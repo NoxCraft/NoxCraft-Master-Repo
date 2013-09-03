@@ -1,0 +1,4 @@
+name: NoxCore
+version: ${project.version}
+main: ${main}
+depend: [BKCommonLib]
