@@ -2,12 +2,15 @@ package net.noxcraft.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 
 import net.noxcraft.core.permissions.NoxPermission;
 import net.noxcraft.core.tp.BaseHome;
+import net.noxcraft.core.utils.CommandUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -25,7 +28,12 @@ public class NoxCore extends PluginBase {
 
 	@Override
 	public boolean command(CommandSender sender, String command, String[] args) {
+		Map<String, Object> flags = new LinkedHashMap<String, Object>();
+		args = CommandUtil.parseFlags(flags, args);
+		
+		
 		return false;
+		
 	}
 
 	@Override
