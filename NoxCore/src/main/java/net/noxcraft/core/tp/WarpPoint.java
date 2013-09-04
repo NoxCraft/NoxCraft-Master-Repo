@@ -1,5 +1,6 @@
 package net.noxcraft.core.tp;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 public interface WarpPoint {
@@ -8,5 +9,6 @@ public interface WarpPoint {
 	public boolean canTeleport(Entity entity);
 
 	public void teleport(Entity entity);
-
+	
+	public Location getLocation();
 }

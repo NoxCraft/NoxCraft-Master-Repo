@@ -7,9 +7,11 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 
 import net.noxcraft.core.permissions.NoxPermission;
+import net.noxcraft.core.tp.BaseHome;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.Common;
@@ -34,6 +36,12 @@ public class NoxCore extends PluginBase {
 	@Override
 	public void enable() {
 		instance = this;
+		
+		//Serializable Objects
+		ConfigurationSerialization.registerClass(BaseHome.class);
+		ConfigurationSerialization.registerClass(SafeLocation.class);
+		
+		//Not ready to enable...
 		log(Level.SEVERE, "This plugin has no functionality. Why are we running this? Self Disabling...");
 		setEnabled(false);
 		

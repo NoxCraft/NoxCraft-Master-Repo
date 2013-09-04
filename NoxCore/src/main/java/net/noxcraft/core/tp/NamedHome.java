@@ -12,12 +12,12 @@ public class NamedHome extends BaseHome {
 		this.name = name;
 	}
 
-	public NamedHome(String owner,String name, Entity e) {
+	public NamedHome(String owner, String name, Entity e) {
 		super(owner, e);
 		this.name = name;
 	}
 
-	public NamedHome(String owner,String name, Location location) {
+	public NamedHome(String owner, String name, Location location) {
 		super(owner, location);
 		this.name = name;
 	}
@@ -26,5 +26,4 @@ public class NamedHome extends BaseHome {
 	public String getName() {
 		return name;
 	}
-
 }
