@@ -33,7 +33,7 @@
 	</developers>
 	<description>Provides core functionality to the servver</description>
 	<properties>
-		<main>net.noxcraft.noxcore.NoxCore</main>
+		<main>net.noxcraft.core.NoxCore</main>
 	</properties>
 	<dependencies>
 		<dependency>
