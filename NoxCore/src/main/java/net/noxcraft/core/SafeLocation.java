@@ -14,7 +14,7 @@ import com.bergerkiller.bukkit.common.bases.mutable.LocationAbstract;
 public class SafeLocation extends LocationAbstract implements ConfigurationSerializable {
 
 	private final float pitch, yaw;
-	private final double x,y,z;
+	private final double x, y, z;
 	private final String worldName;
 	private transient final World world;
 	
@@ -32,8 +32,8 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 	
 	public static SafeLocation deserialize(Map<String, Object> data)
 	{
-		float pitch,yaw;
-		double x,y,z;
+		float pitch, yaw;
+		double x, y, z;
 		String world;
 		try {
 			pitch = (Float) data.get("pitch");
@@ -64,7 +64,7 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 		worldName = world.getName();
 	}
 	
-	public SafeLocation(final String worldName2,final double x2,final double y2,final double z2,final float pitch2,final float yaw2) {
+	public SafeLocation(final String worldName2, final double x2, final double y2, final double z2, final float pitch2, final float yaw2) {
 		worldName = worldName2;
 		x = x2;
 		y = y2;
