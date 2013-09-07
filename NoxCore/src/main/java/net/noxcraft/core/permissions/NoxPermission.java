@@ -19,7 +19,7 @@ public class NoxPermission implements IPermissionDefault {
 	
 	public NoxPermission(String node, String description, PermissionDefault defaults, NoxPermission... children)
 	{
-		this.node = "noxcraft." + node;
+		this.node = "nox." + node;
 		this.name = this.node;
 		this.children = children;
 		this.parents = new String[1];
