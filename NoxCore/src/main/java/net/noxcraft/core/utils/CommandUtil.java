@@ -3,6 +3,7 @@ package net.noxcraft.core.utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.bergerkiller.bukkit.common.utils.StringUtil;
@@ -22,10 +23,10 @@ public class CommandUtil {
 			{
 				if (args[i].endsWith(quoteChar))
 					isQuoted = false;
-				quoteBuilder.append(args[i]);
+				quoteBuilder.append(" ").append(args[i]);
 				if (!isQuoted){
 					String d = quoteBuilder.toString();
-					newData.add(d.substring(1, d.length()-2)); //TODO: Double check this actually removes ONLY one char off the end of string and begginning of string.
+					newData.add(d.substring(1, d.length()-1)); //TODO: Double check this actually removes ONLY one char off the end of string and begginning of string.
 				}
 				else
 					continue;
@@ -56,12 +57,18 @@ public class CommandUtil {
 			} else if (isFlagged){
 				data.put(flag, true);
 				flag = args[i];
-			} else if (args[i].matches(FLAG_PATTERN.pattern())) {
-				flag = FLAG_PATTERN.matcher(args[i]).group(1);
-				isFlagged = true;
+			} else {
+				Matcher m = FLAG_PATTERN.matcher(args[i]);
+				if (m.matches())
+				{
+					flag = m.group(1);
+					isFlagged = true;
+				}
+				else
+					newData.add(args[i]);
 				continue;
-			} else
-				newData.add(args[i]);
+
+			}
 		}
 		String argline = StringUtil.combine(" ", newData.toArray(new String[newData.size()]));
 		return argline.split(" ");
