@@ -23,6 +23,8 @@ public class NoxPermission implements IPermissionDefault {
 		this.name = this.node;
 		this.children = children;
 		this.parents = new String[1];
+		this.description = description;
+		this.defaultPermission = defaults;
 		this.parents[0] = this.node.substring(0, this.node.lastIndexOf('.')) + "*";
 	}
 	
