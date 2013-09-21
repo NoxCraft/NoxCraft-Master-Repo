@@ -1,8 +1,9 @@
-package net.noxcraft.core.permissions;
+package com.noxpvp.core.permissions;
 
 import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.permissions.IPermissionDefault;
+import com.noxpvp.core.NoxPlugin;
 
 public class NoxPermission implements IPermissionDefault {
 	private final String name;
@@ -11,14 +12,16 @@ public class NoxPermission implements IPermissionDefault {
 	private String[] parents;
 	private PermissionDefault defaultPermission;
 	private String description;
+	private NoxPlugin plugin;
 	
-	public NoxPermission(String node, String description, PermissionDefault defaults)
+	public NoxPermission(NoxPlugin plugin, String node, String description, PermissionDefault defaults)
 	{
-		this(node, description, defaults, new NoxPermission[0]);
+		this(plugin, node, description, defaults, new NoxPermission[0]);
 	}
 	
-	public NoxPermission(String node, String description, PermissionDefault defaults, NoxPermission... children)
+	public NoxPermission(NoxPlugin plugin, String node, String description, PermissionDefault defaults, NoxPermission... children)
 	{
+		this.plugin = plugin;
 		this.node = "nox." + node;
 		this.name = this.node;
 		this.children = children;
@@ -48,5 +51,9 @@ public class NoxPermission implements IPermissionDefault {
 	
 	public String getName() {
 		return name;
+	}
+
+	public NoxPlugin getPlugin() {
+		return plugin;
 	}
 }

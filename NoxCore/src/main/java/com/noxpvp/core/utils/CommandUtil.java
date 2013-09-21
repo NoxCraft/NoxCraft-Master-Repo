@@ -1,4 +1,4 @@
-package net.noxcraft.core.utils;
+package com.noxpvp.core.utils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package net.noxcraft.core.tp;
+package com.noxpvp.homes.tp;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

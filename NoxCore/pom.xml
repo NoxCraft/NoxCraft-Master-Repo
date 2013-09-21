@@ -2,23 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>net.noxcraft</groupId>
+		<groupId>com.noxpvp</groupId>
 		<artifactId>NoxCraft</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>NoxCore</artifactId>
 	<name>NoxCore</name>
-	<repositories>
-		<repository>
-			<id>dj-tcraft repository</id>
-			<url>http://ci.dj-tcraft.nl/plugin/repository/everything/</url>
-		</repository>
-		<repository>
-			<id>comphenix-rep</id>
-			<name>Comphenix Repository</name>
-			<url>http://repo.comphenix.net/content/groups/public</url>
-		</repository>
-	</repositories>
 	<developers>
 		<developer>
 			<email>ckrier.3000@gmail.com</email>
@@ -31,23 +20,12 @@
 			<timezone>Eastern US Time</timezone>
 		</developer>
 	</developers>
-	<description>Provides core functionality to the servver</description>
+	<description>Provides core functionality to the server</description>
 	<properties>
-		<main>net.noxcraft.core.NoxCore</main>
+		<main>com.noxpvp.core.NoxCore</main>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>com.bergerkiller.bukkit</groupId>
-			<artifactId>BKCommonLib</artifactId>
-			<version>1.54-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.comphenix.protocol</groupId>
-			<artifactId>ProtocolLib</artifactId>
-			<version>2.6.0</version>
-			<scope>provided</scope>
-		</dependency>
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

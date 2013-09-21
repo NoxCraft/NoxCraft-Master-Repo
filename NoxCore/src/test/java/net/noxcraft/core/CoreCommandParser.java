@@ -8,11 +8,11 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
-import net.noxcraft.core.utils.CommandUtil;
 
 import org.junit.Test;
 
 import com.bergerkiller.bukkit.common.utils.StringUtil;
+import com.noxpvp.core.utils.CommandUtil;
 
 public class CoreCommandParser {
 	

@@ -1,4 +1,4 @@
-package net.noxcraft.core;
+package com.noxpvp.core;
 
 public interface Persistant {
 	public void save();

@@ -1,0 +1,28 @@
+name: NoxHomes
+description: Provides home management for teleportation usage. Meant as a replacement plugin to MultiHome and EssentialsHomes.
+Author: Christopher Krier (AKA Coaster3000)
+version: ${project.version}
+main: ${main}
+softdepend: [Vault]
+commands:
+  importhomes:
+    aliases: [homesimport]
+    description: Imports home data from other plugins.
+  home:
+    description: Warps to your specified home.
+    usage: /<command> [name]    
+  sethome:
+    description: Set your home to your current location
+    aliases: [makehome,createhome]
+    usage: /<command> [name]
+  delhome:
+    description: Delete that specified home.
+    aliases: [deletehome]
+    usage: /<command> [name]
+  homes:
+    description: List your homes that you have.
+    aliases: [listhomes,homelist]
+    usage: /<command>
+  noxhomes:
+    aliases: [homeadmin]
+    description: Administative commands to NoxHomes system.

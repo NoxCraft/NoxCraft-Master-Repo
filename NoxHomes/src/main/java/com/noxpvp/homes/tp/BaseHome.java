@@ -1,11 +1,9 @@
-package net.noxcraft.core.tp;
+package com.noxpvp.homes.tp;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import net.noxcraft.core.NoxCore;
-import net.noxcraft.core.SafeLocation;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -14,6 +12,9 @@ import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.internal.CommonPlugin;
 import com.bergerkiller.bukkit.common.internal.PermissionHandler;
+import com.noxpvp.core.NoxCore;
+import com.noxpvp.core.SafeLocation;
+import com.noxpvp.core.tp.WarpPoint;
 
 public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 	
@@ -80,10 +81,7 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 	}
 	public boolean canTeleport(Player player)
 	{
-		if (isOwner(player))
-			return permHandler.hasPermission(player, getNode());
-		else
-			return permHandler.hasPermission(player, getOtherNode());
+		return isOwner(player);
 	}
 
 	public boolean canTeleport(Entity entity) {

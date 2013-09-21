@@ -1,4 +1,4 @@
-package net.noxcraft.core;
+package com.noxpvp.core;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,10 +13,10 @@ import com.bergerkiller.bukkit.common.bases.mutable.LocationAbstract;
 
 public class SafeLocation extends LocationAbstract implements ConfigurationSerializable {
 
-	private final float pitch, yaw;
-	private final double x, y, z;
-	private final String worldName;
-	private transient final World world;
+	private float pitch, yaw;
+	private double x, y, z;
+	private String worldName;
+	private transient World world;
 	
 	public Map<String, Object> serialize() {
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -36,8 +36,13 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 		double x, y, z;
 		String world;
 		try {
-			pitch = (Float) data.get("pitch");
-			yaw = (Float) data.get("yaw");
+			try {
+				pitch = ((Double) data.get("pitch")).floatValue();
+				yaw = ((Double) data.get("yaw")).floatValue();
+			} catch (ClassCastException e) {
+				pitch = (Float) data.get("pitch");
+				yaw = (Float) data.get("yaw");
+			}
 			x = (Double) data.get("x");
 			y = (Double) data.get("y");
 			z = (Double) data.get("z");
@@ -83,6 +88,10 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 	public World getWorld() {
 		return (world!=null)?world:Bukkit.getServer().getWorld(worldName);
 	}
+	
+	public String getWorldName(){
+		return worldName;
+	}
 
 	@Override
 	public float getYaw() {
@@ -91,32 +100,39 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 
 	@Override
 	public LocationAbstract setPitch(float pitch) {
-		return new SafeLocation(worldName, x, y, z, pitch, yaw);
+		this.pitch = pitch;
+		return this;
 	}
 
 	@Override
 	public LocationAbstract setWorld(World world) {
-		return new SafeLocation(world.getName(), x, y, z, pitch, yaw);
+		this.world = world;
+		this.worldName = world.getName();
+		return this;
 	}
 
 	@Override
 	public LocationAbstract setX(double x) {
-		return new SafeLocation(worldName, x, y, z, pitch, yaw);
+		this.x = x;
+		return this;
 	}
 
 	@Override
 	public LocationAbstract setY(double y) {
-		return new SafeLocation(worldName, x, y, z, pitch, yaw);
+		this.y = y;
+		return this;
 	}
 
 	@Override
 	public LocationAbstract setYaw(float yaw) {
-		return new SafeLocation(worldName, x, y, z, pitch, yaw);
+		this.yaw = yaw;
+		return this;
 	}
 
 	@Override
 	public LocationAbstract setZ(double z) {
-		return new SafeLocation(worldName, x, y, z, pitch, yaw);
+		this.z = z;
+		return this;
 	}
 
 	@Override
@@ -134,4 +150,16 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 		return z;
 	}
 
+	@Override
+	public String toString() {
+		final String w = getWorldName();
+		return new StringBuilder().append("{world=")
+				.append((w==null?"null":w))
+				.append(", x=").append(getX())
+				.append(", y=").append(getY())
+				.append(", z=").append(getZ())
+				.append(", yaw=").append(getYaw())
+				.append(", pitch=").append(getPitch())
+				.append("}").toString();
+	}
 }
