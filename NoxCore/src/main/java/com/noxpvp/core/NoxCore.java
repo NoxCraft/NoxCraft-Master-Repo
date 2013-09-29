@@ -1,9 +1,7 @@
 package com.noxpvp.core;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -17,7 +15,8 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.Common;
-import com.noxpvp.core.commands.CommandRunner;
+import com.bergerkiller.bukkit.common.config.FileConfiguration;
+import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.utils.CommandUtil;
 
@@ -27,8 +26,9 @@ public class NoxCore extends NoxPlugin {
 	private List<NoxPermission> permissions = new ArrayList<NoxPermission>();
 	private transient WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>> permission_cache = new WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>>();
 	
-	private Map<String, CommandRunner> commandExecs;
+	private FileConfiguration config;
 	
+
 	@Override
 	public boolean command(CommandSender sender, String command, String[] args) {
 		Map<String, Object> flags = new LinkedHashMap<String, Object>();
@@ -43,6 +43,7 @@ public class NoxCore extends NoxPlugin {
 	@Override
 	public void disable() {
 		setInstance(null);
+		VaultAdapter.unload();
 	}
 	
 	@Override
@@ -102,10 +103,29 @@ public class NoxCore extends NoxPlugin {
 		
 		setInstance(this);
 		
-		commandExecs = new HashMap<String, CommandRunner>();
+		VaultAdapter.load();
 		
 		// Serializable Objects
 		ConfigurationSerialization.registerClass(SafeLocation.class);
+	}
+	
+	@Override
+	public void reloadConfig() {
+		config.load();
+		
+	}
+	
+	public org.bukkit.configuration.file.FileConfiguration getConfig() {
+		return config.getSource();
+	}
+	
+	public FileConfiguration getCoreConfig(){
+		return config;
+	}
+	
+	@Override
+	public void saveConfig() {
+		config.save();
 	}
 	
 	@Override
@@ -212,7 +232,7 @@ public class NoxCore extends NoxPlugin {
 	}
 
 	/**
-	 * Aquires all permission nodes.
+	 * Acquires all permission nodes.
 	 * 
 	 * See addPermission and removePermission for manipulating this list.
 	 * 
@@ -225,26 +245,6 @@ public class NoxCore extends NoxPlugin {
 
 	public static NoxCore getInstance() {
 		return instance;
-	}
-	
-	public void registerCommands(Collection<CommandRunner> runners)
-	{
-		for(CommandRunner runner : runners)
-			registerCommand(runner);
-	}
-	
-	public void registerCommands(CommandRunner... runners)
-	{
-		for (CommandRunner runner : runners)
-			registerCommand(runner);
-	}
-	
-	public void registerCommand(CommandRunner runner)
-	{
-		if (commandExecs.containsKey(runner.getName()))
-			return;
-		else
-			commandExecs.put(runner.getName(), runner);
 	}
 	
 	private static void setInstance(NoxCore instance)
