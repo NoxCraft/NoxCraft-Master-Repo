@@ -23,11 +23,29 @@ import com.noxpvp.core.utils.CommandUtil;
 public class NoxCore extends NoxPlugin {
 	private static NoxCore instance;
 	
+	private VoteListener voteListener = null;
 	private List<NoxPermission> permissions = new ArrayList<NoxPermission>();
 	private transient WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>> permission_cache = new WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>>();
 	
 	private FileConfiguration config;
+
+	private PlayerManager playerManager;
 	
+	private static boolean useUserFile = true;
+	
+	/**
+	 * @return the useUserFile
+	 */
+	public static final boolean isUseUserFile() {
+		return useUserFile;
+	}
+
+	/**
+	 * @param useUserFile the useUserFile to set
+	 */
+	public static final void setUseUserFile(boolean useUserFile) {
+		NoxCore.useUserFile = useUserFile;
+	}
 
 	@Override
 	public boolean command(CommandSender sender, String command, String[] args) {
@@ -42,6 +60,9 @@ public class NoxCore extends NoxPlugin {
 	
 	@Override
 	public void disable() {
+		if (voteListener != null)
+			voteListener.destroy();
+		
 		setInstance(null);
 		VaultAdapter.unload();
 	}
@@ -102,6 +123,9 @@ public class NoxCore extends NoxPlugin {
 		}
 		
 		setInstance(this);
+		
+		voteListener = new VoteListener();
+		getServer().getPluginManager().registerEvents(voteListener, this);
 		
 		VaultAdapter.load();
 		
@@ -250,5 +274,9 @@ public class NoxCore extends NoxPlugin {
 	private static void setInstance(NoxCore instance)
 	{
 		NoxCore.instance = instance;
+	}
+
+	public PlayerManager getPlayerManager() {
+		return playerManager;
 	}
 }
