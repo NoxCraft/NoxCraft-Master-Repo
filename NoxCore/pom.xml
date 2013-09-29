@@ -32,6 +32,12 @@
 			<version>4.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.vexsoftware.votifier</groupId>
+			<artifactId>Votifier</artifactId>
+			<version>1.9</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
