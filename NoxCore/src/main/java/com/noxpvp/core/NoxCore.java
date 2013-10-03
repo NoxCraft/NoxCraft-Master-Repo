@@ -20,6 +20,7 @@ import com.bergerkiller.bukkit.common.conversion.BasicConverter;
 import com.bergerkiller.bukkit.common.conversion.Conversion;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdaptor;
+import com.noxpvp.core.listeners.ChestBlockListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.utils.CommandUtil;
@@ -150,6 +151,9 @@ public class NoxCore extends NoxPlugin {
 	public void reloadConfig() {
 		config.load();
 		
+		ChestBlockListener.isRemovingOnInteract = config.get("custom.events.chestblocked.isRemovingOnInteract", ChestBlockListener.isRemovingOnInteract);
+		ChestBlockListener.usePlaceEvent = config.get("custom.events.chestblocked.usePlaceEvent", ChestBlockListener.usePlaceEvent);
+		ChestBlockListener.useFormEvent = config.get("custom.events.chestblocked.useFormEvent", ChestBlockListener.useFormEvent);
 	}
 	
 	public org.bukkit.configuration.file.FileConfiguration getConfig() {
