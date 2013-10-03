@@ -10,9 +10,9 @@ public class Cycler<E> implements ListIterator<E>{
 	
 	private ArrayList<E> data;
 	
-	public Cycler(Collection<E> da)
+	public Cycler(Collection<E> data)
 	{
-		data = new ArrayList<E>(da);
+		this.data = new ArrayList<E>(data);
 		index = 0;
 	}
 	
@@ -24,6 +24,19 @@ public class Cycler<E> implements ListIterator<E>{
 	
 	public List<E> getList() { return data; }
 	
+	/**
+	 * Retrieves the current object on the current index / iteration.
+	 *
+	 * @return the current object.
+	 */
+	public E current() { return data.get(currentIndex()); }
+	
+	/**
+	 * Retrieves the current index.
+	 * 
+	 * @return 0 - (Cycler Size)
+	 */
+	public int currentIndex() { return index;}
 	/*
 	 * Warning this method will cause it to loop infinite on iteration.
 	 * 
@@ -42,7 +55,7 @@ public class Cycler<E> implements ListIterator<E>{
 
 	public E next() {
 		index = nextIndex();
-		return data.get(index);
+		return data.get(currentIndex());
 	}
 
 	/*
@@ -63,29 +76,29 @@ public class Cycler<E> implements ListIterator<E>{
 	
 	public E previous() {
 		index = previousIndex();
-		return data.get(index);
+		return data.get(currentIndex());
 	}
 
 	public int nextIndex() {
-		return index >= (data.size() - 1) ? 0 : (index + 1);
+		return currentIndex() >= (data.size() - 1) ? 0 : (currentIndex() + 1);
 	}
 
 	public int previousIndex() {
-		return index <= 0 ? (data.size()-1) : (index - 1);
+		return currentIndex() <= 0 ? (data.size()-1) : (currentIndex() - 1);
 	}
 
 	public void remove() {
-		data.remove(index);
-		if (data.size() <= index)
+		data.remove(currentIndex());
+		if (data.size() <= currentIndex())
 			index = data.size() - 1;
 	}
 
 	public void set(E e) {
-		data.set(index, e);
+		data.set(currentIndex(), e);
 	}
 
 	public void add(E e) {
-		data.add(index, e);
+		data.add(currentIndex(), e);
 	}
 
 }
