@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package com.noxpvp.core;
 
 import java.io.File;
@@ -18,10 +21,16 @@ public class PlayerManager implements Persistant {
 	
 	private Map<String, NoxPlayer> players;
 	
+	/* (non-Javadoc)
+	 * @see com.noxpvp.core.Persistant#save()
+	 */
 	public void save() {
 		config.save();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.noxpvp.core.Persistant#load()
+	 */
 	public void load() {
 		Collection<String> pls = players.keySet();
 
@@ -35,6 +44,12 @@ public class PlayerManager implements Persistant {
 			loadOrCreate(player.getName());
 	}
 	
+	/**
+	 * Gets the player node.
+	 * <b>INTERNAL METHOD</b> Best not to use this!
+	 * @param name the name
+	 * @return the player node
+	 */
 	public ConfigurationNode getPlayerNode(String name)
 	{
 		if (isMultiFile())
@@ -45,10 +60,24 @@ public class PlayerManager implements Persistant {
 			return null;
 	}
 	
+	/**
+	 * Gets the player.
+	 *
+	 * @see #getPlayer(String)
+	 * @param player the player
+	 * @return the player
+	 */
 	public NoxPlayer getPlayer(OfflinePlayer player) {
 		return getPlayer(player.getName());
 	}
 	
+	
+	/**
+	 * Gets the specified player.
+	 *
+	 * @param name of the player
+	 * @return the player
+	 */
 	public NoxPlayer getPlayer(String name)
 	{
 		if (players.containsKey(name))
@@ -60,6 +89,43 @@ public class PlayerManager implements Persistant {
 		}
 	}
 	
+	/**
+	 * Unload if player is offline.
+	 * <br/>
+	 * <b> WARNING IF THERE ARE PLUGINS THAT ARE IMPROPERLY CACHING THIS OBJECT. IT WILL NEVER TRUELY UNLOAD</b>
+	 * @param name of the player
+	 * @return true, if it unloads the player from memory.
+	 */
+	public boolean unloadIfOffline(String name) {
+		if (isPlayerInMemory(name) && getPlayer(name).getPlayer() != null)
+		{
+			unloadAndSavePlayer(name);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Unload and save player.
+	 * 
+	 * @see #unloadPlayer(String)
+	 * @see #savePlayer(String)
+	 * @param name the name
+	 */
+	public void unloadAndSavePlayer(String name) {
+		getPlayer(name).save();
+		unloadPlayer(name);
+	}
+
+	/**
+	 * Unload the named player.
+	 *
+	 * @param name of the player
+	 */
+	public void unloadPlayer(String name) {
+		players.remove(name);
+	}
+
 	private NoxPlayer loadOrCreate(String name) {
 		NoxPlayer player = null;
 		
@@ -76,27 +142,62 @@ public class PlayerManager implements Persistant {
 		return player;
 	}
 	
-	public boolean isPlayerInMemeory(String name) {
+	/**
+	 * Checks if is player is in memory.
+	 *
+	 * @param name of the player.
+	 * @return true, if is player in memory
+	 */
+	public boolean isPlayerInMemory(String name) {
 		return players.containsKey(name);
 	}
 	
+	/**
+	 * Save player.
+	 *
+	 * @see #savePlayer(NoxPlayer)
+	 * @param name of the player
+	 */
 	public void savePlayer(String name) {
 		savePlayer(getPlayer(name));
 	}
 
+	/**
+	 * Save player.
+	 *
+	 * @see #savePlayer(NoxPlayer)
+	 * @param player of the player
+	 */
 	public void savePlayer(OfflinePlayer player){
 		savePlayer(getPlayer(player));
 	}
 	
+	/**
+	 * Save player.
+	 *
+	 * @param player the player
+	 */
 	public void savePlayer(NoxPlayer player) 
 	{
 		player.save();
 	}
 	
+	/**
+	 * Load player.
+	 *
+	 * @param noxPlayer the NoxPlayer object to load
+	 */
 	public void loadPlayer(NoxPlayer noxPlayer) {
 		noxPlayer.load();
 	}
+	
+	
 
+	/**
+	 * Load player.
+	 *
+	 * @param name of the player
+	 */
 	public void loadPlayer(String name) {
 		if (!players.containsKey(name))
 		{
@@ -110,13 +211,31 @@ public class PlayerManager implements Persistant {
 	
 	
 //////// HELPER FUNCTIONS
+	/**
+	 * Checks if is multi file.
+	 * <b>INTERNALLY USED METHOD</b>
+	 * @return true, if is using the multi file structure for player data.
+	 */
 	public boolean isMultiFile() { return NoxCore.isUseUserFile(); }
 	
+	/**
+	 * Gets the player file.
+	 *
+	 * @param name of the player
+	 * @return the player file
+	 */
 	public File getPlayerFile(String name)
 	{
 		return NoxCore.getInstance().getDataFile("playerdata", name);
 	}
 	
+	/**
+	 * Gets the player file.
+	 *
+	 * @see #getPlayerFile(String)
+	 * @param noxPlayer the NoxPlayer object
+	 * @return the player file
+	 */
 	public File getPlayerFile(NoxPlayer noxPlayer) {
 		return getPlayerFile(noxPlayer.getName());
 	}
