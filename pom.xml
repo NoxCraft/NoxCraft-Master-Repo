@@ -73,28 +73,20 @@
 		<dependency>
 			<groupId>com.bergerkiller.bukkit</groupId>
 			<artifactId>BKCommonLib</artifactId>
-			<version>1.54-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.comphenix.protocol</groupId>
 			<artifactId>ProtocolLib</artifactId>
-			<version>2.6.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.6.2-R1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
-			<version>1.2.27-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.vexsoftware.votifier</groupId>
-			<artifactId>Votifier</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
