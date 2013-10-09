@@ -3,7 +3,6 @@ package com.noxpvp.core.listeners;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -76,10 +75,9 @@ public class VoteListener implements Listener {
 		final String user = vote.getUsername();
 		if (event.isAsynchronous() && usePlayer)
 		{
-			CommonUtil.nextTick(new Runnable() {
-				
+			CommonUtil.nextTick(new Runnable() { // TODOD: Double check. This might not be needed with multithreading.. Must test concurrency support of player handler
 				public void run() {
-					NoxPlayer player = manager.getPlayer(Bukkit.getServer().getOfflinePlayer(user));
+					NoxPlayer player = manager.getPlayer(user);
 					
 					synchronized (player) {
 						player.incrementVote();

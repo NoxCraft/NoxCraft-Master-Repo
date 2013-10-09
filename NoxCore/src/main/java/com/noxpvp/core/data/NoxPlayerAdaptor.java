@@ -18,5 +18,5 @@ public interface NoxPlayerAdaptor {
 	 * Retrieves the player object that this adaptor uses for data.
 	 * @return NoxPlayer instance
 	 */
-	public NoxPlayer getPlayer();
+	public NoxPlayer getNoxPlayer();
 }

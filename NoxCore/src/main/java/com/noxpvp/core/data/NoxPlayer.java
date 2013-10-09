@@ -13,11 +13,20 @@ import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.VaultAdapter;
 
-public class NoxPlayer implements Persistant {
+public class NoxPlayer implements Persistant, NoxPlayerAdaptor {
 	private final String name;
 	private ConfigurationNode temp_data = new ConfigurationNode();
 	private ConfigurationNode persistant_data = null;
 	private PlayerManager manager;
+	
+	public NoxPlayer(NoxPlayer player)
+	{
+		this.name = player.name;
+		this.temp_data = player.temp_data;
+		this.persistant_data = player.persistant_data;
+		this.manager = player.manager;
+		load();
+	}
 	
 	public NoxPlayer(PlayerManager mn, String name) {
 		manager = mn;
@@ -46,6 +55,8 @@ public class NoxPlayer implements Persistant {
 			return w.getName();
 		return persistant_data.get("last.world", String.class, "NONE");
 	}
+	
+	public NoxPlayer getNoxPlayer() { return this; }
 	
 	public final ConfigurationNode getPersistantData() { return persistant_data;}
 	public final ConfigurationNode getTempData() { return temp_data; }

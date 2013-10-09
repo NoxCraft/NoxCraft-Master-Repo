@@ -133,7 +133,7 @@ public class NoxCore extends NoxPlugin {
 			@Override
 			protected NoxPlayer convertSpecial(Object object, Class<?> obType, NoxPlayer def) {
 				if (object instanceof NoxPlayerAdaptor)
-					return ((NoxPlayerAdaptor)object).getPlayer();
+					return ((NoxPlayerAdaptor)object).getNoxPlayer();
 				return def;
 			}
 		});
