@@ -13,7 +13,7 @@ import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.VaultAdapter;
 
-public class NoxPlayer implements Persistant, NoxPlayerAdaptor {
+public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	private final String name;
 	private ConfigurationNode temp_data = new ConfigurationNode();
 	private ConfigurationNode persistant_data = null;

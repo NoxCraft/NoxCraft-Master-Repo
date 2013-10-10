@@ -4,7 +4,10 @@
 package com.noxpvp.core;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -238,5 +241,19 @@ public class PlayerManager implements Persistant {
 	 */
 	public File getPlayerFile(NoxPlayer noxPlayer) {
 		return getPlayerFile(noxPlayer.getName());
+	}
+
+	public List<String> getAllPlayerNames() {
+		List<String> ret = new ArrayList<String>();
+		if (isMultiFile())
+		{
+			for (File f : NoxCore.getInstance().getDataFile("playerdata").listFiles())
+				ret.add(f.getName().replace(".yml", ""));
+		} else {
+			for (ConfigurationNode node : config.getNode("players").getNodes())
+				ret.add(node.getName());
+		}
+		
+		return Collections.unmodifiableList(ret);
 	}
 }

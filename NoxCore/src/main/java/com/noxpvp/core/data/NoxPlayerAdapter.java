@@ -12,7 +12,7 @@ package com.noxpvp.core.data;
  * 
  * @author Chris
  */
-public interface NoxPlayerAdaptor {
+public interface NoxPlayerAdapter {
 	
 	/**
 	 * Retrieves the player object that this adaptor uses for data.

@@ -9,6 +9,8 @@ import com.noxpvp.core.NoxPlugin;
 public class NoxMMO extends NoxPlugin {
 	private static NoxMMO instance;
 	
+	private PlayerAbilityManager abilityManager = null;
+	
 	@Override
 	public boolean command(CommandSender arg0, String arg1, String[] arg2) {
 		// TODO Auto-generated method stub
@@ -36,5 +38,14 @@ public class NoxMMO extends NoxPlugin {
 		instance = noxMMO;
 	}
 
+	/**
+	 * Gets the ability manager.
+	 *
+	 * @return the ability manager
+	 */
+	public PlayerAbilityManager getAbilityManager() {
+		return abilityManager;
+	}
+	
 	public static NoxMMO getInstance() { return instance; } 
 }

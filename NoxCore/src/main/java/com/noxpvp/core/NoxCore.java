@@ -19,7 +19,7 @@ import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.conversion.BasicConverter;
 import com.bergerkiller.bukkit.common.conversion.Conversion;
 import com.noxpvp.core.data.NoxPlayer;
-import com.noxpvp.core.data.NoxPlayerAdaptor;
+import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.listeners.ChestBlockListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.permissions.NoxPermission;
@@ -132,8 +132,8 @@ public class NoxCore extends NoxPlugin {
 		Conversion.register(new BasicConverter<NoxPlayer>(NoxPlayer.class) {
 			@Override
 			protected NoxPlayer convertSpecial(Object object, Class<?> obType, NoxPlayer def) {
-				if (object instanceof NoxPlayerAdaptor)
-					return ((NoxPlayerAdaptor)object).getNoxPlayer();
+				if (object instanceof NoxPlayerAdapter)
+					return ((NoxPlayerAdapter)object).getNoxPlayer();
 				return def;
 			}
 		});
