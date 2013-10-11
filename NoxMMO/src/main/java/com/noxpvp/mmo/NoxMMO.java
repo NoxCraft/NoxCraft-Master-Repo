@@ -3,10 +3,16 @@ package com.noxpvp.mmo;
 import java.util.logging.Level;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.PermissionDefault;
 
+import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.permissions.NoxPermission;
+import com.noxpvp.mmo.abilities.entity.LeapAbility;
 
 public class NoxMMO extends NoxPlugin {
+	public static final String PERM_NODE = "nox.mmo";
+
 	private static NoxMMO instance;
 	
 	private PlayerAbilityManager abilityManager = null;
@@ -36,6 +42,13 @@ public class NoxMMO extends NoxPlugin {
 	
 	private void setInstance(NoxMMO noxMMO) {
 		instance = noxMMO;
+	}
+	
+	@Override
+	public void permissions() {
+		addPermission(new NoxPermission(this, StringUtil.combine(".", PERM_NODE, PlayerAbilityManager.MAIN_PERM), "Base MMO Node", PermissionDefault.FALSE, 
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, PlayerAbilityManager.MAIN_PERM, LeapAbility.PERM_NODE), "Allows usage of the leap ability.", PermissionDefault.OP )
+		));
 	}
 
 	/**
