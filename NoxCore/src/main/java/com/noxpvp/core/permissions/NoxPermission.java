@@ -22,7 +22,11 @@ public class NoxPermission implements IPermissionDefault {
 	public NoxPermission(NoxPlugin plugin, String node, String description, PermissionDefault defaults, NoxPermission... children)
 	{
 		this.plugin = plugin;
-		this.node = "nox." + node;
+		if (!node.startsWith("nox."))
+			this.node = "nox." + node;
+		else
+			this.node = node;
+		
 		this.name = this.node;
 		this.children = children;
 		this.parents = new String[1];
