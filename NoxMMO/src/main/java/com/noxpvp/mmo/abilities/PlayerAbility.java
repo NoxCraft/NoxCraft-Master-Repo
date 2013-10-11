@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.noxpvp.core.data.NoxPlayer;
@@ -17,7 +18,7 @@ public interface PlayerAbility extends EntityAbility {
 	 * 
 	 * @see #getPlayer()
 	 */
-	public Player getEntity();
+	public Entity getEntity();
 	
 	/**
 	 * Retrieves the NoxPlayer core player implementation for this ability.

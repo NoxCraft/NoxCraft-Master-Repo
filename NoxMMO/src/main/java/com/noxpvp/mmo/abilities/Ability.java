@@ -12,7 +12,7 @@ public interface Ability {
 	 * 
 	 * @return Ability Name
 	 */
-	public String name();
+	public String getName();
 	
 	/**
 	 * Executes an ability
