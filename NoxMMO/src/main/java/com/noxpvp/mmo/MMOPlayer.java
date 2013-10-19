@@ -7,9 +7,12 @@ import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.abilities.PassiveAbility;
+import com.noxpvp.mmo.classes.PlayerClass;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 
+	private PlayerClass currentClass;
+	
 	public MMOPlayer(OfflinePlayer player)
 	{
 		super(player);
