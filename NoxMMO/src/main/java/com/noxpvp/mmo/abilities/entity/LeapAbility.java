@@ -28,7 +28,7 @@ public class LeapAbility extends BaseEntityAbility {
 	public void setVPower(double value) { vPower = value; }
 	
 	public boolean execute() {
-		if (!isValid())
+		if (!mayExecute())
 			return false;
 		
 		Vector newVelocity = getEntity().getLocation().getDirection();
@@ -40,11 +40,9 @@ public class LeapAbility extends BaseEntityAbility {
 	}
 
 	public boolean mayExecute() {
-		if (getEntity() instanceof Player)
-		{
+		if (isValid() && getEntity() instanceof Player)
 			return VaultAdapter.permission.has((Player)getEntity(), NoxMMO.PERM_NODE + ".abilities."+PERM_NODE);
-		}
-		return false;
+		return isValid();
 	}
 
 }

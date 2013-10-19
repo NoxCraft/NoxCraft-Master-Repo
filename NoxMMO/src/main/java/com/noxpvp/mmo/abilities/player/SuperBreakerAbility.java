@@ -9,6 +9,10 @@ public class SuperBreakerAbility extends BasePlayerAbility {
 	private static long maximumTicks = 6000;
 	
 	/**
+	 * Retrieves the maximum number of ticks this ability can last for. 
+	 * 
+	 * This is the global limit.
+	 * 
 	 * @return the maximumTicks
 	 */
 	public static final long getMaximumTicks() {

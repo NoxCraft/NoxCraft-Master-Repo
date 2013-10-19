@@ -5,6 +5,8 @@ import org.bukkit.OfflinePlayer;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
+import com.noxpvp.mmo.abilities.Ability;
+import com.noxpvp.mmo.abilities.PassiveAbility;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 
@@ -23,6 +25,18 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		super(player);
 	}
 	
+	public Ability[] getAbilities()
+	{
+		//TODO: Implement.
+		return null;
+	}
+	
+	public PassiveAbility[] getPassiveAbilities()
+	{
+		//TODO: Implement
+		return null;
+	}
+	
 	public void save() {
 		if (getNoxPlayer() == null)
 			return;
@@ -35,5 +49,10 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			return;
 		
 		//TODO: Implement Loading.
+	}
+
+	public Ability getAbility(String abilityName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

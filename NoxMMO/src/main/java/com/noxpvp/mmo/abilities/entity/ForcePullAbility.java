@@ -8,7 +8,7 @@ public class ForcePullAbility extends BaseEntityAbility {
 
 	public ForcePullAbility(Entity ent)
 	{
-		super("ForcePullAbility", ent);
+		super("ForcePull", ent);
 	}
 	
 	public boolean execute() {

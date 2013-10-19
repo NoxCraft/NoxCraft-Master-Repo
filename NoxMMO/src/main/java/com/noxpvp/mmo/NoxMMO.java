@@ -15,7 +15,7 @@ public class NoxMMO extends NoxPlugin {
 
 	private static NoxMMO instance;
 	
-	private PlayerAbilityManager abilityManager = null;
+	private PlayerManager playerManager = null;
 	
 	@Override
 	public boolean command(CommandSender arg0, String arg1, String[] arg2) {
@@ -46,18 +46,18 @@ public class NoxMMO extends NoxPlugin {
 	
 	@Override
 	public void permissions() {
-		addPermission(new NoxPermission(this, StringUtil.combine(".", PERM_NODE, PlayerAbilityManager.MAIN_PERM), "Base MMO Node", PermissionDefault.FALSE, 
-				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, PlayerAbilityManager.MAIN_PERM, LeapAbility.PERM_NODE), "Allows usage of the leap ability.", PermissionDefault.OP )
+		addPermission(new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability"), "Base MMO Node", PermissionDefault.FALSE, 
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", LeapAbility.PERM_NODE), "Allows usage of the leap ability.", PermissionDefault.OP )
 		));
 	}
 
 	/**
-	 * Gets the ability manager.
+	 * Gets the player manager.
 	 *
-	 * @return the ability manager
+	 * @return the player manager
 	 */
-	public PlayerAbilityManager getAbilityManager() {
-		return abilityManager;
+	public PlayerManager getPlayerManager() {
+		return playerManager;
 	}
 	
 	public static NoxMMO getInstance() { return instance; } 
