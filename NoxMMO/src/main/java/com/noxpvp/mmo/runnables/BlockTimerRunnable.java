@@ -15,10 +15,14 @@ public class BlockTimerRunnable extends BukkitRunnable{
 		this.block = block;
 	}
 	
+	public void safeCancel() { try { cancel(); } catch (IllegalStateException e) { } }
+	
 	public void run(){
-		if (block.getType() != oldType)
+		if (block.getType() == oldType)
+		{
+			safeCancel();
 			return;
-		
+		}
 		block.setType(newType);
 	}
 }

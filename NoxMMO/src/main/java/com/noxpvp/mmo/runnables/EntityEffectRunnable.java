@@ -17,10 +17,14 @@ public class EntityEffectRunnable extends BukkitRunnable{
 		this.runs = runsLimit;
 	}
 
+	public void safeCancel() { try { cancel(); } catch (IllegalStateException e) {} }
+	
 	public void run(){
 		if (e == null)
+		{
+			safeCancel();
 			return;
-		
+		}
 		int runs = 0;
 		
 		if (runs < this.runs)

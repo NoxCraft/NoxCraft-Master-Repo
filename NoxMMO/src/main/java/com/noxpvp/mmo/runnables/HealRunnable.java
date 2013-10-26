@@ -16,9 +16,16 @@ public class HealRunnable extends BukkitRunnable{
 		this.runsLimit = runsLimit;
 	}
 	
+	public void safeCancel() {
+		try { cancel(); } catch (IllegalStateException e) {}
+	}
+	
 	public void run(){
 		if (!(runs >= runsLimit))
+		{
+			safeCancel();
 			return;
+		}
 		
 		if (!(e instanceof LivingEntity))
 			return;
