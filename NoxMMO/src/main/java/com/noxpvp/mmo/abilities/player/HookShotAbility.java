@@ -1,6 +1,5 @@
 package com.noxpvp.mmo.abilities.player;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
@@ -55,8 +54,8 @@ public class HookShotAbility extends BasePlayerAbility{
 		hBlock.setType(getHoldingBlock());
 		p.teleport(hBlock.getLocation());
 		
-		Runnable removeBlock = new BlockTimerRunnable(hBlock, Material.AIR, getHoldingBlock());
-		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), removeBlock, getBlockTime());
+		BlockTimerRunnable removeBlock = new BlockTimerRunnable(hBlock, Material.AIR, getHoldingBlock());
+		removeBlock.runTaskLater(NoxMMO.getInstance(), getBlockTime());
 		
 		return true;
 	}

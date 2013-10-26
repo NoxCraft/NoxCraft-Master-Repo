@@ -32,12 +32,13 @@ public class RejuvenationAbility extends BasePlayerAbility{
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
+		NoxMMO instance = NoxMMO.getInstance();
 		
-		Runnable rejuvenation = new HealRunnable(getEntity(), healthPerHeal, heals);
-		Runnable hearts = new EntityEffectRunnable(getEntity(), EntityEffect.WOLF_HEARTS, heals);
+		HealRunnable rejuvenation = new HealRunnable(getPlayer(), healthPerHeal, heals);
+		EntityEffectRunnable hearts = new EntityEffectRunnable(getPlayer(), EntityEffect.WOLF_HEARTS, heals);
 		
-		Bukkit.getScheduler().runTaskTimer(NoxMMO.getInstance(), rejuvenation, 0, delayBetweenHeals);
-		Bukkit.getScheduler().runTaskTimer(NoxMMO.getInstance(), hearts, 0, delayBetweenHeals);
+		rejuvenation.runTaskTimer(instance, 0, delayBetweenHeals);
+		hearts.runTaskTimer(instance, 0, delayBetweenHeals);
 		
 		return true;
 	}

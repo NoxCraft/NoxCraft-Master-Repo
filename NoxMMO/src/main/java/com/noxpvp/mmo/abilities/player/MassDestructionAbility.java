@@ -28,6 +28,8 @@ public class MassDestructionAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 		
+		NoxMMO instance = NoxMMO.getInstance();
+		
 		Player p = getPlayer();
 		
 		Vector up = p.getLocation().getDirection();
@@ -35,11 +37,11 @@ public class MassDestructionAbility extends BasePlayerAbility{
 		Vector down = p.getLocation().getDirection();
 		down.setY(-gethVelo());
 		
-		Runnable shootUp = new SetVelocityRunnable(getEntity(), up);
-		Runnable shootDown = new SetVelocityRunnable(getEntity(), down);
+		SetVelocityRunnable shootUp = new SetVelocityRunnable(getEntity(), up);
+		SetVelocityRunnable shootDown = new SetVelocityRunnable(getEntity(), down);
 		
-		Bukkit.getScheduler().runTask(NoxMMO.getInstance(), shootUp);
-		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), shootDown, 30);
+		shootUp.runTask(instance);
+		shootDown.runTaskLater(instance, 30);
 		
 		massDestructors.add(p);
 		return true;

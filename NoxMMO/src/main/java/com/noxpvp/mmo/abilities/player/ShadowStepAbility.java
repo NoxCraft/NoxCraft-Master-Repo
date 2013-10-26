@@ -33,20 +33,20 @@ public class ShadowStepAbility extends BasePlayerAbility{
 		Entity target = getTarget();
 		
 		Location targetLoc = target.getLocation();
-        Vector facing = targetLoc.getDirection().setY(0).multiply(-1);
-        Location loc = targetLoc.toVector().add(facing).toLocation(targetLoc.getWorld());
-        loc.setPitch(0);
-        loc.setYaw(targetLoc.getYaw());
-        
-        
-        Block b = loc.getBlock();
-        if (!(!b.getType().isSolid() || b.getRelative(BlockFace.UP).getType().isSolid())) {
-                return false;
-        }
-        
-        player.teleport(loc);
-        
-        return true;
+		Vector facing = targetLoc.getDirection().setY(0).multiply(-1);
+		Location loc = targetLoc.toVector().add(facing).toLocation(targetLoc.getWorld());
+		loc.setPitch(0);
+		loc.setYaw(targetLoc.getYaw());
+		
+		
+		Block b = loc.getBlock();
+		if (!(!b.getType().isSolid() || b.getRelative(BlockFace.UP).getType().isSolid())) {
+				return false;
+		}
+		
+		player.teleport(loc);
+		
+		return true;
 	}
 	
 	public boolean mayExecute() {

@@ -75,11 +75,13 @@ public class TrackingAbility extends BasePlayerAbility{
 		
 		tracker.setTarget(it);
 		
-		Runnable effect = new EffectRunnable(tracker, EffectType, (duration / effectFreq), 0);
-		Bukkit.getScheduler().runTaskTimer(NoxMMO.getInstance(), effect, 0, effectFreq);
+		NoxMMO instance = NoxMMO.getInstance();
 		
-		Runnable despawn = new DespawnRunnable(tracker);
-		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), despawn, (duration));
+		EffectRunnable effect = new EffectRunnable(tracker, EffectType, (duration / effectFreq), 0);
+		effect.runTaskTimer(instance, 0, effectFreq);
+		
+		DespawnRunnable despawn = new DespawnRunnable(tracker);
+		despawn.runTaskLater(instance, duration);
 		
 		return false;
 	}

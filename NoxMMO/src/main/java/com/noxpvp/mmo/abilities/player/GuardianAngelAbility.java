@@ -5,6 +5,7 @@ import org.bukkit.Effect;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.util.NumberConversions;
@@ -47,17 +48,18 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 		for (Entity it : v.getNearbyEntities(range, range, range)){
 			if (!(it instanceof Player)) continue;
 			
-			Entity e = it;
+			LivingEntity e = (LivingEntity) it;
 			
-			Runnable heal = new HealRunnable(e, getHealAmount(), 1);
-			Runnable effect = new EntityEffectRunnable(e, EntityEffect.WOLF_HEARTS, NumberConversions.toInt((getHealAmount() / 2)));
-			Bukkit.getScheduler().runTaskLater(instance, heal, 40);
-			Bukkit.getScheduler().runTaskTimer(instance, effect, 25, 5);
+			HealRunnable heal = new HealRunnable(e, getHealAmount(), 1);
+			EntityEffectRunnable effect = new EntityEffectRunnable(e, EntityEffect.WOLF_HEARTS, NumberConversions.toInt((getHealAmount() / 2)));
+			
+			heal.runTaskLater(instance, 40);
+			effect.runTaskTimer(instance, 25, 5);
 		}
-		Runnable leaveEffect = new EffectRunnable(v, getLeaveEffect(), 1, 5);
-		Runnable despawn = new DespawnRunnable(v);
-		Bukkit.getScheduler().runTaskTimer(instance, leaveEffect, 90, 2);
-		Bukkit.getScheduler().runTaskLater(instance, despawn, 100);
+		EffectRunnable leaveEffect = new EffectRunnable(v, getLeaveEffect(), 1, 5);
+		DespawnRunnable despawn = new DespawnRunnable(v);
+		leaveEffect.runTaskTimer(instance, 90, 2);
+		despawn.runTaskLater(instance, 100);
 		
 		return true;
 	}
