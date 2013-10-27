@@ -162,12 +162,13 @@ public class NoxCore extends NoxPlugin {
 		
 		// Serializable Objects
 		ConfigurationSerialization.registerClass(SafeLocation.class);
+		
+		playerManager = new PlayerManager();
 	}
 	
 	@Override
 	public void reloadConfig() {
-		config.load();
-		
+		getCoreConfig().load();
 		ChestBlockListener.isRemovingOnInteract = config.get("custom.events.chestblocked.isRemovingOnInteract", ChestBlockListener.isRemovingOnInteract);
 		ChestBlockListener.usePlaceEvent = config.get("custom.events.chestblocked.usePlaceEvent", ChestBlockListener.usePlaceEvent);
 		ChestBlockListener.useFormEvent = config.get("custom.events.chestblocked.useFormEvent", ChestBlockListener.useFormEvent);
@@ -178,6 +179,8 @@ public class NoxCore extends NoxPlugin {
 	}
 	
 	public FileConfiguration getCoreConfig(){
+		if (config == null)
+			config = new FileConfiguration(getDataFile("config.yml"));
 		return config;
 	}
 	

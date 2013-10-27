@@ -18,8 +18,9 @@ import com.vexsoftware.votifier.model.VotifierEvent;
 
 public class VoteListener implements Listener {
 	private final PlayerManager manager;
-	private static ModuleLogger log;
-	private static FileHandler handle;
+	private static ModuleLogger log = null;
+	private static FileHandler handle = null;
+	private static boolean isGood = false;
 	
 	public VoteListener()
 	{
@@ -28,12 +29,13 @@ public class VoteListener implements Listener {
 		init();
 	}
 	
-	private void init()
+	private static void init()
 	{
 		try {
 			handle = new FileHandler(NoxCore.getInstance().getDataFile("votelogs.log").getPath(), true);
 			log = NoxCore.getInstance().getModuleLogger("Vote","Log");
 			log.addHandler(handle);
+			isGood = handle != null;
 		} catch (SecurityException e) {
 			if (handle != null)
 				handle.close();
@@ -47,7 +49,7 @@ public class VoteListener implements Listener {
 	
 	public void destroy()
 	{
-		if (handle != null)
+		if (isGood)
 		{
 			log.removeHandler(handle);
 			handle.close();

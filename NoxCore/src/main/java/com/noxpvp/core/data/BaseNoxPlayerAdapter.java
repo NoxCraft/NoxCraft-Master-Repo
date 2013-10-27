@@ -20,7 +20,7 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter {
 	public BaseNoxPlayerAdapter(NoxPlayerAdapter player)
 	{
 		playerRef = new SoftReference<NoxPlayer>(player.getNoxPlayer());
-		playerName = playerRef.get().getName();
+		playerName = player.getNoxPlayer().getName();
 	}
 	
 	public BaseNoxPlayerAdapter(OfflinePlayer player) {

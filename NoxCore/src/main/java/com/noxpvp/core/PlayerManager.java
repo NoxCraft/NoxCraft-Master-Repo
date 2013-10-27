@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,12 @@ public class PlayerManager implements Persistant {
 	private FileConfiguration config;
 	
 	private Map<String, NoxPlayer> players;
+	
+	
+	public PlayerManager() {
+		config = new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml"));
+		players = new HashMap<String, NoxPlayer>();
+	}
 	
 	/* (non-Javadoc)
 	 * @see com.noxpvp.core.Persistant#save()
@@ -135,8 +142,8 @@ public class PlayerManager implements Persistant {
 		if (players.containsKey(name))
 			player = players.get(name);
 		else
-			new NoxPlayer(this, name);
-
+			player = new NoxPlayer(this, name);
+		
 		player.load();
 		
 		if (!players.containsKey(name))

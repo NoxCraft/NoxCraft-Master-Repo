@@ -52,7 +52,7 @@ public class ChatPingListener implements Listener {
 		String lastCol = ChatColor.getLastColors(sb.toString());
 		
 		final String reset;
-		if (lastCol != null && lastCol != "")
+		if (lastCol != null && !lastCol.equals(""))
 			reset = ChatColor.COLOR_CHAR + "r" + lastCol;
 		else
 			reset = ChatColor.COLOR_CHAR + "r";
