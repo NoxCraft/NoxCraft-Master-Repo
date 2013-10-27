@@ -153,7 +153,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		if (persistant_data instanceof FileConfiguration)
 		{
 			FileConfiguration configNode = (FileConfiguration) persistant_data;
-			configNode.load();
+			configNode.save();
 		}
 	}
 
