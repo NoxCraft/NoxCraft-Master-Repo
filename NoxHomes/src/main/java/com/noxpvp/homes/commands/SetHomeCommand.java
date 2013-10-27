@@ -102,7 +102,7 @@ public class SetHomeCommand implements CommandRunner {
 			SafeLocation l = new SafeLocation(newHome.getLocation());
 			
 			sender.sendMessage(plugin.getLocale("homes.sethome"+(own?".own":""), playerName, homeName, String.format(
-					"x=%1 y=%2 z=%3 on world %4", l.getX(), l.getY(), l.getZ(), l.getWorldName()
+					"x=%1$s y=%2$s z=%3$s on world %4$s", l.getX(), l.getY(), l.getZ(), l.getWorldName()
 					)));
 //		}
 			

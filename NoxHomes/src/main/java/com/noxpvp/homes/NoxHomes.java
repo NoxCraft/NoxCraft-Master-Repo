@@ -1,4 +1,4 @@
-package com.noxpvp.homes;
+package com.noxpvp.homes; 
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -10,35 +10,92 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.permissions.PermissionDefault;
 
+import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.utils.CommandUtil;
-import com.noxpvp.homes.commands.DeleteHomeCommand;
-import com.noxpvp.homes.commands.HomeAdminImportCommand;
-import com.noxpvp.homes.commands.HomeCommand;
-import com.noxpvp.homes.commands.HomeListCommand;
+import com.noxpvp.homes.commands.*;
 import com.noxpvp.homes.tp.BaseHome;
 
 public class NoxHomes extends NoxPlugin {
 
-	private static NoxHomes instance;
-	private HomeManager homeManager;
-	private Map<String, CommandRunner> commandExecs;
+	public static NoxHomes getInstance() {
+		return instance;
+	}
+	
+	/**
+	 * <b> BE SURE TO HAVE THOSE CLASSES IMPLEMENT <u>CommandRunner</u> OR YOU RISK CRASH!</b>
+	 */
+	@SuppressWarnings("unchecked")
+	private static final Class<CommandRunner>[] commands = (Class<CommandRunner>[]) new Class<?>[] {
+		DeleteHomeCommand.class,
+		HomeAdminCommand.class,
+		HomeCommand.class,
+		HomeListCommand.class,
+		LocateHomeCommand.class,
+		SetHomeCommand.class
+	};
 	public final static String HOMES_NODE = "homes";
+	private static NoxHomes instance;
+	private Map<String, CommandRunner> commandExecs;
+	
+	private HomeManager homeManager;
+	
+	@Override
+	public boolean command(CommandSender sender, String command, String[] args) {
+		Map<String, Object> flags = new LinkedHashMap<String, Object>();
+		args = CommandUtil.parseFlags(flags, args);
+		
+		if (commandExecs.containsKey(command.toLowerCase(Locale.ENGLISH)))
+		{
+			CommandRunner cmd = commandExecs.get(command.toLowerCase(Locale.ENGLISH));
+			if (cmd == null)
+				throw new NullPointerException("Command Runner was null!");
+			
+			if (!cmd.execute(sender, flags, args))
+				cmd.displayHelp(sender);
+			
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public void disable() {
+		setInstance(null);
+	}
+
+	private static void setInstance(NoxHomes homes) {
+		instance = homes;
+	}
+
+	@Override
+	public void enable() {
+		if (instance != null)
+		{
+			log(Level.SEVERE, "Instance already running of NoxHomes!");
+			log(Level.SEVERE, "Self Disabling new instance.");
+			setEnabled(false);
+			return;
+		}
+		
+		instance = this;
+		
+		registerAllCommands();
+		
+		commandExecs = new HashMap<String, CommandRunner>();
+		homeManager = new HomeManager();
+		
+		ConfigurationSerialization.registerClass(BaseHome.class);
+	}
 	
 	public HomeManager getHomeManager()
 	{
 		return homeManager;
 	}
-	
-	@Override
-	public void disable() {
-		instance = null;
-		
-	}
-	
+
 	@Override
 	public void permissions() {
 		addPermission(
@@ -113,43 +170,14 @@ public class NoxHomes extends NoxPlugin {
 			);
 	}
 
-	@Override
-	public void enable() {
-		if (instance != null)
+	private void registerAllCommands() {
+		for (Class<CommandRunner> cls : commands)
 		{
-			log(Level.SEVERE, "Instance already running of NoxHomes!");
-			log(Level.SEVERE, "Self Disabling new instance.");
-			setEnabled(false);
-			return;
+			SafeConstructor<CommandRunner> cons = new SafeConstructor<CommandRunner>(cls, new Class[0]);
+			CommandRunner rn = cons.newInstance();
+			if (rn != null)
+				registerCommand(rn);
 		}
-		
-		instance = this;
-		commandExecs = new HashMap<String, CommandRunner>();
-		
-		ConfigurationSerialization.registerClass(BaseHome.class);
-	}
-	
-	@Override
-	public boolean command(CommandSender sender, String command, String[] args) {
-		Map<String, Object> flags = new LinkedHashMap<String, Object>();
-		args = CommandUtil.parseFlags(flags, args);
-		
-		if (commandExecs.containsKey(command.toLowerCase(Locale.ENGLISH)))
-		{
-			CommandRunner cmd = commandExecs.get(command.toLowerCase(Locale.ENGLISH));
-			if (cmd == null)
-				throw new NullPointerException("Command Runner was null!");
-			
-			if (!cmd.execute(sender, flags, args))
-				cmd.displayHelp(sender);
-			
-			return true;
-		}
-		return false;
-	}
-
-	public static NoxHomes getInstance() {
-		return instance;
 	}
 
 }
