@@ -37,7 +37,24 @@ public class NoxCore extends NoxPlugin {
 	private PlayerManager playerManager;
 	
 	private static boolean useUserFile = true;
+	private static boolean useNanoTime = false;
 	
+	
+	
+	/**
+	 * @return the useNanoTime
+	 */
+	public static synchronized final boolean isUsingNanoTime() {
+		return useNanoTime;
+	}
+
+	/**
+	 * @param useNanoTime the useNanoTime to set
+	 */
+	public static synchronized final void setUseNanoTime(boolean useNanoTime) {
+		NoxCore.useNanoTime = useNanoTime;
+	}
+
 	/**
 	 * @return the useUserFile
 	 */

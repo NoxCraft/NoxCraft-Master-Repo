@@ -6,6 +6,71 @@ import java.util.Map;
 public final class TimeUtils {
 	private TimeUtils() {}
 	
+	public static String getReadableNanosTime(long nanos) {
+		int ns = (int) (nanos % 1000);
+		nanos /= 1000;
+		int ms = (int) (nanos % 1000);
+		nanos /= 1000;
+		
+		int seconds = (int) (nanos % 60);
+		nanos /= 60;
+		
+		int minutes = (int) (nanos % 60);
+		nanos /= 60;
+		
+		int hours = (int) (nanos % 24);
+		nanos /= 24;
+		
+		int days = (int) (nanos % Integer.MAX_VALUE);
+		
+		StringBuilder sb = new StringBuilder();
+		if (days != 0)
+			sb.append(days).append("d ");
+		if (hours != 0)
+			sb.append(hours).append("h ");
+		if (minutes != 0)
+			sb.append(minutes).append("m ");
+		if (seconds != 0)
+			sb.append(seconds).append("s ");
+		if (ms != 0)
+			sb.append(ms).append("ms ");
+		if (ns != 0)
+			sb.append(ns).append("ns");
+		
+		return sb.toString();
+	}
+	
+	public static String getReadableMillisTime(long millis)
+	{
+		int ms = (int) (millis % 1000);
+		millis /= 1000;
+		
+		int seconds = (int) (millis % 60);
+		millis /= 60;
+		
+		int minutes = (int) (millis % 60);
+		millis /= 60;
+		
+		int hours = (int) (millis % 24);
+		millis /= 24;
+		
+		int days = (int) (millis % Integer.MAX_VALUE);
+		
+		StringBuilder sb = new StringBuilder();
+		if (days != 0)
+			sb.append(days).append("d ");
+		if (hours != 0)
+			sb.append(hours).append("h ");
+		if (minutes != 0)
+			sb.append(minutes).append("m ");
+		if (seconds != 0)
+			sb.append(seconds).append("s ");
+		if (ms != 0)
+			sb.append(ms).append("ms ");
+		
+		return sb.toString();
+	}
+	
 	public static class StopWatch {
 		private final Map<String, Long> starts;
 		private final Map<String, Long> elapses;
@@ -92,5 +157,10 @@ public final class TimeUtils {
 				convert(isNanos());
 			return last;
 		}
+	}
+
+	public static long getStamp(boolean nanos)
+	{
+		return (nanos)? System.nanoTime(): System.currentTimeMillis();
 	}
 }

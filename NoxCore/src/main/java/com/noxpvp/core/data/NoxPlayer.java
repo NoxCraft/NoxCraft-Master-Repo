@@ -1,5 +1,9 @@
 package com.noxpvp.core.data;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.WeakHashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -8,6 +12,7 @@ import org.bukkit.entity.Player;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.internal.PermissionHandler;
+import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.SafeLocation;
@@ -19,8 +24,13 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	private ConfigurationNode persistant_data = null;
 	private PlayerManager manager;
 	
+	private WeakHashMap<String, CoolDown> cd_cache;
+	private List<CoolDown> cds;
+	
 	public NoxPlayer(NoxPlayer player)
 	{
+		cds = new ArrayList<CoolDown>();
+		cd_cache = new WeakHashMap<String, CoolDown>();
 		this.name = player.name;
 		this.temp_data = player.temp_data;
 		this.persistant_data = player.persistant_data;
@@ -150,6 +160,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 
 	public void save() {
+		persistant_data.set("cooldowns", getCoolDowns());
 		if (persistant_data instanceof FileConfiguration)
 		{
 			FileConfiguration configNode = (FileConfiguration) persistant_data;
@@ -166,6 +177,61 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			FileConfiguration fNode = (FileConfiguration) persistant_data;
 			fNode.load();
 		}
+		
+		cds = persistant_data.getList("cooldowns", CoolDown.class);
+		
+		rebuild_cache();
+	}
+	
+	public void rebuild_cache() {
+		cd_cache.clear();
+		for (CoolDown cd: cds)
+			cd_cache.put(cd.getName(), cd);
 	}
 
+	public List<CoolDown> getCoolDowns() {
+		return cds;
+	}
+	
+	public boolean isCooldownActive(String name)
+	{
+		if (cd_cache.containsKey(name))
+			return cd_cache.get(name).expired();
+		else
+			return false;
+	}
+	
+	public boolean isCooldownExpired(String name)
+	{
+		if (cd_cache.containsKey(name))
+			return cd_cache.get(name).expired();
+		else
+			return true;
+	}
+	
+	public void removeCooldDown(String name)
+	{
+		if (cd_cache.containsKey(name))
+		{
+			cds.remove(cd_cache.get(name));
+			cd_cache.remove(name);
+		}
+	}
+	
+	public boolean addCoolDown(String name, long length)
+	{
+		if (cd_cache.containsKey(name) && !cd_cache.get(name).expired())
+			return false;
+		CoolDown cd;
+		
+		long time = 0;
+		if (NoxCore.isUsingNanoTime())
+			time = System.nanoTime() + length;
+		
+		cd = new CoolDown(name, time, NoxCore.isUsingNanoTime());
+		
+		cds.add(cd);
+		cd_cache.put(cd.getName(), cd);
+		return true;
+	}
 }
