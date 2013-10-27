@@ -28,9 +28,17 @@ public class HealRunnable extends BukkitRunnable{
 		}
 		
 		if (!(e instanceof LivingEntity))
+		{
+			safeCancel();
 			return;
+		}
 		
-		e.setHealth(e.getHealth() + health);
+		health = (e.getHealth() + health);
+		try {
+			e.setHealth(e.getHealth() + health);
+		}
+		catch (IllegalArgumentException health) {}
+		}
 	}
 
 }

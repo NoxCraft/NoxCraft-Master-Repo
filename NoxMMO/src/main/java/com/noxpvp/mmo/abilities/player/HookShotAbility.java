@@ -1,9 +1,11 @@
 package com.noxpvp.mmo.abilities.player;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
@@ -51,11 +53,11 @@ public class HookShotAbility extends BasePlayerAbility{
 		if (hBlock.getRelative(0, 1, 0).getType() != Material.AIR || hBlock.getRelative(0, 2, 0).getType() != Material.AIR)
 				return false;
 		
-		hBlock.setType(getHoldingBlock());
-		p.teleport(hBlock.getLocation());
+		Location pLoc = p.getLocation();
+		Location eLoc = hBlock.getLocation();
+		Vector vector = eLoc.toVector().subtract(pLoc.toVector());
 		
-		BlockTimerRunnable removeBlock = new BlockTimerRunnable(hBlock, Material.AIR, getHoldingBlock());
-		removeBlock.runTaskLater(NoxMMO.getInstance(), getBlockTime());
+		p.getWorld().spawnArrow(p.getEyeLocation(), vector, 3, 0);
 		
 		return true;
 	}
