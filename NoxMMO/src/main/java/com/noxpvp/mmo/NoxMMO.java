@@ -38,6 +38,8 @@ public class NoxMMO extends NoxPlugin {
 		}
 		
 		setInstance(this);
+		
+		playerManager = new PlayerManager();
 	}
 	
 	private void setInstance(NoxMMO noxMMO) {

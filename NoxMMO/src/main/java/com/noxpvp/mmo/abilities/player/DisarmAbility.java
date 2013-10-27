@@ -22,6 +22,7 @@ public class DisarmAbility extends BasePlayerAbility{
 	
 	public DisarmAbility(Player player){
 		super(ABILITY_NAME, player);
+		weapons = new HashSet<Material>();
 	}
 	
 	public boolean execute() {

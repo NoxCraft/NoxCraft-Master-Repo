@@ -22,6 +22,7 @@ public class MassDestructionAbility extends BasePlayerAbility{
 
 	public MassDestructionAbility(Player p){
 		super(ABILITY_NAME, p);
+		massDestructors = new HashSet<Player>();
 	}
 	
 	public boolean execute() {

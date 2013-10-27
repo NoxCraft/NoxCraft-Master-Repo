@@ -18,6 +18,7 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 	
 	public DemoralizingRoarAbility(Entity entity){
 		super(ABILITY_NAME, entity);
+		creatures = new HashSet<Creature>();
 	}
 	public boolean execute() {
 		if (!mayExecute())
