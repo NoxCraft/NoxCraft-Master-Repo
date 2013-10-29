@@ -1,41 +1,101 @@
 package com.noxpvp.mmo.abilities.player;
 
-import org.bukkit.Location;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
-import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 
 public class HookShotAbility extends BasePlayerAbility{
 	
+	public static List<Arrow> hookArrows = new ArrayList<Arrow>();
+	
 	private final static String ABILITY_NAME = "Hook Shot";
 	private Arrow hook;
-	private int maxDistance;
+	private double maxDistance;
 	private int blockTime;
-	private Material holdingBlock;
+	private Material holdingBlockType;
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Arrow hook - The current hook given to this instance. Returns null is setHook() has not been used
+	 */
 	public Arrow getHook() {return hook;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param hook - The hook from a (intended) projectile shoot event
+	 * @return HookShotAbility - This instance used for chaining
+	 */
 	public HookShotAbility setHook(Arrow hook) {this.hook = hook; return this;}
 
-	public int getMaxDistance() {return maxDistance;}
-	public HookShotAbility setMaxDistance(int maxDistance) {this.maxDistance = maxDistance; return this;}
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return int - Max distance set for ability execution - returns null is setMaxDistance() has not been used
+	 */
+	public double getMaxDistance() {return maxDistance;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param maxDistance The max distance a player can hook to
+	 * @return HookShotAbility This instance used for chaining
+	 */
+	public HookShotAbility setMaxDistance(double maxDistance) {this.maxDistance = maxDistance; return this;}
 
-	public Material getHoldingBlock() {return holdingBlock;}
-	public HookShotAbility setHoldingBlock(Material block) {this.holdingBlock = block; return this;}
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Material - Type of block used to support player
+	 */
+	public Material getHoldingBlockType() {return holdingBlockType;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param block - Material type that should be used to support the player
+	 * @return HookShotAbility - This instance used for chaining
+	 */
+	public HookShotAbility setHoldingBlockType(Material block) {this.holdingBlockType = block; return this;}
 
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Integer Amount of ticks the supporting block will last before removal
+	 */
 	public int getBlockTime() {return blockTime;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param blockTime - Time before the supporting block is removed
+	 * @return HookShotAbility - This instance used for chaining
+	 */
 	public HookShotAbility setBlockTime(int blockTime) {this.blockTime = blockTime; return this;}
 
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param player - Player used for the ability (Usually the shooter is a projectile shoot event)
+	 * @param hook - Arrow used for the ability (Usually the projectile from a projectile shoot event)
+	 */
 	public HookShotAbility(Player player, Arrow hook){
 		super(ABILITY_NAME, player);
 		this.hook = hook;
 	}
 
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If ability successfully executed
+	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -53,15 +113,16 @@ public class HookShotAbility extends BasePlayerAbility{
 		if (hBlock.getRelative(0, 1, 0).getType() != Material.AIR || hBlock.getRelative(0, 2, 0).getType() != Material.AIR)
 				return false;
 		
-		Location pLoc = p.getLocation();
-		Location eLoc = hBlock.getLocation();
-		Vector vector = eLoc.toVector().subtract(pLoc.toVector());
-		
-		p.getWorld().spawnArrow(p.getEyeLocation(), vector, 3, 0);
+		HookShotAbility.hookArrows.add(getHook());
 		
 		return true;
 	}
 
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If the execute() method for this instance will be able to start
+	 */
 	public boolean mayExecute() {
 		if (getPlayer() == null || getHook() == null)
 			return false;

@@ -13,13 +13,36 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 	private int range;
 	private HashSet<Creature> creatures = null;
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Integer - Currently set range to look for targets
+	 */
 	public int getRange() {return range;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param range - Integer range to look that this ability should look for targets
+	 * @return DemoralizingRoarAbility - This instance, used for chaining
+	 */
 	public DemoralizingRoarAbility setRange(int range) {this.range = range; return this;}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param entity - Entity type user of this ability (Usually a wolf)
+	 */
 	public DemoralizingRoarAbility(Entity entity){
 		super(ABILITY_NAME, entity);
 		creatures = new HashSet<Creature>();
 	}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If this ability executed successfully
+	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -46,6 +69,11 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 		return true;
 	}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If the execute() method will normally be able to start
+	 */
 	public boolean mayExecute() {
 		return getEntity() != null;
 	}

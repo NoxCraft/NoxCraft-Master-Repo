@@ -1,8 +1,8 @@
 package com.noxpvp.mmo.abilities.player;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -14,17 +14,44 @@ import com.noxpvp.mmo.runnables.SetVelocityRunnable;
 public class MassDestructionAbility extends BasePlayerAbility{
 	
 	private final static String ABILITY_NAME = "Mass Destruction";
-	public HashSet<Player> massDestructors;
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * The class list of current mass destructors. Used for event side checking
+	 */
+	public static List<Player> massDestructors = new ArrayList<Player>();
 	private double hVelo = 4;
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param velo - Double velocity value for player upwards/downwards effect
+	 * @return MassDestructionAbility - This instance, used for chaining
+	 */
 	public MassDestructionAbility sethVelo(double velo) {this.hVelo = velo; return this;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Double - The current set velocity used for the player upwards/downwards effect
+	 */
 	public double gethVelo() {return this.hVelo;}
 
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param p - The Player type user for this instance
+	 */
 	public MassDestructionAbility(Player p){
 		super(ABILITY_NAME, p);
-		massDestructors = new HashSet<Player>();
 	}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If the ability has successfully executed
+	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -44,10 +71,15 @@ public class MassDestructionAbility extends BasePlayerAbility{
 		shootUp.runTask(instance);
 		shootDown.runTaskLater(instance, 30);
 		
-		massDestructors.add(p);
+		MassDestructionAbility.massDestructors.add(getPlayer());
 		return true;
 	}
 
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If the execute() method will normally be able to start
+	 */
 	public boolean mayExecute() {
 		return getPlayer() != null;
 	}

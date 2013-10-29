@@ -15,16 +15,50 @@ public class ShadowStepAbility extends BasePlayerAbility{
 	private Entity target;
 	private int range;
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Integer - the currently set range for the ability execution
+	 */
 	public int getRange() {return range;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param range - The range that the target can be from the ability user
+	 * @return ShadowStepAbility - This instance, used for chaining
+	 */
 	public ShadowStepAbility setRange(int range) {this.range = range; return this;}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Entity - The currently set target for this ability instance
+	 */
 	public Entity getTarget() {return target;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param target - The Entity Type target that this ability instance should be targeted at
+	 * @return ShadowStepAbility - This instance, used for chaining
+	 */
 	public ShadowStepAbility setTarget(Entity target) {this.target = target; return this;}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param player - the Player type user for this ability instance
+	 */
 	public ShadowStepAbility(Player player){
 		super(ABILITY_NAME, player);
 	}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If the ability has executed successfullty
+	 * */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -49,6 +83,11 @@ public class ShadowStepAbility extends BasePlayerAbility{
 		return true;
 	}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If the execute() method is normally able to start
+	 */
 	public boolean mayExecute() {
 		return getPlayer() != null;
 	}
