@@ -1,6 +1,5 @@
 package com.noxpvp.mmo.abilities.player;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Entity;
@@ -21,21 +20,68 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 	
 	private final static String ABILITY_NAME = "Guardian Angel";
 	private int range = 5;
-	private int healAmount = 6;
+	private double healAmount = 6;
 	private Effect leaveEffect;
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Integer - Currently set range for the angel heal range
+	 */
 	public int getRange() {return range;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param range - The Integer range the angel should look for player to heal
+	 * @return GuardianAngelAbility - This instance, used for chaining
+	 */
 	public GuardianAngelAbility setRange(int range) {this.range = range; return this;}
 	
-	public int getHealAmount() {return healAmount;}
-	public GuardianAngelAbility setHealAmount(int healAmount) {this.healAmount = healAmount; return this;}
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Integer - The currently set amount to heal players
+	 */
+	public double getHealAmount() {return healAmount;}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param healAmount - double amount that the angel should heal players
+	 * @return GuardianAngelAbility - This instance, used for chaining
+	 */
+	public GuardianAngelAbility setHealAmount(double healAmount) {this.healAmount = healAmount; return this;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Effect - The current effect set for when the guardian angel vanishes / is removed
+	 */
 	public Effect getLeaveEffect() {return this.leaveEffect;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param leaveEffect - Effect type for the angel when removed / leaves after healing is complete
+	 * @return guardianAngelAbility - This instance, used for chaining
+	 */
 	public GuardianAngelAbility setLeaveEffect(Effect leaveEffect) {this.leaveEffect = leaveEffect; return this;}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param player - The Player type user for this ability instance
+	 */
 	public GuardianAngelAbility(Player player){
 		super(ABILITY_NAME, player);
 	}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If the ability has successfully executed
+	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -64,6 +110,11 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 		return true;
 	}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If the execute() method will normally be able to start
+	 */
 	public boolean mayExecute() {
 		return getPlayer() != null;
 	}

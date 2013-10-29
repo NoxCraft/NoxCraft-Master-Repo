@@ -15,27 +15,90 @@ public class PickPocketAbility extends BasePlayerAbility{
 	private int pocketamount = 1;
 	private boolean takeFullStack = false;
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Player - The currently set target for this ability instance
+	 */
 	public Player getTarget() {return target;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param target - the Player type target that this ability should use
+	 * @return PickPocketAbility - This instance, used for chaining
+	 */
 	public PickPocketAbility setTarget(Player target) {this.target = target; return this;}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return double - The currently set chance for pick pocket success
+	 */
 	public double getChance() {return chance;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param chance - The double chance this ability has for a successful pick pocket
+	 * should be between 0.00 and 100.00
+	 * @return
+	 */
 	public PickPocketAbility setChance(double chance) {this.chance = chance; return this;}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Integer - The amount of an item stack to take if pick is successful
+	 * (Will always return 64 if TakeFullStack() ha been set to true)
+	 */
 	public int getPocketamount() {
 		if (isTakeFullStack())
 			return 64;
 		else 
 			return this.pocketamount;
 	}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param pocketamount - Integer amount that the player should take from the item stack if pick is successful
+	 * (Will always be overridden with 64 if TakeFullStack() has been set to true)
+	 * @return PickPocketAbility - This instance, used for chaining
+	 */
 	public PickPocketAbility setPocketamount(int pocketamount){this.pocketamount = pocketamount; return this;}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If pocketamount will always be overriden with 64
+	 */
 	public boolean isTakeFullStack() {return takeFullStack;}
+	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param takeFullStack - Boolean if s successful pick will always take the full amount of the item
+	 * (Else falls back onto the setPocketAmount() )
+	 * @return PickPocketAbility - This instance, used for chaining
+	 */
 	public PickPocketAbility setTakeFullStack(boolean takeFullStack) {this.takeFullStack = takeFullStack; return this;}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @param player - The Player type user for this ability instance
+	 * (The PickPocket)
+	 */
 	public PickPocketAbility(Player player){
 		super(ABILITY_NAME, player);
 	}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If the ability has successfully executed
+	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -83,6 +146,11 @@ public class PickPocketAbility extends BasePlayerAbility{
 		return true;
 	}
 	
+	/**
+	 * @author Connor Stone
+	 * 
+	 * @return Boolean - If the execute() method will normally be able to start
+	 */
 	public boolean mayExecute() {
 		if (getPlayer() == null || getTarget() == null)
 			return false;

@@ -2,8 +2,6 @@ package com.noxpvp.core.listeners;
  
 import java.util.ArrayList;
 import java.util.List;
- 
-
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,7 +24,7 @@ public class ChatPingListener implements Listener {
 		final List<Player> players = new ArrayList<Player>();
 		for (final Player p: Bukkit.getServer().getOnlinePlayers())
 		{
-			if (msg.contains("@"+p.getName()))
+			if ((msg.toLowerCase()).contains(p.getName().toLowerCase()) && (msg.toLowerCase()).contains("@"))
 			{
 				players.add(p);
 			}
@@ -57,16 +55,19 @@ public class ChatPingListener implements Listener {
 		else
 			reset = ChatColor.COLOR_CHAR + "r";
 				
-		final String ital = ChatColor.ITALIC.toString();
+		final String underline = ChatColor.UNDERLINE.toString();
 		final String green = ChatColor.GREEN.toString();
 		int i = 0;
 		
-		for(Player p : players) {list.add(i, "@" + p.getName()); newNames.add(i++, green + ital + p.getName() + reset);}
+		for(Player p : players) {list.add(i, (p.getName().toLowerCase())); newNames.add(i++, green + underline + p.getName() + reset);}
 			
 		int n = 0;
 		for (String s: list) {
-			while(sb.indexOf(s, 0) >= 0){
-				sb.replace((sb.indexOf(s, 0)), (sb.indexOf(s, 0) + s.length()), newNames.get(n));
+
+			int i2 = 0;
+			while(sb.toString().toLowerCase().indexOf(s, i2) >= 0){
+				sb.replace((sb.toString().toLowerCase().indexOf(s, i2)), ((sb.toString().toLowerCase()).indexOf(s, i2) + s.length()), newNames.get(n));
+				i2 = (((sb.toString().toLowerCase()).indexOf(s, i2) + s.length()));
 			}
 			n++;
 		}

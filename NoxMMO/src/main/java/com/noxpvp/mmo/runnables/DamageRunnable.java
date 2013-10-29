@@ -16,7 +16,13 @@ public class DamageRunnable extends BukkitRunnable{
 		this.d = damage;
 	}
 	
+	public void safeCancel() { try { cancel(); } catch (IllegalStateException e) {} }
+	
 	public void run(){
+		if (!(e instanceof Damageable)){
+			safeCancel();
+			return;
+		}
 		e.damage(d, a);
 	}
 
