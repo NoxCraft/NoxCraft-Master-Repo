@@ -4,8 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.noxpvp.core.utils.Vector3D;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.utils.Vector3D;
 
 public class HitVanishedPlayers extends BasePlayerAbility{
 	
