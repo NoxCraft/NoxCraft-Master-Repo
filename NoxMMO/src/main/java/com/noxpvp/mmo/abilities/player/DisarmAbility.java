@@ -9,6 +9,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class DisarmAbility extends BasePlayerAbility{
 	
+	public final static String PERM_NODE = "disarm";
 	private final static String ABILITY_NAME = "Disarm";
 	private Player target;
 	private HashSet<Material> weapons;

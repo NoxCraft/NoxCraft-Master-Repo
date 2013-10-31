@@ -6,6 +6,9 @@ import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class SuperBreakerAbility extends BasePlayerAbility {
+	
+	public static final String PERM_NODE = "super-breaker";
+	private static final String ABILITY_NAME = "Super Breaker Ability";
 	private static long maximumTicks = 6000;
 	
 	/**
@@ -28,7 +31,7 @@ public class SuperBreakerAbility extends BasePlayerAbility {
 
 	public SuperBreakerAbility(Player player)
 	{
-		super("SuperBreakerAbility", player);
+		super(ABILITY_NAME, player);
 	}
 	
 	public SuperBreakerAbility(NoxPlayerAdapter adapt)

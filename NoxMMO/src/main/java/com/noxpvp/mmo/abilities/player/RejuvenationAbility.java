@@ -1,6 +1,5 @@
 package com.noxpvp.mmo.abilities.player;
 
-import org.bukkit.Bukkit;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Player;
 
@@ -11,6 +10,7 @@ import com.noxpvp.mmo.runnables.HealRunnable;
 
 public class RejuvenationAbility extends BasePlayerAbility{
 	
+	public final static String PERM_NODE = "rejuvenation";
 	private final static String ABILITY_NAME = "Rejuvenation";
 	private int healthPerHeal = 1;
 	private int heals = 6;

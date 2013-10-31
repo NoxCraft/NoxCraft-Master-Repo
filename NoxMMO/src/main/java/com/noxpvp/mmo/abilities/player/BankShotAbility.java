@@ -1,6 +1,5 @@
 package com.noxpvp.mmo.abilities.player;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -16,6 +15,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class BankShotAbility extends BasePlayerAbility{
 	
+	public final static String PERM_NODE = "bankshot";
 	private final static String ABILITTY_NAME = "Bank Shot";
 	private Projectile p;
 	private int range;

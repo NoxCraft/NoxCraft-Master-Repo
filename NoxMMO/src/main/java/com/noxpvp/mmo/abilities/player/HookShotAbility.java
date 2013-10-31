@@ -11,6 +11,7 @@ import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 
 public class HookShotAbility extends BasePlayerAbility{
 	
+	public final static String PERM_NODE = "hookshot";
 	private final static String ABILITY_NAME = "Hook Shot";
 	private Arrow hook;
 	private int maxDistance;

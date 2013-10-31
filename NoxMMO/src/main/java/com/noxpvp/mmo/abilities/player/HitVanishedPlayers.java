@@ -9,6 +9,8 @@ import com.noxpvp.mmo.utils.Vector3D;
 
 public class HitVanishedPlayers extends BasePlayerAbility{
 	
+	public static final String PERM_NODE = "hit-vanished-players";
+	private static final String ABILITY_NAME = "Hit Vanished Players";
 	private double range = 3.5;
 	private Player e = null;
 	
@@ -16,7 +18,7 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 	public HitVanishedPlayers setRange(double range) {this.range = range; return this;}
 	
 	public HitVanishedPlayers(Player player){
-		super("Hit Vanished Players", player);
+		super(ABILITY_NAME, player);
 	}
 	public boolean execute() {
 		if (!mayExecute())
