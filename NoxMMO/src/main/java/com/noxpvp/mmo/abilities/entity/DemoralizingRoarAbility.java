@@ -7,19 +7,46 @@ import org.bukkit.entity.Entity;
 
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 
+/**
+ * @author NoxPVP
+ *
+ */
 public class DemoralizingRoarAbility extends BaseEntityAbility{
 	
 	private final static String ABILITY_NAME = "Demoralizing Roar";
 	private int range;
 	private HashSet<Creature> creatures = null;
 	
+	/**
+	 * 
+	 * 
+	 * @return Integer - Currently set range to look for targets
+	 */
 	public int getRange() {return range;}
+	
+	/**
+	 * 
+	 * 
+	 * @param range - Integer range to look that this ability should look for targets
+	 * @return DemoralizingRoarAbility - This instance, used for chaining
+	 */
 	public DemoralizingRoarAbility setRange(int range) {this.range = range; return this;}
 	
+	/**
+	 * 
+	 * 
+	 * @param entity - Entity type user of this ability (Usually a wolf)
+	 */
 	public DemoralizingRoarAbility(Entity entity){
 		super(ABILITY_NAME, entity);
 		creatures = new HashSet<Creature>();
 	}
+	
+	/**
+	 * 
+	 * 
+	 * @return Boolean - If this ability executed successfully
+	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -46,6 +73,11 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 		return true;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @return Boolean - If the execute() method will normally be able to start
+	 */
 	public boolean mayExecute() {
 		return getEntity() != null;
 	}

@@ -3,6 +3,10 @@ package com.noxpvp.mmo.runnables;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * @author NoxPVP
+ *
+ */
 public class HealRunnable extends BukkitRunnable{
 	
 	private double health;
@@ -10,6 +14,12 @@ public class HealRunnable extends BukkitRunnable{
 	private int runsLimit;
 	private int runs = 0;
 	
+	/**
+	 * 
+	 * @param entity - Living entity to heal
+	 * @param healthAmount - double amount to heal target
+	 * @param runsLimit - the amount of times to run, if used as a tasktimer
+	 */
 	public HealRunnable(LivingEntity entity, double healthAmount, int runsLimit){
 		this.e = entity;
 		this.health = healthAmount;
@@ -27,18 +37,7 @@ public class HealRunnable extends BukkitRunnable{
 			return;
 		}
 		
-		if (!(e instanceof LivingEntity))
-		{
-			safeCancel();
-			return;
-		}
-		
-		health = (e.getHealth() + health);
-		try {
-			e.setHealth(e.getHealth() + health);
-		}
-		catch (IllegalArgumentException health) {}
-		}
+		e.setHealth(e.getHealth() + health);
 	}
 
 }

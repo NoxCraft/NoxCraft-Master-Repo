@@ -5,6 +5,10 @@ import org.bukkit.entity.Player;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
+/**
+ * @author NoxPVP
+ *
+ */
 public class SuperBreakerAbility extends BasePlayerAbility {
 	private static long maximumTicks = 6000;
 	

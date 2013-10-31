@@ -5,6 +5,10 @@ import org.bukkit.Effect;
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * @author NoxPVP
+ *
+ */
 public class EffectRunnable extends BukkitRunnable{
 	
 	private Entity e;
@@ -12,6 +16,13 @@ public class EffectRunnable extends BukkitRunnable{
 	private int bitData;
 	private int runs;
 	
+	/**
+	 * 
+	 * @param entity - The entity at which location and world to apply the effect
+	 * @param effect - The effect type
+	 * @param bitdata - the extra bit data for specific effect exp: potion splash color
+	 * @param runsLimit - The amount of times to run, if used in a task timer
+	 */
 	public EffectRunnable(Entity entity, Effect effect, int bitdata, int runsLimit){
 		this.e = entity;
 		this.effectType = effect;
