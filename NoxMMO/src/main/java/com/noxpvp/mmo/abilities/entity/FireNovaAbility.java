@@ -15,29 +15,91 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 
+/**
+ * @author NoxPVP
+ *
+ */
 public class FireNovaAbility extends BaseEntityAbility{
 	
 	private final static String ABILITY_NAME = "Fire Nova";
 	private int range;
 	private int tickSpeed;
-	private Material blockType;
+	private Material blockType = Material.FIRE;
 	private boolean burnTallGrass;
 	private FirenovaAnimation animation;
 	
+	/**
+	 * 
+	 * 
+	 * @return Integer - The currently set nova range emitted out from player
+	 */
 	public int getRange() {return this.range;}
+	
+	/**
+	 * 
+	 * 
+	 * @param range - Integer range that the fire nova will emitt from player
+	 * @return FireNovaAbility - This instance, used for chaining
+	 */
 	public FireNovaAbility setRange(int range) {this.range = range; return this;}
 	
+	/**
+	 * 
+	 * 
+	 * @return Integer - Currently set tick delay between fire rings
+	 */
 	public int getTickSpeed() {return tickSpeed;}
+	
+	/**
+	 * 
+	 * 
+	 * @param tickSpeed - Integer tick delay between fire ring creations/removal
+	 * @return FireNovaAbility - This instance, used for chaining
+	 */
 	public FireNovaAbility setTickSpeed(int tickSpeed) {this.tickSpeed = tickSpeed; return this;}
 	
+	/**
+	 * 
+	 * 
+	 * @return Material - Currently set fire Material (Default Material.FIRE)
+	 */
 	public Material getBlockType() {return blockType;}
+	
+	/**
+	 * 
+	 * 
+	 * @param blockType - The Material type to use for fire blocks (Default Material.FIRE)
+	 * @return FireNovaAbility - This instance, used for chaining
+	 */
 	public FireNovaAbility setBlockType(Material blockType) {this.blockType = blockType; return this;}
 	
+	/**
+	 * 
+	 * 
+	 * @return Boolean - If the fire Rings will burn any tall grass it their way, or go around them
+	 */
 	public boolean isBurnTallGrass() {return burnTallGrass;}
+	
+	/**
+	 * 
+	 * 
+	 * @param burnTallGrass - Boolean if the fire rings should burn tall grass is their way
+	 * @return
+	 */
 	public FireNovaAbility setBurnTallGrass(boolean burnTallGrass) {this.burnTallGrass = burnTallGrass; return this;}
 	
+	/**
+	 * 
+	 * 
+	 * @param entity - The Entity type user for this ability instance (Also to fire ring center location)
+	 */
 	public FireNovaAbility(Entity entity){super(ABILITY_NAME, entity);}
 	
+	/**
+	 * 
+	 * 
+	 * @return Boolean - If this ability was executed successfully
+	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -48,6 +110,11 @@ public class FireNovaAbility extends BaseEntityAbility{
 		return true;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @return Boolean - If the execute() method will normally for able to start
+	 */
 	public boolean mayExecute() {
 		return getEntity() != null;
 	}
@@ -59,6 +126,10 @@ public class FireNovaAbility extends BaseEntityAbility{
 		private HashSet<Block> fireBlocks;
 		private int taskId;
 		
+		/**
+		 * 
+		 * The actual Fire Rings animation, handle with care...or evil
+		 */
 		public FirenovaAnimation() {
 			this.e = getEntity();
 			i = 0;

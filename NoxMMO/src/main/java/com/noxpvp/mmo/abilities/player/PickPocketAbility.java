@@ -7,35 +7,105 @@ import org.bukkit.inventory.ItemStack;
 
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
+/**
+ * @author NoxPVP
+ *
+ */
 public class PickPocketAbility extends BasePlayerAbility{
 	
 	private final static String ABILITY_NAME = "Pick Pocket";
 	private Player target;
-	private double chance = 15;
+	private float chance = 15;
+	private float calChance;
 	private int pocketamount = 1;
 	private boolean takeFullStack = false;
 	
+	/**
+	 * 
+	 * 
+	 * @return Player - The currently set target for this ability instance
+	 */
 	public Player getTarget() {return target;}
+	
+	/**
+	 * 
+	 * 
+	 * @param target - the Player type target that this ability should use
+	 * @return PickPocketAbility - This instance, used for chaining
+	 */
 	public PickPocketAbility setTarget(Player target) {this.target = target; return this;}
 	
-	public double getChance() {return chance;}
-	public PickPocketAbility setChance(double chance) {this.chance = chance; return this;}
+	/**
+	 * 
+	 * 
+	 * @return double - The currently set chance for pick pocket success
+	 */
+	public float getChance() {return chance;}
 	
+	public float getCalChance() {return calChance;}
+	
+	/**
+	 * 
+	 * 
+	 * @param chance - The double chance this ability has for a successful pick pocket
+	 * should be between 0.00 and 100.00
+	 * @return
+	 */
+	public PickPocketAbility setChance(float chance) {this.chance = chance; this.calChance = chance / 100; return this;}
+	
+	/**
+	 * 
+	 * 
+	 * @return Integer - The amount of an item stack to take if pick is successful
+	 * (Will always return 64 if TakeFullStack() ha been set to true)
+	 */
 	public int getPocketamount() {
 		if (isTakeFullStack())
 			return 64;
 		else 
 			return this.pocketamount;
 	}
+	
+	/**
+	 * 
+	 * 
+	 * @param pocketamount - Integer amount that the player should take from the item stack if pick is successful
+	 * (Will always be overridden with 64 if TakeFullStack() has been set to true)
+	 * @return PickPocketAbility - This instance, used for chaining
+	 */
 	public PickPocketAbility setPocketamount(int pocketamount){this.pocketamount = pocketamount; return this;}
 	
+	/**
+	 * 
+	 * 
+	 * @return Boolean - If pocketamount will always be overriden with 64
+	 */
 	public boolean isTakeFullStack() {return takeFullStack;}
+	
+	/**
+	 * 
+	 * 
+	 * @param takeFullStack - Boolean if s successful pick will always take the full amount of the item
+	 * (Else falls back onto the setPocketAmount() )
+	 * @return PickPocketAbility - This instance, used for chaining
+	 */
 	public PickPocketAbility setTakeFullStack(boolean takeFullStack) {this.takeFullStack = takeFullStack; return this;}
 	
+	/**
+	 * 
+	 * 
+	 * @param player - The Player type user for this ability instance
+	 * (The PickPocket)
+	 */
 	public PickPocketAbility(Player player){
 		super(ABILITY_NAME, player);
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @return Boolean - If the ability has successfully executed
+	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -52,7 +122,7 @@ public class PickPocketAbility extends BasePlayerAbility{
 		if (!(p.isSneaking()))//and sneaking
 			return false;
 		
-		if (Math.random() * 100 > getChance())//chance to pick
+		if (Math.random() > getCalChance())//chance to pick
 			return false;
 		
 		Inventory inv = getTarget().getInventory();//get target inventory
@@ -83,6 +153,11 @@ public class PickPocketAbility extends BasePlayerAbility{
 		return true;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @return Boolean - If the execute() method will normally be able to start
+	 */
 	public boolean mayExecute() {
 		if (getPlayer() == null || getTarget() == null)
 			return false;
