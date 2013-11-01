@@ -9,6 +9,7 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.mmo.abilities.entity.LeapAbility;
+import com.noxpvp.mmo.abilities.player.MassDestructionAbility;
 
 public class NoxMMO extends NoxPlugin {
 	public static final String PERM_NODE = "nox.mmo";
@@ -25,6 +26,8 @@ public class NoxMMO extends NoxPlugin {
 
 	@Override
 	public void disable() {
+		MassDestructionAbility.massDestructors = null;
+		
 		setInstance(null);
 	}
 
