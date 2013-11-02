@@ -3,6 +3,7 @@ description: Provides home management for teleportation usage. Meant as a replac
 Author: Christopher Krier (AKA Coaster3000)
 version: ${project.version}
 main: ${main}
+depend: [NoxCore]
 softdepend: [Vault]
 commands:
   importhomes:

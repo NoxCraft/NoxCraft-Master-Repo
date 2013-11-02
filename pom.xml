@@ -7,8 +7,6 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>NoxCore</module>
-		<module>NoxLog</module>
-		<module>NoxSkills</module>
 		<module>NoxHomes</module>
 		<module>NoxMMO</module>
 	</modules>

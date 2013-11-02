@@ -2,4 +2,4 @@ name: NoxCore
 version: ${project.version}
 main: ${main}
 depend: [BKCommonLib]
-softdepend: [Vault]
+softdepend: [Vault, Votifier]
