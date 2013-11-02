@@ -36,6 +36,8 @@ public class NoxCore extends NoxPlugin {
 
 	private PlayerManager playerManager;
 	
+	private MasterReloader masterReloader = null;
+	
 	private static boolean useUserFile = true;
 	private static boolean useNanoTime = false;
 	
@@ -146,6 +148,8 @@ public class NoxCore extends NoxPlugin {
 		
 		setInstance(this);
 		
+		masterReloader = new MasterReloader();
+		
 		Conversion.register(new BasicConverter<NoxPlayer>(NoxPlayer.class) {
 			@Override
 			protected NoxPlayer convertSpecial(Object object, Class<?> obType, NoxPlayer def) {
@@ -164,6 +168,20 @@ public class NoxCore extends NoxPlugin {
 		ConfigurationSerialization.registerClass(SafeLocation.class);
 		
 		playerManager = new PlayerManager();
+		Reloader r = new BaseReloader(masterReloader, "NoxCore") {
+			public boolean reload() {
+				return false;
+			}
+		};
+		
+		r.addModule(new BaseReloader(r, "config.yml") {
+			public boolean reload() {
+				NoxCore.this.reloadConfig();
+				return true;
+			}
+		});
+		
+		masterReloader.addModule(r);
 	}
 	
 	@Override
