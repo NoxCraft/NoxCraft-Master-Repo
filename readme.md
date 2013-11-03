@@ -7,4 +7,4 @@ It contains all our plugins and code.
 Credits
 ----
 Christopher Krier ([AKA Coaster3000](https://github.com/coaster3000)) - Head Developer
-Connor Stone ([AKA BBCSTO13](https://github.com/ConnorStone)) - Contributor 
+Connor Stone ([AKA BBCSTO13](https://github.com/ConnorStone)) - Junior Developer 
