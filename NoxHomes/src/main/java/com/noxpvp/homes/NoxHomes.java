@@ -134,21 +134,21 @@ public class NoxHomes extends NoxPlugin {
 		addPermission(
 				new NoxPermission(this, "homes.*", "All of NoxHomes permissions Including admin.", PermissionDefault.FALSE,
 						new NoxPermission(this, "homes.admin.*", "All NoxHome's Admin Permissions", PermissionDefault.FALSE, 
-								new NoxPermission(this, "homes.admin.history", "Ability to read Home History.", PermissionDefault.OP),
-								new NoxPermission(this, "homes.admin.wipe.*", "Permission to wipe all data.", PermissionDefault.OP,
-										new NoxPermission(this, "homes.admin.wipe.history", "Permission to wipe history.", PermissionDefault.OP),
-										new NoxPermission(this, "homes.admin.wipe.homes", "Permission to wipe homes data.", PermissionDefault.OP)
+								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "history"), "Ability to read Home History.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "wipe" , "*"), "Permission to wipe all data.", PermissionDefault.OP,
+										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "wipe" , "history"), "Permission to wipe history.", PermissionDefault.OP),
+										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "wipe" , "homes"), "Permission to wipe homes data.", PermissionDefault.OP)
 								),
-								new NoxPermission(this, "homes.admin.load", "Permission to reload plugin.", PermissionDefault.OP),
-								new NoxPermission(this, "homes.admin.save", "Permission to force save.", PermissionDefault.OP),
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin",HomeAdminImportCommand.PERM_NODE), "Permission to migrate save data to and from plugin.", PermissionDefault.OP)
+								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "load"), "Permission to reload plugin.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "save"), "Permission to force save.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", HomeAdminImportCommand.PERM_NODE), "Permission to migrate save data to and from plugin.", PermissionDefault.OP)
 						),
-						new NoxPermission(this, "homes.sethome.*", "Allowed to set home of everything including others.", PermissionDefault.FALSE,
-								new NoxPermission(this, "homes.sethome.default", "Allowed to set default home.", PermissionDefault.OP),
-								new NoxPermission(this, "homes.sethome.named", "Allowed to set named homes.", PermissionDefault.OP),
-								new NoxPermission(this, "homes.sethome.others.*", "Allowed to set any type of other peoples homes.", PermissionDefault.FALSE,
-										new NoxPermission(this, "homes.sethome.others.default", "Allowed to set other peoples default homes.", PermissionDefault.OP),
-										new NoxPermission(this, "homes.sethome.others.named", "Allowed to set other peoples named homes.", PermissionDefault.OP)
+						new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "*"), "Allowed to set home of everything including others.", PermissionDefault.FALSE,
+								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "default"), "Allowed to set default home.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "named"), "Allowed to set named homes.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", "*"), "Allowed to set any type of other peoples homes.", PermissionDefault.FALSE,
+										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", "default"), "Allowed to set other peoples default homes.", PermissionDefault.OP),
+										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", "named"), "Allowed to set other peoples named homes.", PermissionDefault.OP)
 								)
 						),
 						new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, HomeCommand.PERM_NODE, "*"), "Allowed to warp to any type of home. Including others.", PermissionDefault.FALSE,
