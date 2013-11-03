@@ -326,6 +326,11 @@ public class NoxCore extends NoxPlugin {
 		return playerManager;
 	}
 
+	public Reloader getMasterReloader()
+	{
+		return masterReloader;
+	}
+	
 	public Reloader getReloader(String path)
 	{
 		return masterReloader.getModule(path);
