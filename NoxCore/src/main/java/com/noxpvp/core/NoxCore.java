@@ -181,7 +181,7 @@ public class NoxCore extends NoxPlugin {
 			}
 		});
 		
-		masterReloader.addModule(r);
+		addReloader(r);
 	}
 	
 	@Override
@@ -322,6 +322,30 @@ public class NoxCore extends NoxPlugin {
 		return Collections.unmodifiableList(permissions);
 	}
 
+	public PlayerManager getPlayerManager() {
+		return playerManager;
+	}
+
+	public Reloader getReloader(String path)
+	{
+		return masterReloader.getModule(path);
+	}
+	
+	public boolean hasReloader(String path)
+	{
+		return masterReloader.hasModule(path);
+	}
+
+	public boolean hasReloaders()
+	{
+		return masterReloader.hasModules();
+	}
+	
+	public boolean addReloader(Reloader r)
+	{
+		return masterReloader.addModule(r);
+	}
+	
 	public static NoxCore getInstance() {
 		return instance;
 	}
@@ -331,7 +355,4 @@ public class NoxCore extends NoxPlugin {
 		NoxCore.instance = instance;
 	}
 
-	public PlayerManager getPlayerManager() {
-		return playerManager;
-	}
 }
