@@ -12,15 +12,20 @@ import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
+import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.permissions.NoxPermission;
+import com.noxpvp.core.reloader.BaseReloader;
+import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.CommandUtil;
 import com.noxpvp.homes.commands.*;
 import com.noxpvp.homes.tp.BaseHome;
 
 public class NoxHomes extends NoxPlugin {
 
+	NoxCore core;
+	
 	public static NoxHomes getInstance() {
 		return instance;
 	}
@@ -82,6 +87,7 @@ public class NoxHomes extends NoxPlugin {
 		}
 		
 		instance = this;
+		core = NoxCore.getInstance();
 		
 		registerAllCommands();
 		
@@ -89,6 +95,33 @@ public class NoxHomes extends NoxPlugin {
 		homeManager = new HomeManager();
 		
 		ConfigurationSerialization.registerClass(BaseHome.class);
+		
+		Reloader r = new BaseReloader(core.getMasterReloader(), "NoxHomes") {
+			public boolean reload() {
+				reloadConfig();
+				return true;
+			}
+		};
+		
+		r.addModule(new BaseReloader(r, "homes") {
+			public boolean reload() {
+				getHomeManager().load();
+				return true;
+			}
+		});
+		
+		r.addModule(new BaseReloader(r, "limits") {
+			public boolean reload() {
+				getLimitsManager().load();
+				return true;
+			}
+		});
+		
+		core.addReloader(r);
+	}
+	
+	public NoxCore getCore() {
+		return core;
 	}
 	
 	public HomeManager getHomeManager()
