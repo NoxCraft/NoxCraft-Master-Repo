@@ -23,6 +23,8 @@ import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.listeners.ChestBlockListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.permissions.NoxPermission;
+import com.noxpvp.core.reloader.BaseReloader;
+import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.CommandUtil;
 
 public class NoxCore extends NoxPlugin {
@@ -36,10 +38,10 @@ public class NoxCore extends NoxPlugin {
 
 	private PlayerManager playerManager;
 	
+	private MasterReloader masterReloader = null;
+	
 	private static boolean useUserFile = true;
 	private static boolean useNanoTime = false;
-	
-	
 	
 	/**
 	 * @return the useNanoTime
@@ -146,6 +148,8 @@ public class NoxCore extends NoxPlugin {
 		
 		setInstance(this);
 		
+		masterReloader = new MasterReloader();
+		
 		Conversion.register(new BasicConverter<NoxPlayer>(NoxPlayer.class) {
 			@Override
 			protected NoxPlayer convertSpecial(Object object, Class<?> obType, NoxPlayer def) {
@@ -164,6 +168,20 @@ public class NoxCore extends NoxPlugin {
 		ConfigurationSerialization.registerClass(SafeLocation.class);
 		
 		playerManager = new PlayerManager();
+		Reloader r = new BaseReloader(masterReloader, "NoxCore") {
+			public boolean reload() {
+				return false;
+			}
+		};
+		
+		r.addModule(new BaseReloader(r, "config.yml") {
+			public boolean reload() {
+				NoxCore.this.reloadConfig();
+				return true;
+			}
+		});
+		
+		addReloader(r);
 	}
 	
 	@Override
@@ -304,6 +322,30 @@ public class NoxCore extends NoxPlugin {
 		return Collections.unmodifiableList(permissions);
 	}
 
+	public PlayerManager getPlayerManager() {
+		return playerManager;
+	}
+
+	public Reloader getReloader(String path)
+	{
+		return masterReloader.getModule(path);
+	}
+	
+	public boolean hasReloader(String path)
+	{
+		return masterReloader.hasModule(path);
+	}
+
+	public boolean hasReloaders()
+	{
+		return masterReloader.hasModules();
+	}
+	
+	public boolean addReloader(Reloader r)
+	{
+		return masterReloader.addModule(r);
+	}
+	
 	public static NoxCore getInstance() {
 		return instance;
 	}
@@ -313,7 +355,4 @@ public class NoxCore extends NoxPlugin {
 		NoxCore.instance = instance;
 	}
 
-	public PlayerManager getPlayerManager() {
-		return playerManager;
-	}
 }
