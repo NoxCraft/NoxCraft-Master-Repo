@@ -23,6 +23,8 @@ import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.listeners.ChestBlockListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.permissions.NoxPermission;
+import com.noxpvp.core.reloader.BaseReloader;
+import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.CommandUtil;
 
 public class NoxCore extends NoxPlugin {
@@ -40,8 +42,6 @@ public class NoxCore extends NoxPlugin {
 	
 	private static boolean useUserFile = true;
 	private static boolean useNanoTime = false;
-	
-	
 	
 	/**
 	 * @return the useNanoTime

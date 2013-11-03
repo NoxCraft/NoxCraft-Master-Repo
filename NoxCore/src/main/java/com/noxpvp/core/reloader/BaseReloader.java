@@ -1,7 +1,9 @@
-package com.noxpvp.core;
+package com.noxpvp.core.reloader;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.noxpvp.core.MasterReloader;
 
 public abstract class BaseReloader implements Reloader {
 	protected Map<String, Reloader> reloaders;

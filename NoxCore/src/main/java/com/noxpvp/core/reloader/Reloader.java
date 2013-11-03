@@ -1,4 +1,4 @@
-package com.noxpvp.core;
+package com.noxpvp.core.reloader;
 
 public interface Reloader {
 	/**

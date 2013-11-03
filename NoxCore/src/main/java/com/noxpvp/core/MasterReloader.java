@@ -1,5 +1,7 @@
 package com.noxpvp.core;
 
+import com.noxpvp.core.reloader.BaseReloader;
+
 
 public final class MasterReloader extends BaseReloader {
 	private static final String root = "Master";
