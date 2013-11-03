@@ -45,6 +45,7 @@ public class NoxHomes extends NoxPlugin {
 	public final static String HOMES_NODE = "homes";
 	private static NoxHomes instance;
 	private Map<String, CommandRunner> commandExecs;
+	private HomeLimitManager limitManager;
 	
 	private HomeManager homeManager;
 	
@@ -213,4 +214,7 @@ public class NoxHomes extends NoxPlugin {
 		}
 	}
 
+	public HomeLimitManager getLimitsManager() {
+		return limitManager;
+	}
 }
