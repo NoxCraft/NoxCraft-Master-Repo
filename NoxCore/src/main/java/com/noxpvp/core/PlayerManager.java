@@ -69,7 +69,7 @@ public class PlayerManager implements Persistant {
 	public ConfigurationNode getPlayerNode(String name)
 	{
 		if (isMultiFile())
-			return new FileConfiguration(NoxCore.getInstance(), "playerdata"+File.pathSeparator+name+".yml");
+			return new FileConfiguration(NoxCore.getInstance(), "playerdata"+File.separatorChar+name+".yml");
 		else if (config != null)
 			return config.getNode("players").getNode(name);
 		else

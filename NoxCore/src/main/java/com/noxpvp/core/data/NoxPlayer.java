@@ -39,6 +39,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	public NoxPlayer(PlayerManager mn, String name) {
+		cds = new ArrayList<CoolDown>();
+		cd_cache = new WeakHashMap<String, CoolDown>();
 		manager = mn;
 		this.name = name;
 		load();

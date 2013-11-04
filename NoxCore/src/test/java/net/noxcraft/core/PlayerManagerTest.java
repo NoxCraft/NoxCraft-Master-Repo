@@ -52,8 +52,10 @@ public class PlayerManagerTest extends EasyMockSupport {
 		playerManager = new PlayerManager(new FileConfiguration((temp = new File("playerdata"+File.separator+"config.yml")))){
 			@Override
 			public ConfigurationNode getPlayerNode(String name) {
+				File f = new File("playerdata"+File.separatorChar+player+".yml");
+				f.deleteOnExit();
 				if (isMultiFile())
-					return new FileConfiguration(new File("playerdata"+File.pathSeparator+name+".yml"));
+					return new FileConfiguration(f);
 				else if (config != null)
 					return config.getNode("players").getNode(name);
 				else
@@ -75,6 +77,7 @@ public class PlayerManagerTest extends EasyMockSupport {
 	@AfterClass
 	public static void teardownClass() {
 		temp = null;
+		
 		playerManager = null;
 		
 		reset(server);
