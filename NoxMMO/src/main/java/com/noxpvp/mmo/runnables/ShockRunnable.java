@@ -15,7 +15,7 @@ import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.NoxMMO;
 
-public class GenericShockRunnable implements Runnable{
+public class ShockRunnable implements Runnable{
 	private int shockRange;
 	private Vector shockVelo;
 	private double percentThrown;
@@ -23,7 +23,7 @@ public class GenericShockRunnable implements Runnable{
 	private HashSet<FallingBlock> shockBlocks;
 	private List<Material> flowers;
 	
-	public GenericShockRunnable(Location shockCenter, int shockRange, double shockVelo, double percentThrown, int delay) {
+	public ShockRunnable(Location shockCenter, int shockRange, double shockVelo, double percentThrown, int delay) {
 		this.center = shockCenter.getBlock();
 		this.shockRange = shockRange;
 		this.shockVelo = new Vector().zero();
