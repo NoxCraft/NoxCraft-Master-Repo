@@ -21,13 +21,19 @@ import com.noxpvp.core.data.NoxPlayer;
 
 public class PlayerManager implements Persistant {
 
-	private FileConfiguration config;
+	protected FileConfiguration config;
 	
 	private Map<String, NoxPlayer> players;
 	
-	
 	public PlayerManager() {
+		this(new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml")));
 		config = new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml"));
+		players = new HashMap<String, NoxPlayer>();
+	}
+	
+	public PlayerManager(FileConfiguration conf)
+	{
+		this.config = conf;
 		players = new HashMap<String, NoxPlayer>();
 	}
 	
@@ -63,7 +69,7 @@ public class PlayerManager implements Persistant {
 	public ConfigurationNode getPlayerNode(String name)
 	{
 		if (isMultiFile())
-			return new FileConfiguration(NoxCore.getInstance(), "playerdata"+File.pathSeparator+name+".yml");
+			return new FileConfiguration(NoxCore.getInstance(), "playerdata"+File.separatorChar+name+".yml");
 		else if (config != null)
 			return config.getNode("players").getNode(name);
 		else
