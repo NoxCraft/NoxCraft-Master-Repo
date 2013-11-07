@@ -9,13 +9,14 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
-import org.easymock.EasyMock;
-import org.easymock.EasyMockSupport;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import static org.easymock.EasyMock.*;
+import org.mockito.Mock;
+
+import static org.mockito.Mockito.*;
+
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
@@ -24,10 +25,10 @@ import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.data.NoxPlayer;
 
 @RunWith(Parameterized.class)
-public class PlayerManagerTest extends EasyMockSupport {
+public class PlayerManagerTest{
 	static PlayerManager playerManager;
 	static File temp;
-	static Server server;
+	@Mock static Server server;
 
 	private static boolean multiFile;
 	private static String player;
@@ -40,13 +41,14 @@ public class PlayerManagerTest extends EasyMockSupport {
 	
 	@BeforeClass
 	public static void setupClass() throws Exception {
-		server = EasyMock.createMock(Server.class);
-		expect(server.getLogger()).andStubReturn(Logger.getLogger("minecraft"));
-		expect(server.getName()).andStubReturn("FakeServer");
-		expect(server.getVersion()).andStubReturn("1.6.4");
-		expect(server.getBukkitVersion()).andStubReturn("FakeBukkit 1.6.4-R9000");
+		server = mock(Server.class);
+		
+		when(server.getLogger()).thenReturn(Logger.getLogger("minecraft"));
+		when(server.getName()).thenReturn("FakeServer");
+		when(server.getVersion()).thenReturn("1.6.4");
+		
+		when(server.getBukkitVersion()).thenReturn("FakeBukkit 1.6.4-R9000");
 
-		replay(server);
 		Bukkit.setServer(server);
 		
 		playerManager = new PlayerManager(new FileConfiguration((temp = new File("playerdata"+File.separator+"config.yml")))){
@@ -87,8 +89,9 @@ public class PlayerManagerTest extends EasyMockSupport {
 	@Test
 	public final void testPlayerManagerFileConfiguration() {
 		reset(server);
-		expect(server.getLogger()).andReturn(Logger.getLogger("minecraft"));
-		replay(server);
+		
+		when(server.getLogger()).thenReturn(Logger.getLogger("minecraft"));
+
 		assertNotNull("Player Manager failed to initialize", playerManager);
 		assertNotNull("File was null. It did not aquire an object.",temp);
 	}
@@ -102,9 +105,9 @@ public class PlayerManagerTest extends EasyMockSupport {
 	@Test
 	public final void testGetPlayerNode() {
 		reset(server);
-		expect(server.getLogger()).andReturn(Logger.getLogger("minecraft"));
 		
-		replay(server);
+		when(server.getLogger()).thenReturn(Logger.getLogger("minecraft"));
+
 		ConfigurationNode node = playerManager.getPlayerNode("test");
 		if (playerManager.isMultiFile())
 			assertTrue("ConfigurationNode was not a FileConfiguration when it was explicitly stated to be so.", (node instanceof FileConfiguration));
