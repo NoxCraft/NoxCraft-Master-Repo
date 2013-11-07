@@ -30,7 +30,7 @@ import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.CommandUtil;
 
 public class NoxCore extends NoxPlugin {
-	private static final Class<CommandRunner>[] commands = (Class<CommandRunner>[]) new Class[]{ CoreCommand.class, ReloadCommand.class};
+	private static final Class<CommandRunner>[] commands = (Class<CommandRunner>[]) new Class[]{ CoreCommand.class};
 
 	private static NoxCore instance;
 	
