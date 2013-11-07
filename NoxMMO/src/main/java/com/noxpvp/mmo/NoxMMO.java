@@ -8,10 +8,9 @@ import org.bukkit.permissions.PermissionDefault;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.permissions.NoxPermission;
-import com.noxpvp.mmo.abilities.entity.LeapAbility;
-import com.noxpvp.mmo.abilities.player.HammerOfThorAbility;
-import com.noxpvp.mmo.abilities.player.MassDestructionAbility;
-import com.noxpvp.mmo.abilities.player.ShurikenAbility;
+import com.noxpvp.mmo.abilities.entity.*;
+import com.noxpvp.mmo.abilities.player.*;
+
 
 public class NoxMMO extends NoxPlugin {
 	public static final String PERM_NODE = "nox.mmo";
@@ -55,9 +54,28 @@ public class NoxMMO extends NoxPlugin {
 	
 	@Override
 	public void permissions() {
-		addPermission(new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability"), "Base MMO Node", PermissionDefault.FALSE, 
-				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", LeapAbility.PERM_NODE), "Allows usage of the leap ability.", PermissionDefault.OP )
-		));
+		addPermission(new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability"), "Base MMO Node", PermissionDefault.FALSE,
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", BackStabAbility.PERM_NODE), "Allows usage of the Back Stab Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", LeapAbility.PERM_NODE), "Allows usage of the leap ability.", PermissionDefault.OP ),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", BankShotAbility.PERM_NODE), "Allows usage of the Bank Shot Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", DisarmAbility.PERM_NODE), "Allows usage of the Disarm Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", DemoralizingRoarAbility.PERM_NODE), "Allows usage of the Demoralizing Road Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", FireBallAbility.PERM_NODE), "Allows usage of the Fire Ball Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", FireNovaAbility.PERM_NODE), "Allows usage of the Fire Nova Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", ForcePullAbility.PERM_NODE), "Allows usage of the Force Pull Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", GuardianAngelAbility.PERM_NODE), "Allows usage of the Guardian Angel Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", HitVanishedPlayers.PERM_NODE), "Allows user to Hit Vanished Players.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", HookShotAbility.PERM_NODE), "Allows usage of the Hook Shot Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", LeapAbility.PERM_NODE), "Allows usage of the Leap Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MassDestructionAbility.PERM_NODE), "Allows usage of the Mass Destruction Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", PickPocketAbility.PERM_NODE), "Allows usage of the Pick Pocket Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", RejuvenationAbility.PERM_NODE), "Allows usage of the Rejuvenation Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", ShadowStepAbility.PERM_NODE), "Allows usage of the Shadow Step Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", SoulStealAbility.PERM_NODE), "Allows usage of the Soul Steal Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", SuperBreakerAbility.PERM_NODE), "Allows usage of the Super Breaker Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", TrackingAbility.PERM_NODE), "Allows usage of the Tracking Ability.", PermissionDefault.OP)
+				)
+		);
 	}
 
 	/**

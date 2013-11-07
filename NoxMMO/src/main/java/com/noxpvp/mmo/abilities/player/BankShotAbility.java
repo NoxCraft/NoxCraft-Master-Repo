@@ -20,6 +20,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
  */
 public class BankShotAbility extends BasePlayerAbility{
 	
+	public final static String PERM_NODE = "bankshot";
 	private final static String ABILITTY_NAME = "Bank Shot";
 	private Projectile a;
 	private int range;

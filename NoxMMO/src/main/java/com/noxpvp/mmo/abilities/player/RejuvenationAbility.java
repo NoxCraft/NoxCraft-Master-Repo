@@ -14,6 +14,7 @@ import com.noxpvp.mmo.runnables.HealRunnable;
  */
 public class RejuvenationAbility extends BasePlayerAbility{
 	
+	public final static String PERM_NODE = "rejuvenation";
 	private final static String ABILITY_NAME = "Rejuvenation";
 	private double healthPerHeal = 1;
 	private int heals = 6;

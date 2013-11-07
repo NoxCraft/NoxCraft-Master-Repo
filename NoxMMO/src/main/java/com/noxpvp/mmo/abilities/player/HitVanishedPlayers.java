@@ -4,11 +4,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.noxpvp.core.utils.Vector3D;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.utils.Vector3D;
 
 public class HitVanishedPlayers extends BasePlayerAbility{
 	
+	public static final String PERM_NODE = "hit-vanished-players";
+	private static final String ABILITY_NAME = "Hit Vanished Players";
 	private double range = 3.5;
 	private Player e = null;
 	
@@ -34,7 +36,7 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 	 * @param player - The Player type user for this ability instance
 	 */
 	public HitVanishedPlayers(Player player){
-		super("Hit Vanished Players", player);
+		super(ABILITY_NAME, player);
 	}
 	
 	/**

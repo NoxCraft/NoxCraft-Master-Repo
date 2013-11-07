@@ -15,6 +15,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
  */
 public class ShadowStepAbility extends BasePlayerAbility{
 	
+	public final static String PERM_NODE = "shadow-step";
 	private final static String ABILITY_NAME = "Shadow Step";
 	private Entity target;
 	private int range;

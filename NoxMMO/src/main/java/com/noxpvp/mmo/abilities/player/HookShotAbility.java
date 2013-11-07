@@ -17,6 +17,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 public class HookShotAbility extends BasePlayerAbility{
 	
 	public static List<Arrow> hookArrows = new ArrayList<Arrow>();
+	public final static String PERM_NODE = "hookshot";
 	
 	private final static String ABILITY_NAME = "Hook Shot";
 	private Arrow hook;
