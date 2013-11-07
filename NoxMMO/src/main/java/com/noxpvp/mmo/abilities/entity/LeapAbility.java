@@ -9,6 +9,8 @@ import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 
 public class LeapAbility extends BaseEntityAbility {
+
+	private static final String ABILITY_NAME = "Leap";
 	public final static String PERM_NODE = "leap";
 	
 	private double hPower;
@@ -16,7 +18,7 @@ public class LeapAbility extends BaseEntityAbility {
 	
 	public LeapAbility(Entity ent, double hPower, double vPower)
 	{
-		super("Leap", ent);
+		super(ABILITY_NAME, ent);
 		this.hPower = hPower;
 		this.vPower = vPower;
 	}

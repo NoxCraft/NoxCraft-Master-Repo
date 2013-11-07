@@ -8,22 +8,9 @@ import org.bukkit.permissions.PermissionDefault;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.permissions.NoxPermission;
-import com.noxpvp.mmo.abilities.entity.DemoralizingRoarAbility;
-import com.noxpvp.mmo.abilities.entity.LeapAbility;
-import com.noxpvp.mmo.abilities.player.BackStabAbility;
-import com.noxpvp.mmo.abilities.player.BankShotAbility;
-import com.noxpvp.mmo.abilities.player.DisarmAbility;
-import com.noxpvp.mmo.abilities.player.FireBallAbility;
-import com.noxpvp.mmo.abilities.player.GuardianAngelAbility;
-import com.noxpvp.mmo.abilities.player.HitVanishedPlayers;
-import com.noxpvp.mmo.abilities.player.HookShotAbility;
-import com.noxpvp.mmo.abilities.player.MassDestructionAbility;
-import com.noxpvp.mmo.abilities.player.PickPocketAbility;
-import com.noxpvp.mmo.abilities.player.RejuvenationAbility;
-import com.noxpvp.mmo.abilities.player.ShadowStepAbility;
-import com.noxpvp.mmo.abilities.player.SoulStealAbility;
-import com.noxpvp.mmo.abilities.player.SuperBreakerAbility;
-import com.noxpvp.mmo.abilities.player.TrackingAbility;
+import com.noxpvp.mmo.abilities.entity.*;
+import com.noxpvp.mmo.abilities.player.*;
+
 
 public class NoxMMO extends NoxPlugin {
 	public static final String PERM_NODE = "nox.mmo";
@@ -70,9 +57,12 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", DisarmAbility.PERM_NODE), "Allows usage of the Disarm Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", DemoralizingRoarAbility.PERM_NODE), "Allows usage of the Demoralizing Road Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", FireBallAbility.PERM_NODE), "Allows usage of the Fire Ball Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", FireNovaAbility.PERM_NODE), "Allows usage of the Fire Nova Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", ForcePullAbility.PERM_NODE), "Allows usage of the Force Pull Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", GuardianAngelAbility.PERM_NODE), "Allows usage of the Guardian Angel Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", HitVanishedPlayers.PERM_NODE), "Allows user to Hit Vanished Players.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", HookShotAbility.PERM_NODE), "Allows usage of the Hook Shot Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", LeapAbility.PERM_NODE), "Allows usage of the Leap Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MassDestructionAbility.PERM_NODE), "Allows usage of the Mass Destruction Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", PickPocketAbility.PERM_NODE), "Allows usage of the Pick Pocket Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", RejuvenationAbility.PERM_NODE), "Allows usage of the Rejuvenation Ability.", PermissionDefault.OP),
@@ -81,7 +71,7 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", SuperBreakerAbility.PERM_NODE), "Allows usage of the Super Breaker Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", TrackingAbility.PERM_NODE), "Allows usage of the Tracking Ability.", PermissionDefault.OP)
 				)
-		));
+		);
 	}
 
 	/**
