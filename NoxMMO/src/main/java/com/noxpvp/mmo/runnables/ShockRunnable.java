@@ -18,12 +18,20 @@ import com.noxpvp.mmo.NoxMMO;
 public class ShockRunnable implements Runnable{
 	private int shockRange;
 	private Vector shockVelo;
-	private double percentThrown;
+	private float percentThrown;
 	private Block center;
 	private HashSet<FallingBlock> shockBlocks;
 	private List<Material> flowers;
 	
-	public ShockRunnable(Location shockCenter, int shockRange, double shockVelo, double percentThrown, int delay) {
+	/**
+	 * 
+	 * @param shockCenter - Location for center of shock
+	 * @param shockRange - Distance of wave from center
+	 * @param shockVelo - Height velocity to throw blocks
+	 * @param percentThrown - Decimal value of chance to throw blocks - (1.0 = all / 0.8 = 80% of blocks)
+	 * @param delay - Delay in ticks before starting
+	 */
+	public ShockRunnable(Location shockCenter, int shockRange, double shockVelo, float percentThrown, int delay) {
 		this.center = shockCenter.getBlock();
 		this.shockRange = shockRange;
 		this.shockVelo = new Vector().zero();
@@ -94,7 +102,7 @@ public class ShockRunnable implements Runnable{
 					b = b.getRelative(BlockFace.DOWN);
 				}
 				
-				if (Math.random() * 100 > percentThrown) continue;
+				if (Math.random() > percentThrown) continue;
 				
 				if (flowers.contains(b.getType())) {b.breakNaturally();}
 				if (b.getType() == Material.GRASS) {b.setType(Material.DIRT);}
