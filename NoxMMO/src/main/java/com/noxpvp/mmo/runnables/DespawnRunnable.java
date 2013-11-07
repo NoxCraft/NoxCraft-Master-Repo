@@ -1,5 +1,8 @@
 package com.noxpvp.mmo.runnables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -9,20 +12,31 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class DespawnRunnable extends BukkitRunnable{
 	
-	private Entity e;
+	private List<Entity> entitys;
 	
 	/**
 	 * 
 	 * @param entity - The entity to mark to be removed
 	 */
 	public DespawnRunnable(Entity entity){
-		this.e = entity;
+		this.entitys = new ArrayList<Entity>();
+		this.entitys.add(entity);
+	}
+	
+	/**
+	 * 
+	 * @param entity - The entity to mark to be removed
+	 */
+	public DespawnRunnable(List<Entity> entitys){
+		this.entitys = entitys;
 	}
 	
 	public void run(){
-		if (e != null)
+		for (Entity e : this.entitys){
+			if (e == null) continue;
+				
 			e.remove();
-		else return;
+		}
 	}
 
 }
