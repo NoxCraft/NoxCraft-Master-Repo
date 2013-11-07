@@ -14,7 +14,7 @@ public class HammerOfThorAbility extends BasePlayerAbility{
         public static List<Player> hammerThrowers = new ArrayList<Player>();
         
         private final static String ABILITY_NAME = "Hammer of Thor";
-        private final static String PERM_NODE = "hammer-of-thor";
+        public final static String PERM_NODE = "hammer-of-thor";
         
         
         private double distanceVelo;

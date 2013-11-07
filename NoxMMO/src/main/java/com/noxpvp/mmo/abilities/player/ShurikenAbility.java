@@ -14,7 +14,7 @@ public class ShurikenAbility extends BasePlayerAbility{
         public static List<Player> shurikenThrowers = new ArrayList<Player>();
         
         private final static String ABILITY_NAME = "Shuriken";
-        private final static String PERM_NODE = "shuriken";
+        public final static String PERM_NODE = "shuriken";
         
         
         private double distanceVelo;

@@ -11,7 +11,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 public class CallOfTheWildAbility extends BasePlayerAbility{
 
 	private final static String ABILITY_NAME = "Call Of the Wild";
-	private final static String PERM_NODE = "wolf-call";
+	public final static String PERM_NODE = "wolf-call";
 	
 	private double range;
 	private boolean cancelIfNearby;
