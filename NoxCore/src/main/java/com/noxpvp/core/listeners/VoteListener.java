@@ -6,7 +6,6 @@ import java.util.logging.FileHandler;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 
 import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
@@ -16,7 +15,7 @@ import com.noxpvp.core.data.NoxPlayer;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.model.VotifierEvent;
 
-public class VoteListener implements Listener {
+public class VoteListener extends NoxListener {
 	private final PlayerManager manager;
 	private static ModuleLogger log = null;
 	private static FileHandler handle = null;
@@ -24,6 +23,7 @@ public class VoteListener implements Listener {
 	
 	public VoteListener()
 	{
+		super(NoxCore.getInstance());
 		manager = NoxCore.getInstance().getPlayerManager();
 		destroy();
 		init();

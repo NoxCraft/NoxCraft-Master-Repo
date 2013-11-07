@@ -11,14 +11,18 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.events.ChatPingEvent;
  
-public class ChatPingListener implements Listener {
+public class ChatPingListener extends NoxListener {
+	
+	public ChatPingListener()
+	{
+		super(NoxCore.getInstance());
+	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onChatEvent(AsyncPlayerChatEvent event){
