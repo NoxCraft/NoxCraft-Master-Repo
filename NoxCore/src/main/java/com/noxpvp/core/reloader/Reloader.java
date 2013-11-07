@@ -70,6 +70,12 @@ public interface Reloader {
 	 * @return Reloader object of specified name.
 	 */
 	public Reloader getModule(String name);
+	
+	/**
+	 * Returns all modules that is part of this reloader.
+	 * @return Reloader array or null if none.
+	 */
+	public Reloader[] getModules();
 
 	/**
 	 * Tells if this is a module of a Master Reloader

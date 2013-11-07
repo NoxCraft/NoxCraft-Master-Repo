@@ -18,6 +18,8 @@ import com.bergerkiller.bukkit.common.Common;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.conversion.BasicConverter;
 import com.bergerkiller.bukkit.common.conversion.Conversion;
+import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
+import com.noxpvp.core.commands.*;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.listeners.ChestBlockListener;
@@ -28,6 +30,8 @@ import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.CommandUtil;
 
 public class NoxCore extends NoxPlugin {
+	private static final Class<CommandRunner>[] commands = (Class<CommandRunner>[]) new Class[]{ CoreCommand.class, ReloadCommand.class};
+
 	private static NoxCore instance;
 	
 	private VoteListener voteListener = null;
@@ -173,6 +177,8 @@ public class NoxCore extends NoxPlugin {
 				return false;
 			}
 		};
+		
+		registerAllCommands();
 		
 		r.addModule(new BaseReloader(r, "config.yml") {
 			public boolean reload() {
@@ -326,7 +332,7 @@ public class NoxCore extends NoxPlugin {
 		return playerManager;
 	}
 
-	public Reloader getMasterReloader()
+	public MasterReloader getMasterReloader()
 	{
 		return masterReloader;
 	}
@@ -349,6 +355,16 @@ public class NoxCore extends NoxPlugin {
 	public boolean addReloader(Reloader r)
 	{
 		return masterReloader.addModule(r);
+	}
+	
+	private void registerAllCommands() {
+		for (Class<CommandRunner> cls : commands)
+		{
+			SafeConstructor<CommandRunner> cons = new SafeConstructor<CommandRunner>(cls, new Class[0]);
+			CommandRunner rn = cons.newInstance();
+			if (rn != null)
+				registerCommand(rn);
+		}
 	}
 	
 	public static NoxCore getInstance() {

@@ -11,11 +11,7 @@ import com.noxpvp.core.permissions.NoxPermission;
 
 public abstract class NoxPlugin extends PluginBase {
 
-	protected Map<String, CommandRunner> commandExecs;
-	
-	public NoxPlugin() {
-		commandExecs = new HashMap<String, CommandRunner>();
-	}
+	protected Map<String, CommandRunner> commandExecs = new HashMap<String, CommandRunner>();;
 	
 	public void registerCommands(Collection<CommandRunner> runners)
 	{

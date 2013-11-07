@@ -1,5 +1,6 @@
 package com.noxpvp.core.reloader;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,5 +110,9 @@ public abstract class BaseReloader implements Reloader {
 		while (prev != (prev = reloader))
 			reloader = reloader.getParent();
 		return reloader;
+	}
+	
+	public Reloader[] getModules() {
+		return new ArrayList<Reloader>(reloaders.values()).toArray(new Reloader[reloaders.size()]);
 	}
 }
