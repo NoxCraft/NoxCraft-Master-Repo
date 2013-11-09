@@ -3,3 +3,10 @@ version: ${project.version}
 main: ${main}
 depend: [BKCommonLib]
 softdepend: [Vault, Votifier]
+commands:
+  reload:
+    description: Reload any plugin. 
+    alias: [noxreload]
+  noxcore:
+    description: Current does nothing.
+    alias: [noxcore]

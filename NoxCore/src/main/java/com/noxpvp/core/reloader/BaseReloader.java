@@ -85,14 +85,14 @@ public abstract class BaseReloader implements Reloader {
 	public Reloader getModule(String path) {
 		Reloader section = this;
 		int i1 = -1, i2;
-		while ((i1 = path.indexOf('.', i2 = i1 + 1)) != -1) {
+		while ((i1 = path.indexOf('\\', i2 = i1 + 1)) != -1) {
 			section = section.getModule(path.substring(i2, i1));
 			if (section == null)
 				return null;
 		}
 		
 		if (section == this)
-			return ((MasterReloader)section).reloaders.get(path.substring(i2));
+			return ((BaseReloader)section).reloaders.get(path.substring(i2));
 		else
 			return section.getModule(path.substring(i2));
 	}

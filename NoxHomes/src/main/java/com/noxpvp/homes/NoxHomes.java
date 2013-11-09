@@ -93,7 +93,7 @@ public class NoxHomes extends NoxPlugin {
 		registerAllCommands();
 		
 		commandExecs = new HashMap<String, CommandRunner>();
-		homeManager = new HomeManager();
+		homeManager = new HomeManager(NoxCore.getInstance());
 		
 		ConfigurationSerialization.registerClass(BaseHome.class);
 		

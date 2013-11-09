@@ -22,9 +22,9 @@ public class HomeManager implements Persistant { //FIXME: Javadocs
 	
 	protected NoxCore plugin;
 	
-	public HomeManager()
+	public HomeManager(NoxCore core)
 	{
-		this.plugin = NoxCore.getInstance();
+		this.plugin = core;
 		players = new HashMap<String, HomesPlayer>();
 	}
 	

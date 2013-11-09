@@ -2,15 +2,12 @@ package com.noxpvp.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -27,10 +24,10 @@ import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
 import com.noxpvp.core.reloader.Reloader;
-import com.noxpvp.core.utils.CommandUtil;
 
 public class NoxCore extends NoxPlugin {
-	private static final Class<CommandRunner>[] commands = (Class<CommandRunner>[]) new Class[]{ CoreCommand.class};
+	@SuppressWarnings("unchecked")
+	private static final Class<CommandRunner>[] commands = (Class<CommandRunner>[]) new Class[]{ CoreCommand.class, ReloadCommand.class};
 
 	private static NoxCore instance;
 	
@@ -75,17 +72,6 @@ public class NoxCore extends NoxPlugin {
 		NoxCore.useUserFile = useUserFile;
 	}
 
-	@Override
-	public boolean command(CommandSender sender, String command, String[] args) {
-		Map<String, Object> flags = new LinkedHashMap<String, Object>();
-		args = CommandUtil.parseFlags(flags, args);
-		
-		if (commandExecs.containsKey(command.toLowerCase(Locale.ENGLISH)))
-			return commandExecs.get(command.toLowerCase(Locale.ENGLISH)).execute(sender, flags, args);
-		else
-			return false;
-	}
-	
 	@Override
 	public void disable() {
 		if (voteListener != null)
