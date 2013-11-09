@@ -302,6 +302,11 @@ public class NoxCore extends NoxPlugin {
 		}
 	}
 
+	@Override
+	public NoxCore getCore() {
+		return (NoxCore)this;
+	}
+	
 	/**
 	 * Acquires all permission nodes.
 	 * 

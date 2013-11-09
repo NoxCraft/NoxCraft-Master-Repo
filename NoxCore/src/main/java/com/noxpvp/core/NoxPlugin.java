@@ -77,4 +77,5 @@ public abstract class NoxPlugin extends PluginBase {
 		return Common.VERSION;
 	}
 	
+	public abstract NoxCore getCore();
 }
