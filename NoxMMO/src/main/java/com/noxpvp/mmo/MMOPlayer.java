@@ -1,6 +1,7 @@
 package com.noxpvp.mmo;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.LivingEntity;
 
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
@@ -12,6 +13,7 @@ import com.noxpvp.mmo.classes.PlayerClass;
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 
 	private PlayerClass currentClass;
+	private LivingEntity target;
 	
 	public MMOPlayer(OfflinePlayer player)
 	{
@@ -57,5 +59,40 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	public Ability getAbility(String abilityName) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/**
+	 * 
+	 * @param target - The LivingEntity to set as the current target
+	 * @return MMOPlayer - This instance
+	 * 
+	 * @throws IllegalStateException - If the target is dead or null
+	 */
+	public MMOPlayer setTarget(LivingEntity target){
+		if (target.isDead() || target == null)
+		{
+			throw new IllegalStateException("Target cannot be null or dead");
+		}
+		
+		this.target = target;
+		
+		return this;
+	}
+	
+	/**
+	 * 
+	 * @return LivingEntity - This players currently set target
+	 */
+	public LivingEntity getTarget(){return this.target;}
+	
+	/**
+	 * 
+	 * @return boolean - If this player has a target set
+	 */
+	public boolean hasTarget(){
+		if (target.isDead() || target == null)
+			return false;
+		
+		return true;
 	}
 }

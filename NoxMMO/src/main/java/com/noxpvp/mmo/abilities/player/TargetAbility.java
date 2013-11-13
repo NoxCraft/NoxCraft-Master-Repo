@@ -5,13 +5,14 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.noxpvp.core.utils.Vector3D;
+import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
-public class HitVanishedPlayers extends BasePlayerAbility{
+public class TargetAbility extends BasePlayerAbility{
 	
-	public static final String PERM_NODE = "hit-vanished-players";
-	private static final String ABILITY_NAME = "Hit Vanished Players";
-	private double range = 3.8;
+	public static final String PERM_NODE = "set-target";
+	private static final String ABILITY_NAME = "Target";
+	private double range = 25;
 	private Player e = null;
 	
 	/**
@@ -23,24 +24,20 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * 
 	 * @param range - The double range to look for targets
-	 * @return HitVanishedPlayers - This instance, used for chaining
+	 * @return TargetAbility - This instance, used for chaining
 	 */
-	public HitVanishedPlayers setRange(double range) {this.range = range; return this;}
+	public TargetAbility setRange(double range) {this.range = range; return this;}
 	
 	/**
 	 * 
-	 * CREDIT: Comphenix @ bukkit forums
-	 * 
 	 * @param player - The Player type user for this ability instance
 	 */
-	public HitVanishedPlayers(Player player){
+	public TargetAbility(Player player){
 		super(ABILITY_NAME, player);
 	}
 	
 	/**
-	 * 
 	 * 
 	 * @return Boolean - If this ability has successfully executed
 	 */
@@ -53,7 +50,7 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 		for (Entity it : p.getNearbyEntities(range, range, range)){
 			
 			if (!(it instanceof Player)) continue;
-			if (((Player)it).canSee(p)) continue;
+			if (!(p).canSee((Player) it)) continue;
 			
 			this.e = (Player) it;
 			break;
@@ -68,15 +65,13 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 		Vector3D observerEnd = observerStart.add(observerDir.multiply(range));
 		
 		Vector3D targetPos = new Vector3D(e.getLocation());
-		Vector3D minimum = targetPos.add(-0.5, 0, -0.5); 
-		Vector3D maximum = targetPos.add(0.5, 1.67, 0.5); 
+		Vector3D minimum = targetPos.add(-0.6, 0, -0.6); 
+		Vector3D maximum = targetPos.add(0.6, 1.75, 0.6); 
 
 		if (hasIntersection(observerStart, observerEnd, minimum, maximum)) {
-			p.showPlayer(e);
-			e.damage(1, p);
-		}
-		
-		return true;
+			NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p.getName()).setTarget(e);
+			return true;
+		}else return false;
 	}
 	
 	/**
