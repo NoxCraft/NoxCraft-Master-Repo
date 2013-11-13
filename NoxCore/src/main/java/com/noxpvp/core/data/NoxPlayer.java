@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -50,6 +51,32 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	public String getName(){
 		return name;
+	}
+	
+	public Location getLastDeathLocation()
+	{
+		SafeLocation l = null;
+		return ((l=this.persistant_data.get("last.death.location", SafeLocation.class))==null?null:l.toLocation()); //Nice handy work here!
+	}
+	
+	public long getLastDeathTS()
+	{
+		return (this.persistant_data.get("last.death.timestamp", (long)0));
+	}
+	
+	public void setLastDeathLocation(Location loc)
+	{
+		this.persistant_data.set("last.death.location", new SafeLocation(loc));
+	}
+	
+	public void setLastDeathTS(long stamp)
+	{
+		this.persistant_data.set("last.death.timestamp", stamp);
+	}
+	
+	public void setLastDeathTS()
+	{
+		setLastDeathTS((NoxCore.isUsingNanoTime()?System.nanoTime(): System.currentTimeMillis()));
 	}
 	
 	public World getLastWorld() {
