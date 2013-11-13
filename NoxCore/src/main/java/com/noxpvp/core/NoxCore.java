@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.PluginManager;
 
 import com.bergerkiller.bukkit.common.Common;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
@@ -20,6 +21,7 @@ import com.noxpvp.core.commands.*;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.listeners.ChestBlockListener;
+import com.noxpvp.core.listeners.DeathListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
@@ -40,6 +42,8 @@ public class NoxCore extends NoxPlugin {
 	private PlayerManager playerManager;
 	
 	private MasterReloader masterReloader = null;
+
+	private DeathListener deathListener;
 	
 	private static boolean useUserFile = true;
 	private static boolean useNanoTime = false;
@@ -137,6 +141,7 @@ public class NoxCore extends NoxPlugin {
 		}
 		
 		setInstance(this);
+		PluginManager pluginManager = getServer().getPluginManager();
 		
 		masterReloader = new MasterReloader();
 		
@@ -148,14 +153,16 @@ public class NoxCore extends NoxPlugin {
 				return def;
 			}
 		});
+		ConfigurationSerialization.registerClass(SafeLocation.class);
 		
 		voteListener = new VoteListener();
-		getServer().getPluginManager().registerEvents(voteListener, this);
+		deathListener = new DeathListener();
+		pluginManager.registerEvents(voteListener, this);
+		pluginManager.registerEvents(deathListener, this);
 		
 		VaultAdapter.load();
 		
 		// Serializable Objects
-		ConfigurationSerialization.registerClass(SafeLocation.class);
 		
 		playerManager = new PlayerManager();
 		Reloader r = new BaseReloader(masterReloader, "NoxCore") {
