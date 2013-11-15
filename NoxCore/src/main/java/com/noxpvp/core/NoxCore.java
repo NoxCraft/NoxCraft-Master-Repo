@@ -3,6 +3,7 @@ package com.noxpvp.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
@@ -16,7 +17,11 @@ import com.bergerkiller.bukkit.common.Common;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.conversion.BasicConverter;
 import com.bergerkiller.bukkit.common.conversion.Conversion;
+import com.bergerkiller.bukkit.common.localization.ILocalizationDefault;
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
+import com.bergerkiller.bukkit.common.utils.LogicUtil;
+import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.*;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
@@ -38,7 +43,8 @@ public class NoxCore extends NoxPlugin {
 	private transient WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>> permission_cache = new WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>>();
 	
 	private FileConfiguration config;
-
+	private FileConfiguration globalLocales;
+	
 	private PlayerManager playerManager;
 	
 	private MasterReloader masterReloader = null;
@@ -87,48 +93,67 @@ public class NoxCore extends NoxPlugin {
 	
 	@Override
 	public void localization() {
+		globalLocales = new FileConfiguration(this, "Global-Localization.yml");
+		
 		//Permission Locales
-		loadLocale("permission.denied", "&4Permission Denied&r:&e %0%"); //%0% is the message while %1% is the perm node.
-		loadLocale("permission.denied.verbose", getLocale("permission.denied", "%1%"));//Locale dynamic replace.
+		loadGlobalLocale("permission.denied", "&4Permission Denied&r:&e %0%"); //%0% is the message while %1% is the perm node.
+		loadGlobalLocale("permission.denied.verbose", getLocale("permission.denied", "%1%"));//Locale dynamic replace.
 		
 		//HOMES
 		{ //Cleaner code.
 				//Home List Locales
-				loadLocale("homes.list.own", "&3Your Homes&r: &e%1%");
-				loadLocale("homes.list", "&e%0%'s &3homes: &e%1%");
+				loadGlobalLocale("homes.list.own", "&3Your Homes&r: &e%1%");
+				loadGlobalLocale("homes.list", "&e%0%'s &3homes: &e%1%");
 
 				//home Command
-				loadLocale("homes.home.own", "&3You teleported to home: %1%");
-				loadLocale("homes.home", "&3You teleported to %0%'s home named &e%1%");
+				loadGlobalLocale("homes.home.own", "&3You teleported to home: %1%");
+				loadGlobalLocale("homes.home", "&3You teleported to %0%'s home named &e%1%");
 				
 				//delhome
-				loadLocale("homes.delhome.own", "&cRemoved your home:&e%1%");
-				loadLocale("homes.delhome", "&cDeleted &e%0%'s&c home named &e%1%");
+				loadGlobalLocale("homes.delhome.own", "&cRemoved your home:&e%1%");
+				loadGlobalLocale("homes.delhome", "&cDeleted &e%0%'s&c home named &e%1%");
 				
 				//Sethome
-				loadLocale("homes.sethome.own", "&aSet new home named &e%1%&a at &6%2%");
-				loadLocale("homes.sethome", "&aSet new home for &e%0%&2 &anamed: &e%1%&a at &6%2%");
+				loadGlobalLocale("homes.sethome.own", "&aSet new home named &e%1%&a at &6%2%");
+				loadGlobalLocale("homes.sethome", "&aSet new home for &e%0%&2 &anamed: &e%1%&a at &6%2%");
 				
 				//Admin Commands
 				//// NEED SOME LOCALES
 				
 				
 				//Restrictors
-				loadLocale("homes.warmup", "&3Warmup started. &cDo not move!"); //%0% is the time to warmup in seconds
-				loadLocale("homes.cooldown", "&4Your too tired to get home.&e Wait another &4%0%&e seconds");
+				loadGlobalLocale("homes.warmup", "&3Warmup started. &cDo not move!"); //%0% is the time to warmup in seconds
+				loadGlobalLocale("homes.cooldown", "&4Your too tired to get home.&e Wait another &4%0%&e seconds");
 				
 		}
 		
-		loadLocale("command.successful", "&2Successfully executed command: %0%");
-		loadLocale("command.failed", "&4Failed to execute command: %0%");
+		loadGlobalLocale("command.successful", "&2Successfully executed command: %0%");
+		loadGlobalLocale("command.failed", "&4Failed to execute command: %0%");
 		
 		
 		//Misc Command Locals
-		loadLocale("console.needplayer", "This command requires a player: %0%");
-		loadLocale("console.onlyplayer", "This command can only be run by a player.");
+		loadGlobalLocale("console.needplayer", "This command requires a player: %0%");
+		loadGlobalLocale("console.onlyplayer", "This command can only be run by a player.");
 		
 		//Error Locales
-		loadLocale("error.null", "&4A null pointer error occured: &c%0%");
+		loadGlobalLocale("error.null", "&4A null pointer error occured: &c%0%");
+	}
+
+	public void loadGlobalLocales(Class<? extends ILocalizationDefault> localizationDefaults) {
+		for (ILocalizationDefault def : CommonUtil.getClassConstants(localizationDefaults))
+			this.loadGlobalLocale(def);
+	}
+	
+	public void loadGlobalLocale(ILocalizationDefault localizationDefault)
+	{
+		this.loadLocale(localizationDefault.getName(), localizationDefault.getDefault());
+	}
+	
+	public void loadGlobalLocale(String path, String defaultValue) {
+		path = path.toLowerCase(Locale.ENGLISH);
+        if (!this.globalLocales.contains(path)) {
+                this.globalLocales.set(path, defaultValue);
+        }
 	}
 
 	@Override
@@ -210,7 +235,49 @@ public class NoxCore extends NoxPlugin {
 	public int getMinimumLibVersion() {
 		return Common.VERSION;
 	}
-
+	
+	@Override
+	public String getGlobalLocale(String path, String... arguments) {
+        path = path.toLowerCase(Locale.ENGLISH);
+        // First check if the path leads to a node
+        if (this.globalLocales.isNode(path)) {
+                // Redirect to the proper sub-node
+                // Check recursively if the arguments are contained
+                String newPath = path + ".default";
+                if (arguments.length > 0) {
+                        StringBuilder tmpPathBuilder = new StringBuilder(path);
+                        String tmpPath = path;
+                        for (int i = 0; i < arguments.length; i++) {
+                                tmpPathBuilder.append('.');
+                                if (arguments[i] == null) {
+                                        tmpPathBuilder.append("null");
+                                } else {
+                                        tmpPathBuilder.append(arguments[i].toLowerCase(Locale.ENGLISH));
+                                }
+                                tmpPath = tmpPathBuilder.toString();
+                                // New argument appended path exists, update the path
+                                if (this.globalLocales.contains(tmpPath)) {
+                                        newPath = tmpPath;
+                                } else {
+                                        break;
+                                }
+                        }
+                }
+                // Update path to lead to the new path
+                path = newPath;
+        }
+        // Regular loading going on
+        if (arguments.length > 0) {
+                StringBuilder locale = new StringBuilder(this.globalLocales.get(path, ""));
+                for (int i = 0; i < arguments.length; i++) {
+                        StringUtil.replaceAll(locale, "%" + i + "%", LogicUtil.fixNull(arguments[i], "null"));
+                }
+                return locale.toString();
+        } else {
+                return this.globalLocales.get(path, String.class, "");
+        }
+	}
+	
 	@Override
 	public void permissions() {
 		addPermission( //Currently does nothing.

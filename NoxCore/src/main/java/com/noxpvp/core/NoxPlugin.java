@@ -19,6 +19,14 @@ public abstract class NoxPlugin extends PluginBase {
 
 	protected Map<String, CommandRunner> commandExecs = new HashMap<String, CommandRunner>();;
 	
+	public String getGlobalLocale(String path, String... args)
+	{
+		NoxCore c;
+		if ((c = getCore())==null)
+			throw new IllegalStateException("This plugin depends on NoxCore! Its not loaded!");
+		return c.getGlobalLocale(path, args);
+	}
+	
 	@Override
 	public boolean command(CommandSender sender, String command, String[] args) {
 		Map<String, Object> flags = new LinkedHashMap<String, Object>();
