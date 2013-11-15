@@ -69,17 +69,21 @@ public class HomeListCommand implements CommandRunner {
 			sender.sendMessage(plugin.getLocale("console.needplayer", "Use the -p \"PlayerName\" flag"));
 			return true;
 		}
+		
 		List<BaseHome> homes = manager.getHomes(player);
+		
 		String homelist;
 		List<String> homeNames = new ArrayList<String>(homes.size());
 		
-		for (BaseHome home : homes)
-			homeNames.add(home.getName());
 		
 		if (homes.isEmpty())
 			homelist = "None";
 		else
+		{
+			for (BaseHome home : homes)
+				homeNames.add(home.getName());
 			homelist = StringUtil.combine(",", homeNames);
+		}
 		
 		if (own)
 			player = "own";
