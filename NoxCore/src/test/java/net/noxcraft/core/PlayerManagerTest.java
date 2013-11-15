@@ -33,10 +33,20 @@ public class PlayerManagerTest{
 	private static boolean multiFile;
 	private static String player;
 	
+	private static void setMulti(boolean a)
+	{
+		multiFile = a;
+	}
+	
+	private static void setPlayer(String pl)
+	{
+		player = pl;
+	}
+	
 	public PlayerManagerTest(boolean multi, String player)
 	{
-		multiFile = multi;
-		PlayerManagerTest.player = player;
+		setMulti(multi);
+		setPlayer(player);
 	}
 	
 	@BeforeClass

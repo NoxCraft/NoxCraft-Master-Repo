@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.utils.StringUtil;
+import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.mmo.abilities.entity.*;
@@ -16,6 +17,7 @@ public class NoxMMO extends NoxPlugin {
 	public static final String PERM_NODE = "nox.mmo";
 
 	private static NoxMMO instance;
+	private NoxCore core;
 	
 	private PlayerManager playerManager = null;
 	
@@ -46,6 +48,7 @@ public class NoxMMO extends NoxPlugin {
 		setInstance(this);
 		
 		playerManager = new PlayerManager();
+		core = NoxCore.getInstance();
 	}
 	
 	private void setInstance(NoxMMO noxMMO) {
@@ -96,5 +99,10 @@ public class NoxMMO extends NoxPlugin {
 		return playerManager;
 	}
 	
-	public static NoxMMO getInstance() { return instance; } 
+	public static NoxMMO getInstance() { return instance; }
+
+	@Override
+	public NoxCore getCore() {
+		return core;
+	} 
 }
