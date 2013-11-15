@@ -16,12 +16,14 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 	public final static String COMMAND_NAME = "wipehomes";
 	public final static String PERM_NODE = "wipe.homes";
 	private final static Random r = new Random();
-	private final String[] helpLines;
+	private String[] helpLines;
 	private HomeManager manager;
 	
-	private String key = String.valueOf(r.nextInt(NoxCore.getInstance().getConfig().getInt("wipe-confirmation-number", 9999)));
+	private String key;
 	
 	public HomeAdminWipeCommand() {
+		key = String.valueOf(r.nextInt(NoxCore.getInstance().getConfig().getInt("wipe-confirmation-number", 9999)));
+		
 		MessageBuilder mb = new MessageBuilder();
 		mb.yellow("[").blue(" Nox Admin Wipe Command ").yellow("]").newLine();
 		mb.red("WILL WIPE ALL HOME LOCATIONS ON ALL PLAYERS").newLine();
