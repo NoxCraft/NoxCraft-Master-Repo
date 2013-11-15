@@ -58,11 +58,11 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 		if (wiped)
 		{
 			key = String.valueOf(r.nextInt(NoxCore.getInstance().getConfig().getInt("wipe-confirmation-number", 9999)));
-			String l = NoxCore.getInstance().getLocale("command.successful", "Wiped home data.");
+			String l = NoxCore.getInstance().getGlobalLocale("command.successful", "Wiped home data.");
 			
 			sender.sendMessage(StringUtil.ampToColor(l));
 		} else {
-			String l = NoxCore.getInstance().getLocale("command.failed", "Could not wipe data.");
+			String l = NoxCore.getInstance().getGlobalLocale("command.failed", "Could not wipe data.");
 			sender.sendMessage(StringUtil.ampToColor(l));
 		}
 		return true;

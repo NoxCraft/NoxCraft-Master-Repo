@@ -39,7 +39,7 @@ public class HomeListCommand implements CommandRunner {
 			manager = plugin.getHomeManager();
 			if (manager == null);
 			{
-				sender.sendMessage(StringUtil.ampToColor(plugin.getLocale("error.null", "HomeManager reference in Home List Object.")));
+				sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("error.null", "HomeManager reference in Home List Object.")));
 				return true;
 			}
 		}
@@ -55,7 +55,7 @@ public class HomeListCommand implements CommandRunner {
 			
 			if (player == null || player.length() == 0)
 			{
-				sender.sendMessage(StringUtil.ampToColor(plugin.getLocale("error.homes.list.others", (player == null)? "null": player)));
+				sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("error.homes.list.others", (player == null)? "null": player)));
 				return true;
 			}
 			
@@ -66,7 +66,7 @@ public class HomeListCommand implements CommandRunner {
 			player = ((Player)sender).getName();
 			own = true;
 		} else {
-			sender.sendMessage(plugin.getLocale("console.needplayer", "Use the -p \"PlayerName\" flag"));
+			sender.sendMessage(plugin.getGlobalLocale("console.needplayer", "Use the -p \"PlayerName\" flag"));
 			return true;
 		}
 		List<BaseHome> homes = manager.getHomes(player);
@@ -87,7 +87,7 @@ public class HomeListCommand implements CommandRunner {
 		String perm = StringUtil.combine(".", NoxHomes.HOMES_NODE, LIST_PERM_NODE, (own ? "own" : "others"));
 		if (!permHandler.hasPermission(sender, perm))
 		{
-			sender.sendMessage(StringUtil.ampToColor(plugin.getLocale("permission.denied", "Can not view other people's Homes!", perm)));
+			sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("permission.denied", "Can not view other people's Homes!", perm)));
 			return true;
 		}
 		sender.sendMessage(plugin.getLocale("homes.list", player, homelist));//TODO: Prettify large lists.

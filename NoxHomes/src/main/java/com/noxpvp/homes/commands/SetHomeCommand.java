@@ -44,7 +44,7 @@ public class SetHomeCommand implements CommandRunner {
 	public boolean execute(CommandSender sender, Map<String, Object> flags, String[] args) {
 		if (!(sender instanceof Player))
 		{
-			sender.sendMessage(StringUtil.ampToColor(plugin.getLocale("console.onlyplayer")));
+			sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("console.onlyplayer")));
 			return true;
 		}
 		
@@ -80,7 +80,7 @@ public class SetHomeCommand implements CommandRunner {
 		String perm = StringUtil.combine(".", NoxHomes.HOMES_NODE, PERM_NODE, (own? ".": "others.") + (homeName==null ? "default": "named"));
 		if (!permHandler.hasPermission(sender, perm))
 		{
-			sender.sendMessage(plugin.getLocale("permission.denied", "Teleport to homes.", perm));
+			sender.sendMessage(plugin.getGlobalLocale("permission.denied", "Teleport to homes.", perm));
 			return true;
 		}
 		BaseHome newHome = null;

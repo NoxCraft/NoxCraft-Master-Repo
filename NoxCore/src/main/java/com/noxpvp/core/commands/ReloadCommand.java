@@ -79,19 +79,19 @@ public class ReloadCommand implements DescriptiveCommandRunner {
 			{
 				r.reload();
 				r.reloadAll();
-				MessageBuilder mb = new MessageBuilder(StringUtil.ampToColor(core.getLocale("command.successful", "Reloaded modules...")));
+				MessageBuilder mb = new MessageBuilder(StringUtil.ampToColor(core.getGlobalLocale("command.successful", "Reloaded modules...")));
 				mb.newLine();
 				nextTree(mb, r, 0);
 				sender.sendMessage(mb.lines());
 			}
 			else {
 				r.reload();
-				sender.sendMessage(StringUtil.ampToColor(core.getLocale("command.successful", "Module \"" + module + "\" reloaded!")));
+				sender.sendMessage(StringUtil.ampToColor(core.getGlobalLocale("command.successful", "Module \"" + module + "\" reloaded!")));
 			}
 		} catch (NullPointerException e) {
-			sender.sendMessage(StringUtil.ampToColor(core.getLocale("command.failed", "Module does not exist. \"" + module + "\"")));
+			sender.sendMessage(StringUtil.ampToColor(core.getGlobalLocale("command.failed", "Module does not exist. \"" + module + "\"")));
 		} catch (Exception e) {
-			sender.sendMessage(StringUtil.ampToColor(core.getLocale("command.failed", "An error occured: " + e.getMessage())));
+			sender.sendMessage(StringUtil.ampToColor(core.getGlobalLocale("command.failed", "An error occured: " + e.getMessage())));
 			e.printStackTrace();
 		}
 		return true;

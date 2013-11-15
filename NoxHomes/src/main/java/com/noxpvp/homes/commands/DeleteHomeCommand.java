@@ -57,7 +57,7 @@ public class DeleteHomeCommand implements CommandRunner {
 			playerName = playerFlag;
 		else
 		{
-			sender.sendMessage(StringUtil.ampToColor(plugin.getLocale("console.needplayer", "To delete a home.")));
+			sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("console.needplayer", "To delete a home.")));
 			return true;
 		}
 		
@@ -68,7 +68,7 @@ public class DeleteHomeCommand implements CommandRunner {
 		
 		if (!permHandler.hasPermission(sender, perm))
 		{
-			sender.sendMessage(plugin.getLocale("permission.denied", "Delete homes", perm));
+			sender.sendMessage(plugin.getGlobalLocale("permission.denied", "Delete homes", perm));
 			return true;
 		}
 		
