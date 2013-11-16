@@ -12,9 +12,9 @@ public class VanishPlayerRunnable extends BukkitRunnable{
 	
 	/**
 	 * 
-	 * @param vanisher - The player to keep vanished
-	 * @param range - The distance to look for other players
-	 * @param runs - The amount of time to run
+	 * @param vanisherThe player to keep vanished
+	 * @param rangeThe distance to look for other players
+	 * @param runsThe amount of time to run
 	 */
 	public VanishPlayerRunnable(Player vanisher, double range, int runs){
 		this.runs = runs;

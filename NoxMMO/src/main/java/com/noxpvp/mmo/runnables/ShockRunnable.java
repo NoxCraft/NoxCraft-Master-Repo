@@ -11,11 +11,12 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.NoxMMO;
 
-public class ShockRunnable implements Runnable{
+public class ShockRunnable extends BukkitRunnable{
 	private int shockRange;
 	private Vector shockVelo;
 	private float percentThrown;
@@ -25,11 +26,11 @@ public class ShockRunnable implements Runnable{
 	
 	/**
 	 * 
-	 * @param shockCenter - Location for center of shock
-	 * @param shockRange - Distance of wave from center
-	 * @param shockVelo - Height velocity to throw blocks
-	 * @param percentThrown - Decimal value of chance to throw blocks - (1.0 = all / 0.8 = 80% of blocks)
-	 * @param delay - Delay in ticks before starting
+	 * @param shockCenter Location for center of shock
+	 * @param shockRange Distance of wave from center
+	 * @param shockVelo Height velocity to throw blocks
+	 * @param percentThrown Decimal value of chance to throw blocks (1.0 = all / 0.8 = 80% of blocks)
+	 * @param delay Delay in ticks before starting
 	 */
 	public ShockRunnable(Location shockCenter, int shockRange, double shockVelo, float percentThrown, int delay) {
 		this.center = shockCenter.getBlock();
@@ -86,7 +87,7 @@ public class ShockRunnable implements Runnable{
 				return true;
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void run() {
 		

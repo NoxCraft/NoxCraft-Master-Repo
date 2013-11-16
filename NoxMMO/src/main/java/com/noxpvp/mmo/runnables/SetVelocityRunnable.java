@@ -15,8 +15,8 @@ public class SetVelocityRunnable extends BukkitRunnable{
 	
 	/**
 	 * 
-	 * @param entity - Entity to give the new velocity
-	 * @param newVelo - Velocity to set
+	 * @param entity Entity to give the new velocity
+	 * @param newVelo Velocity to set
 	 */
 	public SetVelocityRunnable(Entity entity, Vector newVelo){
 		this.e = entity;

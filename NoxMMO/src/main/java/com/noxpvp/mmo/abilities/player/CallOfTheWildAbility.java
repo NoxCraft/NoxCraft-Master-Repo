@@ -19,40 +19,40 @@ public class CallOfTheWildAbility extends BasePlayerAbility{
 
 	/**
 	 * 
-	 * @return double - The currently set range to search for nearby entitys
+	 * @return double The currently set range to search for nearby entitys
 	 */
 	public double getRange() {return range;}
 
 	/**
 	 * 
-	 * @param range - the distance to search for nearby entitys
-	 * @return CallOfTheWildAbility - This instance, used for chaining
+	 * @param range the distance to search for nearby entitys
+	 * @return CallOfTheWildAbility This instance, used for chaining
 	 */
 	public CallOfTheWildAbility setRange(double range) {this.range = range; return this;}
 
 	/**
 	 * 
-	 * @return boolean - If the ability is set to check for nearby entitys before executing
+	 * @return boolean If the ability is set to check for nearby entitys before executing
 	 */
 	public boolean isCancelIfNearby() {return cancelIfNearby;}
 
 	/**
 	 * 
-	 * @param cancelIfNearby - If the ability should check for nearby entitys before executing
-	 * @return CallOfTheWildAbility - This instance, used for chaining
+	 * @param cancelIfNearby If the ability should check for nearby entitys before executing
+	 * @return CallOfTheWildAbility This instance, used for chaining
 	 */
 	public CallOfTheWildAbility setCancelIfNearby(boolean cancelIfNearby) {this.cancelIfNearby = cancelIfNearby; return this;}
 
 	/**
 	 * 
-	 * @return EntityType - The type of entity set to spawn
+	 * @return EntityType The type of entity set to spawn
 	 */
 	public EntityType getSpawnType() {return spawnType;}
 
 	/**
 	 * 
-	 * @param spawnType - The type of entity to spawn
-	 * @return CallOfTheWildAbility - This instance, used for chaining
+	 * @param spawnType The type of entity to spawn
+	 * @return CallOfTheWildAbility This instance, used for chaining
 	 */
 	public CallOfTheWildAbility setSpawnType(EntityType spawnType) {this.spawnType = spawnType; return this;}
 
@@ -65,7 +65,7 @@ public class CallOfTheWildAbility extends BasePlayerAbility{
 
 	/**
 	 * 
-	 * @return boolean - If the ability has executed successfully
+	 * @return boolean If the ability has executed successfully
 	 */
 	public boolean execute() {
 		if (!mayExecute()) return false;
@@ -93,7 +93,7 @@ public class CallOfTheWildAbility extends BasePlayerAbility{
 
 	/**
 	 * 
-	 * @return boolean - If the execute() method will normally be able to start
+	 * @return boolean If the execute() method will normally be able to start
 	 */
 	public boolean mayExecute() {
 		return getPlayer() != null;

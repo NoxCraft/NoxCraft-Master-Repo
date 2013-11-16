@@ -20,23 +20,23 @@ public class FireBallAbility extends BaseEntityAbility{
 	/**
 	 * 
 	 * 
-	 * @param power - The double power to shoot the fireball at
+	 * @param power The double power to shoot the fireball at
 	 * (THIS MUST BE 1.0 OR ABOVE)
-	 * @return FireBallAbility - This instance, used for chaining
+	 * @return FireBallAbility This instance, used for chaining
 	 */
 	public FireBallAbility setPower(double power) {this.power = power; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return double - current power set for fireball launch
+	 * @return double current power set for fireball launch
 	 */
 	public double getPower() {return this.power;}
 	
 	/**
 	 * 
 	 * 
-	 * @param e - The Entity type user of this ability instance
+	 * @param e The Entity type user of this ability instance
 	 */
 	public FireBallAbility(Entity e){
 		super(ABILITY_NAME, e);
@@ -45,7 +45,7 @@ public class FireBallAbility extends BaseEntityAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If this ability has executed successfully
+	 * @return Boolean If this ability has executed successfully
 	 */
 	public boolean execute() {
 		if (!mayExecute())
@@ -65,7 +65,7 @@ public class FireBallAbility extends BaseEntityAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the execute() method will normally be able to start
+	 * @return Boolean If the execute() method will normally be able to start
 	 */
 	public boolean mayExecute() {
 		return getEntity() != null;

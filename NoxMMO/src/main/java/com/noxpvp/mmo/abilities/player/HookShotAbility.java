@@ -28,22 +28,22 @@ public class HookShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Arrow hook - The current hook given to this instance. Returns null is setHook() has not been used
+	 * @return Arrow hook The current hook given to this instance. Returns null is setHook() has not been used
 	 */
 	public Arrow getHook() {return hook;}
 	
 	/**
 	 * 
 	 * 
-	 * @param hook - The hook from a (intended) projectile shoot event
-	 * @return HookShotAbility - This instance used for chaining
+	 * @param hook The hook from a (intended) projectile shoot event
+	 * @return HookShotAbility This instance used for chaining
 	 */
 	public HookShotAbility setHook(Arrow hook) {this.hook = hook; return this;}
 
 	/**
 	 * 
 	 * 
-	 * @return int - Max distance set for ability execution - returns null is setMaxDistance() has not been used
+	 * @return int Max distance set for ability execution <br/> returns null is setMaxDistance() has not been used
 	 */
 	public double getMaxDistance() {return maxDistance;}
 	
@@ -58,15 +58,15 @@ public class HookShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Material - Type of block used to support player
+	 * @return Material Type of block used to support player
 	 */
 	public Material getHoldingBlockType() {return holdingBlockType;}
 	
 	/**
 	 * 
 	 * 
-	 * @param block - Material type that should be used to support the player
-	 * @return HookShotAbility - This instance used for chaining
+	 * @param block Material type that should be used to support the player
+	 * @return HookShotAbility This instance used for chaining
 	 */
 	public HookShotAbility setHoldingBlockType(Material block) {this.holdingBlockType = block; return this;}
 
@@ -80,16 +80,16 @@ public class HookShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @param blockTime - Time before the supporting block is removed
-	 * @return HookShotAbility - This instance used for chaining
+	 * @param blockTime Time before the supporting block is removed
+	 * @return HookShotAbility This instance used for chaining
 	 */
 	public HookShotAbility setBlockTime(int blockTime) {this.blockTime = blockTime; return this;}
 
 	/**
 	 * 
 	 * 
-	 * @param player - Player used for the ability (Usually the shooter is a projectile shoot event)
-	 * @param hook - Arrow used for the ability (Usually the projectile from a projectile shoot event)
+	 * @param player Player used for the ability (Usually the shooter is a projectile shoot event)
+	 * @param hook Arrow used for the ability (Usually the projectile from a projectile shoot event)
 	 */
 	public HookShotAbility(Player player, Arrow hook){
 		super(ABILITY_NAME, player);
@@ -99,7 +99,7 @@ public class HookShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If ability successfully executed
+	 * @return Boolean If ability successfully executed
 	 */
 	public boolean execute() {
 		if (!mayExecute())
@@ -126,7 +126,7 @@ public class HookShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the execute() method for this instance will be able to start
+	 * @return Boolean If the execute() method for this instance will be able to start
 	 */
 	public boolean mayExecute() {
 		if (getPlayer() == null || getHook() == null)

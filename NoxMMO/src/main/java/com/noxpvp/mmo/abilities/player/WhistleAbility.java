@@ -15,14 +15,14 @@ public class WhistleAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @return Integer - The currently set range for this ability instance (Default is 15)
+	 * @return Integer The currently set range for this ability instance (Default is 15)
 	 */
 	public int getRange() {return range;}
 
 	/**
 	 * 
-	 * @param range - The range to check for nearby targets  (Default is 15)
-	 * @return WhistleAbility - This instance, used for chaining
+	 * @param range The range to check for nearby targets  (Default is 15)
+	 * @return WhistleAbility This instance, used for chaining
 	 */
 	public WhistleAbility setRange(int range) {this.range = range; return this;}
 
@@ -30,7 +30,7 @@ public class WhistleAbility extends BasePlayerAbility{
 
 	/**
 	 * 
-	 * @return boolean - If the ability has executed successfully
+	 * @return boolean If the ability has executed successfully
 	 */
 	public boolean execute() {
 		if (!mayExecute())
@@ -53,7 +53,7 @@ public class WhistleAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @return boolean - If the execute() method will normally be able to start
+	 * @return boolean If the execute() method will normally be able to start
 	 */
 	public boolean mayExecute() {return getPlayer() != null;}
 

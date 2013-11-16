@@ -21,20 +21,20 @@ public class HammerOfThorAbility extends BasePlayerAbility{
         
         /**
          * 
-         * @return distanceVelo - The currently set multiplier for the users direction used as a velocity
+         * @return distanceVelo The currently set multiplier for the users direction used as a velocity
          */
         public double getDistanceVelo() {return distanceVelo;}
 
         /**
          * 
-         * @param distanceVelo - double multiplier of the users direction used as a velocity
-         * @return HammerOfThorAbility - This instance, used for chaining
+         * @param distanceVelo double multiplier of the users direction used as a velocity
+         * @return HammerOfThorAbility This instance, used for chaining
          */
         public HammerOfThorAbility setDistanceVelo(double distanceVelo) {this.distanceVelo = distanceVelo; return this;}
 
         /**
          * 
-         * @param player - The user of this ability instance
+         * @param player The user of this ability instance
          */
         public HammerOfThorAbility(Player player){
                 super(ABILITY_NAME, player);
@@ -42,8 +42,8 @@ public class HammerOfThorAbility extends BasePlayerAbility{
         
         /**
          * 
-         * @param player - The user of this ability instance
-         * @param distanceVelo - double multiplier of the users direction used as a velocity
+         * @param player The user of this ability instance
+         * @param distanceVelo double multiplier of the users direction used as a velocity
          */
         public HammerOfThorAbility(Player player, double distanceVelo){
                 super(ABILITY_NAME, player);
@@ -52,7 +52,7 @@ public class HammerOfThorAbility extends BasePlayerAbility{
 
         /**
          * 
-         * @return boolean - If this ability executed successfully
+         * @return boolean If this ability executed successfully
          */
         public boolean execute() {
                 if (!mayExecute())
@@ -79,7 +79,7 @@ public class HammerOfThorAbility extends BasePlayerAbility{
 
         /**
          * 
-         * @return boolean - If the execute() method is normally able to start
+         * @return boolean If the execute() method is normally able to start
          */
         public boolean mayExecute() {
                 return getPlayer() != null;

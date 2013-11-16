@@ -18,7 +18,7 @@ public class SeveringStrikesAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @param player - The user of the ability instance
+	 * @param player The user of the ability instance
 	 */
 	public SeveringStrikesAbility(Player player){
 		super(ABILITY_NAME, player);
@@ -26,7 +26,7 @@ public class SeveringStrikesAbility extends BasePlayerAbility{
 
 	/**
 	 * 
-	 * @return boolean - If this ability executed successfully
+	 * @return boolean If this ability executed successfully
 	 */
 	public boolean execute() {
 		if (!mayExecute())
@@ -51,7 +51,7 @@ public class SeveringStrikesAbility extends BasePlayerAbility{
 
 	/**
 	 * 
-	 * @return boolean - If the execute() method will normally be able to start
+	 * @return boolean If the execute() method will normally be able to start
 	 */
 	public boolean mayExecute() {
 		return getPlayer() != null;

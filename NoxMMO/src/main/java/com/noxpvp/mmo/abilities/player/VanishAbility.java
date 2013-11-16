@@ -17,45 +17,45 @@ public class VanishAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @return double - The currently set amount of distance to check for players to hide
+	 * @return double The currently set amount of distance to check for players to hide
 	 */
 	public double getRange() {return range;}
 
 	/**
 	 * 
-	 * @param range - The distance to check for players to hide
-	 * @return VanishAbility - This instance, used for chaining
+	 * @param range The distance to check for players to hide
+	 * @return VanishAbility This instance, used for chaining
 	 */
 	public VanishAbility setRange(double range) {this.range = range; return this;}
 
 	/**
 	 * 
-	 * @return Integer - The currently set amount of ticks to keep the player vanished
+	 * @return Integer The currently set amount of ticks to keep the player vanished
 	 */
 	public int getTime() {return time;}
 
 	/**
 	 * 
-	 * @param time - The amount of ticks to keep the player vanished
-	 * @return VanishAbility - This instance, used for chaining
+	 * @param time The amount of ticks to keep the player vanished
+	 * @return VanishAbility This instance, used for chaining
 	 */
 	public VanishAbility setTime(int time) {this.time = time; return this;}
 
 	/**
 	 * 
-	 * @return Integer - The currently set amount of delay between checks for players to hidef
+	 * @return Integer The currently set amount of delay between checks for players to hidef
 	 */
 	public int getHideFreq() {return hideFreq;}
 
 	/**
 	 * 
-	 * @param hideFreq - The amount of time to wait between checks for players to hide
+	 * @param hideFreq The amount of time to wait between checks for players to hide
 	 */
 	public VanishAbility setHideFreq(int hideFreq) {this.hideFreq = hideFreq; return this;}
 
 	/**
 	 * 
-	 * @param player - The user of the ability instance
+	 * @param player The user of the ability instance
 	 */
 	public VanishAbility(Player player){
 		super(ABILITY_NAME, player);
@@ -63,7 +63,7 @@ public class VanishAbility extends BasePlayerAbility{
 
 	/**
 	 * 
-	 * @return boolean - If this ability executed successfully
+	 * @return boolean If this ability executed successfully
 	 */
 	public boolean execute() {
 		if(!mayExecute())
@@ -77,7 +77,7 @@ public class VanishAbility extends BasePlayerAbility{
 
 	/**
 	 * 
-	 * @return boolean - If the execute() method will normally be able to start
+	 * @return boolean If the execute() method will normally be able to start
 	 */
 	public boolean mayExecute() {
 		return getPlayer() != null;

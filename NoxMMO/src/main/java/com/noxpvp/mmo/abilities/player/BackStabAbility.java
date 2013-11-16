@@ -22,80 +22,80 @@ public class BackStabAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return double - the currently set accuracy required for being behind the target
+	 * @return double the currently set accuracy required for being behind the target
 	 */
 	public double getAccuracy() {return accuracy;}
 	
 	/**
 	 * 
 	 * 
-	 * @param accuracy - double value in degrees of accuracy required. 0 = exactly behind, 20 (Default) = 20 degrees to either side of target
-	 * @return BackStabAbility - This instance, used for chaining
+	 * @param accuracy double value in degrees of accuracy required. 0 = exactly behind, 20 (Default) = 20 degrees to either side of target
+	 * @return BackStabAbility This instance, used for chaining
 	 */
 	public BackStabAbility setAccuracy(double accuracy) {this.accuracy = accuracy; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return Integer - The current set chance of backstab success
+	 * @return Integer The current set chance of backstab success
 	 */
 	public float getChancePercent() {return chancePercent;}
 	
 	/**
 	 * 
 	 * 
-	 * @param chancePercent - The percent chance of a successful backstab
-	 * @return BackStabAbility - This instance, used for chaining
+	 * @param chancePercent The percent chance of a successful backstab
+	 * @return BackStabAbility This instance, used for chaining
 	 */
 	public BackStabAbility setChancePercent(float chancePercent) {this.chancePercent = chancePercent; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return Entity - The currently set target for this ability
+	 * @return Entity The currently set target for this ability
 	 */
 	public LivingEntity getTarget() {return target;}
 	
 	/**
 	 * 
 	 * 
-	 * @param target - The LivingEntity type target for this ability instance
-	 * @return BackStabAbility - This instance, used for chaining
+	 * @param target The LivingEntity type target for this ability instance
+	 * @return BackStabAbility This instance, used for chaining
 	 */
 	public BackStabAbility setTarget(LivingEntity target) {this.target = target; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return double - The currently set damage percent. 100% = normal damage.
+	 * @return double The currently set damage percent. 100% = normal damage.
 	 */
 	public float getDamagePercent() {return damagePercent;}
 
 	/**
 	 * 
 	 * 
-	 * @param damagePercent - double percent value for damage modifier. 100% = normal damage
+	 * @param damagePercent double percent value for damage modifier. 100% = normal damage
 	 */
 	public void setDamagePercent(float damagePercent) {this.damagePercent = damagePercent;}
 
 	/**
 	 * 
 	 * 
-	 * @return double - Currently set initial damage value
+	 * @return double Currently set initial damage value
 	 */
 	public double getDamage() {return Damage;}
 
 	/**
 	 * 
 	 * 
-	 * @param damage - double amount from initial damage event
+	 * @param damage double amount from initial damage event
 	 */
 	public void setDamage(double damage) {Damage = damage;}
 
 	/**
 	 * 
 	 * 
-	 * @param player - The Player type user for this ability instance
+	 * @param player The Player type user for this ability instance
 	 */
 	public BackStabAbility(Player player){
 		super(ABILITY_NAME, player);
@@ -104,7 +104,7 @@ public class BackStabAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the backstab was successful
+	 * @return Boolean If the backstab was successful
 	 * (If this ability is successful, the initial damage event should be canceled)
 	 */
 	public boolean execute() {
@@ -128,7 +128,7 @@ public class BackStabAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the execute() method would normally be able to start
+	 * @return Boolean If the execute() method would normally be able to start
 	 */
 	public boolean mayExecute() {
 		if (getPlayer() == null || getTarget() == null)

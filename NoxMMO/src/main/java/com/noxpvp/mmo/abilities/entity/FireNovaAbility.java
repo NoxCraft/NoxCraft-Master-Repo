@@ -2,7 +2,6 @@ package com.noxpvp.mmo.abilities.entity;
 
 import java.util.HashSet;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -33,59 +32,59 @@ public class FireNovaAbility extends BaseEntityAbility{
 	/**
 	 * 
 	 * 
-	 * @return Integer - The currently set nova range emitted out from player
+	 * @return Integer The currently set nova range emitted out from player
 	 */
 	public int getRange() {return this.range;}
 	
 	/**
 	 * 
 	 * 
-	 * @param range - Integer range that the fire nova will emitt from player
-	 * @return FireNovaAbility - This instance, used for chaining
+	 * @param range Integer range that the fire nova will emitt from player
+	 * @return FireNovaAbility This instance, used for chaining
 	 */
 	public FireNovaAbility setRange(int range) {this.range = range; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return Integer - Currently set tick delay between fire rings
+	 * @return Integer Currently set tick delay between fire rings
 	 */
 	public int getTickSpeed() {return tickSpeed;}
 	
 	/**
 	 * 
 	 * 
-	 * @param tickSpeed - Integer tick delay between fire ring creations/removal
-	 * @return FireNovaAbility - This instance, used for chaining
+	 * @param tickSpeed Integer tick delay between fire ring creations/removal
+	 * @return FireNovaAbility This instance, used for chaining
 	 */
 	public FireNovaAbility setTickSpeed(int tickSpeed) {this.tickSpeed = tickSpeed; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return Material - Currently set fire Material (Default Material.FIRE)
+	 * @return Material Currently set fire Material (Default Material.FIRE)
 	 */
 	public Material getBlockType() {return blockType;}
 	
 	/**
 	 * 
 	 * 
-	 * @param blockType - The Material type to use for fire blocks (Default Material.FIRE)
-	 * @return FireNovaAbility - This instance, used for chaining
+	 * @param blockType The Material type to use for fire blocks (Default Material.FIRE)
+	 * @return FireNovaAbility This instance, used for chaining
 	 */
 	public FireNovaAbility setBlockType(Material blockType) {this.blockType = blockType; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the fire Rings will burn any tall grass it their way, or go around them
+	 * @return Boolean If the fire Rings will burn any tall grass it their way, or go around them
 	 */
 	public boolean isBurnTallGrass() {return burnTallGrass;}
 	
 	/**
 	 * 
 	 * 
-	 * @param burnTallGrass - Boolean if the fire rings should burn tall grass is their way
+	 * @param burnTallGrass Boolean if the fire rings should burn tall grass is their way
 	 * @return
 	 */
 	public FireNovaAbility setBurnTallGrass(boolean burnTallGrass) {this.burnTallGrass = burnTallGrass; return this;}
@@ -93,14 +92,14 @@ public class FireNovaAbility extends BaseEntityAbility{
 	/**
 	 * 
 	 * 
-	 * @param entity - The Entity type user for this ability instance (Also to fire ring center location)
+	 * @param entity The Entity type user for this ability instance (Also to fire ring center location)
 	 */
 	public FireNovaAbility(Entity entity){super(ABILITY_NAME, entity);}
 	
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If this ability was executed successfully
+	 * @return Boolean If this ability was executed successfully
 	 */
 	public boolean execute() {
 		if (!mayExecute())
@@ -115,7 +114,7 @@ public class FireNovaAbility extends BaseEntityAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the execute() method will normally for able to start
+	 * @return Boolean If the execute() method will normally for able to start
 	 */
 	public boolean mayExecute() {
 		return getEntity() != null;
@@ -126,7 +125,6 @@ public class FireNovaAbility extends BaseEntityAbility{
 		private int i;
 		private Block center;
 		private HashSet<Block> fireBlocks;
-		private int taskId;
 		
 		/**
 		 * 
@@ -134,14 +132,14 @@ public class FireNovaAbility extends BaseEntityAbility{
 		 */
 		public FirenovaAnimation() {
 			this.e = getEntity();
-			i = 0;
-			center = e.getLocation().getBlock();
-			fireBlocks = new HashSet<Block>();
+			this.i = 0;
+			this.center = e.getLocation().getBlock();
+			this.fireBlocks = new HashSet<Block>();
 			
-			
-			taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(NoxMMO.getInstance(), this, 0, tickSpeed);
 		}
 		
+		public void safeCancel() {try { cancel(); } catch (IllegalStateException e) {}	}
+
 		public void start() {
 			if (e instanceof LivingEntity)
 				((LivingEntity)e).addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, (10 * 20), 1));
@@ -184,8 +182,8 @@ public class FireNovaAbility extends BaseEntityAbility{
 					}
 				}
 			} else if (i > range+1) {
-				// stop if done
-				cancel();
+				safeCancel();
+				return;
 			}
 		}
 	}

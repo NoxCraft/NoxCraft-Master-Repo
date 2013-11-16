@@ -17,9 +17,9 @@ public class EntityEffectRunnable extends BukkitRunnable{
 	
 	/**
 	 * 
-	 * @param entity - Entity to apply to effect to
-	 * @param effect - Effect type
-	 * @param runsLimit - The amount of times to run, if used as a task timer
+	 * @param entity Entity to apply to effect to
+	 * @param effect Effect type
+	 * @param runsLimit The amount of times to run, if used as a task timer
 	 */
 	public EntityEffectRunnable(Entity entity, EntityEffect effect, int runsLimit){
 		this.e = entity;
