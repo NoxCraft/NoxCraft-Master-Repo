@@ -24,46 +24,46 @@ public class ParryAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @return Entity - The currently set target for this ability instance
+	 * @return Entity The currently set target for this ability instance
 	 */
 	public Player getE() {return e;}
 	
 	/**
 	 * 
-	 * @param e - the target to set for this ability instance
-	 * @return ParryAbility - This instance, used for chaining
+	 * @param e the target to set for this ability instance
+	 * @return ParryAbility This instance, used for chaining
 	 */
 	public ParryAbility setE(Player e) {this.e = e; return this;}
 
 	/**
 	 * 
-	 * @return double - Get the currently set percentage for this ability's chance of success
+	 * @return double Get the currently set percentage for this ability's chance of success
 	 */
 	public double getPercentChance() {return percentChance; }
 
 	/**
 	 * 
-	 * @param percentChance - The chance to set for this ability's success
-	 * @return ParryAbility - This instance, used for chaining
+	 * @param percentChance The chance to set for this ability's success
+	 * @return ParryAbility This instance, used for chaining
 	 */
 	public ParryAbility setPercentChance(double percentChance) {this.percentChance = percentChance; return this;}
 
 	/**
 	 * 
-	 * @return boolean - If this ability is set to only succeed if the user is blocking with a sword
+	 * @return boolean If this ability is set to only succeed if the user is blocking with a sword
 	 */
 	public boolean isMustBlock() {return mustBlock;}
 
 	/**
 	 * 
-	 * @param mustBlock - boolean if the ability should only succeed if the player is blocking with a sword
-	 * @return ParryAbility - This instance, used for chaining
+	 * @param mustBlock boolean if the ability should only succeed if the player is blocking with a sword
+	 * @return ParryAbility This instance, used for chaining
 	 */
 	public ParryAbility setMustBlock(boolean mustBlock) {this.mustBlock = mustBlock; return this;}
 
 	/**
 	 * 
-	 * @param player - The Player type user for this ability instance
+	 * @param player The Player type user for this ability instance
 	 */
 	public ParryAbility(Player player){
 		super(ABILITY_NAME, player);
@@ -71,7 +71,7 @@ public class ParryAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @return boolean - If the ability executed successfully
+	 * @return boolean If the ability executed successfully
 	 */
 	public boolean execute(){
 		if (!mayExecute()) return false;
@@ -87,7 +87,7 @@ public class ParryAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @return boolean - If the execute() method will normally be able to execute
+	 * @return boolean If the execute() method will normally be able to execute
 	 */
 	public boolean mayExecute(){
 		return getPlayer() != null;

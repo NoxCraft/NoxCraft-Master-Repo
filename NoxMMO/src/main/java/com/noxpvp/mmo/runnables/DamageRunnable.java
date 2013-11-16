@@ -18,10 +18,10 @@ public class DamageRunnable extends BukkitRunnable{
 	
 	/**
 	 * 
-	 * @param entity - The damagable entity to damage
-	 * @param Attacker - The attacker (if any)
-	 * @param damage - the damage to apply
-	 * @param runs - The amount of times to run this, if used in a task timer (set to atleast 1)
+	 * @param entity The damagable entity to damage
+	 * @param Attacker The attacker (if any)
+	 * @param damage the damage to apply
+	 * @param runs The amount of times to run this, if used in a task timer (set to atleast 1)
 	 */
 	public DamageRunnable(Damageable entity, Entity Attacker, double damage, int runs){
 		this.e = entity;

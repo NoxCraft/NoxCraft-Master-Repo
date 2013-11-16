@@ -19,9 +19,9 @@ public class BlockTimerRunnable extends BukkitRunnable{
 	
 	/**
 	 * 
-	 * @param block - The block to change
-	 * @param newType - The material the block should be changed to
-	 * @param oldType - The material the block should be changed from. If the block given is not this type it will not be changed as something else is the world has changed it already. (set this to null for no checking)
+	 * @param block The block to change
+	 * @param newType The material the block should be changed to
+	 * @param oldType The material the block should be changed from. If the block given is not this type it will not be changed as something else is the world has changed it already. (set this to null for no checking)
 	 */
 	public BlockTimerRunnable(Block block, Material newType, Material oldType){
 		this.newType = newType;
@@ -32,9 +32,9 @@ public class BlockTimerRunnable extends BukkitRunnable{
 	
 	/**
 	 * 
-	 * @param blocks - A list of blocks to change
-	 * @param newType - The material the block should be changed to
-	 * @param oldType - The material the block should be changed from. If the block given is not this type it will not be changed as something else is the world has changed it already. (set this to null for no checking)
+	 * @param blocks A list of blocks to change
+	 * @param newType The material the block should be changed to
+	 * @param oldType The material the block should be changed from. If the block given is not this type it will not be changed as something else is the world has changed it already. (set this to null for no checking)
 	 */
 	public BlockTimerRunnable(List<Block> blocks, Material newType, Material oldType){
 		this.newType = newType;

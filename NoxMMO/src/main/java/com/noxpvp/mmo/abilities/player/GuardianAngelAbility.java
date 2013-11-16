@@ -31,52 +31,52 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Integer - Currently set range for the angel heal range
+	 * @return Integer Currently set range for the angel heal range
 	 */
 	public int getRange() {return range;}
 	
 	/**
 	 * 
 	 * 
-	 * @param range - The Integer range the angel should look for player to heal
-	 * @return GuardianAngelAbility - This instance, used for chaining
+	 * @param range The Integer range the angel should look for player to heal
+	 * @return GuardianAngelAbility This instance, used for chaining
 	 */
 	public GuardianAngelAbility setRange(int range) {this.range = range; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return Integer - The currently set amount to heal players
+	 * @return Integer The currently set amount to heal players
 	 */
 	public double getHealAmount() {return healAmount;}
 	
 	/**
 	 * 
 	 * 
-	 * @param healAmount - double amount that the angel should heal players
-	 * @return GuardianAngelAbility - This instance, used for chaining
+	 * @param healAmount double amount that the angel should heal players
+	 * @return GuardianAngelAbility This instance, used for chaining
 	 */
 	public GuardianAngelAbility setHealAmount(double healAmount) {this.healAmount = healAmount; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return Effect - The current effect set for when the guardian angel vanishes / is removed
+	 * @return Effect The current effect set for when the guardian angel vanishes / is removed
 	 */
 	public Effect getLeaveEffect() {return this.leaveEffect;}
 	
 	/**
 	 * 
 	 * 
-	 * @param leaveEffect - Effect type for the angel when removed / leaves after healing is complete
-	 * @return guardianAngelAbility - This instance, used for chaining
+	 * @param leaveEffect Effect type for the angel when removed / leaves after healing is complete
+	 * @return guardianAngelAbility This instance, used for chaining
 	 */
 	public GuardianAngelAbility setLeaveEffect(Effect leaveEffect) {this.leaveEffect = leaveEffect; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @param player - The Player type user for this ability instance
+	 * @param player The Player type user for this ability instance
 	 */
 	public GuardianAngelAbility(Player player){
 		super(ABILITY_NAME, player);
@@ -85,7 +85,7 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the ability has successfully executed
+	 * @return Boolean If the ability has successfully executed
 	 */
 	public boolean execute() {
 		if (!mayExecute())
@@ -118,7 +118,7 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the execute() method will normally be able to start
+	 * @return Boolean If the execute() method will normally be able to start
 	 */
 	public boolean mayExecute() {
 		return getPlayer() != null;

@@ -49,7 +49,7 @@ public class DashAbility extends BaseEntityAbility{
 	/**
 	 * 
 	 * 
-	 * @param entity - Entity to apply ability on
+	 * @param entity Entity to apply ability on
 	 */
 	public DashAbility(LivingEntity entity){
 		super(ABILITY_NAME, entity);
@@ -58,7 +58,7 @@ public class DashAbility extends BaseEntityAbility{
 	/**
 	 * 
 	 * 
-	 * @return boolean - Ability success
+	 * @return boolean Ability success
 	 */
 	public boolean execute() {
 		if (!mayExecute())
@@ -72,7 +72,7 @@ public class DashAbility extends BaseEntityAbility{
 	/**
 	 * 
 	 * 
-	 * @return boolean - If the execute method from this instance is able to start
+	 * @return boolean If the execute method from this instance is able to start
 	 */
 	public boolean mayExecute() {
 		return getEntity() != null;

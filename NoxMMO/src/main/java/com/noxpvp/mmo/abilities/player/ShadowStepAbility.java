@@ -23,37 +23,37 @@ public class ShadowStepAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Integer - the currently set range for the ability execution
+	 * @return Integer the currently set range for the ability execution
 	 */
 	public int getRange() {return range;}
 	
 	/**
 	 * 
 	 * 
-	 * @param range - The range that the target can be from the ability user
-	 * @return ShadowStepAbility - This instance, used for chaining
+	 * @param range The range that the target can be from the ability user
+	 * @return ShadowStepAbility This instance, used for chaining
 	 */
 	public ShadowStepAbility setRange(int range) {this.range = range; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return Entity - The currently set target for this ability instance
+	 * @return Entity The currently set target for this ability instance
 	 */
 	public Entity getTarget() {return target;}
 	
 	/**
 	 * 
 	 * 
-	 * @param target - The Entity Type target that this ability instance should be targeted at
-	 * @return ShadowStepAbility - This instance, used for chaining
+	 * @param target The Entity Type target that this ability instance should be targeted at
+	 * @return ShadowStepAbility This instance, used for chaining
 	 */
 	public ShadowStepAbility setTarget(Entity target) {this.target = target; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @param player - the Player type user for this ability instance
+	 * @param player the Player type user for this ability instance
 	 */
 	public ShadowStepAbility(Player player){
 		super(ABILITY_NAME, player);
@@ -62,7 +62,7 @@ public class ShadowStepAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the ability has executed successfullty
+	 * @return Boolean If the ability has executed successfullty
 	 * */
 	public boolean execute() {
 		if (!mayExecute())
@@ -91,7 +91,7 @@ public class ShadowStepAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the execute() method is normally able to start
+	 * @return Boolean If the execute() method is normally able to start
 	 */
 	public boolean mayExecute() {
 		return getPlayer() != null;

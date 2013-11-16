@@ -22,52 +22,52 @@ public class GrappleThrowAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @return Integer - The currently set range for this ability instance
+	 * @return Integer The currently set range for this ability instance
 	 */
 	public int getRange() {return range;}
 
 	/**
 	 * 
-	 * @param range - Integer range to look for target in this ability instance
-	 * @return GrappleThrowAbility - This instance, used for chaining
+	 * @param range Integer range to look for target in this ability instance
+	 * @return GrappleThrowAbility This instance, used for chaining
 	 */
 	public GrappleThrowAbility setRange(int range) {this.range = range; return this;}
 
 	/**
 	 * 
-	 * @return Integer - The max amount of targets this ability can find
+	 * @return Integer The max amount of targets this ability can find
 	 */
 	public int getMaxTargets() {return maxTargets;}
 
 	/**
 	 * 
-	 * @param maxTargets - Integer amount of targets this ability is allowed to target at max
-	 * @return GrappleThrowAbility - This instance, used for chaining
+	 * @param maxTargets Integer amount of targets this ability is allowed to target at max
+	 * @return GrappleThrowAbility This instance, used for chaining
 	 */
 	public GrappleThrowAbility setMaxTargets(int maxTargets) {this.maxTargets = maxTargets; return this;}
 
 	/**
 	 * 
-	 * @return Integer - The currently set tick delay before the targets a thrown/shock wave runs
+	 * @return Integer The currently set tick delay before the targets a thrown/shock wave runs
 	 */
 	public int getPushDelay() {return pushDelay;}
 
 	/**
 	 * 
-	 * @param pushDelay - Integer amount of ticks to wait before throwing the target(s) and executing the shockwave
-	 * @return GrappleThrowAbility - This instance, used for chaining
+	 * @param pushDelay Integer amount of ticks to wait before throwing the target(s) and executing the shockwave
+	 * @return GrappleThrowAbility This instance, used for chaining
 	 */
 	public GrappleThrowAbility setPushDelay(int pushDelay) {this.pushDelay = pushDelay; return this;}
 
 	/**
 	 * 
-	 * @param player - The Player type user object for this ability instance
+	 * @param player The Player type user object for this ability instance
 	 */
 	public GrappleThrowAbility(Player player){super(ABILITY_NAME, player);}
 	
 	/**
 	 * 
-	 * @return boolean - If the ability was executed successfully
+	 * @return boolean If the ability was executed successfully
 	 */
 	public boolean execute(){
 		if (!mayExecute())
@@ -106,7 +106,7 @@ public class GrappleThrowAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @return boolean - If the execute() method is normally able to start
+	 * @return boolean If the execute() method is normally able to start
 	 */
 	public boolean mayExecute(){
 		return getPlayer() != null;

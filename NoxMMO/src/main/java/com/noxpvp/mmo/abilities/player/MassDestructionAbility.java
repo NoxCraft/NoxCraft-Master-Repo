@@ -31,22 +31,22 @@ public class MassDestructionAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @param velo - Double velocity value for player upwards/downwards effect
-	 * @return MassDestructionAbility - This instance, used for chaining
+	 * @param velo Double velocity value for player upwards/downwards effect
+	 * @return MassDestructionAbility This instance, used for chaining
 	 */
 	public MassDestructionAbility sethVelo(double velo) {this.hVelo = velo; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return Double - The current set velocity used for the player upwards/downwards effect
+	 * @return Double The current set velocity used for the player upwards/downwards effect
 	 */
 	public double gethVelo() {return this.hVelo;}
 
 	/**
 	 * 
 	 * 
-	 * @param p - The Player type user for this instance
+	 * @param p The Player type user for this instance
 	 */
 	public MassDestructionAbility(Player p){
 		super(ABILITY_NAME, p);
@@ -55,7 +55,7 @@ public class MassDestructionAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the ability has successfully executed
+	 * @return Boolean If the ability has successfully executed
 	 */
 	public boolean execute() {
 		if (!mayExecute())
@@ -83,7 +83,7 @@ public class MassDestructionAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the execute() method will normally be able to start
+	 * @return Boolean If the execute() method will normally be able to start
 	 */
 	public boolean mayExecute() {
 		return getPlayer() != null;

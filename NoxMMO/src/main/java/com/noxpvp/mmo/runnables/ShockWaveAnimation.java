@@ -4,9 +4,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-
-
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -31,15 +28,14 @@ public class ShockWaveAnimation extends BukkitRunnable{
 		private Block center;
 		private HashSet<FallingBlock> novaBlocks;
 		private List<Material> flowers;
-		private int taskId;
 		
 		/**
 		 * 
 		 * 
-		 * @param shockCenter - Location the shockwave will start from
-		 * @param shockSpeed - The delay in ticks between each ring
-		 * @param shockRange - the range from the location the shockwave will extend
-		 * @param shockVelo - the velocity height of the shockwave blocks
+		 * @param shockCenter Location the shockwave will start from
+		 * @param shockSpeed The delay in ticks between each ring
+		 * @param shockRange the range from the location the shockwave will extend
+		 * @param shockVelo the velocity height of the shockwave blocks
 		 */
 		public ShockWaveAnimation(Location shockCenter, int shockSpeed, int shockRange, double shockVelo, boolean isCircle, int delay) {
 			this.shockSpeed = shockSpeed;
@@ -51,7 +47,6 @@ public class ShockWaveAnimation extends BukkitRunnable{
 			this.novaBlocks = new HashSet<FallingBlock>();
 			this.flowers = Arrays.asList(Material.LONG_GRASS, Material.RED_ROSE, Material.YELLOW_FLOWER, Material.CROPS, Material.DEAD_BUSH, Material.VINE, Material.SAPLING);
 			
-			taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(NoxMMO.getInstance(), this, delay, shockSpeed);
 		}
 		
 		private boolean isThrowable(Material type){
@@ -99,6 +94,8 @@ public class ShockWaveAnimation extends BukkitRunnable{
 			}
 		}
 		
+		public void safeCancel() {try { cancel(); } catch (IllegalStateException e) {}	}
+
 		public void start() {
 			runTaskTimer(NoxMMO.getInstance(), 0, shockSpeed);
 		}
@@ -147,8 +144,8 @@ public class ShockWaveAnimation extends BukkitRunnable{
 					}
 				}
 			} else if (i > shockRange+1) {
-				// stop if done
-				cancel();
+				safeCancel();
+				return;
 				}
 			}
 		}

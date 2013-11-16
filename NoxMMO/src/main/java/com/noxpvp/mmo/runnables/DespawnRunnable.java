@@ -16,7 +16,7 @@ public class DespawnRunnable extends BukkitRunnable{
 	
 	/**
 	 * 
-	 * @param entity - The entity to mark to be removed
+	 * @param entity The entity to mark to be removed
 	 */
 	public DespawnRunnable(Entity entity){
 		this.entitys = new ArrayList<Entity>();
@@ -25,7 +25,7 @@ public class DespawnRunnable extends BukkitRunnable{
 	
 	/**
 	 * 
-	 * @param entity - The entity to mark to be removed
+	 * @param entity The entity to mark to be removed
 	 */
 	public DespawnRunnable(List<Entity> entitys){
 		this.entitys = entitys;

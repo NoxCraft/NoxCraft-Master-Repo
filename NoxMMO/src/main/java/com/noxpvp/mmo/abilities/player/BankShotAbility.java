@@ -31,15 +31,15 @@ public class BankShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Integer - The currently set range for this ability instance
+	 * @return Integer The currently set range for this ability instance
 	 */
 	public int getRange() {return range;}
 	
 	/**
 	 * 
 	 * 
-	 * @param range - The Integer range that the ricochet'd arrow should look for a target
-	 * @return BankShotAbility - This instance, used for chaining
+	 * @param range The Integer range that the ricochet'd arrow should look for a target
+	 * @return BankShotAbility This instance, used for chaining
 	 */
 	public BankShotAbility setRange(int range) {this.range = range; return this;}
 	
@@ -53,7 +53,7 @@ public class BankShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @param hitPlayers - Boolean is the ricochet'd arrow should look for players as targets
+	 * @param hitPlayers Boolean is the ricochet'd arrow should look for players as targets
 	 * @return
 	 */
 	public BankShotAbility setHitPlayers(boolean hitPlayers) {this.hitPlayers = hitPlayers; return this;}
@@ -61,14 +61,14 @@ public class BankShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the ricochet'd arrow will look for Creature types as targets
+	 * @return Boolean If the ricochet'd arrow will look for Creature types as targets
 	 */
 	public boolean isHitCreatures() {return hitCreatures;}
 	
 	/**
 	 * 
 	 * 
-	 * @param hitCreatures - Boolean if the ricochet'd arrow should look for Creature types as targets
+	 * @param hitCreatures Boolean if the ricochet'd arrow should look for Creature types as targets
 	 * @return
 	 */
 	public BankShotAbility setHitCreatures(boolean hitCreatures) {this.hitCreatures = hitCreatures; return this;}
@@ -76,23 +76,23 @@ public class BankShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the ricochet'd arrow can consider the shooter as a target
+	 * @return Boolean If the ricochet'd arrow can consider the shooter as a target
 	 */
 	public boolean isHitSelf() {return hitSelf;}
 	
 	/**
 	 * 
 	 * 
-	 * @param hitSelf - Boolean if the ricochet'd arrow should consider the shooter as a target
-	 * @return BankShotAbility - this instance, used for chaining
+	 * @param hitSelf Boolean if the ricochet'd arrow should consider the shooter as a target
+	 * @return BankShotAbility this instance, used for chaining
 	 */
 	public BankShotAbility setHitSelf(boolean hitSelf) {this.hitSelf = hitSelf; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @param player - The Player type used for this ability instance
-	 * @param proj - The Arrow type projectile used for this ability instance
+	 * @param player The Player type used for this ability instance
+	 * @param proj The Arrow type projectile used for this ability instance
 	 */
 	public BankShotAbility(Player player, Arrow proj){
 		super(ABILITTY_NAME, player);
@@ -102,7 +102,7 @@ public class BankShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the ability has successfully executed
+	 * @return Boolean If the ability has successfully executed
 	 */
 	public boolean execute() {
 		if (!mayExecute())
@@ -153,7 +153,7 @@ public class BankShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the execute() method is normally able to start
+	 * @return Boolean If the execute() method is normally able to start
 	 */
 	public boolean mayExecute() {
 		if (getPlayer() == null)

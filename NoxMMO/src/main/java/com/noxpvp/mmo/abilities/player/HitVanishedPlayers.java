@@ -17,23 +17,23 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return double - The currently set range for target distance
+	 * @return double The currently set range for target distance
 	 */
 	public double getRange() {return range;}
 	
 	/**
 	 * 
 	 * 
-	 * @param range - The double range to look for targets
-	 * @return HitVanishedPlayers - This instance, used for chaining
+	 * @param range The double range to look for targets
+	 * @return HitVanishedPlayers This instance, used for chaining
 	 */
 	public HitVanishedPlayers setRange(double range) {this.range = range; return this;}
 	
 	/**
 	 * 
-	 * CREDIT: Comphenix @ bukkit forums
+	 * @author Comphenix @ bukkit forums
 	 * 
-	 * @param player - The Player type user for this ability instance
+	 * @param player The Player type user for this ability instance
 	 */
 	public HitVanishedPlayers(Player player){
 		super(ABILITY_NAME, player);
@@ -42,7 +42,7 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If this ability has successfully executed
+	 * @return Boolean If this ability has successfully executed
 	 */
 	public boolean execute() {
 		if (!mayExecute())
@@ -82,7 +82,7 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean - If the execute() method will normally be able to start
+	 * @return Boolean If the execute() method will normally be able to start
 	 */
 	public boolean mayExecute() {
 		return getPlayer() != null;

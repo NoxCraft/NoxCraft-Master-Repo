@@ -16,9 +16,9 @@ public class HealRunnable extends BukkitRunnable{
 	
 	/**
 	 * 
-	 * @param entity - Living entity to heal
-	 * @param healthAmount - double amount to heal target
-	 * @param runsLimit - the amount of times to run, if used as a tasktimer
+	 * @param entity Living entity to heal
+	 * @param healthAmount double amount to heal target
+	 * @param runsLimit the amount of times to run, if used as a tasktimer
 	 */
 	public HealRunnable(LivingEntity entity, double healthAmount, int runsLimit){
 		this.e = entity;

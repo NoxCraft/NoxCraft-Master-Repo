@@ -37,7 +37,7 @@ public abstract class BasePlayerClass implements PlayerClass {
 		} 
 		else if (hasNextLevel())
 		{
-			exp = exp - getNextLevelExp();
+			exp -= getNextLevelExp();
 			setLevel(level + 1);
 		}
 		
