@@ -12,6 +12,16 @@
 	</modules>
 	<repositories>
 		<repository>
+        	<id>kitteh-repo</id>
+        	<url>http://repo.kitteh.org/content/repositories/public/</url>
+        <releases>
+           <enabled>true</enabled>
+        </releases>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>        
+     </repository>
+		<repository>
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public/</url>
 		</repository>
@@ -59,11 +69,25 @@
 				<groupId>net.milkbowl.vault</groupId>
 				<artifactId>Vault</artifactId>
 				<version>1.2.27-SNAPSHOT</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.vexsoftware.votifier</groupId>
 				<artifactId>Votifier</artifactId>
 				<version>1.9</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>me.confuser.barapi</groupId>
+				<artifactId>BarAPI</artifactId>
+				<version>1.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.kitteh</groupId>
+				<artifactId>tagapi</artifactId>
+				<version>2.6</version>
+				<scope>provided</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
