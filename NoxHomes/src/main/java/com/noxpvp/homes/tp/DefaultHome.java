@@ -5,7 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 public class DefaultHome extends BaseHome {
-	public final static String DEF_NAME = "default";
+	public static final String DEF_NAME = "default";
 	
 	@Override
 	protected String getNode() {

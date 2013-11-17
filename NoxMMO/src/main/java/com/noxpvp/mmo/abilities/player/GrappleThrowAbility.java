@@ -13,8 +13,8 @@ import com.noxpvp.mmo.runnables.ShockWaveAnimation;
 
 public class GrappleThrowAbility extends BasePlayerAbility{
 	
-	public final static String ABILITY_NAME = "Grapple Throw";
-	public final static String PERM_NODE = "grapplethrow";
+	public static final String ABILITY_NAME = "Grapple Throw";
+	public static final String PERM_NODE = "grapplethrow";
 	
 	private int range;
 	private int maxTargets;

@@ -26,7 +26,7 @@ public class ChestBlockListener implements Listener {
 	public static boolean useFormEvent = false;
 	public static boolean isRemovingOnInteract;
 	
-	public final static BlockFace[] sides = {BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH};
+	public static final BlockFace[] sides = {BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH};
 	
 	
 	@EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)

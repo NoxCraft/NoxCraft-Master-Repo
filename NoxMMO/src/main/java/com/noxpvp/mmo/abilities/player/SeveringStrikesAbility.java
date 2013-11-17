@@ -11,8 +11,8 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class SeveringStrikesAbility extends BasePlayerAbility{
 	
-	private final static String ABILITY_NAME = "Severing Strikes";
-	public final static String PERM_NODE = "severing-strikes";
+	private static final String ABILITY_NAME = "Severing Strikes";
+	public static final String PERM_NODE = "severing-strikes";
 	
 	private static List<Player> strikers = new ArrayList<Player>();
 	

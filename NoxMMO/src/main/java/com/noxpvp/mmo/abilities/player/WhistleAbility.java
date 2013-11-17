@@ -8,8 +8,8 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class WhistleAbility extends BasePlayerAbility{
 	
-	private final static String ABILITY_NAME = "Whistle";
-	public final static String PERM_NODE = "whistle";
+	private static final String ABILITY_NAME = "Whistle";
+	public static final String PERM_NODE = "whistle";
 	
 	private int range = 15;
 	

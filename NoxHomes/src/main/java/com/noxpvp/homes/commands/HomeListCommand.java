@@ -17,10 +17,10 @@ import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.tp.BaseHome;
 
 public class HomeListCommand implements CommandRunner {
-	public final static String COMMAND_NAME = "listhomes";
+	public static final String COMMAND_NAME = "listhomes";
 	private final PermissionHandler permHandler;
 	private NoxHomes plugin;
-	public final static String LIST_PERM_NODE = "list";
+	public static final String LIST_PERM_NODE = "list";
 	private HomeManager manager;
 	
 	public HomeListCommand()

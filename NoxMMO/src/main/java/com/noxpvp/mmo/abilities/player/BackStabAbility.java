@@ -11,8 +11,8 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
  */
 public class BackStabAbility extends BasePlayerAbility{
 	
-	public final static String PERM_NODE = "backstab";
-	private final static String ABILITY_NAME = "BackStab";
+	public static final String PERM_NODE = "backstab";
+	private static final String ABILITY_NAME = "BackStab";
 	private LivingEntity target;
 	private float damagePercent;
 	private double Damage;

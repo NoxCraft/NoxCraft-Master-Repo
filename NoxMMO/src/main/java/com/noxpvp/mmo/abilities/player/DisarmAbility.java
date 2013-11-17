@@ -17,7 +17,7 @@ public class DisarmAbility extends BasePlayerAbility{
 	
 	public static List<Player> disarmedPlayers = new ArrayList<Player>();
 	
-	private final static String ABILITY_NAME = "Disarm";
+	private static final String ABILITY_NAME = "Disarm";
 
 	public static final String PERM_NODE = "disarm";
 	private Player target;

@@ -13,10 +13,9 @@ import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
 
 public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
-	public final static String COMMAND_NAME = "wipehomes";
-	public final static String PERM_NODE = "wipe.homes";
-	private final static Random r = new Random();
-	private String[] helpLines;
+	public static final String COMMAND_NAME = "wipehomes";
+	public static final String PERM_NODE = "wipe.homes";
+	private static final Random r = new Random();
 	private HomeManager manager;
 	
 	private String key;

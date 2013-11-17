@@ -17,8 +17,8 @@ import com.noxpvp.mmo.runnables.SetVelocityRunnable;
 //TODO Finish ability on event-side. ask bbc what he intends to happen at that point
 public class MassDestructionAbility extends BasePlayerAbility{
 	
-	public final static String PERM_NODE = "mass-destruction";
-	private final static String ABILITY_NAME = "Mass Destruction";
+	public static final String PERM_NODE = "mass-destruction";
+	private static final String ABILITY_NAME = "Mass Destruction";
 	
 	/**
 	 * 

@@ -12,7 +12,7 @@ import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.commands.DescriptiveCommandRunner;
 
 public class HomeAdminCommand implements CommandRunner {
-	public final static String COMMAND_NAME = "homeadmin";
+	public static final String COMMAND_NAME = "homeadmin";
 	
 	private Map<String, DescriptiveCommandRunner> subCommands = new HashMap<String, DescriptiveCommandRunner>();;
 	

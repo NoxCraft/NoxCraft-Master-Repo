@@ -12,8 +12,8 @@ import com.noxpvp.mmo.abilities.BaseEntityAbility;
  */
 public class DashAbility extends BaseEntityAbility{
 	
-	private final static String ABILITY_NAME = "Dash";
-	public final static String PERM_NODE = "dash";
+	private static final String ABILITY_NAME = "Dash";
+	public static final String PERM_NODE = "dash";
 	
 	private int s = 2;
 	private int d = (20 * 6);

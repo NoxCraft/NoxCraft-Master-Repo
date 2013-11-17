@@ -15,8 +15,8 @@ import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.tp.BaseHome;
 
 public class HomeCommand implements CommandRunner {
-	public final static String COMMAND_NAME = "home";
-	public final static String PERM_NODE = "home";
+	public static final String COMMAND_NAME = "home";
+	public static final String PERM_NODE = "home";
 	private HomeManager manager;
 	private NoxHomes plugin;
 	private PermissionHandler permHandler;

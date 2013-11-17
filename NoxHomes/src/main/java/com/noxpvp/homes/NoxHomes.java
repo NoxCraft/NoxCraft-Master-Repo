@@ -42,7 +42,7 @@ public class NoxHomes extends NoxPlugin {
 		LocateHomeCommand.class,
 		SetHomeCommand.class
 	};
-	public final static String HOMES_NODE = "homes";
+	public static final String HOMES_NODE = "homes";
 	private static NoxHomes instance;
 	private Map<String, CommandRunner> commandExecs;
 	private HomeLimitManager limitManager;

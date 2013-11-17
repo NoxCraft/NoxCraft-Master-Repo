@@ -8,7 +8,7 @@ import com.noxpvp.core.commands.CommandRunner;
 
 
 public class LocateHomeCommand implements CommandRunner {
-	public final static String COMMAND_NAME = "locatehome";
+	public static final String COMMAND_NAME = "locatehome";
 	
 	public String getName() {
 		return COMMAND_NAME;

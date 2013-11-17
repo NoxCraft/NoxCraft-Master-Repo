@@ -18,8 +18,8 @@ import com.noxpvp.homes.tp.DefaultHome;
 import com.noxpvp.homes.tp.NamedHome;
 
 public class SetHomeCommand implements CommandRunner {
-	public final static String COMMAND_NAME = "sethome";
-	public final static String PERM_NODE = "sethome";
+	public static final String COMMAND_NAME = "sethome";
+	public static final String PERM_NODE = "sethome";
 	
 	private HomeManager manager;
 	private PermissionHandler permHandler;

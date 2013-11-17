@@ -11,9 +11,9 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.reloader.Reloader;
 
 public class ReloadCommand implements DescriptiveCommandRunner {
-	public final static String COMMAND_NAME = "reload";
+	public static final String COMMAND_NAME = "reload";
 	private NoxCore core;
-	private final static String ENTER_TREE = ">";
+	private static final String ENTER_TREE = ">";
 	
 	public ReloadCommand(){
 		core = NoxCore.getInstance();

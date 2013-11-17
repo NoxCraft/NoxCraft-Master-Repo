@@ -15,8 +15,8 @@ import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.tp.BaseHome;
 
 public class DeleteHomeCommand implements CommandRunner {
-	public final static String COMMAND_NAME = "delhome";
-	public final static String PERM_NODE = "delhome";
+	public static final String COMMAND_NAME = "delhome";
+	public static final String PERM_NODE = "delhome";
 	private HomeManager manager;
 	private PermissionHandler permHandler;
 	private NoxHomes plugin;

@@ -22,8 +22,8 @@ import com.noxpvp.mmo.runnables.HealRunnable;
  */
 public class GuardianAngelAbility extends BasePlayerAbility{
 	
-	public final static String PERM_NODE = "guardian-angel";
-	private final static String ABILITY_NAME = "Guardian Angel";
+	public static final String PERM_NODE = "guardian-angel";
+	private static final String ABILITY_NAME = "Guardian Angel";
 	private int range = 5;
 	private double healAmount = 6;
 	private Effect leaveEffect;

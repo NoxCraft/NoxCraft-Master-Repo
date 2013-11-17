@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CoreCommand implements CommandRunner {
-	public final static String COMMAND_NAME = "noxcore";
+	public static final String COMMAND_NAME = "noxcore";
 	
 	public String getName() {
 		return COMMAND_NAME;

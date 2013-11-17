@@ -14,8 +14,8 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
  */
 public class ParryAbility extends BasePlayerAbility{
 	
-	private final static String ABILITY_NAME = "Parry";
-	public final static String PERM_NODE = "parry";
+	private static final String ABILITY_NAME = "Parry";
+	public static final String PERM_NODE = "parry";
 	
 	public List<Material> parriedWeapons= new ArrayList<Material>();
 	private Player e;

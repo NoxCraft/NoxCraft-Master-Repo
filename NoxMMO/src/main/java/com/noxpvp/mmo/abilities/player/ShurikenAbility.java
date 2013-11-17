@@ -13,8 +13,8 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 public class ShurikenAbility extends BasePlayerAbility{
         public static List<Player> shurikenThrowers = new ArrayList<Player>();
         
-        private final static String ABILITY_NAME = "Shuriken";
-        public final static String PERM_NODE = "shuriken";
+        private static final String ABILITY_NAME = "Shuriken";
+        public static final String PERM_NODE = "shuriken";
         
         
         private double distanceVelo;

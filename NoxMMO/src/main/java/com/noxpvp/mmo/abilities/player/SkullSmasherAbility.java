@@ -11,8 +11,8 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class SkullSmasherAbility extends BasePlayerAbility{
 	
-	private final static String ABILITY_NAME = "Skull Smasher";
-	public final static String PERM_NODE = "skull-smasher";
+	private static final String ABILITY_NAME = "Skull Smasher";
+	public static final String PERM_NODE = "skull-smasher";
 	
 	private static List<Player> smashers = new ArrayList<Player>();
 	
