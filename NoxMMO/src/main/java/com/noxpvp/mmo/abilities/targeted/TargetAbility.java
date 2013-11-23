@@ -1,18 +1,23 @@
-package com.noxpvp.mmo.abilities.player;
+package com.noxpvp.mmo.abilities.targeted;
+
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import com.noxpvp.core.utils.Vector3D;
+import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
-public class HitVanishedPlayers extends BasePlayerAbility{
+public class TargetAbility extends BasePlayerAbility{
 	
-	public static final String PERM_NODE = "hit-vanished-players";
-	private static final String ABILITY_NAME = "Hit Vanished Players";
-	private double range = 3.8;
-	private Player e = null;
+	public static final String PERM_NODE = "set-target";
+	private static final String ABILITY_NAME = "Target";
+	private double range = 25;
+	private Reference<LivingEntity> target_ref;
 	
 	/**
 	 * 
@@ -23,24 +28,20 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * 
 	 * @param range - The double range to look for targets
-	 * @return HitVanishedPlayers - This instance, used for chaining
+	 * @return TargetAbility - This instance, used for chaining
 	 */
-	public HitVanishedPlayers setRange(double range) {this.range = range; return this;}
+	public TargetAbility setRange(double range) {this.range = range; return this;}
 	
 	/**
 	 * 
-	 * CREDIT: Comphenix @ bukkit forums
-	 * 
 	 * @param player - The Player type user for this ability instance
 	 */
-	public HitVanishedPlayers(Player player){
+	public TargetAbility(Player player){
 		super(ABILITY_NAME, player);
 	}
 	
 	/**
-	 * 
 	 * 
 	 * @return Boolean - If this ability has successfully executed
 	 */
@@ -53,12 +54,13 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 		for (Entity it : p.getNearbyEntities(range, range, range)){
 			
 			if (!(it instanceof Player)) continue;
-			if (((Player)it).canSee(p)) continue;
+			if (it instanceof Player){
+				if (!(p).canSee((Player) it)) continue;}
 			
-			this.e = (Player) it;
+			this.target_ref = new SoftReference<LivingEntity>((LivingEntity) it);
 			break;
 		}
-		if (this.e == null)
+		if (this.target_ref.get() == null)
 			return false;
 		
 		Location observerPos = p.getEyeLocation();
@@ -67,13 +69,12 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 		Vector3D observerStart = new Vector3D(observerPos);
 		Vector3D observerEnd = observerStart.add(observerDir.multiply(range));
 		
-		Vector3D targetPos = new Vector3D(e.getLocation());
-		Vector3D minimum = targetPos.add(-0.5, 0, -0.5); 
-		Vector3D maximum = targetPos.add(0.5, 1.67, 0.5); 
+		Vector3D targetPos = new Vector3D(target_ref.get().getLocation());
+		Vector3D minimum = targetPos.add(-0.6, 0, -0.6); 
+		Vector3D maximum = targetPos.add(0.6, 1.75, 0.6); 
 
 		if (hasIntersection(observerStart, observerEnd, minimum, maximum)) {
-			p.showPlayer(e);
-			e.damage(1, p);
+			NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p.getName()).setTarget(target_ref.get());
 		}
 		
 		return true;

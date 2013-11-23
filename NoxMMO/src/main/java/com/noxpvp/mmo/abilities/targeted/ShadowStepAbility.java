@@ -1,23 +1,22 @@
-package com.noxpvp.mmo.abilities.player;
+package com.noxpvp.mmo.abilities.targeted;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
 /**
  * @author NoxPVP
  *
  */
-public class ShadowStepAbility extends BasePlayerAbility{
+public class ShadowStepAbility extends BaseTargetedPlayerAbility{
 	
 	public final static String PERM_NODE = "shadow-step";
 	private final static String ABILITY_NAME = "Shadow Step";
-	private Entity target;
 	private int range;
 	
 	/**
@@ -38,25 +37,12 @@ public class ShadowStepAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Entity - The currently set target for this ability instance
-	 */
-	public Entity getTarget() {return target;}
-	
-	/**
-	 * 
-	 * 
-	 * @param target - The Entity Type target that this ability instance should be targeted at
-	 * @return ShadowStepAbility - This instance, used for chaining
-	 */
-	public ShadowStepAbility setTarget(Entity target) {this.target = target; return this;}
-	
-	/**
-	 * 
-	 * 
 	 * @param player - the Player type user for this ability instance
 	 */
 	public ShadowStepAbility(Player player){
-		super(ABILITY_NAME, player);
+		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getMMOPlayer(player).getTarget());
+		
+		this.range = 10;
 	}
 	
 	/**
@@ -68,10 +54,10 @@ public class ShadowStepAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 		
-		Player player = getPlayer();
-		Entity target = getTarget();
+		if (getDistance() > range)
+			return false;
 		
-		Location targetLoc = target.getLocation();
+		Location targetLoc = getTarget().getLocation();
 		Vector facing = targetLoc.getDirection().setY(0).multiply(-1);
 		Location loc = targetLoc.toVector().add(facing).toLocation(targetLoc.getWorld());
 		loc.setPitch(0);
@@ -83,7 +69,7 @@ public class ShadowStepAbility extends BasePlayerAbility{
 				return false;
 		}
 		
-		player.teleport(loc);
+		getPlayer().teleport(loc);
 		
 		return true;
 	}
@@ -94,7 +80,10 @@ public class ShadowStepAbility extends BasePlayerAbility{
 	 * @return Boolean - If the execute() method is normally able to start
 	 */
 	public boolean mayExecute() {
-		return getPlayer() != null;
+		if (getPlayer() == null || getTarget() == null)
+			return false;
+		
+		return true;
 	}
 
 	
