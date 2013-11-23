@@ -4,12 +4,13 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PassiveAbility;
 
 /**
  * @author NoxPVP
  *
  */
-public class BackStabAbility extends BasePlayerAbility{
+public class BackStabAbility extends BasePlayerAbility implements PassiveAbility{
 	
 	public static final String PERM_NODE = "backstab";
 	private static final String ABILITY_NAME = "BackStab";

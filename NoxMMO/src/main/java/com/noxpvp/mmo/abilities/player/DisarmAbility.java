@@ -17,7 +17,7 @@ public class DisarmAbility extends BasePlayerAbility{
 	
 	public static List<Player> disarmedPlayers = new ArrayList<Player>();
 	
-	private static final String ABILITY_NAME = "Disarm";
+	private final static String ABILITY_NAME = "Disarm";
 
 	public static final String PERM_NODE = "disarm";
 	private Player target;
@@ -26,45 +26,45 @@ public class DisarmAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Player The currently set target for this ability instance
+	 * @return Player - The currently set target for this ability instance
 	 */
 	public Player getTarget() {return target;}
 	
 	/**
 	 * 
 	 * 
-	 * @param target The Player type target that the disarm should apply to
-	 * @return disarmAbility This instance, used for chaining
+	 * @param target - The Player type target that the disarm should apply to
+	 * @return disarmAbility - This instance, used for chaining
 	 */
 	public DisarmAbility setTarget(Player target) {this.target = target; return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @return HashSet The current list of weapons that the target must be holding
+	 * @return HashSet - The current list of weapons that the target must be holding
 	 */
 	public HashSet<Material> getWeapons() {return this.weapons;}
 	
 	/**
 	 * 
 	 * 
-	 * @param weapon Material Type of weapon to remove from the list of weapons the target must for holding
-	 * @return DisarmAbility This instance, used for chaining
+	 * @param weapon - Material Type of weapon to remove from the list of weapons the target must for holding
+	 * @return DisarmAbility - This instance, used for chaining
 	 */
 	public DisarmAbility removeWeapon(Material weapon) {this.weapons.remove(weapon); return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @param weapon A Material type weapon to add to the list of weapons the target must be holding
-	 * @return DisarmAbility This instance, used for chaining
+	 * @param weapon - A Material type weapon to add to the list of weapons the target must be holding
+	 * @return DisarmAbility - This instance, used for chaining
 	 */
 	public DisarmAbility addWeapon(Material weapon) {this.weapons.add(weapon); return this;}
 	
 	/**
 	 * 
 	 * 
-	 * @param player The Player type user for this ability instance
+	 * @param player - The Player type user for this ability instance
 	 */
 	public DisarmAbility(Player player){
 		super(ABILITY_NAME, player);
@@ -74,7 +74,7 @@ public class DisarmAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean If the ability has successfully executed
+	 * @return Boolean - If the ability has successfully executed
 	 */
 	public boolean execute() {
 		if (!mayExecute())
@@ -93,7 +93,7 @@ public class DisarmAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean If the execute() method will normally be able to start
+	 * @return Boolean - If the execute() method will normally be able to start
 	 */
 	public boolean mayExecute() {
 		if (getPlayer() == null || getTarget() == null)
@@ -101,5 +101,4 @@ public class DisarmAbility extends BasePlayerAbility{
 		
 		return true;
 	}
-
 }

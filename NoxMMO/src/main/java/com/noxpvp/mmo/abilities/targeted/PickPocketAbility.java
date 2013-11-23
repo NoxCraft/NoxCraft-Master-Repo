@@ -1,40 +1,28 @@
-package com.noxpvp.mmo.abilities.player;
+package com.noxpvp.mmo.abilities.targeted;
 
 import org.apache.commons.lang.math.RandomUtils;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
 /**
  * @author NoxPVP
  *
  */
-public class PickPocketAbility extends BasePlayerAbility{
+public class PickPocketAbility extends BaseTargetedPlayerAbility{
 	
 	public static final String PERM_NODE = "pick-pocket";
 	private static final String ABILITY_NAME = "Pick Pocket";
-	private Player target;
+	
 	private float chance = 15;
 	private float calChance;
 	private int pocketamount = 1;
 	private boolean takeFullStack = false;
-	
-	/**
-	 * 
-	 * 
-	 * @return Player The currently set target for this ability instance
-	 */
-	public Player getTarget() {return target;}
-	
-	/**
-	 * 
-	 * 
-	 * @param target the Player type target that this ability should use
-	 * @return PickPocketAbility This instance, used for chaining
-	 */
-	public PickPocketAbility setTarget(Player target) {this.target = target; return this;}
 	
 	/**
 	 * 
@@ -98,7 +86,7 @@ public class PickPocketAbility extends BasePlayerAbility{
 	 * (The PickPocket)
 	 */
 	public PickPocketAbility(Player player){
-		super(ABILITY_NAME, player);
+		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getMMOPlayer(player).getTarget());
 	}
 	
 	/**
@@ -110,10 +98,13 @@ public class PickPocketAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 		
-		Player t = getTarget();
+		LivingEntity target = getTarget();
+		
+		if (!(target instanceof InventoryHolder)) return false;
+		
 		Player p = getPlayer();
 		
-		double tYaw = t.getLocation().getYaw();
+		double tYaw = target.getLocation().getYaw();
 		double pYaw = p.getLocation().getYaw();
 		
 		if (!(pYaw <= (tYaw + 20)) && (pYaw >= (tYaw - 20)))//must be behind target
@@ -125,7 +116,7 @@ public class PickPocketAbility extends BasePlayerAbility{
 		if (Math.random() > getCalChance())//chance to pick
 			return false;
 		
-		Inventory inv = getTarget().getInventory();//get target inventory
+		Inventory inv = ((InventoryHolder) target).getInventory();//get target inventory
 		int placeHolder = 0;
 		int runs = 0;//limit for trying to find an itemstack below
 		

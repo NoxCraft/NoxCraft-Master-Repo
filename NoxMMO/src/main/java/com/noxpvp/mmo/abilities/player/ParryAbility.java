@@ -3,23 +3,25 @@ package com.noxpvp.mmo.abilities.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PassiveAbility;
 
 /**
  * @author NoxPVP
  *
  */
-public class ParryAbility extends BasePlayerAbility{
+public class ParryAbility extends BasePlayerAbility implements PassiveAbility{
 	
 	private static final String ABILITY_NAME = "Parry";
 	public static final String PERM_NODE = "parry";
 	
 	public List<Material> parriedWeapons= new ArrayList<Material>();
 	private Player e;
-	private double percentChance;
+	private float percentChance;
 	private boolean mustBlock = true;
 	
 	/**
@@ -39,14 +41,14 @@ public class ParryAbility extends BasePlayerAbility{
 	 * 
 	 * @return double Get the currently set percentage for this ability's chance of success
 	 */
-	public double getPercentChance() {return percentChance; }
+	public float getPercentChance() {return percentChance; }
 
 	/**
 	 * 
 	 * @param percentChance The chance to set for this ability's success
 	 * @return ParryAbility This instance, used for chaining
 	 */
-	public ParryAbility setPercentChance(double percentChance) {this.percentChance = percentChance; return this;}
+	public ParryAbility setPercentChance(float percentChance) {this.percentChance = percentChance; return this;}
 
 	/**
 	 * 
@@ -81,6 +83,7 @@ public class ParryAbility extends BasePlayerAbility{
 		
 		if (!parriedWeapons.contains(i)) return false;
 		if (mustBlock && !p.isBlocking()) return false;
+		if (RandomUtils.nextFloat() > percentChance) return false;
 		
 		return true;
 	}
