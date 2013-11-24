@@ -56,19 +56,18 @@ public class CommandUtil {
 				continue;
 			} else if (isFlagged){
 				data.put(flag, true);
-				flag = args[i];
-			} else {
-				Matcher m = FLAG_PATTERN.matcher(args[i]);
-				if (m.matches())
-				{
-					flag = m.group(1);
-					isFlagged = true;
-				}
-				else
-					newData.add(args[i]);
-				continue;
-
 			}
+		
+			Matcher m = FLAG_PATTERN.matcher(args[i]);
+			if (m.matches())
+			{
+				flag = m.group(1);
+				isFlagged = true;
+			}
+			else
+				newData.add(args[i]);
+			continue;
+
 		}
 		String argline = StringUtil.combine(" ", newData.toArray(new String[newData.size()]));
 		return argline.split(" ");
