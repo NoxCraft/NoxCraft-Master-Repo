@@ -18,11 +18,13 @@ import org.bukkit.entity.Player;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.data.CoreBoard;
 
 public class PlayerManager implements Persistant {
 
 	protected FileConfiguration config;
 	
+	private Map<String, CoreBoard> coreBoards = new HashMap<String, CoreBoard>();
 	private Map<String, NoxPlayer> players;
 	
 	public PlayerManager() {
@@ -268,5 +270,66 @@ public class PlayerManager implements Persistant {
 		}
 		
 		return Collections.unmodifiableList(ret);
+	}
+	
+	/**
+	 * Gets all the currently active coreBoards
+	 * 
+	 * @return Collection<CoreBoard> The CoreBoards
+	 */
+	public Collection<CoreBoard> getCoreBoards(){
+		return this.coreBoards.values();
+	}
+	
+	/**
+	 * 
+	 * @param name The Key
+	 * @return CoreBoard The CoreBoard
+	 * @throws NullPointerException If the key is null
+	 */
+	public CoreBoard getCoreBoard(String name){
+		if (name == null)
+			throw new NullPointerException("Cannot use with null key");
+			
+		return this.coreBoards.get(name);
+	}
+	
+	/**
+	 * 
+	 * @param name The Key
+	 * @return boolean If there is a CoreBoard active with the specific key
+	 * @throws NullPointerException If the key is null
+	 */
+	public boolean hasCoreBoard(String name){
+		if (name == null)
+			throw new NullPointerException("Cannot check with null key");
+			
+		return this.coreBoards.containsKey(name);
+	}
+	
+	/**
+	 * 
+	 * @param name The Key
+	 * @param board The CoreBoard to add
+	 * @throws NullPointerException If the key or CoreBoard are null
+	 */
+	public void addCoreBoard(CoreBoard board){
+		if (board == null)
+			throw new NullPointerException("Cannot CoreBoard to active CoreBoard list");
+		
+		this.coreBoards.put(board.p.getName(), board);
+	}
+	
+	/**
+	 * 
+	 * @param name The key for the CoreBoard to remove
+	 * @return PlayerManager This instance
+	 * @throws NullPointerException If the key is null
+	 */
+	public PlayerManager removeCoreBoard(String name){
+		if (name == null)
+			throw new NullPointerException("Cannot remove null Key from list");
+		
+		this.coreBoards.remove(name); return this;
 	}
 }
