@@ -3,6 +3,7 @@ package com.noxpvp.mmo.abilities.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -57,6 +58,10 @@ public class FlyAbility extends BasePlayerAbility{
 	 */
 	public FlyAbility(Player player) {
 		super(ABILITY_NAME, player);
+		
+		this.reg.setAmount(1);
+		this.reg.setType(Material.FEATHER);
+		this.regFreq = (1200);
 	}
 	
 	/**
@@ -96,21 +101,34 @@ public class FlyAbility extends BasePlayerAbility{
 		return getPlayer() != null;
 	}
 	
+	private boolean hasItems(Inventory inv){
+		Material typeToTake = reg.getType();
+		int totals = 0;
+		
+		for(ItemStack s : inv.getContents()){
+			if (s.getType() != typeToTake) continue;
+			
+			totals += s.getAmount();
+			
+		}
+		
+		return totals >= reg.getAmount();
+		
+	}
+	
 	private class FlyRunnable extends BukkitRunnable{
 		private Player p;
 		private Inventory i;
-		private ItemStack stack;
 		
 		public FlyRunnable(){
 			this.p = getPlayer();
 			this.i = p.getInventory();
-			this.stack = getReg();
 		}
 		
 		public void safeCancel() {try { cancel(); } catch (IllegalStateException e) {}}
 		
 		public void run(){
-			if (!i.containsAtLeast(stack, stack.getAmount())){
+			if (!hasItems(i)){
 				p.setAllowFlight(false);
 				p.setFlying(false);
 				
@@ -118,14 +136,9 @@ public class FlyAbility extends BasePlayerAbility{
 				
 				safeCancel();
 				return;
-			}else{
-				for(ItemStack s : i.getContents()){
-					if (s.getAmount() < stack.getAmount()) continue;
-					if (s.getType() != stack.getType()) continue;
-					
-					s.setAmount(s.getAmount() - stack.getAmount());
-					break;
-				}
+			}else
+			{
+				i.removeItem(reg);
 			}
 		}
 	}
