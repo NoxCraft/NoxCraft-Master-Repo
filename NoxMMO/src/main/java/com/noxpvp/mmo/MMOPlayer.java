@@ -58,6 +58,10 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		
 		//TODO: Implement Loading.
 	}
+	
+	public PlayerClass getPlayerClass() {
+		return this.currentClass;
+	}
 
 	public Ability getAbility(String abilityName) {
 		// TODO Auto-generated method stub
@@ -98,4 +102,5 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		
 		return true;
 	}
+
 }

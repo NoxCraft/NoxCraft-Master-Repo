@@ -1,8 +1,12 @@
 package com.noxpvp.mmo.classes;
 
 public interface PlayerClass {
+	public int getId();
 	public String getName();
 	
+	public double getMaxHealth();
+	
+	public int getTierLevel();
 	public int getTotalExp();
 	public int getExp();
 	public int getLevel();
