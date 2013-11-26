@@ -78,6 +78,7 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", HookShotAbility.PERM_NODE), "Allows usage of the Hook Shot Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", LeapAbility.PERM_NODE), "Allows usage of the Leap Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MassDestructionAbility.PERM_NODE), "Allows usage of the Mass Destruction Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MortalWoundAbility.PERM_NODE), "Allows usage of the Mortal Wound Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", ParryAbility.PERM_NODE), "Allows usage of the Parry Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", PickPocketAbility.PERM_NODE), "Allows usage of the Pick Pocket Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", ReincarnateAbility.PERM_NODE), "Allows usage of the Reincarnation Ability.", PermissionDefault.OP),
