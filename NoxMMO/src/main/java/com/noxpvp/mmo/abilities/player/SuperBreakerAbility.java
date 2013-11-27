@@ -1,9 +1,13 @@
 package com.noxpvp.mmo.abilities.player;
 
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import com.noxpvp.core.data.NoxPlayerAdapter;
+import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.classes.PlayerClass;
 
 /**
  * @author NoxPVP
@@ -12,26 +16,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 public class SuperBreakerAbility extends BasePlayerAbility {
 	
 	public static final String PERM_NODE = "super-breaker";
-	private static final String ABILITY_NAME = "Super Breaker Ability";
-	private static long maximumTicks = 6000;
-	
-	/**
-	 * Retrieves the maximum number of ticks this ability can last for. 
-	 * 
-	 * This is the global limit.
-	 * 
-	 * @return the maximumTicks
-	 */
-	public static final long getMaximumTicks() {
-		return maximumTicks;
-	}
-
-	/**
-	 * @param maximumTicks the maximumTicks to set
-	 */
-	public static final void setMaximumTicks(long maximumTicks) {
-		SuperBreakerAbility.maximumTicks = maximumTicks;
-	}
+	private static final String ABILITY_NAME = "Super Breaker";
 
 	public SuperBreakerAbility(Player player)
 	{
@@ -44,18 +29,18 @@ public class SuperBreakerAbility extends BasePlayerAbility {
 	}
 	
 	public boolean execute() {
-		Player player = getPlayer();
-		if (player == null)
+		if (!mayExecute())
 			return false;
 		
+		Player p = getPlayer();
+		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p).getPlayerClass();
 		
-		// TODO Auto-generated method stub
-		return false;
+		int length = 20 * ((pClass.getLevel() * pClass.getTierLevel()) / 16);
+		return p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, length, 50));
 	}
 
 	public boolean mayExecute() {
-		// TODO Auto-generated method stub
-		return false;
+		return getPlayer() != null;
 	}
 
 }

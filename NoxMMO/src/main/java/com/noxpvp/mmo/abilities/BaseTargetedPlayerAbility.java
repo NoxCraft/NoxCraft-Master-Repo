@@ -29,12 +29,16 @@ public abstract class BaseTargetedPlayerAbility extends BasePlayerAbility implem
 	}
 	
 	public double getDistance(){
-		Location l = null;
-		if (getTarget() != null)
-			l = getTarget().getLocation();
-		if (l != null)
-			return getDistance(l);
-		else
-			return -1;
+		if (getPlayer() != null)
+			return getDistance(getPlayer().getLocation());
+		
+		return -1;
+	}
+	
+	public double getDistance(Location loc) {
+		if (getTarget() != null && loc != null)
+			return getTarget().getLocation().distance(loc);
+		
+		return -1;
 	}
 }

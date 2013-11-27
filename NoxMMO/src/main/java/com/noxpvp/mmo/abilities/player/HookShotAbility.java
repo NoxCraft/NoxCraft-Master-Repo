@@ -1,14 +1,24 @@
 package com.noxpvp.mmo.abilities.player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.command.defaults.TeleportCommand;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
+import com.noxpvp.core.utils.InventoryUtils;
+import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 
 /**
  * @author NoxPVP
@@ -16,34 +26,22 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
  */
 public class HookShotAbility extends BasePlayerAbility{
 	
-	public static List<Arrow> hookArrows = new ArrayList<Arrow>();
 	public static final String PERM_NODE = "hookshot";
-	
 	private static final String ABILITY_NAME = "Hook Shot";
-	private Arrow hook;
+	
+	public static Map<String, Arrow> hookArrows = new HashMap<String, Arrow>();
+	
+	private static ItemStack pullRegent = new ItemStack(Material.STRING, 1);
+	private static ItemStack shootRegent = new ItemStack(Material.ARROW, 1);
+	
 	private double maxDistance;
 	private int blockTime;
 	private Material holdingBlockType;
-	
-	/**
-	 * 
-	 * 
-	 * @return Arrow hook The current hook given to this instance. Returns null is setHook() has not been used
-	 */
-	public Arrow getHook() {return hook;}
-	
-	/**
-	 * 
-	 * 
-	 * @param hook The hook from a (intended) projectile shoot event
-	 * @return HookShotAbility This instance used for chaining
-	 */
-	public HookShotAbility setHook(Arrow hook) {this.hook = hook; return this;}
 
 	/**
 	 * 
 	 * 
-	 * @return int Max distance set for ability execution <br/> returns null is setMaxDistance() has not been used
+	 * @return Integer Max distance set for ability execution <br/> returns null is setMaxDistance() has not been used
 	 */
 	public double getMaxDistance() {return maxDistance;}
 	
@@ -91,9 +89,8 @@ public class HookShotAbility extends BasePlayerAbility{
 	 * @param player Player used for the ability (Usually the shooter is a projectile shoot event)
 	 * @param hook Arrow used for the ability (Usually the projectile from a projectile shoot event)
 	 */
-	public HookShotAbility(Player player, Arrow hook){
+	public HookShotAbility(Player player){
 		super(ABILITY_NAME, player);
-		this.hook = hook;
 	}
 
 	/**
@@ -105,21 +102,45 @@ public class HookShotAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 		
-		Arrow h = getHook();
-		Block hBlock = h.getLocation().getBlock();
 		Player p = getPlayer();
+		String pName = p.getName();
+		Inventory inv = p.getInventory();
 		
-		if (p.getLocation().distance(hBlock.getLocation()) > getMaxDistance())
-			return false;
-		
-		if (hBlock.getType() != Material.AIR)
-			return false;
-		
-		if (hBlock.getRelative(0, 1, 0).getType() != Material.AIR || hBlock.getRelative(0, 2, 0).getType() != Material.AIR)
+		if (HookShotAbility.hookArrows.containsKey(pName)){
+			Arrow a = HookShotAbility.hookArrows.get(pName);
+			Block hBlock = a.getLocation().getBlock();
+			
+			
+			if (!InventoryUtils.hasItems(inv, pullRegent))
 				return false;
-		
-		HookShotAbility.hookArrows.add(getHook());
-		
+			if (!p.hasLineOfSight(a))
+				return false;
+			if (hBlock.getType() != Material.AIR || hBlock.getRelative(0, 1, 0).getType() != Material.AIR || hBlock.getRelative(0, 2, 0).getType() != Material.AIR){
+				HookShotAbility.hookArrows.remove(pName);
+				a.remove();
+				return false;
+			}
+			
+			inv.removeItem(pullRegent);
+			
+			hBlock.setType(holdingBlockType);
+			BlockTimerRunnable remover = new BlockTimerRunnable(hBlock, Material.AIR, holdingBlockType);
+			remover.runTaskLater(NoxMMO.getInstance(), blockTime);
+			
+			p.teleport(hBlock.getRelative(0, 1, 0).getLocation(), TeleportCause.PLUGIN);
+			a.remove();
+		} else {
+			if (!InventoryUtils.hasItems(inv, shootRegent))
+				return false;
+			
+			inv.removeItem(shootRegent);
+			
+			Arrow a = p.launchProjectile(Arrow.class);
+			a.setBounce(true);
+			a.setVelocity(p.getLocation().getDirection());
+			
+			HookShotAbility.hookArrows.put(pName, a);
+		}
 		return true;
 	}
 
@@ -129,7 +150,7 @@ public class HookShotAbility extends BasePlayerAbility{
 	 * @return Boolean If the execute() method for this instance will be able to start
 	 */
 	public boolean mayExecute() {
-		if (getPlayer() == null || getHook() == null)
+		if (getPlayer() == null)
 			return false;
 		
 		return true;
