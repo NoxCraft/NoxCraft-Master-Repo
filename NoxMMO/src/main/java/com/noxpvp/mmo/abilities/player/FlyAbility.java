@@ -9,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.noxpvp.core.utils.InventoryUtils;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
@@ -101,21 +102,6 @@ public class FlyAbility extends BasePlayerAbility{
 		return getPlayer() != null;
 	}
 	
-	private boolean hasItems(Inventory inv){
-		Material typeToTake = reg.getType();
-		int totals = 0;
-		
-		for(ItemStack s : inv.getContents()){
-			if (s.getType() != typeToTake) continue;
-			
-			totals += s.getAmount();
-			
-		}
-		
-		return totals >= reg.getAmount();
-		
-	}
-	
 	private class FlyRunnable extends BukkitRunnable{
 		private Player p;
 		private Inventory i;
@@ -128,7 +114,7 @@ public class FlyAbility extends BasePlayerAbility{
 		public void safeCancel() {try { cancel(); } catch (IllegalStateException e) {}}
 		
 		public void run(){
-			if (!hasItems(i)){
+			if (!InventoryUtils.hasItems(i, getReg())){
 				p.setAllowFlight(false);
 				p.setFlying(false);
 				

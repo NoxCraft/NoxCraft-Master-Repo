@@ -72,7 +72,7 @@ public class ShurikenAbility extends BasePlayerAbility{
                                         ShurikenAbility.shurikenThrowers.remove(p);
                                 
                         }
-                }, 50);
+                }, 20);
                 
                 return true;
         }

@@ -26,4 +26,11 @@ public abstract class BaseTargetedAbility extends BaseAbility implements Targete
 	public void setTarget(LivingEntity target){
 		this.target_ref = new SoftReference<LivingEntity>(target);
 	}
+	
+	public double getDistance(Location loc) {
+		if (getTarget() != null && loc != null)
+			return getTarget().getLocation().distance(loc);
+		
+		return -1;
+	}
 }

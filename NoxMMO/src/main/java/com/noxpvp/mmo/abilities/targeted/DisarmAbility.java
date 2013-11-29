@@ -3,7 +3,6 @@ package com.noxpvp.mmo.abilities.targeted;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -54,4 +53,5 @@ public class DisarmAbility extends BaseTargetedPlayerAbility{
 		
 		return true;
 	}
+	
 }

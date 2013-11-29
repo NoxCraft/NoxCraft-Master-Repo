@@ -13,21 +13,45 @@ public class LeapAbility extends BaseEntityAbility {
 	private static final String ABILITY_NAME = "Leap";
 	public static final String PERM_NODE = "leap";
 	
-	private double hPower;
-	private double vPower;
+	private double forwardMultiplier;
+	private double heightVelo;
 	
-	public LeapAbility(Entity ent, double hPower, double vPower)
+	/**
+	 * Gets the current multiplier for the ability's forward velocity
+	 * 
+	 * @return double The forward multiplier
+	 */
+	public double getForwardMultiplier() {return forwardMultiplier;}
+
+	/**
+	 * Sets the multiplier for this ability's forward velocity
+	 * 
+	 * @param forwardMultiplier The multiplier to set
+	 * @return LeapAbility This instance
+	 */
+	public LeapAbility setForwardMultiplier(double forwardMultiplier) {this.forwardMultiplier = forwardMultiplier; return this;}
+
+	/**
+	 * Gets the current set height velocity
+	 * 
+	 * @return LeapAbility This instance
+	 */
+	public double getHeightVelo() {return heightVelo;}
+
+	/**
+	 * Sets the height velocity for this ability
+	 * 
+	 * @param heightVelo The height velocity
+	 * @return LeapAbility This instance
+	 */
+	public LeapAbility setHeightVelo(double heightVelo) {this.heightVelo = heightVelo; return this;}
+
+	public LeapAbility(Entity ent, double heightVelo, double forwardMultiplier)
 	{
 		super(ABILITY_NAME, ent);
-		this.hPower = hPower;
-		this.vPower = vPower;
+		this.heightVelo = heightVelo;
+		this.forwardMultiplier = forwardMultiplier;
 	}
-	
-	public double getHPower() { return hPower; }
-	public double getVPower() { return vPower; }
-	
-	public void setHPower(double value) { hPower = value; }
-	public void setVPower(double value) { vPower = value; }
 	
 	public boolean execute() {
 		if (!mayExecute())
@@ -35,7 +59,7 @@ public class LeapAbility extends BaseEntityAbility {
 		
 		Vector newVelocity = getEntity().getLocation().getDirection();
 		
-		newVelocity.setY(0).multiply(hPower).setY(vPower);
+		newVelocity.setY(0).multiply(forwardMultiplier).setY(heightVelo);
 		
 		getEntity().setVelocity(newVelocity);		
 		return true;

@@ -1,5 +1,8 @@
 package com.noxpvp.mmo.abilities.player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
@@ -7,10 +10,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
@@ -22,12 +23,59 @@ public class BankShotAbility extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "bankshot";
 	private static final String ABILITTY_NAME = "Bank Shot";
-	private Projectile a;
+	
+	private static Map<String, Arrow> abilityQue = new HashMap<String, Arrow>();
+	
+	private Arrow a;
+	
 	private int range;
 	private boolean hitPlayers = true;
 	private boolean hitCreatures = true;
 	private boolean hitSelf = false;
 	
+	public static boolean eventExecute(String name, Arrow a){
+		BankShotAbility ab = null;
+		
+		if (!(a.getShooter() instanceof Player))
+			return false;
+		
+		Entity e = null;
+		
+		for (Entity it :a.getNearbyEntities(20, 20, 20)){
+			
+			if (!(it instanceof LivingEntity || it == a)) continue;
+			
+			if (!ab.hitPlayers && it instanceof Player) continue;
+
+			if (!ab.hitSelf && it == a.getShooter()) continue;
+
+			if (!ab.hitCreatures && it instanceof Creature) continue;
+			
+			Entity losChecker = a.getWorld().spawnEntity(a.getLocation(), EntityType.BAT);
+			
+			((LivingEntity)losChecker).addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20, 1));
+			
+			if (!((LivingEntity) losChecker).hasLineOfSight(it)){
+				losChecker.remove();
+				continue;
+			}
+			losChecker.remove();
+			
+			e = it;
+			break;
+		}
+		if (e == null)
+			return false;
+		
+		Location pLoc = a.getLocation();
+		Location eLoc = e.getLocation();
+		
+		Arrow a2 = a.getWorld().spawnArrow(pLoc, eLoc.toVector().subtract(pLoc.toVector()), (float) 3, (float) 0);
+		a2.setShooter(ab.getPlayer());
+		a.remove();
+		
+		return true;
+	}
 	/**
 	 * 
 	 * 
@@ -94,9 +142,10 @@ public class BankShotAbility extends BasePlayerAbility{
 	 * @param player The Player type used for this ability instance
 	 * @param proj The Arrow type projectile used for this ability instance
 	 */
-	public BankShotAbility(Player player, Arrow proj){
+	public BankShotAbility(Player player, Arrow a){
 		super(ABILITTY_NAME, player);
-		this.a = proj;
+		
+		this.a = a;
 	}
 	
 	/**
@@ -107,45 +156,11 @@ public class BankShotAbility extends BasePlayerAbility{
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
-			
-		if (!(a.getShooter() instanceof Player))
-			return false;
 		
-		Entity e = null;
+		Player p = getPlayer();
+		final String name = p.getName();
 		
-		for (Entity it :a.getNearbyEntities(20, 20, 20)){
-			
-			if (!(it instanceof LivingEntity || it == a)) continue;
-			
-			if (!hitPlayers && it instanceof Player) continue;
-
-			if (!hitSelf && it == a.getShooter()) continue;
-
-			if (!hitCreatures && it instanceof Creature) continue;
-			
-			Entity losChecker = a.getWorld().spawnEntity(a.getLocation(), EntityType.BAT);
-			
-			((LivingEntity)losChecker).addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20, 1));
-			
-			if (!((LivingEntity) losChecker).hasLineOfSight(it)){
-				losChecker.remove();
-				continue;
-			}
-			losChecker.remove();
-			
-			e = it;
-			break;
-		}
-		if (e == null)
-			return false;
-		
-		Location pLoc = a.getLocation();
-		Location eLoc = e.getLocation();
-		Vector vector = eLoc.toVector().subtract(pLoc.toVector());
-		
-		Arrow a2 = a.getWorld().spawnArrow(pLoc, vector, (float) 3, (float) 0);
-		a2.setShooter(getPlayer());
-		a.remove();
+		abilityQue.put(name, this.a);
 		
 		return true;
 	}
@@ -156,11 +171,6 @@ public class BankShotAbility extends BasePlayerAbility{
 	 * @return Boolean If the execute() method is normally able to start
 	 */
 	public boolean mayExecute() {
-		if (getPlayer() == null)
-			return false;
-		if (this.a == null)
-			return false;
-		
-		return true;
+		return getPlayer() != null;
 	}
 }

@@ -29,12 +29,16 @@ public abstract class BaseTargetedEntityAbility extends BaseEntityAbility implem
 	}
 	
 	public double getDistance(){
-		Location l = null;
-		if (getTarget() != null)
-			l = getTarget().getLocation();
-		if (l != null)
-			return getDistance(l);
-		else
-			return -1;
+		if (getEntity() != null)
+			return getDistance(getEntity().getLocation());
+		
+		return -1;
+	}
+	
+	public double getDistance(Location loc) {
+		if (getTarget() != null && loc != null)
+			return getTarget().getLocation().distance(loc);
+		
+		return -1;
 	}
 }
