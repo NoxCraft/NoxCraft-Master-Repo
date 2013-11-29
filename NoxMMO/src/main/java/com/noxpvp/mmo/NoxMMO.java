@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 
+import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
@@ -19,6 +20,8 @@ public class NoxMMO extends NoxPlugin {
 
 	private static NoxMMO instance;
 	private NoxCore core;
+	
+	private FileConfiguration config;
 	
 	private PlayerManager playerManager = null;
 	
@@ -36,6 +39,12 @@ public class NoxMMO extends NoxPlugin {
 		
 		setInstance(null);
 	}
+	
+	public FileConfiguration getFileConfig(){
+		if (config == null)
+			config = new FileConfiguration(this, "config.yml");
+		return config;
+	}
 
 	@Override
 	public void enable() {
@@ -45,7 +54,6 @@ public class NoxMMO extends NoxPlugin {
 			setEnabled(false);
 			return;
 		}
-		
 		setInstance(this);
 		
 		playerManager = new PlayerManager();
@@ -54,6 +62,35 @@ public class NoxMMO extends NoxPlugin {
 	
 	private void setInstance(NoxMMO noxMMO) {
 		instance = noxMMO;
+	}
+	
+	@Override
+	public void saveDefaultConfig() {
+		//TODO: Add Defaults.
+		saveConfig();
+	}
+
+	@Override
+	public void saveConfig() {
+		//Ability Cycler Checks
+		config.set("Ability-Cycler.checks.Meta", AbilityCycler.isCheckMeta());
+		config.set("Ability-Cycler.checks.DisplayName", AbilityCycler.isCheckDisplayName());
+		config.set("Ability-Cycler.checks.Enchants", AbilityCycler.isCheckEnchants());
+		config.set("Ability-Cycler.checks.Lore", AbilityCycler.isCheckLore());
+		
+		
+		config.save();
+	}
+	
+	@Override
+	public void reloadConfig() {
+		config.load();
+		
+		//Ability Cycler Checks
+		AbilityCycler.setCheckMeta(config.get("Ability-Cycler.checks.Meta", AbilityCycler.isCheckMeta()));
+		AbilityCycler.setCheckDisplayName(config.get("Ability-Cycler.checks.DisplayName", AbilityCycler.isCheckDisplayName()));
+		AbilityCycler.setCheckEnchants(config.get("Ability-Cycler.checks.Enchants", AbilityCycler.isCheckEnchants()));
+		AbilityCycler.setCheckLore(config.get("Ability-Cycler.checks.Lore", AbilityCycler.isCheckLore()));
 	}
 	
 	@Override
@@ -115,5 +152,5 @@ public class NoxMMO extends NoxPlugin {
 	@Override
 	public NoxCore getCore() {
 		return core;
-	} 
+	}
 }
