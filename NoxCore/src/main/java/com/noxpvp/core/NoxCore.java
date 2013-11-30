@@ -25,6 +25,7 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.*;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
+import com.noxpvp.core.listeners.ChatPingListener;
 import com.noxpvp.core.listeners.ChestBlockListener;
 import com.noxpvp.core.listeners.DeathListener;
 import com.noxpvp.core.listeners.VoteListener;
@@ -50,6 +51,7 @@ public class NoxCore extends NoxPlugin {
 	private MasterReloader masterReloader = null;
 
 	private DeathListener deathListener;
+	private ChatPingListener chatPingListener;
 	
 	private static boolean useUserFile = true;
 	private static boolean useNanoTime = false;
@@ -180,9 +182,14 @@ public class NoxCore extends NoxPlugin {
 		});
 		ConfigurationSerialization.registerClass(SafeLocation.class);
 		
+		chatPingListener = new ChatPingListener();
 		voteListener = new VoteListener();
 		deathListener = new DeathListener();
-		pluginManager.registerEvents(voteListener, this);
+		
+		chatPingListener.register();
+		voteListener.register();
+		
+		
 		pluginManager.registerEvents(deathListener, this);
 		
 		VaultAdapter.load();
