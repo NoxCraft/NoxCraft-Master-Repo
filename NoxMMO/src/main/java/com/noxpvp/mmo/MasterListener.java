@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.bukkit.event.Event;
 
-import com.noxpvp.mmo.abilities.AbilityEventHandler;
+import com.noxpvp.mmo.listeners.EventHandler;
 import com.noxpvp.mmo.listeners.GenericNoxListener;
 
 public class MasterListener {
@@ -24,7 +24,7 @@ public class MasterListener {
 		return getNoxListener((Class<T>)event.getClass(), event.getEventName());
 	}
 	
-	public <T extends Event> boolean unregisterHandler(AbilityEventHandler<T> handler)
+	public <T extends Event> boolean unregisterHandler(EventHandler<T> handler)
 	{
 		String eventName = handler.getEventName();
 		if (!listeners.containsKey(eventName))
@@ -38,7 +38,7 @@ public class MasterListener {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public <T extends Event> boolean registerHandler(AbilityEventHandler<T> handler)
+	public <T extends Event> boolean registerHandler(EventHandler<T> handler)
 	{
 		String eventName = handler.getEventName();
 		GenericNoxListener<T> listener;

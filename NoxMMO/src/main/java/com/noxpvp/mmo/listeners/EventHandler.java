@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.abilities;
+package com.noxpvp.mmo.listeners;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
@@ -15,7 +15,7 @@ import org.bukkit.event.EventPriority;
  * It is best to use the Base Implementation of this class. OR copy the base implementations of a compareTo function. As this is required.
  * @param <T> of type Event.
  */
-public interface AbilityEventHandler <T extends Event> extends Comparable<AbilityEventHandler> {
+public interface EventHandler <T extends Event> extends Comparable<EventHandler> {
 	
 	/**
 	 * Gets a unique id to this ability handle.

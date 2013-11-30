@@ -1,16 +1,16 @@
-package com.noxpvp.mmo.abilities;
+package com.noxpvp.mmo.listeners;
 
 import java.util.Comparator;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 
-public abstract class BaseAbilityEventHandler<T extends Event> implements AbilityEventHandler<T>, Comparator<AbilityEventHandler<T>> {
+public abstract class BaseEventHandler<T extends Event> implements EventHandler<T>, Comparator<EventHandler<T>> {
 	private final String id;
 	private final EventPriority eventPriority;
 	private int priority;
 	
-	public BaseAbilityEventHandler(String id, EventPriority eventPriority, int priority)
+	public BaseEventHandler(String id, EventPriority eventPriority, int priority)
 	{
 		this.id = id;
 		this.eventPriority = eventPriority;
@@ -21,17 +21,17 @@ public abstract class BaseAbilityEventHandler<T extends Event> implements Abilit
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;
-		if (!(obj instanceof AbilityEventHandler))
+		if (!(obj instanceof EventHandler))
 			return false;
 		
-		return ((AbilityEventHandler<?>)obj).getID().equals(this.getID());
+		return ((EventHandler<?>)obj).getID().equals(this.getID());
 	}
 	
 	public final String getID() {
 		return id;
 	}
 	
-	public int compare(AbilityEventHandler<?> o1, AbilityEventHandler<?> o2) {
+	public int compare(EventHandler<?> o1, EventHandler<?> o2) {
 		EventPriority ep1 = o1.getEventPriority(), ep2 = o2.getEventPriority();
 		int d1 = ep1.getSlot(), d2 = ep2.getSlot();
 		
