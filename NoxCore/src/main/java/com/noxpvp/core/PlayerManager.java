@@ -17,12 +17,14 @@ import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
+import com.noxpvp.core.data.CoreBar;
 import com.noxpvp.core.data.NoxPlayer;
 
 public class PlayerManager implements Persistant {
 
 	protected FileConfiguration config;
 	
+	private Map<String, CoreBar> coreBars = new HashMap<String, CoreBar>();
 	private Map<String, NoxPlayer> players;
 	
 	public PlayerManager() {
@@ -268,5 +270,57 @@ public class PlayerManager implements Persistant {
 		}
 		
 		return Collections.unmodifiableList(ret);
+	}
+	
+	/**
+	 * 
+	 * @param name The Key
+	 * @return CoreBar The CoreBar
+	 * @throws NullPointerException If the key is null
+	 */
+	public CoreBar getCoreBar(String name){
+		if (name == null)
+			throw new NullPointerException("Cannot use with null key");
+		
+		return this.coreBars.containsKey(name) ? this.coreBars.get(name) : new CoreBar(NoxCore.getInstance(), Bukkit.getPlayer(name));
+	}
+	
+	/**
+	 * 
+	 * @param name The Key
+	 * @return boolean If there is a CoreBar active with the specific key
+	 * @throws NullPointerException If the key is null
+	 */
+	public boolean hasCoreBar(String name) {
+		if (name == null)
+			throw new NullPointerException("Cannot check with null key");
+		
+		return this.coreBars.containsKey(name);
+	}
+	
+	/**
+	 * 
+	 * @param name The Key
+	 * @param bar The CoreBar to add
+	 * @throws NullPointerException If the key or CoreBar are null
+	 */
+	public void addCoreBar(CoreBar bar){
+		if (bar == null)
+			throw new NullPointerException("Cannot CoreBar to active CoreBar list");
+		
+		this.coreBars.put(bar.p.getName(), bar);
+	}
+	
+	/**
+	 * 
+	 * @param name The key for the CoreBar to remove
+	 * @return PlayerManager This instance
+	 * @throws NullPointerException If the key is null
+	 */
+	public PlayerManager removeCoreBar(String name){
+		if (name == null)
+			throw new NullPointerException("Cannot remove null Key from list");
+		
+		this.coreBars.remove(name); return this;
 	}
 }

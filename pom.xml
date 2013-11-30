@@ -110,6 +110,11 @@
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>me.confuser.barapi</groupId>
+			<artifactId>BarAPI</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
