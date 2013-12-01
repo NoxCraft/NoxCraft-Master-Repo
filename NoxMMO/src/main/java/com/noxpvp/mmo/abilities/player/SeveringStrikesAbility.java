@@ -15,7 +15,7 @@ import com.noxpvp.mmo.classes.PlayerClass;
 
 public class SeveringStrikesAbility extends BasePlayerAbility{
 	
-	private static final String ABILITY_NAME = "Severing Strikes";
+	public static final String ABILITY_NAME = "Severing Strikes";
 	public static final String PERM_NODE = "severing-strikes";
 	
 	private static Map<String, SeveringStrikesAbility> strikers = new HashMap<String, SeveringStrikesAbility>();
@@ -59,7 +59,7 @@ public class SeveringStrikesAbility extends BasePlayerAbility{
 		final String name = getPlayer().getName();
 		
 		SeveringStrikesAbility.strikers.put(name, this);
-		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(getPlayer()).getPlayerClass();
+		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(getPlayer()).getMainPlayerClass();
 		
 		this.bleedLength = 20 * ((pClass.getLevel() * pClass.getTierLevel()) / 16);
 		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {

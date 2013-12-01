@@ -16,7 +16,7 @@ import com.noxpvp.mmo.classes.PlayerClass;
 public class SuperBreakerAbility extends BasePlayerAbility {
 	
 	public static final String PERM_NODE = "super-breaker";
-	private static final String ABILITY_NAME = "Super Breaker";
+	public static final String ABILITY_NAME = "Super Breaker";
 
 	public SuperBreakerAbility(Player player)
 	{
@@ -33,7 +33,7 @@ public class SuperBreakerAbility extends BasePlayerAbility {
 			return false;
 		
 		Player p = getPlayer();
-		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p).getPlayerClass();
+		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p).getMainPlayerClass();
 		
 		int length = 20 * ((pClass.getLevel() * pClass.getTierLevel()) / 16);
 		return p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, length, 50));

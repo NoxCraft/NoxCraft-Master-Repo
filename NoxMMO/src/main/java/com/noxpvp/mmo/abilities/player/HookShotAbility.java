@@ -27,7 +27,7 @@ import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 public class HookShotAbility extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "hookshot";
-	private static final String ABILITY_NAME = "Hook Shot";
+	public static final String ABILITY_NAME = "Hook Shot";
 	
 	public static Map<String, Arrow> hookArrows = new HashMap<String, Arrow>();
 	

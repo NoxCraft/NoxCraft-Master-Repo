@@ -20,7 +20,7 @@ import com.noxpvp.mmo.abilities.BaseEntityAbility;
  */
 public class FireNovaAbility extends BaseEntityAbility{
 	
-	private static final String ABILITY_NAME = "Fire Nova";
+	public static final String ABILITY_NAME = "Fire Nova";
 	public static final String PERM_NODE = "fire-nova";
 	
 	private int range;

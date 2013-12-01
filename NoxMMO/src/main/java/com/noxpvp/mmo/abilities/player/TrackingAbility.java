@@ -20,7 +20,7 @@ import com.noxpvp.mmo.runnables.EffectRunnable;
 public class TrackingAbility extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "track";
-	private static final String ABILITY_NAME = "Tracking";
+	public static final String ABILITY_NAME = "Tracking";
 	private boolean isInvis;
 	private boolean hasSpeed;
 	private int speedAmp;
