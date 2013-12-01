@@ -1,5 +1,7 @@
 package com.noxpvp.core.data;
 
+import java.util.regex.Pattern;
+
 import me.confuser.barapi.BarAPI;
 
 import org.apache.commons.lang.math.RandomUtils;
@@ -59,11 +61,21 @@ public class CoreBar{
 		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
 		
 		private StringBuilder text;
+		private int v;
 		
-		public Scroller(String text){
-			this.text = new StringBuilder("    " + text);
+		private boolean useScrollColor;
+		private String sc;
+		
+		private char cChar;
+		public Scroller(String text, int visibleLength, ChatColor color){
+			this.v = visibleLength <= 64 ? visibleLength : 64;
 			
-			currentEntry.update(100F, text.toString());
+			this.useScrollColor = color != null ? true : false;
+			this.sc = color.toString();
+			this.cChar = ChatColor.COLOR_CHAR;
+			
+			this.text = new StringBuilder(this.sc + "    " + text);
+			currentEntry.update(100F, text.substring(0, v));
 			
 			this.runTaskTimer(NoxCore.getInstance(), 0, 5);
 		}
@@ -75,10 +87,19 @@ public class CoreBar{
 				return;
 			}
 			
-			text.append(text.charAt(1));
-			text.deleteCharAt(1);
+			if (useScrollColor){
+				text.append(text.charAt(2));
+				text.replace(0, 2, this.sc);
+			} else {
+				if (text.substring(0, 1).matches("[&" + cChar + "][0-9a-f]")){
+					text.append(text.substring(0, 2)).delete(0, 2);
+				} else {
+					text.append(text.substring(0)).deleteCharAt(0);
+				}
+				
+			}
 			
-			currentEntry.update(100F, text.toString());
+			currentEntry.update(100F, text.substring(0, v));
 			
 		} 	
 		

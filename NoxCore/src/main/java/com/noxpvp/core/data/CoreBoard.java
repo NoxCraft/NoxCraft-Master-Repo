@@ -21,6 +21,7 @@ public class CoreBoard{
 	public Player p;
 	
 	
+	private Map<String, BoardScroller> scrollers;
 	private Map<String, BoardTimer> timers;
 	private Map<String, BoardEntry> entries;
 	PlayerManager pm;
@@ -38,7 +39,8 @@ public class CoreBoard{
 		this.ob = sb.getObjective(Display.SIDEBAR);
 		this.ob.setDisplayName(objName);
 		this.p = p;
-		
+
+		this.scrollers = new HashMap<String, BoardScroller>();
 		this.timers = new HashMap<String, BoardTimer>();
 		this.entries = new HashMap<String, BoardEntry>();
 		this.pm = core.getPlayerManager();
@@ -92,7 +94,7 @@ public class CoreBoard{
 	public CoreBoard updateScores() {this.ob.update(); return this;}
 	
 	/**
-	 * Cancels all running timers on this CoreBoard
+	 * Cancels all running timers and scrollers on this CoreBoard
 	 * 
 	 * @return CoreBoard - This instance
 	 */
@@ -101,7 +103,12 @@ public class CoreBoard{
 		{
 			timer.safeCancel();
 		}
+		for (BoardScroller scroller: scrollers.values())
+		{
+			scroller.safeCancel();
+		}
 		timers.clear();
+		scrollers.clear();
 		return this;
 	}
 	
@@ -157,7 +164,25 @@ public class CoreBoard{
 		BoardEntry entry = new BoardEntry(name, displayedName, scoreName);
 		
 		return this;
-	} 
+	}
+	
+	/**
+	 * 
+	 * @param name - The name for the score, only used internally for tracking and removing the score
+	 * @param displayedName - The name of the scroller to be displayed on the scoreboard
+	 * @param visibleLength - The length of the scroller to be displayed
+	 * @param nameColor - The color of the scroller name
+	 * @param scrollerColor - The color of the scroller being displayed
+	 * @return CoreBoard - This instance
+	 */
+	public CoreBoard addScroller(String name, String displayedName, String scrollText, int visibleLength, ChatColor nameColor, ChatColor scrollerColor){
+		
+		BoardScroller scroller = new BoardScroller(name, displayedName, scrollText, visibleLength, nameColor, scrollerColor);
+		scroller.runTaskTimer(NoxCore.getInstance(), 0, 5);
+		scrollers.put(scroller.name, scroller);
+		
+		return this;
+	}
 	
 	/**
 	 * 
@@ -275,6 +300,49 @@ public class CoreBoard{
 			entries.remove(name);
 		}
 	}
+
+	private class BoardScroller extends BukkitRunnable{
+
+		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
+		
+		public final String name;
+		private StringBuilder text;
+		private int v;
+		
+		private BoardEntry entry;
+		
+		private boolean useScrollColor;
+		private String sc;
+		
+		public BoardScroller(String name, String displayedName, String scrollText, int visibleLength, ChatColor nameColor, ChatColor scrollerColor){
+			this.name = name;
+			this.text = new StringBuilder("    " + scrollText);
+			this.v = visibleLength <= 14 ? visibleLength : 14;
+			
+			this.useScrollColor = scrollerColor != null ? true : false;
+			this.sc = scrollerColor.toString();
+
+			entry = new BoardEntry(name, (nameColor + displayedName), this.text.substring(0, this.v));
+		}
+		
+		public void run() {
+			if (entry == null || !entries.containsKey(entry)){
+				safeCancel();
+				return;
+			}
+			
+			if (useScrollColor){
+				text.append(text.charAt(2));
+				text.replace(0, 2, this.sc);
+			} else {
+				text.append(text.charAt(0));
+				text.deleteCharAt(0);
+				
+			}
+			entry.setValue(text.substring(0, this.v));
+		}
+		
+	}
 	
 	private class BoardTimer extends BukkitRunnable{
 		public final String name;
@@ -323,7 +391,7 @@ public class CoreBoard{
 			sb.insert(0, sc);
 			timerString = sb.toString();
 			
-			while(sb.length() < 14){
+			while(sb.length() <= 14){
 				sb.insert(0, " ");
 				sb.append(" ");
 			}
