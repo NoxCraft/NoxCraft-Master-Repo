@@ -14,8 +14,8 @@ import com.noxpvp.mmo.classes.BasePlayerClass;
  */
 public class ChampionClass extends BasePlayerClass{
 
-	private final static int classId = 2;
-	private final static String className = "champion";
+	public final static int classId = 2;
+	public final static String className = "champion";
 	private final static String DisplayName = ChatColor.RED + "Champion";
 	
 	private final static double maxHealth = 24;

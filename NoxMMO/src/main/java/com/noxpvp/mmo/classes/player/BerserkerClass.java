@@ -14,8 +14,8 @@ import com.noxpvp.mmo.classes.BasePlayerClass;
  */
 public class BerserkerClass extends BasePlayerClass{
 
-	private final static int classId = 3;
-	private final static String className = "berserker";
+	public final static int classId = 3;
+	public final static String className = "berserker";
 	private final static String DisplayName = ChatColor.RED + "Berserker";
 	
 	private final static double maxHealth = 26;

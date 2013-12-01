@@ -14,8 +14,8 @@ import com.noxpvp.mmo.classes.BasePlayerClass;
  */
 public class WarlordClass extends BasePlayerClass{
 
-	private final static int classId = 4;
-	private final static String className = "warlord";
+	public final static int classId = 4;
+	public final static String className = "warlord";
 	private final static String DisplayName = ChatColor.RED + "Warlord";
 	
 	private final static double maxHealth = 28;

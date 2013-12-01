@@ -5,12 +5,12 @@ import java.util.Comparator;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 
-public abstract class BaseEventHandler<T extends Event> implements EventHandler<T>, Comparator<EventHandler<T>> {
+public abstract class BaseMMOEventHandler<T extends Event> implements MMOEventHandler<T>, Comparator<MMOEventHandler<T>> {
 	private final String id;
 	private final EventPriority eventPriority;
 	private int priority;
 	
-	public BaseEventHandler(String id, EventPriority eventPriority, int priority)
+	public BaseMMOEventHandler(String id, EventPriority eventPriority, int priority)
 	{
 		this.id = id;
 		this.eventPriority = eventPriority;
@@ -21,17 +21,17 @@ public abstract class BaseEventHandler<T extends Event> implements EventHandler<
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;
-		if (!(obj instanceof EventHandler))
+		if (!(obj instanceof MMOEventHandler))
 			return false;
 		
-		return ((EventHandler<?>)obj).getID().equals(this.getID());
+		return ((MMOEventHandler<?>)obj).getID().equals(this.getID());
 	}
 	
 	public final String getID() {
 		return id;
 	}
 	
-	public int compare(EventHandler<?> o1, EventHandler<?> o2) {
+	public int compare(MMOEventHandler<?> o1, MMOEventHandler<?> o2) {
 		EventPriority ep1 = o1.getEventPriority(), ep2 = o2.getEventPriority();
 		int d1 = ep1.getSlot(), d2 = ep2.getSlot();
 		

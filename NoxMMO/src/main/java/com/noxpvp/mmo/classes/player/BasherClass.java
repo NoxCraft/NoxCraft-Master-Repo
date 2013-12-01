@@ -14,8 +14,8 @@ import com.noxpvp.mmo.classes.BasePlayerClass;
  */
 public class BasherClass extends BasePlayerClass{
 
-	private final static int classId = 1;
-	private final static String className = "basher";
+	public final static int classId = 1;
+	public final static String className = "basher";
 	private final static String DisplayName = ChatColor.RED + "Basher";
 	
 	private final static double maxHealth = 22;

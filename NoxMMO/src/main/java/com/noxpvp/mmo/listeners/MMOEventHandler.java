@@ -15,7 +15,7 @@ import org.bukkit.event.EventPriority;
  * It is best to use the Base Implementation of this class. OR copy the base implementations of a compareTo function. As this is required.
  * @param <T> of type Event.
  */
-public interface EventHandler <T extends Event> extends Comparable<EventHandler> {
+public interface MMOEventHandler <T extends Event> extends Comparable<MMOEventHandler> {
 	
 	/**
 	 * Gets a unique id to this ability handle.
