@@ -38,7 +38,7 @@ public class DamageRunnable extends BukkitRunnable{
 			return;
 		}
 		
-		if (!(e instanceof Damageable)){
+		if (!(e instanceof Damageable || e.isDead())){
 			safeCancel();
 			return;
 		}

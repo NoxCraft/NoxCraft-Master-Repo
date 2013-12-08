@@ -61,6 +61,7 @@ public class NoxMMO extends NoxPlugin {
 	public void permissions() {
 		addPermission(new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability"), "Base MMO Node", PermissionDefault.FALSE,
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", BackStabAbility.PERM_NODE), "Allows usage of the Back Stab Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", BandageAbility.PERM_NODE), "Allows usage of the Bandage Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", BankShotAbility.PERM_NODE), "Allows usage of the Bank Shot Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", BoltAbility.PERM_NODE), "Allows usage of the Bolt Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", CallOfTheWildAbility.PERM_NODE), "Allows usage of the Call Of The Wild Ability.", PermissionDefault.OP),
@@ -80,6 +81,7 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", LeapAbility.PERM_NODE), "Allows usage of the Leap Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MaliciousBiteAbility.PERM_NODE), "Allows usage of the Malicious Bite Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MassDestructionAbility.PERM_NODE), "Allows usage of the Mass Destruction Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MedPackAbility.PERM_NODE), "Allows usage of the Med-Pack Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MortalWoundAbility.PERM_NODE), "Allows usage of the Mortal Wound Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", NetArrowAbility.PERM_NODE), "Allows usage of the Net Arrow Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", ParryAbility.PERM_NODE), "Allows usage of the Parry Ability.", PermissionDefault.OP),
