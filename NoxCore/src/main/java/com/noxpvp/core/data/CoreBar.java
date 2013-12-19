@@ -1,7 +1,5 @@
 package com.noxpvp.core.data;
 
-import java.util.regex.Pattern;
-
 import me.confuser.barapi.BarAPI;
 
 import org.apache.commons.lang.math.RandomUtils;
@@ -86,7 +84,7 @@ public class CoreBar{
 				safeCancel();
 				return;
 			}
-			
+				
 			if (useScrollColor){
 				text.append(text.charAt(2));
 				text.replace(0, 2, this.sc);
@@ -108,8 +106,6 @@ public class CoreBar{
 
 	public class Flasher extends BukkitRunnable{
 
-		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
-		
 		private String text;
 		
 		public Flasher(String text){
@@ -119,6 +115,8 @@ public class CoreBar{
 			
 			this.runTaskTimer(NoxCore.getInstance(), 0, 4);
 		}
+		
+		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
 		
 		public void run() {
 			if (currentEntry.text != text)
@@ -135,11 +133,60 @@ public class CoreBar{
 		} 	
 		
 	}
+	
+	public class Shine extends BukkitRunnable{
+
+		
+		private StringBuilder text;
+		private int delay;
+		
+		private int currentIndex;
+		
+		private String one = ChatColor.GOLD.toString(), two = ChatColor.YELLOW.toString(), three = ChatColor.RED.toString();
+		private int i1, i2, i3;
+		
+		public Shine(String text, int delay){
+			this.text = new StringBuilder();
+			this.delay = delay;
+			
+			currentEntry.update(100F, text);
+			this.currentIndex = 0;
+			
+			this.runTaskTimer(NoxCore.getInstance(), 0, 1);
+		}
+		
+		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
+		
+		public void run() {
+			if ((currentEntry.text != text.toString()) || (text.length() <= 7))
+			{
+				safeCancel();
+				return;
+			}
+			if (currentIndex+7 > text.length()){
+				safeCancel();
+				new Shine(this.text.toString(), 1).runTaskLater(NoxCore.getInstance(), delay);
+				
+				return;
+			}
+			
+			text.delete(i1, i1+1).delete(i2, i2+1).delete(i3, i3+1);//remove old colors
+			
+			currentIndex = currentIndex+2;
+			i1 = currentIndex;
+			i2 = currentIndex+3;
+			i3 = currentIndex+6;
+			
+			text.insert(i1, one).insert(i1+3, two).insert(i1+6, three);//add again
+			
+			currentEntry.update(100F, text.toString());
+			
+		} 	
+		
+	}
 
 	private class LivingTracker extends BukkitRunnable{
 
-		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
-		
 		private double distance;
 		
 		private LivingEntity e;
@@ -155,6 +202,8 @@ public class CoreBar{
 			
 			this.runTaskTimer(NoxCore.getInstance(), 0, 4);
 		}
+		
+		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
 		
 		public void run() {
 			if (currentEntry.text != text.toString() || !p.isOnline() || p == null)
