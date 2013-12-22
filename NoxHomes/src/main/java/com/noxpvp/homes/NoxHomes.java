@@ -39,7 +39,7 @@ public class NoxHomes extends NoxPlugin {
 		HomeAdminCommand.class,
 		HomeCommand.class,
 		HomeListCommand.class,
-		LocateHomeCommand.class,
+//		LocateHomeCommand.class,
 		SetHomeCommand.class
 	};
 	public static final String HOMES_NODE = "homes";
@@ -130,6 +130,7 @@ public class NoxHomes extends NoxPlugin {
 		return homeManager;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void permissions() {
 		addPermission(

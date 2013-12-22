@@ -80,7 +80,7 @@ public class SetHomeCommand implements CommandRunner {
 		String perm = StringUtil.combine(".", NoxHomes.HOMES_NODE, PERM_NODE, (own? ".": "others.") + (homeName==null ? "default": "named"));
 		if (!permHandler.hasPermission(sender, perm))
 		{
-			sender.sendMessage(plugin.getGlobalLocale("permission.denied", "Teleport to homes.", perm));
+			sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("permission.denied", "Teleport to homes.", perm)));
 			return true;
 		}
 		BaseHome newHome = null;
@@ -89,25 +89,27 @@ public class SetHomeCommand implements CommandRunner {
 		else
 			newHome = new NamedHome(playerName, homeName, player);
 		
-//		if (own)
-//		{
-//			//TODO: Write home limit code.
-//		}
+		boolean success = false;
+		if (own)
+		{
+			if (plugin.getLimitsManager().canAddHome(playerName))
+			{
+				manager.addHome(newHome);
+				
+				success = true;
+			} else {
+				sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("command.failed", "You already have the maximum amount of homes allowed.")));
+			}
+		}
+		else
+			success = true;
 		
-		
-		manager.addHome(newHome);
-
-//		sender.sendMessage(plugin.getLocale("command.failed", "Failed to create new home."));
-//		else {
+		if (success) {
 			SafeLocation l = new SafeLocation(newHome.getLocation());
-			
-			sender.sendMessage(plugin.getLocale("homes.sethome"+(own?".own":""), playerName, homeName, String.format(
-					"x=%1$s y=%2$s z=%3$s on world %4$s", l.getX(), l.getY(), l.getZ(), l.getWorldName()
-					)));
-//		}
-			
-		
-			
+			sender.sendMessage(StringUtil.ampToColor(plugin.getLocale("homes.sethome"+(own?".own":""), playerName, homeName, String.format(
+				"x=%1$s y=%2$s z=%3$s on world %4$s", l.getX(), l.getY(), l.getZ(), l.getWorldName()
+				))));
+		}
 		
 		return true;
 	}

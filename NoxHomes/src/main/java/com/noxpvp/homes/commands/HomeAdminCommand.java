@@ -19,7 +19,8 @@ public class HomeAdminCommand implements CommandRunner {
 	public HomeAdminCommand()
 	{
 		addSubCommands(
-				new HomeAdminImportCommand()
+				new HomeAdminImportCommand(),
+				new HomeAdminWipeCommand()
 		);
 	}
 	

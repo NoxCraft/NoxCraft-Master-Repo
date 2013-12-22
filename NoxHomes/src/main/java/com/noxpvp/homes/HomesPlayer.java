@@ -55,6 +55,10 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		return Collections.unmodifiableList(homes);
 	}
 	
+	public int getHomeCount() {
+		return getHomes().size();
+	}
+	
 	/**
 	 * Gets the home names.
 	 *

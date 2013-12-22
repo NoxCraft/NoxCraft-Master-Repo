@@ -1,6 +1,7 @@
 package com.noxpvp.homes;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.noxpvp.core.NoxCore;
@@ -50,6 +51,33 @@ public class HomeLimitManager implements Persistant {
 		String world = p.getLastWorldName();
 		String player = p.getName();
 		
+		limit = getLimit(p);
+		
+		if (limit < 0)
+			return true;
+					
+		return count <= limit;
+	}
+	
+	public boolean inRange(String playerName, int count)
+	{
+		return inRange(getNoxPlayer(playerName), count);
+	}
+	
+	public int getLimit(String playerName)
+	{
+		return getLimit(getNoxPlayer(playerName));
+	}
+	
+	public int getLimit(NoxPlayerAdapter p)
+	{
+		NoxPlayer nPlayer = getNoxPlayer(p);
+		String player = nPlayer.getName();
+		
+		World world = nPlayer.getLastWorld();
+		
+		int limit = 0;
+		
 		if (!config.getNode("player").getKeys().contains(player)) {
 			for (String node : config.getNode("group").getKeys())
 				if (superPerms || !VaultAdapter.permission.hasGroupSupport()) 
@@ -68,15 +96,22 @@ public class HomeLimitManager implements Persistant {
 		} else 
 			limit = config.get("player."+ player, 0);
 		
-		if (limit < 0)
-			return true;
-					
-		return count <= limit;
+		
+		return limit;
 	}
 	
-	public boolean inRange(String playerName, int count)
+	public boolean canAddHome(String playerName)
 	{
-		return inRange(getNoxPlayer(playerName), count);
+		return canAddHome(getNoxPlayer(playerName));
+	}
+	
+	public boolean canAddHome(NoxPlayer player)
+	{
+		HomesPlayer p = new HomesPlayer(player);
+		
+		int count = p.getHomeCount(); //Could possibly single lined.. Unsure at moment.
+		
+		return inRange(p, ++count);
 	}
 	
 	public static boolean usingCumulativeLimits() { return cumulativeLimits; }
