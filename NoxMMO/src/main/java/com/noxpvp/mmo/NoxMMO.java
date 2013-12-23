@@ -81,6 +81,7 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", LeapAbility.PERM_NODE), "Allows usage of the Leap Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MaliciousBiteAbility.PERM_NODE), "Allows usage of the Malicious Bite Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MassDestructionAbility.PERM_NODE), "Allows usage of the Mass Destruction Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MeasuringTapeAbility.PERM_NODE), "Allows usage of the Measuring Tape Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MedPackAbility.PERM_NODE), "Allows usage of the Med-Pack Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", MortalWoundAbility.PERM_NODE), "Allows usage of the Mortal Wound Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", NetArrowAbility.PERM_NODE), "Allows usage of the Net Arrow Ability.", PermissionDefault.OP),
