@@ -48,10 +48,6 @@ public class SeveringStrikesAbility extends BasePlayerAbility{
 		super(ABILITY_NAME, player);
 	}
 
-	/**
-	 * 
-	 * @return boolean If this ability executed successfully
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -72,14 +68,6 @@ public class SeveringStrikesAbility extends BasePlayerAbility{
 		}, bleedLength);
 		
 		return true;
-	}
-
-	/**
-	 * 
-	 * @return boolean If the execute() method will normally be able to start
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
 	}
 	
 	private static class BleedRunnable extends BukkitRunnable{

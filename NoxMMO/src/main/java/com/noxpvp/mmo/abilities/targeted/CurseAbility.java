@@ -90,16 +90,4 @@ public class CurseAbility extends BaseTargetedPlayerAbility{
 		
 		return true;
 	}
-
-	/**
-	 * Gets if the execute method will be able to start
-	 * 
-	 * @return boolean If the ability is safe to start
-	 */
-	public boolean mayExecute() {
-		if (getPlayer() == null || getTarget() == null)
-			return false;
-		
-		return true;
-	}
 }

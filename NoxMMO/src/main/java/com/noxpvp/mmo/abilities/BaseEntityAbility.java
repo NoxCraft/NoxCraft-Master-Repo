@@ -19,4 +19,14 @@ public abstract class BaseEntityAbility extends BaseAbility implements EntityAbi
 	}
 	
 	public boolean isValid() { return getEntity() != null; }
+	
+	/**
+	 * Returns is the Entity of this ability is null, thus if the execute method will start
+	 * 
+	 * @return boolean If the execute() method is normally able to start
+	 */
+	public boolean mayExecute() {
+		return getEntity() != null;
+	}
+	
 }

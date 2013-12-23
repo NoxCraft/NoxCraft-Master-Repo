@@ -96,11 +96,6 @@ public class FireNovaAbility extends BaseEntityAbility{
 	 */
 	public FireNovaAbility(Entity entity){super(ABILITY_NAME, entity);}
 	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If this ability was executed successfully
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -109,15 +104,6 @@ public class FireNovaAbility extends BaseEntityAbility{
 		animation.start();
 		
 		return true;
-	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method will normally for able to start
-	 */
-	public boolean mayExecute() {
-		return getEntity() != null;
 	}
 	
 	private class FirenovaAnimation extends BukkitRunnable {

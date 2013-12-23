@@ -81,12 +81,7 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 	public GuardianAngelAbility(Player player){
 		super(ABILITY_NAME, player);
 	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the ability has successfully executed
-	 */
+
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -113,15 +108,6 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 		despawn.runTaskLater(instance, 100);
 		
 		return true;
-	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method will normally be able to start
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
 	}
 	
 }

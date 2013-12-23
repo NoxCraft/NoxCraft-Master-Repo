@@ -81,10 +81,6 @@ public class PoisonArrowAbility extends BasePlayerAbility{
 		this.duration = 75;
 	}
 	
-	/**
-	 * 
-	 * @return boolean - If the ability executed successfully
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -103,14 +99,6 @@ public class PoisonArrowAbility extends BasePlayerAbility{
 		}, 100);
 		
 		return true;
-	}
-	
-	/**
-	 * 
-	 * @return boolean - If the execute() method will normally be able to execute
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
 	}
 
 }

@@ -85,14 +85,5 @@ public class TracerArrowAbility extends BasePlayerAbility{
 		
 		return true;
 	}
-	
-	/**
-	 * 
-	 * @return boolean - If the execute() method will normally be able to execute
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
-	}
-	
 
 }

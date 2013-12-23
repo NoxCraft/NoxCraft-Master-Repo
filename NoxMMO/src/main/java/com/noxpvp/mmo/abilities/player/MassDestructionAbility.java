@@ -52,11 +52,6 @@ public class MassDestructionAbility extends BasePlayerAbility{
 		super(ABILITY_NAME, p);
 	}
 	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the ability has successfully executed
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -78,15 +73,6 @@ public class MassDestructionAbility extends BasePlayerAbility{
 		
 		MassDestructionAbility.massDestructors.add(getPlayer());
 		return true;
-	}
-
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method will normally be able to start
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
 	}
 
 }

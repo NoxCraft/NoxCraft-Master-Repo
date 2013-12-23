@@ -117,10 +117,6 @@ public class NetArrowAbility extends BasePlayerAbility{
 		this.time = 100;
 	}
 	
-	/**
-	 * 
-	 * @return boolean - If the ability executed successfully
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -139,14 +135,6 @@ public class NetArrowAbility extends BasePlayerAbility{
 		}, 100);
 		
 		return true;
-	}
-	
-	/**
-	 * 
-	 * @return boolean - If the execute() method will normally be able to execute
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
 	}
 
 }

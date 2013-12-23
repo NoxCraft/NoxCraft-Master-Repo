@@ -76,11 +76,6 @@ public class RejuvenationAbility extends BasePlayerAbility{
 		super(ABILITY_NAME, player);
 	}
 	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the ability has successfully executed
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -94,15 +89,5 @@ public class RejuvenationAbility extends BasePlayerAbility{
 		
 		return true;
 	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method will normally be able to start
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
-	}
-	
 	
 }

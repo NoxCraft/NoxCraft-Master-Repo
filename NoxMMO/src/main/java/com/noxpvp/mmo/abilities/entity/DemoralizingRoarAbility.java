@@ -43,12 +43,7 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 		super(ABILITY_NAME, entity);
 		creatures = new HashSet<Creature>();
 	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If this ability executed successfully
-	 */
+
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -73,15 +68,6 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 			return false;
 		
 		return true;
-	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method will normally be able to start
-	 */
-	public boolean mayExecute() {
-		return getEntity() != null;
 	}
 	
 }

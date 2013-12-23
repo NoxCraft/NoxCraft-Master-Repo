@@ -106,10 +106,4 @@ public class MortalWoundAbility extends BaseTargetedPlayerAbility{
 				new PotionEffect(PotionEffectType.SLOW, duration, amplifier)));
 	}
 	
-	/**
-	 * @return Boolean - If the execute() method will normally be able to start
-	 */
-	public boolean mayExecute() {
-		return (getPlayer() != null && getTarget() != null);
-	}
 }

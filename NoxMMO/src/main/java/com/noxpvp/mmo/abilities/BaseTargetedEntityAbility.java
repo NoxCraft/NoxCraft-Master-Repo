@@ -41,4 +41,13 @@ public abstract class BaseTargetedEntityAbility extends BaseEntityAbility implem
 		
 		return -1;
 	}
+	
+	/**
+	 * Returns is the entity or target of this ability is null, thus if the execute method will start
+	 * 
+	 * @return boolean If the execute() method is normally able to start
+	 */
+	public boolean mayExecute() {
+		return (getEntity() != null && getTarget() != null);
+	}
 }
