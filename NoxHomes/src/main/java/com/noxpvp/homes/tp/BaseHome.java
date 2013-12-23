@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 
+
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
@@ -15,6 +16,7 @@ import com.bergerkiller.bukkit.common.internal.PermissionHandler;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.tp.WarpPoint;
+import com.noxpvp.homes.NoxHomes;
 
 public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 	
@@ -79,9 +81,10 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 	protected String getOtherNode() {
 		return OTHER_HOME_NODE;
 	}
+	
 	public boolean canTeleport(Player player)
 	{
-		return isOwner(player);
+		return player.hasPermission((isOwner(player))?getNode():getOtherNode());
 	}
 
 	public boolean canTeleport(Entity entity) {
