@@ -42,14 +42,5 @@ public class BandageAbility extends BaseEntityAbility{
 		
 		return false;
 	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method is normally able to start
-	 */
-	public boolean mayExecute() {
-		return getEntity() != null;
-	}
 
 }

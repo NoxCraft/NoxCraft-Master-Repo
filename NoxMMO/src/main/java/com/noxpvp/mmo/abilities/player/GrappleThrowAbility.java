@@ -65,10 +65,6 @@ public class GrappleThrowAbility extends BasePlayerAbility{
 	 */
 	public GrappleThrowAbility(Player player){super(ABILITY_NAME, player);}
 	
-	/**
-	 * 
-	 * @return boolean If the ability was executed successfully
-	 */
 	public boolean execute(){
 		if (!mayExecute())
 			return false;
@@ -102,14 +98,6 @@ public class GrappleThrowAbility extends BasePlayerAbility{
 			return true;
 		}
 		else return false;
-	}
-	
-	/**
-	 * 
-	 * @return boolean If the execute() method is normally able to start
-	 */
-	public boolean mayExecute(){
-		return getPlayer() != null;
 	}
 
 }

@@ -63,10 +63,6 @@ public class CallOfTheWildAbility extends BasePlayerAbility{
 		this.spawnType = EntityType.WOLF;
 	}
 
-	/**
-	 * 
-	 * @return boolean If the ability has executed successfully
-	 */
 	public boolean execute() {
 		if (!mayExecute()) return false;
 		
@@ -89,14 +85,6 @@ public class CallOfTheWildAbility extends BasePlayerAbility{
 			((Tameable) e).setOwner(p);
 		
 		return true;
-	}
-
-	/**
-	 * 
-	 * @return boolean If the execute() method will normally be able to start
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
 	}
 	
 }

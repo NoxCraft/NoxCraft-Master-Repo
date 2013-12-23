@@ -144,16 +144,4 @@ public class PickPocketAbility extends BaseTargetedPlayerAbility{
 		return true;
 	}
 	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method will normally be able to start
-	 */
-	public boolean mayExecute() {
-		if (getPlayer() == null || getTarget() == null)
-			return false;
-		
-		return true;
-	}
-	
 }

@@ -147,12 +147,7 @@ public class BankShotAbility extends BasePlayerAbility{
 		
 		this.a = a;
 	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the ability has successfully executed
-	 */
+
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -165,12 +160,4 @@ public class BankShotAbility extends BasePlayerAbility{
 		return true;
 	}
 	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method is normally able to start
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
-	}
 }

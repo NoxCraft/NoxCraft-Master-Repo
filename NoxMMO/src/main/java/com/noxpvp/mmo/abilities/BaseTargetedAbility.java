@@ -33,4 +33,13 @@ public abstract class BaseTargetedAbility extends BaseAbility implements Targete
 		
 		return -1;
 	}
+	
+	/**
+	 * Returns is the target of this ability is null, thus if the execute method will start
+	 * 
+	 * @return boolean If the execute() method is normally able to start
+	 */
+	public boolean mayExecute() {
+		return getTarget() != null;
+	}
 }

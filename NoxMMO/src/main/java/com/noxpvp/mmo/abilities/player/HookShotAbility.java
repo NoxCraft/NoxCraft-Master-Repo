@@ -93,11 +93,6 @@ public class HookShotAbility extends BasePlayerAbility{
 		super(ABILITY_NAME, player);
 	}
 
-	/**
-	 * 
-	 * 
-	 * @return Boolean If ability successfully executed
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -143,18 +138,5 @@ public class HookShotAbility extends BasePlayerAbility{
 		}
 		return true;
 	}
-
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method for this instance will be able to start
-	 */
-	public boolean mayExecute() {
-		if (getPlayer() == null)
-			return false;
-		
-		return true;
-	}
-	
 
 }

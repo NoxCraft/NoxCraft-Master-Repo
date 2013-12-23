@@ -41,4 +41,13 @@ public abstract class BaseTargetedPlayerAbility extends BasePlayerAbility implem
 		
 		return -1;
 	}
+	
+	/**
+	 * Returns is the player or target of this ability is null, thus if the execute method will start
+	 * 
+	 * @return boolean If the execute() method is normally able to start
+	 */
+	public boolean mayExecute() {
+		return (getPlayer() != null && getTarget() != null);
+	}
 }

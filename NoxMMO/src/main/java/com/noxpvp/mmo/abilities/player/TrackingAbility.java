@@ -172,13 +172,4 @@ public class TrackingAbility extends BasePlayerAbility{
 		return false;
 	}
 
-	/**
-	 * 
-	 * @return boolean If the execute() will normally be able to start
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
-	}
-	
-
 }

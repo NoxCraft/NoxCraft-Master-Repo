@@ -86,14 +86,5 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 		
 		return true;
 	}
-
-	/**
-	 * 
-	 * @return boolean If the execute() method will normally be able to start
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
-	}
-
 	
 }

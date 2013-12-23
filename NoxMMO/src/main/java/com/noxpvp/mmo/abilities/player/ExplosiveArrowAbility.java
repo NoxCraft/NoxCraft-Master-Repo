@@ -60,10 +60,6 @@ public class ExplosiveArrowAbility extends BasePlayerAbility{
 		this.power = 4;
 	}
 	
-	/**
-	 * 
-	 * @return boolean - If the ability executed successfully
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -82,14 +78,6 @@ public class ExplosiveArrowAbility extends BasePlayerAbility{
 		}, 100);
 		
 		return true;
-	}
-	
-	/**
-	 * 
-	 * @return boolean - If the execute() method will normally be able to execute
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
 	}
 
 }

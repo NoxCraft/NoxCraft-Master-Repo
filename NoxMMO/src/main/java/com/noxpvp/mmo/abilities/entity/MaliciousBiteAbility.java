@@ -39,8 +39,4 @@ public class MaliciousBiteAbility extends BaseEntityAbility implements PassiveAb
 		return RandomUtils.nextFloat() < (pClass.getTierLevel() * pClass.getLevel()) / 1000;
 	}
 
-	public boolean mayExecute() {
-		return getEntity() != null;
-	}
-
 }

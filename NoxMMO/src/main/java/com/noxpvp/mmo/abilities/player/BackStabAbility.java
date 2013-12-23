@@ -102,12 +102,6 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 		super(ABILITY_NAME, player);
 	}
 	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the backstab was successful
-	 * (If this ability is successful, the initial damage event should be canceled)
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -126,15 +120,4 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 		return true;
 	}
 	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method would normally be able to start
-	 */
-	public boolean mayExecute() {
-		if (getPlayer() == null || getTarget() == null)
-			return false;
-		
-		return true;
-	}	
 }

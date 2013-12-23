@@ -42,11 +42,6 @@ public class FireBallAbility extends BaseEntityAbility{
 		super(ABILITY_NAME, e);
 	}
 
-	/**
-	 * 
-	 * 
-	 * @return Boolean If this ability has executed successfully
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -60,15 +55,6 @@ public class FireBallAbility extends BaseEntityAbility{
 		fireBall.setShooter((LivingEntity) e);
 		
 		return true;
-	}
-
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method will normally be able to start
-	 */
-	public boolean mayExecute() {
-		return getEntity() != null;
 	}
 
 }

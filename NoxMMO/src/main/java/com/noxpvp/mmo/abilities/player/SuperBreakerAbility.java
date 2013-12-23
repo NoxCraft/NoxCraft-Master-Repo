@@ -39,8 +39,4 @@ public class SuperBreakerAbility extends BasePlayerAbility {
 		return p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, length, 50));
 	}
 
-	public boolean mayExecute() {
-		return getPlayer() != null;
-	}
-
 }

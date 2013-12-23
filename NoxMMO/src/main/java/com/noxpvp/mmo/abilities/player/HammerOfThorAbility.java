@@ -49,11 +49,7 @@ public class HammerOfThorAbility extends BasePlayerAbility{
                 super(ABILITY_NAME, player);
                 this.distanceVelo = distanceVelo;
         }
-
-        /**
-         * 
-         * @return boolean If this ability executed successfully
-         */
+        
         public boolean execute() {
                 if (!mayExecute())
                         return false;
@@ -75,14 +71,6 @@ public class HammerOfThorAbility extends BasePlayerAbility{
                 }, 50);
                 
                 return true;
-        }
-
-        /**
-         * 
-         * @return boolean If the execute() method is normally able to start
-         */
-        public boolean mayExecute() {
-                return getPlayer() != null;
         }
         
 }

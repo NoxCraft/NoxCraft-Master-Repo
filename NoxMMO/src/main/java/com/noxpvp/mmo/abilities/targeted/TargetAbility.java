@@ -80,15 +80,6 @@ public class TargetAbility extends BasePlayerAbility{
 		return true;
 	}
 	
-	/**
-	 * 
-	 * 
-	 * @return Boolean - If the execute() method will normally be able to start
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
-	}
-	
 	private boolean hasIntersection(Vector3D p1, Vector3D p2, Vector3D min, Vector3D max) {
 		final double epsilon = 0.0001f;
  

@@ -71,10 +71,6 @@ public class ParryAbility extends BasePlayerAbility implements PassiveAbility{
 		super(ABILITY_NAME, player);
 	}
 	
-	/**
-	 * 
-	 * @return boolean If the ability executed successfully
-	 */
 	public boolean execute(){
 		if (!mayExecute()) return false;
 		
@@ -86,14 +82,6 @@ public class ParryAbility extends BasePlayerAbility implements PassiveAbility{
 		if (RandomUtils.nextFloat() > percentChance) return false;
 		
 		return true;
-	}
-	
-	/**
-	 * 
-	 * @return boolean If the execute() method will normally be able to execute
-	 */
-	public boolean mayExecute(){
-		return getPlayer() != null;
 	}
 	
 }

@@ -65,10 +65,6 @@ public class FlyAbility extends BasePlayerAbility{
 		this.regFreq = (1200);
 	}
 	
-	/**
-	 * 
-	 * @return boolean - If the ability was executed successfully
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -92,14 +88,6 @@ public class FlyAbility extends BasePlayerAbility{
 		regChecker.runTaskTimer(NoxMMO.getInstance(), 0, getRegFreq());
 		
 		return true;
-	}
-	
-	/**
-	 * 
-	 * @return boolean - If the execute() method is normally able to start
-	 */
-	public boolean mayExecute() {
-		return getPlayer() != null;
 	}
 	
 	private class FlyRunnable extends BukkitRunnable{

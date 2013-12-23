@@ -5,8 +5,9 @@ import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.noxpvp.core.NoxCore;
+import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
@@ -92,8 +93,6 @@ public class ReincarnateAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 		
-		PlayerManager pm = NoxMMO.getInstance().getPlayerManager();
-		
 		Player p = getPlayer();
 		Location pLoc = p.getLocation();
 		
@@ -101,10 +100,10 @@ public class ReincarnateAbility extends BasePlayerAbility{
 		long ct = System.currentTimeMillis();
 		
 		for (Player pl : Bukkit.getOnlinePlayers()){
-			MMOPlayer mmoP = pm.getMMOPlayer(pl.getName());
+			NoxPlayer noxP = getNoxPlayer();
 			
-			if (mmoP.getLastDeathLoc().distance(pLoc) > getMaxRadius()) continue;
-			if (((ct - mmoP.getLastDeathTime()) / 1000) > timeLimit) continue;
+			if (noxP.getLastDeathLocation().distance(pLoc) > getMaxRadius()) continue;
+			if (((ct - noxP.getLastDeathTS()) / 1000) > timeLimit) continue;
 			
 			target = pl;
 			break;
@@ -117,12 +116,4 @@ public class ReincarnateAbility extends BasePlayerAbility{
 		return true;
 	}
 	
-	/**
-	 * Returns is the player of this ability is null, thus if the execute method will start
-	 * 
-	 * @return boolean If the execute() method is normally able to start
-	 */
-	public boolean mayExecute(){
-		return getPlayer() != null;
-	}
 }

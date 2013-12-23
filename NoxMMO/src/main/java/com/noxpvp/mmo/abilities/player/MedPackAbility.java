@@ -29,11 +29,6 @@ public class MedPackAbility extends BasePlayerAbility{
 		super(ABILITY_NAME, player);
 	}
 	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the ability has successfully executed
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -49,15 +44,6 @@ public class MedPackAbility extends BasePlayerAbility{
 		MedPackAbility.packs.put(drop, p.getName());
 		
 		return false;
-	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the execute() method is normally able to start
-	 */
-	public boolean mayExecute() {
-		return getEntity() != null;
 	}
 
 }

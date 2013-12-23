@@ -55,11 +55,6 @@ public class DashAbility extends BaseEntityAbility{
 		super(ABILITY_NAME, entity);
 	}
 
-	/**
-	 * 
-	 * 
-	 * @return boolean Ability success
-	 */
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -68,13 +63,5 @@ public class DashAbility extends BaseEntityAbility{
 		
 		return true;
 	}
-
-	/**
-	 * 
-	 * 
-	 * @return boolean If the execute method from this instance is able to start
-	 */
-	public boolean mayExecute() {
-		return getEntity() != null;
-	}
+	
 }
