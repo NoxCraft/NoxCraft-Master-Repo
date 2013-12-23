@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.classes.player;
+package com.noxpvp.mmo.classes.player.main.axes;
 
 import org.bukkit.ChatColor;
 
@@ -20,14 +20,15 @@ public class WarlordClass extends BasePlayerClass{
 
 	public final static int classId = 4;
 	public final static String className = "warlord";
-	public final static String[] STANDARD_ABILITIES = new String[] {  LeapAbility.ABILITY_NAME, SkullSmasherAbility.ABILITY_NAME, MassDestructionAbility.ABILITY_NAME, HammerOfThorAbility.ABILITY_NAME };  
-	private final static String DisplayName = ChatColor.RED + "Warlord";
+	public final static String DisplayName = ChatColor.RED + "Warlord";
 	
-	private final static double maxHealth = 28;
-	private final static int tierLevel = 4;
-	private final static int levelCap = 100;
-	private final static double exponent = 2.8;
-	private final static float multiplier = 1.0f;
+	public final static String[] STANDARD_ABILITIES = new String[] {  LeapAbility.ABILITY_NAME, SkullSmasherAbility.ABILITY_NAME, MassDestructionAbility.ABILITY_NAME, HammerOfThorAbility.ABILITY_NAME };  
+	
+	public final static double maxHealth = 28;
+	public final static int tierLevel = 4;
+	public final static int levelCap = 100;
+	public final static double exponent = 2.8;
+	public final static float multiplier = 1.0f;
 	
 	public WarlordClass() {
 		super(WarlordClass.classId, WarlordClass.className, WarlordClass.DisplayName, WarlordClass.maxHealth,

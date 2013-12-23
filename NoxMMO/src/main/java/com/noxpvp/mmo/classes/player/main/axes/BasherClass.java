@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.classes.player;
+package com.noxpvp.mmo.classes.player.main.axes;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.IronGolem;
@@ -19,13 +19,13 @@ public class BasherClass extends BasePlayerClass{
 	public final static int classId = 1;
 	public final static String className = "basher";
 	public final static String[] STANDARD_ABILITIES = new String[] { LeapAbility.ABILITY_NAME };
-	private final static String DisplayName = ChatColor.RED + "Basher";
+	public final static String DisplayName = ChatColor.RED + "Basher";
 	
-	private final static double maxHealth = 22;
-	private final static int tierLevel = 1;
-	private final static int levelCap = 100;
-	private final static double exponent = 2.2;
-	private final static float multiplier = 1.0f;
+	public final static double maxHealth = 22;
+	public final static int tierLevel = 1;
+	public final static int levelCap = 100;
+	public final static double exponent = 2.2;
+	public final static float multiplier = 1.0f;
 	
 	public BasherClass() {
 		super(BasherClass.classId, BasherClass.className, BasherClass.DisplayName, BasherClass.maxHealth,
