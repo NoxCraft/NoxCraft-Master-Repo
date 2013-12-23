@@ -39,14 +39,16 @@ public class NoxHomes extends NoxPlugin {
 		HomeAdminCommand.class,
 		HomeCommand.class,
 		HomeListCommand.class,
-		LocateHomeCommand.class,
+//		LocateHomeCommand.class,
 		SetHomeCommand.class
 	};
+	
 	public static final String HOMES_NODE = "homes";
 	private static NoxHomes instance;
-	private Map<String, CommandRunner> commandExecs;
-	private HomeLimitManager limitManager;
 	
+	private Map<String, CommandRunner> commandExecs;
+	
+	private HomeLimitManager limitManager;
 	private HomeManager homeManager;
 	
 	@Override
@@ -130,6 +132,7 @@ public class NoxHomes extends NoxPlugin {
 		return homeManager;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void permissions() {
 		addPermission(
