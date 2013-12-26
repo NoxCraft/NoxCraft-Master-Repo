@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.NoxMMO;
 
-public class ShockRunnable extends BukkitRunnable{
+public class ShockGroundAnimation extends BukkitRunnable{
 	private int shockRange;
 	private Vector shockVelo;
 	private float percentThrown;
@@ -32,7 +32,7 @@ public class ShockRunnable extends BukkitRunnable{
 	 * @param percentThrown Decimal value of chance to throw blocks (1.0 = all / 0.8 = 80% of blocks)
 	 * @param delay Delay in ticks before starting
 	 */
-	public ShockRunnable(Location shockCenter, int shockRange, double shockVelo, float percentThrown, int delay) {
+	public ShockGroundAnimation(Location shockCenter, int shockRange, double shockVelo, float percentThrown, int delay) {
 		this.center = shockCenter.getBlock();
 		this.shockRange = shockRange;
 		this.shockVelo = new Vector().zero();
