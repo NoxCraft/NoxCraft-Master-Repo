@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.classes.player;
+package com.noxpvp.mmo.classes.player.main.axes;
 
 import org.bukkit.ChatColor;
 
@@ -23,11 +23,11 @@ public class BerserkerClass extends BasePlayerClass{
 	public final static String[] STANDARD_ABILITIES = new String[] { LeapAbility.ABILITY_NAME, SkullSmasherAbility.ABILITY_NAME };
 	private final static String DisplayName = ChatColor.RED + "Berserker";
 	
-	private final static double maxHealth = 26;
-	private final static int tierLevel = 2;
-	private final static int levelCap = 100;
-	private final static double exponent = 2.6;
-	private final static float multiplier = 1.0f;
+	public final static double maxHealth = 26;
+	public final static int tierLevel = 2;
+	public final static int levelCap = 100;
+	public final static double exponent = 2.6;
+	public final static float multiplier = 1.0f;
 	
 	public BerserkerClass() {
 		super(BerserkerClass.classId, BerserkerClass.className, BerserkerClass.DisplayName, BerserkerClass.maxHealth,
