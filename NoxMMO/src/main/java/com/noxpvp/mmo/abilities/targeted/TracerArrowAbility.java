@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.abilities.player;
+package com.noxpvp.mmo.abilities.targeted;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +12,9 @@ import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
-public class TracerArrowAbility extends BasePlayerAbility{
+public class TracerArrowAbility extends BaseTargetedPlayerAbility{
 	
 	static Map<String, TracerArrowAbility> abilityCue = new HashMap<String, TracerArrowAbility>();
 	
@@ -32,9 +32,6 @@ public class TracerArrowAbility extends BasePlayerAbility{
 		String name = player.getName();
 		
 		if (abilityCue.containsKey(name))
-			return false;
-		
-		if (!mmoP.hasTarget())
 			return false;
 		
 		final Arrow a = arrow;

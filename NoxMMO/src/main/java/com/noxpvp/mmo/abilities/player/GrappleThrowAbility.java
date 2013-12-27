@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
@@ -75,15 +74,14 @@ public class GrappleThrowAbility extends BasePlayerAbility{
 		int i = 0;
 		for (Entity it : p.getNearbyEntities(range, range, range)){
 			if (i >= maxTargets) break;
-			if (!(it instanceof Player)) continue;;
-			if (!(p.hasLineOfSight(it))) continue;;
+			if (!(it instanceof Player)) continue;
+			if (!(p.hasLineOfSight(it))) continue;
 			
 			i++;
 			final Entity e = it;
 			final Location itLoc = it.getLocation();
 			
-			Vector velo = (pLoc.toVector().subtract(itLoc.toVector()).multiply(0.4));
-			e.setVelocity(velo);
+			e.setVelocity( (pLoc.toVector().subtract(itLoc.toVector()).multiply(0.4)) );
 			
 			Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
 				public void run() {
@@ -92,12 +90,12 @@ public class GrappleThrowAbility extends BasePlayerAbility{
 					e.setVelocity(pLoc.getDirection().setY(0.45).multiply(1.6));
 			}}, pushDelay);
 		}
+		
 		if (i > 0){
-			new ExpandingDamageRunnable(p, 1, range).runTaskTimer(NoxMMO.getInstance(), pushDelay, 2);
-			new ShockWaveAnimation(pLoc, 2, range, 0.30, true, pushDelay);
+			new ExpandingDamageRunnable(p, 1, range, 2).start(pushDelay);
+			new ShockWaveAnimation(pLoc, 2, range, 0.30, true).start(pushDelay);
 			return true;
-		}
-		else return false;
+		} else return false;
 	}
 
 }
