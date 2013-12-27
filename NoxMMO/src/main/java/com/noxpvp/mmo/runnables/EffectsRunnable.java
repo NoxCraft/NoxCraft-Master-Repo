@@ -80,9 +80,7 @@ public class EffectsRunnable extends BukkitRunnable{
 				commonEffect.write(effect.randomZ, (float) locOffSet.getZ());
 			}
 			
-			
-				
-			for (Player p : Bukkit.getOnlinePlayers()) {PacketUtil.sendPacket(p, commonEffect);}
+			PacketUtil.broadcastPacketNearby(loc, 100, commonEffect);
 		}
 		catch (Exception e) {e.printStackTrace(); safeCancel(); return;}
 	}
