@@ -9,10 +9,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.ProjectileHitEvent;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 
 public class NetArrowAbility extends BasePlayerAbility{
@@ -29,11 +34,11 @@ public class NetArrowAbility extends BasePlayerAbility{
 	 * @param loc The location to make the net, normally the location of an arrow
 	 * @return boolean If the execution ran successfully
 	 */
-	public static boolean eventExecute(Player p, Location loc){
+	private void eventExecute(Player p, Location loc, int time){
 		String name = p.getName();
 		
 		if (abilityCue.containsKey(name))
-			return false;
+			return;
 		
 		NetArrowAbility ab = abilityCue.get(name);
 		List<Block> net = new ArrayList<Block>();
@@ -58,8 +63,8 @@ public class NetArrowAbility extends BasePlayerAbility{
 		}
 		
 		BlockTimerRunnable netRemover = new BlockTimerRunnable(net, Material.AIR, Material.WEB);
-		netRemover.runTaskLater(NoxMMO.getInstance(), ab.getTime());
-		return true;
+		netRemover.runTaskLater(NoxMMO.getInstance(), time);
+		return;
 	}
 	private static boolean isNetable(Material type){
 		switch(type){
@@ -68,15 +73,13 @@ public class NetArrowAbility extends BasePlayerAbility{
 			case CROPS:
 			case VINE:
 			case WATER_LILY:
-			case FLOWER_POT:
-			case CARROT:
-			case POTATO:
 				return true;
 			default:
 				return false;
 		}
 	}
 	
+	private BaseMMOEventHandler<ProjectileHitEvent> handler;
 	private int size;
 	private int time;
 
@@ -112,6 +115,46 @@ public class NetArrowAbility extends BasePlayerAbility{
 
 	public NetArrowAbility(Player player) {
 		super(ABILITY_NAME, player);
+		
+		handler = new BaseMMOEventHandler<ProjectileHitEvent>(new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileHitEvent").toString(), EventPriority.NORMAL, 1) {
+
+			@Override
+			public boolean ignoreCancelled() {
+				return true;
+			}
+
+			@Override
+			public void execute(ProjectileHitEvent event) {
+				if (event.getEntityType() != EntityType.ARROW)
+					return;
+				
+				Arrow a = (Arrow) event.getEntity();
+				
+				if (a.getShooter().getType() != EntityType.PLAYER)
+					return;
+				
+				String name = ((Player) a.getShooter()).getName();
+				NetArrowAbility ab = null;
+				
+				if (NetArrowAbility.abilityCue.containsKey(name)) {
+					ab = NetArrowAbility.abilityCue.get(name);
+					NetArrowAbility.abilityCue.remove(name);
+					
+					NetArrowAbility.this.eventExecute(ab.getPlayer(), a.getLocation(), ab.getTime());
+
+				} else return;
+			}
+
+			@Override
+			public Class<ProjectileHitEvent> getEventType() {
+				return ProjectileHitEvent.class;
+			}
+
+			@Override
+			public String getEventName() {
+				return "ProjectileHitEvent";
+			}
+		};
 		
 		this.size = 3;
 		this.time = 100;
