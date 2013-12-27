@@ -16,23 +16,23 @@ import com.noxpvp.core.listeners.NoxListener;
 
 public class GenericNoxListener<T extends Event> extends NoxListener {
 	private Class<T> eventType;
-	private WeakHashMap<String, EventHandler<T>> abe_name_cache;
-	private Map<EventPriority, SortedSet<EventHandler<T>>> abilityHandlers;
+	private WeakHashMap<String, MMOEventHandler<T>> abe_name_cache;
+	private Map<EventPriority, SortedSet<MMOEventHandler<T>>> abilityHandlers;
 	
 	public GenericNoxListener(NoxPlugin plugin, Class<T> type) {
 		super(plugin);
 		eventType = type;
 		
-		abe_name_cache = new WeakHashMap<String, EventHandler<T>>();
-		abilityHandlers = new HashMap<EventPriority, SortedSet<EventHandler<T>>>();
+		abe_name_cache = new WeakHashMap<String, MMOEventHandler<T>>();
+		abilityHandlers = new HashMap<EventPriority, SortedSet<MMOEventHandler<T>>>();
 		for (EventPriority pri: EventPriority.values())
-			abilityHandlers.put(pri, new TreeSet<EventHandler<T>>());
+			abilityHandlers.put(pri, new TreeSet<MMOEventHandler<T>>());
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEventLowest(T event)
 	{
-		for (EventHandler<T> handler : abilityHandlers.get(EventPriority.LOWEST))
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.LOWEST))
 		{
 			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
 				continue;
@@ -43,7 +43,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onEventLow(T event)
 	{
-		for (EventHandler<T> handler : abilityHandlers.get(EventPriority.LOW))
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.LOW))
 		{
 			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
 				continue;
@@ -54,7 +54,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onEventNormal(T event)
 	{
-		for (EventHandler<T> handler : abilityHandlers.get(EventPriority.NORMAL))
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.NORMAL))
 		{
 			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
 				continue;
@@ -65,7 +65,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEventHigh(T event)
 	{
-		for (EventHandler<T> handler : abilityHandlers.get(EventPriority.HIGH))
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.HIGH))
 		{
 			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
 				continue;
@@ -76,7 +76,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEventHighest(T event)
 	{
-		for (EventHandler<T> handler : abilityHandlers.get(EventPriority.HIGHEST))
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.HIGHEST))
 		{
 			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
 				continue;
@@ -87,7 +87,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEventMonitor(T event)
 	{
-		for (EventHandler<T> handler : abilityHandlers.get(EventPriority.MONITOR))
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.MONITOR))
 		{
 			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
 				continue;
@@ -100,7 +100,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener {
 		return eventType;
 	}
 	
-	public void unregisterHandler(EventHandler<T> handler)
+	public void unregisterHandler(MMOEventHandler<T> handler)
 	{
 		String name;
 		if (!abe_name_cache.containsKey((name = handler.getID())))
@@ -110,7 +110,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener {
 		abe_name_cache.remove(name);
 	}
 	
-	public void registerHandler(EventHandler<T> handler)
+	public void registerHandler(MMOEventHandler<T> handler)
 	{
 		String name;
 		if (abe_name_cache.containsKey((name = handler.getID())))

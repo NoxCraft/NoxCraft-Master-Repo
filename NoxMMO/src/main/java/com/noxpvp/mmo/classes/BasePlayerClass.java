@@ -1,7 +1,10 @@
 package com.noxpvp.mmo.classes;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class BasePlayerClass implements PlayerClass {
 	public final int classId;
@@ -20,9 +23,20 @@ public abstract class BasePlayerClass implements PlayerClass {
 	private final int baseExp;
 	private final double exponent;
 	private final float multiplier;
+	private Set<String> abilities;
 	
-	public BasePlayerClass(int classId, String name, String displayName, double maxHealth, int tierLevel, int levelCap, double exponent, float multiplier)
+	public BasePlayerClass(int classID, String name, String displayName, double maxHealth, int tierLevel, int levelCap, double exponent, float multiplier)
 	{
+		this(classID, name, displayName, maxHealth, tierLevel, levelCap, exponent, multiplier, null);
+	}
+	
+	public BasePlayerClass(int classId, String name, String displayName, double maxHealth, int tierLevel, int levelCap, double exponent, float multiplier, String[] abilities)
+	{
+		if (abilities == null)
+			abilities = new String[0];
+		
+		this.abilities = new HashSet<String>(Arrays.asList(abilities));
+		
 		if (classId < 1) throw new IllegalArgumentException("classId must be more than 0");
 		this.classId = classId;
 		
@@ -39,7 +53,6 @@ public abstract class BasePlayerClass implements PlayerClass {
 		this.multiplier = multiplier;
 		
 		this.levelToExpMap = generateLevelToExpMap();
-		
 	}
 	
 	public final String getDisplayName() {
@@ -163,5 +176,9 @@ public abstract class BasePlayerClass implements PlayerClass {
 		}
 		
 		return map;
+	}
+	
+	public Set<String> getAbilityNames() {
+		return abilities;
 	}
 }

@@ -2,6 +2,10 @@ package com.noxpvp.mmo.classes.player;
 
 import org.bukkit.ChatColor;
 
+import com.noxpvp.mmo.abilities.entity.LeapAbility;
+import com.noxpvp.mmo.abilities.player.HammerOfThorAbility;
+import com.noxpvp.mmo.abilities.player.MassDestructionAbility;
+import com.noxpvp.mmo.abilities.player.SkullSmasherAbility;
 import com.noxpvp.mmo.classes.BasePlayerClass;
 
 /**
@@ -16,6 +20,7 @@ public class WarlordClass extends BasePlayerClass{
 
 	public final static int classId = 4;
 	public final static String className = "warlord";
+	public final static String[] STANDARD_ABILITIES = new String[] {  LeapAbility.ABILITY_NAME, SkullSmasherAbility.ABILITY_NAME, MassDestructionAbility.ABILITY_NAME, HammerOfThorAbility.ABILITY_NAME };  
 	private final static String DisplayName = ChatColor.RED + "Warlord";
 	
 	private final static double maxHealth = 28;

@@ -13,6 +13,7 @@ import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.mmo.abilities.entity.*;
 import com.noxpvp.mmo.abilities.player.*;
 import com.noxpvp.mmo.abilities.targeted.*;
+import com.noxpvp.mmo.classes.player.*;
 
 
 public class NoxMMO extends NoxPlugin {
@@ -72,12 +73,6 @@ public class NoxMMO extends NoxPlugin {
 
 	@Override
 	public void saveConfig() {
-		//Ability Cycler Checks
-		config.set("Ability-Cycler.checks.Meta", AbilityCycler.isCheckMeta());
-		config.set("Ability-Cycler.checks.DisplayName", AbilityCycler.isCheckDisplayName());
-		config.set("Ability-Cycler.checks.Enchants", AbilityCycler.isCheckEnchants());
-		config.set("Ability-Cycler.checks.Lore", AbilityCycler.isCheckLore());
-		
 		
 		config.save();
 	}
@@ -86,11 +81,6 @@ public class NoxMMO extends NoxPlugin {
 	public void reloadConfig() {
 		config.load();
 		
-		//Ability Cycler Checks
-		AbilityCycler.setCheckMeta(config.get("Ability-Cycler.checks.Meta", AbilityCycler.isCheckMeta()));
-		AbilityCycler.setCheckDisplayName(config.get("Ability-Cycler.checks.DisplayName", AbilityCycler.isCheckDisplayName()));
-		AbilityCycler.setCheckEnchants(config.get("Ability-Cycler.checks.Enchants", AbilityCycler.isCheckEnchants()));
-		AbilityCycler.setCheckLore(config.get("Ability-Cycler.checks.Lore", AbilityCycler.isCheckLore()));
 	}
 	
 	@Override
@@ -135,6 +125,13 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", TrackingAbility.PERM_NODE), "Allows usage of the Tracking Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", VanishAbility.PERM_NODE), "Allows usage of the Vanish Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", WhistleAbility.PERM_NODE), "Allows usage of the Whistle Ability.", PermissionDefault.OP)
+		));
+		
+		addPermission(new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "class", "*"), "ALlow access to all classes.", PermissionDefault.OP,
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "class", BasherClass.className), "Allows access to the class named " + BasherClass.className , PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "class", BerserkerClass.className), "Allows access to the class named " + BerserkerClass.className, PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "class", ChampionClass.className), "Allows access to the class named " + ChampionClass.className, PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "class", WarlordClass.className), "Allows access to the class named " + WarlordClass.className, PermissionDefault.OP)
 		));
 	}
 

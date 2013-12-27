@@ -5,7 +5,7 @@ import java.util.Comparator;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 
-public abstract class BaseMMOEventHandler<T extends Event> implements MMOEventHandler<T>, Comparator<MMOEventHandler<T>> {
+public abstract class BaseMMOEventHandler<T extends Event> implements MMOEventHandler<T>, Comparator<MMOEventHandler<?>> {
 	private final String id;
 	private final EventPriority eventPriority;
 	private int priority;
@@ -29,6 +29,10 @@ public abstract class BaseMMOEventHandler<T extends Event> implements MMOEventHa
 	
 	public final String getID() {
 		return id;
+	}
+	
+	public int compareTo(MMOEventHandler o) {
+		return compare(this, o);
 	}
 	
 	public int compare(MMOEventHandler<?> o1, MMOEventHandler<?> o2) {
