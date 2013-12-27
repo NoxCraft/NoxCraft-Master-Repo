@@ -10,7 +10,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 public class HitVanishedPlayers extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "hit-vanished-players";
-	private static final String ABILITY_NAME = "Hit Vanished Players";
+	public static final String ABILITY_NAME = "Hit Vanished Players";
 	private double range = 3.8;
 	private Player e = null;
 	

@@ -2,9 +2,14 @@ package com.noxpvp.mmo;
 
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.ItemStack;
 
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
@@ -15,8 +20,9 @@ import com.noxpvp.mmo.classes.PlayerClass;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 
-	private PlayerClass currentClass;
+	private PlayerClass curMainClass, curSubClass;
 	private Reference<LivingEntity> target_ref;
+	private Map<String, Ability> abilities = new HashMap<String, Ability>();
 	
 	public MMOPlayer(OfflinePlayer player)
 	{
@@ -35,14 +41,17 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	
 	public Ability[] getAbilities()
 	{
-		//TODO: Implement.
-		return null;
+		return abilities.values().toArray(new Ability[abilities.size()]);
 	}
 	
 	public PassiveAbility[] getPassiveAbilities()
 	{
-		//TODO: Implement
-		return null;
+		List<PassiveAbility> passive = new ArrayList<PassiveAbility>();
+		for (Ability a : getAbilities())
+			if (a instanceof PassiveAbility)
+				passive.add((PassiveAbility)a);
+		
+		return passive.toArray(new PassiveAbility[passive.size()]);
 	}
 	
 	public void save() {
@@ -59,8 +68,12 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		//TODO: Implement Loading.
 	}
 	
-	public PlayerClass getPlayerClass() {
-		return this.currentClass;
+	public PlayerClass getSubPlayerClass() {
+		return this.curSubClass;
+	}
+	
+	public PlayerClass getMainPlayerClass() {
+		return this.curMainClass;
 	}
 
 	public Ability getAbility(String abilityName) {

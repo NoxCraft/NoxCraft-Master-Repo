@@ -14,7 +14,7 @@ import com.noxpvp.mmo.abilities.BaseEntityAbility;
 public class FireBallAbility extends BaseEntityAbility{
 	
 	public static final String PERM_NODE = "fireball";
-	private static final String ABILITY_NAME = "FireBall";
+	public static final String ABILITY_NAME = "FireBall";
 	private double power;
 	
 	/**

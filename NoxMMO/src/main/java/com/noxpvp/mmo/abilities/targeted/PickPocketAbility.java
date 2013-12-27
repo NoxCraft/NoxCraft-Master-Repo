@@ -17,7 +17,7 @@ import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 public class PickPocketAbility extends BaseTargetedPlayerAbility{
 	
 	public static final String PERM_NODE = "pick-pocket";
-	private static final String ABILITY_NAME = "Pick Pocket";
+	public static final String ABILITY_NAME = "Pick Pocket";
 	
 	private float chance = 15;
 	private float calChance;

@@ -13,7 +13,7 @@ import com.noxpvp.mmo.classes.PlayerClass;
 
 public class MaliciousBiteAbility extends BaseEntityAbility implements PassiveAbility{
 	
-	private static final String ABILITY_NAME = "Malicious bite";
+	public static final String ABILITY_NAME = "Malicious bite";
 	public static final String PERM_NODE = "malicious-bite";
 	
 	private static final float damageMultiplier = 2.0f;
@@ -34,7 +34,7 @@ public class MaliciousBiteAbility extends BaseEntityAbility implements PassiveAb
 		
 		Player o = (Player) a;
 		
-		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(o).getPlayerClass();
+		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(o).getMainPlayerClass();
 		
 		return RandomUtils.nextFloat() < (pClass.getTierLevel() * pClass.getLevel()) / 1000;
 	}

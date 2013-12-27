@@ -15,7 +15,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 public class TargetAbility extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "set-target";
-	private static final String ABILITY_NAME = "Target";
+	public static final String ABILITY_NAME = "Target";
 	private double range = 25;
 	private Reference<LivingEntity> target_ref;
 	

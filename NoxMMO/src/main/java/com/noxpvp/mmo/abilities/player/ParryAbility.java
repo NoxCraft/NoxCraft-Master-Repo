@@ -16,7 +16,7 @@ import com.noxpvp.mmo.abilities.PassiveAbility;
  */
 public class ParryAbility extends BasePlayerAbility implements PassiveAbility{
 	
-	private static final String ABILITY_NAME = "Parry";
+	public static final String ABILITY_NAME = "Parry";
 	public static final String PERM_NODE = "parry";
 	
 	public List<Material> parriedWeapons= new ArrayList<Material>();

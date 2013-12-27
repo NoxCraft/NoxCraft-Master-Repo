@@ -1,5 +1,7 @@
 package com.noxpvp.mmo.classes;
 
+import java.util.Set;
+
 public interface PlayerClass {
 	public int getId();
 	public String getName();
@@ -32,4 +34,5 @@ public interface PlayerClass {
 	public boolean hasLevel(int level);
 	public boolean hasExp(int exp);
 	
+	public Set<String> getAbilityNames();
 }

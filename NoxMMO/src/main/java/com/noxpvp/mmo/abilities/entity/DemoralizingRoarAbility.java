@@ -13,7 +13,7 @@ import com.noxpvp.mmo.abilities.BaseEntityAbility;
  */
 public class DemoralizingRoarAbility extends BaseEntityAbility{
 	
-	private static final String ABILITY_NAME = "Demoralizing Roar";
+	public static final String ABILITY_NAME = "Demoralizing Roar";
 	public static final String PERM_NODE = "demoralizing-roar";
 	
 	private int range;

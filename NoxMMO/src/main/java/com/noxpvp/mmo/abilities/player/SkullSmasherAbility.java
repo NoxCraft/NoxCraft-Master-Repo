@@ -14,7 +14,7 @@ import com.noxpvp.mmo.classes.PlayerClass;
 
 public class SkullSmasherAbility extends BasePlayerAbility{
 	
-	private static final String ABILITY_NAME = "Skull Smasher";
+	public static final String ABILITY_NAME = "Skull Smasher";
 	public static final String PERM_NODE = "skull-smasher";
 	
 	private static Map<String, SkullSmasherAbility> smashers = new HashMap<String, SkullSmasherAbility>();
@@ -72,7 +72,7 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 		final String name = getPlayer().getName();
 		
 		SkullSmasherAbility.smashers.put(name, this);
-		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(getPlayer()).getPlayerClass();
+		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(getPlayer()).getMainPlayerClass();
 		
 		int length = 20 * ((pClass.getLevel() * pClass.getTierLevel()) / 16);
 		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {

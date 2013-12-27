@@ -2,6 +2,10 @@ package com.noxpvp.mmo.classes.player;
 
 import org.bukkit.ChatColor;
 
+import com.noxpvp.mmo.abilities.entity.LeapAbility;
+import com.noxpvp.mmo.abilities.player.HammerOfThorAbility;
+import com.noxpvp.mmo.abilities.player.MassDestructionAbility;
+import com.noxpvp.mmo.abilities.player.SkullSmasherAbility;
 import com.noxpvp.mmo.classes.BasePlayerClass;
 
 /**
@@ -14,8 +18,9 @@ import com.noxpvp.mmo.classes.BasePlayerClass;
  */
 public class BerserkerClass extends BasePlayerClass{
 
-	private final static int classId = 3;
-	private final static String className = "berserker";
+	public final static int classId = 3;
+	public final static String className = "berserker";
+	public final static String[] STANDARD_ABILITIES = new String[] { LeapAbility.ABILITY_NAME, SkullSmasherAbility.ABILITY_NAME };
 	private final static String DisplayName = ChatColor.RED + "Berserker";
 	
 	private final static double maxHealth = 26;

@@ -8,7 +8,7 @@ import com.noxpvp.mmo.runnables.VanishPlayerRunnable;
 
 public class VanishAbility extends BasePlayerAbility{
 	
-	private static final String ABILITY_NAME = "Cloak";
+	public static final String ABILITY_NAME = "Cloak";
 	public static final String PERM_NODE = "cloak";
 	
 	private double range;

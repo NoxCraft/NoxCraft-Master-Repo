@@ -19,7 +19,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
  */
 public class FlyAbility extends BasePlayerAbility{
 	
-	private static final String ABILITY_NAME = "Fly";
+	public static final String ABILITY_NAME = "Fly";
 	public static final String PERM_NODE = "fly";
 	
 	public static List<Player> flyers = new ArrayList<Player>();

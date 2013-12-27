@@ -12,7 +12,7 @@ import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
 public class MortalWoundAbility extends BaseTargetedPlayerAbility{
 	
-	private static final String ABILITY_NAME = "Mortal Wound";
+	public static final String ABILITY_NAME = "Mortal Wound";
 	public static final String PERM_NODE = "mortal-wound";
 	
 	private double range;

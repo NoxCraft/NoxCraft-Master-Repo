@@ -14,7 +14,7 @@ import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 public class SoulStealAbility extends BaseTargetedPlayerAbility{
 	
 	public static final String PERM_NODE = "soulsteal";
-	private static final String ABILITY_NAME = "SoulSteal";
+	public static final String ABILITY_NAME = "SoulSteal";
 	private int duration;
 	
 	/**

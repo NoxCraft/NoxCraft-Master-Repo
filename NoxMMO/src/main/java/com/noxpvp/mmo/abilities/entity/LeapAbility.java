@@ -10,7 +10,7 @@ import com.noxpvp.mmo.abilities.BaseEntityAbility;
 
 public class LeapAbility extends BaseEntityAbility {
 
-	private static final String ABILITY_NAME = "Leap";
+	public static final String ABILITY_NAME = "Leap";
 	public static final String PERM_NODE = "leap";
 	
 	private double forwardMultiplier;

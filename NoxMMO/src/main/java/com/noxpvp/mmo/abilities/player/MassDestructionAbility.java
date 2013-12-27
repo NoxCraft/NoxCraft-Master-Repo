@@ -18,7 +18,7 @@ import com.noxpvp.mmo.runnables.SetVelocityRunnable;
 public class MassDestructionAbility extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "mass-destruction";
-	private static final String ABILITY_NAME = "Mass Destruction";
+	public static final String ABILITY_NAME = "Mass Destruction";
 	
 	/**
 	 * 

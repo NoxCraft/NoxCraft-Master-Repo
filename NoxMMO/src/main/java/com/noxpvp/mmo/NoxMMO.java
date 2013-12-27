@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 
+import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
@@ -12,6 +13,7 @@ import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.mmo.abilities.entity.*;
 import com.noxpvp.mmo.abilities.player.*;
 import com.noxpvp.mmo.abilities.targeted.*;
+import com.noxpvp.mmo.classes.player.*;
 
 
 public class NoxMMO extends NoxPlugin {
@@ -19,6 +21,8 @@ public class NoxMMO extends NoxPlugin {
 
 	private static NoxMMO instance;
 	private NoxCore core;
+	
+	private FileConfiguration config;
 	
 	private PlayerManager playerManager = null;
 	
@@ -36,6 +40,12 @@ public class NoxMMO extends NoxPlugin {
 		
 		setInstance(null);
 	}
+	
+	public FileConfiguration getFileConfig(){
+		if (config == null)
+			config = new FileConfiguration(this, "config.yml");
+		return config;
+	}
 
 	@Override
 	public void enable() {
@@ -45,7 +55,6 @@ public class NoxMMO extends NoxPlugin {
 			setEnabled(false);
 			return;
 		}
-		
 		setInstance(this);
 		
 		playerManager = new PlayerManager();
@@ -54,6 +63,24 @@ public class NoxMMO extends NoxPlugin {
 	
 	private void setInstance(NoxMMO noxMMO) {
 		instance = noxMMO;
+	}
+	
+	@Override
+	public void saveDefaultConfig() {
+		//TODO: Add Defaults.
+		saveConfig();
+	}
+
+	@Override
+	public void saveConfig() {
+		
+		config.save();
+	}
+	
+	@Override
+	public void reloadConfig() {
+		config.load();
+		
 	}
 	
 	@Override
@@ -102,6 +129,13 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", VanishAbility.PERM_NODE), "Allows usage of the Vanish Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "ability", WhistleAbility.PERM_NODE), "Allows usage of the Whistle Ability.", PermissionDefault.OP)
 		));
+		
+		addPermission(new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "class", "*"), "ALlow access to all classes.", PermissionDefault.OP,
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "class", BasherClass.className), "Allows access to the class named " + BasherClass.className , PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "class", BerserkerClass.className), "Allows access to the class named " + BerserkerClass.className, PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "class", ChampionClass.className), "Allows access to the class named " + ChampionClass.className, PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "class", WarlordClass.className), "Allows access to the class named " + WarlordClass.className, PermissionDefault.OP)
+		));
 	}
 
 	/**
@@ -118,5 +152,5 @@ public class NoxMMO extends NoxPlugin {
 	@Override
 	public NoxCore getCore() {
 		return core;
-	} 
+	}
 }
