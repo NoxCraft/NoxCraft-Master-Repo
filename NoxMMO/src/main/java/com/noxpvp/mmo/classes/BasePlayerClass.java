@@ -7,6 +7,22 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class BasePlayerClass implements PlayerClass {
+	
+	private static Map<Integer, BasePlayerClass> idToClassMap = new HashMap<Integer, BasePlayerClass>();
+	
+	public static Class<? extends BasePlayerClass> getPlayerClassJavaClass(int id) {
+		BasePlayerClass c;
+		return ((c = getPlayerClass(id)) == null)? null : c.getClass();
+	}
+	
+	public static BasePlayerClass getPlayerClass(int id)
+	{
+		if (idToClassMap.containsKey(id))
+			return idToClassMap.get(id);
+		else
+			return null;
+	}
+	
 	public final int classId;
 
 	private final String name;
