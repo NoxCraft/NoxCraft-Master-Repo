@@ -2,6 +2,8 @@ package com.noxpvp.mmo.classes.player.main.pets;
 
 import org.bukkit.ChatColor;
 
+import com.noxpvp.mmo.abilities.entity.MaliciousBiteAbility;
+import com.noxpvp.mmo.abilities.player.CallOfTheWildAbility;
 import com.noxpvp.mmo.classes.BasePlayerClass;
 
 /**
@@ -23,6 +25,11 @@ public class TamerClass extends BasePlayerClass{
 	public final static int levelCap = 100;
 	public final static double exponent = 2.2;
 	public final static float multiplier = 1.0f;
+	
+	public final static String[] STANDARD_ABILITIES = new String[] { 
+		MaliciousBiteAbility.ABILITY_NAME,
+		CallOfTheWildAbility.ABILITY_NAME
+	};
 	
 	public TamerClass() {
 		super(TamerClass.classId, TamerClass.className, TamerClass.DisplayName, TamerClass.maxHealth,
