@@ -8,6 +8,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.utils.MessageUtil;
 
 public class DeathListener extends NoxListener {
 	private PlayerManager pm;
@@ -26,11 +27,13 @@ public class DeathListener extends NoxListener {
 	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
 	public void onDeath(PlayerDeathEvent e)
 	{
+		
 		Player p = null;
 		NoxPlayer player = pm.getPlayer(p = e.getEntity());
 		if (player == null)
 			return;
 		
+		e.setDeathMessage(MessageUtil.parseDeathMessage(p));
 		player.setLastDeathTS();
 		player.setLastDeathLocation(p.getLocation());
 	}
