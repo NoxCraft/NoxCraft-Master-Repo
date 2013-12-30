@@ -9,7 +9,7 @@ import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
 public class SootheAbility extends BaseTargetedPlayerAbility{
 	
-	private final static String ABILITY_NAME = "Soothe";
+	public final static String ABILITY_NAME = "Soothe";
 	public final static String PERM_NODE = "soothe";
 	
 	private double healAmount;

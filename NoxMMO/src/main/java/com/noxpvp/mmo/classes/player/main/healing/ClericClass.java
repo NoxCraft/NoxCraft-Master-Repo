@@ -2,6 +2,8 @@ package com.noxpvp.mmo.classes.player.main.healing;
 
 import org.bukkit.ChatColor;
 
+import com.noxpvp.mmo.abilities.player.MedPackAbility;
+import com.noxpvp.mmo.abilities.targeted.SootheAbility;
 import com.noxpvp.mmo.classes.BasePlayerClass;
 
 /**
@@ -23,6 +25,11 @@ public class ClericClass extends BasePlayerClass{
 	public final static int levelCap = 100;
 	public final static double exponent = 2.2;
 	public final static float multiplier = 1.0f;
+	
+	public final static String[] STANDARD_ABILITIES = new String[] { 
+		SootheAbility.ABILITY_NAME,
+		MedPackAbility.ABILITY_NAME
+	};
 	
 	public ClericClass() {
 		super(ClericClass.classId, ClericClass.className, ClericClass.DisplayName, ClericClass.maxHealth,

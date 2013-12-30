@@ -2,6 +2,7 @@ package com.noxpvp.mmo.classes.player.main.archery;
 
 import org.bukkit.ChatColor;
 
+import com.noxpvp.mmo.abilities.player.NetArrowAbility;
 import com.noxpvp.mmo.classes.BasePlayerClass;
 
 /**
@@ -23,6 +24,10 @@ public class ArcherClass extends BasePlayerClass{
 	public final static int levelCap = 100;
 	public final static double exponent = 2.2;
 	public final static float multiplier = 1.0f;
+	
+	public final static String[] STANDARD_ABILITIES = new String[] {
+		NetArrowAbility.ABILITY_NAME
+	};
 	
 	public ArcherClass() {
 		super(ArcherClass.classId, ArcherClass.className, ArcherClass.DisplayName, ArcherClass.maxHealth,

@@ -2,6 +2,7 @@ package com.noxpvp.mmo.classes.player.main.swords;
 
 import org.bukkit.ChatColor;
 
+import com.noxpvp.mmo.abilities.player.ParryAbility;
 import com.noxpvp.mmo.classes.BasePlayerClass;
 
 /**
@@ -23,6 +24,10 @@ public class SwordsmanClass extends BasePlayerClass{
 	public final static int levelCap = 100;
 	public final static double exponent = 2.2;
 	public final static float multiplier = 1.0f;
+	
+	public final static String[] STANDARD_ABILITIES = new String[] {
+		ParryAbility.ABILITY_NAME
+	};
 	
 	public SwordsmanClass() {
 		super(SwordsmanClass.classId, SwordsmanClass.className, SwordsmanClass.DisplayName, SwordsmanClass.maxHealth,

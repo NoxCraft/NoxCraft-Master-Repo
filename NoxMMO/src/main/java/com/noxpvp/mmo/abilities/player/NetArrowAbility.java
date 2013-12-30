@@ -19,7 +19,7 @@ public class NetArrowAbility extends BasePlayerAbility{
 	
 	static Map<String, NetArrowAbility> abilityCue = new HashMap<String, NetArrowAbility>();
 	
-	private final static String ABILITY_NAME = "Net Arrow";
+	public final static String ABILITY_NAME = "Net Arrow";
 	public final static String PERM_NODE = "net-arrow";
 	
 	/**

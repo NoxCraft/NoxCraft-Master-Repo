@@ -2,6 +2,8 @@ package com.noxpvp.mmo.classes.player.main.stealth;
 
 import org.bukkit.ChatColor;
 
+import com.noxpvp.mmo.abilities.player.TrackingAbility;
+import com.noxpvp.mmo.abilities.targeted.PickPocketAbility;
 import com.noxpvp.mmo.classes.BasePlayerClass;
 
 /**
@@ -23,6 +25,11 @@ public class ThiefClass extends BasePlayerClass{
 	public final static int levelCap = 100;
 	public final static double exponent = 2.2;
 	public final static float multiplier = 1.0f;
+	
+	public final static String[] STANDARD_ABILITIES = new String[] { 
+		PickPocketAbility.ABILITY_NAME,
+		TrackingAbility.ABILITY_NAME
+	};
 	
 	public ThiefClass() {
 		super(ThiefClass.classId, ThiefClass.className, ThiefClass.DisplayName, ThiefClass.maxHealth,
