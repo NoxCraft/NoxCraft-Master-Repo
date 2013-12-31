@@ -44,12 +44,7 @@ public class ShadowStepAbility extends BaseTargetedPlayerAbility{
 		
 		this.range = 10;
 	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the ability has executed successfullty
-	 * */
+
 	public boolean execute() {
 		if (!mayExecute())
 			return false;

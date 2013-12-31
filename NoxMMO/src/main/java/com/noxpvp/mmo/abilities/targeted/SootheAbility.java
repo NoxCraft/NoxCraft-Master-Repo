@@ -1,11 +1,14 @@
 package com.noxpvp.mmo.abilities.targeted;
 
-import org.bukkit.EntityEffect;
+import java.util.Arrays;
+
+import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
+import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 public class SootheAbility extends BaseTargetedPlayerAbility{
 	
@@ -39,20 +42,16 @@ public class SootheAbility extends BaseTargetedPlayerAbility{
 		
 		this.healAmount = 8;
 	}
-	
-	/**
-	 * Returns if the ability execution was carried out successfully
-	 * 
-	 * @return boolean If this ability executed successfully
-	 */
+
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
 		
 		LivingEntity t = getTarget();
+		Location tLoc = t.getLocation(), loc = new Location(tLoc.getWorld(), tLoc.getX(), tLoc.getY()+1.75, tLoc.getZ());
 		
 		t.setHealth(t.getHealth() + getHealAmount());
-		t.playEffect(EntityEffect.WOLF_HEARTS);
+		new EffectsRunnable(Arrays.asList("heart"), loc, 0, (int) getHealAmount() / 2, true, false, null).runTaskTimer(NoxMMO.getInstance(), 0, 6);
 		
 		return false;
 	}

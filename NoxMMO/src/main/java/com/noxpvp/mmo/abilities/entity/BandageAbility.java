@@ -20,12 +20,7 @@ public class BandageAbility extends BaseEntityAbility{
 	public BandageAbility(Entity entity) {
 		super(ABILITY_NAME, entity);
 	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean If the ability has successfully executed
-	 */
+
 	public boolean execute() {
 		if (!mayExecute())
 			return false;		

@@ -27,12 +27,7 @@ public class DisarmAbility extends BaseTargetedPlayerAbility{
 	public DisarmAbility(Player player){
 		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getMMOPlayer(player).getTarget());
 	}
-	
-	/**
-	 * 
-	 * 
-	 * @return Boolean - If the ability has successfully executed
-	 */
+
 	public boolean execute() {
 		if (!mayExecute())
 			return false;

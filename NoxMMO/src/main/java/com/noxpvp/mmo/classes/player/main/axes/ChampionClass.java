@@ -16,17 +16,17 @@ import com.noxpvp.mmo.classes.BasePlayerClass;
  */
 public class ChampionClass extends BasePlayerClass{
 
-	private final static int classId = 2;
-	private final static String className = "champion";
-	private final static String DisplayName = ChatColor.RED + "Champion";
+	public final static int classId = 2;
+	public final static String className = "champion";
+	public final static String DisplayName = ChatColor.RED + "Champion";
 	
 	public final static String[] STANDARD_ABILITIES = new String[] { LeapAbility.ABILITY_NAME, SkullSmasherAbility.ABILITY_NAME };
 	
-	private final static double maxHealth = 24;
-	private final static int tierLevel = 3;
-	private final static int levelCap = 100;
-	private final static double exponent = 2.4;
-	private final static float multiplier = 1.0f;
+	public final static double maxHealth = 24;
+	public final static int tierLevel = 3;
+	public final static int levelCap = 100;
+	public final static double exponent = 2.4;
+	public final static float multiplier = 1.0f;
 	
 	public ChampionClass() {
 		super(ChampionClass.classId, ChampionClass.className, ChampionClass.DisplayName, ChampionClass.maxHealth,

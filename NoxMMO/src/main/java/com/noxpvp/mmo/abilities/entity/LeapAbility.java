@@ -1,5 +1,8 @@
 package com.noxpvp.mmo.abilities.entity;
 
+import java.util.Arrays;
+
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -7,6 +10,7 @@ import org.bukkit.util.Vector;
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
+import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 public class LeapAbility extends BaseEntityAbility {
 
@@ -57,11 +61,16 @@ public class LeapAbility extends BaseEntityAbility {
 		if (!mayExecute())
 			return false;
 		
-		Vector newVelocity = getEntity().getLocation().getDirection();
+		Entity e = getEntity();
+		
+		Vector newVelocity = e.getLocation().getDirection();
 		
 		newVelocity.setY(0).multiply(forwardMultiplier).setY(heightVelo);
 		
-		getEntity().setVelocity(newVelocity);		
+		new EffectsRunnable(Arrays.asList("blockcrack_"+ e.getLocation().getBlock().getRelative(BlockFace.DOWN).getTypeId() +"_0"),
+				e.getLocation(), 0, 50, false, false, null).runTask(NoxMMO.getInstance());
+		
+		e.setVelocity(newVelocity);		
 		return true;
 	}
 

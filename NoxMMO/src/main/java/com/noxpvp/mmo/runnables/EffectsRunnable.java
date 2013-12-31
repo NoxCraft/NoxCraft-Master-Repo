@@ -1,10 +1,9 @@
 package com.noxpvp.mmo.runnables;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
@@ -22,37 +21,37 @@ public class EffectsRunnable extends BukkitRunnable{
 	private Location locOffSet;
 	private float data;
 	private int amount;
-	private String name;
+	private int amt;
+	private List<String> name;
+	
+	private boolean runMulti = false;
+	private boolean continuous = false;
+	
+	private boolean usingTracker = false;
+	private Entity tracker;
+	
+	private int runs = 0;
 	
 	/**
 	 * 
-	 * @param name The effect name | List - https://gist.github.com/thinkofdeath/5110835
+	 * @param List<String> The effect name(s) | List - https://gist.github.com/thinkofdeath/5110835
 	 * @param loc The particle location
-	 * @param locOffSet
 	 * @param data
 	 * @param amount The amount of particles
 	 */
-	public EffectsRunnable(String name, Location loc, Location locOffSet, float data, int amount){
+	public EffectsRunnable(List<String> name, Location loc, float data, int amount, boolean runMultipleTimes, boolean continuous, Entity tracker) {
 		this.name = name;
 		this.loc = loc;
-		this.locOffSet = locOffSet;
 		this.data = data;
 		this.amount = amount;
+		this.amt = runMultipleTimes? 1 : amount;
+		this.runs = name.size();
 		
-	}
-	
-	/**
-	 * 
-	 * @param name The effect name | List - https://gist.github.com/thinkofdeath/5110835
-	 * @param loc The particle location
-	 * @param data
-	 * @param amount The amount of particles
-	 */
-	public EffectsRunnable(String name, Location loc, float data, int amount){
-		this.name = name;
-		this.loc = loc;
-		this.data = data;
-		this.amount = amount;
+		this.runMulti = runMultipleTimes;
+		this.continuous = continuous;
+		
+		this.usingTracker = tracker != null;
+		this.tracker = usingTracker? tracker : null;
 		
 	}
 	
@@ -60,29 +59,44 @@ public class EffectsRunnable extends BukkitRunnable{
 		try { cancel(); } catch (IllegalStateException e) {}
 	}
 	public void run(){
-		
-		try {
-			CommonPacket commonEffect = new CommonPacket(PacketType.OUT_WORLD_PARTICLES);
-			NMSPacketPlayOutWorldParticles effect = new NMSPacketPlayOutWorldParticles();
-			
-			commonEffect.write(effect.effectName, name);
-			commonEffect.write(effect.particleCount, amount);
-			commonEffect.write(effect.speed, data);
-			
-			commonEffect.write(effect.x, (float) loc.getX());
-			commonEffect.write(effect.y, (float) loc.getY());
-			commonEffect.write(effect.z, (float) loc.getZ());
-			
-
-			if (locOffSet != null) {
-				commonEffect.write(effect.randomX, (float) locOffSet.getX());
-				commonEffect.write(effect.randomY, (float) locOffSet.getY());
-				commonEffect.write(effect.randomZ, (float) locOffSet.getZ());
+			if (runMulti) {
+				if (continuous && runs >= name.size())
+					runs = 0;
+				else if (!continuous && (runs > amount || runs >= name.size())) {
+					safeCancel();
+					return;
+				}
+					
+			} else if (runs != 0) {
+				safeCancel();
+				return;
 			}
 			
-			PacketUtil.broadcastPacketNearby(loc, 100, commonEffect);
-		}
-		catch (Exception e) {e.printStackTrace(); safeCancel(); return;}
+			if (usingTracker && (tracker.isDead() || tracker == null || !tracker.isValid())) {
+				safeCancel(); return;
+			} else if (usingTracker)
+				loc = tracker.getLocation();
+			
+			try {
+				CommonPacket commonEffect = new CommonPacket(PacketType.OUT_WORLD_PARTICLES);
+				NMSPacketPlayOutWorldParticles effect = new NMSPacketPlayOutWorldParticles();
+				
+				commonEffect.write(effect.effectName, name.get(runs++));
+				commonEffect.write(effect.particleCount, amt);
+				commonEffect.write(effect.speed, data);
+				
+				commonEffect.write(effect.x, (float) loc.getX());
+				commonEffect.write(effect.y, (float) loc.getY());
+				commonEffect.write(effect.z, (float) loc.getZ());
+	
+				if (locOffSet != null) {
+					commonEffect.write(effect.randomX, (float) locOffSet.getX());
+					commonEffect.write(effect.randomY, (float) locOffSet.getY());
+					commonEffect.write(effect.randomZ, (float) locOffSet.getZ());
+				}
+				
+				PacketUtil.broadcastPacketNearby(loc, 256, commonEffect);//max render distance
+			} catch (Exception e) {e.printStackTrace(); safeCancel(); return;}
 	}
 
 }

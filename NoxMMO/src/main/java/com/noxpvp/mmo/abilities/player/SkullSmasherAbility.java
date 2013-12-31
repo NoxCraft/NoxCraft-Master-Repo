@@ -1,16 +1,22 @@
 package com.noxpvp.mmo.abilities.player;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 public class SkullSmasherAbility extends BasePlayerAbility{
 	
@@ -19,22 +25,29 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 	
 	private static Map<String, SkullSmasherAbility> smashers = new HashMap<String, SkullSmasherAbility>();
 	
-	private double range;
-	
-	public static boolean eventExecute(Player attacker, double damage){
+	public void eventExecute(Player attacker, double damage){
 		if (!smashers.containsKey(attacker.getName()))
-			return false;
+			return;
 		
 		SkullSmasherAbility a = smashers.get(attacker.getName());
 		
 		for (Entity it : attacker.getNearbyEntities(a.range, a.range, a.range)){
 			if (!(it instanceof Damageable)) continue;
 			
+			if (it == attacker) continue;
+			
+			Location itLoc = it.getLocation(),
+			loc = new Location(itLoc.getWorld(), itLoc.getX(), itLoc.getY()+1.75, itLoc.getZ());
+			
 			((Damageable) it).damage(damage - (damage / 4), attacker);
+			new EffectsRunnable(Arrays.asList("blockcrack_155_0"), loc, .1F, 20, false, false, null).runTask(NoxMMO.getInstance());
 		}
 		
-		return true;
+		return;
 	}
+	
+	private BaseMMOEventHandler<EntityDamageByEntityEvent> handler;
+	private double range;
 
 	/**
 	 * gets the currently set range for this ability
@@ -58,13 +71,35 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 	public SkullSmasherAbility(Player player, double range){
 		super(ABILITY_NAME, player);
 		
+		this.handler = new BaseMMOEventHandler<EntityDamageByEntityEvent>(
+				new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("EntityDamageByEntityEvent").toString(),
+				EventPriority.MONITOR, 1) {
+			
+			@Override
+			public boolean ignoreCancelled() {
+				return true;
+			}
+			
+			@Override
+			public Class<EntityDamageByEntityEvent> getEventType() {
+				return EntityDamageByEntityEvent.class;
+			}
+			
+			@Override
+			public String getEventName() {
+				return "EntityDamageByEntityEvent";
+			}
+			
+			@Override
+			public void execute(EntityDamageByEntityEvent event) {
+				if (event.getDamager().equals(SkullSmasherAbility.this.getPlayer()))
+					SkullSmasherAbility.this.eventExecute(SkullSmasherAbility.this.getPlayer(), event.getDamage());
+			}
+		};
+		
 		this.range = range;
 	}
-	
-	/**
-	 * 
-	 * @return boolean If this ability executed successfully
-	 */
+
 	public boolean execute() {
 		if (!mayExecute())
 			return false;

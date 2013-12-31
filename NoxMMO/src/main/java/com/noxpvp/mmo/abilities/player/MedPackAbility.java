@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities.player;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class MedPackAbility extends BasePlayerAbility{
 				Location ploc = player.getLocation();
 				ploc.setY(ploc.getY() + 2);
 				
-				EffectsRunnable hearts = new EffectsRunnable("heart", ploc, 0, 1);
+				EffectsRunnable hearts = new EffectsRunnable(Arrays.asList("heart"), ploc, 0, 1, false, false, null);
 				hearts.runTask(NoxMMO.getInstance());
 			} else return;
 		}
@@ -73,8 +74,10 @@ public class MedPackAbility extends BasePlayerAbility{
 			
 			@Override
 			public void execute(PlayerPickupItemEvent event) {
-				if (event.getPlayer().equals(MedPackAbility.this.getPlayer()))
+				if (event.getPlayer().equals(MedPackAbility.this.getPlayer())) {
 					MedPackAbility.this.EventExecute(event);
+					
+				}
 			}
 		};
 	}
@@ -91,6 +94,7 @@ public class MedPackAbility extends BasePlayerAbility{
 		Item drop = p.getWorld().dropItem(p.getLocation(), pack);
 		drop.setPickupDelay(30);
 		
+		new EffectsRunnable(Arrays.asList("townaura"), null, .1F, 10, true, true, drop).runTaskTimer(NoxMMO.getInstance(), 20, 20);
 		MedPackAbility.packs.put(drop, p.getName());
 		
 		return false;

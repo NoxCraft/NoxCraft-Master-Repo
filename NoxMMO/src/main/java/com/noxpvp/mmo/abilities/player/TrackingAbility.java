@@ -1,5 +1,7 @@
 package com.noxpvp.mmo.abilities.player;
 
+import java.util.Arrays;
+
 import org.bukkit.Effect;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -11,7 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.runnables.DespawnRunnable;
-import com.noxpvp.mmo.runnables.EffectRunnable;
+import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 /**
  * @author NoxPVP
@@ -163,11 +165,8 @@ public class TrackingAbility extends BasePlayerAbility{
 		
 		NoxMMO instance = NoxMMO.getInstance();
 		
-		EffectRunnable effect = new EffectRunnable(tracker, EffectType, (duration / effectFreq), 0);
-		effect.runTaskTimer(instance, 0, effectFreq);
-		
-		DespawnRunnable despawn = new DespawnRunnable(tracker);
-		despawn.runTaskLater(instance, duration);
+		new EffectsRunnable(Arrays.asList("flame"), null, 0, 4, true, true, tracker).runTaskTimer(instance, 0, effectFreq);
+		new DespawnRunnable(tracker).runTaskLater(instance, duration);
 		
 		return false;
 	}
