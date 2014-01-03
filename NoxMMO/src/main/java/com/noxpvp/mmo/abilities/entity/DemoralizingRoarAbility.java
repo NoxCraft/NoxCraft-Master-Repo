@@ -1,11 +1,15 @@
 package com.noxpvp.mmo.abilities.entity;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 
+import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
+import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 /**
  * @author NoxPVP
@@ -53,14 +57,27 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 		for (Entity it : e.getNearbyEntities(range, range, range)){
 			if (!(it instanceof Creature || creatures.contains(it))) continue;
 			
-			for (Entity itIt : it.getNearbyEntities(range, range, range)){
-				if (!(itIt instanceof Creature || creatures.contains(it))) continue;
+			for (Entity itTwo : it.getNearbyEntities(range, range, range)){
+				if (!(itTwo instanceof Creature || creatures.contains(it))) continue;
 				
-				((Creature) it).setTarget((Creature) itIt);
-				((Creature) itIt).setTarget((Creature) it);
+				((Creature) it).setTarget((Creature) itTwo);
+				((Creature) itTwo).setTarget((Creature) it);
+				
+				
+				new Location(itTwo.getWorld(),
+						itTwo.getLocation().getX(),
+						itTwo.getLocation().getY()+1.75,
+						itTwo.getLocation().getZ());
+				
+				EffectsRunnable ef1 = new EffectsRunnable(Arrays.asList("angryVillager"), it.getLocation(), 0, 1, false, false, null),
+				ef2 = new EffectsRunnable(Arrays.asList("angryVillager"), itTwo.getLocation(), 0, 1, false, false, null);
+				
+				ef1.runTask(NoxMMO.getInstance());
+				ef2.runTask(NoxMMO.getInstance());
+
 				
 				creatures.add((Creature) it);
-				creatures.add((Creature) itIt);
+				creatures.add((Creature) itTwo);
 				break;
 			}
 		}

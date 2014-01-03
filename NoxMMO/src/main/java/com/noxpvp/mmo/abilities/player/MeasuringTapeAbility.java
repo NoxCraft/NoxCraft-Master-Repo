@@ -39,13 +39,13 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 		//NMSPacketPlayOutBlockAction fakeBlock = new NMSPacketPlayOutBlockAction();
 		
 		try {
-		commonFakeBlock.write(0, b.getX());
-		commonFakeBlock.write(1, b.getY());
-		commonFakeBlock.write(2, b.getZ());
-		commonFakeBlock.write(3, Material.WOOL.getId());
-		commonFakeBlock.write(4, 14);
-		
-		PacketUtil.sendPacket(p, commonFakeBlock);;
+			commonFakeBlock.write(0, b.getX());
+			commonFakeBlock.write(1, b.getY());
+			commonFakeBlock.write(2, b.getZ());
+			commonFakeBlock.write(3, Material.WOOL.getId());
+			commonFakeBlock.write(4, 14);
+			
+			PacketUtil.sendPacket(p, commonFakeBlock);;
 		}
 		catch (IllegalArgumentException e) {}
 		catch (Exception e) {e.printStackTrace();}

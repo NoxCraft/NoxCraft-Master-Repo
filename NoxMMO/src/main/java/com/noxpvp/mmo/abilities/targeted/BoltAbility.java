@@ -67,12 +67,7 @@ public class BoltAbility extends BaseTargetedPlayerAbility{
 		
 		this.range = range;
 	}
-	
-	/**
-	 * Returns if the ability execution was carried out successfully
-	 * 
-	 * @return boolean - If this ability executed successfully
-	 */
+
 	public boolean execute(){
 		if (!mayExecute())
 			return false;
@@ -84,7 +79,6 @@ public class BoltAbility extends BaseTargetedPlayerAbility{
 		
 		t.getWorld().strikeLightningEffect(t.getLocation());
 		t.damage(damage, p);
-		t.playEffect(EntityEffect.WOLF_SMOKE);
 		
 		return true;
 	}

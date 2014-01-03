@@ -88,10 +88,7 @@ public class MortalWoundAbility extends BaseTargetedPlayerAbility{
 		this.duration = (20 * 4);
 		this.amplifier = 2;
 	}
-	
-	/**
-	 * @return Boolean - If the ability has successfully executed
-	 */
+
 	public boolean execute() {
 		if (!mayExecute())
 			return false;

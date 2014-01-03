@@ -1,11 +1,12 @@
 package com.noxpvp.mmo.abilities.player;
 
-import org.bukkit.EntityEffect;
+import java.util.Arrays;
+
 import org.bukkit.entity.Player;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.runnables.EntityEffectRunnable;
+import com.noxpvp.mmo.runnables.EffectsRunnable;
 import com.noxpvp.mmo.runnables.HealRunnable;
 
 /**
@@ -79,13 +80,13 @@ public class RejuvenationAbility extends BasePlayerAbility{
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
+		
 		NoxMMO instance = NoxMMO.getInstance();
 		
-		HealRunnable rejuvenation = new HealRunnable(getPlayer(), healthPerHeal, heals);
-		EntityEffectRunnable hearts = new EntityEffectRunnable(getPlayer(), EntityEffect.WOLF_HEARTS, heals);
+		new HealRunnable(getPlayer(), healthPerHeal, heals).runTaskTimer(instance, 0, delayBetweenHeals);
+		new EffectsRunnable(Arrays.asList("heart", "heart", "heart"),
+				getPlayer().getLocation(), 0F, 1, true, false, null).runTaskTimer(instance, 0, delayBetweenHeals);
 		
-		rejuvenation.runTaskTimer(instance, 0, delayBetweenHeals);
-		hearts.runTaskTimer(instance, 0, delayBetweenHeals);
 		
 		return true;
 	}

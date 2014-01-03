@@ -14,6 +14,10 @@ import com.noxpvp.mmo.abilities.entity.*;
 import com.noxpvp.mmo.abilities.player.*;
 import com.noxpvp.mmo.abilities.targeted.*;
 import com.noxpvp.mmo.classes.player.*;
+import com.noxpvp.mmo.classes.player.main.axes.BasherClass;
+import com.noxpvp.mmo.classes.player.main.axes.BerserkerClass;
+import com.noxpvp.mmo.classes.player.main.axes.ChampionClass;
+import com.noxpvp.mmo.classes.player.main.axes.WarlordClass;
 
 
 public class NoxMMO extends NoxPlugin {
@@ -34,7 +38,6 @@ public class NoxMMO extends NoxPlugin {
 
 	@Override
 	public void disable() {
-		MassDestructionAbility.massDestructors = null;
 		ShurikenAbility.shurikenThrowers = null;
 		HammerOfThorAbility.hammerThrowers = null;
 		
@@ -137,7 +140,6 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.combine(".", PERM_NODE, "class", WarlordClass.className), "Allows access to the class named " + WarlordClass.className, PermissionDefault.OP)
 		));
 	}
-
 	/**
 	 * Gets the player manager.
 	 *

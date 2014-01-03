@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities.player;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,8 +16,10 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 /**
  * @author NoxPVP
@@ -71,6 +74,7 @@ public class BankShotAbility extends BasePlayerAbility{
 		Location pLoc = a.getLocation();
 		Location eLoc = e.getLocation();
 		
+		new EffectsRunnable(Arrays.asList("explode", "explode"), eLoc, 0, 3, false, false, null).runTask(NoxMMO.getInstance());
 		a.setVelocity(eLoc.toVector().subtract(pLoc.toVector()));
 		
 		return;
@@ -164,9 +168,8 @@ public class BankShotAbility extends BasePlayerAbility{
 
 					@Override
 					public void execute(ProjectileHitEvent event) {
-						if (event.getEntity().getType() != EntityType.ARROW) {
-							return;
-						} else BankShotAbility.this.eventExecute((Arrow) event.getEntity());
+						if (event.getEntity().equals(BankShotAbility.this.a))
+							BankShotAbility.this.eventExecute((Arrow) event.getEntity());
 					}
 
 					@Override

@@ -5,10 +5,7 @@ import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.NoxPlayer;
-import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class ReincarnateAbility extends BasePlayerAbility{

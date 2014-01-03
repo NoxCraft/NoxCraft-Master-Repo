@@ -1,19 +1,17 @@
 package com.noxpvp.mmo.abilities.player;
 
-import org.bukkit.Effect;
-import org.bukkit.EntityEffect;
+import java.util.Arrays;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
-import org.bukkit.util.NumberConversions;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.runnables.DespawnRunnable;
-import com.noxpvp.mmo.runnables.EffectRunnable;
-import com.noxpvp.mmo.runnables.EntityEffectRunnable;
+import com.noxpvp.mmo.runnables.EffectsRunnable;
 import com.noxpvp.mmo.runnables.HealRunnable;
 
 /**
@@ -26,7 +24,6 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 	public static final String ABILITY_NAME = "Guardian Angel";
 	private int range = 5;
 	private double healAmount = 6;
-	private Effect leaveEffect;
 	
 	/**
 	 * 
@@ -61,21 +58,6 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Effect The current effect set for when the guardian angel vanishes / is removed
-	 */
-	public Effect getLeaveEffect() {return this.leaveEffect;}
-	
-	/**
-	 * 
-	 * 
-	 * @param leaveEffect Effect type for the angel when removed / leaves after healing is complete
-	 * @return guardianAngelAbility This instance, used for chaining
-	 */
-	public GuardianAngelAbility setLeaveEffect(Effect leaveEffect) {this.leaveEffect = leaveEffect; return this;}
-	
-	/**
-	 * 
-	 * 
 	 * @param player The Player type user for this ability instance
 	 */
 	public GuardianAngelAbility(Player player){
@@ -96,16 +78,12 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 			
 			LivingEntity e = (LivingEntity) it;
 			
-			HealRunnable heal = new HealRunnable(e, getHealAmount(), 1);
-			EntityEffectRunnable effect = new EntityEffectRunnable(e, EntityEffect.WOLF_HEARTS, NumberConversions.toInt((getHealAmount() / 2)));
-			
-			heal.runTaskLater(instance, 40);
-			effect.runTaskTimer(instance, 25, 5);
+			new HealRunnable(e, getHealAmount(), 1).runTaskLater(instance, 40);
+			new EffectsRunnable(Arrays.asList("heart"), e.getLocation(), 0, (int) getHealAmount()/2, false, false, null).runTaskTimer(instance, 25, 5);
 		}
-		EffectRunnable leaveEffect = new EffectRunnable(v, getLeaveEffect(), 1, 5);
-		DespawnRunnable despawn = new DespawnRunnable(v);
-		leaveEffect.runTaskTimer(instance, 90, 2);
-		despawn.runTaskLater(instance, 100);
+		
+		new EffectsRunnable(Arrays.asList("angryVillager"), null, 0, 1, false, false, v).runTaskLater(instance, 60);
+		new DespawnRunnable(v).runTaskLater(instance, 60);
 		
 		return true;
 	}
