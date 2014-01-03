@@ -34,6 +34,22 @@ public class CoreBar{
 		pm.addCoreBar(this);
 	}
 	
+	public void newFlasher(String text) {
+		this.new Flasher(null);
+	}
+	
+	public void newLivingTracker(LivingEntity e, String text, ChatColor color) {
+		this.new LivingTracker(e, text, color);
+	}
+	
+	public void newScroller(String text, int length, ChatColor color) {
+		this.new Scroller(text, length, color);
+	}
+	
+	public void newShine(String text, int delay) {
+		this.new Shine(text, delay);
+	}
+	
 	private class Entry{
 		String text;
 		float percentFilled;
@@ -41,6 +57,11 @@ public class CoreBar{
 		public Entry(){
 			this.text = "";
 			this.percentFilled = 100F;
+		}
+		
+		public void update(String text){
+			this.update(percentFilled, text);
+			
 		}
 		
 		public void update(float percentFilled, String text){
@@ -54,7 +75,7 @@ public class CoreBar{
 	}
 	
 
-	public class Scroller extends BukkitRunnable{
+	private class Scroller extends BukkitRunnable{
 
 		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
 		
@@ -104,7 +125,7 @@ public class CoreBar{
 	}
 	
 
-	public class Flasher extends BukkitRunnable{
+	private class Flasher extends BukkitRunnable{
 
 		private String text;
 		
@@ -113,7 +134,7 @@ public class CoreBar{
 			
 			currentEntry.update(100F, text);
 			
-			this.runTaskTimer(NoxCore.getInstance(), 0, 4);
+			this.runTaskTimer(NoxCore.getInstance(), 0, 6);
 		}
 		
 		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
@@ -134,7 +155,7 @@ public class CoreBar{
 		
 	}
 	
-	public class Shine extends BukkitRunnable{
+	private class Shine extends BukkitRunnable{
 
 		
 		private StringBuilder text;
@@ -192,21 +213,21 @@ public class CoreBar{
 		private LivingEntity e;
 		private StringBuilder text;
 		
-		public LivingTracker(LivingEntity e, String text){
+		public LivingTracker(LivingEntity e, String text, ChatColor color) {
 			this.e = e;
 			distance = p.getLocation().distance(e.getLocation());
 			
-			this.text = new StringBuilder(text).append(" - ").append(distance);
+			this.text = new StringBuilder(color + text).append(" - ").append(distance);
 			
 			currentEntry.update((float) (e.getHealth() / e.getMaxHealth() * 100), text.toString());
 			
-			this.runTaskTimer(NoxCore.getInstance(), 0, 4);
+			this.runTaskTimer(NoxCore.getInstance(), 0, 10);
 		}
 		
 		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
 		
 		public void run() {
-			if (currentEntry.text != text.toString() || !p.isOnline() || p == null)
+			if (currentEntry.text != text.toString() || p == null || !p.isOnline() || p.isDead() || e == null || e.isDead())
 			{
 				safeCancel();
 				return;

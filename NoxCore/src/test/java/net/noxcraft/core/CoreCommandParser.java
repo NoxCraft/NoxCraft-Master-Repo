@@ -31,7 +31,7 @@ public class CoreCommandParser {
 		String[] args = argline.split(" ");
 		String[] newArgs;
 		newArgs = CommandUtil.parseFlags(flags, args);
-		String newArgline = StringUtil.combine(" ", newArgs);
+		String newArgline = StringUtil.join(" ", newArgs);
 		
 		Assert.assertEquals(newArgline, expected);
 		for (String key: flags.keySet())

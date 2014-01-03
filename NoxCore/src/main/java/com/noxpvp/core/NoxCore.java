@@ -28,6 +28,7 @@ import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.listeners.ChatPingListener;
 import com.noxpvp.core.listeners.ChestBlockListener;
 import com.noxpvp.core.listeners.DeathListener;
+import com.noxpvp.core.listeners.LoginGroupListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
@@ -52,6 +53,7 @@ public class NoxCore extends NoxPlugin {
 
 	private DeathListener deathListener;
 	private ChatPingListener chatPingListener;
+	private LoginGroupListener loginListener;
 	
 	private static boolean useUserFile = true;
 	private static boolean useNanoTime = false;
@@ -185,10 +187,12 @@ public class NoxCore extends NoxPlugin {
 		chatPingListener = new ChatPingListener();
 		voteListener = new VoteListener();
 		deathListener = new DeathListener();
+		loginListener = new LoginGroupListener();
 		
 		chatPingListener.register();
 		voteListener.register();
-		
+		deathListener.register();
+		loginListener.register();
 		
 		pluginManager.registerEvents(deathListener, this);
 		
@@ -208,6 +212,15 @@ public class NoxCore extends NoxPlugin {
 		r.addModule(new BaseReloader(r, "config.yml") {
 			public boolean reload() {
 				NoxCore.this.reloadConfig();
+				return true;
+			}
+		});
+		
+		r.addModule(new BaseReloader(r, "group-name") {
+			
+			public boolean reload() {
+				LoginGroupListener.reloadGroupNames();
+				
 				return true;
 			}
 		});

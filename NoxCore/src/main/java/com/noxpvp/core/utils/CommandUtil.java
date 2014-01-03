@@ -69,7 +69,7 @@ public class CommandUtil {
 			continue;
 
 		}
-		String argline = StringUtil.combine(" ", newData.toArray(new String[newData.size()]));
+		String argline = StringUtil.join(" ", newData.toArray(new String[newData.size()]));
 		return argline.split(" ");
 	}
 }

@@ -53,7 +53,7 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 			}
 		}
 		
-		String perm = StringUtil.combine(".", NoxHomes.HOMES_NODE, "admin", PERM_NODE);
+		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, "admin", PERM_NODE);
 		if (!permHandler.hasPermission(sender, perm))
 		{
 			sender.sendMessage(StringUtil.ampToColor(plugin.getLocale("permission.denied", "Can not import homes data.", perm)));
@@ -73,7 +73,7 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 				mb.red(args[0]).append(" is not a valid importer.");
 			mb.blue("List of importers: ");
 			
-			mb.yellow("[").green(StringUtil.combineNames(importerNames)).yellow("]").newLine().aqua("/").append(COMMAND_NAME).append(" ").yellow("[").green(StringUtil.combine("|", importerNames)).yellow("]");
+			mb.yellow("[").green(StringUtil.joinNames(importerNames)).yellow("]").newLine().aqua("/").append(COMMAND_NAME).append(" ").yellow("[").green(StringUtil.join("|", importerNames)).yellow("]");
 			
 			mb.send(sender);
 			return true;
@@ -86,7 +86,7 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 		if (porter == null)
 		{
 			mb.red("Importer: ").append(args[0]).append(". Does not exist.");
-			mb.newLine().aqua("The following importers are available. ").yellow("[").green(StringUtil.combineNames(importerNames)).yellow("]");
+			mb.newLine().aqua("The following importers are available. ").yellow("[").green(StringUtil.joinNames(importerNames)).yellow("]");
 		} else {
 			boolean success = porter.importData(flags.containsKey("e") || flags.containsKey("erase") || flags.containsKey("overwrite"));
 			if (success)
@@ -107,7 +107,7 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 		
 		mb.blue("/").append(HomeAdminCommand.COMMAND_NAME).append(" ").append(COMMAND_NAME).append(" ").yellow("[importerName]");
 		mb.newLine().blue("Importers: ").newLine();
-		mb.yellow("[").aqua("[").green(StringUtil.combineNames(importerNames)).aqua("]");
+		mb.yellow("[").aqua("[").green(StringUtil.joinNames(importerNames)).aqua("]");
 		
 		return mb.lines();
 	}
