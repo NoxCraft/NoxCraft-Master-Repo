@@ -6,18 +6,26 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
+import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.mmo.abilities.entity.*;
 import com.noxpvp.mmo.abilities.player.*;
+import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoArmor;
+import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoSword;
+import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoTool;
 import com.noxpvp.mmo.abilities.targeted.*;
 import com.noxpvp.mmo.classes.player.main.axes.BasherClass;
 import com.noxpvp.mmo.classes.player.main.axes.BerserkerClass;
 import com.noxpvp.mmo.classes.player.main.axes.ChampionClass;
 import com.noxpvp.mmo.classes.player.main.axes.WarlordClass;
+import com.noxpvp.mmo.listeners.BlockListener;
 import com.noxpvp.mmo.listeners.DamageListener;
+import com.noxpvp.mmo.listeners.PacketListeners;
+import com.noxpvp.mmo.listeners.PacketListeners.EntityEquipmentListener;
+import com.noxpvp.mmo.listeners.PacketListeners.WorldSoundListener;
 import com.noxpvp.mmo.listeners.PlayerTargetListener;
 
 
@@ -29,6 +37,11 @@ public class NoxMMO extends NoxPlugin {
 	
 	DamageListener damageListener;
 	PlayerTargetListener playerTargetListener;
+	BlockListener blockListener;
+	
+	PacketListeners packetListeners;
+	EntityEquipmentListener equipmentPacketListener;
+	WorldSoundListener worldSoundListener;
 	
 	private FileConfiguration config;
 	
@@ -72,11 +85,20 @@ public class NoxMMO extends NoxPlugin {
 		
 		damageListener = new DamageListener(instance);
 		playerTargetListener = new PlayerTargetListener(instance);
+		blockListener = new BlockListener(instance);
+		
+		packetListeners = new PacketListeners();
+		equipmentPacketListener = packetListeners.new EntityEquipmentListener();
+		worldSoundListener = packetListeners.new WorldSoundListener();
 		
 		damageListener.register();
 		playerTargetListener.register();
+		blockListener.register();
+		
+		register(equipmentPacketListener, PacketType.OUT_ENTITY_EQUIPMENT);
+		register(worldSoundListener, PacketType.OUT_NAMED_SOUND_EFFECT);
 	}
-	
+
 	private void setInstance(NoxMMO noxMMO) {
 		instance = noxMMO;
 	}
@@ -102,6 +124,9 @@ public class NoxMMO extends NoxPlugin {
 	@Override
 	public void permissions() {
 		addPermission(new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability"), "Base MMO Node", PermissionDefault.FALSE,
+				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", AutoArmor.PERM_NODE), "Allows usage of the Auto Armor Abilities.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", AutoSword.PERM_NODE), "Allows usage of the Auto Sword Abilities.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", AutoTool.PERM_NODE), "Allows usage of the Auto Tool Abilities.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", BackStabAbility.PERM_NODE), "Allows usage of the Back Stab Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", BandageAbility.PERM_NODE), "Allows usage of the Bandage Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", BankShotAbility.PERM_NODE), "Allows usage of the Bank Shot Ability.", PermissionDefault.OP),

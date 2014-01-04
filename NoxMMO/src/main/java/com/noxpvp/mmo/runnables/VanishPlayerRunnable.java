@@ -4,22 +4,24 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.bergerkiller.bukkit.common.utils.PlayerUtil;
+
 public class VanishPlayerRunnable extends BukkitRunnable{
 	private Player vanisher;
 	private int runs;
 	private double range;
-	private int n;
+	private int runsLimit;
 	
 	/**
 	 * 
-	 * @param vanisherThe player to keep vanished
-	 * @param rangeThe distance to look for other players
-	 * @param runsThe amount of time to run
+	 * @param vanisher The player to keep vanished
+	 * @param range The distance to look for other players
+	 * @param runs The amount of time to run
 	 */
 	public VanishPlayerRunnable(Player vanisher, double range, int runs){
-		this.runs = runs;
+		this.runs = 0;
 		this.range = range;
-		this.n = 0;
+		this.runsLimit = runs;
 	}
 	
 	public void safeCancel() {
@@ -27,21 +29,16 @@ public class VanishPlayerRunnable extends BukkitRunnable{
 	}
 	
 	public void run(){
-		if (this.runs >= this.n){
-			for (Player it : vanisher.getServer().getOnlinePlayers()){
-				if (it.canSee(vanisher)) continue;
+		if (this.runs++ >= runsLimit) {
+			for (Player it : vanisher.getServer().getOnlinePlayers())
 				it.showPlayer(vanisher);
-			}
+				
 			safeCancel();
 			return;
 		}
 		
-		for (Entity it : this.vanisher.getNearbyEntities(range, range, range)){
-			if (!(it instanceof Player)) continue;
-			if (!((Player) it).canSee(this.vanisher)) continue;
-			
-			((Player) it).hidePlayer(vanisher);
-		}
+		for (Entity it : PlayerUtil.getNearbyPlayers(vanisher, range))
+			((Player)it).hidePlayer(vanisher);
 	}
 
 }

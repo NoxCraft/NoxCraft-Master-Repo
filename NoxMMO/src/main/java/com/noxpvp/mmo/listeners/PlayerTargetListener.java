@@ -33,7 +33,7 @@ public class PlayerTargetListener extends GenericNoxListener<PlayerInteractEvent
 		
 		if (player == null) return;
 		
-		new TargetAbility(p).execute();
+		new TargetAbility(p).setRange(30).execute();//TODO make default range configized
 		
 	}
 }

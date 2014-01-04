@@ -1,21 +1,31 @@
 package com.noxpvp.mmo.listeners;
 
-import java.util.Arrays;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.noxpvp.core.NoxCore;
+import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.data.CoreBar;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.PlayerManager;
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoArmor;
+import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoSword;
+import com.noxpvp.mmo.abilities.player.BackStabAbility;
+import com.noxpvp.mmo.abilities.player.CriticalHitAbility;
+import com.noxpvp.mmo.abilities.player.JoustAbility;
+import com.noxpvp.mmo.abilities.player.RazerClawsAbility;
 import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 public class DamageListener extends GenericNoxListener<EntityDamageEvent>{
@@ -34,42 +44,125 @@ public class DamageListener extends GenericNoxListener<EntityDamageEvent>{
 	}
 
 	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
-	private void onDamage(EntityDamageEvent e) {
-		if (e.getEntity() instanceof LivingEntity) return;
+	private void onDamage(EntityDamageEvent event) {		
+		Entity e = event.getEntity();
 		
-		LivingEntity eEntity = (LivingEntity) e.getEntity();
+		LivingEntity livingDamaged = (LivingEntity) ((e instanceof LivingEntity)? e : null),
+				livingAttacker = null;
+		Player playerDamaged = (Player) ((e instanceof Player)? e : null),
+				playerAttacker = null;
 		
-		Location loc = eEntity.getLocation();
-		loc.setY(loc.getY() + 1.8);
-		
-		new EffectsRunnable(Arrays.asList("blockdust_152_0"), loc, .1F, 50, false, false, null).runTask(NoxMMO.getInstance());
-			
 		EntityDamageByEntityEvent pe = (EntityDamageByEntityEvent)
-				(eEntity.getLastDamageCause() instanceof EntityDamageByEntityEvent? eEntity.getLastDamageCause() : null);
+				(e.getLastDamageCause() instanceof EntityDamageByEntityEvent? e.getLastDamageCause() : null);
 		
-		if (pe != null && (pe.getDamager() instanceof Player)) {
-			//damaged by player
-			Player eDamager = (Player) pe.getDamager();
-			ChatColor color = ChatColor.GREEN;//TODO Make as a locale variable
+		if (pe != null) {
+			livingAttacker = (LivingEntity) ((pe.getDamager() instanceof LivingEntity)? pe.getDamager() : null);
+			playerAttacker = (Player) ((pe.getDamager() instanceof Player)? pe.getDamager() : null);
 			
-			//is a player getting damaged
-			if (eEntity instanceof Player) {
-				
-				NoxPlayer eDamagerPlayer = pm.getPlayer(eDamager.getName()),
-						eEntityPlayer = pm.getPlayer((Player) eEntity);
-				
-				if (eDamagerPlayer == null || eEntityPlayer == null)
-					return;
-				
-				CoreBar bar = pm.getCoreBar(eDamager.getName());
-				bar.newLivingTracker(eEntity, eEntityPlayer.getFullName(), color);
-			} else {//still make bar, but with the entity type name instead
-				
-				CoreBar bar = pm.getCoreBar(eDamager.getName());
-				bar.newLivingTracker(eEntity, eEntity.getType().name(), color);
+		}
+		
+		if (playerAttacker != null) {//damaged by player
+			
+			/*
+			 * auto tools - sword
+			 */
+			if (playerAttacker.getItemInHand().getType() == Material.GOLD_SWORD && 
+					VaultAdapter.permission.has(playerAttacker, NoxMMO.PERM_NODE + ".ability." + AutoSword.PERM_NODE)) {
+				new AutoSword(playerAttacker, e).execute();
 				
 			}
 			
+			/*
+			 * backstab
+			 */
+			if (VaultAdapter.permission.has(playerAttacker, NoxMMO.PERM_NODE + ".ability." + BackStabAbility.PERM_NODE)){
+				String itemName = playerAttacker.getItemInHand().getType().name();
+				
+				if (itemName.contains("SWORD") || itemName.contains("AXE"))
+					new BackStabAbility(playerAttacker, pe);
+			}
+			
+			/*
+			 * critical hit
+			 */
+			if (VaultAdapter.permission.has(playerAttacker, NoxMMO.PERM_NODE + ".ability." + CriticalHitAbility.PERM_NODE)){
+				String itemName = playerAttacker.getItemInHand().getType().name();
+				
+				if (itemName.contains("SWORD") || itemName.contains("AXE"))
+					new CriticalHitAbility(playerAttacker, pe);
+			}
+			
+			/*
+			 * player / living entity bars
+			 */
+			if (livingDamaged != null) {
+				Location dLoc = e.getLocation();
+				dLoc.setY(dLoc.getY() + 1.8);
+				new EffectsRunnable("blockdust_152_0", dLoc, .12F, 25, false, false, null).runTask(NoxMMO.getInstance());
+				
+				/*
+				 * joust passive ability
+				 */
+				if (VaultAdapter.permission.has(playerAttacker, NoxMMO.PERM_NODE + ".ability." + JoustAbility.PERM_NODE)) {
+					new JoustAbility(playerAttacker, pe).execute();
+				}
+				
+				ChatColor color = ChatColor.GREEN;//TODO Make as a locale variable
+				CoreBar bar = pm.getCoreBar(playerAttacker.getName());
+				
+				if (playerDamaged != null) {
+					
+					NoxPlayer noxPlayerDamaged = pm.getPlayer(playerDamaged.getName());
+					
+					if (noxPlayerDamaged != null)
+						bar.newLivingTracker(livingDamaged, noxPlayerDamaged.getFullName(), color);
+					
+				} else {
+					bar.newLivingTracker(livingDamaged, livingDamaged.getType().name(), color);
+				}
+				
+			}
+			
+		}
+			
+		
+		if (playerDamaged != null) {//is a player getting damaged
+			
+			/*
+			 * auto armor - helmet
+			 */
+			if (event.getCause() == DamageCause.DROWNING) {
+				if (VaultAdapter.permission.has(playerDamaged, NoxMMO.PERM_NODE + ".ability." + AutoArmor.PERM_NODE)) {
+					new AutoArmor(playerDamaged).execute();
+				}
+			}
+			
+		}
+		
+		if (livingDamaged != null) {
+			switch (livingAttacker.getType()) {
+			case WOLF:
+				Wolf it = (Wolf) livingAttacker;
+				AnimalTamer owner = it.getOwner() != null? it.getOwner() : null;
+				
+				if (owner != null && owner instanceof Player) {
+					Player tamer = (Player) owner;
+					
+					/*
+					 * razer claws ability
+					 */
+					if (VaultAdapter.permission.has(tamer, NoxMMO.PERM_NODE + ".ability." + RazerClawsAbility.PERM_NODE)) {
+						new RazerClawsAbility(tamer, it).execute();
+					}
+					
+				}
+				
+				break;
+				
+			default:
+				break;
+			}
+		
 		}
 		
 	}
