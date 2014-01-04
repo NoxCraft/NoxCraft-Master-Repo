@@ -1,6 +1,7 @@
 package com.noxpvp.core.data;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.WeakHashMap;
 
@@ -53,6 +54,34 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		return name;
 	}
 	
+	public String getFullName() {
+		StringBuilder text = new StringBuilder();
+		
+		text.append(VaultAdapter.chat.getGroupPrefix(getLastWorld(), getMainGroup()) + getPlayer().getName());
+		
+		return text.toString();
+	}
+	
+	private String getMainGroup() {
+	    
+	    String[] groups = VaultAdapter.permission.getPlayerGroups(getPlayer());
+	    LinkedList<String> groupList = new LinkedList<String>(null);// put local group list here
+	    
+	    if (groups.length < 0) return null;
+	    
+	    int ind = 100;
+	    String finalGroup = null;
+	    
+	    for (String group : groups) {
+	            if (groupList.indexOf(group) < ind) {
+	                    ind = groupList.indexOf(group);
+	                    finalGroup = group;
+	            }
+	    }
+	    
+	    return finalGroup;
+	}
+
 	public Location getLastDeathLocation()
 	{
 		SafeLocation l = null;

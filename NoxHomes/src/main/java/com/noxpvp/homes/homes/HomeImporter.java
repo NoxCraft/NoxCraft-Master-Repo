@@ -31,7 +31,7 @@ public enum HomeImporter implements Importer{
 			if (plugin == null)
 				return false;
 			List<BaseHome> homes = new ArrayList<BaseHome>();
-			File essentialsDir = new File(StringUtil.combine(File.separator, "plugins", "Essentials", "userdata"));
+			File essentialsDir = new File(StringUtil.join(File.separator, "plugins", "Essentials", "userdata"));
 			if (!essentialsDir.exists())
 				return false;
 			else
@@ -145,7 +145,7 @@ public enum HomeImporter implements Importer{
 			if (plugin == null)
 				return false;
 			List<BaseHome> homes = new ArrayList<BaseHome>();
-			File multiHomeFile = new File(StringUtil.combine(File.separator, "plugins", "MultiHome", "homes.txt"));
+			File multiHomeFile = new File(StringUtil.join(File.separator, "plugins", "MultiHome", "homes.txt"));
 			if (!multiHomeFile.exists())
 				return false;
 			else

@@ -22,8 +22,9 @@ public class SeveringStrikesAbility extends BasePlayerAbility{
 	
 	public static final String ABILITY_NAME = "Severing Strikes";
 	public static final String PERM_NODE = "severing-strikes";
-	private static Map<String, SeveringStrikesAbility> strikers = new HashMap<String, SeveringStrikesAbility>();
-	private static Map<Damageable, BleedRunnable> bleeders = new HashMap<Damageable, SeveringStrikesAbility.BleedRunnable>();
+	
+	public static Map<String, SeveringStrikesAbility> strikers = new HashMap<String, SeveringStrikesAbility>();
+	public static Map<Damageable, BleedRunnable> bleeders = new HashMap<Damageable, SeveringStrikesAbility.BleedRunnable>();
 	
 	public void eventExecute(Player attacker, Damageable target){
 		

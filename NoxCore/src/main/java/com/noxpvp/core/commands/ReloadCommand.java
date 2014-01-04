@@ -61,7 +61,7 @@ public class ReloadCommand implements DescriptiveCommandRunner {
 			return true;
 		}
 		
-		String module = StringUtil.combine("\\", args);
+		String module = StringUtil.join("\\", args);
 //		if (module.equals(""))
 //		{
 //			displayHelp(sender);

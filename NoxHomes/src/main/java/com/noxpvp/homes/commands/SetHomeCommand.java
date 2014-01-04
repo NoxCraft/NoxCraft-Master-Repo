@@ -77,7 +77,7 @@ public class SetHomeCommand implements CommandRunner {
 		if (args.length > 0)
 			homeName = args[0];
 		
-		String perm = StringUtil.combine(".", NoxHomes.HOMES_NODE, PERM_NODE, (own? ".": "others.") + (homeName==null ? "default": "named"));
+		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, (own? ".": "others.") + (homeName==null ? "default": "named"));
 		if (!permHandler.hasPermission(sender, perm))
 		{
 			sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("permission.denied", "Teleport to homes.", perm)));

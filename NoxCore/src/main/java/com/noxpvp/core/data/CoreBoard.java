@@ -161,7 +161,7 @@ public class CoreBoard{
 		String scoreName = sb.toString();
 		
 		
-		BoardEntry entry = new BoardEntry(name, displayedName, scoreName);
+		new BoardEntry(name, displayedName, scoreName);
 		
 		return this;
 	}

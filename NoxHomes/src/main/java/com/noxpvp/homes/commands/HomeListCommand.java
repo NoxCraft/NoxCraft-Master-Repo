@@ -82,13 +82,13 @@ public class HomeListCommand implements CommandRunner {
 		{
 			for (BaseHome home : homes)
 				homeNames.add(home.getName());
-			homelist = StringUtil.combine(",", homeNames);
+			homelist = StringUtil.join(",", homeNames);
 		}
 		
 		if (own)
 			player = "own";
 		
-		String perm = StringUtil.combine(".", NoxHomes.HOMES_NODE, LIST_PERM_NODE, (own ? "own" : "others"));
+		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, LIST_PERM_NODE, (own ? "own" : "others"));
 		if (!permHandler.hasPermission(sender, perm))
 		{
 			sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("permission.denied", "Can not view other people's Homes!", perm)));

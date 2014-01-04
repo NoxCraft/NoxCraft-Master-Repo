@@ -138,37 +138,37 @@ public class NoxHomes extends NoxPlugin {
 		addPermission(
 				new NoxPermission(this, "homes.*", "All of NoxHomes permissions Including admin.", PermissionDefault.FALSE,
 						new NoxPermission(this, "homes.admin.*", "All NoxHome's Admin Permissions", PermissionDefault.FALSE, 
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "history"), "Ability to read Home History.", PermissionDefault.OP),
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "wipe" , "*"), "Permission to wipe all data.", PermissionDefault.OP,
-										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "wipe" , "history"), "Permission to wipe history.", PermissionDefault.OP),
-										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "wipe" , "homes"), "Permission to wipe homes data.", PermissionDefault.OP)
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, "admin", "history"), "Ability to read Home History.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, "admin", "wipe" , "*"), "Permission to wipe all data.", PermissionDefault.OP,
+										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, "admin", "wipe" , "history"), "Permission to wipe history.", PermissionDefault.OP),
+										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, "admin", "wipe" , "homes"), "Permission to wipe homes data.", PermissionDefault.OP)
 								),
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "load"), "Permission to reload plugin.", PermissionDefault.OP),
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", "save"), "Permission to force save.", PermissionDefault.OP),
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, "admin", HomeAdminImportCommand.PERM_NODE), "Permission to migrate save data to and from plugin.", PermissionDefault.OP)
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, "admin", "load"), "Permission to reload plugin.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, "admin", "save"), "Permission to force save.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, "admin", HomeAdminImportCommand.PERM_NODE), "Permission to migrate save data to and from plugin.", PermissionDefault.OP)
 						),
-						new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "*"), "Allowed to set home of everything including others.", PermissionDefault.FALSE,
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "default"), "Allowed to set default home.", PermissionDefault.OP),
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "named"), "Allowed to set named homes.", PermissionDefault.OP),
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", "*"), "Allowed to set any type of other peoples homes.", PermissionDefault.FALSE,
-										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", "default"), "Allowed to set other peoples default homes.", PermissionDefault.OP),
-										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", "named"), "Allowed to set other peoples named homes.", PermissionDefault.OP)
+						new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "*"), "Allowed to set home of everything including others.", PermissionDefault.FALSE,
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "default"), "Allowed to set default home.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "named"), "Allowed to set named homes.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", "*"), "Allowed to set any type of other peoples homes.", PermissionDefault.FALSE,
+										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", "default"), "Allowed to set other peoples default homes.", PermissionDefault.OP),
+										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", "named"), "Allowed to set other peoples named homes.", PermissionDefault.OP)
 								)
 						),
-						new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, HomeCommand.PERM_NODE, "*"), "Allowed to warp to any type of home. Including others.", PermissionDefault.FALSE,
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, HomeCommand.PERM_NODE, "default"), "Allowed to warp to your default home.", PermissionDefault.OP),
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, HomeCommand.PERM_NODE, "named"), "Allowed to warp to your named home.", PermissionDefault.OP),
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, HomeCommand.PERM_NODE, "others", "*"), "Allowed to warp to others homes. Without invitiation.", PermissionDefault.FALSE,
-										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, HomeCommand.PERM_NODE, "others","default"), "Allowed to warp to other peoples default home's.", PermissionDefault.OP),
-										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, HomeCommand.PERM_NODE, "others", "named"), "Allowed to warp to other peoples named home's", PermissionDefault.OP)
+						new NoxPermission(this, StringUtil.join(".", HOMES_NODE, HomeCommand.PERM_NODE, "*"), "Allowed to warp to any type of home. Including others.", PermissionDefault.FALSE,
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, HomeCommand.PERM_NODE, "default"), "Allowed to warp to your default home.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, HomeCommand.PERM_NODE, "named"), "Allowed to warp to your named home.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, HomeCommand.PERM_NODE, "others", "*"), "Allowed to warp to others homes. Without invitiation.", PermissionDefault.FALSE,
+										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, HomeCommand.PERM_NODE, "others","default"), "Allowed to warp to other peoples default home's.", PermissionDefault.OP),
+										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, HomeCommand.PERM_NODE, "others", "named"), "Allowed to warp to other peoples named home's", PermissionDefault.OP)
 								)
 						),
-						new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "*"), "Allowed to delete any and all homes.", PermissionDefault.FALSE,
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "default"), "Allowed to delete your default home.", PermissionDefault.OP),
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "named"), "Allowed to delete your named home.", PermissionDefault.OP),
-								new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "others", "*"), "Allowed to delete any type of other people's homes.", PermissionDefault.FALSE,
-										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "others", "default"), "Allowed to delete other peoples default home's", PermissionDefault.OP),
-										new NoxPermission(this, StringUtil.combine(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "others", "named"), "Allowed to delete other peoples named home's", PermissionDefault.OP)
+						new NoxPermission(this, StringUtil.join(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "*"), "Allowed to delete any and all homes.", PermissionDefault.FALSE,
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "default"), "Allowed to delete your default home.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "named"), "Allowed to delete your named home.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "others", "*"), "Allowed to delete any type of other people's homes.", PermissionDefault.FALSE,
+										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "others", "default"), "Allowed to delete other peoples default home's", PermissionDefault.OP),
+										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, DeleteHomeCommand.PERM_NODE, "others", "named"), "Allowed to delete other peoples named home's", PermissionDefault.OP)
 								)
 						),
 //						new NoxPermission(this, "homes.invite.*", "Allowed to set invites to any home of anyone.", PermissionDefault.FALSE,
@@ -199,9 +199,9 @@ public class NoxHomes extends NoxPlugin {
 										)
 								)
 						),
-						new NoxPermission(this, StringUtil.combine(".", "homes", HomeListCommand.LIST_PERM_NODE, "*"), "Allows to list any home of any person.", PermissionDefault.FALSE,
-								new NoxPermission(this, StringUtil.combine(".", "homes", HomeListCommand.LIST_PERM_NODE, "own"), "List your own homes.", PermissionDefault.OP),
-								new NoxPermission(this, StringUtil.combine(".", "homes", HomeListCommand.LIST_PERM_NODE, "others"), "List other people's homes.", PermissionDefault.OP)
+						new NoxPermission(this, StringUtil.join(".", "homes", HomeListCommand.LIST_PERM_NODE, "*"), "Allows to list any home of any person.", PermissionDefault.FALSE,
+								new NoxPermission(this, StringUtil.join(".", "homes", HomeListCommand.LIST_PERM_NODE, "own"), "List your own homes.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", "homes", HomeListCommand.LIST_PERM_NODE, "others"), "List other people's homes.", PermissionDefault.OP)
 						)
 				)
 			);

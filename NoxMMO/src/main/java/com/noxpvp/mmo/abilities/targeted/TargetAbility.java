@@ -3,12 +3,17 @@ package com.noxpvp.mmo.abilities.targeted;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import com.noxpvp.core.NoxCore;
+import com.noxpvp.core.PlayerManager;
+import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.utils.Vector3D;
+import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
@@ -75,6 +80,21 @@ public class TargetAbility extends BasePlayerAbility{
 
 		if (hasIntersection(observerStart, observerEnd, minimum, maximum)) {
 			NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p.getName()).setTarget(target_ref.get());
+			
+			ChatColor color = ChatColor.RED;
+			PlayerManager pm = NoxCore.getInstance().getPlayerManager();
+			
+			NoxPlayer noxPlayer = pm.getPlayer(p);
+			MMOPlayer mmoPlayer = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p);
+			
+			if (noxPlayer == null) return false;
+			
+			String name = noxPlayer.getFullName() + color;
+			if (mmoPlayer != null && mmoPlayer.getMainPlayerClass() != null) {
+				name.concat(" - " + mmoPlayer.getMainPlayerClass().getDisplayName() + color);
+			}
+			
+			pm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, color);
 		}
 		
 		return true;
