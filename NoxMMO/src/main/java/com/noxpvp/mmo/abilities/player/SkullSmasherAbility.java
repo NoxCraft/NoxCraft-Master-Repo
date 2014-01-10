@@ -109,7 +109,7 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 		SkullSmasherAbility.smashers.put(name, this);
 		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(getPlayer()).getMainPlayerClass();
 		
-		int length = 20 * ((pClass.getLevel() * pClass.getTierLevel()) / 16);
+		int length = (20 * (pClass.getTotalLevels())) / 16;
 		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
 			
 			public void run() {

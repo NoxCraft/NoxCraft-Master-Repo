@@ -1,7 +1,9 @@
 package com.noxpvp.mmo.runnables;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,7 +24,7 @@ public class EffectsRunnable extends BukkitRunnable{
 	private float data;
 	private int amount;
 	private int amt;
-	private List<String> name;
+	private List<String> name = new ArrayList<>();
 	
 	private boolean runMulti = false;
 	private boolean continuous = false;
@@ -45,7 +47,30 @@ public class EffectsRunnable extends BukkitRunnable{
 		this.data = data;
 		this.amount = amount;
 		this.amt = runMultipleTimes? 1 : amount;
-		this.runs = name.size();
+		this.runs = 0;
+		
+		this.runMulti = runMultipleTimes;
+		this.continuous = continuous;
+		
+		this.usingTracker = tracker != null;
+		this.tracker = usingTracker? tracker : null;
+		
+	}
+	
+	/**
+	 * 
+	 * @param List<String> The effect name(s) | List - https://gist.github.com/thinkofdeath/5110835
+	 * @param loc The particle location
+	 * @param data
+	 * @param amount The amount of particles
+	 */
+	public EffectsRunnable(String stringName, Location loc, float data, int amount, boolean runMultipleTimes, boolean continuous, Entity tracker) {
+		this.name.add(stringName);
+		this.loc = (loc != null)? loc : null;
+		this.data = data;
+		this.amount = amount;
+		this.amt = runMultipleTimes? 1 : amount;
+		this.runs = 0;
 		
 		this.runMulti = runMultipleTimes;
 		this.continuous = continuous;
@@ -68,19 +93,24 @@ public class EffectsRunnable extends BukkitRunnable{
 				}
 					
 			} else if (runs != 0) {
+				Bukkit.broadcastMessage("runs over limit, stopping");
 				safeCancel();
 				return;
 			}
 			
 			if (usingTracker && (tracker.isDead() || tracker == null || !tracker.isValid())) {
-				safeCancel(); return;
-			} else if (usingTracker)
+				Bukkit.broadcastMessage("tracker in valid");
+				safeCancel();
+				return;
+			} else if (usingTracker) {
 				loc = tracker.getLocation();
+			}
 			
 			try {
 				CommonPacket commonEffect = new CommonPacket(PacketType.OUT_WORLD_PARTICLES);
 				NMSPacketPlayOutWorldParticles effect = new NMSPacketPlayOutWorldParticles();
 				
+				Bukkit.broadcastMessage("editing data");
 				commonEffect.write(effect.effectName, name.get(runs++));
 				commonEffect.write(effect.particleCount, amt);
 				commonEffect.write(effect.speed, data);
@@ -96,6 +126,8 @@ public class EffectsRunnable extends BukkitRunnable{
 				}
 				
 				PacketUtil.broadcastPacketNearby(loc, 256, commonEffect);//max render distance
+				Bukkit.broadcastMessage("effect sent");
+				
 			} catch (Exception e) {e.printStackTrace(); safeCancel(); return;}
 	}
 

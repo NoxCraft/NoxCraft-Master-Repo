@@ -3,8 +3,20 @@ package com.noxpvp.mmo.classes;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+
+import com.noxpvp.mmo.classes.player.main.archery.ArcherClass;
+import com.noxpvp.mmo.classes.player.main.axes.BasherClass;
+import com.noxpvp.mmo.classes.player.main.axes.BerserkerClass;
+import com.noxpvp.mmo.classes.player.main.axes.ChampionClass;
+import com.noxpvp.mmo.classes.player.main.axes.WarlordClass;
+import com.noxpvp.mmo.classes.player.main.healing.ClericClass;
+import com.noxpvp.mmo.classes.player.main.magic.MageClass;
+import com.noxpvp.mmo.classes.player.main.pets.TamerClass;
+import com.noxpvp.mmo.classes.player.main.stealth.ThiefClass;
+import com.noxpvp.mmo.classes.player.main.swords.SwordsmanClass;
 
 public abstract class BasePlayerClass implements PlayerClass {
 	
@@ -21,6 +33,38 @@ public abstract class BasePlayerClass implements PlayerClass {
 			return idToClassMap.get(id);
 		else
 			return null;
+	}
+	
+	public static LinkedList<Integer> getArmorColor(int classID) {
+		
+		switch (classID) {
+		case BasherClass.classId: 
+		case BerserkerClass.classId: 
+		case ChampionClass.classId: 
+		case WarlordClass.classId: 
+			return new LinkedList<Integer>(Arrays.asList(160, 0, 0));
+			
+		case SwordsmanClass.classId:
+			return new LinkedList<Integer>(Arrays.asList(90, 90, 90));
+			
+		case TamerClass.classId:
+			return new LinkedList<Integer>(Arrays.asList(12, 126, 0));
+			
+		case MageClass.classId:
+			return new LinkedList<Integer>(Arrays.asList(79, 255, 60));
+			
+		case ClericClass.classId:
+			return new LinkedList<Integer>(Arrays.asList(255, 255, 255));
+			
+		case ArcherClass.classId:
+			return new LinkedList<Integer>(Arrays.asList(20, 0, 191));
+			
+		case ThiefClass.classId:
+			return new LinkedList<Integer>(Arrays.asList(0, 0, 0));
+			
+		default:
+			return null;
+		}
 	}
 	
 	public final int classId;
@@ -130,6 +174,18 @@ public abstract class BasePlayerClass implements PlayerClass {
 	
 	public final int getTierLevel(){
 		return this.tierLevel;
+	}
+	
+	public int getTotalLevels() {
+		int levels = 0;
+		int limit = getTierLevel() > 1? getTierLevel() - 1 : getTierLevel(); 
+		
+		for(int i = 0; i < limit; i++)
+			levels = levels + 100;
+		
+		levels = levels + getLevel();
+		
+		return levels;
 	}
 	
 	public final int getLevel() {

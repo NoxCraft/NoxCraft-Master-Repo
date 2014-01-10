@@ -79,10 +79,10 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 			LivingEntity e = (LivingEntity) it;
 			
 			new HealRunnable(e, getHealAmount(), 1).runTaskLater(instance, 40);
-			new EffectsRunnable(Arrays.asList("heart"), e.getLocation(), 0, (int) getHealAmount()/2, false, false, null).runTaskTimer(instance, 25, 5);
+			new EffectsRunnable("heart", e.getLocation(), 0, (int) getHealAmount()/2, false, false, null).runTaskTimer(instance, 25, 5);
 		}
 		
-		new EffectsRunnable(Arrays.asList("angryVillager"), null, 0, 1, false, false, v).runTaskLater(instance, 60);
+		new EffectsRunnable("angryVillager", null, 0, 1, false, false, v).runTaskLater(instance, 60);
 		new DespawnRunnable(v).runTaskLater(instance, 60);
 		
 		return true;

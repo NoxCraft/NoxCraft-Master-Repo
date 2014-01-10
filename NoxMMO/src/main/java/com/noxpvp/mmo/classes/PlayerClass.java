@@ -9,6 +9,7 @@ public interface PlayerClass {
 	public double getMaxHealth();
 	
 	public int getTierLevel();
+	public int getTotalLevels();
 	public int getTotalExp();
 	public int getExp();
 	public int getLevel();

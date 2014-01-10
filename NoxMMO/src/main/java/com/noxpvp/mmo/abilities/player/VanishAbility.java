@@ -30,13 +30,13 @@ public class VanishAbility extends BasePlayerAbility{
 
 	/**
 	 * 
-	 * @return Integer The currently set amount of ticks to keep the player vanished
+	 * @return Integer The currently set amount of seconds to keep the player vanished
 	 */
 	public int getTime() {return time;}
 
 	/**
 	 * 
-	 * @param time The amount of ticks to keep the player vanished
+	 * @param time The amount of seconds to keep the player vanished
 	 * @return VanishAbility This instance, used for chaining
 	 */
 	public VanishAbility setTime(int time) {this.time = time; return this;}
@@ -59,6 +59,10 @@ public class VanishAbility extends BasePlayerAbility{
 	 */
 	public VanishAbility(Player player){
 		super(ABILITY_NAME, player);
+		
+		this.range = 50;
+		this.hideFreq = 20;
+		this.time = 60;
 	}
 
 	/**
@@ -69,8 +73,8 @@ public class VanishAbility extends BasePlayerAbility{
 		if(!mayExecute())
 			return false;
 		
-		VanishPlayerRunnable vanisher = new VanishPlayerRunnable(getPlayer(), range, (time / hideFreq));
-		vanisher.runTaskTimer(NoxMMO.getInstance(), 0, hideFreq);
+		new VanishPlayerRunnable(getPlayer(), range, (time * (20 / hideFreq))).
+				runTaskTimer(NoxMMO.getInstance(), 0, hideFreq);
 		
 		return true;
 	}

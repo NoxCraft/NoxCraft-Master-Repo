@@ -1,10 +1,15 @@
 package com.noxpvp.mmo.abilities.player;
 
+import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 
+import com.noxpvp.mmo.MMOPlayer;
+import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
+import com.noxpvp.mmo.classes.PlayerClass;
 
 /**
  * @author NoxPVP
@@ -18,7 +23,7 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 	private float damagePercent;
 	private double Damage;
 	private double accuracy = 20;
-	private float chancePercent = 50;
+	private EntityDamageEvent event;
 	
 	/**
 	 * 
@@ -34,21 +39,6 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 	 * @return BackStabAbility This instance, used for chaining
 	 */
 	public BackStabAbility setAccuracy(double accuracy) {this.accuracy = accuracy; return this;}
-	
-	/**
-	 * 
-	 * 
-	 * @return Integer The current set chance of backstab success
-	 */
-	public float getChancePercent() {return chancePercent;}
-	
-	/**
-	 * 
-	 * 
-	 * @param chancePercent The percent chance of a successful backstab
-	 * @return BackStabAbility This instance, used for chaining
-	 */
-	public BackStabAbility setChancePercent(float chancePercent) {this.chancePercent = chancePercent; return this;}
 	
 	/**
 	 * 
@@ -98,8 +88,10 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 	 * 
 	 * @param player The Player type user for this ability instance
 	 */
-	public BackStabAbility(Player player){
+	public BackStabAbility(Player player, EntityDamageEvent event){
 		super(ABILITY_NAME, player);
+		
+		this.event = event;
 	}
 	
 	public boolean execute() {
@@ -109,14 +101,29 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 		LivingEntity t = getTarget();
 		Player p = getPlayer();
 		
-		double tYaw = t.getLocation().getYaw();
-		double pYaw = p.getLocation().getYaw();
+		Location pLoc = p.getLocation();
+		Location tLoc = t.getLocation();		
+		double tYaw = tLoc.getYaw();
+		double pYaw = pLoc.getYaw();
 		
-		if (!(pYaw <= (tYaw + accuracy)) && (pYaw >= (tYaw - accuracy)) && (Math.random() < getChancePercent()))
+		if (!(pYaw <= (tYaw + accuracy)) && (pYaw >= (tYaw - accuracy)))
 			return false;
 		
-		t.damage(getDamagePercent() * getDamage(), p);
+		MMOPlayer player = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p);
+		if (player == null)
+			return false;
+		
+		PlayerClass clazz = player.getMainPlayerClass();
+		
+		float chance = (clazz.getLevel() + clazz.getTotalLevels()) / 10;//up to 40% at max 400 total levels
+		if ((Math.random() * 100) > chance)
+			return false;
 					
+		if (pLoc.distance(tLoc) < .35)//prevent if inside the target
+			return false;
+		
+		event.setDamage(event.getDamage() + getDamage());
+		
 		return true;
 	}
 	
