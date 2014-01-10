@@ -51,6 +51,7 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 	public BaseHome(String owner, Location location) {
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 		this.owner = owner;
+		this.warpPoint = new SafeLocation(location);
 	}
 	
 	public BaseHome(String owner, Entity e)

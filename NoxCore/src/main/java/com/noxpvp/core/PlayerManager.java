@@ -246,6 +246,10 @@ public class PlayerManager implements Persistant {
 		return NoxCore.getInstance().getDataFile("playerdata", name);
 	}
 	
+	public NoxPlayer[] getLoadedPlayers() {
+		return players.values().toArray(new NoxPlayer[0]);
+	}
+	
 	/**
 	 * Gets the player file.
 	 *
@@ -261,14 +265,22 @@ public class PlayerManager implements Persistant {
 		List<String> ret = new ArrayList<String>();
 		if (isMultiFile())
 		{
-			for (File f : NoxCore.getInstance().getDataFile("playerdata").listFiles())
-				ret.add(f.getName().replace(".yml", ""));
+			try {
+				for (File f : NoxCore.getInstance().getDataFile("playerdata").listFiles())
+					ret.add(f.getName().replace(".yml", ""));
+			} catch (NullPointerException e) {//We don't have a nullfix yet...
+				 
+			}
 		} else {
 			for (ConfigurationNode node : config.getNode("players").getNodes())
 				ret.add(node.getName());
 		}
 		
-		return Collections.unmodifiableList(ret);
+		for (NoxPlayer p : getLoadedPlayers())
+			if (!ret.contains(p.getName()))
+				ret.add(p.getName());
+		
+		return ret;
 	}
 	
 	/**

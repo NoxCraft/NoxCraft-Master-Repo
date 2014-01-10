@@ -48,7 +48,7 @@ public class NoxHomes extends NoxPlugin {
 		SetHomeCommand.class
 	};
 	
-	public static final String HOMES_NODE = "homes";
+	public static final String HOMES_NODE = "nox.homes";
 	private static NoxHomes instance;
 	
 	private HomeLimitManager limitManager;

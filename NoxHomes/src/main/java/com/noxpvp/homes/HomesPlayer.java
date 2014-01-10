@@ -136,8 +136,17 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		}
 		else
 			return false;
+		
+		updateIndex();
 		save();
 		return true;
+	}
+
+	private void updateIndex() {
+		homes_index.clear();
+		
+		for (int i = 0; i < homes.size(); i++)
+			homes_index.put(homes.get(i).getName(), i);
 	}
 
 	/**

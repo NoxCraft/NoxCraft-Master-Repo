@@ -30,7 +30,7 @@ public class HomeListCommand implements CommandRunner {
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
-	public boolean execute(ICommandContext context) {
+	public boolean execute(CommandContext context) {
 		if (context.hasFlag("h") || context.hasFlag("help"))
 			return false;
 		

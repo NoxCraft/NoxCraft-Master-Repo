@@ -26,6 +26,7 @@ public class HomeCommand implements CommandRunner {
 	public HomeCommand()
 	{
 		plugin = NoxHomes.getInstance();
+		manager = plugin.getHomeManager();
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	

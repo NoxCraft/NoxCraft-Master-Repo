@@ -1,5 +1,6 @@
 package com.noxpvp.homes.commands;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -41,7 +42,14 @@ public class HomeAdminCommand implements CommandRunner {
 		{
 			if (isSubCommand(args[0]))
 			{
-				String[] newArgs = Java15Compat.Arrays_copyOfRange(args, 1, args.length-1);
+				String[] newArgs;
+				if (args.length == 1)
+					newArgs = new String[0];
+				else if (args.length == 2) {
+					newArgs = new String[1];
+					newArgs[0] = args[1];
+				} else
+					newArgs = Arrays.copyOfRange(args, 1, args.length-1);
 				if (!subCommands.get(args[0]).execute(new CommandContext(sender, context.getFlags(), newArgs)))
 					displayHelp(sender);
 			} else {

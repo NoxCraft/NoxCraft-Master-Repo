@@ -7,7 +7,7 @@ import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.commands.CommandRunner;
-import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.core.utils.PermissionHandler;
@@ -41,7 +41,7 @@ public class SetHomeCommand implements CommandRunner {
 		return mb.lines();
 	}
 	
-	public boolean execute(ICommandContext context) {
+	public boolean execute(CommandContext context) {
 		if (!context.isPlayer())
 		{
 			MessageUtil.sendGlobalLocale(plugin, context.getSender(), "console.onlyplayer");
