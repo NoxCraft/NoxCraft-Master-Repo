@@ -12,6 +12,7 @@ import org.bukkit.command.PluginCommand;
 
 import com.bergerkiller.bukkit.common.Common;
 import com.bergerkiller.bukkit.common.PluginBase;
+import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.CommandContext;
@@ -55,6 +56,20 @@ public abstract class NoxPlugin extends PluginBase {
 		}
 		return false;
 	}
+	
+	/**
+    * Gets a localization configuration node
+    * 
+    * @param path of the node to get
+    * @return Localization configuration node
+    */
+   public ConfigurationNode getGlobalLocalizationNode(String path) {
+	   NoxCore c;
+	   if ((c = getCore())==null)
+		   throw new IllegalStateException("This plugin depends on NoxCore! Its not loaded!");
+   
+       return c.getGlobalLocalizationNode(path);
+   }
 	
 	public abstract NoxCore getCore();
 	

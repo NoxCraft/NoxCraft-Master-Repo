@@ -66,6 +66,10 @@ public class CoreCommandParser {
 		
 		when(server.getBukkitVersion()).thenReturn("FakeBukkit 1.6.4-R9000");
 
+		
+		if (Bukkit.getServer() == null)
+			Bukkit.setServer(server);
+		
 		mockPlayerSender = mock(Player.class);
 		mockSender = mock(CommandSender.class);
 		doAnswer((new Answer<Void>() {
@@ -92,8 +96,7 @@ public class CoreCommandParser {
 //		
 //		when(Bukkit.getServer()).thenReturn(server);
 		
-		if (Bukkit.getServer() == null)
-			Bukkit.setServer(server);
+		
 	}
 	
 	static String[] testFlagsExistsTestArgLines = {"come --all", "this --all  test", "oh --all"};

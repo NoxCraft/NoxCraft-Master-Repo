@@ -15,6 +15,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
 import com.bergerkiller.bukkit.common.Common;
+import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.conversion.BasicConverter;
 import com.bergerkiller.bukkit.common.conversion.Conversion;
@@ -227,6 +228,11 @@ public class NoxCore extends NoxPlugin {
 	}
 	
 	@Override
+	public ConfigurationNode getGlobalLocalizationNode(String path) {
+		return this.globalLocales.getNode(path);
+	}
+	
+	@Override
 	public String getGlobalLocale(String path, String... arguments) {
         path = path.toLowerCase(Locale.ENGLISH);
         // First check if the path leads to a node
@@ -334,8 +340,8 @@ public class NoxCore extends NoxPlugin {
 
 		
 		//Permission Locales
-		loadGlobalLocale("permission.denied", "&4Permission Denied&r:&e %0%"); //%0% is the message while %1% is the perm node.
-		loadGlobalLocale("permission.denied.verbose", getLocale("permission.denied", "%0% >> Node '%1%'"));//Locale dynamic replace.
+        loadGlobalLocale("permission.denied.default", "&4Permission Denied&r:&e %0%"); //%0% is the message while %1% is the perm node.
+		loadGlobalLocale("permission.denied.verbose", getGlobalLocale("permission.denied", "%0% >> Node '%1%'"));//Locale dynamic replace.
 		
 		loadGlobalLocale("command.successful", "&2Successfully executed command: %0%");
 		loadGlobalLocale("command.failed", "&4Failed to execute command: %0%");

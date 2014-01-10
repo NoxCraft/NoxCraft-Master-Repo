@@ -38,6 +38,7 @@ import org.powermock.api.mockito.PowerMockito;
 @RunWith(Parameterized.class)
 //@PrepareOnlyThisForTest(Bukkit.class)
 public class PlayerManagerTest {
+	static Logger logger = Logger.getLogger("minecraft");
 	static PlayerManager playerManager;
 	static PermissionHandler handler;
 	
@@ -80,15 +81,20 @@ public class PlayerManagerTest {
 		if (!Mockito.mockingDetails(server).isMock())
 			throw new IllegalStateException("Server is not mocked");
 		
-		Mockito.reset(server);
-		when(server.getLogger()).thenReturn(Logger.getLogger("minecraft"));
-		when(server.getName()).thenReturn("FakeServer");
-		when(server.getVersion()).thenReturn("1.6.4");
 		
-		when(server.getBukkitVersion()).thenReturn("FakeBukkit 1.6.4-R9000");
+		Mockito.reset(server);
+		Mockito.when(server.getLogger()).thenReturn(Logger.getLogger("minecraft"));
+		Mockito.when(server.getName()).thenReturn("FakeServer");
+		Mockito.when(server.getVersion()).thenReturn("1.6.4");
+		
+		Mockito.when(server.getBukkitVersion()).thenReturn("FakeBukkit 1.6.4-R9000");
 
 //		PowerMockito.mockStatic(Bukkit.class); 
 //		when(Bukkit.getServer()).thenReturn(server);
+		
+		
+		if (Bukkit.getServer() == null)
+			Bukkit.setServer(server);
 		
 		corePlugin = mock(NoxCore.class);
 		when(corePlugin.getPermissionHandler()).thenReturn(handler);
@@ -111,8 +117,6 @@ public class PlayerManagerTest {
 		
 		NoxCore.setUseUserFile(multiFile);
 		
-		if (Bukkit.getServer() == null)
-			Bukkit.setServer(server);
 	}
 	
 	@Parameters
