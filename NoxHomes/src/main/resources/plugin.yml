@@ -6,9 +6,6 @@ main: ${main}
 depend: [NoxCore]
 softdepend: [Vault]
 commands:
-  importhomes:
-    aliases: [homesimport]
-    description: Imports home data from other plugins.
   home:
     description: Warps to your specified home.
     usage: /<command> [name]    

@@ -47,6 +47,28 @@ public class MessageUtil {
 		sendMessage(world.getPlayers().toArray(new Player[0]), permission, messages);	
 	}
 	
+	public static String getLocale(NoxPlugin plugin, String locale, String... args)
+	{
+		return plugin.getLocale(locale, args);
+	}
+	
+	public static String getGlobalLocale(NoxPlugin plugin, String locale, String... args)
+	{
+		return plugin.getGlobalLocale(locale, args);
+	}
+
+	public static boolean globalLocaleExists(NoxPlugin plugin, String locale, String... args)
+	{
+		String l = getGlobalLocale(plugin, locale, args);
+		return (l == null || l.length() == 0 || l == "" || l.equals("")); //TODO: Remove unneeded checks. Not sure which yet.
+	}
+	
+	public static boolean localeExists(NoxPlugin plugin, String locale, String... args)
+	{
+		String l = getLocale(plugin, locale, args);
+		return (l == null || l.length() == 0 || l == "" || l.equals("")); //TODO: Remove unneeded checks. Not sure which yet.
+	}
+	
 	public static String parseColor(String message)
 	{
 		return StringUtil.ampToColor(message);

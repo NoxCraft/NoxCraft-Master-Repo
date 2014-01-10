@@ -1,48 +1,177 @@
 package net.noxcraft.core;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
-import junit.framework.Assert;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 
+import static org.hamcrest.Matchers.*;
 
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.internal.verification.AtLeast;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
-import com.bergerkiller.bukkit.common.utils.StringUtil;
+import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.utils.CommandUtil;
 
+//@PrepareOnlyThisForTest(Bukkit.class)
 public class CoreCommandParser {
 	
-	@Test(timeout=10000)
-	public void testFlags()
+	
+	@Mock static CommandSender mockSender;
+	@Mock static Player mockPlayerSender;
+	@Mock static Server server;
+	
+	
+//	@Rule public PowerMockRule rule = new PowerMockRule();
+	
+	@BeforeClass
+	public static void setup()
 	{
-		String argline = "-p \"eating my\" Yoshi -a true -f ";
-		Map<String, Object> expectedFlags = new HashMap<String, Object>();
-		
-		expectedFlags.put("p", "eating my");
-		expectedFlags.put("a", "true");
-		
-		String expected = "Yoshi";
-		
-		Map<String, Object> flags = new LinkedHashMap<String, Object>();
-		String[] args = argline.split(" ");
-		String[] newArgs;
-		newArgs = CommandUtil.parseFlags(flags, args);
-		String newArgline = StringUtil.join(" ", newArgs);
-		
-		Assert.assertEquals(newArgline, expected);
-		for (String key: flags.keySet())
-		{
-			if (!expectedFlags.containsKey(key))
-				fail("The flag map did not contain '" + key);
-			if (!expectedFlags.get(key).equals(flags.get(key)))
-				fail("The flag map contained wrong value for '" + key + "' They need '" + expectedFlags.get(key).toString() + "' But got '" + flags.get(key).toString() + "'");
+		if (Bukkit.getServer() != null)
+			server = Bukkit.getServer();
+		else {
+			server = mock(Server.class);
+			
 		}
+			
 		
+		if (!Mockito.mockingDetails(server).isMock())
+			throw new IllegalStateException("Server is not mocked");
 		
+		Mockito.reset(server);
+		when(server.getLogger()).thenReturn(Logger.getLogger("minecraft"));
+		when(server.getName()).thenReturn("FakeServer");
+		when(server.getVersion()).thenReturn("1.6.4");
 		
+		when(server.getBukkitVersion()).thenReturn("FakeBukkit 1.6.4-R9000");
+
+		mockPlayerSender = mock(Player.class);
+		mockSender = mock(CommandSender.class);
+		doAnswer((new Answer<Void>() {
+
+			public Void answer(InvocationOnMock invocation) throws Throwable {
+				Object[] objs = invocation.getArguments();
+				for (Object o : objs)
+					System.out.println(o.toString());
+				return null;
+			}
+		})).when(mockSender).sendMessage(anyString());
+		
+		doAnswer((new Answer<Void>() {
+
+			public Void answer(InvocationOnMock invocation) throws Throwable {
+				Object[] objs = invocation.getArguments();
+				for (Object o : objs)
+					System.out.println(o.toString());
+				return null;
+			}
+		})).when(mockPlayerSender).sendMessage(anyString());
+		
+//		PowerMockito.mockStatic(Bukkit.class);
+//		
+//		when(Bukkit.getServer()).thenReturn(server);
+		
+		if (Bukkit.getServer() == null)
+			Bukkit.setServer(server);
+	}
+	
+	static String[] testFlagsExistsTestArgLines = {"come --all", "this --all  test", "oh --all"};
+	@Test
+	public void testFlagsExists() {
+		for (String argLine : testFlagsExistsTestArgLines)
+		{
+			CommandContext context = CommandUtil.parseCommand(mockSender, argLine);
+			boolean all = context.hasFlag("all");
+			assertTrue(new StringBuilder().append('"').append(argLine).append('"').append(" has failed...").append("\n").append(context.getFlags()).toString() , all);
+			assertTrue(new StringBuilder().append('"').append(argLine).append('"').append(" has failed...").append("\n").append(context.getFlags()).toString() , context.getFlag("all") instanceof Boolean);
+		}
+	}
+	
+	@Test
+	public void testBlankFlagArg() {
+		String argLine = "test -p  ha";
+		CommandContext context = CommandUtil.parseCommand(mockSender, argLine);
+		Map<String, Object> res = context.getFlags();
+		assertThat(res, allOf(hasSize(1), hasEntry("p", (Object) true)));
+		assertThat(context.getArguments(), allOf(hasItemInArray("test"), hasItemInArray("ha")));
+		assertTrue("Had Extra arguments!", context.getArgumentCount() < 3);
+	}
+	
+	@Test
+	public void testSingleFlagValue() {
+		String argLine = "test -p test";
+		CommandContext context = CommandUtil.parseCommand(mockSender, argLine);
+		Map<String, Object> res = context.getFlags();
+		assertThat(res, allOf(hasSize(1), hasEntry("p",(Object) "test")));
+	}
+	
+	@Test
+	public void testLongSingleFlagValue() {
+		String argLine = "test --player test";
+		CommandContext context = CommandUtil.parseCommand(mockSender, argLine);
+		Map<String, Object> res = context.getFlags();
+		assertThat(res, allOf(hasSize(1), hasEntry("player",(Object) "test")));
+	}
+	
+	@Test
+	public void testMultiFlag() {
+		String argLine = "oh -test";
+		CommandContext context = CommandUtil.parseCommand(mockSender, argLine);
+		
+		Map<String, Object> res = context.getFlags();
+		
+		assertThat(res, allOf(hasSize(3), //the repeated t is actually removed due to map limitations.
+				hasKey("t"),
+				hasKey("e"),
+				hasKey("s")
+				));
+	}
+	
+	@Test
+	public void testMultiLongFlag() {
+		String argLine = "dear --test --flag --three";
+		CommandContext context = CommandUtil.parseCommand(mockSender, argLine);
+		Map<String, Object> res = context.getFlags();
+		
+		assertThat(res, allOf(hasSize(3),
+				hasKey("test"),
+				hasKey("flag"),
+				hasKey("three")
+				));
+	}
+	
+	
+	
+	public static <V> Matcher<Map<String, V>> hasSize(final int size) {
+	    return new TypeSafeMatcher<Map<String, V>>() {
+	        public boolean matchesSafely(Map<String, V> kvMap) {
+	            return kvMap.size() == size;
+	        }
+
+	        public void describeTo(Description description) {
+	            description.appendText(" has ").appendValue(size).appendText(" key/value pairs");
+	        }
+	    };
 	}
 }

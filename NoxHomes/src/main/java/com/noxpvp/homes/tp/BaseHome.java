@@ -4,18 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-
-
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.bergerkiller.bukkit.common.internal.CommonPlugin;
-import com.bergerkiller.bukkit.common.internal.PermissionHandler;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.tp.WarpPoint;
+import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.NoxHomes;
 
 public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
@@ -35,7 +32,7 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 			SafeLocation warpPoint = SafeLocation.deserialize((Map<String, Object>) data.get("warpPoint"));
 			String name = data.get("name").toString();
 			
-			if (name.equals(DefaultHome.DEF_NAME))
+			if (name.equals(DefaultHome.PERM_NODE))
 				return new DefaultHome(owner, warpPoint.toLocation());
 			else
 				return new NamedHome(owner, name, warpPoint.toLocation());
@@ -52,7 +49,7 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 	}
 	
 	public BaseHome(String owner, Location location) {
-		permHandler = CommonPlugin.getInstance().getPermissionHandler();
+		permHandler = NoxHomes.getInstance().getPermissionHandler();
 		this.owner = owner;
 	}
 	

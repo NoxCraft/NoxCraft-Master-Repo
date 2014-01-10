@@ -170,8 +170,8 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	 */
 	public BaseHome getHome(String name) {
 		if (name == null)
-			if (homes_index.containsKey(DefaultHome.DEF_NAME))
-				return homes.get(homes_index.get(DefaultHome.DEF_NAME));
+			if (homes_index.containsKey(DefaultHome.PERM_NODE))
+				return homes.get(homes_index.get(DefaultHome.PERM_NODE));
 			else
 				return null;
 		else if (homes_index.containsKey(name))

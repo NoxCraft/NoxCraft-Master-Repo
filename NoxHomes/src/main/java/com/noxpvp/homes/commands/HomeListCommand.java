@@ -2,16 +2,16 @@ package com.noxpvp.homes.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
-import com.bergerkiller.bukkit.common.internal.CommonPlugin;
-import com.bergerkiller.bukkit.common.internal.PermissionHandler;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.CommandRunner;
+import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.tp.BaseHome;
@@ -27,48 +27,49 @@ public class HomeListCommand implements CommandRunner {
 	{
 		plugin = NoxHomes.getInstance();
 		manager = plugin.getHomeManager();
-		permHandler = CommonPlugin.getInstance().getPermissionHandler();
+		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
-	public boolean execute(CommandSender sender, Map<String, Object> flags, String[] args) {
-		if ((args.length > 0 && args[0].equalsIgnoreCase("help")) || flags.containsKey("h") || flags.containsKey("help"))
+	public boolean execute(ICommandContext context) {
+		if (context.hasFlag("h") || context.hasFlag("help"))
 			return false;
+		
+		CommandSender sender = context.getSender();
 		
 		if (manager == null)
 		{
 			manager = plugin.getHomeManager();
 			if (manager == null);
 			{
-				sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("error.null", "HomeManager reference in Home List Object.")));
+				MessageUtil.sendGlobalLocale(plugin, sender, "error.null", "HomeManager reference in Home List Object.");
 				return true;
 			}
 		}
 		
-		String player;
-		boolean own = false;
-		if (flags.containsKey("p") || flags.containsKey("player"))
-		{
-			if (flags.containsKey("p"))
-				player = flags.get("p").toString();
-			else
-				player = flags.get("player").toString();
-			
-			if (player == null || player.length() == 0)
-			{
-				sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("error.homes.list.others", (player == null)? "null": player)));
-				return true;
-			}
-			
-			if ((sender instanceof Player))
-				if (((Player)sender).getName().equals(player))
-					own = true;
-		} else if (sender instanceof Player){
-			player = ((Player)sender).getName();
-			own = true;
-		} else {
-			sender.sendMessage(plugin.getGlobalLocale("console.needplayer", "Use the -p \"PlayerName\" flag"));
+		String player = null;
+		
+		if (context.hasFlag("p"))
+			player = context.getFlag("p", String.class);
+		else if (context.hasFlag("player"))
+			player = context.getFlag("player", String.class);
+		else if (context.isPlayer())
+			player = context.getPlayer().getName();
+		
+		if ((player == null || player.length() == 0) && context.isPlayer()) {
+			MessageUtil.sendGlobalLocale(plugin, sender, "command.failed", "Player match failed. Player was " + ((player == null)? "null": "blank"));
+			return true;
+		} else if ((player == null || player.length() == 0)) {
+			MessageUtil.sendGlobalLocale(plugin, sender, "console.needplayer", "Use the -p \"PlayerName\" flag");
 			return true;
 		}
+		
+		boolean own = false;
+		if (player.equals(sender.getName()) && context.isPlayer())
+			own = true;
+		
+		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, LIST_PERM_NODE, (own ? "own" : "others"));
+		if (!permHandler.hasPermission(sender, perm))
+			throw new NoPermissionException(sender, perm, new StringBuilder("Not allowed to view list of ").append((own?"your own ":"other's ")).append("homes!").toString());
 		
 		List<BaseHome> homes = manager.getHomes(player);
 		
@@ -82,19 +83,13 @@ public class HomeListCommand implements CommandRunner {
 		{
 			for (BaseHome home : homes)
 				homeNames.add(home.getName());
-			homelist = StringUtil.join(",", homeNames);
+			homelist = StringUtil.combineNames(homeNames);
 		}
 		
 		if (own)
 			player = "own";
 		
-		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, LIST_PERM_NODE, (own ? "own" : "others"));
-		if (!permHandler.hasPermission(sender, perm))
-		{
-			sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("permission.denied", "Can not view other people's Homes!", perm)));
-			return true;
-		}
-		sender.sendMessage(plugin.getLocale("homes.list", player, homelist));//TODO: Prettify large lists.
+		MessageUtil.sendLocale(plugin, sender, "homes.list", player, homelist);//TODO: Prettify large lists.
 		return true;
 	}
 	
@@ -109,8 +104,7 @@ public class HomeListCommand implements CommandRunner {
 	}
 	
 	public void displayHelp(CommandSender sender) {
-		for (String line : getHelp())
-			sender.sendMessage(line);
+		MessageUtil.sendMessage(sender, getHelp()); 
 	}
 
 	public String getName() {

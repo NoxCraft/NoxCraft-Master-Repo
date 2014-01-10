@@ -11,22 +11,41 @@ import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.junit.*;
 import org.junit.runner.RunWith;
+import org.junit.runner.Runner;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.model.RunnerBuilder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.internal.runners.RunnerFactory;
+import org.powermock.core.PowerMockUtils;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import static org.mockito.Mockito.*;
-
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.utils.PermissionHandler;
+
+import org.powermock.api.mockito.PowerMockito;
 
 @RunWith(Parameterized.class)
-public class PlayerManagerTest{
+//@PrepareOnlyThisForTest(Bukkit.class)
+public class PlayerManagerTest {
 	static PlayerManager playerManager;
+	static PermissionHandler handler;
+	
+//	@Rule public PowerMockRule rule = new PowerMockRule();
+	
+	@Mock
+	static NoxCore corePlugin;
+	
 	static File temp;
 	@Mock static Server server;
 
@@ -51,17 +70,30 @@ public class PlayerManagerTest{
 	
 	@BeforeClass
 	public static void setupClass() throws Exception {
-		server = mock(Server.class);
+		if (Bukkit.getServer() != null)
+			server = Bukkit.getServer();
+		else {
+			server = mock(Server.class);
+		}
+			
 		
+		if (!Mockito.mockingDetails(server).isMock())
+			throw new IllegalStateException("Server is not mocked");
+		
+		Mockito.reset(server);
 		when(server.getLogger()).thenReturn(Logger.getLogger("minecraft"));
 		when(server.getName()).thenReturn("FakeServer");
 		when(server.getVersion()).thenReturn("1.6.4");
 		
 		when(server.getBukkitVersion()).thenReturn("FakeBukkit 1.6.4-R9000");
 
-		Bukkit.setServer(server);
+//		PowerMockito.mockStatic(Bukkit.class); 
+//		when(Bukkit.getServer()).thenReturn(server);
 		
-		playerManager = new PlayerManager(new FileConfiguration((temp = new File("playerdata"+File.separator+"config.yml")))){
+		corePlugin = mock(NoxCore.class);
+		when(corePlugin.getPermissionHandler()).thenReturn(handler);
+		
+		playerManager = new PlayerManager(new FileConfiguration((temp = new File("playerdata"+File.separator+"config.yml"))), corePlugin){
 			@Override
 			public ConfigurationNode getPlayerNode(String name) {
 				File f = new File("playerdata"+File.separatorChar+player+".yml");
@@ -78,6 +110,9 @@ public class PlayerManagerTest{
 		temp.deleteOnExit();
 		
 		NoxCore.setUseUserFile(multiFile);
+		
+		if (Bukkit.getServer() == null)
+			Bukkit.setServer(server);
 	}
 	
 	@Parameters
@@ -91,9 +126,6 @@ public class PlayerManagerTest{
 		temp = null;
 		
 		playerManager = null;
-		
-		reset(server);
-		
 	}
 	
 	@Test

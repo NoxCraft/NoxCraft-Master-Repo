@@ -48,9 +48,6 @@ public class HomeLimitManager implements Persistant {
 		
 		NoxPlayer p = getNoxPlayer(noxplayer);
 		
-		String world = p.getLastWorldName();
-		String player = p.getName();
-		
 		limit = getLimit(p);
 		
 		if (limit < 0)

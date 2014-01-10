@@ -1,88 +1,75 @@
 package com.noxpvp.homes.commands;
 
-import java.util.Map;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
-import com.bergerkiller.bukkit.common.internal.CommonPlugin;
-import com.bergerkiller.bukkit.common.internal.PermissionHandler;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.CommandRunner;
+import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.tp.BaseHome;
+import com.noxpvp.homes.tp.DefaultHome;
+import com.noxpvp.homes.tp.NamedHome;
 
 public class HomeCommand implements CommandRunner {
 	public static final String COMMAND_NAME = "home";
 	public static final String PERM_NODE = "home";
 	private HomeManager manager;
 	private NoxHomes plugin;
-	private PermissionHandler permHandler;
+	private final PermissionHandler permHandler;;
 	
 	public HomeCommand()
 	{
 		plugin = NoxHomes.getInstance();
-		permHandler = CommonPlugin.getInstance().getPermissionHandler();
+		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
-	public boolean execute(CommandSender sender, Map<String, Object> flags, String[] args) {
-		if (!(sender instanceof Player))
-		{
-			sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("console.onlyplayer")));
+	public boolean execute(ICommandContext context) {
+		
+		if (!context.isPlayer()) {
+			MessageUtil.sendGlobalLocale(plugin, context.getSender(), "console.onlyplayer");
 			return true;
 		}
+		Player sender = context.getPlayer();
 		
-		if ((args.length > 0 && args[0].equalsIgnoreCase("help")) || flags.containsKey("h") || flags.containsKey("help"))
-			displayHelp(sender);
-		
-		boolean own;
-		String playerFlag = null;
-		if (flags.containsKey("p"))
-			playerFlag = flags.get("p").toString();
-		else if (flags.containsKey("player"))
-			playerFlag = flags.get("player").toString();
-		
-		if (playerFlag == null)
-			own = true;
+		if (context.hasFlag("h") || context.hasFlag("help"))
+			return false; //Its caught anyway why repeat display help code...
+
+		String player = null, homeName = null;
+
+		if (context.hasFlag("p"))
+			player = context.getFlag("p", String.class);
+		else if (context.hasFlag("player"))
+			player = context.getFlag("player", String.class);
 		else
-			own = playerFlag.equals(sender.getName()) && sender instanceof Player;
+			player = context.getPlayer().getName(); //Impossible to NPE. If it does. We got problems..
 		
-		String homeName = null;
+		if (context.hasArgument(0))
+			homeName = context.getArgument(0);
 		
-		String playerName = null;
+		boolean own = sender.getName().equals(player);
 		
-		Player player = (Player) sender;
-		
-		if (own)
-			playerName = player.getName();
-		else
-			playerName = playerFlag;
-		
-		if (args.length > 0)
-			homeName = args[0];
-		
-		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, (own? ".": "others.") + (homeName==null ? "default": "named"));
+		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, (own? "": "others.") + (homeName==null ? DefaultHome.PERM_NODE: NamedHome.PERM_NODE));
 		if (!permHandler.hasPermission(sender, perm))
-		{
-			sender.sendMessage(plugin.getGlobalLocale("permission.denied", "Teleport to homes.", perm));
-			return true;
-		}
+			throw new NoPermissionException(sender, perm, new StringBuilder().append("Teleport to ").append((own?"your ":"others ")).append("homes.").toString());
 		
-		BaseHome home = manager.getHome(playerName, homeName);
+		BaseHome home = manager.getHome(player, homeName);
 		
-		if (home.tryTeleport(player))
-			player.sendMessage(StringUtil.ampToColor(plugin.getLocale("homes.home"+ (own?".own":""), playerName, homeName)));
+		if (home.tryTeleport(sender))
+			MessageUtil.sendLocale(plugin, sender, "homes.home"+ (own?".own":""), player, homeName);
 		else
-			player.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("commands.failed", "Could not teleport home.")));
+			MessageUtil.sendGlobalLocale(plugin, sender, "commands.failed", "Could not teleport home.");
 		
 		return true;
 	}
 
 	public void displayHelp(CommandSender sender) {
-		for (String line : getHelp())
-			sender.sendMessage(line);
+		MessageUtil.sendMessage(sender, getHelp());
 	}
 
 	public String getName() {

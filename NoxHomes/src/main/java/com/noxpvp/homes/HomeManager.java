@@ -192,5 +192,6 @@ public class HomeManager implements Persistant { //FIXME: Javadocs
 	 *            the player
 	 * @return the nox player
 	 */
-	private static NoxPlayer getNoxPlayer(String player) { return NoxCore.getInstance().getPlayerManager().getPlayer(player);} 
+	private static NoxPlayer getNoxPlayer(String player) { return NoxCore.getInstance().getPlayerManager().getPlayer(player);}
+
 }

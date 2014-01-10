@@ -1,15 +1,14 @@
 package com.noxpvp.homes.commands;
 
-import java.util.Map;
-
 import org.bukkit.command.CommandSender;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
-import com.bergerkiller.bukkit.common.internal.CommonPlugin;
-import com.bergerkiller.bukkit.common.internal.PermissionHandler;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.commands.DescriptiveCommandRunner;
+import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.homes.HomeImporter;
@@ -19,6 +18,7 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 	public static final String PERM_NODE = "import";
 	private HomeManager manager;
 	private NoxHomes plugin;
+	
 	private final PermissionHandler permHandler;
 	private String[] importerNames;
 	
@@ -27,9 +27,10 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 	{
 		if (NoxCore.getInstance() == null)
 			throw new RuntimeException("NoxCore plugin is not loaded! Do not use this class in other plugins please.");
+		
 		this.plugin = NoxHomes.getInstance();
 		manager = plugin.getHomeManager();
-		permHandler = CommonPlugin.getInstance().getPermissionHandler();
+		permHandler = NoxHomes.getInstance().getPermissionHandler();
 		
 		HomeImporter[] vals = HomeImporter.values();
 		importerNames = new String[vals.length];
@@ -42,13 +43,15 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 		return COMMAND_NAME;
 	}
 
-	public boolean execute(CommandSender sender, Map<String, Object> flags, String[] args) {
+	public boolean execute(ICommandContext context) {
+		CommandSender sender = context.getSender();
+		String[] args = context.getArguments();
 		if (manager == null)
 		{
 			manager = plugin.getHomeManager();
 			if (manager == null);
 			{
-				sender.sendMessage(StringUtil.ampToColor(plugin.getLocale("error.null", "HomeManager reference in Home List Object.")));
+				MessageUtil.sendGlobalLocale(plugin, sender, "error.null", "HomeManager reference in Home List Object.");
 				return true;
 			}
 		}
@@ -56,13 +59,13 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, "admin", PERM_NODE);
 		if (!permHandler.hasPermission(sender, perm))
 		{
-			sender.sendMessage(StringUtil.ampToColor(plugin.getLocale("permission.denied", "Can not import homes data.", perm)));
+			MessageUtil.sendGlobalLocale(plugin, sender, "permission.denied", "Can not import homes data.", perm);
 			return true;
 		}
 		
 		
 		
-		if (args.length < 1 || args[0].equalsIgnoreCase("help") || flags.containsKey("h") || flags.containsKey("help") || HomeImporter.valueOf(args[0]) == null)
+		if (args.length < 1 || args[0].equalsIgnoreCase("help") || context.hasFlag("h") || context.hasFlag("help") || HomeImporter.valueOf(args[0]) == null)
 		{
 			
 			MessageBuilder mb = new MessageBuilder();
@@ -73,7 +76,7 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 				mb.red(args[0]).append(" is not a valid importer.");
 			mb.blue("List of importers: ");
 			
-			mb.yellow("[").green(StringUtil.joinNames(importerNames)).yellow("]").newLine().aqua("/").append(COMMAND_NAME).append(" ").yellow("[").green(StringUtil.join("|", importerNames)).yellow("]");
+			mb.yellow("[").green(StringUtil.combineNames(importerNames)).yellow("]").newLine().aqua("/").append(COMMAND_NAME).append(" ").yellow("[").green(StringUtil.join("|", importerNames)).yellow("]");
 			
 			mb.send(sender);
 			return true;
@@ -86,9 +89,9 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 		if (porter == null)
 		{
 			mb.red("Importer: ").append(args[0]).append(". Does not exist.");
-			mb.newLine().aqua("The following importers are available. ").yellow("[").green(StringUtil.joinNames(importerNames)).yellow("]");
+			mb.newLine().aqua("The following importers are available. ").yellow("[").green(StringUtil.combineNames(importerNames)).yellow("]");
 		} else {
-			boolean success = porter.importData(flags.containsKey("e") || flags.containsKey("erase") || flags.containsKey("overwrite"));
+			boolean success = porter.importData(context.hasFlag("e") || context.hasFlag("erase") || context.hasFlag("overwrite"));
 			if (success)
 				mb.gold("Imported data from ").append(args[0]).append(" successfully!");
 			else
@@ -107,7 +110,7 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 		
 		mb.blue("/").append(HomeAdminCommand.COMMAND_NAME).append(" ").append(COMMAND_NAME).append(" ").yellow("[importerName]");
 		mb.newLine().blue("Importers: ").newLine();
-		mb.yellow("[").aqua("[").green(StringUtil.joinNames(importerNames)).aqua("]");
+		mb.aqua("[").green(StringUtil.combineNames(importerNames)).aqua("]");
 		
 		return mb.lines();
 	}
@@ -124,8 +127,7 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 	}
 
 	public void displayHelp(CommandSender sender) {
-		for (String line : getHelp())
-			sender.sendMessage(line);
+		MessageUtil.sendMessage(sender, getHelp());
 	}
 
 }

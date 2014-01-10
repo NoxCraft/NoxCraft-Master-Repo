@@ -23,6 +23,8 @@ import com.noxpvp.core.data.CoreBoard;
 
 public class PlayerManager implements Persistant {
 
+	private NoxCore plugin;
+	
 	protected FileConfiguration config;
 	
 	private Map<String, CoreBar> coreBars = new HashMap<String, CoreBar>();
@@ -30,13 +32,14 @@ public class PlayerManager implements Persistant {
 	private Map<String, NoxPlayer> players;
 	
 	public PlayerManager() {
-		this(new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml")));
+		this(new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml")), NoxCore.getInstance());
 		config = new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml"));
 		players = new HashMap<String, NoxPlayer>();
 	}
 	
-	public PlayerManager(FileConfiguration conf)
+	public PlayerManager(FileConfiguration conf, NoxCore plugin)
 	{
+		this.plugin = plugin;
 		this.config = conf;
 		players = new HashMap<String, NoxPlayer>();
 	}
@@ -100,13 +103,7 @@ public class PlayerManager implements Persistant {
 	 */
 	public NoxPlayer getPlayer(String name)
 	{
-		if (players.containsKey(name))
-			return players.get(name);
-		else
-		{
-			loadOrCreate(name);
-			return players.get(name);
-		}
+			return loadOrCreate(name);
 	}
 	
 	/**
@@ -386,4 +383,6 @@ public class PlayerManager implements Persistant {
 		
 		this.coreBoards.remove(name); return this;
 	}
+	
+	public NoxCore getPlugin() { return plugin; }
 }

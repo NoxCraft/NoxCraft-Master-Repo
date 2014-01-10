@@ -1,7 +1,5 @@
 package com.noxpvp.core.commands;
 
-import java.util.Map;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,7 +15,8 @@ public class CoreCommand implements CommandRunner {
 		return new String[0];
 	}
 
-	public boolean execute(CommandSender sender, Map<String, Object> flags, String[] args) {
+	public boolean execute(ICommandContext context) {
+		CommandSender sender = context.getSender();
 		String m = new StringBuilder().append(ChatColor.RED).append("Command is not implemented yet..").toString();
 		if (!(sender instanceof Player))
 			sender.sendMessage(ChatColor.stripColor(m));

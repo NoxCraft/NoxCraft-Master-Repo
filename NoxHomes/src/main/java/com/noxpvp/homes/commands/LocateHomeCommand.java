@@ -1,10 +1,10 @@
 package com.noxpvp.homes.commands;
 
-import java.util.Map;
-
 import org.bukkit.command.CommandSender;
 
 import com.noxpvp.core.commands.CommandRunner;
+import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.utils.MessageUtil;
 
 
 public class LocateHomeCommand implements CommandRunner {
@@ -15,17 +15,16 @@ public class LocateHomeCommand implements CommandRunner {
 	}
 
 	public String[] getHelp() {
-		return new String[0];
+		return new String[] {"THIS COMMAND IS NOT IMPLEMENTED" };
 	}
 	
-	public boolean execute(CommandSender sender, Map<String, Object> flags, String[] args) {
-		// TODO Auto-generated method stub
+	public boolean execute(ICommandContext context) {
+		displayHelp(context.getSender());
 		return false;
 	}
 
 	public void displayHelp(CommandSender sender) {
-		for (String line : getHelp())
-			sender.sendMessage(line);
+		MessageUtil.sendMessage(sender, getHelp());
 	}
 
 }

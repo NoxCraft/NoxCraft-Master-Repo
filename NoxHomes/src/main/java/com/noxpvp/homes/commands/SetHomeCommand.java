@@ -1,16 +1,16 @@
 package com.noxpvp.homes.commands;
 
-import java.util.Map;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
-import com.bergerkiller.bukkit.common.internal.CommonPlugin;
-import com.bergerkiller.bukkit.common.internal.PermissionHandler;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.commands.CommandRunner;
+import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.tp.BaseHome;
@@ -22,14 +22,14 @@ public class SetHomeCommand implements CommandRunner {
 	public static final String PERM_NODE = "sethome";
 	
 	private HomeManager manager;
-	private PermissionHandler permHandler;
+	private final PermissionHandler permHandler;;
 	private NoxHomes plugin;
 	
 	public SetHomeCommand()
 	{
 		plugin = NoxHomes.getInstance();
 		manager = plugin.getHomeManager();
-		permHandler = CommonPlugin.getInstance().getPermissionHandler();
+		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
 	public String[] getHelp() {
@@ -41,64 +41,54 @@ public class SetHomeCommand implements CommandRunner {
 		return mb.lines();
 	}
 	
-	public boolean execute(CommandSender sender, Map<String, Object> flags, String[] args) {
-		if (!(sender instanceof Player))
+	public boolean execute(ICommandContext context) {
+		if (!context.isPlayer())
 		{
-			sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("console.onlyplayer")));
+			MessageUtil.sendGlobalLocale(plugin, context.getSender(), "console.onlyplayer");
 			return true;
 		}
 		
-		if ((args.length > 0 && args[0].equalsIgnoreCase("help")) || flags.containsKey("h") || flags.containsKey("help"))
+		Player sender = context.getPlayer();
+		
+		if (context.hasFlag("h") || context.hasFlag("help"))
 			displayHelp(sender);
 		
-		boolean own;
-		String playerFlag = null;
-		if (flags.containsKey("p"))
-			playerFlag = flags.get("p").toString();
-		else if (flags.containsKey("player"))
-			playerFlag = flags.get("player").toString();
+		String player = null;
 		
-		if (playerFlag == null)
-			own = true;
+		if (context.hasFlag("p"))
+			player = context.getFlag("p", String.class);
+		else if (context.hasFlag("player"))
+			player = context.getFlag("player", String.class);
 		else
-			own = playerFlag.equals(sender.getName()) && sender instanceof Player;
+			player = sender.getName();
 		
+		boolean own = player.equals(sender.getName());
 		String homeName = null;
 		
-		String playerName = null;
+		if (context.hasArgument(0))
+			homeName = context.getArgument(0);
 		
-		Player player = (Player) sender;
-		
-		if (own)
-			playerName = player.getName();
-		else
-			playerName = playerFlag;
-		
-		if (args.length > 0)
-			homeName = args[0];
-		
-		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, (own? ".": "others.") + (homeName==null ? "default": "named"));
+		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, (own? "": "others.") + (homeName==null ? "default": "named"));
 		if (!permHandler.hasPermission(sender, perm))
-		{
-			sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("permission.denied", "Teleport to homes.", perm)));
-			return true;
-		}
+			throw new NoPermissionException(sender, perm, new StringBuilder("Set New Homes for ").append((own?"self":"others")).append(".").toString());
+
 		BaseHome newHome = null;
 		if (homeName == null)
-			newHome = new DefaultHome(playerName, player);
+			newHome = new DefaultHome(player, sender);
 		else
-			newHome = new NamedHome(playerName, homeName, player);
+			newHome = new NamedHome(player, homeName, sender);
 		
 		boolean success = false;
+		
 		if (own)
 		{
-			if (plugin.getLimitsManager().canAddHome(playerName))
+			if (plugin.getLimitsManager().canAddHome(player))
 			{
 				manager.addHome(newHome);
-				
-				success = true;
+				success = manager.getHome(player, homeName) != null;
 			} else {
-				sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("command.failed", "You already have the maximum amount of homes allowed.")));
+				MessageUtil.sendGlobalLocale(plugin, sender, "command.failed", "You already have the maximum amount of homes allowed.");
+				return true;
 			}
 		}
 		else
@@ -106,9 +96,11 @@ public class SetHomeCommand implements CommandRunner {
 		
 		if (success) {
 			SafeLocation l = new SafeLocation(newHome.getLocation());
-			sender.sendMessage(StringUtil.ampToColor(plugin.getLocale("homes.sethome"+(own?".own":""), playerName, homeName, String.format(
+			MessageUtil.sendLocale(plugin, sender, "homes.sethome"+(own?".own":""), player, homeName, String.format(
 				"x=%1$s y=%2$s z=%3$s on world %4$s", l.getX(), l.getY(), l.getZ(), l.getWorldName()
-				))));
+				));
+		} else {
+			MessageUtil.sendGlobalLocale(plugin, sender, "command.failed", "Home never stored in memory...");
 		}
 		
 		return true;
@@ -116,8 +108,7 @@ public class SetHomeCommand implements CommandRunner {
 	
 	public void displayHelp(CommandSender sender)
 	{
-		for (String line : getHelp())
-			sender.sendMessage(line);
+		MessageUtil.sendMessage(sender, getHelp());
 	}
 
 	public String getName() {

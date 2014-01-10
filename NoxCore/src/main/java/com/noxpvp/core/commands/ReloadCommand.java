@@ -1,7 +1,5 @@
 package com.noxpvp.core.commands;
 
-import java.util.Map;
-
 import org.bukkit.command.CommandSender;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
@@ -9,9 +7,12 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.MasterReloader;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.reloader.Reloader;
+import com.noxpvp.core.utils.MessageUtil;
 
 public class ReloadCommand implements DescriptiveCommandRunner {
-	public static final String COMMAND_NAME = "reload";
+	public static final String COMMAND_NAME = "reloader";
+	public static final String PERM_NODE = "nox.reload";
+	
 	private NoxCore core;
 	private static final String ENTER_TREE = ">";
 	
@@ -54,33 +55,44 @@ public class ReloadCommand implements DescriptiveCommandRunner {
 		return mb.lines();
 	}
 
-	public boolean execute(CommandSender sender, Map<String, Object> flags, String[] args) {
-		if (flags.containsKey("?") || flags.containsKey("help") || flags.containsKey("h"))
+	public boolean execute(ICommandContext context) {
+		
+		CommandSender sender = context.getSender();
+		String[] args = context.getArguments();
+		
+		if (context.getFlag("?", false)|| context.getFlag("h", false)|| context.getFlag("help", false) || args.length == 0)
 		{
 			displayHelp(sender);
 			return true;
 		}
 		
-		String module = StringUtil.join("\\", args);
-//		if (module.equals(""))
-//		{
-//			displayHelp(sender);
-//			return true;
-//		}
 		
-		boolean all = module.endsWith("*");
+		
+		String module = null;
+		if (args.length > 1)
+			module = StringUtil.join(":", args);
+		else if (args.length == 1)
+			module = args[0];
+		
+		boolean all = false;
+		if (module != null)
+			all = module.endsWith("*");
+		
 		if (all)
 			module = module.substring(0, module.length()-1);
 		
-		Reloader r = core.getMasterReloader().getModule(module);
+		Reloader r = null;
+		if (module == "" || module.length() == 0 && all)
+			r = core.getMasterReloader();
+		else
+			r = core.getMasterReloader().getModule(module);
 		
 		try {
 			if (all)
 			{
 				r.reload();
 				r.reloadAll();
-				MessageBuilder mb = new MessageBuilder(StringUtil.ampToColor(core.getGlobalLocale("command.successful", "Reloaded modules...")));
-				mb.newLine();
+				MessageBuilder mb = new MessageBuilder(StringUtil.ampToColor(core.getGlobalLocale("command.successful", "Reloaded modules ->")));
 				nextTree(mb, r, 0);
 				sender.sendMessage(mb.lines());
 			}
@@ -98,13 +110,11 @@ public class ReloadCommand implements DescriptiveCommandRunner {
 	}
 
 	public void displayHelp(CommandSender sender) {
-		for (String line : getHelp())
-			sender.sendMessage(line);
+		MessageUtil.sendMessage(sender, getHelp());
 	}
 
 	public String[] getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[0];
 	}
 
 	public String[] getFlags() {

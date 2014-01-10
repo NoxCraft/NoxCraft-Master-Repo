@@ -47,7 +47,7 @@ public class ExpandingDamageRunnable extends BukkitRunnable{
 			int y = (int) a.getLocation().getY();
 			int bz = (int) a.getLocation().getZ();
 			
-			List<Location> blcks = new ArrayList<>();
+			List<Location> blcks = new ArrayList<Location>();
 			
 			for (int x = bx - i; x <= bx + i; x++) {
 				

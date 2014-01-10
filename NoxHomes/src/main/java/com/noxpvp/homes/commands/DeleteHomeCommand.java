@@ -1,15 +1,16 @@
 package com.noxpvp.homes.commands;
 
-import java.util.Map;
-
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
-import com.bergerkiller.bukkit.common.internal.CommonPlugin;
-import com.bergerkiller.bukkit.common.internal.PermissionHandler;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.CommandRunner;
+import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.tp.BaseHome;
@@ -25,65 +26,57 @@ public class DeleteHomeCommand implements CommandRunner {
 	{
 		plugin = NoxHomes.getInstance();
 		manager = plugin.getHomeManager();
-		permHandler = CommonPlugin.getInstance().getPermissionHandler();
+		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
 	
-	public boolean execute(CommandSender sender, Map<String, Object> flags, String[] args) {
-		if ((args.length > 0 && args[0].equalsIgnoreCase("help")) || flags.containsKey("h") || flags.containsKey("help"))
+	public boolean execute(ICommandContext context) {
+		if (context.hasFlag("h") || context.hasFlag("help"))
 		{
-			displayHelp(sender);
+			displayHelp(context.getSender());
+			if (!context.isPlayer())
+				MessageUtil.sendMessage(context.getSender(), "Use (-p | --player) to specify a player to use this on.");
 			return true;
 		}
 		
-		boolean own;
-		String playerFlag = null;
-		if (flags.containsKey("p"))
-			playerFlag = flags.get("p").toString();
-		else if (flags.containsKey("player"))
-			playerFlag = flags.get("player").toString();
+		Player player;
 		
-		if (playerFlag == null)
-			own = true;
+		if (context.hasFlag("p"))
+			player = Bukkit.getPlayer(context.getFlag("p", String.class));
+		else if (context.hasFlag("player"))
+			player = Bukkit.getPlayer(context.getFlag("player", String.class));
 		else
-			own = playerFlag.equals(sender.getName()) && sender instanceof Player;
+			player = (context.isPlayer())? context.getPlayer() : null;
+			
+		if (player == null)
+		{
+			MessageUtil.sendGlobalLocale(plugin, context.getSender(), "console.needplayer", "To delete a home.");
+			return true;
+		}
+		
+		boolean own = player.equals(context.getSender());
 		
 		String homeName = null;
+		if (context.hasArgument(0))
+			homeName = context.getArgument(0);
 		
-		String playerName = null;
-		if (own && sender instanceof Player)
-			playerName = sender.getName();
-		else if (!own)
-			playerName = playerFlag;
-		else
-		{
-			sender.sendMessage(StringUtil.ampToColor(plugin.getGlobalLocale("console.needplayer", "To delete a home.")));
-			return true;
-		}
+		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, (own? "": "others.") + (homeName==null ? "default": "named"));
 		
-		if (args.length > 0)
-			homeName = args[0];
+		if (!permHandler.hasPermission(context.getSender(), perm))
+			throw new NoPermissionException(context.getSender(), perm, new StringBuilder().append("Delete ").append(((own)?"Own":"Others")).append(" homes.").toString());
+
+		BaseHome home = manager.getHome(player.getName(), homeName);
 		
-		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, (own? ".": "others.") + (homeName==null ? "default": "named"));
+		if (home != null)
+			manager.removeHome(home);
 		
-		if (!permHandler.hasPermission(sender, perm))
-		{
-			sender.sendMessage(plugin.getGlobalLocale("permission.denied", "Delete homes", perm));
-			return true;
-		}
-		
-		BaseHome home = manager.getHome(playerName, homeName);
-		
-		manager.removeHome(home);
-		sender.sendMessage(StringUtil.ampToColor(plugin.getLocale("homes.delhome"+((own)?".own":""), playerName, homeName)));
-		
+		MessageUtil.sendLocale(plugin, context.getSender(), "homes.delhome"+((own)?".own":""), player.getName(), homeName);
 		return true;
 	}
 	
 	public void displayHelp(CommandSender sender)
 	{
-		for (String line : getHelp())
-			sender.sendMessage(line);
+		MessageUtil.sendMessage(sender, getHelp());
 	}
 	
 	public String[] getHelp()
@@ -91,7 +84,8 @@ public class DeleteHomeCommand implements CommandRunner {
 		MessageBuilder mb = new MessageBuilder();
 		mb.yellow("[").aqua("NoxHomes Delete Home Command").yellow("]").newLine();
 		mb.blue("/").append(COMMAND_NAME).yellow(" [").aqua("name").yellow("]").newLine();
-		mb.aqua("Flags: ").yellow("p|player").aqua(" specifies remote player to delete home");
+		mb.aqua("Flags: ").newLine().yellow("p|player").aqua(" specifies remote player to delete home").newLine();
+		mb.yellow("h|help").aqua(" displays this help message.");
 		return mb.lines();
 	}
 

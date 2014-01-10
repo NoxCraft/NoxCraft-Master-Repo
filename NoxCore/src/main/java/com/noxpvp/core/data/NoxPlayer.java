@@ -13,24 +13,27 @@ import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
-import com.bergerkiller.bukkit.common.internal.PermissionHandler;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.VaultAdapter;
+import com.noxpvp.core.utils.PermissionHandler;
 
 public class NoxPlayer implements Persistant, NoxPlayerAdapter {
-	private final String name;
-	private ConfigurationNode temp_data = new ConfigurationNode();
-	private ConfigurationNode persistant_data = null;
-	private PlayerManager manager;
-	
 	private WeakHashMap<String, CoolDown> cd_cache;
 	private List<CoolDown> cds;
+	private PlayerManager manager;
+	private final String name;
+	
+	private final PermissionHandler permHandler;
+	private ConfigurationNode persistant_data = null;
+	
+	private ConfigurationNode temp_data = new ConfigurationNode();
 	
 	public NoxPlayer(NoxPlayer player)
 	{
+		permHandler = player.permHandler;
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
 		this.name = player.name;
@@ -41,6 +44,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	public NoxPlayer(PlayerManager mn, String name) {
+		permHandler = mn.getPlugin().getPermissionHandler();
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
 		manager = mn;
@@ -48,96 +52,31 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		load();
 	}
 	
-	private PermissionHandler permHandler;
-	
-	public String getName(){
-		return name;
+	public boolean addCoolDown(String name, long length)
+	{
+		if (cd_cache.containsKey(name) && !cd_cache.get(name).expired())
+			return false;
+		CoolDown cd;
+		
+		long time = 0;
+		if (NoxCore.isUsingNanoTime())
+			time = System.nanoTime() + length;
+		
+		cd = new CoolDown(name, time, NoxCore.isUsingNanoTime());
+		
+		cds.add(cd);
+		cd_cache.put(cd.getName(), cd);
+		return true;
 	}
 	
-	public String getFullName() {
-		StringBuilder text = new StringBuilder();
-		
-		text.append(VaultAdapter.chat.getGroupPrefix(getLastWorld(), getMainGroup()) + getPlayer().getName());
-		
-		return text.toString();
+	public void decrementVote() {
+		setVotes(getVotes() - 1);
 	}
 	
-	private String getMainGroup() {
-	    
-	    String[] groups = VaultAdapter.permission.getPlayerGroups(getPlayer());
-	    LinkedList<String> groupList = new LinkedList<String>(null);// put local group list here
-	    
-	    if (groups.length < 0) return null;
-	    
-	    int ind = 100;
-	    String finalGroup = null;
-	    
-	    for (String group : groups) {
-	            if (groupList.indexOf(group) < ind) {
-	                    ind = groupList.indexOf(group);
-	                    finalGroup = group;
-	            }
-	    }
-	    
-	    return finalGroup;
+	public List<CoolDown> getCoolDowns() {
+		return cds;
 	}
 
-	public Location getLastDeathLocation()
-	{
-		SafeLocation l = null;
-		return ((l=this.persistant_data.get("last.death.location", SafeLocation.class))==null?null:l.toLocation()); //Nice handy work here!
-	}
-	
-	public long getLastDeathTS()
-	{
-		return (this.persistant_data.get("last.death.timestamp", (long)0));
-	}
-	
-	public void setLastDeathLocation(Location loc)
-	{
-		this.persistant_data.set("last.death.location", new SafeLocation(loc));
-	}
-	
-	public void setLastDeathTS(long stamp)
-	{
-		this.persistant_data.set("last.death.timestamp", stamp);
-	}
-	
-	public void setLastDeathTS()
-	{
-		setLastDeathTS((NoxCore.isUsingNanoTime()?System.nanoTime(): System.currentTimeMillis()));
-	}
-	
-	public World getLastWorld() {
-		World w = null;
-		if (getPlayer() != null)
-			w = getPlayer().getWorld();
-		else
-			w = Bukkit.getWorld(persistant_data.get("last.world", String.class, "NONE"));
-		return w;
-	}
-	
-	public String getLastWorldName() {
-		World w = getLastWorld();
-		if (w != null)
-			return w.getName();
-		return persistant_data.get("last.world", String.class, "NONE");
-	}
-	
-	public NoxPlayer getNoxPlayer() { return this; }
-	
-	public final ConfigurationNode getPersistantData() { return persistant_data;}
-	public final ConfigurationNode getTempData() { return temp_data; }
-	
-	public final String getPlayerName(){ return name;}
-	
-	public OfflinePlayer getOfflinePlayer() { return Bukkit.getOfflinePlayer(getPlayerName());}
-	
-	public Player getPlayer() { return Bukkit.getPlayerExact(getPlayerName()); }
-	
-	public Double getMoney() { return VaultAdapter.economy.getBalance(getPlayerName(), getLastWorldName()); }
-	public Double getMoney(String worldName) { return VaultAdapter.economy.getBalance(getPlayerName(), worldName); }
-	
 	public long getFirstJoin() {
 		return getFirstJoin(true);
 	}
@@ -148,6 +87,25 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			return persistant_data.get("first.join", long.class);
 		else
 			return getOfflinePlayer().getFirstPlayed();
+	}
+	
+	public String getFullName() {
+		StringBuilder text = new StringBuilder();
+		
+		text.append(VaultAdapter.chat.getGroupPrefix(getLastWorld(), getMainGroup()) + getPlayer().getName());
+		
+		return text.toString();
+	}
+	
+	public Location getLastDeathLocation()
+	{
+		SafeLocation l = null;
+		return ((l=this.persistant_data.get("last.death.location", SafeLocation.class))==null?null:l.toLocation()); //Nice handy work here!
+	}
+	
+	public long getLastDeathTS()
+	{
+		return (this.persistant_data.get("last.death.timestamp", (long)0));
 	}
 	
 	public long getLastJoin() {
@@ -169,34 +127,63 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			return persistant_data.get("last.location", SafeLocation.class);
 	}
 	
-	public void saveLastLocation(){
+	public World getLastWorld() {
+		World w = null;
 		if (getPlayer() != null)
-			persistant_data.set("last.location", new SafeLocation(getPlayer().getLocation()));
+			w = getPlayer().getWorld();
+		else
+			w = Bukkit.getWorld(persistant_data.get("last.world", String.class, "NONE"));
+		return w;
+	}
+	public String getLastWorldName() {
+		World w = getLastWorld();
+		if (w != null)
+			return w.getName();
+		return persistant_data.get("last.world", String.class, "NONE");
 	}
 	
-	public void saveLastLocation(Player player){
-		if (!player.getName().equals(name))
-			throw new IllegalArgumentException("Must be the same player as object holder");
-		
-		persistant_data.set("last.location", new SafeLocation(player.getLocation()));
+	private String getMainGroup() {
+	    
+	    String[] groups = VaultAdapter.permission.getPlayerGroups(getPlayer());
+	    LinkedList<String> groupList = new LinkedList<String>();//: put local group list here
+	    
+	    if (groups.length < 0) return null;
+	    
+	    int ind = 100;
+	    String finalGroup = null;
+	    
+	    for (String group : groups) {
+	            if (groupList.indexOf(group) < ind) {
+	                    ind = groupList.indexOf(group);
+	                    finalGroup = group;
+	            }
+	    }
+	    
+	    return finalGroup;
 	}
+	
+	public Double getMoney() { return VaultAdapter.economy.getBalance(getPlayerName(), getLastWorldName()); }
+	
+	public Double getMoney(String worldName) { return VaultAdapter.economy.getBalance(getPlayerName(), worldName); }
+	
+	public String getName(){
+		return name;
+	}
+	public NoxPlayer getNoxPlayer() { return this; }
+	
+	public OfflinePlayer getOfflinePlayer() { return Bukkit.getOfflinePlayer(getPlayerName());}
+	
+	public final ConfigurationNode getPersistantData() { return persistant_data;}
+	
+	public Player getPlayer() { return Bukkit.getPlayerExact(getPlayerName()); }
+	
+	public final String getPlayerName(){ return name;}
+	
+	public final ConfigurationNode getTempData() { return temp_data; }
 	
 	public int getVotes()
 	{
 		return persistant_data.get("vote-count", (int)0);
-	}
-	
-	public void setVotes(int amount)
-	{
-		persistant_data.set("vote-count", amount);
-	}
-	
-	public void incrementVote() {
-		setVotes(getVotes() + 1);
-	}
-	
-	public void decrementVote() {
-		setVotes(getVotes() - 1);
 	}
 	
 	public boolean hasPermission(String permNode)
@@ -216,16 +203,27 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 				return false;
 		return true;
 	}
-
-	public void save() {
-		persistant_data.set("cooldowns", getCoolDowns());
-		if (persistant_data instanceof FileConfiguration)
-		{
-			FileConfiguration configNode = (FileConfiguration) persistant_data;
-			configNode.save();
-		}
+	
+	public void incrementVote() {
+		setVotes(getVotes() + 1);
 	}
-
+	
+	public boolean isCooldownActive(String name)
+	{
+		if (cd_cache.containsKey(name))
+			return cd_cache.get(name).expired();
+		else
+			return false;
+	}
+	
+	public boolean isCooldownExpired(String name)
+	{
+		if (cd_cache.containsKey(name))
+			return cd_cache.get(name).expired();
+		else
+			return true;
+	}
+	
 	public void load() {
 		if (persistant_data == null)
 			persistant_data = manager.getPlayerNode(name);
@@ -247,26 +245,6 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			cd_cache.put(cd.getName(), cd);
 	}
 
-	public List<CoolDown> getCoolDowns() {
-		return cds;
-	}
-	
-	public boolean isCooldownActive(String name)
-	{
-		if (cd_cache.containsKey(name))
-			return cd_cache.get(name).expired();
-		else
-			return false;
-	}
-	
-	public boolean isCooldownExpired(String name)
-	{
-		if (cd_cache.containsKey(name))
-			return cd_cache.get(name).expired();
-		else
-			return true;
-	}
-	
 	public void removeCooldDown(String name)
 	{
 		if (cd_cache.containsKey(name))
@@ -275,21 +253,45 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			cd_cache.remove(name);
 		}
 	}
+
+	public void save() {
+		persistant_data.set("cooldowns", getCoolDowns());
+		if (persistant_data instanceof FileConfiguration)
+		{
+			FileConfiguration configNode = (FileConfiguration) persistant_data;
+			configNode.save();
+		}
+	}
 	
-	public boolean addCoolDown(String name, long length)
+	public void saveLastLocation(){
+		if (getPlayer() != null)
+			persistant_data.set("last.location", new SafeLocation(getPlayer().getLocation()));
+	}
+
+	public void saveLastLocation(Player player){
+		if (!player.getName().equals(name))
+			throw new IllegalArgumentException("Must be the same player as object holder");
+		
+		persistant_data.set("last.location", new SafeLocation(player.getLocation()));
+	}
+	
+	public void setLastDeathLocation(Location loc)
 	{
-		if (cd_cache.containsKey(name) && !cd_cache.get(name).expired())
-			return false;
-		CoolDown cd;
-		
-		long time = 0;
-		if (NoxCore.isUsingNanoTime())
-			time = System.nanoTime() + length;
-		
-		cd = new CoolDown(name, time, NoxCore.isUsingNanoTime());
-		
-		cds.add(cd);
-		cd_cache.put(cd.getName(), cd);
-		return true;
+		this.persistant_data.set("last.death.location", new SafeLocation(loc));
+	}
+	
+	public void setLastDeathTS()
+	{
+		setLastDeathTS((NoxCore.isUsingNanoTime()?System.nanoTime(): System.currentTimeMillis()));
+	}
+	
+	public void setLastDeathTS(long stamp)
+	{
+		this.persistant_data.set("last.death.timestamp", stamp);
+	}
+	
+	public void setVotes(int amount)
+	{
+		persistant_data.set("vote-count", amount);
 	}
 }

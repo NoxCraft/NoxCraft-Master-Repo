@@ -6,13 +6,17 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.Java15Compat;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
+import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.commands.DescriptiveCommandRunner;
+import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.utils.MessageUtil;
 
 public class HomeAdminCommand implements CommandRunner {
-	public static final String COMMAND_NAME = "homeadmin";
+	public static final String COMMAND_NAME = "noxhomes";
 	
 	private Map<String, DescriptiveCommandRunner> subCommands = new HashMap<String, DescriptiveCommandRunner>();;
 	
@@ -28,14 +32,17 @@ public class HomeAdminCommand implements CommandRunner {
 		return COMMAND_NAME;
 	}
 
-	public boolean execute(CommandSender sender, Map<String, Object> flags, String[] args) {
+	public boolean execute(ICommandContext context) {
+		String[] args = context.getArguments();
+		
+		CommandSender sender = context.getSender();
+		
 		if (args.length > 0)
 		{
 			if (isSubCommand(args[0]))
 			{
-				String[] newArgs = new String[args.length-1];
-				System.arraycopy(args, 1, newArgs, 0, newArgs.length);
-				if (!subCommands.get(args[0]).execute(sender, flags, newArgs))
+				String[] newArgs = Java15Compat.Arrays_copyOfRange(args, 1, args.length-1);
+				if (!subCommands.get(args[0]).execute(new CommandContext(sender, context.getFlags(), newArgs)))
 					displayHelp(sender);
 			} else {
 				displayHelp(sender);
@@ -49,8 +56,7 @@ public class HomeAdminCommand implements CommandRunner {
 	
 	public void displayHelp(CommandSender sender)
 	{
-		for(String line : getHelp())
-			sender.sendMessage(line);
+		MessageUtil.sendMessage(sender, getHelp());
 	}
 	
 	protected int addSubCommands(DescriptiveCommandRunner... runners)

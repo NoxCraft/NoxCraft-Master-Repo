@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.noxpvp.core.MasterReloader;
-
 public abstract class BaseReloader implements Reloader {
 	protected Map<String, Reloader> reloaders;
 	private final String name;
@@ -79,13 +77,13 @@ public abstract class BaseReloader implements Reloader {
 	 * Fetches the specified Reloader Module.
 	 * <br/><br/>
 	 * <b>Remember to null check the return value. Value may be null</b>
-	 * @param path - Name of the module to fetch. '.' denotes a path.
+	 * @param path - Name of the module to fetch. ':' denotes a path.
 	 * @return Reloader object or null if module does not exist.
 	 */
 	public Reloader getModule(String path) {
 		Reloader section = this;
 		int i1 = -1, i2;
-		while ((i1 = path.indexOf('\\', i2 = i1 + 1)) != -1) {
+		while ((i1 = path.indexOf(':', i2 = i1 + 1)) != -1) {
 			section = section.getModule(path.substring(i2, i1));
 			if (section == null)
 				return null;

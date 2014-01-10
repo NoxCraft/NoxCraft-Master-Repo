@@ -1,14 +1,14 @@
 package com.noxpvp.homes.commands;
 
-import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.command.CommandSender;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
-import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.commands.DescriptiveCommandRunner;
+import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
 
@@ -17,23 +17,28 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 	public static final String PERM_NODE = "wipe.homes";
 	private static final Random r = new Random();
 	private HomeManager manager;
+	private NoxHomes plugin;
 	
 	private String key;
 	private String[] helpLines;
 	
 	public HomeAdminWipeCommand() {
+		plugin = NoxHomes.getInstance();
 		key = getNextKey();
 		
 		updateHelp();
 		
-		manager = NoxHomes.getInstance().getHomeManager();
+		manager = plugin.getHomeManager();
 	}
 	
 	public String getName() {
 		return COMMAND_NAME;
 	}
 
-	public boolean execute(CommandSender sender, Map<String, Object> flags, String[] args) {
+	public boolean execute(ICommandContext context) {
+		String[] args = context.getArguments();
+		CommandSender sender = context.getSender();
+		
 		boolean wiped = false;
 		if (args.length < 1)
 			return false;
@@ -54,14 +59,11 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 		if (wiped)
 		{
 			key = getNextKey();
-			String l = NoxCore.getInstance().getGlobalLocale("command.successful", "Wiped home data.");
-			
-			sender.sendMessage(StringUtil.ampToColor(l));
+			MessageUtil.sendGlobalLocale(plugin, sender, "command.successful", "Wiped home data.");
 			
 			updateHelp();
 		} else {
-			String l = NoxCore.getInstance().getGlobalLocale("command.failed", "Could not wipe data.");
-			sender.sendMessage(StringUtil.ampToColor(l));
+			MessageUtil.sendGlobalLocale(plugin, sender, "command.failed", "Could not wipe data.");
 		}
 		return true;
 	}
@@ -93,8 +95,7 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 	}
 
 	public void displayHelp(CommandSender sender) {
-		for (String line : getHelp())
-			sender.sendMessage(line);
+		MessageUtil.sendMessage(sender, getHelp());
 	}
 	
 }
