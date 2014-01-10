@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.CommandRunner;
-import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.core.utils.PermissionHandler;
@@ -17,7 +17,7 @@ import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.tp.BaseHome;
 
 public class HomeListCommand implements CommandRunner {
-	public static final String COMMAND_NAME = "listhomes";
+	public static final String COMMAND_NAME = "homes";
 	private final PermissionHandler permHandler;
 	private NoxHomes plugin;
 	public static final String LIST_PERM_NODE = "list";

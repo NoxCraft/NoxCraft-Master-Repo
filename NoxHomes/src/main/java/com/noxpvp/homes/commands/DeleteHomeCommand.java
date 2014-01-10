@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.CommandRunner;
-import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.core.utils.PermissionHandler;
@@ -30,7 +30,7 @@ public class DeleteHomeCommand implements CommandRunner {
 	}
 	
 	
-	public boolean execute(ICommandContext context) {
+	public boolean execute(CommandContext context) {
 		if (context.hasFlag("h") || context.hasFlag("help"))
 		{
 			displayHelp(context.getSender());

@@ -55,7 +55,7 @@ public class ReloadCommand implements DescriptiveCommandRunner {
 		return mb.lines();
 	}
 
-	public boolean execute(ICommandContext context) {
+	public boolean execute(CommandContext context) {
 		
 		CommandSender sender = context.getSender();
 		String[] args = context.getArguments();

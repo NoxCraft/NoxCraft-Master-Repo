@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.commands.DescriptiveCommandRunner;
-import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
@@ -35,7 +35,7 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 		return COMMAND_NAME;
 	}
 
-	public boolean execute(ICommandContext context) {
+	public boolean execute(CommandContext context) {
 		String[] args = context.getArguments();
 		CommandSender sender = context.getSender();
 		

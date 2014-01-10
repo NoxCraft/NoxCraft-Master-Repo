@@ -15,7 +15,7 @@ public class CoreCommand implements CommandRunner {
 		return new String[0];
 	}
 
-	public boolean execute(ICommandContext context) {
+	public boolean execute(CommandContext context) {
 		CommandSender sender = context.getSender();
 		String m = new StringBuilder().append(ChatColor.RED).append("Command is not implemented yet..").toString();
 		if (!(sender instanceof Player))

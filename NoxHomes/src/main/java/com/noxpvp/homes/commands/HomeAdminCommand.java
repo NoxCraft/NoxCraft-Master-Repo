@@ -12,7 +12,7 @@ import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.commands.DescriptiveCommandRunner;
-import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.utils.MessageUtil;
 
 public class HomeAdminCommand implements CommandRunner {
@@ -32,7 +32,7 @@ public class HomeAdminCommand implements CommandRunner {
 		return COMMAND_NAME;
 	}
 
-	public boolean execute(ICommandContext context) {
+	public boolean execute(CommandContext context) {
 		String[] args = context.getArguments();
 		
 		CommandSender sender = context.getSender();

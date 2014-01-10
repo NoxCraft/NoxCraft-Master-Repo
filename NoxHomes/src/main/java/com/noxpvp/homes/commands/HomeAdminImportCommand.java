@@ -6,7 +6,7 @@ import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.commands.DescriptiveCommandRunner;
-import com.noxpvp.core.commands.ICommandContext;
+import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.HomeManager;
@@ -43,7 +43,7 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 		return COMMAND_NAME;
 	}
 
-	public boolean execute(ICommandContext context) {
+	public boolean execute(CommandContext context) {
 		CommandSender sender = context.getSender();
 		String[] args = context.getArguments();
 		if (manager == null)
