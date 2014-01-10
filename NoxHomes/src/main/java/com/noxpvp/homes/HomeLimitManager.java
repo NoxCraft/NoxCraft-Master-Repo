@@ -3,6 +3,7 @@ package com.noxpvp.homes;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
+import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
@@ -33,7 +34,12 @@ public class HomeLimitManager implements Persistant {
 
 	public HomeLimitManager()
 	{
-		plugin = NoxHomes.getInstance();
+		this(NoxHomes.getInstance());
+	}
+	
+	public HomeLimitManager(NoxHomes plugin)
+	{
+		this.plugin = plugin;
 		config = new FileConfiguration(plugin.getDataFile("limits.yml"));
 	}
 	
@@ -122,11 +128,36 @@ public class HomeLimitManager implements Persistant {
 	}
 
 	public void load() {
+		if (!config.exists())
+		{
+			genDefault();
+		}
+		
+		
 		config.load();
 		setSuperPerms(config.get("superPerms", isSuperPerms()));
 		setCumulativeLimits(config.get("cumulativeLimits", cumulativeLimits));
 	}
 	
+	private void genDefault() {
+		config.setHeader("This file is generated to give you an idea for syntax of setting limits.");
+		config.addHeader("There are two root nodes. \"group\" and \"player\"");
+		config.addHeader("Use those nodes to add limits. Below is default example.");
+		config.addHeader("");
+		config.addHeader("Values below 0 are infinite homes!");
+		ConfigurationNode node = config.getNode("group");
+		node.set("peasant", 1);
+		node.set("vip", 2);
+		node.set("sponsor", 3);
+		node.set("king", 4);
+		node.set("imperial", 5);
+		
+		node = config.getNode("player");
+		node.set("coaster3000", -1);
+		
+		save();
+	}
+
 	private static NoxPlayer getNoxPlayer(NoxPlayerAdapter adapt)
 	{
 		if (adapt instanceof NoxPlayer)

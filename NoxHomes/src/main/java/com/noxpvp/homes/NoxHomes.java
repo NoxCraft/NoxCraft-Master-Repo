@@ -81,6 +81,10 @@ public class NoxHomes extends NoxPlugin {
 		
 		commandExecs = new HashMap<String, CommandRunner>();
 		homeManager = new HomeManager(NoxCore.getInstance());
+		limitManager = new HomeLimitManager();
+		
+		homeManager.load();
+		limitManager.load();
 		
 		ConfigurationSerialization.registerClass(BaseHome.class);
 		
