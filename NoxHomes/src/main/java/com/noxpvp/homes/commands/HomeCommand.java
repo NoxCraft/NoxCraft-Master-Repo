@@ -8,6 +8,7 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.HomeManager;
@@ -33,7 +34,7 @@ public class HomeCommand implements CommandRunner {
 	public boolean execute(CommandContext context) {
 		
 		if (!context.isPlayer()) {
-			MessageUtil.sendGlobalLocale(plugin, context.getSender(), "console.onlyplayer");
+			MessageUtil.sendLocale(context.getSender(), GlobalLocale.CONSOLE_ONLYPLAYER);
 			return true;
 		}
 		Player sender = context.getPlayer();
@@ -62,9 +63,9 @@ public class HomeCommand implements CommandRunner {
 		BaseHome home = manager.getHome(player, homeName);
 		
 		if (home.tryTeleport(sender))
-			MessageUtil.sendLocale(plugin, sender, "homes.home"+ (own?".own":""), player, homeName);
+			MessageUtil.sendLocale(plugin, sender, "homes.home"+ (own?".own":""), player, (homeName == null? "default": homeName));
 		else
-			MessageUtil.sendGlobalLocale(plugin, sender, "commands.failed", "Could not teleport home.");
+			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Could not teleport home.");
 		
 		return true;
 	}

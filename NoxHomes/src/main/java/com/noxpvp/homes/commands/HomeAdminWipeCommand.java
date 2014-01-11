@@ -8,6 +8,7 @@ import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.commands.DescriptiveCommandRunner;
 import com.noxpvp.core.commands.CommandContext;
+import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
@@ -41,8 +42,10 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 		
 		boolean wiped = false;
 		if (args.length < 1)
+		{
+			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Must Specify Safety Key.");
 			return false;
-		
+		}
 		String k = null;
 		if (args.length > 0) 
 		{
@@ -53,17 +56,20 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 				manager.clear();
 				manager.save();
 				wiped = true;
+			} else {
+				MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Incorrect safety key. Key is not \"" + k + "\"");
+				return false;
 			}
 		}
 		
 		if (wiped)
 		{
 			key = getNextKey();
-			MessageUtil.sendGlobalLocale(plugin, sender, "command.successful", "Wiped home data.");
+			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_SUCCESS, "Wiped home data.");
 			
 			updateHelp();
 		} else {
-			MessageUtil.sendGlobalLocale(plugin, sender, "command.failed", "Could not wipe data.");
+			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Could not wipe data.");
 		}
 		return true;
 	}

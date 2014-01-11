@@ -8,6 +8,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.filtering.Filter;
+import com.bergerkiller.bukkit.common.localization.LocalizationEnum;
+import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.bergerkiller.bukkit.common.utils.WorldUtil;
 import com.noxpvp.core.NoxPlugin;
@@ -74,6 +76,21 @@ public class MessageUtil {
 		return StringUtil.ampToColor(message);
 	}
 	
+	public static String parseArguments(String message, String... args)
+	{
+		StringBuilder msg = new StringBuilder(message);
+		if (args.length > 0)
+			 for (int i = 0; i < args.length; i++) {
+                StringUtil.replaceAll(msg, "%" + i + "%", LogicUtil.fixNull(args[i], "null"));
+			 }
+		return msg.toString();
+	}
+	
+	public static void sendLocale(CommandSender sender, LocalizationEnum locale, String... args)
+	{
+		locale.message(sender, args);
+	}
+	
 	public static void sendGlobalLocale(NoxPlugin plugin, CommandSender sender, String locale, String... params) 
 	{
 		sender.sendMessage(parseColor(plugin.getGlobalLocale(locale, params)));
@@ -92,7 +109,7 @@ public class MessageUtil {
 	public static void sendMessage(CommandSender sender, String...messages)
 	{
 		for (String message : messages)
-			sender.sendMessage(message);
+			sendMessage(sender, message);
 	}
 	
 	public static void sendMessage(CommandSender[] senders, Filter<CommandSender> filter, String message)

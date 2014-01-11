@@ -9,6 +9,7 @@ import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.HomeManager;
@@ -44,7 +45,7 @@ public class SetHomeCommand implements CommandRunner {
 	public boolean execute(CommandContext context) {
 		if (!context.isPlayer())
 		{
-			MessageUtil.sendGlobalLocale(plugin, context.getSender(), "console.onlyplayer");
+			MessageUtil.sendLocale(context.getSender(), GlobalLocale.CONSOLE_ONLYPLAYER);
 			return true;
 		}
 		
@@ -87,7 +88,7 @@ public class SetHomeCommand implements CommandRunner {
 				manager.addHome(newHome);
 				success = manager.getHome(player, homeName) != null;
 			} else {
-				MessageUtil.sendGlobalLocale(plugin, sender, "command.failed", "You already have the maximum amount of homes allowed.");
+				MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "You already have the maximum amount of homes allowed.");
 				return true;
 			}
 		}
@@ -96,11 +97,11 @@ public class SetHomeCommand implements CommandRunner {
 		
 		if (success) {
 			SafeLocation l = new SafeLocation(newHome.getLocation());
-			MessageUtil.sendLocale(plugin, sender, "homes.sethome"+(own?".own":""), player, homeName, String.format(
+			MessageUtil.sendLocale(plugin, sender, "homes.sethome"+(own?".own":""), player, (homeName == null? "default": homeName), String.format(
 				"x=%1$s y=%2$s z=%3$s on world %4$s", l.getX(), l.getY(), l.getZ(), l.getWorldName()
 				));
 		} else {
-			MessageUtil.sendGlobalLocale(plugin, sender, "command.failed", "Home never stored in memory...");
+			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Home never stored in memory...");
 		}
 		
 		return true;

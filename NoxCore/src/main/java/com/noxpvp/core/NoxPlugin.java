@@ -18,6 +18,7 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.utils.CommandUtil;
 import com.noxpvp.core.utils.MessageUtil;
@@ -50,7 +51,7 @@ public abstract class NoxPlugin extends PluginBase {
 				if (!cmd.execute(context))
 					cmd.displayHelp(sender);
 			} catch (NoPermissionException e) {
-				MessageUtil.sendGlobalLocale(this, e.getSender(), "permission.denied", e.getMessage(), e.getPermission());
+				MessageUtil.sendLocale(e.getSender(), GlobalLocale.FAILED_PERMISSION_VERBOSE, e.getMessage(), e.getPermission());
 			}
 			return true;
 		}

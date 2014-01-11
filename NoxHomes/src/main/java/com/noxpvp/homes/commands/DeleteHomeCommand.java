@@ -9,6 +9,7 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.HomeManager;
@@ -50,7 +51,7 @@ public class DeleteHomeCommand implements CommandRunner {
 			
 		if (player == null)
 		{
-			MessageUtil.sendGlobalLocale(plugin, context.getSender(), "console.needplayer", "To delete a home.");
+			MessageUtil.sendLocale(context.getSender(), GlobalLocale.CONSOLE_NEEDPLAYER, "To delete a home.");
 			return true;
 		}
 		
@@ -70,7 +71,7 @@ public class DeleteHomeCommand implements CommandRunner {
 		if (home != null)
 			manager.removeHome(home);
 		
-		MessageUtil.sendLocale(plugin, context.getSender(), "homes.delhome"+((own)?".own":""), player.getName(), homeName);
+		MessageUtil.sendLocale(plugin, context.getSender(), "homes.delhome"+((own)?".own":""), player.getName(), (homeName == null? "default": homeName));
 		return true;
 	}
 	

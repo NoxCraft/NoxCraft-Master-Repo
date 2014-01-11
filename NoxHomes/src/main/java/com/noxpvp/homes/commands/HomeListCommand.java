@@ -10,6 +10,7 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.HomeManager;
@@ -41,7 +42,6 @@ public class HomeListCommand implements CommandRunner {
 			manager = plugin.getHomeManager();
 			if (manager == null);
 			{
-				MessageUtil.sendGlobalLocale(plugin, sender, "error.null", "HomeManager reference in Home List Object.");
 				return true;
 			}
 		}
@@ -56,10 +56,10 @@ public class HomeListCommand implements CommandRunner {
 			player = context.getPlayer().getName();
 		
 		if ((player == null || player.length() == 0) && context.isPlayer()) {
-			MessageUtil.sendGlobalLocale(plugin, sender, "command.failed", "Player match failed. Player was " + ((player == null)? "null": "blank"));
+			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Player match failed. Player was " + ((player == null)? "null": "blank"));
 			return true;
 		} else if ((player == null || player.length() == 0)) {
-			MessageUtil.sendGlobalLocale(plugin, sender, "console.needplayer", "Use the -p \"PlayerName\" flag");
+			MessageUtil.sendLocale(sender, GlobalLocale.CONSOLE_NEEDPLAYER, "Use the -p \"PlayerName\" flag");
 			return true;
 		}
 		

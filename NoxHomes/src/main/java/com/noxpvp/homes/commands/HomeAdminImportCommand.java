@@ -7,6 +7,7 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.commands.DescriptiveCommandRunner;
 import com.noxpvp.core.commands.CommandContext;
+import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.HomeManager;
@@ -51,7 +52,7 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 			manager = plugin.getHomeManager();
 			if (manager == null);
 			{
-				MessageUtil.sendGlobalLocale(plugin, sender, "error.null", "HomeManager reference in Home List Object.");
+				MessageUtil.sendLocale(sender, GlobalLocale.ERROR_NULL, "HomeManager reference in Home List Object.");
 				return true;
 			}
 		}
@@ -59,7 +60,7 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, "admin", PERM_NODE);
 		if (!permHandler.hasPermission(sender, perm))
 		{
-			MessageUtil.sendGlobalLocale(plugin, sender, "permission.denied", "Can not import homes data.", perm);
+			MessageUtil.sendLocale(sender, GlobalLocale.FAILED_PERMISSION, "Can not import homes data.", perm);
 			return true;
 		}
 		

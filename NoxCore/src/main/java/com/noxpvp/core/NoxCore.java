@@ -32,6 +32,7 @@ import com.noxpvp.core.listeners.ChestBlockListener;
 import com.noxpvp.core.listeners.DeathListener;
 import com.noxpvp.core.listeners.LoginGroupListener;
 import com.noxpvp.core.listeners.VoteListener;
+import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
 import com.noxpvp.core.reloader.Reloader;
@@ -339,20 +340,7 @@ public class NoxCore extends NoxPlugin {
         this.globalLocales.addHeader("http://dev.bukkit.org/server-mods/bkcommonlib/pages/general/localization/");
 
 		
-		//Permission Locales
-        loadGlobalLocale("permission.denied.default", "&4Permission Denied&r:&e %0%"); //%0% is the message while %1% is the perm node.
-		loadGlobalLocale("permission.denied.verbose", getGlobalLocale("permission.denied", "%0% >> Node '%1%'"));//Locale dynamic replace.
-		
-		loadGlobalLocale("command.successful", "&2Successfully executed command: %0%");
-		loadGlobalLocale("command.failed", "&4Failed to execute command: %0%");
-		
-		
-		//Misc Command Locals
-		loadGlobalLocale("console.needplayer", "This command requires a player: %0%");
-		loadGlobalLocale("console.onlyplayer", "This command can only be run by a player.");
-		
-		//Error Locales
-		loadGlobalLocale("error.null", "&4A null pointer error occured: &c%0%");
+		loadGlobalLocales((Class<? extends ILocalizationDefault>) GlobalLocale.class);
 	}
 	
 	@Override
