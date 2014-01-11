@@ -13,9 +13,8 @@ import com.noxpvp.mmo.abilities.player.SilentWalkingAbility;
 
 public class PacketListeners {
 
-	public class EntityEquipmentListener implements PacketListener{
+	public class EntityEquipmentListener implements PacketListener {
 
-		@Override
 		public void onPacketReceive(PacketReceiveEvent arg0) {
 			
 			CommonPacket packet = arg0.getPacket();
@@ -31,7 +30,6 @@ public class PacketListeners {
 			}
 		}
 
-		@Override
 		public void onPacketSend(PacketSendEvent arg0) {
 			
 		}
@@ -40,7 +38,6 @@ public class PacketListeners {
 
 	public class WorldSoundListener implements PacketListener{
 		
-		@Override
 		public void onPacketReceive(PacketReceiveEvent arg0) {
 			
 			CommonPacket packet = arg0.getPacket();
@@ -58,7 +55,6 @@ public class PacketListeners {
 			}
 		}
 		
-		@Override
 		public void onPacketSend(PacketSendEvent arg0) {
 			
 		}

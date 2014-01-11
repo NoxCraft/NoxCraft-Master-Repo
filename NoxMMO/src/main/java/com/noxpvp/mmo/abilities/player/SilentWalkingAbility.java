@@ -25,7 +25,6 @@ public class SilentWalkingAbility extends BasePlayerAbility implements PassiveAb
 		this.packet = packet;
 	}
 
-	@Override
 	public boolean execute() {
 		nms = new NMSPacketPlayOutNamedSoundEffect();
 		

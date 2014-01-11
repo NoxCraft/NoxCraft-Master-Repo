@@ -96,15 +96,21 @@ public class HomeListCommand implements CommandRunner {
 	public String[] getHelp()
 	{
 		MessageBuilder mb = new MessageBuilder();
-		mb.yellow("[").aqua("NoxHomes list homes command").yellow("]").newLine();
-		mb.blue("/").append(COMMAND_NAME).newLine();
-		mb.aqua("Flags: ").yellow("p|player").aqua(" defines remote Player");
+		mb.gold("/").blue(COMMAND_NAME).newLine();
 		
 		return mb.lines();
 	}
 	
 	public void displayHelp(CommandSender sender) {
-		MessageUtil.sendMessage(sender, getHelp()); 
+		MessageBuilder mb = new MessageBuilder();
+		
+		mb.setSeparator("\n");
+		for (String line : GlobalLocale.HELP_HEADER.get("Homes", COMMAND_NAME).split("\n"))
+			mb.append(line);
+		for (String line : getHelp())
+			mb.append(line);
+		
+		MessageUtil.sendMessage(sender, mb.lines());
 	}
 
 	public String getName() {

@@ -61,8 +61,9 @@ public class HomeCommand implements CommandRunner {
 			throw new NoPermissionException(sender, perm, new StringBuilder().append("Teleport to ").append((own?"your ":"others ")).append("homes.").toString());
 		
 		BaseHome home = manager.getHome(player, homeName);
-		
-		if (home.tryTeleport(sender))
+		if (home == null) 
+			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "The home \"" + (homeName == null? "default": homeName) + "\" does not exist");
+		else if (home.tryTeleport(sender))
 			MessageUtil.sendLocale(plugin, sender, "homes.home"+ (own?".own":""), player, (homeName == null? "default": homeName));
 		else
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Could not teleport home.");
@@ -71,7 +72,15 @@ public class HomeCommand implements CommandRunner {
 	}
 
 	public void displayHelp(CommandSender sender) {
-		MessageUtil.sendMessage(sender, getHelp());
+		MessageBuilder mb = new MessageBuilder();
+		
+		mb.setSeparator("\n");
+		for (String line : GlobalLocale.HELP_HEADER.get("Homes", COMMAND_NAME).split("\n"))
+			mb.append(line);
+		for (String line : getHelp())
+			mb.append(line);
+		
+		MessageUtil.sendMessage(sender, mb.lines());
 	}
 
 	public String getName() {
@@ -80,10 +89,7 @@ public class HomeCommand implements CommandRunner {
 
 	public String[] getHelp() {
 		MessageBuilder mb = new MessageBuilder();
-		mb.yellow("[").aqua("NoxHomes Home Command").yellow("]").newLine();
-		mb.blue("/").append(COMMAND_NAME).yellow(" [").aqua("name").yellow("]").newLine();
-		mb.aqua("Flags: ").yellow("p|player ").aqua("Remote player. Use the home as if that player.");
-		
+		mb.gold("/").blue(COMMAND_NAME).aqua(" [").aqua("name]").newLine();
 		return mb.lines();
 	}
 

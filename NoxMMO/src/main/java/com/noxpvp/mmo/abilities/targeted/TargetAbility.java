@@ -22,7 +22,7 @@ public class TargetAbility extends BasePlayerAbility{
 	public static final String PERM_NODE = "set-target";
 	public static final String ABILITY_NAME = "Target";
 	
-	private double range =;
+	private double range;
 	private Reference<LivingEntity> target_ref;
 	
 	/**

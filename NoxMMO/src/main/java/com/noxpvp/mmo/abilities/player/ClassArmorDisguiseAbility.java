@@ -30,7 +30,6 @@ public class ClassArmorDisguiseAbility extends BasePlayerAbility implements Pass
 		this.packet = packet;
 	}
 
-	@Override
 	public boolean execute() {
 		NMSPacketPlayOutEntityEquipment nms = new NMSPacketPlayOutEntityEquipment();
 		

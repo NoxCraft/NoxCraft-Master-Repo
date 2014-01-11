@@ -58,7 +58,7 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 				wiped = true;
 			} else {
 				MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Incorrect safety key. Key is not \"" + k + "\"");
-				return false;
+				return true;
 			}
 		}
 		

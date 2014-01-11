@@ -43,22 +43,18 @@ public class SeveringStrikesAbility extends BasePlayerAbility{
 				new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("EntityDamageByEntityEvent").toString(),
 				EventPriority.MONITOR, 1) {
 			
-			@Override
 			public boolean ignoreCancelled() {
 				return true;
 			}
 			
-			@Override
 			public Class<EntityDamageByEntityEvent> getEventType() {
 				return EntityDamageByEntityEvent.class;
 			}
 			
-			@Override
 			public String getEventName() {
 				return "EntityDamageByEntityEvent";
 			}
 			
-			@Override
 			public void execute(EntityDamageByEntityEvent event) {
 				if (event.getDamager().equals(SeveringStrikesAbility.this.getPlayer()) && event.getEntity() instanceof Damageable)
 					SeveringStrikesAbility.this.eventExecute((Player) event.getDamager(), (Damageable) event.getEntity());

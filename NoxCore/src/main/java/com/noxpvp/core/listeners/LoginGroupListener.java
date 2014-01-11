@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.VaultAdapter;
 
-public class LoginGroupListener extends NoxListener {
+public class LoginGroupListener extends NoxListener<NoxCore> {
 		public LoginGroupListener()
 		{
 			this(NoxCore.getInstance());

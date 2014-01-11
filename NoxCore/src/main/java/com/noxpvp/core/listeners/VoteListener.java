@@ -15,7 +15,7 @@ import com.noxpvp.core.data.NoxPlayer;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.model.VotifierEvent;
 
-public class VoteListener extends NoxListener {
+public class VoteListener extends NoxListener<NoxCore> {
 	private final PlayerManager manager;
 	private static ModuleLogger log = null;
 	private static FileHandler handle = null;

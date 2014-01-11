@@ -3,19 +3,19 @@ package com.noxpvp.mmo.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockEvent;
 
 import com.noxpvp.core.VaultAdapter;
+import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoTool;
 
-public class BlockListener extends GenericNoxListener<BlockEvent>{
+public class BlockListener extends NoxListener<NoxMMO>{
 
 	private PlayerManager pm;
 
 	public BlockListener(NoxMMO mmo) {
-		super(mmo, BlockEvent.class);
+		super(mmo);
 		
 		pm = mmo.getPlayerManager();
 	}

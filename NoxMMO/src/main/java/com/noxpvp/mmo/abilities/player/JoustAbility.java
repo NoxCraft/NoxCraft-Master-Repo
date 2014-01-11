@@ -22,7 +22,6 @@ public class JoustAbility extends BasePlayerAbility implements PassiveAbility{
 		this.event = event;
 	}
 
-	@Override
 	public boolean execute() {
 		
 		MMOPlayer mmoP;

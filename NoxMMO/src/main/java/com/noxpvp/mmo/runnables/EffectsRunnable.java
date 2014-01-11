@@ -24,7 +24,7 @@ public class EffectsRunnable extends BukkitRunnable{
 	private float data;
 	private int amount;
 	private int amt;
-	private List<String> name = new ArrayList<>();
+	private List<String> name = new ArrayList<String>();
 	
 	private boolean runMulti = false;
 	private boolean continuous = false;

@@ -21,7 +21,6 @@ public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbil
 		this.event = event;
 	}
 
-	@Override
 	public boolean execute() { 
 		if (!mayExecute())
 			return false;

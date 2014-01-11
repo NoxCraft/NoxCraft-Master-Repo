@@ -95,22 +95,18 @@ public class MassDestructionAbility extends BasePlayerAbility{
 				new StringBuilder().append(p.getName()).append(ABILITY_NAME).append("EntityDamageEvent").toString(),
 				EventPriority.MONITOR, 1) {
 			
-			@Override
 			public boolean ignoreCancelled() {
 				return true;
 			}
 			
-			@Override
 			public Class<EntityDamageEvent> getEventType() {
 				return EntityDamageEvent.class;
 			}
 			
-			@Override
 			public String getEventName() {
 				return "EntityDamageEvent";
 			}
 			
-			@Override
 			public void execute(EntityDamageEvent event) {
 				if (event.getCause() != DamageCause.FALL || event.getEntityType() != EntityType.PLAYER)
 					return;

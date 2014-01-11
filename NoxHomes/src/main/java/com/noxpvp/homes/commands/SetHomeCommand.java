@@ -35,9 +35,7 @@ public class SetHomeCommand implements CommandRunner {
 	
 	public String[] getHelp() {
 		MessageBuilder mb = new MessageBuilder();
-		mb.yellow("[").aqua("NoxHomes sethome command").yellow("]").newLine();
-		mb.blue("/").append(COMMAND_NAME).yellow(" [").aqua("name").yellow("]").newLine();
-		mb.aqua("Flags: ").yellow("p|player").aqua(" specifies remote player.");
+		mb.gold("/").blue(COMMAND_NAME).aqua(" [name]").newLine();
 		
 		return mb.lines();
 	}
@@ -52,7 +50,7 @@ public class SetHomeCommand implements CommandRunner {
 		Player sender = context.getPlayer();
 		
 		if (context.hasFlag("h") || context.hasFlag("help"))
-			displayHelp(sender);
+			return false;
 		
 		String player = null;
 		
@@ -73,29 +71,33 @@ public class SetHomeCommand implements CommandRunner {
 		if (!permHandler.hasPermission(sender, perm))
 			throw new NoPermissionException(sender, perm, new StringBuilder("Set New Homes for ").append((own?"self":"others")).append(".").toString());
 
+		
+		boolean success = false;
 		BaseHome newHome = null;
 		if (homeName == null)
 			newHome = new DefaultHome(player, sender);
 		else
 			newHome = new NamedHome(player, homeName, sender);
-		
-		boolean success = false;
-		
+		boolean good = false;
 		if (own)
 		{
 			if (plugin.getLimitsManager().canAddHome(player))
 			{
-				manager.addHome(newHome);
-				success = manager.getHome(player, homeName) != null;
+				good = true;
 			} else {
 				MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "You already have the maximum amount of homes allowed.");
 				return true;
 			}
 		}
 		else
-			success = true;
+			good = true;
 		
-		if (success) {
+		if (good) {
+			manager.addHome(newHome);
+			success = manager.getHome(player, homeName) != null;
+		} else
+			success = false;
+		if (success && newHome != null) {
 			SafeLocation l = new SafeLocation(newHome.getLocation());
 			MessageUtil.sendLocale(plugin, sender, "homes.sethome"+(own?".own":""), player, (homeName == null? "default": homeName), String.format(
 				"x=%1$s y=%2$s z=%3$s on world %4$s", l.getX(), l.getY(), l.getZ(), l.getWorldName()
@@ -109,7 +111,15 @@ public class SetHomeCommand implements CommandRunner {
 	
 	public void displayHelp(CommandSender sender)
 	{
-		MessageUtil.sendMessage(sender, getHelp());
+		MessageBuilder mb = new MessageBuilder();
+		
+		mb.setSeparator("\n");
+		for (String line : GlobalLocale.HELP_HEADER.get("Homes", COMMAND_NAME).split("\n"))
+			mb.append(line);
+		for (String line : getHelp())
+			mb.append(line);
+		
+		MessageUtil.sendMessage(sender, mb.lines());
 	}
 
 	public String getName() {

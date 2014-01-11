@@ -75,22 +75,18 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 				new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("EntityDamageByEntityEvent").toString(),
 				EventPriority.MONITOR, 1) {
 			
-			@Override
 			public boolean ignoreCancelled() {
 				return true;
 			}
 			
-			@Override
 			public Class<EntityDamageByEntityEvent> getEventType() {
 				return EntityDamageByEntityEvent.class;
 			}
 			
-			@Override
 			public String getEventName() {
 				return "EntityDamageByEntityEvent";
 			}
 			
-			@Override
 			public void execute(EntityDamageByEntityEvent event) {
 				if (event.getDamager().equals(SkullSmasherAbility.this.getPlayer()))
 					SkullSmasherAbility.this.eventExecute(SkullSmasherAbility.this.getPlayer(), event.getDamage());

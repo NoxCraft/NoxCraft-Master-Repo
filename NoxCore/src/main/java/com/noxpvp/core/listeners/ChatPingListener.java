@@ -17,7 +17,7 @@ import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.events.ChatPingEvent;
  
-public class ChatPingListener extends NoxListener {
+public class ChatPingListener extends NoxListener<NoxCore> {
 	
 	public ChatPingListener()
 	{

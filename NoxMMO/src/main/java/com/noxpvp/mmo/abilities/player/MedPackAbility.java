@@ -56,22 +56,18 @@ public class MedPackAbility extends BasePlayerAbility{
 		
 		this.handler = new BaseMMOEventHandler<PlayerPickupItemEvent>(new StringBuilder().append(ABILITY_NAME).append(player.getName()).append("ProjectileHitEvent").toString(), EventPriority.NORMAL, 1) {
 			
-			@Override
 			public boolean ignoreCancelled() {
 				return true;
 			}
 			
-			@Override
 			public Class<PlayerPickupItemEvent> getEventType() {
 				return PlayerPickupItemEvent.class;
 			}
 			
-			@Override
 			public String getEventName() {
 				return "PlayerPickupItemEvent";
 			}
 			
-			@Override
 			public void execute(PlayerPickupItemEvent event) {
 				if (event.getPlayer().equals(MedPackAbility.this.getPlayer())) {
 					MedPackAbility.this.EventExecute(event);

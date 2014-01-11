@@ -9,7 +9,7 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.data.NoxPlayer;
 
-public class DeathListener extends NoxListener {
+public class DeathListener extends NoxListener<NoxCore> {
 	private PlayerManager pm;
 	
 	public DeathListener()

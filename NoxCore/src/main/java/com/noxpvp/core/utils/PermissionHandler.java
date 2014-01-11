@@ -29,7 +29,7 @@ public class PermissionHandler {
 	{
 		boolean isTrue = permHandler.handlePermission(sender, permission);
 		
-		if (logConsole)
+		if (logConsole && !isTrue)
 			plugin.log(Level.WARNING, new MessageBuilder().red("Failed permission from \"").yellow(sender.getName()).red("\" for permission \"").yellow(permission).red("\"").toString());
 		
 		return isTrue;

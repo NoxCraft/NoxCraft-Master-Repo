@@ -7,13 +7,12 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.Java15Compat;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.commands.DescriptiveCommandRunner;
-import com.noxpvp.core.commands.CommandContext;
+import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.MessageUtil;
 
 public class HomeAdminCommand implements CommandRunner {
@@ -64,7 +63,15 @@ public class HomeAdminCommand implements CommandRunner {
 	
 	public void displayHelp(CommandSender sender)
 	{
-		MessageUtil.sendMessage(sender, getHelp());
+		MessageBuilder mb = new MessageBuilder();
+		
+		mb.setSeparator("\n");
+		for (String line : GlobalLocale.HELP_HEADER.get("Homes", COMMAND_NAME).split("\n"))
+			mb.append(line);
+		for (String line : getHelp())
+			mb.append(line);
+		
+		MessageUtil.sendMessage(sender, mb.lines());
 	}
 	
 	protected int addSubCommands(DescriptiveCommandRunner... runners)
@@ -96,17 +103,11 @@ public class HomeAdminCommand implements CommandRunner {
 	
 	public String[] getHelp() {
 		MessageBuilder mb = new MessageBuilder();
-		mb.yellow("[").blue("NoxHomes Help").yellow("]").newLine();
 		mb.setIndent(1);
+		mb.setSeparator("\n");
 		for (Entry<String, DescriptiveCommandRunner> entry : subCommands.entrySet())
-		{
-			boolean first = true;
 			for (String line : entry.getValue().getHelp())
-				if (!first)
-					mb.append(line);
-				else
-					mb.newLine().append(line);
-		}
+				mb.append(line);
 		mb.setIndent(0);
 		
 		return mb.lines();

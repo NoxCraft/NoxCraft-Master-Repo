@@ -50,16 +50,17 @@ public class HomeLimitManager implements Persistant {
 	
 	public boolean inRange(NoxPlayerAdapter noxplayer, int count)
 	{
-		int limit = 0;
+		int limit;
+		limit = 0;
 		
 		NoxPlayer p = getNoxPlayer(noxplayer);
 		
 		limit = getLimit(p);
 		
-		if (limit < 0)
+		if (limit <= -1)
 			return true;
-					
-		return count <= limit;
+		
+		return (count <= limit);
 	}
 	
 	public boolean inRange(String playerName, int count)
@@ -97,8 +98,7 @@ public class HomeLimitManager implements Persistant {
 						limit = (limit <= config.get("group."+node, int.class)?config.get("group."+node, int.class):limit);
 				}
 		} else 
-			limit = config.get("player."+ player, 0);
-		
+			limit = config.get("player."+ player, limit);
 		
 		return limit;
 	}
@@ -110,11 +110,8 @@ public class HomeLimitManager implements Persistant {
 	
 	public boolean canAddHome(NoxPlayer player)
 	{
-		HomesPlayer p = new HomesPlayer(player);
-		
-		int count = p.getHomeCount(); //Could possibly single lined.. Unsure at moment.
-		
-		return inRange(p, ++count);
+		HomesPlayer p = plugin.getHomeManager().getPlayer(player.getName());
+		return inRange(p, p.getHomeCount()+1);
 	}
 	
 	public static boolean usingCumulativeLimits() { return cumulativeLimits; }

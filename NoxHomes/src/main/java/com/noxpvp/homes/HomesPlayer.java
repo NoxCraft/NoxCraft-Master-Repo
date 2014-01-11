@@ -56,7 +56,8 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 	
 	public int getHomeCount() {
-		return getHomes().size();
+		int size = homes_index.size();
+		return size;
 	}
 	
 	/**
@@ -106,7 +107,6 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			homes_index.put(home.getName(), homes_index.size());
 			homes.add(home);
 		}
-		
 		save();
 	}
 	

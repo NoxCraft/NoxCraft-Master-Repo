@@ -77,16 +77,21 @@ public class DeleteHomeCommand implements CommandRunner {
 	
 	public void displayHelp(CommandSender sender)
 	{
-		MessageUtil.sendMessage(sender, getHelp());
+		MessageBuilder mb = new MessageBuilder();
+		
+		mb.setSeparator("\n");
+		for (String line : GlobalLocale.HELP_HEADER.get("Homes", COMMAND_NAME).split("\n"))
+			mb.append(line);
+		for (String line : getHelp())
+			mb.append(line);
+		
+		MessageUtil.sendMessage(sender, mb.lines());
 	}
 	
 	public String[] getHelp()
 	{
 		MessageBuilder mb = new MessageBuilder();
-		mb.yellow("[").aqua("NoxHomes Delete Home Command").yellow("]").newLine();
-		mb.blue("/").append(COMMAND_NAME).yellow(" [").aqua("name").yellow("]").newLine();
-		mb.aqua("Flags: ").newLine().yellow("p|player").aqua(" specifies remote player to delete home").newLine();
-		mb.yellow("h|help").aqua(" displays this help message.");
+		mb.gold("/").blue(COMMAND_NAME).aqua(" [").aqua("name]").newLine();
 		return mb.lines();
 	}
 

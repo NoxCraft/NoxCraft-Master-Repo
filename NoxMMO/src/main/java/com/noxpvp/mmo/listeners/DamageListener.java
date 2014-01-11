@@ -15,10 +15,11 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.noxpvp.core.NoxCore;
+import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.data.CoreBar;
 import com.noxpvp.core.data.NoxPlayer;
-import com.noxpvp.core.PlayerManager;
+import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoArmor;
 import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoSword;
@@ -28,13 +29,13 @@ import com.noxpvp.mmo.abilities.player.JoustAbility;
 import com.noxpvp.mmo.abilities.player.RazerClawsAbility;
 import com.noxpvp.mmo.runnables.EffectsRunnable;
 
-public class DamageListener extends GenericNoxListener<EntityDamageEvent>{
+public class DamageListener extends NoxListener<NoxMMO>{
 
 	PlayerManager pm;
 	
 	public DamageListener(NoxMMO mmo)
 	{
-		super(mmo, EntityDamageEvent.class);
+		super(mmo);
 		
 		this.pm = NoxCore.getInstance().getPlayerManager();
 	}

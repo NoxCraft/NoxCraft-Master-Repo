@@ -99,7 +99,6 @@ public class MinersHelmetAbility extends BaseEntityAbility {
 			try { cancel(); } catch (IllegalStateException e) {}
 		}
 		
-		@Override
 		public void run() {
 			
 			Location loc = e.getLocation();

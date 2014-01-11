@@ -11,6 +11,7 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.permissions.NoxPermission;
+import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.mmo.abilities.entity.*;
 import com.noxpvp.mmo.abilities.player.*;
 import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoArmor;
@@ -35,6 +36,8 @@ public class NoxMMO extends NoxPlugin {
 	private static NoxMMO instance;
 	private NoxCore core;
 	
+	private PermissionHandler permHandler;
+	
 	DamageListener damageListener;
 	PlayerTargetListener playerTargetListener;
 	BlockListener blockListener;
@@ -58,9 +61,8 @@ public class NoxMMO extends NoxPlugin {
 		ShurikenAbility.shurikenThrowers = null;
 		HammerOfThorAbility.hammerThrowers = null;
 		MedPackAbility.packs = null;
-		SeveringStrikesAbility.bleeders = null;
 		SeveringStrikesAbility.strikers = null;
-		
+		permHandler = null;
 		setInstance(null);
 	}
 	
@@ -94,6 +96,7 @@ public class NoxMMO extends NoxPlugin {
 		damageListener.register();
 		playerTargetListener.register();
 		blockListener.register();
+		permHandler = new PermissionHandler(this);
 		
 		register(equipmentPacketListener, PacketType.OUT_ENTITY_EQUIPMENT);
 		register(worldSoundListener, PacketType.OUT_NAMED_SOUND_EFFECT);
@@ -191,5 +194,10 @@ public class NoxMMO extends NoxPlugin {
 	@Override
 	public NoxCore getCore() {
 		return core;
+	}
+
+	@Override
+	public PermissionHandler getPermissionHandler() {
+		return null;
 	}
 }

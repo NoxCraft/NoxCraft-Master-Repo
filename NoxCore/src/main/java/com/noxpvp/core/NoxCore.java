@@ -306,7 +306,7 @@ public class NoxCore extends NoxPlugin {
 	
 	public void loadGlobalLocale(ILocalizationDefault localizationDefault)
 	{
-		this.loadLocale(localizationDefault.getName(), localizationDefault.getDefault());
+		this.loadGlobalLocale(localizationDefault.getName(), localizationDefault.getDefault());
 	}
 	
 	public void loadGlobalLocale(String path, String defaultValue) {
@@ -340,7 +340,7 @@ public class NoxCore extends NoxPlugin {
         this.globalLocales.addHeader("http://dev.bukkit.org/server-mods/bkcommonlib/pages/general/localization/");
 
 		
-		loadGlobalLocales((Class<? extends ILocalizationDefault>) GlobalLocale.class);
+		loadGlobalLocales(GlobalLocale.class);
 	}
 	
 	@Override
@@ -425,7 +425,7 @@ public class NoxCore extends NoxPlugin {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static final Class<CommandRunner>[] commands = (Class<CommandRunner>[]) new Class[]{ CoreCommand.class, ReloadCommand.class};
+	private static final Class<CommandRunner>[] commands = (Class<CommandRunner>[]) new Class[]{ /*CoreCommand.class,*/ ReloadCommand.class};
 
 	private static NoxCore instance;
 

@@ -161,23 +161,19 @@ public class BankShotAbility extends BasePlayerAbility{
 				new StringBuilder().append(player.getName()).append(ABILITTY_NAME).append("ProjectileHitEvent").toString(),
 				EventPriority.NORMAL, 1) {
 
-					@Override
 					public boolean ignoreCancelled() {
 						return true;
 					}
 
-					@Override
 					public void execute(ProjectileHitEvent event) {
 						if (event.getEntity().equals(BankShotAbility.this.a))
 							BankShotAbility.this.eventExecute((Arrow) event.getEntity());
 					}
 
-					@Override
 					public Class<ProjectileHitEvent> getEventType() {
 						return ProjectileHitEvent.class;
 					}
 
-					@Override
 					public String getEventName() {
 						return "ProjectileHitEvent";
 					}
