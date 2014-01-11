@@ -22,7 +22,7 @@ public class HomeCommand implements CommandRunner {
 	public static final String PERM_NODE = "home";
 	private HomeManager manager;
 	private NoxHomes plugin;
-	private final PermissionHandler permHandler;;
+	private final PermissionHandler permHandler;
 	
 	public HomeCommand()
 	{

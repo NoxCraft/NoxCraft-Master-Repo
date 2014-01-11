@@ -18,8 +18,8 @@ import com.noxpvp.homes.tp.DefaultHome;
 @SuppressWarnings("unchecked")
 public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	
-	private List<BaseHome> homes = new ArrayList<BaseHome>();;
-	private Map<String, Integer> homes_index = new HashMap<String, Integer>();;
+	private List<BaseHome> homes = new ArrayList<BaseHome>();
+	private Map<String, Integer> homes_index = new HashMap<String, Integer>();
 	
 	/**
 	 * Instantiates a new homes playerRef.

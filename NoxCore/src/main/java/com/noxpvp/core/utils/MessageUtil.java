@@ -39,26 +39,16 @@ public class MessageUtil {
 			sendMessage(player, messages);
 	}
 	
-	public static void broadcast(World world,final String permission, String message)
+	public static void broadcast(World world, final String permission, String message)
 	{
 		sendMessage(world.getPlayers().toArray(new Player[0]), permission, message);
 	}
 	
-	public static void broadcast(World world,final String permission, String... messages)
+	public static void broadcast(World world, final String permission, String... messages)
 	{
 		sendMessage(world.getPlayers().toArray(new Player[0]), permission, messages);	
 	}
 	
-	public static String getLocale(NoxPlugin plugin, String locale, String... args)
-	{
-		return plugin.getLocale(locale, args);
-	}
-	
-	public static String getGlobalLocale(NoxPlugin plugin, String locale, String... args)
-	{
-		return plugin.getGlobalLocale(locale, args);
-	}
-
 	public static boolean globalLocaleExists(NoxPlugin plugin, String locale, String... args)
 	{
 		String l = getGlobalLocale(plugin, locale, args);
@@ -138,7 +128,7 @@ public class MessageUtil {
 			sendMessage(sender, messages);
 	}
 	
-	public static void sendMessage(CommandSender[] senders,final String permission, String message)
+	public static void sendMessage(CommandSender[] senders, final String permission, String message)
 	{
 		sendMessage(senders, new Filter<CommandSender>() {
 			public boolean isFiltered(CommandSender sender) {
@@ -226,6 +216,16 @@ public class MessageUtil {
 				return false;
 			}
 		}, messages);
+	}
+	
+	public static String getLocale(NoxPlugin plugin, String locale, String... params)
+	{
+		return plugin.getLocale(locale, params);
+	}
+	
+	public static String getGlobalLocale(NoxPlugin plugin, String locale, String... params)
+	{
+		return plugin.getGlobalLocale(locale, params);
 	}
 }
 	

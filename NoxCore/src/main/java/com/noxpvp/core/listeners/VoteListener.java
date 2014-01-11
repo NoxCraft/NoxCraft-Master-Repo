@@ -33,7 +33,7 @@ public class VoteListener extends NoxListener<NoxCore> {
 	{
 		try {
 			handle = new FileHandler(NoxCore.getInstance().getDataFile("votelogs.log").getPath(), true);
-			log = NoxCore.getInstance().getModuleLogger("Vote","Log");
+			log = NoxCore.getInstance().getModuleLogger("Vote", "Log");
 			log.addHandler(handle);
 			isGood = handle != null;
 		} catch (SecurityException e) {

@@ -23,7 +23,7 @@ public class SetHomeCommand implements CommandRunner {
 	public static final String PERM_NODE = "sethome";
 	
 	private HomeManager manager;
-	private final PermissionHandler permHandler;;
+	private final PermissionHandler permHandler;
 	private NoxHomes plugin;
 	
 	public SetHomeCommand()
