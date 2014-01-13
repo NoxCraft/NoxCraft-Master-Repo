@@ -56,6 +56,10 @@ public class NoxHomes extends NoxPlugin {
 	
 	@Override
 	public void disable() {
+		saveConfig();
+		homeManager.save();
+		limitManager.save();
+		
 		setInstance(null);
 	}
 
