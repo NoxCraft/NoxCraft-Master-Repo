@@ -45,7 +45,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 			commonFakeBlock.write(3, Material.WOOL.getId());
 			commonFakeBlock.write(4, 14);
 			
-			PacketUtil.sendPacket(p, commonFakeBlock);;
+			PacketUtil.sendPacket(p, commonFakeBlock);
 		}
 		catch (IllegalArgumentException e) {}
 		catch (Exception e) {e.printStackTrace();}

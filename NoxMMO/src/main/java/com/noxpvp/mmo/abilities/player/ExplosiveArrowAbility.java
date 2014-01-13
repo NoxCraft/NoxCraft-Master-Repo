@@ -1,48 +1,75 @@
 package com.noxpvp.mmo.abilities.player;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 
+import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
 
 public class ExplosiveArrowAbility extends BasePlayerAbility{
-	
-	static Map<String, ExplosiveArrowAbility> abilityCue = new HashMap<String, ExplosiveArrowAbility>();
 	
 	private final static String ABILITY_NAME = "Explosive Arrow";
 	public final static String PERM_NODE = "explosive-arrow";
 	
-	/**
-	 * Runs the event-side execution of this ability
-	 * 
-	 * @param player The Player - normally arrow shooter from a projectile hit event
-	 * @param loc The location - normally the hit block from a projectile hit event
-	 * @return boolean If the execution ran successfully
-	 */
-	public static boolean eventExecute(Player player, Location loc){
-		if (player == null || loc == null)
-			return false;
+	private BaseMMOEventHandler<ProjectileHitEvent> hitHandler;
+	private BaseMMOEventHandler<ProjectileLaunchEvent> launchHandler;
+	private float power;
+	
+	List<Arrow> arrows = new ArrayList<Arrow>();
+	private boolean isActive = false, isFiring = false, isSingleShotMode = true;
+	
+	public ExplosiveArrowAbility setFiring(boolean firing) { 
+		boolean changed = this.isFiring != firing;
+		this.isFiring = firing;
 		
-		String name = player.getName();
-				
-		if (abilityCue.containsKey(name))
-			return false;
+		MasterListener m = NoxMMO.getInstance().getMasterListener();
 		
-		player.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), abilityCue.get(name).power, false, false);
-		return true;
+		if (changed)
+			if (firing)
+				m.registerHandler(launchHandler);
+			else
+				m.unregisterHandler(hitHandler);
+		
+		return this; 
 	}
 	
-	private float power;
-
+	public ExplosiveArrowAbility setActive(boolean active) {
+		boolean changed = this.isActive != active;
+		this.isActive = active;
+		
+		MasterListener m = NoxMMO.getInstance().getMasterListener();
+		
+		if (changed)
+			if (active)
+				m.registerHandler(hitHandler);
+			else
+				m.unregisterHandler(hitHandler);
+		
+		return this; 
+	}
+	
+	public ExplosiveArrowAbility setSingleShotMode(boolean singleMode) { this.isSingleShotMode = singleMode; return this; }
+	
+	public boolean isFiring() { return this.isFiring; }
+	public boolean isActive() { return this.isActive; }
+	public boolean isSingleShotMode() { return this.isSingleShotMode;}
+	
+	
 	/**
 	 * Gets the current power of the explosion
 	 * 
-	 * @return Integer The power
+	 * @return Float The power
 	 */
 	public float getPower() {return power;}
 
@@ -57,27 +84,91 @@ public class ExplosiveArrowAbility extends BasePlayerAbility{
 	public ExplosiveArrowAbility(Player player) {
 		super(ABILITY_NAME, player);
 		
-		this.power = 4;
+		hitHandler = new BaseMMOEventHandler<ProjectileHitEvent>(new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileHitEvent").toString(), EventPriority.NORMAL, 1) {
+
+			public boolean ignoreCancelled() {
+				return true;
+			}
+
+			public void execute(ProjectileHitEvent event) {
+				if (event.getEntityType() != EntityType.ARROW)
+					return;
+				
+				Arrow a = (Arrow) event.getEntity();
+				
+				Location loc = a.getLocation();
+				if (!arrows.contains(a))
+					return;
+				
+				a.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), power, false, false);
+				arrows.remove(a);
+				a.remove();
+				
+				if (arrows.isEmpty())
+					setActive(false);
+			}
+
+			public Class<ProjectileHitEvent> getEventType() {
+				return ProjectileHitEvent.class;
+			}
+
+			public String getEventName() {
+				return "ProjectileHitEvent";
+			}
+		};
+		
+		launchHandler = new BaseMMOEventHandler<ProjectileLaunchEvent>(new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileLaunchEvent").toString(), EventPriority.MONITOR, 1) {
+			
+			
+			public boolean ignoreCancelled() {
+				return true;
+			}
+			
+			public Class<ProjectileLaunchEvent> getEventType() {
+				return ProjectileLaunchEvent.class;
+			}
+			
+			public String getEventName() {
+				return "ProjectileLaunchEvent";
+			}
+			
+			public void execute(ProjectileLaunchEvent event) {
+				Arrow a = (event.getEntity() instanceof Arrow? (Arrow)event.getEntity() : null);
+				
+				if (a == null)
+					return;
+				
+				if (a.getShooter().equals(getPlayer()) && isFiring())
+				{
+					arrows.add(a);
+					if (isSingleShotMode())
+						setFiring(false);
+				}
+				
+				if (!arrows.isEmpty())
+					setActive(true);
+				
+			}
+		};
+		
+		this.power = 4f;
 	}
 	
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
 		
-		final String pName = getPlayer().getName();
-		
-		ExplosiveArrowAbility.abilityCue.put(getPlayer().getName(), this);
-		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
-			
-			public void run() {
-				
-				if (ExplosiveArrowAbility.abilityCue.containsKey(pName))
-					ExplosiveArrowAbility.abilityCue.remove(pName);
-				
-			}
-		}, 100);
-		
-		return true;
+		if (!isActive() && !isFiring())
+		{
+			setFiring(true);
+			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.activated", ABILITY_NAME);
+			return true;
+		}
+		else
+		{
+			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.already-active", ABILITY_NAME);
+			return false;
+		}
 	}
 
 }

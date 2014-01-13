@@ -9,15 +9,24 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 
+import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 
-public class NetArrowAbility extends BasePlayerAbility{
+public class NetArrowAbility extends BasePlayerAbility
+{
 	
-	static Map<String, NetArrowAbility> abilityCue = new HashMap<String, NetArrowAbility>();
+	private List<Arrow> arrows = new ArrayList<Arrow>();
 	
 	public final static String ABILITY_NAME = "Net Arrow";
 	public final static String PERM_NODE = "net-arrow";
@@ -29,24 +38,23 @@ public class NetArrowAbility extends BasePlayerAbility{
 	 * @param loc The location to make the net, normally the location of an arrow
 	 * @return boolean If the execution ran successfully
 	 */
-	public static boolean eventExecute(Player p, Location loc){
-		String name = p.getName();
+	private void eventExecute(Arrow a, int time)
+	{
 		
-		if (abilityCue.containsKey(name))
-			return false;
+		Location loc = a.getLocation();
 		
-		NetArrowAbility ab = abilityCue.get(name);
 		List<Block> net = new ArrayList<Block>();
 		
 		int x = (int) loc.getX();
 		int y = (int) loc.getY();
 		int z = (int) loc.getZ();
-		int size = ab.getSize();
+		int size = getSize();
 		
-		for (int by = y+(size/2); by > y-(size/2); by--){
-			for (int bx = x+(size/2); bx > x-(size/2); bx--){
-				for (int bz = z+(size/2); bz > z-(size/2); bz--){
-					Block b = p.getWorld().getBlockAt(bx, by, bz);
+		for (int by = y+(size/2); by > y-(size / 2); by--)
+			for (int bx = x+(size/2); bx > x-(size/2); bx--)
+				for (int bz = z+(size/2); bz > z-(size/2); bz--) 
+				{
+					Block b = a.getWorld().getBlockAt(bx, by, bz);
 					
 					if (!isNetable(b.getType())) continue;
 					
@@ -54,32 +62,82 @@ public class NetArrowAbility extends BasePlayerAbility{
 					net.add(b);
 					
 				}
-			}
-		}
 		
 		BlockTimerRunnable netRemover = new BlockTimerRunnable(net, Material.AIR, Material.WEB);
-		netRemover.runTaskLater(NoxMMO.getInstance(), ab.getTime());
-		return true;
+		netRemover.runTaskLater(NoxMMO.getInstance(), time);
+		
+		
+		arrows.remove(a);
+		
+		if (arrows.isEmpty())
+			setActive(false);
+		
+		return;
 	}
-	private static boolean isNetable(Material type){
+	
+	private static boolean isNetable(Material type)
+	{
 		switch(type){
 			case AIR:
 			case LONG_GRASS:
 			case CROPS:
 			case VINE:
 			case WATER_LILY:
-			case FLOWER_POT:
-			case CARROT:
-			case POTATO:
 				return true;
 			default:
 				return false;
 		}
 	}
 	
+	private BaseMMOEventHandler<ProjectileHitEvent> hitHandler;
+	private BaseMMOEventHandler<ProjectileLaunchEvent> launchHandler;
+	
 	private int size;
 	private int time;
-
+	private boolean isFiring = false, isActive = false, isSingleShotMode = true;
+	
+	public NetArrowAbility setFiring(boolean firing)
+	{
+		boolean changed = this.isFiring != firing;
+		this.isFiring = firing;
+		
+		MasterListener m = NoxMMO.getInstance().getMasterListener();
+		
+		if (changed)
+			if (firing)
+				m.registerHandler(launchHandler);
+			else
+				m.unregisterHandler(launchHandler);
+		
+		return this;
+	}
+	
+	public NetArrowAbility setActive(boolean active) 
+	{
+		boolean changed = this.isActive != active;
+		this.isActive = active;
+		
+		MasterListener m = NoxMMO.getInstance().getMasterListener();
+		
+		if (changed)
+			if (active)
+				m.registerHandler(hitHandler);
+			else
+				m.unregisterHandler(hitHandler);
+		
+		return this;
+	}
+	
+	public NetArrowAbility setSingleShotMode(boolean single) 
+	{
+		this.isSingleShotMode = single;
+		return this;
+	}
+	
+	public boolean isSingleShotMode() { return this.isSingleShotMode; }
+	public boolean isActive() { return this.isActive; }
+	public boolean isFiring() { return this.isFiring; }
+	
 	/**
 	 * Get the currently set size of the net
 	 * 
@@ -110,29 +168,49 @@ public class NetArrowAbility extends BasePlayerAbility{
 	 */
 	public NetArrowAbility setTime(int time) {this.time = time; return this;}
 
-	public NetArrowAbility(Player player) {
+	public NetArrowAbility(Player player)
+	{
 		super(ABILITY_NAME, player);
+		
+		hitHandler = new BaseMMOEventHandler<ProjectileHitEvent>(new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileHitEvent").toString(), EventPriority.NORMAL, 1) {
+
+			public boolean ignoreCancelled() {
+				return true;
+			}
+
+			public void execute(ProjectileHitEvent event) {
+				Arrow a = (event.getEntity() instanceof Arrow)? (Arrow) event.getEntity() : null ;
+				
+				if (a == null)
+					return;
+				
+				if (arrows.contains(a))
+					eventExecute(a, time);
+			}
+
+			public Class<ProjectileHitEvent> getEventType() {
+				return ProjectileHitEvent.class;
+			}
+
+			public String getEventName() {
+				return "ProjectileHitEvent";
+			}
+		};
 		
 		this.size = 3;
 		this.time = 100;
 	}
 	
-	public boolean execute() {
+	public boolean execute()
+	{
 		if (!mayExecute())
 			return false;
 		
-		final String pName = getPlayer().getName();
-		
-		NetArrowAbility.abilityCue.put(getPlayer().getName(), this);
-		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
-			
-			public void run() {
-				
-				if (NetArrowAbility.abilityCue.containsKey(pName))
-					NetArrowAbility.abilityCue.remove(pName);
-				
-			}
-		}, 100);
+		if (!isActive() && !isFiring()) {
+			setFiring(true);
+			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.arrow.net.use");
+		} else
+			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.already-active", ABILITY_NAME);
 		
 		return true;
 	}
