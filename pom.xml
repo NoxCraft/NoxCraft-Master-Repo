@@ -3,7 +3,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.noxpvp</groupId>
 	<artifactId>NoxCraft</artifactId>
-	<version>0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>NoxCore</module>
@@ -136,4 +135,5 @@
 
 We add all sorts of features. Specifically coded for our server in mind.
 </description>
+	<version>0.1 Beta</version>
 </project>
