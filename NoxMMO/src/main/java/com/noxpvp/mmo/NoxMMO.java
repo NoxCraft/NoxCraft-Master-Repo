@@ -48,6 +48,8 @@ public class NoxMMO extends NoxPlugin {
 	
 	private FileConfiguration config;
 	
+	private MasterListener masterListener;
+	
 	private PlayerManager playerManager = null;
 	
 	@Override
@@ -58,11 +60,13 @@ public class NoxMMO extends NoxPlugin {
 
 	@Override
 	public void disable() {
+		masterListener.unregisterAll(); 
 		ShurikenAbility.shurikenThrowers = null;
 		HammerOfThorAbility.hammerThrowers = null;
-		MedPackAbility.packs = null;
+		HookShotAbility.hookArrows = null;
 		SeveringStrikesAbility.strikers = null;
 		permHandler = null;
+		masterListener = null;
 		setInstance(null);
 	}
 	
@@ -81,6 +85,7 @@ public class NoxMMO extends NoxPlugin {
 			return;
 		}
 		setInstance(this);
+		masterListener = new MasterListener();
 		
 		playerManager = new PlayerManager();
 		core = NoxCore.getInstance();
@@ -180,6 +185,32 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "class", WarlordClass.className), "Allows access to the class named " + WarlordClass.className, PermissionDefault.OP)
 		));
 	}
+
+	@Override
+	public void localization() {
+		loadLocale("ability.already-active", "&4You cannot use the ability \"%1%\" as it is already active!");
+		loadLocale("ability.activated.default", "&a%1% Activated!");
+		
+		//Ability - MedPack
+		loadLocale("ability.medpack.use", "&eMedPack dropped!");
+		loadLocale("ability.medpack.picked-up.other", "&c%1%&e Picked up your dropped medpack!");
+		loadLocale("ability.medpack.picked-up", "&ePicked up %2%'s dropped medpack!");
+		
+		//Ability - NetArrow 
+		loadLocale("ability.arrow.net.use", getLocale("ability.activated", NetArrowAbility.ABILITY_NAME)); //Dynamic defaults FTW
+		loadLocale("ability.arrow.net.trapped", "&cSomething was caught in the net!"); //%1% should be a list comma delimited of entities or players. Default does not contain it.
+		
+		//Ability - Explosive Arrow
+		loadLocale("ability.arrow.explosive", "&eExplosive Arrow Activated!"); //FIXME: Unused
+		
+		//Ability - 
+		
+	}
+
+	public MasterListener getMasterListener(){
+		return masterListener;
+	}
+	
 	/**
 	 * Gets the player manager.
 	 *
@@ -189,8 +220,6 @@ public class NoxMMO extends NoxPlugin {
 		return playerManager;
 	}
 	
-	public static NoxMMO getInstance() { return instance; }
-
 	@Override
 	public NoxCore getCore() {
 		return core;
@@ -198,6 +227,9 @@ public class NoxMMO extends NoxPlugin {
 
 	@Override
 	public PermissionHandler getPermissionHandler() {
-		return null;
+		return permHandler;
 	}
+	
+	public static NoxMMO getInstance() { return instance; }
+	
 }

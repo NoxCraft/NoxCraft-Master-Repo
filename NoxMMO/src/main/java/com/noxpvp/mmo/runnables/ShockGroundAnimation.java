@@ -97,7 +97,7 @@ public class ShockGroundAnimation extends BukkitRunnable{
 		
 		for (int x = bx - shockRange; x <= bx + shockRange; x++) {
 			for (int z = bz - shockRange; z <= bz + shockRange; z++) {
-				Block b = center.getWorld().getBlockAt(x,y+3,z);
+				Block b = center.getWorld().getBlockAt(x, y+3, z);
 				
 				while(!isThrowable(b.getType()) && b.getLocation().getY() >= (center.getY()-3)){
 					b = b.getRelative(BlockFace.DOWN);

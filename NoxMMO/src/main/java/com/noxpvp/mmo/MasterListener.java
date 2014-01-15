@@ -54,4 +54,9 @@ public class MasterListener {
 			return false;
 		}
 	}
+
+	public void unregisterAll() {
+		for (GenericNoxListener<?> listener : listeners.values())
+			listener.unregister();
+	}
 }

@@ -80,7 +80,7 @@ public enum HomeImporter implements Importer{
 										Map<String, Object> data = new HashMap<String, Object>();
 										data.put("world", homeWorld);
 										
-										Double x,y,z;
+										Double x, y, z;
 										Float pitch, yaw;
 
 										x = homeData.getDouble("x", Double.NaN);

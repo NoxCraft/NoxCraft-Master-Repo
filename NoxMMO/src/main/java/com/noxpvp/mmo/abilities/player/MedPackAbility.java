@@ -1,7 +1,7 @@
 package com.noxpvp.mmo.abilities.player;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,6 +12,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
@@ -21,30 +23,30 @@ public class MedPackAbility extends BasePlayerAbility{
 	
 	public final static String ABILITY_NAME = "Med Pack";
 	public final static String PERM_NODE = "med-pack";
-	public static Map<Item, String> packs = new HashMap<Item, String>();
-	
-	private void EventExecute(PlayerPickupItemEvent event){
-		Player player = getPlayer();
-		Item item = event.getItem();
-		
-		if (MedPackAbility.packs.containsKey(item)) {
-			event.setCancelled(true);				
-			if (MedPackAbility.packs.get(item) != player.getName()){
-				item.remove();
-				
-				player.setHealth(player.getHealth() + 6.0);
-				
-				Location ploc = player.getLocation();
-				ploc.setY(ploc.getY() + 2);
-				
-				EffectsRunnable hearts = new EffectsRunnable("heart", ploc, 0, 1, false, false, null);
-				hearts.runTask(NoxMMO.getInstance());
-			} else return;
-		}
-	}
+
+	List<Item> packs = new ArrayList<Item>();
 	
 	private BaseMMOEventHandler<PlayerPickupItemEvent> handler;
 	private int health;
+	private boolean isActive = false;
+	
+	public MedPackAbility setActive(boolean active) {
+		boolean changed = this.isActive != active;
+		
+		MasterListener m = NoxMMO.getInstance().getMasterListener();
+		
+		this.isActive = active;
+		
+		if (active)
+			m.registerHandler(handler);
+		else
+			m.unregisterHandler(handler);
+		
+		return this;
+	}
+	
+	public boolean isActive() { return this.isActive; }
+	
 
 	public int getHealth() {return health;}
 
@@ -70,8 +72,33 @@ public class MedPackAbility extends BasePlayerAbility{
 			
 			public void execute(PlayerPickupItemEvent event) {
 				if (event.getPlayer().equals(MedPackAbility.this.getPlayer())) {
-					MedPackAbility.this.EventExecute(event);
-					
+					Item eventItem = event.getItem();
+					Player player = event.getPlayer();
+					Player abilPlayer = MedPackAbility.this.getPlayer();
+					if (MedPackAbility.this.packs.contains(eventItem))
+					{
+						event.setCancelled(true);
+						if (player.equals(MedPackAbility.this.getPlayer()))
+							return;
+						
+						packs.remove(eventItem);
+						eventItem.remove();
+						
+						player.setHealth(player.getHealth() + 6.0);
+						
+						Location ploc = player.getLocation();
+						ploc.setY(ploc.getY() + 2);
+						
+						EffectsRunnable hearts = new EffectsRunnable("heart", ploc, 0, 1, false, false, null);
+						hearts.runTask(NoxMMO.getInstance());
+						
+						MessageUtil.sendLocale(NoxMMO.getInstance(), player, "ability.medpack.pick-up", player.getName(), (abilPlayer != null? abilPlayer.getName() :  MedPackAbility.this.getNoxPlayer().getName()));
+						if (abilPlayer != null && abilPlayer.isOnline())
+							MessageUtil.sendLocale(NoxMMO.getInstance(), abilPlayer, "ability.medpack.pick-up.other", player.getName(), MedPackAbility.this.getNoxPlayer().getName());
+						
+						if (packs.isEmpty())
+							setActive(false);
+					}
 				}
 			}
 		};
@@ -87,12 +114,18 @@ public class MedPackAbility extends BasePlayerAbility{
 		pack.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
 		
 		Item drop = p.getWorld().dropItem(p.getLocation(), pack);
-		drop.setPickupDelay(30);
+		packs.add(drop);
 		
 		new EffectsRunnable("townaura", null, .1F, 10, true, true, drop).runTaskTimer(NoxMMO.getInstance(), 20, 12);
-		MedPackAbility.packs.put(drop, p.getName());
+		if (!packs.isEmpty())
+			setActive(true);
 		
-		return false;
+		if (isActive())
+		{
+			MessageUtil.sendLocale(NoxMMO.getInstance(), p, "ability.medpack.use");
+			return true;
+		} else
+			return false;
 	}
 
 }

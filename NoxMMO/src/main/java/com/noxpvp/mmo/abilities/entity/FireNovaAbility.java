@@ -151,7 +151,7 @@ public class FireNovaAbility extends BaseEntityAbility{
 				for (int x = bx - i; x <= bx + i; x++) {
 					for (int z = bz - i; z <= bz + i; z++) {
 						if (Math.abs(x-bx) == i || Math.abs(z-bz) == i) {
-							Block b = center.getWorld().getBlockAt(x,y,z);
+							Block b = center.getWorld().getBlockAt(x, y, z);
 							if (b.getType() == Material.AIR || (burnTallGrass && b.getType() == Material.LONG_GRASS)) {
 								Block under = b.getRelative(BlockFace.DOWN);
 								if (under.getType() == Material.AIR || (burnTallGrass && under.getType() == Material.LONG_GRASS)) {

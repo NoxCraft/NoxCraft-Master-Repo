@@ -52,7 +52,7 @@ public class CoolDown implements ConfigurationSerializable {
 		return obs;
 	}
 	
-	public static CoolDown deserialize(Map<String,Object> obs)
+	public static CoolDown deserialize(Map<String, Object> obs)
 	{
 		if (!obs.containsKey("name")|| !obs.containsKey("expires")|| !obs.containsKey("ns"))
 			throw new IllegalArgumentException("(name | expires | ns) should not be null!");

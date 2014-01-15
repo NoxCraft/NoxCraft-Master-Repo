@@ -1,49 +1,74 @@
 package com.noxpvp.mmo.abilities.player;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.bukkit.Bukkit;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
 
 public class PoisonArrowAbility extends BasePlayerAbility{
-	
-	static Map<String, PoisonArrowAbility> abilityCue = new HashMap<String, PoisonArrowAbility>();
 	
 	private final static String ABILITY_NAME = "Poison Arrow";
 	public final static String PERM_NODE = "poison-arrow";
 	
+	private BaseMMOEventHandler<EntityDamageByEntityEvent> hitHandler;
+	private BaseMMOEventHandler<ProjectileLaunchEvent> launchHandler;
+
 	private int amplifier;
 	private int duration;
 	
-	/**
-	 * Runs the event-side execution of this ability
-	 * 
-	 * @param player The Player - normally arrow shooter from a damage event
-	 * @param target The target - normally the living entity from a damage event
-	 * @return boolean If the execution ran successfully
-	 */
-	public static boolean eventExecute(Player player, LivingEntity target){
-		if (player == null || target == null)
-			return false;
+	List<Arrow> arrows = new ArrayList<Arrow>();
+	private boolean isActive = false, isFiring = false, isSingleShotMode = true;
+	
+	public PoisonArrowAbility setFiring(boolean firing) { 
+		boolean changed = this.isFiring != firing;
+		this.isFiring = firing;
 		
-		String name = player.getName();
-				
-		if (abilityCue.containsKey(name))
-			return false;
+		MasterListener m = NoxMMO.getInstance().getMasterListener();
 		
-		PoisonArrowAbility a = abilityCue.get(name);
+		if (changed)
+			if (firing)
+				m.registerHandler(launchHandler);
+			else
+				m.unregisterHandler(hitHandler);
 		
-		target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, a.duration, a.amplifier));
-		return true;
+		return this; 
 	}
-
+	
+	public PoisonArrowAbility setActive(boolean active) {
+		boolean changed = this.isActive != active;
+		this.isActive = active;
+		
+		MasterListener m = NoxMMO.getInstance().getMasterListener();
+		
+		if (changed)
+			if (active)
+				m.registerHandler(hitHandler);
+			else
+				m.unregisterHandler(hitHandler);
+		
+		return this; 
+	}
+	
+	public PoisonArrowAbility setSingleShotMode(boolean singleMode) { this.isSingleShotMode = singleMode; return this; }
+	
+	public boolean isFiring() { return this.isFiring; }
+	public boolean isActive() { return this.isActive; }
+	public boolean isSingleShotMode() { return this.isSingleShotMode;}
+	
 	/**
 	 * Get the currently set poison effect amplifier
 	 * 
@@ -57,14 +82,14 @@ public class PoisonArrowAbility extends BasePlayerAbility{
 	 * @param size The poison effect amplifier
 	 * @return NetArrowAbility This instance
 	 */
-	public PoisonArrowAbility setSize(int size) {this.amplifier = size; return this;}
+	public PoisonArrowAbility setAmplifier(int size) {this.amplifier = size; return this;}
 
 	/**
 	 * Gets the duration of the poison effect
 	 * 
 	 * @return Integer The duration
 	 */
-	public int getTime() {return duration;}
+	public int getDuration() {return duration;}
 
 	/**
 	 * Sets the duration in ticks of the poison amplifier
@@ -77,6 +102,84 @@ public class PoisonArrowAbility extends BasePlayerAbility{
 	public PoisonArrowAbility(Player player) {
 		super(ABILITY_NAME, player);
 		
+		hitHandler = new BaseMMOEventHandler<EntityDamageByEntityEvent>(new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("EntityDamageByEntityEvent").toString(), EventPriority.NORMAL, 1) {
+
+			public boolean ignoreCancelled() {
+				return true;
+			}
+
+			public void execute(EntityDamageByEntityEvent event) {
+				if (event.getDamager().getType() != EntityType.ARROW)
+					return;
+				if (!mayExecute())
+					return;
+				
+				LivingEntity e = (LivingEntity) ((event.getEntity() instanceof LivingEntity)? event.getEntity(): null);
+				if (e == null)
+					return;
+				
+				
+				Arrow a = (Arrow) event.getDamager();		
+				
+				if (a.getShooter().getType() != EntityType.PLAYER)
+					return;
+				
+				if (a.getShooter().equals(getPlayer()))
+				
+				if (PoisonArrowAbility.this.arrows.contains(a))
+					e.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getDuration(), getAmplifier()));
+				
+				arrows.remove(a);
+				
+				if (arrows.isEmpty())
+					setActive(false);
+				
+				else return;
+			}
+
+			public Class<EntityDamageByEntityEvent> getEventType() {
+				return EntityDamageByEntityEvent.class;
+			}
+
+			public String getEventName() {
+				return "EntityDamageByEntityEvent";
+			}
+		};
+		
+		launchHandler = new BaseMMOEventHandler<ProjectileLaunchEvent>(new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileLaunchEvent").toString(), EventPriority.MONITOR, 1) {
+			
+			
+			public boolean ignoreCancelled() {
+				return true;
+			}
+			
+			public Class<ProjectileLaunchEvent> getEventType() {
+				return ProjectileLaunchEvent.class;
+			}
+			
+			public String getEventName() {
+				return "ProjectileLaunchEvent";
+			}
+			
+			public void execute(ProjectileLaunchEvent event) {
+				Arrow a = (event.getEntity() instanceof Arrow? (Arrow)event.getEntity() : null);
+				
+				if (a == null)
+					return;
+				
+				if (a.getShooter().equals(getPlayer()) && isFiring())
+				{
+					arrows.add(a);
+					if (isSingleShotMode())
+						setFiring(false);
+				}
+				
+				if (!arrows.isEmpty())
+					setActive(true);
+				
+			}
+		};
+		
 		this.amplifier = 3;
 		this.duration = 75;
 	}
@@ -85,20 +188,17 @@ public class PoisonArrowAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 		
-		final String pName = getPlayer().getName();
-		
-		PoisonArrowAbility.abilityCue.put(getPlayer().getName(), this);
-		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
-			
-			public void run() {
-				
-				if (PoisonArrowAbility.abilityCue.containsKey(pName))
-					PoisonArrowAbility.abilityCue.remove(pName);
-				
-			}
-		}, 100);
-		
-		return true;
+		if (!isActive() && !isFiring())
+		{
+			setFiring(true);
+			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.activated", ABILITY_NAME);
+			return true;
+		}
+		else
+		{
+			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.already-active", ABILITY_NAME);
+			return false;
+		}
 	}
 
 }

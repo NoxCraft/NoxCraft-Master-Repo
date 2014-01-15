@@ -142,11 +142,11 @@ public class ShockWaveAnimation extends BukkitRunnable{
 					
 					if (isCircle) {
 						if (Math.abs( (int) b.getLocation().distance(center.getLocation()) ) == i) {
-							b = center.getWorld().getBlockAt(x,y+3,z);
+							b = center.getWorld().getBlockAt(x, y+3, z);
 						} else continue;
 						
 					} else if (Math.abs(x-bx) == i || Math.abs(z-bz) == i) {
-						b = center.getWorld().getBlockAt(x,y+3,z);//+3 - max height above location
+						b = center.getWorld().getBlockAt(x, y+3, z);//+3 - max height above location
 					}
 					
 					if (b == null) continue;

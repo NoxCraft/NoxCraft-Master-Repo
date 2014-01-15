@@ -18,7 +18,7 @@ import com.noxpvp.core.utils.MessageUtil;
 public class HomeAdminCommand implements CommandRunner {
 	public static final String COMMAND_NAME = "noxhomes";
 	
-	private Map<String, DescriptiveCommandRunner> subCommands = new HashMap<String, DescriptiveCommandRunner>();;
+	private Map<String, DescriptiveCommandRunner> subCommands = new HashMap<String, DescriptiveCommandRunner>();
 	
 	public HomeAdminCommand()
 	{

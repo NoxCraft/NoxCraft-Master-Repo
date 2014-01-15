@@ -139,7 +139,7 @@ public class PlayerManagerTest {
 		when(server.getLogger()).thenReturn(Logger.getLogger("minecraft"));
 
 		assertNotNull("Player Manager failed to initialize", playerManager);
-		assertNotNull("File was null. It did not aquire an object.",temp);
+		assertNotNull("File was null. It did not aquire an object.", temp);
 	}
 
 	@Test

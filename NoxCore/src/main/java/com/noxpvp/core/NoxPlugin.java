@@ -26,7 +26,7 @@ import com.noxpvp.core.utils.PermissionHandler;
 
 public abstract class NoxPlugin extends PluginBase {
 
-	protected Map<String, CommandRunner> commandExecs = new HashMap<String, CommandRunner>();;
+	protected Map<String, CommandRunner> commandExecs = new HashMap<String, CommandRunner>();
 	
 	protected void addPermission(NoxPermission perm) {
 		NoxCore.getInstance().addPermission(perm);
