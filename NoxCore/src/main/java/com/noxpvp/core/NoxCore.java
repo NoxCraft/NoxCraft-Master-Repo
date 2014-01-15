@@ -11,6 +11,7 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.event.HandlerList;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 
@@ -31,6 +32,7 @@ import com.noxpvp.core.listeners.ChatPingListener;
 import com.noxpvp.core.listeners.ChestBlockListener;
 import com.noxpvp.core.listeners.DeathListener;
 import com.noxpvp.core.listeners.LoginGroupListener;
+import com.noxpvp.core.listeners.OnLogoutSaveListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.permissions.NoxPermission;
@@ -46,6 +48,8 @@ public class NoxCore extends NoxPlugin {
 	private DeathListener deathListener;
 	private FileConfiguration globalLocales;
 	private LoginGroupListener loginListener;
+	
+	private OnLogoutSaveListener saveListener;
 	
 	private MasterReloader masterReloader = null;
 	private transient WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>> permission_cache = new WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>>();
@@ -113,6 +117,9 @@ public class NoxCore extends NoxPlugin {
 		if (voteListener != null)
 			voteListener.destroy();
 		
+		playerManager.save();
+		
+		HandlerList.unregisterAll(this);
 		setInstance(null);
 		VaultAdapter.unload();
 	}
@@ -149,15 +156,18 @@ public class NoxCore extends NoxPlugin {
 		voteListener = new VoteListener();
 		deathListener = new DeathListener();
 		loginListener = new LoginGroupListener();
+		saveListener = new OnLogoutSaveListener(this); 
+		
+		saveListener.register();
 		
 		chatPingListener.register();
 		
 		if (CommonUtil.isPluginEnabled("Votifier")) //Fixes console error message.
 			voteListener.register();
+		
+		
 		deathListener.register();
 		loginListener.register();
-		
-		pluginManager.registerEvents(deathListener, this);
 		
 		VaultAdapter.load();
 		
