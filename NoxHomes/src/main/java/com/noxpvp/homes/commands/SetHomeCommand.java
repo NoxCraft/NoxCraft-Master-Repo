@@ -100,7 +100,7 @@ public class SetHomeCommand implements CommandRunner {
 		if (success && newHome != null) {
 			SafeLocation l = new SafeLocation(newHome.getLocation());
 			MessageUtil.sendLocale(plugin, sender, "homes.sethome"+(own?".own":""), player, (homeName == null? "default": homeName), String.format(
-				"x=%1$s y=%2$s z=%3$s on world %4$s", l.getX(), l.getY(), l.getZ(), l.getWorldName()
+				"x=%1$.1f y=%2$.1f z=%3$.1f on world \"%4$s\"", l.getX(), l.getY(), l.getZ(), l.getWorldName()
 				));
 		} else {
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Home never stored in memory...");
