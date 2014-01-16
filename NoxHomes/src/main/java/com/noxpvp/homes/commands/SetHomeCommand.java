@@ -78,6 +78,9 @@ public class SetHomeCommand implements CommandRunner {
 			newHome = new DefaultHome(player, sender);
 		else
 			newHome = new NamedHome(player, homeName, sender);
+		
+		if (newHome instanceof DefaultHome)
+			homeName = DefaultHome.PERM_NODE;
 		boolean good = false;
 		if (own)
 		{
@@ -85,8 +88,13 @@ public class SetHomeCommand implements CommandRunner {
 			{
 				good = true;
 			} else {
-				MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "You already have the maximum amount of homes allowed.");
-				return true;
+				if ( manager.getHome(player, homeName) != null) {
+					good = true;
+					manager.removeHome(plugin.getHomeManager().getHome(player, homeName));
+				} else {
+					MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "You already have the maximum amount of homes allowed.");
+					return true;
+				}
 			}
 		}
 		else
@@ -97,11 +105,13 @@ public class SetHomeCommand implements CommandRunner {
 			success = manager.getHome(player, homeName) != null;
 		} else
 			success = false;
-		if (success && newHome != null) {
+		if (success) {
 			SafeLocation l = new SafeLocation(newHome.getLocation());
 			MessageUtil.sendLocale(plugin, sender, "homes.sethome"+(own?".own":""), player, (homeName == null? "default": homeName), String.format(
 				"x=%1$.1f y=%2$.1f z=%3$.1f on world \"%4$s\"", l.getX(), l.getY(), l.getZ(), l.getWorldName()
 				));
+			
+			manager.save();
 		} else {
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Home never stored in memory...");
 		}

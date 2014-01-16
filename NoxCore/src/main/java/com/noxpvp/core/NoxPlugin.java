@@ -2,6 +2,7 @@ package com.noxpvp.core;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
@@ -9,6 +10,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import com.bergerkiller.bukkit.common.Common;
 import com.bergerkiller.bukkit.common.PluginBase;
@@ -128,4 +130,6 @@ public abstract class NoxPlugin extends PluginBase {
 	}
 	
 	public abstract PermissionHandler getPermissionHandler();
+	
+	public abstract Class<? extends ConfigurationSerializable>[] getSerialiables();
 }

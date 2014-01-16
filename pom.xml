@@ -8,6 +8,7 @@
 		<module>NoxCore</module>
 		<module>NoxHomes</module>
 		<module>NoxMMO</module>
+		
 	</modules>
 	<repositories>
 		<repository>
@@ -135,5 +136,5 @@
 
 We add all sorts of features. Specifically coded for our server in mind.
 </description>
-	<version>0.1.2 Beta</version>
+	<version>0.1.3 Beta</version>
 </project>

@@ -3,6 +3,8 @@ package com.noxpvp.homes;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.permissions.PermissionDefault;
 
@@ -30,6 +32,8 @@ public class NoxHomes extends NoxPlugin {
 	NoxCore core;
 	
 	private PermissionHandler permHandler;
+	
+	LoginListener logins;
 	
 	public static NoxHomes getInstance() {
 		return instance;
@@ -82,6 +86,7 @@ public class NoxHomes extends NoxPlugin {
 		instance = this;
 		core = NoxCore.getInstance();
 		
+		logins = new LoginListener(this);
 		
 		commandExecs = new HashMap<String, CommandRunner>();
 		homeManager = new HomeManager(NoxCore.getInstance());
@@ -90,7 +95,7 @@ public class NoxHomes extends NoxPlugin {
 		homeManager.load();
 		limitManager.load();
 		
-		ConfigurationSerialization.registerClass(BaseHome.class);
+		logins.register();
 		
 		Reloader r = new BaseReloader(core.getMasterReloader(), "NoxHomes") {
 			public boolean reload() {
@@ -115,6 +120,7 @@ public class NoxHomes extends NoxPlugin {
 		
 		core.addReloader(r);
 		registerAllCommands();
+		
 	}
 	
 	public NoxCore getCore() {
@@ -243,5 +249,10 @@ public class NoxHomes extends NoxPlugin {
 	@Override
 	public PermissionHandler getPermissionHandler() {
 		return permHandler;
+	}
+	
+	@Override
+	public Class<? extends ConfigurationSerializable>[] getSerialiables() {
+		return new Class[]{BaseHome.class};
 	}
 }

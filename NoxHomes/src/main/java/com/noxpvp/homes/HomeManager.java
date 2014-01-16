@@ -87,7 +87,7 @@ public class HomeManager implements Persistant { //FIXME: Javadocs
 	
 	public void loadHomes(String player)
 	{
-		getPlayer(player);
+		getPlayer(player).load();
 	}
 	
 	public void save()

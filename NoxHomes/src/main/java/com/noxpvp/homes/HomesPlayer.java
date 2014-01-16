@@ -5,9 +5,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.defaults.ClearCommand;
 
+import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.conversion.Conversion;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
@@ -29,6 +32,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	public HomesPlayer(String playerName)
 	{
 		super(playerName);
+		load();
 	}
 	
 	/**
@@ -39,11 +43,13 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	public HomesPlayer(OfflinePlayer player)
 	{
 		super(player);
+		load();
 	}
 	
 	public HomesPlayer(NoxPlayerAdapter player)
 	{
 		super(player);
+		load();
 	}
 	
 	/**
@@ -83,14 +89,37 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	 * @see com.noxpvp.core.Persistant#save()
 	 */
 	public void save() {
-		getNoxPlayer().getPersistantData().set("homes", getHomes());
+		ConfigurationNode var = getNoxPlayer().getPersistantData();
+		for (int i = 0; i < homes.size(); i++)
+			var.set("homes." + i, homes.get(i));
 	}
 
 	/* (non-Javadoc)
 	 * @see com.noxpvp.core.Persistant#load()
 	 */
 	public void load() {
-		setHomes(getNoxPlayer().getPersistantData().getList("homes", BaseHome.class));
+		ConfigurationNode var = getNoxPlayer().getPersistantData().getNode("homes");
+		
+		homes.clear();
+		
+		for (String k : var.getKeys())
+			homes.add((BaseHome) var.get(k));
+		
+		cleanHomes();
+	}
+	
+	private void cleanHomes() {
+		List<Integer> pending = new ArrayList<Integer>();
+		
+		for ( int i = 0; i < homes.size(); i++)
+			if (homes.get(i) == null)
+				pending.add(i);
+		
+		for(int i : pending)
+			homes.remove(i);
+		if (pending.size() > 0)
+			NoxHomes.getInstance().log(Level.WARNING, "Removed " + pending.size() + " null homes.");
+		save();
 	}
 	
 	/**

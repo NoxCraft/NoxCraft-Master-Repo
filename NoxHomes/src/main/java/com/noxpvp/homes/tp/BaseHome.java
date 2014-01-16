@@ -24,7 +24,6 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 	protected transient final PermissionHandler permHandler;
 	protected SafeLocation warpPoint;
 	
-	@SuppressWarnings("unchecked")
 	public static BaseHome deserialize(Map<String, Object> data)
 	{
 		try {
@@ -32,17 +31,20 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 			SafeLocation warpPoint = SafeLocation.deserialize((Map<String, Object>) data.get("warpPoint"));
 			String name = data.get("name").toString();
 			
-			if (name.equals(DefaultHome.PERM_NODE))
+			if (name.equalsIgnoreCase(DefaultHome.PERM_NODE))
 				return new DefaultHome(owner, warpPoint.toLocation());
 			else
 				return new NamedHome(owner, name, warpPoint.toLocation());
 		} catch (ClassCastException e) {
-			NoxCore plugin = NoxCore.getInstance();
+			NoxHomes plugin = NoxHomes.getInstance();
 			
 			plugin.log(Level.SEVERE, "Severe error occured during deserialization of Home class from config.");
 			plugin.handle(e);
 		}
 		catch (Throwable e) {
+			NoxHomes plugin = NoxHomes.getInstance();
+			
+			plugin.log(Level.SEVERE, "Something happened on trying to make new basehome off of config value.");
 			NoxCore.getInstance().handle(e);
 		}
 		return null;
