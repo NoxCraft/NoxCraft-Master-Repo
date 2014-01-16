@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.noxpvp</groupId>
     <artifactId>NoxCraft</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1.4 - Beta</version>
   </parent>
   <artifactId>NoxHomes</artifactId>
   <properties>

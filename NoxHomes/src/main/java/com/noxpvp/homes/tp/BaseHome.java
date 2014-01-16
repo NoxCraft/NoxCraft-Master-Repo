@@ -28,7 +28,8 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 	{
 		try {
 			String owner = data.get("owner").toString();
-			SafeLocation warpPoint = SafeLocation.deserialize((Map<String, Object>) data.get("warpPoint"));
+//			SafeLocation warpPoint = SafeLocation.deserialize((Map<String, Object>) data.get("warpPoint"));
+			SafeLocation warpPoint = (SafeLocation) data.get("warpPoint");
 			String name = data.get("name").toString();
 			
 			if (name.equalsIgnoreCase(DefaultHome.PERM_NODE))
@@ -123,7 +124,8 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("name", getName());
 		data.put("owner", getOwner());
-		data.put("warpPoint", new SafeLocation(getLocation()).serialize());
+//		data.put("warpPoint", new SafeLocation(getLocation()).serialize());
+		data.put("warpPoint", new SafeLocation(getLocation()));
 		
 		return data;
 	}

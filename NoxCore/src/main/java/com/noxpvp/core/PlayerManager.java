@@ -6,7 +6,6 @@ package com.noxpvp.core;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +16,13 @@ import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.data.CoreBar;
-import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.CoreBoard;
+import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.events.PlayerDataLoadEvent;
+import com.noxpvp.core.events.PlayerDataSaveEvent;
+import com.noxpvp.core.events.PlayerDataUnloadEvent;
 
 public class PlayerManager implements Persistant {
 
@@ -67,6 +70,10 @@ public class PlayerManager implements Persistant {
 			loadOrCreate(player.getName());
 	}
 	
+	private void loadOrCreate(String name) {
+		loadPlayer(getPlayer(name));
+	}
+
 	/**
 	 * Gets the player node.
 	 * <b>INTERNAL METHOD</b> Best not to use this!
@@ -103,7 +110,14 @@ public class PlayerManager implements Persistant {
 	 */
 	public NoxPlayer getPlayer(String name)
 	{
-			return loadOrCreate(name);
+		NoxPlayer player = null;
+		if (players.containsKey(name))
+			player = players.get(name);
+		else {
+			player = new NoxPlayer(this, name);
+			players.put(name, player);
+		}
+		return player;
 	}
 	
 	/**
@@ -130,7 +144,7 @@ public class PlayerManager implements Persistant {
 	 * @param name the name
 	 */
 	public void unloadAndSavePlayer(String name) {
-		getPlayer(name).save();
+		savePlayer(name);
 		unloadPlayer(name);
 	}
 
@@ -140,25 +154,10 @@ public class PlayerManager implements Persistant {
 	 * @param name of the player
 	 */
 	public void unloadPlayer(String name) {
+		/*PlayerDataUnloadEvent e = */CommonUtil.callEvent(new PlayerDataUnloadEvent(getPlayer(name), false));
 		players.remove(name);
 	}
 
-	private NoxPlayer loadOrCreate(String name) {
-		NoxPlayer player = null;
-		
-		if (players.containsKey(name))
-			player = players.get(name);
-		else
-			player = new NoxPlayer(this, name);
-		
-		player.load();
-		
-		if (!players.containsKey(name))
-			players.put(name, player);
-		
-		return player;
-	}
-	
 	/**
 	 * Checks if is player is in memory.
 	 *
@@ -216,11 +215,7 @@ public class PlayerManager implements Persistant {
 	 * @param name of the player
 	 */
 	public void loadPlayer(String name) {
-		if (!players.containsKey(name))
-		{
-			NoxPlayer player = loadOrCreate(name);
-			loadPlayer(player);
-		}
+		loadPlayer(getPlayer(name));
 	}
 	
 	

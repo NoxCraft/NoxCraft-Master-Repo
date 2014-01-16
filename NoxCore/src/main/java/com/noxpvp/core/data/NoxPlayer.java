@@ -13,11 +13,14 @@ import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.VaultAdapter;
+import com.noxpvp.core.events.PlayerDataLoadEvent;
+import com.noxpvp.core.events.PlayerDataSaveEvent;
 import com.noxpvp.core.utils.PermissionHandler;
 
 public class NoxPlayer implements Persistant, NoxPlayerAdapter {
@@ -40,7 +43,6 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this.temp_data = player.temp_data;
 		this.persistant_data = player.persistant_data;
 		this.manager = player.manager;
-		load();
 	}
 	
 	public NoxPlayer(PlayerManager mn, String name) {
@@ -49,7 +51,6 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		cd_cache = new WeakHashMap<String, CoolDown>();
 		manager = mn;
 		this.name = name;
-		load();
 	}
 	
 	public boolean addCoolDown(String name, long length)
@@ -233,10 +234,16 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			FileConfiguration fNode = (FileConfiguration) persistant_data;
 			fNode.load();
 		}
+		else if (!manager.isMultiFile())
+			manager.load();
 		
 		cds = persistant_data.getList("cooldowns", CoolDown.class);
 		
+		if (getFirstJoin() == 0)
+			setFirstJoin();
+		
 		rebuild_cache();
+		/*PlayerDataLoadEvent e = */CommonUtil.callEvent(new PlayerDataLoadEvent(this, false));
 	}
 	
 	public void rebuild_cache() {
@@ -256,6 +263,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 
 	public void save() {
 		persistant_data.set("cooldowns", getCoolDowns());
+		/*PlayerDataSaveEvent e = */CommonUtil.callEvent(new PlayerDataSaveEvent(this ,false));
 		if (persistant_data instanceof FileConfiguration)
 		{
 			FileConfiguration configNode = (FileConfiguration) persistant_data;
@@ -273,6 +281,15 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			throw new IllegalArgumentException("Must be the same player as object holder");
 		
 		persistant_data.set("last.location", new SafeLocation(player.getLocation()));
+	}
+	
+	public void setFirstJoin() {
+		setFirstJoin(getOfflinePlayer().getFirstPlayed());
+	}
+	
+	public void setFirstJoin(long value)
+	{
+		this.persistant_data.set("first.join", value);
 	}
 	
 	public void setLastDeathLocation(Location loc)

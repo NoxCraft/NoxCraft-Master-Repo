@@ -44,11 +44,11 @@ public class GlobalLocale extends LocalizationEnum {
 	
 	@Override
 	public String get(String... args) {
-		return NoxCore.getInstance().getGlobalLocale(getName(), args);
+		return MessageUtil.parseColor(NoxCore.getInstance().getGlobalLocale(getName(), args));
 	}
 	
 	@Override
 	public void message(CommandSender sender, String... arguments) {
-		MessageUtil.sendMessage(sender, MessageUtil.parseArguments(MessageUtil.parseColor(get()), arguments).split("\n"));
+		MessageUtil.sendMessage(sender, MessageUtil.parseArguments(get(), arguments).split("\n"));
 	}
 }
