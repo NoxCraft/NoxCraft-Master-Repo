@@ -92,7 +92,7 @@ public class SetHomeCommand implements CommandRunner {
 					good = true;
 					manager.removeHome(plugin.getHomeManager().getHome(player, homeName));
 				} else {
-					MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "You already have the maximum amount of homes allowed.");
+					MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "You already " + plugin.getHomeManager().getHomes(player).size() + "/"+ plugin.getLimitsManager().getLimit(player) + " of the maximum amount of homes allowed.");
 					return true;
 				}
 			}
