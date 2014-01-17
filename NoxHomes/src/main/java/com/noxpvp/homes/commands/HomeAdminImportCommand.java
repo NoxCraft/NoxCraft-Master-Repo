@@ -5,7 +5,8 @@ import org.bukkit.command.CommandSender;
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.commands.DescriptiveCommandRunner;
+import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.MessageUtil;
@@ -14,7 +15,7 @@ import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.homes.HomeImporter;
 
-public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME add this as subcommand.
+public class HomeAdminImportCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "import";
 	public static final String PERM_NODE = "import";
 	private HomeManager manager;
@@ -26,6 +27,8 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 	
 	public HomeAdminImportCommand()
 	{
+		super(COMMAND_NAME, false);
+		
 		if (NoxCore.getInstance() == null)
 			throw new RuntimeException("NoxCore plugin is not loaded! Do not use this class in other plugins please.");
 		
@@ -40,10 +43,6 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 			importerNames[i] = vals[i].name();
 	}
 	
-	public String getName() {
-		return COMMAND_NAME;
-	}
-
 	public boolean execute(CommandContext context) {
 		CommandSender sender = context.getSender();
 		String[] args = context.getArguments();
@@ -105,10 +104,6 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 
 	public String[] getHelp() {
 		MessageBuilder mb = new MessageBuilder();
-		mb.yellow("[").blue("NoxHomes Import Command Help").yellow("]");
-		
-		mb.setIndent(1);
-		
 		mb.blue("/").append(HomeAdminCommand.COMMAND_NAME).append(" ").append(COMMAND_NAME).append(" ").yellow("[importerName]");
 		mb.newLine().blue("Importers: ").newLine();
 		mb.aqua("[").green(StringUtil.combineNames(importerNames)).aqua("]");
@@ -124,11 +119,15 @@ public class HomeAdminImportCommand implements DescriptiveCommandRunner {//FIXME
 	}
 
 	public String[] getFlags() {
-		return new String[]{"e", "erase", "overwrite"};
+		return new String[]{"e", "erase", "overwrite", "h", "help"};
 	}
 
-	public void displayHelp(CommandSender sender) {
-		MessageUtil.sendMessage(sender, getHelp());
+	public int getMaxArguments() {
+		return 1;
 	}
 
+	@Override
+	public NoxPlugin getPlugin() {
+		return plugin;
+	}
 }

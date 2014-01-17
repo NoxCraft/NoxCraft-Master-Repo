@@ -20,8 +20,6 @@ import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.data.CoreBar;
 import com.noxpvp.core.data.CoreBoard;
 import com.noxpvp.core.data.NoxPlayer;
-import com.noxpvp.core.events.PlayerDataLoadEvent;
-import com.noxpvp.core.events.PlayerDataSaveEvent;
 import com.noxpvp.core.events.PlayerDataUnloadEvent;
 
 public class PlayerManager implements Persistant {

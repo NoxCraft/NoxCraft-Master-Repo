@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.defaults.ClearCommand;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.conversion.Conversion;

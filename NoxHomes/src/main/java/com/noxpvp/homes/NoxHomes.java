@@ -10,7 +10,7 @@ import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
-import com.noxpvp.core.commands.CommandRunner;
+import com.noxpvp.core.commands.Command;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
 import com.noxpvp.core.reloader.Reloader;
@@ -37,10 +37,10 @@ public class NoxHomes extends NoxPlugin {
 	}
 	
 	/**
-	 * <b> BE SURE TO HAVE THOSE CLASSES IMPLEMENT <u>CommandRunner</u> OR YOU RISK CRASH!</b>
+	 * <b> BE SURE TO HAVE THOSE CLASSES IMPLEMENT <u>Command</u> OR YOU RISK CRASH!</b>
 	 */
 	@SuppressWarnings("unchecked")
-	private static final Class<CommandRunner>[] commands = (Class<CommandRunner>[]) new Class<?>[] {
+	private static final Class<Command>[] commands = (Class<Command>[]) new Class<?>[] {
 		DeleteHomeCommand.class,
 		HomeAdminCommand.class,
 		HomeCommand.class,
@@ -83,7 +83,7 @@ public class NoxHomes extends NoxPlugin {
 		instance = this;
 		core = NoxCore.getInstance();
 		
-		commandExecs = new HashMap<String, CommandRunner>();
+		commandExecs = new HashMap<String, Command>();
 		homeManager = new HomeManager(NoxCore.getInstance());
 		limitManager = new HomeLimitManager();
 		dataL = new DataListener(this);
@@ -228,10 +228,10 @@ public class NoxHomes extends NoxPlugin {
 	}
 
 	private void registerAllCommands() {
-		for (Class<CommandRunner> cls : commands)
+		for (Class<Command> cls : commands)
 		{
-			SafeConstructor<CommandRunner> cons = new SafeConstructor<CommandRunner>(cls, new Class[0]);
-			CommandRunner rn = cons.newInstance();
+			SafeConstructor<Command> cons = new SafeConstructor<Command>(cls, new Class[0]);
+			Command rn = cons.newInstance();
 			if (rn != null)
 				registerCommand(rn);
 		}
@@ -246,6 +246,7 @@ public class NoxHomes extends NoxPlugin {
 		return permHandler;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Class<? extends ConfigurationSerializable>[] getSerialiables() {
 		return new Class[]{BaseHome.class, NamedHome.class, DefaultHome.class};

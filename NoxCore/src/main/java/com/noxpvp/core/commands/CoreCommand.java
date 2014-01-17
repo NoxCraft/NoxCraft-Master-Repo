@@ -4,11 +4,24 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CoreCommand implements CommandRunner {
-	public static final String COMMAND_NAME = "noxcore";
+import com.noxpvp.core.NoxCore;
+
+public class CoreCommand extends BaseCommand {
+	public CoreCommand() {
+		super(COMMAND_NAME, false);
+	}
 	
-	public String getName() {
-		return COMMAND_NAME;
+	public int getMaxArguments() {
+		return 0;
+	}
+	
+	@Override
+	public NoxCore getPlugin() {
+		return NoxCore.getInstance();
+	}
+	
+	public String[] getFlags() {
+		return new String[0];
 	}
 	
 	public String[] getHelp() {
@@ -22,12 +35,6 @@ public class CoreCommand implements CommandRunner {
 			sender.sendMessage(ChatColor.stripColor(m));
 		else
 			sender.sendMessage(m);
-		return false;
+		return true;
 	}
-
-	public void displayHelp(CommandSender sender) {
-		for (String line : getHelp())
-			sender.sendMessage(line);
-	}
-
 }

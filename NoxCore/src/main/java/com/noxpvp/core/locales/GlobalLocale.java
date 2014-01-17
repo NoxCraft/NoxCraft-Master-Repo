@@ -19,7 +19,7 @@ public class GlobalLocale extends LocalizationEnum {
 	static {
 		//Help Dialogs
 		HELP_HEADER = new GlobalLocale("help.header", 
-				  "&6-=[&1Nox &l:&4 %0%&6]=-\n"
+				  "&6-=[&4%0%&6]=-\n"
 				+ "&6/&1%1% &d-h&6 > Displays this message");
 		
 		//Permissions

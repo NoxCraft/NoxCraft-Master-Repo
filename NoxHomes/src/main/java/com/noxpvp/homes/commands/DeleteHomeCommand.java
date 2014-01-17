@@ -1,12 +1,12 @@
 package com.noxpvp.homes.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
-import com.noxpvp.core.commands.CommandRunner;
+import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.locales.GlobalLocale;
@@ -16,7 +16,7 @@ import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.tp.BaseHome;
 
-public class DeleteHomeCommand implements CommandRunner {
+public class DeleteHomeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "delhome";
 	public static final String PERM_NODE = "delhome";
 	private HomeManager manager;
@@ -25,6 +25,7 @@ public class DeleteHomeCommand implements CommandRunner {
 	
 	public DeleteHomeCommand()
 	{
+		super(COMMAND_NAME, false);
 		plugin = NoxHomes.getInstance();
 		manager = plugin.getHomeManager();
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
@@ -75,19 +76,6 @@ public class DeleteHomeCommand implements CommandRunner {
 		return true;
 	}
 	
-	public void displayHelp(CommandSender sender)
-	{
-		MessageBuilder mb = new MessageBuilder();
-		
-		mb.setSeparator("\n");
-		for (String line : GlobalLocale.HELP_HEADER.get("Homes", COMMAND_NAME).split("\n"))
-			mb.append(line);
-		for (String line : getHelp())
-			mb.append(line);
-		
-		MessageUtil.sendMessage(sender, mb.lines());
-	}
-	
 	public String[] getHelp()
 	{
 		MessageBuilder mb = new MessageBuilder();
@@ -95,8 +83,16 @@ public class DeleteHomeCommand implements CommandRunner {
 		return mb.lines();
 	}
 
-	public String getName() {
-		return COMMAND_NAME;
+	public String[] getFlags() {
+		return new String[] {"h", "help", "p", "player"};
 	}
 
+	public int getMaxArguments() {
+		return 1;
+	}
+
+	@Override
+	public NoxPlugin getPlugin() {
+		return plugin;
+	}
 }

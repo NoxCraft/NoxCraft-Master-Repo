@@ -1,9 +1,6 @@
-package nr.com.noxpvp.core.commands;
+package com.noxpvp.core.commands;
 
 import org.bukkit.command.CommandSender;
-
-import com.noxpvp.core.commands.CommandContext;
-import com.noxpvp.core.commands.NoPermissionException;
 
 public interface Command {
 	public String getName();
@@ -24,5 +21,7 @@ public interface Command {
 	
 	public Command getRoot();
 	
-	public boolean executeCommand(CommandSender sender, CommandContext context) throws NoPermissionException;
+	public boolean executeCommand(CommandContext context) throws NoPermissionException;
+
+	public void displayHelp(CommandSender sender);
 }

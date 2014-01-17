@@ -1,12 +1,15 @@
-package nr.com.noxpvp.core.commands;
+package com.noxpvp.core.commands;
 
 import java.util.Arrays;
 import java.util.logging.Level;
 
 import org.bukkit.command.CommandSender;
 
+import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.collections.StringMap;
 import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.locales.GlobalLocale;
+import com.noxpvp.core.utils.MessageUtil;
 
 public abstract class BaseCommand implements Command {
 	private final boolean isPlayerOnly;
@@ -52,22 +55,24 @@ public abstract class BaseCommand implements Command {
 		return null;
 	}
 
-	public abstract boolean execute(CommandSender sender, CommandContext context) throws NoPermissionException;
+	public abstract boolean execute(CommandContext context) throws NoPermissionException;
 	
-	public final boolean executeCommand(CommandSender sender, CommandContext context) throws NoPermissionException {
+	public final boolean executeCommand(CommandContext context) throws NoPermissionException {
 		if (!hasSubCommands() || context.getArgumentCount() == 0)
-			return execute(sender, context);
+			return execute(context);
 		
 		String[] args = context.getArguments();
 		
 		String nextArg = context.getArgument(0);
-		CommandContext newContext = new CommandContext(sender, context.getFlags(), Arrays.copyOfRange(args, 1, args.length-1));
+		CommandContext newContext = new CommandContext(context.getSender(), context.getFlags(), Arrays.copyOfRange(args, 1, args.length-1));
 		
 		BaseCommand subCMD = getSubCommand(nextArg);
 		if (subCMD != null)
-			return subCMD.executeCommand(sender, newContext);
-		return execute(sender, context);
+			return subCMD.executeCommand(newContext);
+		return execute(context);
 	}
+	
+	protected StringMap<BaseCommand> getSubCommandMap() { return subCommands; }
 	
 	public final String getFullName() {
 		StringBuilder sb = new StringBuilder();
@@ -116,6 +121,12 @@ public abstract class BaseCommand implements Command {
 		return isRoot;
 	}
 	
+	public final void registerSubCommands(BaseCommand... commands)
+	{
+		for (BaseCommand c : commands)
+			registerSubCommand(c);
+	}
+	
 	public final void registerSubCommand(BaseCommand command) {
 		if (containsSubCommand(command))
 		{
@@ -128,5 +139,20 @@ public abstract class BaseCommand implements Command {
 	}
 	
 	private void setParent(BaseCommand command) { this.parent = command; this.isRoot = false; }
+
+	public static final String COMMAND_NAME = "reloader";
+
+	public final void displayHelp(CommandSender sender) {
+		MessageBuilder mb = new MessageBuilder();
+		
+		mb.setSeparator("\n");
+		mb.newLine();
+		for (String line : GlobalLocale.HELP_HEADER.get(getPlugin().getName(), COMMAND_NAME).split("\n"))
+			mb.append(line);
+		for (String line : getHelp())
+			mb.append(line);
+		
+		MessageUtil.sendMessage(sender, mb.lines());
+	}
 }
 

@@ -16,8 +16,8 @@ import com.bergerkiller.bukkit.common.PluginBase;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
+import com.noxpvp.core.commands.Command;
 import com.noxpvp.core.commands.CommandContext;
-import com.noxpvp.core.commands.CommandRunner;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.permissions.NoxPermission;
@@ -27,7 +27,7 @@ import com.noxpvp.core.utils.PermissionHandler;
 
 public abstract class NoxPlugin extends PluginBase {
 
-	protected Map<String, CommandRunner> commandExecs = new HashMap<String, CommandRunner>();
+	protected Map<String, Command> commandExecs = new HashMap<String, Command>();
 	
 	protected void addPermission(NoxPermission perm) {
 		NoxCore.getInstance().addPermission(perm);
@@ -45,12 +45,11 @@ public abstract class NoxPlugin extends PluginBase {
 		
 		if (commandExecs.containsKey(command.toLowerCase(Locale.ENGLISH)))
 		{
-			CommandRunner cmd = commandExecs.get(command.toLowerCase(Locale.ENGLISH));
+			Command cmd = commandExecs.get(command.toLowerCase(Locale.ENGLISH));
 			if (cmd == null)
-				throw new NullPointerException("Command Runner was null!");
+				throw new NullPointerException("Command execution class was null!");
 			try {
-				if (!cmd.execute(context))
-					cmd.displayHelp(sender);
+				return cmd.executeCommand(context);
 			} catch (NoPermissionException e) {
 				MessageUtil.sendLocale(e.getSender(), GlobalLocale.FAILED_PERMISSION_VERBOSE, e.getMessage(), e.getPermission());
 			}
@@ -88,13 +87,13 @@ public abstract class NoxPlugin extends PluginBase {
 		return Common.VERSION;
 	}
 	
-	public void registerCommand(CommandRunner runner)
+	public void registerCommand(Command runner)
 	{
 		if (runner == null)
 			throw new IllegalArgumentException("Command Runner must not be null!");
 		
 		if (commandExecs.containsKey(runner.getName().toLowerCase(Locale.ENGLISH)))
-			log(Level.WARNING, "CommandRunner - "+runner.getName() + " failed to register");
+			log(Level.WARNING, "Command - "+runner.getName() + " failed to register");
 		
 		commandExecs.put(runner.getName().toLowerCase(Locale.ENGLISH), runner);
 		PluginCommand cmd = Bukkit.getPluginCommand(runner.getName().toLowerCase());
@@ -116,15 +115,15 @@ public abstract class NoxPlugin extends PluginBase {
 		}
 	}
 	
-	public void registerCommands(Collection<CommandRunner> runners)
+	public void registerCommands(Collection<Command> runners)
 	{
-		for(CommandRunner runner : runners)
+		for(Command runner : runners)
 			registerCommand(runner);
 	}
 	
-	public void registerCommands(CommandRunner... runners)
+	public void registerCommands(Command... runners)
 	{
-		for (CommandRunner runner : runners)
+		for (Command runner : runners)
 			registerCommand(runner);
 	}
 	

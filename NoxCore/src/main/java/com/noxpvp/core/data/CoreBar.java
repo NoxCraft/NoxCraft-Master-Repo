@@ -100,7 +100,7 @@ public class CoreBar{
 		}
 		
 		public void run() {
-			if (currentEntry.text != text.toString())
+			if (!currentEntry.text.equals(text.toString()))
 			{
 				safeCancel();
 				return;
@@ -179,7 +179,7 @@ public class CoreBar{
 		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
 		
 		public void run() {
-			if ((currentEntry.text != text.toString()) || (text.length() <= 7))
+			if ((!currentEntry.text.equals(text.toString())) || (text.length() <= 7))
 			{
 				safeCancel();
 				return;
@@ -227,7 +227,7 @@ public class CoreBar{
 		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
 		
 		public void run() {
-			if (currentEntry.text != text.toString() || p == null || !p.isOnline() || p.isDead() || e == null || e.isDead())
+			if (!currentEntry.text.equals(text.toString()) || p == null || !p.isOnline() || p.isDead() || e == null || e.isDead())
 			{
 				safeCancel();
 				return;

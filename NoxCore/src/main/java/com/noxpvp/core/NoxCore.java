@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 
-import nr.com.noxpvp.core.commands.*;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -29,7 +27,8 @@ import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
-import com.noxpvp.core.commands.*;
+import com.noxpvp.core.commands.Command;
+import com.noxpvp.core.commands.ReloadCommand;
 import com.noxpvp.core.data.CoolDown;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
@@ -61,7 +60,7 @@ public class NoxCore extends NoxPlugin {
 	
 	private List<NoxPermission> permissions = new ArrayList<NoxPermission>();
 	
-	private PlayerManager playerManager;
+	private PlayerManager playerManager = null;
 	private VoteListener voteListener = null;
 
 	private PermissionHandler permHandler;
@@ -380,10 +379,10 @@ public class NoxCore extends NoxPlugin {
 	}
 
 	private void registerAllCommands() {
-		for (Class<CommandRunner> cls : commands)
+		for (Class<Command> cls : commands)
 		{
-			SafeConstructor<CommandRunner> cons = new SafeConstructor<CommandRunner>(cls, new Class[0]);
-			CommandRunner rn = cons.newInstance();
+			SafeConstructor<Command> cons = new SafeConstructor<Command>(cls, new Class[0]);
+			Command rn = cons.newInstance();
 			if (rn != null)
 				registerCommand(rn);
 		}
@@ -450,7 +449,7 @@ public class NoxCore extends NoxPlugin {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static final Class<CommandRunner>[] commands = (Class<CommandRunner>[]) new Class[]{ /*CoreCommand.class,*/ ReloadCommand.class};
+	private static final Class<Command>[] commands = (Class<Command>[]) new Class[]{ /*CoreCommand.class,*/ ReloadCommand.class};
 
 	private static NoxCore instance;
 

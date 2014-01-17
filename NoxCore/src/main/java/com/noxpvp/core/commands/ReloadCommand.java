@@ -1,19 +1,17 @@
 package com.noxpvp.core.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.MasterReloader;
 import com.noxpvp.core.NoxCore;
+import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.reloader.Reloader;
-import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.core.utils.PermissionHandler;
 
-public class ReloadCommand implements DescriptiveCommandRunner {
-	public static final String COMMAND_NAME = "reloader";
+public class ReloadCommand extends BaseCommand {
 	public static final String PERM_NODE = "nox.reload";
 	
 	private PermissionHandler handler;
@@ -21,12 +19,9 @@ public class ReloadCommand implements DescriptiveCommandRunner {
 	private static final String ENTER_TREE = ">";
 	
 	public ReloadCommand(){
+		super(COMMAND_NAME, false);
 		core = NoxCore.getInstance();
 		handler = core.getPermissionHandler();
-	}
-	
-	public String getName() {
-		return COMMAND_NAME;
 	}
 	
 	private void nextTree(MessageBuilder mb, Reloader module, int level)
@@ -116,25 +111,20 @@ public class ReloadCommand implements DescriptiveCommandRunner {
 		return true;
 	}
 
-	public void displayHelp(CommandSender sender) {
-		MessageBuilder mb = new MessageBuilder();
-		
-		mb.setSeparator("\n");
-		mb.newLine();
-		for (String line : GlobalLocale.HELP_HEADER.get("Core", COMMAND_NAME).split("\n"))
-			mb.append(line);
-		for (String line : getHelp())
-			mb.append(line);
-		
-		MessageUtil.sendMessage(sender, mb.lines());
-	}
-
 	public String[] getDescription() {
 		return new String[0];
 	}
 
 	public String[] getFlags() {
 		return new String[]{"help", "h", "?"};
+	}
+
+	public int getMaxArguments() {
+		return -1;
+	}
+
+	public NoxPlugin getPlugin() {
+		return core;
 	}
 
 }

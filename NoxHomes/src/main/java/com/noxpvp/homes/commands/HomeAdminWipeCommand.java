@@ -6,14 +6,14 @@ import org.bukkit.command.CommandSender;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.commands.DescriptiveCommandRunner;
+import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.homes.HomeManager;
 import com.noxpvp.homes.NoxHomes;
 
-public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
+public class HomeAdminWipeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "wipehomes";
 	public static final String PERM_NODE = "wipe.homes";
 	private static final Random r = new Random();
@@ -24,6 +24,7 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 	private String[] helpLines;
 	
 	public HomeAdminWipeCommand() {
+		super(COMMAND_NAME, false);
 		plugin = NoxHomes.getInstance();
 		key = getNextKey();
 		
@@ -32,10 +33,6 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 		manager = plugin.getHomeManager();
 	}
 	
-	public String getName() {
-		return COMMAND_NAME;
-	}
-
 	public boolean execute(CommandContext context) {
 		String[] args = context.getArguments();
 		CommandSender sender = context.getSender();
@@ -80,9 +77,8 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 
 	private void updateHelp() {
 		MessageBuilder mb = new MessageBuilder();
-		mb.yellow("[").blue(" Nox Admin Wipe Command ").yellow("]").newLine();
-		mb.red("WILL WIPE ALL HOME LOCATIONS ON ALL PLAYERS").newLine();
 		mb.blue("/").append(HomeAdminCommand.COMMAND_NAME).append(' ').append(COMMAND_NAME).newLine();
+		mb.red("WILL WIPE ALL HOME LOCATIONS ON ALL PLAYERS").newLine();
 		mb.red("Current Safety Key: ").yellow(key);
 		
 		helpLines = mb.lines();
@@ -97,11 +93,15 @@ public class HomeAdminWipeCommand implements DescriptiveCommandRunner {
 	}
 
 	public String[] getFlags() {
-		return new String[0];
+		return new String[]{"h", "help"};
 	}
 
-	public void displayHelp(CommandSender sender) {
-		MessageUtil.sendMessage(sender, getHelp());
+	public int getMaxArguments() {
+		return 1;
+	}
+
+	public NoxHomes getPlugin() {
+		return plugin;
 	}
 	
 }

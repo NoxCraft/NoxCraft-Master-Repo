@@ -326,7 +326,7 @@ public class CoreBoard{
 		}
 		
 		public void run() {
-			if (entry == null || !entries.containsKey(entry)){
+			if (entry == null || !entries.containsValue(entry)){
 				safeCancel();
 				return;
 			}
@@ -369,7 +369,7 @@ public class CoreBoard{
 		public void safeCancel() { try { cancel(); } catch (IllegalStateException e) {} }
 		
 		public void run() {
-			if (entry == null || !entries.containsKey(entry)){
+			if (entry == null || !entries.containsValue(entry)){
 				safeCancel();
 				return;
 			}

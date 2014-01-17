@@ -1,12 +1,12 @@
 package com.noxpvp.homes.commands;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
+import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.SafeLocation;
-import com.noxpvp.core.commands.CommandRunner;
+import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.locales.GlobalLocale;
@@ -18,7 +18,7 @@ import com.noxpvp.homes.tp.BaseHome;
 import com.noxpvp.homes.tp.DefaultHome;
 import com.noxpvp.homes.tp.NamedHome;
 
-public class SetHomeCommand implements CommandRunner {
+public class SetHomeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "sethome";
 	public static final String PERM_NODE = "sethome";
 	
@@ -28,6 +28,7 @@ public class SetHomeCommand implements CommandRunner {
 	
 	public SetHomeCommand()
 	{
+		super(COMMAND_NAME, true);
 		plugin = NoxHomes.getInstance();
 		manager = plugin.getHomeManager();
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
@@ -116,22 +117,16 @@ public class SetHomeCommand implements CommandRunner {
 		
 		return true;
 	}
-	
-	public void displayHelp(CommandSender sender)
-	{
-		MessageBuilder mb = new MessageBuilder();
-		
-		mb.setSeparator("\n");
-		for (String line : GlobalLocale.HELP_HEADER.get("Homes", COMMAND_NAME).split("\n"))
-			mb.append(line);
-		for (String line : getHelp())
-			mb.append(line);
-		
-		MessageUtil.sendMessage(sender, mb.lines());
+
+	public String[] getFlags() {
+		return new String[]{"h", "help", "p", "player"};
 	}
 
-	public String getName() {
-		return COMMAND_NAME;
+	public int getMaxArguments() {
+		return 1;
 	}
 
+	public NoxPlugin getPlugin() {
+		return plugin;
+	}
 }
