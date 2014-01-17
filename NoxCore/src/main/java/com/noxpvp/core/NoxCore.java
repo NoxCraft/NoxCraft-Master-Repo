@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 
+import nr.com.noxpvp.core.commands.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
