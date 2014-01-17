@@ -45,7 +45,8 @@ public class DefaultHome extends BaseHome {
 	{
 		try {
 			String owner = data.get("owner").toString();
-			SafeLocation warpPoint = SafeLocation.deserialize((Map<String, Object>) data.get("warpPoint"));
+//			SafeLocation warpPoint = SafeLocation.deserialize((Map<String, Object>) data.get("warpPoint"));
+			SafeLocation warpPoint = (SafeLocation) data.get("warpPoint");
 			String name = data.get("name").toString();
 			
 			if (name.equalsIgnoreCase(DefaultHome.PERM_NODE))
@@ -63,5 +64,10 @@ public class DefaultHome extends BaseHome {
 			NoxCore.getInstance().handle(e);
 		}
 		return null;
+	}
+	
+	@Override
+	public Map<String, Object> serialize() {
+		return super.serialize();
 	}
 }

@@ -50,7 +50,8 @@ public class NamedHome extends BaseHome {
 	{
 		try {
 			String owner = data.get("owner").toString();
-			SafeLocation warpPoint = SafeLocation.deserialize((Map<String, Object>) data.get("warpPoint"));
+//			SafeLocation warpPoint = SafeLocation.deserialize((Map<String, Object>) data.get("warpPoint"));
+			SafeLocation warpPoint = (SafeLocation) data.get("warpPoint");
 			String name = data.get("name").toString();
 		
 			return new NamedHome(owner, name, warpPoint.toLocation());
@@ -67,5 +68,10 @@ public class NamedHome extends BaseHome {
 			NoxCore.getInstance().handle(e);
 		}
 		return null;
+	}
+	
+	@Override
+	public Map<String, Object> serialize() {
+		return super.serialize();
 	}
 }

@@ -1,5 +1,6 @@
 package com.noxpvp.core.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
@@ -30,8 +31,7 @@ public class ReloadCommand implements DescriptiveCommandRunner {
 	
 	private void nextTree(MessageBuilder mb, Reloader module, int level)
 	{
-		if (level != 0)
-			mb.newLine();
+		mb.newLine();
 		for (int i = 0; i < (level); i++)
 			mb.append("-");
 		if (level > 0)
@@ -52,7 +52,7 @@ public class ReloadCommand implements DescriptiveCommandRunner {
 		mb.newLine();
 		if (mr.hasModules())
 			for (Reloader module : mr.getModules())
-				nextTree(mb, module, 0);
+				nextTree(mb.white(" "), module, 0);
 		else
 			mb.red("No Modules Loaded?!");
 		
@@ -99,18 +99,18 @@ public class ReloadCommand implements DescriptiveCommandRunner {
 			{
 				r.reload();
 				r.reloadAll();
-				MessageBuilder mb = new MessageBuilder(StringUtil.ampToColor(core.getGlobalLocale("command.successful", "Reloaded modules ->")));
+				MessageBuilder mb = new MessageBuilder(GlobalLocale.COMMAND_SUCCESS.get("Reloaded modules ->"));
 				nextTree(mb, r, 0);
 				sender.sendMessage(mb.lines());
 			}
 			else {
 				r.reload();
-				sender.sendMessage(StringUtil.ampToColor(core.getGlobalLocale("command.successful", "Module \"" + module + "\" reloaded!")));
+				GlobalLocale.COMMAND_SUCCESS.message(sender, "Module \"" + module + "\" reloaded!");
 			}
 		} catch (NullPointerException e) {
-			sender.sendMessage(StringUtil.ampToColor(core.getGlobalLocale("command.failed", "Module does not exist. \"" + module + "\"")));
+			GlobalLocale.COMMAND_FAILED.message(sender, "Module does not exist. \"" + module + "\"");
 		} catch (Exception e) {
-			sender.sendMessage(StringUtil.ampToColor(core.getGlobalLocale("command.failed", "An error occured: " + e.getMessage())));
+			GlobalLocale.COMMAND_FAILED.message(sender, "An error occured: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return true;
@@ -120,6 +120,7 @@ public class ReloadCommand implements DescriptiveCommandRunner {
 		MessageBuilder mb = new MessageBuilder();
 		
 		mb.setSeparator("\n");
+		mb.newLine();
 		for (String line : GlobalLocale.HELP_HEADER.get("Core", COMMAND_NAME).split("\n"))
 			mb.append(line);
 		for (String line : getHelp())

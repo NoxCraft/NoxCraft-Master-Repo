@@ -10,10 +10,12 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.Plugin;
 
 import com.bergerkiller.bukkit.common.Common;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
@@ -26,12 +28,13 @@ import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.*;
+import com.noxpvp.core.data.CoolDown;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.listeners.ChatPingListener;
 import com.noxpvp.core.listeners.ChestBlockListener;
 import com.noxpvp.core.listeners.DeathListener;
-import com.noxpvp.core.listeners.LoginGroupListener;
+import com.noxpvp.core.listeners.LoginListener;
 import com.noxpvp.core.listeners.OnLogoutSaveListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.locales.GlobalLocale;
@@ -47,7 +50,7 @@ public class NoxCore extends NoxPlugin {
 	
 	private DeathListener deathListener;
 	private FileConfiguration globalLocales;
-	private LoginGroupListener loginListener;
+	private LoginListener loginListener;
 	
 	private OnLogoutSaveListener saveListener;
 	
@@ -134,7 +137,11 @@ public class NoxCore extends NoxPlugin {
 		}
 		setInstance(this);
 		
-		PluginManager pluginManager = getServer().getPluginManager();
+		registerSerials(this);
+		for (Plugin p : CommonUtil.getPlugins())
+			if (p instanceof NoxPlugin && CommonUtil.isDepending(p, this))
+				registerSerials((NoxPlugin)p);
+		
 		playerManager = new PlayerManager();
 		
 		permHandler = new PermissionHandler(this);
@@ -149,26 +156,24 @@ public class NoxCore extends NoxPlugin {
 				return def;
 			}
 		});
-		// Serializable Objects
-		ConfigurationSerialization.registerClass(SafeLocation.class);
+		
 		
 		chatPingListener = new ChatPingListener();
 		voteListener = new VoteListener();
 		deathListener = new DeathListener();
-		loginListener = new LoginGroupListener();
+		loginListener = new LoginListener();
 		saveListener = new OnLogoutSaveListener(this); 
-		
-		saveListener.register();
 		
 		chatPingListener.register();
 		
 		if (CommonUtil.isPluginEnabled("Votifier")) //Fixes console error message.
 			voteListener.register();
 		
-		
+		saveListener.register();
 		deathListener.register();
 		loginListener.register();
 		
+		CommonUtil.queueListenerLast(loginListener, PlayerLoginEvent.class);
 		VaultAdapter.load();
 		
 		Reloader r = new BaseReloader(masterReloader, "NoxCore") {
@@ -203,6 +208,14 @@ public class NoxCore extends NoxPlugin {
         }
 	}
 
+	private void registerSerials(NoxPlugin p) {
+		if (p.getSerialiables() != null) {
+			log(Level.INFO, new StringBuilder().append("Attempting to load ").append(p.getSerialiables().length).append(" '").append(p.getName()).append("' serializables.").toString());
+			
+			for (Class<? extends ConfigurationSerializable> c : p.getSerialiables())
+				ConfigurationSerialization.registerClass(c);
+		}
+	}
 	public final void saveGlobalLocalization() {
 		this.globalLocales.save();
 	}
@@ -447,6 +460,12 @@ public class NoxCore extends NoxPlugin {
 		return instance;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class<? extends ConfigurationSerializable>[] getSerialiables() {
+		return new Class[]{SafeLocation.class, CoolDown.class};
+	}
+	
 	/**
 	 * @return the useUserFile
 	 */
