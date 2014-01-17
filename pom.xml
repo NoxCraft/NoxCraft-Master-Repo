@@ -136,5 +136,11 @@
 
 We add all sorts of features. Specifically coded for our server in mind.
 </description>
-	<version>0.1.4 - Beta</version>
+	<version>1.0</version>
+	<properties>
+		<NoxHomesVersion>${MasterVersion}</NoxHomesVersion>
+		<MasterVersion>0.2 - SNAPSHOT</MasterVersion>
+		<NoxCoreVersion>${MasterVersion}</NoxCoreVersion>
+		<NoxMMOVersion>0.1 - SNAPSHOT</NoxMMOVersion>
+	</properties>
 </project>

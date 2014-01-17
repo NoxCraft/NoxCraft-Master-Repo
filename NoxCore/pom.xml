@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.noxpvp</groupId>
 		<artifactId>NoxCraft</artifactId>
-		<version>0.1.4 - Beta</version>
+		<version>1.0</version>
 	</parent>
 	<artifactId>NoxCore</artifactId>
 	<name>NoxCore</name>
@@ -127,4 +127,5 @@
 			</resource>
 		</resources>
 	</build>
+	<version>${NoxCoreVersion}</version>
 </project>

@@ -3,9 +3,10 @@
   <parent>
     <groupId>com.noxpvp</groupId>
     <artifactId>NoxCraft</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.0</version>
   </parent>
   <artifactId>NoxMMO</artifactId>
   <name>NoxMMO</name>
   <description>Nox classes and level plugin. Used for many special abilities and skills you can use.</description>
+  <version>${NoxMMOVersion}</version>
 </project>
