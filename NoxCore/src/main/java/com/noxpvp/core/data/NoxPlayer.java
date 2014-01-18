@@ -57,6 +57,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
 		manager = mn;
+		this.persistant_data = mn.getPlayerNode(name);
 		this.name = name;
 	}
 	
@@ -92,7 +93,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	public long getFirstJoin(boolean cached)
 	{
 		if (cached)
-			return persistant_data.get("first.join", long.class);
+			return persistant_data.get("first.join", getOfflinePlayer().getFirstPlayed());
 		else
 			return getOfflinePlayer().getFirstPlayed();
 	}

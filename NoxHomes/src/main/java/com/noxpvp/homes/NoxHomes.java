@@ -205,19 +205,19 @@ public class NoxHomes extends NoxPlugin {
 	public void localization() {
 		//Home List Locales
 		loadLocale("homes.list.own", "&3Your Homes&r: &e%1%");
-		loadLocale("homes.list", "&e%0%'s &3homes: &e%1%");
+		loadLocale("homes.list.default", "&e%0%'s &3homes: &e%1%");
 
 		//home Command
 		loadLocale("homes.home.own", "&3You teleported to home: %1%");
-		loadLocale("homes.home", "&3You teleported to %0%'s home named &e%1%");
+		loadLocale("homes.home.default", "&3You teleported to %0%'s home named &e%1%");
 		
 		//delhome
 		loadLocale("homes.delhome.own", "&cRemoved your home:&e%1%");
-		loadLocale("homes.delhome", "&cDeleted &e%0%'s&c home named &e%1%");
+		loadLocale("homes.delhome.default", "&cDeleted &e%0%'s&c home named &e%1%");
 		
 		//Sethome
 		loadLocale("homes.sethome.own", "&aSet new home named &e%1%&a at &6%2%");
-		loadLocale("homes.sethome", "&aSet new home for &e%0%&2 &anamed: &e%1%&a at &6%2%");
+		loadLocale("homes.sethome.default", "&aSet new home for &e%0%&2 &anamed: &e%1%&a at &6%2%");
 		
 		//Admin Commands
 		//// NEED SOME LOCALES

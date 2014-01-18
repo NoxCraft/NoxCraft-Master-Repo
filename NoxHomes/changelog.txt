@@ -4,4 +4,3 @@
 			Perm Node add ".multi" to end of perm node
 	Fixed #68: NoxHomes do not truely delete
 			Now erases on save then rewrites data.
-	
