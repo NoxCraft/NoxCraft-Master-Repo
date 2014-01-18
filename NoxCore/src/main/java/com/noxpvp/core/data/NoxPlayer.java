@@ -9,7 +9,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
@@ -123,9 +130,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	public SafeLocation getLastLocation() {
 		if (getPlayer() != null)
-			return persistant_data.get("last.location", new SafeLocation(getPlayer().getLocation()));
-		else
-			return persistant_data.get("last.location", SafeLocation.class);
+			persistant_data.set("last.location", new SafeLocation(getPlayer().getLocation()));
+		return persistant_data.get("last.location", SafeLocation.class);
 	}
 	
 	public World getLastWorld() {
@@ -307,6 +313,38 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this.persistant_data.set("last.death.timestamp", stamp);
 	}
 	
+	public void setLastDeath(PlayerDeathEvent event)
+	{
+		EntityDamageEvent ede = event.getEntity().getLastDamageCause();
+		this.persistant_data.remove("last.death");
+		
+		setLastDeathTS();
+		
+		this.persistant_data.set("last.death.cause.damage", ede.getDamage());
+		this.persistant_data.set("last.death.cause.type", ede.getCause().name());
+		
+		if (ede instanceof EntityDamageByEntityEvent) {
+			EntityDamageByEntityEvent edbe = (EntityDamageByEntityEvent) ede;
+			
+			Entity damager = edbe.getDamager();
+			if (!(damager instanceof Projectile))
+				this.persistant_data.set("last.death.cause.entity.type", damager.getType());
+			else
+				damager = ((Projectile)damager).getShooter(); //TODO: add projectile info?
+			
+			if (damager instanceof Player) 
+				this.persistant_data.set("last.death.cause.entity.name", ((Player)damager).getName());
+			else if (damager instanceof LivingEntity)
+				this.persistant_data.set("last.death.cause.entity.name", ((LivingEntity)damager).getCustomName());
+			else
+				this.persistant_data.set("last.death.cause.entity.name", "UNTRACKED");
+		} else if (ede instanceof EntityDamageByBlockEvent) {
+			EntityDamageByBlockEvent edbb = (EntityDamageByBlockEvent) ede;
+			
+			this.persistant_data.set("last.death.cause.block.type", edbb.getDamager().getType().name());
+		}
+	}
+		
 	public void setVotes(int amount)
 	{
 		persistant_data.set("vote-count", amount);

@@ -1,0 +1,3 @@
+0.1.5
+	Added #66 death cause tracking.
+		Planned #69 Item Drop tracking.

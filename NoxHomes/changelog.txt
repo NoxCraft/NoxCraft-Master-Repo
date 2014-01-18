@@ -1,0 +1,7 @@
+0.1.5
+	Added way to teleport vehichles with you.
+			When riding something it will tp with you.
+			Perm Node add ".multi" to end of perm node
+	Fixed #68: NoxHomes do not truely delete
+			Now erases on save then rewrites data.
+	

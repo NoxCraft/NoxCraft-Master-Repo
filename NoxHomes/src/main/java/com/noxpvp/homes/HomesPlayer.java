@@ -88,6 +88,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	 * @see com.noxpvp.core.Persistant#save()
 	 */
 	public void save() {
+		getNoxPlayer().getPersistantData().remove("homes");
 		ConfigurationNode var = getNoxPlayer().getPersistantData().getNode("homes");
 		for (BaseHome home : homes)
 			var.set(home.getName(), home);

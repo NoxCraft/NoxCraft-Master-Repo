@@ -4,11 +4,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 public interface WarpPoint {
-	public boolean tryTeleport(Entity entity);
+	public boolean tryTeleport(Entity entity, boolean multi);
 	
-	public boolean canTeleport(Entity entity);
+	public boolean canTeleport(Entity entity, boolean multi);
 
-	public void teleport(Entity entity);
+	public void teleport(Entity entity, boolean multi);
 	
 	public Location getLocation();
 }

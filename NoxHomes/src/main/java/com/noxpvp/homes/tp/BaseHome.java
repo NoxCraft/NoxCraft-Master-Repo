@@ -2,6 +2,7 @@ package com.noxpvp.homes.tp;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 import java.util.logging.Level;
 
 import org.bukkit.Location;
@@ -67,9 +68,9 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 		this(player.getName(), player.getLocation());
 	}
 	
-	public boolean tryTeleport(Entity entity) {
-		if (canTeleport(entity))
-			teleport(entity);
+	public boolean tryTeleport(Entity entity, boolean multi) {
+		if (canTeleport(entity, multi))
+			teleport(entity, multi);
 		else
 			return false;
 		return true;
@@ -83,19 +84,45 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 		return OTHER_HOME_NODE;
 	}
 	
-	public boolean canTeleport(Player player)
+	public boolean canTeleport(Player player, boolean multi)
 	{
-		return player.hasPermission((isOwner(player))?getNode():getOtherNode());
+		return player.hasPermission(((isOwner(player))?getNode():getOtherNode()) + (multi?".multi":""));
 	}
 
-	public boolean canTeleport(Entity entity) {
+	public boolean canTeleport(Entity entity, boolean multi) {
 		if (entity instanceof Player)
-			return canTeleport((Player)entity);
+			return canTeleport((Player)entity, multi);
 		return false;
 	}
 
-	public void teleport(Entity entity) {
-		entity.teleport(warpPoint.toLocation());
+	public void teleport(Entity entity, boolean multi) {
+		entity.setFallDistance(0);
+		Entity last = null, current = entity;
+		Stack<Entity> b2t = new Stack<Entity>();
+		if (multi) {
+			while (current != null) {
+				last = current;
+				current = current.getPassenger(); //Get topmost to start from there.
+			}
+			current = last;
+			while (current != null) {
+				last = current;
+				current = current.getVehicle(); //Retrieve everything below.
+				b2t.push(last); //
+			}
+			
+			current = last;
+			last = null;
+			while (!b2t.empty()) {
+				Entity e = b2t.pop();
+				e.teleport(getLocation());
+				if (last != null)
+					last.setPassenger(e);
+				last = e;
+			}
+				
+		}
+		entity.teleport(getLocation());
 	}
 	
 	public boolean isOwner(Player player)

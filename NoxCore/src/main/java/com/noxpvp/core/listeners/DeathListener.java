@@ -31,7 +31,6 @@ public class DeathListener extends NoxListener<NoxCore> {
 		if (player == null)
 			return;
 		
-		player.setLastDeathTS();
-		player.setLastDeathLocation(p.getLocation());
+		player.setLastDeath(e);
 	}
 }

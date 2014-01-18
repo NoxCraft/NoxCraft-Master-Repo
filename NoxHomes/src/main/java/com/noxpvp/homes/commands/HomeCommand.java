@@ -65,7 +65,7 @@ public class HomeCommand extends BaseCommand {
 		BaseHome home = manager.getHome(player, homeName);
 		if (home == null) 
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "The home \"" + (homeName == null? "default": homeName) + "\" does not exist");
-		else if (home.tryTeleport(sender))
+		else if (home.tryTeleport(sender, permHandler.hasPermission(sender, perm + ".multi")))
 			MessageUtil.sendLocale(plugin, sender, "homes.home"+ (own?".own":""), player, (homeName == null? "default": homeName));
 		else
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Could not teleport home.");
