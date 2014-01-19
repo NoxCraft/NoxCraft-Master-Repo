@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class Cycler<E> implements ListIterator<E>{
-	private int index;
-	
 	private ArrayList<E> data;
+	
+	private int index;
 	
 	public Cycler(Collection<E> data)
 	{
@@ -22,7 +22,9 @@ public class Cycler<E> implements ListIterator<E>{
 		index = 0;
 	}
 	
-	public List<E> getList() { return data; }
+	public void add(E e) {
+		data.add(currentIndex(), e);
+	}
 	
 	/**
 	 * Retrieves the current object on the current index / iteration.
@@ -37,6 +39,8 @@ public class Cycler<E> implements ListIterator<E>{
 	 * @return 0 - (Cycler Size)
 	 */
 	public int currentIndex() { return index;}
+	public List<E> getList() { return data; }
+	
 	/*
 	 * Warning this method will cause it to loop infinite on iteration.
 	 * 
@@ -47,15 +51,6 @@ public class Cycler<E> implements ListIterator<E>{
 	 */
 	public boolean hasNext() {
 		return true;
-	}
-	
-	public E peekNext() {
-		return data.get(nextIndex());
-	}
-
-	public E next() {
-		index = nextIndex();
-		return data.get(currentIndex());
 	}
 
 	/*
@@ -70,17 +65,26 @@ public class Cycler<E> implements ListIterator<E>{
 		return true;
 	}
 
-	public E peekPrevious() {
-		return data.get(previousIndex());
-	}
-	
-	public E previous() {
-		index = previousIndex();
+	public E next() {
+		index = nextIndex();
 		return data.get(currentIndex());
 	}
 
 	public int nextIndex() {
 		return currentIndex() >= (data.size() - 1) ? 0 : (currentIndex() + 1);
+	}
+	
+	public E peekNext() {
+		return data.get(nextIndex());
+	}
+
+	public E peekPrevious() {
+		return data.get(previousIndex());
+	}
+
+	public E previous() {
+		index = previousIndex();
+		return data.get(currentIndex());
 	}
 
 	public int previousIndex() {
@@ -95,10 +99,6 @@ public class Cycler<E> implements ListIterator<E>{
 
 	public void set(E e) {
 		data.set(currentIndex(), e);
-	}
-
-	public void add(E e) {
-		data.add(currentIndex(), e);
 	}
 
 }

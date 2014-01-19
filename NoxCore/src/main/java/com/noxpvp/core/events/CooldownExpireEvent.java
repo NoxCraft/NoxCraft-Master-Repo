@@ -5,16 +5,12 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
 public class CooldownExpireEvent extends PlayerEvent {
-	private static final HandlerList handlers = new HandlerList();
 	private final String name;
-	
 	public CooldownExpireEvent(Player player, String cooldownName)
 	{
 		super(player);
 		this.name = cooldownName;
 	}
-	
-	public String getName() { return name; }
 	
 	/**
 	 * Gets the handlers.
@@ -25,6 +21,10 @@ public class CooldownExpireEvent extends PlayerEvent {
 	public HandlerList getHandlers() {
 		return handlers;
 	}
+	
+	public String getName() { return name; }
+	
+	private static final HandlerList handlers = new HandlerList();
 	
 	/**
 	 * Gets the handler list.

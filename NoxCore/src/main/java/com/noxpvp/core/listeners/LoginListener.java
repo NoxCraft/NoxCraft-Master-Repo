@@ -20,12 +20,6 @@ public class LoginListener extends NoxListener<NoxCore> {
 			super(core);
 		}
 		
-		@Override
-		public void register() {
-			super.register();
-			CommonUtil.queueListenerLast(this, PlayerLoginEvent.class);
-		}
-		
 		@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
 		public void onLogin(PlayerLoginEvent e)
 		{
@@ -34,5 +28,11 @@ public class LoginListener extends NoxListener<NoxCore> {
 			VaultAdapter.GroupUtils.reloadGroupName(p);
 			
 			getPlugin().getPlayerManager().loadPlayer(e.getPlayer().getName());
+		}
+		
+		@Override
+		public void register() {
+			super.register();
+			CommonUtil.queueListenerLast(this, PlayerLoginEvent.class);
 		}
 }

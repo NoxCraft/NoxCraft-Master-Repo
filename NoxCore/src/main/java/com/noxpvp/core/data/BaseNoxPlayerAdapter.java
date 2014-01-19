@@ -8,14 +8,8 @@ import org.bukkit.OfflinePlayer;
 import com.noxpvp.core.NoxCore;
 
 public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter {
-	private Reference<NoxPlayer> playerRef;
 	private final String playerName;
-	
-	public BaseNoxPlayerAdapter(String name)
-	{
-		this.playerName = name;
-		playerRef = new SoftReference<NoxPlayer>(getNoxPlayer(name));
-	}
+	private Reference<NoxPlayer> playerRef;
 	
 	public BaseNoxPlayerAdapter(NoxPlayerAdapter player)
 	{
@@ -26,9 +20,13 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter {
 	public BaseNoxPlayerAdapter(OfflinePlayer player) {
 		this(player.getName());
 	}
-
-	public final String getPlayerName() { return playerName; }
 	
+	public BaseNoxPlayerAdapter(String name)
+	{
+		this.playerName = name;
+		playerRef = new SoftReference<NoxPlayer>(getNoxPlayer(name));
+	}
+
 	public final NoxPlayer getNoxPlayer() {
 		return getNoxPlayer(true);
 	}
@@ -41,11 +39,13 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter {
 		return playerRef.get();
 	}
 	
+	public final String getPlayerName() { return playerName; }
+	
+	public final boolean isAlive() { return playerRef.get() != null; }
+	
 	public final void updateReference() {
 		playerRef = new SoftReference<NoxPlayer>(getNoxPlayer(playerName));
 	}
-	
-	public final boolean isAlive() { return playerRef.get() != null; }
 	
 	private static NoxPlayer getNoxPlayer(String name) {
 		return NoxCore.getInstance().getPlayerManager().getPlayer(name);

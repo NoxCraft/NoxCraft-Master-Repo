@@ -7,16 +7,23 @@ import org.bukkit.event.HandlerList;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 
 public class NoxPlayerDataEvent extends Event {
-	private static final HandlerList handlers = new HandlerList();
-	
 	private final NoxPlayerAdapter player;
- 
-	private boolean shouldHonorCore;
 	
+	private boolean shouldHonorCore;
+ 
 	public NoxPlayerDataEvent(NoxPlayerAdapter player, boolean honorCore)
 	{
 		this.player = player;
 		this.shouldHonorCore = honorCore;
+	}
+	
+	public OfflinePlayer getBukkitPlayer() {
+		return player.getNoxPlayer().getOfflinePlayer();
+	}
+	
+	@Override
+	public HandlerList getHandlers() {
+		return handlers;
 	}
 	
 	public NoxPlayerAdapter getPlayer() {
@@ -25,16 +32,9 @@ public class NoxPlayerDataEvent extends Event {
 	
 	public boolean shouldHonorCore() { return shouldHonorCore; }
 	
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+	private static final HandlerList handlers = new HandlerList();
 	
 	public static HandlerList getHandlerList() {
 		return handlers;
-	}
-	
-	public OfflinePlayer getBukkitPlayer() {
-		return player.getNoxPlayer().getOfflinePlayer();
 	}
 }

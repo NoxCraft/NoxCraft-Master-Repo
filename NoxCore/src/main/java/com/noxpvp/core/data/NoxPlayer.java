@@ -299,6 +299,40 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this.persistant_data.set("first.join", value);
 	}
 	
+	public void setLastDeath(PlayerDeathEvent event)
+	{
+		this.persistant_data.remove("last.death");
+		setLastDeathTS();
+		EntityDamageEvent ede = event.getEntity().getLastDamageCause();
+		
+		
+		this.persistant_data.set("last.death.cause.damage", ede.getDamage());
+		this.persistant_data.set("last.death.cause.type", ede.getCause().name());
+		
+		if (ede instanceof EntityDamageByEntityEvent) {
+			EntityDamageByEntityEvent edbe = (EntityDamageByEntityEvent) ede;
+			
+			Entity damager = edbe.getDamager();
+			if (!(damager instanceof Projectile))
+				this.persistant_data.set("last.death.cause.entity.type", damager.getType());
+			else
+				damager = ((Projectile)damager).getShooter(); //TODO: add projectile info?
+			
+			if (damager instanceof Player) {
+				Player d = (Player)damager;
+				this.persistant_data.set("last.death.cause.entity.name", d.getName());
+				manager.getPlayer(d).setLastKill(getPlayer());
+			} else if (damager instanceof LivingEntity)
+				this.persistant_data.set("last.death.cause.entity.name", ((LivingEntity)damager).getCustomName());
+			else
+				this.persistant_data.set("last.death.cause.entity.name", "UNTRACKED");
+		} else if (ede instanceof EntityDamageByBlockEvent) {
+			EntityDamageByBlockEvent edbb = (EntityDamageByBlockEvent) ede;
+			
+			this.persistant_data.set("last.death.cause.block.type", edbb.getDamager().getType().name());
+		}
+	}
+	
 	public void setLastDeathLocation(Location loc)
 	{
 		this.persistant_data.set("last.death.location", new SafeLocation(loc));
@@ -313,39 +347,27 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	{
 		this.persistant_data.set("last.death.timestamp", stamp);
 	}
-	
-	public void setLastDeath(PlayerDeathEvent event)
-	{
-		EntityDamageEvent ede = event.getEntity().getLastDamageCause();
-		this.persistant_data.remove("last.death");
 		
-		setLastDeathTS();
+	public void setLastKill(Entity entity) {
+		this.persistant_data.remove("last.kill");
 		
-		this.persistant_data.set("last.death.cause.damage", ede.getDamage());
-		this.persistant_data.set("last.death.cause.type", ede.getCause().name());
+		setLastKillTS();
+		this.persistant_data.set("last.kill.entity.type", entity.getType());
+		if (entity instanceof Player)
+			this.persistant_data.set("last.kill.entity.name", ((Player)entity).getName());
+		else if (entity instanceof LivingEntity)
+			this.persistant_data.set("last.kill.entity.name", ((LivingEntity)entity).getCustomName());
+		else
+			this.persistant_data.set("last.kill.entity.name", "UNTRACKED");
 		
-		if (ede instanceof EntityDamageByEntityEvent) {
-			EntityDamageByEntityEvent edbe = (EntityDamageByEntityEvent) ede;
-			
-			Entity damager = edbe.getDamager();
-			if (!(damager instanceof Projectile))
-				this.persistant_data.set("last.death.cause.entity.type", damager.getType());
-			else
-				damager = ((Projectile)damager).getShooter(); //TODO: add projectile info?
-			
-			if (damager instanceof Player) 
-				this.persistant_data.set("last.death.cause.entity.name", ((Player)damager).getName());
-			else if (damager instanceof LivingEntity)
-				this.persistant_data.set("last.death.cause.entity.name", ((LivingEntity)damager).getCustomName());
-			else
-				this.persistant_data.set("last.death.cause.entity.name", "UNTRACKED");
-		} else if (ede instanceof EntityDamageByBlockEvent) {
-			EntityDamageByBlockEvent edbb = (EntityDamageByBlockEvent) ede;
-			
-			this.persistant_data.set("last.death.cause.block.type", edbb.getDamager().getType().name());
-		}
 	}
-		
+
+	public void setLastKillTS() { setLastKillTS((NoxCore.isUsingNanoTime()?System.nanoTime(): System.currentTimeMillis())); }
+	
+	public void setLastKillTS(long stamp) {
+		this.persistant_data.set("last.kill.timestamp", stamp);
+	}
+	
 	public void setVotes(int amount)
 	{
 		persistant_data.set("vote-count", amount);

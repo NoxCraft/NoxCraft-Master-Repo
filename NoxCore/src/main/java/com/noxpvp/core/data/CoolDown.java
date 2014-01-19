@@ -9,8 +9,8 @@ import com.noxpvp.core.utils.TimeUtils;
 
 public class CoolDown implements ConfigurationSerializable {
 	private long expires;
-	private final boolean nanoTime;
 	private final String name;
+	private final boolean nanoTime;
 	
 	public CoolDown(String name, long expireStamp, boolean nanoTime)
 	{
@@ -18,10 +18,6 @@ public class CoolDown implements ConfigurationSerializable {
 		this.expires = expireStamp;
 		this.nanoTime = nanoTime;
 	}
-	
-	public final String getName() { return name; }
-	
-	public final boolean isNanoTime() { return nanoTime; }
 	
 	public boolean expired() {
 		long stamp = TimeUtils.getStamp(nanoTime);
@@ -31,10 +27,7 @@ public class CoolDown implements ConfigurationSerializable {
 	
 	public final long getExpiryStamp() { return expires; }
 	
-	public final long getTimeLeft() {
-		long stamp = TimeUtils.getStamp(nanoTime);
-		return expires - stamp;
-	}
+	public final String getName() { return name; }
 	
 	public String getReadableTimeLeft() {
 		if (isNanoTime())
@@ -42,6 +35,13 @@ public class CoolDown implements ConfigurationSerializable {
 		else
 			return TimeUtils.getReadableMillisTime(getTimeLeft());
 	}
+	
+	public final long getTimeLeft() {
+		long stamp = TimeUtils.getStamp(nanoTime);
+		return expires - stamp;
+	}
+	
+	public final boolean isNanoTime() { return nanoTime; }
 
 	public Map<String, Object> serialize() {
 		Map<String, Object> obs = new HashMap<String, Object>();

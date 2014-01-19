@@ -15,6 +15,79 @@ import org.bukkit.World;
  */
 public class BlockChangeArray {
 	/**
+	 * The internally backed array.
+	 */
+	private int[] data;
+	
+	/**
+	 * Construct a new block change array from the copy of a given data array.
+	 * @param data - the data array to store internally.
+	 */
+	public BlockChangeArray(byte[] input) {
+		if ((input.length % RECORD_SIZE) != 0)
+			throw new IllegalArgumentException("The lenght of the input data array should be a multiple of " + RECORD_SIZE + ".");
+		
+		IntBuffer source = ByteBuffer.wrap(input).asIntBuffer();
+		IntBuffer destination = IntBuffer.allocate(input.length / RECORD_SIZE);
+		destination.put(source);
+
+		// Get the copied array
+		data = destination.array();
+	}
+	
+	/**
+	 * Construct a new array of block changes.
+	 * @param blockChanges - the number of blocks that have been changed.
+	 */
+	public BlockChangeArray(int blockChanges) {
+		data = new int[blockChanges];
+	}
+
+	/**
+	 * Retrieve a view of the block change entry at the given index.
+	 * <p>
+	 * Any modification to this view will be stored in the block change array itself.
+	 * @param index - index of the block change to retrieve. 
+	 * @return A view of the block change entry.
+	 */
+	public BlockChange getBlockChange(int index) {
+		if (index < 0 || index >= getSize())
+			throw new IllegalArgumentException("Index is out of bounds.");
+		return new BlockChange(index);
+	}
+	
+	/**
+	 * Retrieve the number of block changes.
+	 * @return The number of block changes.
+	 */
+	public int getSize() {
+		return data.length;
+	}
+	
+	/**
+	 * Set the block change at the specified index to contain the given block.
+	 * @param loc - the location that will be converted.
+	 * @param block - the new content of the block change.
+	 */
+	public void setBlockChange(int index, BlockChange change) {
+		if (change == null)
+			throw new IllegalArgumentException("Block change cannot be NULL.");
+		data[index] = change.asInteger();
+	}
+	
+	/**
+	 * Convert this block change array to a byte array.
+	 * @return The resulting byte array.
+	 */
+	public byte[] toByteArray() {
+		ByteBuffer copy = ByteBuffer.allocate(data.length * RECORD_SIZE);
+		
+		// Copy in the integer array
+		copy.asIntBuffer().put(data);
+		return copy.array();
+	}
+	
+	/**
 	 * Represents a single block change. 
 	 * <p>
 	 * Retrieved by {@link BlockChangeArray#getBlockChange(int)}.
@@ -30,18 +103,35 @@ public class BlockChangeArray {
 		}
 
 		/**
-		 * Set the location of the block change.
-		 * <p<
-		 * The coordinates will be correctly converted to relative coordinates, provided that all the blocks
-		 * are from the same chunk (16x16 column of blocks).
-		 * @param loc - location.
-		 * @return This block change, for chaining.
+		 * Retrieve the integer representation of this block change.
+		 * @return Integer representation.
 		 */
-		public BlockChange setLocation(Location loc) {
-			setRelativeX(loc.getBlockX() & 0xF);
-			setRelativeZ(loc.getBlockZ() & 0xF);
-			setAbsoluteY(loc.getBlockY());
-			return this;
+		private int asInteger() {
+			return data[index];
+		}
+		
+		/**
+		 * Retrieve the absolute y-axis position of the current block change.
+		 * @return Y-axis position of the block change.
+		 */
+		public int getAbsoluteY() {
+			return getValue(16, 0xFF0000);
+		}
+		
+		/**
+		 * Retrieve the block ID of the current block change.
+		 * @return The block ID that the block will change into.
+		 */
+		public int getBlockID() {
+			return getValue(4, 0xFFF0);
+		}
+		
+		/**
+		 * Retrieve the index of the current block change.
+		 * @return Index of the current block change.
+		 */
+		public int getIndex() {
+			return index;
 		}
 		
 		/**
@@ -65,13 +155,11 @@ public class BlockChangeArray {
 		}
 		
 		/**
-		 * Set the relative x-axis position of current block change in the chunk.
-		 * @param relativeX - relative block change location.
-		 * @return This block change, for chaining.
+		 * Retrieve the block metadata of the current block change.
+		 * @return The block metadata that the block will change into.
 		 */
-		public BlockChange setRelativeX(int relativeX) {
-			setValue(relativeX, 28, 0xF0000000);
-			return this;
+		public int getMetadata() {
+			return getValue(0, 0xF);
 		}
 		
 		/**
@@ -83,21 +171,15 @@ public class BlockChangeArray {
 		}
 		
 		/**
-		 * Set the relative z-axis position of current block change in the chunk.
-		 * @param relativeZ - relative block change location.
-		 * @return This block change, for chaining.
-		 */
-		public BlockChange setRelativeZ(int relativeX) {
-			setValue(relativeX, 24, 0xF000000);
-			return this;
-		}
-		
-		/**
 		 * Retrieve the relative z-axis position of the current block change.
 		 * @return Z-axis position of the block change.
 		 */
 		public byte getRelativeZ() {
 			return (byte) getValue(24, 0xF000000);
+		}
+		
+		private int getValue(int rightShift, int updateMask) {
+			return (data[index] & updateMask) >> rightShift;
 		}
 		
 		/**
@@ -111,14 +193,6 @@ public class BlockChangeArray {
 		}
 		
 		/**
-		 * Retrieve the absolute y-axis position of the current block change.
-		 * @return Y-axis position of the block change.
-		 */
-		public int getAbsoluteY() {
-			return getValue(16, 0xFF0000);
-		}
-		
-		/**
 		 * Set the block ID of the current block change.
 		 * @param blockID - ID that the changed block will have.
 		 * @return This block change, for chaining.
@@ -129,11 +203,18 @@ public class BlockChangeArray {
 		}
 		
 		/**
-		 * Retrieve the block ID of the current block change.
-		 * @return The block ID that the block will change into.
+		 * Set the location of the block change.
+		 * <p<
+		 * The coordinates will be correctly converted to relative coordinates, provided that all the blocks
+		 * are from the same chunk (16x16 column of blocks).
+		 * @param loc - location.
+		 * @return This block change, for chaining.
 		 */
-		public int getBlockID() {
-			return getValue(4, 0xFFF0);
+		public BlockChange setLocation(Location loc) {
+			setRelativeX(loc.getBlockX() & 0xF);
+			setRelativeZ(loc.getBlockZ() & 0xF);
+			setAbsoluteY(loc.getBlockY());
+			return this;
 		}
 		
 		/**
@@ -147,36 +228,28 @@ public class BlockChangeArray {
 		}
 		
 		/**
-		 * Retrieve the block metadata of the current block change.
-		 * @return The block metadata that the block will change into.
+		 * Set the relative x-axis position of current block change in the chunk.
+		 * @param relativeX - relative block change location.
+		 * @return This block change, for chaining.
 		 */
-		public int getMetadata() {
-			return getValue(0, 0xF);
+		public BlockChange setRelativeX(int relativeX) {
+			setValue(relativeX, 28, 0xF0000000);
+			return this;
 		}
 		
 		/**
-		 * Retrieve the index of the current block change.
-		 * @return Index of the current block change.
+		 * Set the relative z-axis position of current block change in the chunk.
+		 * @param relativeZ - relative block change location.
+		 * @return This block change, for chaining.
 		 */
-		public int getIndex() {
-			return index;
-		}
-		
-		/**
-		 * Retrieve the integer representation of this block change.
-		 * @return Integer representation.
-		 */
-		private int asInteger() {
-			return data[index];
+		public BlockChange setRelativeZ(int relativeX) {
+			setValue(relativeX, 24, 0xF000000);
+			return this;
 		}
 		
 		// Should be inlined
 		private void setValue(int value, int leftShift, int updateMask) {
 			data[index] = ((value << leftShift) & updateMask) | (data[index] & ~updateMask);
-		}
-		
-		private int getValue(int rightShift, int updateMask) {
-			return (data[index] & updateMask) >> rightShift;
 		}
 	}
 	
@@ -184,77 +257,4 @@ public class BlockChangeArray {
 	 * Single of a single block change record in bytes.
 	 */
 	private static final int RECORD_SIZE = 4;
-	
-	/**
-	 * The internally backed array.
-	 */
-	private int[] data;
-
-	/**
-	 * Construct a new array of block changes.
-	 * @param blockChanges - the number of blocks that have been changed.
-	 */
-	public BlockChangeArray(int blockChanges) {
-		data = new int[blockChanges];
-	}
-	
-	/**
-	 * Construct a new block change array from the copy of a given data array.
-	 * @param data - the data array to store internally.
-	 */
-	public BlockChangeArray(byte[] input) {
-		if ((input.length % RECORD_SIZE) != 0)
-			throw new IllegalArgumentException("The lenght of the input data array should be a multiple of " + RECORD_SIZE + ".");
-		
-		IntBuffer source = ByteBuffer.wrap(input).asIntBuffer();
-		IntBuffer destination = IntBuffer.allocate(input.length / RECORD_SIZE);
-		destination.put(source);
-
-		// Get the copied array
-		data = destination.array();
-	}
-	
-	/**
-	 * Retrieve a view of the block change entry at the given index.
-	 * <p>
-	 * Any modification to this view will be stored in the block change array itself.
-	 * @param index - index of the block change to retrieve. 
-	 * @return A view of the block change entry.
-	 */
-	public BlockChange getBlockChange(int index) {
-		if (index < 0 || index >= getSize())
-			throw new IllegalArgumentException("Index is out of bounds.");
-		return new BlockChange(index);
-	}
-	
-	/**
-	 * Set the block change at the specified index to contain the given block.
-	 * @param loc - the location that will be converted.
-	 * @param block - the new content of the block change.
-	 */
-	public void setBlockChange(int index, BlockChange change) {
-		if (change == null)
-			throw new IllegalArgumentException("Block change cannot be NULL.");
-		data[index] = change.asInteger();
-	}
-	
-	/**
-	 * Retrieve the number of block changes.
-	 * @return The number of block changes.
-	 */
-	public int getSize() {
-		return data.length;
-	}
-	
-	/**
-	 * Convert this block change array to a byte array.
-	 * @return The resulting byte array.
-	 */
-	public byte[] toByteArray() {
-		ByteBuffer copy = ByteBuffer.allocate(data.length * RECORD_SIZE);
-		
-		// Copy in the integer array
-		copy.asIntBuffer().put(data);
-		return copy.array();
-	}
 }

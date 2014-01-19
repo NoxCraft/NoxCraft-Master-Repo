@@ -6,38 +6,92 @@ import java.util.Map;
 public final class TimeUtils {
 	private TimeUtils() {}
 	
-	public static String getReadableNanosTime(long nanos) {
-		int ns = (int) (nanos % 1000);
-		nanos /= 1000;
-		int ms = (int) (nanos % 1000);
-		nanos /= 1000;
+	public static class StopWatch {
+		private final Map<String, Long> elapses;
+		private boolean isNanos = false;
+		private final Map<String, Long> starts;
+		private final Map<String, Long> stops;
 		
-		int seconds = (int) (nanos % 60);
-		nanos /= 60;
+		public StopWatch() {
+			elapses = new HashMap<String, Long>();
+			stops = new HashMap<String, Long>();
+			starts = new HashMap<String, Long>();
+		}
 		
-		int minutes = (int) (nanos % 60);
-		nanos /= 60;
+		public StopWatch(boolean nanos)
+		{
+			this();
+			isNanos = nanos;
+		}
 		
-		int hours = (int) (nanos % 24);
-		nanos /= 24;
+		private void convert(boolean nanos)
+		{
+			for (String key : starts.keySet())
+				if (nanos)
+					starts.put(key, starts.get(key) * 1000);
+				else
+					starts.put(key, starts.get(key) / 1000);
+			
+			for (String key : elapses.keySet())
+				if (nanos)
+					elapses.put(key, elapses.get(key) * 1000);
+				else
+					elapses.put(key, elapses.get(key) / 1000);
+		}
 		
-		int days = (int) (nanos % Integer.MAX_VALUE);
+		public boolean isNanos() 
+		{
+			return isNanos;
+		}
 		
-		StringBuilder sb = new StringBuilder();
-		if (days != 0)
-			sb.append(days).append("d ");
-		if (hours != 0)
-			sb.append(hours).append("h ");
-		if (minutes != 0)
-			sb.append(minutes).append("m ");
-		if (seconds != 0)
-			sb.append(seconds).append("s ");
-		if (ms != 0)
-			sb.append(ms).append("ms ");
-		if (ns != 0)
-			sb.append(ns).append("ns");
+		public boolean setUsingNanos(boolean useNanos) {
+			boolean last = isNanos();
+			isNanos = useNanos;
+
+			if (last != isNanos())
+				convert(isNanos());
+			return last;
+		}
 		
-		return sb.toString();
+		public void start(String name)
+		{
+			long stamp = getStamp(isNanos());
+			if (starts.containsKey(name))
+				elapses.put(name, time(name));
+			
+			starts.put(name, stamp);
+		}
+		
+		public long stop(String name)
+		{
+			long mark = getStamp(isNanos());
+			
+			if (!starts.containsKey(name))
+				return 0;
+			
+			long diff = mark - starts.get(name);
+			stops.put(name, mark);
+			starts.remove(name);
+			elapses.put(name, diff);
+			
+			return diff;
+		}
+		
+		public long time(String name)
+		{
+			long mark = getStamp(isNanos());
+			if (starts.containsKey(name) && !stops.containsKey(name))
+				return mark - starts.get(name);
+			else if (stops.containsKey(name) && elapses.containsKey(name))
+				return elapses.get(name);
+			else
+				return 0;
+		}
+		
+		private static long getStamp(boolean nanos)
+		{
+			return (nanos)? System.nanoTime(): System.currentTimeMillis();
+		}
 	}
 	
 	public static String getReadableMillisTime(long millis)
@@ -71,92 +125,38 @@ public final class TimeUtils {
 		return sb.toString();
 	}
 	
-	public static class StopWatch {
-		private final Map<String, Long> starts;
-		private final Map<String, Long> elapses;
-		private final Map<String, Long> stops;
-		private boolean isNanos = false;
+	public static String getReadableNanosTime(long nanos) {
+		int ns = (int) (nanos % 1000);
+		nanos /= 1000;
+		int ms = (int) (nanos % 1000);
+		nanos /= 1000;
 		
-		public StopWatch(boolean nanos)
-		{
-			this();
-			isNanos = nanos;
-		}
+		int seconds = (int) (nanos % 60);
+		nanos /= 60;
 		
-		public StopWatch() {
-			elapses = new HashMap<String, Long>();
-			stops = new HashMap<String, Long>();
-			starts = new HashMap<String, Long>();
-		}
+		int minutes = (int) (nanos % 60);
+		nanos /= 60;
 		
-		private static long getStamp(boolean nanos)
-		{
-			return (nanos)? System.nanoTime(): System.currentTimeMillis();
-		}
+		int hours = (int) (nanos % 24);
+		nanos /= 24;
 		
-		public void start(String name)
-		{
-			long stamp = getStamp(isNanos());
-			if (starts.containsKey(name))
-				elapses.put(name, time(name));
-			
-			starts.put(name, stamp);
-		}
+		int days = (int) (nanos % Integer.MAX_VALUE);
 		
-		public long time(String name)
-		{
-			long mark = getStamp(isNanos());
-			if (starts.containsKey(name) && !stops.containsKey(name))
-				return mark - starts.get(name);
-			else if (stops.containsKey(name) && elapses.containsKey(name))
-				return elapses.get(name);
-			else
-				return 0;
-		}
+		StringBuilder sb = new StringBuilder();
+		if (days != 0)
+			sb.append(days).append("d ");
+		if (hours != 0)
+			sb.append(hours).append("h ");
+		if (minutes != 0)
+			sb.append(minutes).append("m ");
+		if (seconds != 0)
+			sb.append(seconds).append("s ");
+		if (ms != 0)
+			sb.append(ms).append("ms ");
+		if (ns != 0)
+			sb.append(ns).append("ns");
 		
-		public long stop(String name)
-		{
-			long mark = getStamp(isNanos());
-			
-			if (!starts.containsKey(name))
-				return 0;
-			
-			long diff = mark - starts.get(name);
-			stops.put(name, mark);
-			starts.remove(name);
-			elapses.put(name, diff);
-			
-			return diff;
-		}
-		
-		public boolean isNanos() 
-		{
-			return isNanos;
-		}
-		
-		private void convert(boolean nanos)
-		{
-			for (String key : starts.keySet())
-				if (nanos)
-					starts.put(key, starts.get(key) * 1000);
-				else
-					starts.put(key, starts.get(key) / 1000);
-			
-			for (String key : elapses.keySet())
-				if (nanos)
-					elapses.put(key, elapses.get(key) * 1000);
-				else
-					elapses.put(key, elapses.get(key) / 1000);
-		}
-		
-		public boolean setUsingNanos(boolean useNanos) {
-			boolean last = isNanos();
-			isNanos = useNanos;
-
-			if (last != isNanos())
-				convert(isNanos());
-			return last;
-		}
+		return sb.toString();
 	}
 
 	public static long getStamp(boolean nanos)

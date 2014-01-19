@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class BaseReloader implements Reloader {
-	protected Map<String, Reloader> reloaders;
 	private final String name;
 	private Reloader parent;
+	protected Map<String, Reloader> reloaders;
 	
 	public BaseReloader(Reloader parent, String name)
 	{
@@ -17,43 +17,6 @@ public abstract class BaseReloader implements Reloader {
 		reloaders = new HashMap<String, Reloader>();
 	}
 	
-	public String getName() {
-		return name;
-	}
-
-	public String getCurrentPath() {
-		Reloader reloader = this;
-		Reloader prev = null;
-		StringBuilder sb = new StringBuilder();
-		sb.append(reloader.getName());
-		while ((reloader = reloader.getParent()) != prev)
-			sb.insert(0, '.').insert(0, (prev = reloader).getName());
-		
-		return sb.toString();
-	}
-	
-	/**
-	 * This implementation always results in true.
-	 * <br/>
-	 * <br/>
-	 * @see Reloader#reloadAll()
-	 * @return true
-	 */
-	public boolean reloadAll() {
-		if (hasModules()) {
-			for (Reloader r: reloaders.values())
-				r.reloadAll();
-		}
-		return true;
-	}
-
-	public boolean reload(String module) {
-		Reloader r;
-		if ((r = getModule(module)) != null)
-			return r.reload();
-		return false;
-	}
-
 	public boolean addModule(Reloader module) {
 		final String name = module.getName();
 		
@@ -65,12 +28,15 @@ public abstract class BaseReloader implements Reloader {
 		return true;
 	}
 
-	public boolean hasModules() {
-		return !reloaders.isEmpty();
-	}
-
-	public boolean hasModule(String name) {
-		return getModule(name) != null;
+	public String getCurrentPath() {
+		Reloader reloader = this;
+		Reloader prev = null;
+		StringBuilder sb = new StringBuilder();
+		sb.append(reloader.getName());
+		while ((reloader = reloader.getParent()) != prev)
+			sb.insert(0, '.').insert(0, (prev = reloader).getName());
+		
+		return sb.toString();
 	}
 	
 	/**
@@ -94,15 +60,19 @@ public abstract class BaseReloader implements Reloader {
 		else
 			return section.getModule(path.substring(i2));
 	}
-	
-	public boolean hasParent() {
-		return parent != null;
+
+	public Reloader[] getModules() {
+		return new ArrayList<Reloader>(reloaders.values()).toArray(new Reloader[reloaders.size()]);
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public Reloader getParent() {
 		return parent;
 	}
-	
+
 	public Reloader getRoot() {
 		Reloader reloader = this, prev = null;
 		while (prev != (prev = reloader))
@@ -110,7 +80,37 @@ public abstract class BaseReloader implements Reloader {
 		return reloader;
 	}
 	
-	public Reloader[] getModules() {
-		return new ArrayList<Reloader>(reloaders.values()).toArray(new Reloader[reloaders.size()]);
+	public boolean hasModule(String name) {
+		return getModule(name) != null;
+	}
+	
+	public boolean hasModules() {
+		return !reloaders.isEmpty();
+	}
+
+	public boolean hasParent() {
+		return parent != null;
+	}
+	
+	public boolean reload(String module) {
+		Reloader r;
+		if ((r = getModule(module)) != null)
+			return r.reload();
+		return false;
+	}
+	
+	/**
+	 * This implementation always results in true.
+	 * <br/>
+	 * <br/>
+	 * @see Reloader#reloadAll()
+	 * @return true
+	 */
+	public boolean reloadAll() {
+		if (hasModules()) {
+			for (Reloader r: reloaders.values())
+				r.reloadAll();
+		}
+		return true;
 	}
 }

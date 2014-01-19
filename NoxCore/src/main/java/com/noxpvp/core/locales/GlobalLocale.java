@@ -7,14 +7,28 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.utils.MessageUtil;
 
 public class GlobalLocale extends LocalizationEnum {
-	public static GlobalLocale HELP_HEADER;
-	public static GlobalLocale FAILED_PERMISSION;
-	public static GlobalLocale FAILED_PERMISSION_VERBOSE;
-	public static GlobalLocale COMMAND_SUCCESS;
+	public GlobalLocale(String name, String def) {
+		super(name, def);
+	}
+	@Override
+	public String get(String... args) {
+		return MessageUtil.parseColor(NoxCore.getInstance().getGlobalLocale(getName(), args));
+	}
+	@Override
+	public void message(CommandSender sender, String... arguments) {
+		MessageUtil.sendMessage(sender, MessageUtil.parseArguments(get(), arguments).split("\n"));
+	}
 	public static GlobalLocale COMMAND_FAILED;
-	public static GlobalLocale ERROR_NULL;
+	public static GlobalLocale COMMAND_SUCCESS;
 	public static GlobalLocale CONSOLE_NEEDPLAYER;
 	public static GlobalLocale CONSOLE_ONLYPLAYER;
+	public static GlobalLocale ERROR_NULL;
+	
+	public static GlobalLocale FAILED_PERMISSION;
+	
+	public static GlobalLocale FAILED_PERMISSION_VERBOSE;
+	
+	public static GlobalLocale HELP_HEADER;
 	
 	static {
 		//Help Dialogs
@@ -36,19 +50,5 @@ public class GlobalLocale extends LocalizationEnum {
 		//CONSOLE
 		CONSOLE_NEEDPLAYER = new GlobalLocale("console.needplayer", "This command requires a player: %0%");
 		CONSOLE_ONLYPLAYER = new GlobalLocale("console.onlyplayer", "This command can only be run by a player.");
-	}
-	
-	public GlobalLocale(String name, String def) {
-		super(name, def);
-	}
-	
-	@Override
-	public String get(String... args) {
-		return MessageUtil.parseColor(NoxCore.getInstance().getGlobalLocale(getName(), args));
-	}
-	
-	@Override
-	public void message(CommandSender sender, String... arguments) {
-		MessageUtil.sendMessage(sender, MessageUtil.parseArguments(get(), arguments).split("\n"));
 	}
 }

@@ -12,48 +12,14 @@ import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.PermissionHandler;
 
 public class ReloadCommand extends BaseCommand {
-	public static final String PERM_NODE = "nox.reload";
+	private NoxCore core;
 	
 	private PermissionHandler handler;
-	private NoxCore core;
-	private static final String ENTER_TREE = ">";
-	
 	public ReloadCommand(){
 		super(COMMAND_NAME, false);
 		core = NoxCore.getInstance();
 		handler = core.getPermissionHandler();
 	}
-	
-	private void nextTree(MessageBuilder mb, Reloader module, int level)
-	{
-		mb.newLine();
-		for (int i = 0; i < (level); i++)
-			mb.append("-");
-		if (level > 0)
-			mb.append(ENTER_TREE);
-		
-		mb.append(module.getName());
-		if (module.hasModules())
-			for (Reloader subModule : module.getModules())
-				nextTree(mb, subModule, level + 1);
-	}
-
-	public String[] getHelp() {
-		MessageBuilder mb = new MessageBuilder();
-		mb.gold("/").blue(COMMAND_NAME).append(' ').red("<<ModuleName> ").aqua("[SubModule ...]").red(">").newLine();
-		mb.gray("Put * on the end of any module to specify to load all sub modules and self").newLine();
-		mb.blue("Current Module Tree");
-		MasterReloader mr = core.getMasterReloader();
-		mb.newLine();
-		if (mr.hasModules())
-			for (Reloader module : mr.getModules())
-				nextTree(mb.white(" "), module, 0);
-		else
-			mb.red("No Modules Loaded?!");
-		
-		return mb.lines();
-	}
-
 	public boolean execute(CommandContext context) {
 		
 		CommandSender sender = context.getSender();
@@ -110,13 +76,29 @@ public class ReloadCommand extends BaseCommand {
 		}
 		return true;
 	}
-
+	
 	public String[] getDescription() {
 		return new String[0];
 	}
-
+	
 	public String[] getFlags() {
 		return new String[]{"help", "h", "?"};
+	}
+
+	public String[] getHelp() {
+		MessageBuilder mb = new MessageBuilder();
+		mb.gold("/").blue(COMMAND_NAME).append(' ').red("<<ModuleName> ").aqua("[SubModule ...]").red(">").newLine();
+		mb.gray("Put * on the end of any module to specify to load all sub modules and self").newLine();
+		mb.blue("Current Module Tree");
+		MasterReloader mr = core.getMasterReloader();
+		mb.newLine();
+		if (mr.hasModules())
+			for (Reloader module : mr.getModules())
+				nextTree(mb.white(" "), module, 0);
+		else
+			mb.red("No Modules Loaded?!");
+		
+		return mb.lines();
 	}
 
 	public int getMaxArguments() {
@@ -126,5 +108,23 @@ public class ReloadCommand extends BaseCommand {
 	public NoxPlugin getPlugin() {
 		return core;
 	}
+
+	private void nextTree(MessageBuilder mb, Reloader module, int level)
+	{
+		mb.newLine();
+		for (int i = 0; i < (level); i++)
+			mb.append("-");
+		if (level > 0)
+			mb.append(ENTER_TREE);
+		
+		mb.append(module.getName());
+		if (module.hasModules())
+			for (Reloader subModule : module.getModules())
+				nextTree(mb, subModule, level + 1);
+	}
+
+	private static final String ENTER_TREE = ">";
+
+	public static final String PERM_NODE = "nox.reload";
 
 }

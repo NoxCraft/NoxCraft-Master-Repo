@@ -16,17 +16,17 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.PlayerManager;
 
 public class CoreBoard{
-	private CommonScoreboard sb;
+	private Map<String, BoardEntry> entries;
 	private CommonObjective ob;
 	public Player p;
 	
 	
-	private Map<String, BoardScroller> scrollers;
-	private Map<String, BoardTimer> timers;
-	private Map<String, BoardEntry> entries;
 	PlayerManager pm;
-	
+	private CommonScoreboard sb;
+	private Map<String, BoardScroller> scrollers;
 	private List<Integer> takenSlots;
+	
+	private Map<String, BoardTimer> timers;
 	
 	/**
 	 * 
@@ -55,87 +55,6 @@ public class CoreBoard{
 		}
 		
 		pm.addCoreBoard(this);
-	}
-	
-	private int getNewSlot(){
-		int n = 50;
-		
-		while (takenSlots.contains(n)) {n--;}
-		this.takenSlots.add(n);
-		
-		return  n;
-	}
-	
-	private CoreBoard removeSlotID(int id)
-	{
-		try {takenSlots.remove(takenSlots.indexOf(id));} catch (ArrayIndexOutOfBoundsException e) {}
-		return this;
-	}
-	
-	/**
-	 * Makes the scoreboard visible
-	 * 
-	 * @return CoreBoard - This instance
-	 */
-	public CoreBoard show(){this.ob.show(); return this;}
-	
-	/**
-	 * Makes the scoreboard hidden
-	 * 
-	 * @return CoreBoard - This instance
-	 */
-	public CoreBoard hide(){this.ob.hide(); return this;}
-	
-	/**
-	 * Updates the objectives scores
-	 * 
-	 * @return CoreBoard - This instance
-	 */
-	public CoreBoard updateScores() {this.ob.update(); return this;}
-	
-	/**
-	 * Cancels all running timers and scrollers on this CoreBoard
-	 * 
-	 * @return CoreBoard - This instance
-	 */
-	public CoreBoard cancelTimers(){
-		for (BoardTimer timer: timers.values())
-		{
-			timer.safeCancel();
-		}
-		for (BoardScroller scroller: scrollers.values())
-		{
-			scroller.safeCancel();
-		}
-		timers.clear();
-		scrollers.clear();
-		return this;
-	}
-	
-	/**
-	 * 
-	 * @param name - The name of the entry to remove
-	 * @return CoreBoard - This instance
-	 */
-	public CoreBoard removeEntry(String name){
-		
-		BoardEntry entry = entries.get(name);
-		if (entry == null)
-			return this;
-		
-		entry.remove();
-		
-		return this;
-	}
-	
-	/**
-	* 
-	* @param entry - The entry to remove
-	* @return CoreBoard - This instance
-	*/
-	public CoreBoard removeEntry(BoardEntry entry)
-	{
-		return removeEntry(entry.getName());
 	}
 	
 	/**
@@ -202,16 +121,94 @@ public class CoreBoard{
 		return this;
 	}
 	
+	/**
+	 * Cancels all running timers and scrollers on this CoreBoard
+	 * 
+	 * @return CoreBoard - This instance
+	 */
+	public CoreBoard cancelTimers(){
+		for (BoardTimer timer: timers.values())
+		{
+			timer.safeCancel();
+		}
+		for (BoardScroller scroller: scrollers.values())
+		{
+			scroller.safeCancel();
+		}
+		timers.clear();
+		scrollers.clear();
+		return this;
+	}
+	
+	private int getNewSlot(){
+		int n = 50;
+		
+		while (takenSlots.contains(n)) {n--;}
+		this.takenSlots.add(n);
+		
+		return  n;
+	}
+	
+	/**
+	 * Makes the scoreboard hidden
+	 * 
+	 * @return CoreBoard - This instance
+	 */
+	public CoreBoard hide(){this.ob.hide(); return this;}
+	
+	/**
+	* 
+	* @param entry - The entry to remove
+	* @return CoreBoard - This instance
+	*/
+	public CoreBoard removeEntry(BoardEntry entry)
+	{
+		return removeEntry(entry.getName());
+	}
+	
+	/**
+	 * 
+	 * @param name - The name of the entry to remove
+	 * @return CoreBoard - This instance
+	 */
+	public CoreBoard removeEntry(String name){
+		
+		BoardEntry entry = entries.get(name);
+		if (entry == null)
+			return this;
+		
+		entry.remove();
+		
+		return this;
+	}
+	
+	private CoreBoard removeSlotID(int id)
+	{
+		try {takenSlots.remove(takenSlots.indexOf(id));} catch (ArrayIndexOutOfBoundsException e) {}
+		return this;
+	}
+	
+	/**
+	 * Makes the scoreboard visible
+	 * 
+	 * @return CoreBoard - This instance
+	 */
+	public CoreBoard show(){this.ob.show(); return this;}
+	
+	/**
+	 * Updates the objectives scores
+	 * 
+	 * @return CoreBoard - This instance
+	 */
+	public CoreBoard updateScores() {this.ob.update(); return this;}
+	
 	private class BoardEntry {
+		private boolean active;
+		private String displayedName;
+		private boolean isGood = true;
 		private final String name;
 		private String scoreName;
-		private String displayedName;
 		private int slot1, slot2;
-		private boolean active;
-		private boolean isGood = true;
-		
-		public int getSlot1(){ return slot1;}
-		public int getSlot2(){ return slot2;}
 		
 		public BoardEntry(String name, String displayedName, String scoreName)
 		{
@@ -229,18 +226,7 @@ public class CoreBoard{
 			entries.put(name, this);
 			show();
 		}
-		
 		public String getName() { return name; }
-
-		public String getValue() { return scoreName; }
-		
-		public BoardEntry setValue(String value)
-		{
-			this.scoreName = value;
-			hide();
-			show();
-			return this;
-		}
 		
 		public BoardEntry getNewSlots()
 		{
@@ -258,14 +244,11 @@ public class CoreBoard{
 			return this;
 		}
 		
-		public BoardEntry setDisplayName(String name){
-			this.displayedName = name;
-			hide();
-			show();
-			return this;
-		}
+		public int getSlot1(){ return slot1;}
+
+		public int getSlot2(){ return slot2;}
 		
-		public boolean isRendering(){ return active; }
+		public String getValue() { return scoreName; }
 		
 		public BoardEntry hide()
 		{
@@ -275,6 +258,32 @@ public class CoreBoard{
 			ob.removeScore(name + slot2);
 			
 			active = false;
+			return this;
+		}
+		
+		public boolean isRendering(){ return active; }
+		
+		public void remove() {
+			hide();
+			
+			removeSlotID(slot1).removeSlotID(slot2);
+			
+			isGood = false;
+			entries.remove(name);
+		}
+		
+		public BoardEntry setDisplayName(String name){
+			this.displayedName = name;
+			hide();
+			show();
+			return this;
+		}
+		
+		public BoardEntry setValue(String value)
+		{
+			this.scoreName = value;
+			hide();
+			show();
 			return this;
 		}
 		
@@ -290,30 +299,19 @@ public class CoreBoard{
 			
 			return this;
 		}
-		
-		public void remove() {
-			hide();
-			
-			removeSlotID(slot1).removeSlotID(slot2);
-			
-			isGood = false;
-			entries.remove(name);
-		}
 	}
 
 	private class BoardScroller extends BukkitRunnable{
 
-		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
-		
-		public final String name;
-		private StringBuilder text;
-		private int v;
-		
 		private BoardEntry entry;
 		
-		private boolean useScrollColor;
+		public final String name;
 		private String sc;
+		private StringBuilder text;
 		
+		private boolean useScrollColor;
+		
+		private int v;
 		public BoardScroller(String name, String displayedName, String scrollText, int visibleLength, ChatColor nameColor, ChatColor scrollerColor){
 			this.name = name;
 			this.text = new StringBuilder("    " + scrollText);
@@ -342,14 +340,16 @@ public class CoreBoard{
 			entry.setValue(text.substring(0, this.v));
 		}
 		
+		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
+		
 	}
 	
 	private class BoardTimer extends BukkitRunnable{
+		private BoardEntry entry;
 		public final String name;
-		private String timerString;
 		private ChatColor sc;
 		
-		private BoardEntry entry;
+		private String timerString;
 		
 		private long timeStamp;
 		
@@ -366,7 +366,20 @@ public class CoreBoard{
 			entry = new BoardEntry(name, (nameColor + displayedName), this.timerString);
 		}
 		
-		public void safeCancel() { try { cancel(); } catch (IllegalStateException e) {} }
+		private String getFormattedTime(long seconds)
+		{
+			int s = (int) (seconds % 60);
+			seconds /= 60;
+			
+			int m= (int) (seconds % 60);
+			seconds /= 60;
+			
+			int h= (int) (seconds % 24);
+			seconds /= 24;
+			
+			return String.format("%1$02d:%2$02d:%3$02d", h, m, s);
+			
+		}
 		
 		public void run() {
 			if (entry == null || !entries.containsValue(entry)){
@@ -400,20 +413,7 @@ public class CoreBoard{
 			entry.setValue(timerString);
 		}
 		
-		private String getFormattedTime(long seconds)
-		{
-			int s = (int) (seconds % 60);
-			seconds /= 60;
-			
-			int m= (int) (seconds % 60);
-			seconds /= 60;
-			
-			int h= (int) (seconds % 24);
-			seconds /= 24;
-			
-			return String.format("%1$02d:%2$02d:%3$02d", h, m, s);
-			
-		}
+		public void safeCancel() { try { cancel(); } catch (IllegalStateException e) {} }
 		
 	}
 

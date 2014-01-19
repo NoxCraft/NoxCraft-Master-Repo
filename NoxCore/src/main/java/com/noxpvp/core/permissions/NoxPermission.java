@@ -6,12 +6,12 @@ import com.bergerkiller.bukkit.common.permissions.IPermissionDefault;
 import com.noxpvp.core.NoxPlugin;
 
 public class NoxPermission implements IPermissionDefault {
-	private final String name;
-	private String node;
 	private NoxPermission[] children;
-	private String[] parents;
 	private PermissionDefault defaultPermission;
 	private String description;
+	private final String name;
+	private String node;
+	private String[] parents;
 	private NoxPlugin plugin;
 	
 	public NoxPermission(NoxPlugin plugin, String node, String description, PermissionDefault defaults)
@@ -40,11 +40,6 @@ public class NoxPermission implements IPermissionDefault {
 		return children;
 	}
 	
-	public String[] getParentNodes()
-	{
-		return parents;
-	}
-	
 	public PermissionDefault getDefault() {
 		return defaultPermission;
 	}
@@ -55,6 +50,11 @@ public class NoxPermission implements IPermissionDefault {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String[] getParentNodes()
+	{
+		return parents;
 	}
 
 	public NoxPlugin getPlugin() {

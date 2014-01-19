@@ -28,6 +28,23 @@ public class CooldownHandler extends BukkitRunnable {
 		core = NoxCore.getInstance();
 	}
 	
+	public synchronized void loadPlayer(NoxPlayerAdapter adapter)
+	{
+		NoxPlayer player = adapter.getNoxPlayer();
+		
+		cds.put(player.getName(), player.getCoolDowns());
+	}
+
+	public void loadPlayer(OfflinePlayer player)
+	{
+		loadPlayer(core.getPlayerManager().getPlayer(player));
+	}
+	
+	public void loadPlayer(String name)
+	{
+		loadPlayer(core.getPlayerManager().getPlayer(name));
+	}
+	
 	public void run() {
 		for (Entry<String, List<CoolDown>> entry : cds.entrySet())
 		{
@@ -45,7 +62,7 @@ public class CooldownHandler extends BukkitRunnable {
 				}
 		}		
 	}
-
+	
 	public synchronized void start() {
 		try {
 			runTaskTimerAsynchronously(core, 0, 20);
@@ -64,22 +81,5 @@ public class CooldownHandler extends BukkitRunnable {
 			core.getLogger().warning("Failed to stop the cooldown manager timer.");
 			e.printStackTrace();
 		}
-	}
-	
-	public void loadPlayer(OfflinePlayer player)
-	{
-		loadPlayer(core.getPlayerManager().getPlayer(player));
-	}
-	
-	public synchronized void loadPlayer(NoxPlayerAdapter adapter)
-	{
-		NoxPlayer player = adapter.getNoxPlayer();
-		
-		cds.put(player.getName(), player.getCoolDowns());
-	}
-	
-	public void loadPlayer(String name)
-	{
-		loadPlayer(core.getPlayerManager().getPlayer(name));
 	}
 }

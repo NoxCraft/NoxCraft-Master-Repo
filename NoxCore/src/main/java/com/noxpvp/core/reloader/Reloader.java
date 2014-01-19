@@ -2,45 +2,6 @@ package com.noxpvp.core.reloader;
 
 public interface Reloader {
 	/**
-	 * Retrieves the name of the reloader.
-	 * <br/><br/>
-	 * <i>Please make sure names are semi unique.</i>
-	 * @return String - Name of Reloader.
-	 */
-	public String getName();
-	
-	/**
-	 * Returns the path to this module. 
-	 * <br/><br/>
-	 * <i>Any root modules should use Master as current path.</i>
-	 * @return String - Path to this module.
-	 */
-	public String getCurrentPath();
-	
-	/**
-	 * Runs the reloading code specified reloader.
-	 * 
-	 * @return true if successful and false if it failed to reload.  
-	 */
-	public boolean reload();
-	
-	/**
-	 * Reloads all submodules and self.
-	 * @return true if successful and false if it failed to reload.<br/>
-	 * <b>Warning Most implementations result in true no matter what.</b>
-	 */
-	public boolean reloadAll();
-	
-	/**
-	 * Reloads the specified module.
-	 * @param module - to reload
-	 * @return true if successful and false if it failed to reload that module.
-	 * <br/>
-	 * <i>Generally will return false if module does not exist.</i>
-	 */
-	public boolean reload(String module);
-	
-	/**
 	 * Adds module to this reloader. Useful for grouping a module to a master loader.
 	 * 
 	 * @param module - to add.
@@ -49,19 +10,12 @@ public interface Reloader {
 	public boolean addModule(Reloader module);
 	
 	/**
-	 * Specifies if this reloader has modules to it.
-	 * 
-	 * @return True if it contains modules. False if it doesn't
+	 * Returns the path to this module. 
+	 * <br/><br/>
+	 * <i>Any root modules should use Master as current path.</i>
+	 * @return String - Path to this module.
 	 */
-	public boolean hasModules();
-	
-	/**
-	 * Specifies if the named module exists in this reloader.
-	 * 
-	 * @param name - Name of module to check for.
-	 * @return true if exists and false if not.<br/> Will always return false if {@link #hasModules()} returns false
-	 */
-	public boolean hasModule(String name);
+	public String getCurrentPath();
 	
 	/**
 	 * Retrieves the specified module.
@@ -76,12 +30,14 @@ public interface Reloader {
 	 * @return Reloader array or null if none.
 	 */
 	public Reloader[] getModules();
-
+	
 	/**
-	 * Tells if this is a module of a Master Reloader
-	 * @return true if it is a module and false if its the root.
+	 * Retrieves the name of the reloader.
+	 * <br/><br/>
+	 * <i>Please make sure names are semi unique.</i>
+	 * @return String - Name of Reloader.
 	 */
-	public boolean hasParent();
+	public String getName();
 	
 	/**
 	 * Retrieves the parent of this Reloader
@@ -94,4 +50,48 @@ public interface Reloader {
 	 * @return Reloader the parent or self if it is the root.
 	 */
 	public Reloader getRoot();
+	
+	/**
+	 * Specifies if the named module exists in this reloader.
+	 * 
+	 * @param name - Name of module to check for.
+	 * @return true if exists and false if not.<br/> Will always return false if {@link #hasModules()} returns false
+	 */
+	public boolean hasModule(String name);
+	
+	/**
+	 * Specifies if this reloader has modules to it.
+	 * 
+	 * @return True if it contains modules. False if it doesn't
+	 */
+	public boolean hasModules();
+	
+	/**
+	 * Tells if this is a module of a Master Reloader
+	 * @return true if it is a module and false if its the root.
+	 */
+	public boolean hasParent();
+
+	/**
+	 * Runs the reloading code specified reloader.
+	 * 
+	 * @return true if successful and false if it failed to reload.  
+	 */
+	public boolean reload();
+	
+	/**
+	 * Reloads the specified module.
+	 * @param module - to reload
+	 * @return true if successful and false if it failed to reload that module.
+	 * <br/>
+	 * <i>Generally will return false if module does not exist.</i>
+	 */
+	public boolean reload(String module);
+	
+	/**
+	 * Reloads all submodules and self.
+	 * @return true if successful and false if it failed to reload.<br/>
+	 * <b>Warning Most implementations result in true no matter what.</b>
+	 */
+	public boolean reloadAll();
 }

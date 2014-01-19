@@ -17,20 +17,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class ChestBlockedEvent extends Event implements Cancellable {
 	
-	/** The Constant handlers. */
-	private static final HandlerList handlers = new HandlerList();
-	
 	/** The cancelled. */
 	private boolean cancelled = false;
-	
-	/** The event cause. */
-	private final Event eventCause;
 	
 	/** The cause. */
 	private final BlockCause cause;
 	
 	/** The entity. */
 	private Entity entity = null;
+	
+	/** The event cause. */
+	private final Event eventCause;
 	
 	/** The is player. */
 	private boolean isPlayer = false;
@@ -40,9 +37,9 @@ public class ChestBlockedEvent extends Event implements Cancellable {
 	 *
 	 * @param event the event
 	 */
-	public ChestBlockedEvent(BlockPistonEvent event)
+	public ChestBlockedEvent(BlockFormEvent event)
 	{
-		cause = BlockCause.Piston;
+		cause = BlockCause.BlockForm;
 		eventCause = event;
 	}
 	
@@ -51,9 +48,9 @@ public class ChestBlockedEvent extends Event implements Cancellable {
 	 *
 	 * @param event the event
 	 */
-	public ChestBlockedEvent(BlockFormEvent event)
+	public ChestBlockedEvent(BlockPistonEvent event)
 	{
-		cause = BlockCause.BlockForm;
+		cause = BlockCause.Piston;
 		eventCause = event;
 	}
 	
@@ -89,6 +86,15 @@ public class ChestBlockedEvent extends Event implements Cancellable {
 		eventCause = event;
 	}
 	
+	/**
+	 * Gets the cause.
+	 *
+	 * @return the cause
+	 */
+	public final BlockCause getCause() {
+		return cause;
+	}
+	
 //	public ChestBlockedEvent(EntityChangeBlockEvent event) //Not supported properly at current moment.
 //	{
 //		entity = event.getEntity();
@@ -96,6 +102,15 @@ public class ChestBlockedEvent extends Event implements Cancellable {
 //	}
 	
 	
+	/**
+	 * Gets the entity.
+	 *
+	 * @return the entity
+	 */
+	public final Entity getEntity() {
+		return entity;
+	}
+
 	/**
  * Gets the event cause.
  *
@@ -106,21 +121,13 @@ public class ChestBlockedEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * Gets the cause.
+	 * Gets the handlers.
 	 *
-	 * @return the cause
+	 * @return the handlers
 	 */
-	public final BlockCause getCause() {
-		return cause;
-	}
-
-	/**
-	 * Gets the entity.
-	 *
-	 * @return the entity
-	 */
-	public final Entity getEntity() {
-		return entity;
+	@Override
+	public HandlerList getHandlers() {
+		return handlers;
 	}
 	
 	/**
@@ -136,12 +143,12 @@ public class ChestBlockedEvent extends Event implements Cancellable {
 	}
 	
 	/**
-	 * Checks if is player.
+	 * Checks if is cancelled.
 	 *
-	 * @return true, if is player
+	 * @return true, if is cancelled
 	 */
-	public boolean isPlayer() {
-		return isPlayer;
+	public boolean isCancelled() {
+		return cancelled;
 	}
 	
 	/**
@@ -154,12 +161,12 @@ public class ChestBlockedEvent extends Event implements Cancellable {
 	}
 	
 	/**
-	 * Checks if is cancelled.
+	 * Checks if is player.
 	 *
-	 * @return true, if is cancelled
+	 * @return true, if is player
 	 */
-	public boolean isCancelled() {
-		return cancelled;
+	public boolean isPlayer() {
+		return isPlayer;
 	}
 
 	/**
@@ -172,14 +179,14 @@ public class ChestBlockedEvent extends Event implements Cancellable {
 	}
 	
 	/**
-	 * Gets the handlers.
-	 *
-	 * @return the handlers
+	 * The Enum BlockCause.
 	 */
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
+	public static enum BlockCause {
+		BlockForm, Entity, Interact, Piston, Player, Unknown;
 	}
+	
+	/** The Constant handlers. */
+	private static final HandlerList handlers = new HandlerList();
 	
 	/**
 	 * Gets the handler list.
@@ -188,12 +195,5 @@ public class ChestBlockedEvent extends Event implements Cancellable {
 	 */
 	public static HandlerList getHandlerList() {
 		return handlers;
-	}
-	
-	/**
-	 * The Enum BlockCause.
-	 */
-	public static enum BlockCause {
-		Entity, Player, BlockForm, Piston, Interact, Unknown;
 	}
 }
