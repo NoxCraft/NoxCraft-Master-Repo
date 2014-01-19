@@ -120,9 +120,8 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 					last.setPassenger(e);
 				last = e;
 			}
-				
-		}
-		entity.teleport(getLocation());
+		} else
+			entity.teleport(getLocation());
 	}
 	
 	public boolean isOwner(Player player)

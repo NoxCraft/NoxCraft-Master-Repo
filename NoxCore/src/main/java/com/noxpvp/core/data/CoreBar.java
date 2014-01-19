@@ -51,17 +51,12 @@ public class CoreBar{
 	}
 	
 	private class Entry{
-		String text;
 		float percentFilled;
+		String text;
 		
 		public Entry(){
 			this.text = "";
 			this.percentFilled = 100F;
-		}
-		
-		public void update(String text){
-			this.update(percentFilled, text);
-			
 		}
 		
 		public void update(float percentFilled, String text){
@@ -72,20 +67,93 @@ public class CoreBar{
 			
 		}
 		
+		public void update(String text){
+			this.update(percentFilled, text);
+			
+		}
+		
 	}
 	
 
-	private class Scroller extends BukkitRunnable{
+	private class Flasher extends BukkitRunnable{
 
+		private String text;
+		
+		public Flasher(String text){
+			this.text = text;
+			
+			currentEntry.update(100F, text);
+			
+			this.runTaskTimer(NoxCore.getInstance(), 0, 6);
+		}
+		
+		public void run() {
+			if (currentEntry.text != text)
+			{
+				safeCancel();
+				return;
+			}
+			
+			text = ChatColor.stripColor(text);
+			text = ChatColor.COLOR_CHAR + RandomUtils.nextInt(9) + text;
+			
+			currentEntry.update(100F, text.toString());
+			
+		}
+		
+		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}} 	
+		
+	}
+	
+
+	private class LivingTracker extends BukkitRunnable{
+
+		private double distance;
+		
+		private LivingEntity e;
+		private StringBuilder text;
+		
+		public LivingTracker(LivingEntity e, String text, ChatColor color) {
+			this.e = e;
+			distance = p.getLocation().distance(e.getLocation());
+			
+			this.text = new StringBuilder(color + text).append(" - ").append(distance);
+			
+			currentEntry.update((float) (e.getHealth() / e.getMaxHealth() * 100), text.toString());
+			
+			this.runTaskTimer(NoxCore.getInstance(), 0, 10);
+		}
+		
+		public void run() {
+			if (!currentEntry.text.equals(text.toString()) || p == null || !p.isOnline() || p.isDead() || e == null || e.isDead())
+			{
+				safeCancel();
+				return;
+			}
+			
+			distance = p.getLocation().distance(e.getLocation());
+			int tLength = text.length();
+			
+			text.replace(tLength - (3 + Double.toString(distance).length()), tLength, " - " + distance);
+			
+			currentEntry.update((float) ((e.getHealth() / e.getMaxHealth()) * 100), text.toString());
+			
+		}
+		
 		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
 		
+	}
+	
+	private class Scroller extends BukkitRunnable{
+
+		private char cChar;
+		
+		private String sc;
 		private StringBuilder text;
-		private int v;
 		
 		private boolean useScrollColor;
-		private String sc;
+		private int v;
 		
-		private char cChar;
 		public Scroller(String text, int visibleLength, ChatColor color){
 			this.v = visibleLength <= 64 ? visibleLength : 64;
 			
@@ -98,7 +166,6 @@ public class CoreBar{
 			
 			this.runTaskTimer(NoxCore.getInstance(), 0, 5);
 		}
-		
 		public void run() {
 			if (!currentEntry.text.equals(text.toString()))
 			{
@@ -120,51 +187,22 @@ public class CoreBar{
 			
 			currentEntry.update(100F, text.substring(0, v));
 			
-		} 	
-		
-	}
-	
-
-	private class Flasher extends BukkitRunnable{
-
-		private String text;
-		
-		public Flasher(String text){
-			this.text = text;
-			
-			currentEntry.update(100F, text);
-			
-			this.runTaskTimer(NoxCore.getInstance(), 0, 6);
 		}
 		
-		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
-		
-		public void run() {
-			if (currentEntry.text != text)
-			{
-				safeCancel();
-				return;
-			}
-			
-			text = ChatColor.stripColor(text);
-			text = ChatColor.COLOR_CHAR + RandomUtils.nextInt(9) + text;
-			
-			currentEntry.update(100F, text.toString());
-			
-		} 	
+		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}} 	
 		
 	}
-	
+
 	private class Shine extends BukkitRunnable{
 
 		
-		private StringBuilder text;
+		private int currentIndex;
 		private int delay;
 		
-		private int currentIndex;
+		private int i1, i2, i3;
 		
 		private String one = ChatColor.GOLD.toString(), two = ChatColor.YELLOW.toString(), three = ChatColor.RED.toString();
-		private int i1, i2, i3;
+		private StringBuilder text;
 		
 		public Shine(String text, int delay){
 			this.text = new StringBuilder();
@@ -175,8 +213,6 @@ public class CoreBar{
 			
 			this.runTaskTimer(NoxCore.getInstance(), 0, 1);
 		}
-		
-		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
 		
 		public void run() {
 			if ((!currentEntry.text.equals(text.toString())) || (text.length() <= 7))
@@ -202,45 +238,9 @@ public class CoreBar{
 			
 			currentEntry.update(100F, text.toString());
 			
-		} 	
-		
-	}
-
-	private class LivingTracker extends BukkitRunnable{
-
-		private double distance;
-		
-		private LivingEntity e;
-		private StringBuilder text;
-		
-		public LivingTracker(LivingEntity e, String text, ChatColor color) {
-			this.e = e;
-			distance = p.getLocation().distance(e.getLocation());
-			
-			this.text = new StringBuilder(color + text).append(" - ").append(distance);
-			
-			currentEntry.update((float) (e.getHealth() / e.getMaxHealth() * 100), text.toString());
-			
-			this.runTaskTimer(NoxCore.getInstance(), 0, 10);
 		}
 		
-		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
-		
-		public void run() {
-			if (!currentEntry.text.equals(text.toString()) || p == null || !p.isOnline() || p.isDead() || e == null || e.isDead())
-			{
-				safeCancel();
-				return;
-			}
-			
-			distance = p.getLocation().distance(e.getLocation());
-			int tLength = text.length();
-			
-			text.replace(tLength - (3 + Double.toString(distance).length()), tLength, " - " + distance);
-			
-			currentEntry.update((float) ((e.getHealth() / e.getMaxHealth()) * 100), text.toString());
-			
-		}
+		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}} 	
 		
 	}
 	

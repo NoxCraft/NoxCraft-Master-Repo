@@ -24,13 +24,13 @@ import com.noxpvp.core.events.PlayerDataUnloadEvent;
 
 public class PlayerManager implements Persistant {
 
-	private NoxCore plugin;
-	
 	protected FileConfiguration config;
 	
 	private Map<String, CoreBar> coreBars = new HashMap<String, CoreBar>();
+	
 	private Map<String, CoreBoard> coreBoards = new HashMap<String, CoreBoard>();
 	private Map<String, NoxPlayer> players;
+	private NoxCore plugin;
 	
 	public PlayerManager() {
 		this(new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml")), NoxCore.getInstance());
@@ -45,215 +45,32 @@ public class PlayerManager implements Persistant {
 		players = new HashMap<String, NoxPlayer>();
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.noxpvp.core.Persistant#save()
-	 */
-	public void save() {
-		config.save();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.noxpvp.core.Persistant#load()
-	 */
-	public void load() {
-		Collection<String> pls = players.keySet();
-
-		players.clear();
-		config.load();
-		
-		for (String name : pls)
-			loadOrCreate(name);
-		
-		for (Player player : Bukkit.getOnlinePlayers())
-			loadOrCreate(player.getName());
-	}
-	
-	private void loadOrCreate(String name) {
-		loadPlayer(getPlayer(name));
-	}
-
 	/**
-	 * Gets the player node.
-	 * <b>INTERNAL METHOD</b> Best not to use this!
-	 * @param name the name
-	 * @return the player node
-	 */
-	public ConfigurationNode getPlayerNode(String name)
-	{
-		if (isMultiFile())
-			return new FileConfiguration(NoxCore.getInstance(), "playerdata"+File.separatorChar+name+".yml");
-		else if (config != null)
-			return config.getNode("players").getNode(name);
-		else
-			return null;
-	}
-	
-	/**
-	 * Gets the player.
-	 *
-	 * @see #getPlayer(String)
-	 * @param player the player
-	 * @return the player
-	 */
-	public NoxPlayer getPlayer(OfflinePlayer player) {
-		return getPlayer(player.getName());
-	}
-	
-	
-	/**
-	 * Gets the specified player.
-	 *
-	 * @param name of the player
-	 * @return the player
-	 */
-	public NoxPlayer getPlayer(String name)
-	{
-		NoxPlayer player = null;
-		if (players.containsKey(name))
-			player = players.get(name);
-		else {
-			player = new NoxPlayer(this, name);
-			players.put(name, player);
-		}
-		return player;
-	}
-	
-	/**
-	 * Unload if player is offline.
-	 * <br/>
-	 * <b> WARNING IF THERE ARE PLUGINS THAT ARE IMPROPERLY CACHING THIS OBJECT. IT WILL NEVER TRUELY UNLOAD</b>
-	 * @param name of the player
-	 * @return true, if it unloads the player from memory.
-	 */
-	public boolean unloadIfOffline(String name) {
-		if (isPlayerInMemory(name) && getPlayer(name).getPlayer() != null)
-		{
-			unloadAndSavePlayer(name);
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * Unload and save player.
 	 * 
-	 * @see #unloadPlayer(String)
-	 * @see #savePlayer(String)
-	 * @param name the name
+	 * @param name The Key
+	 * @param bar The CoreBar to add
+	 * @throws NullPointerException If the key or CoreBar are null
 	 */
-	public void unloadAndSavePlayer(String name) {
-		savePlayer(name);
-		unloadPlayer(name);
+	public void addCoreBar(CoreBar bar){
+		if (bar == null)
+			throw new NullPointerException("Cannot CoreBar to active CoreBar list");
+		
+		this.coreBars.put(bar.p.getName(), bar);
 	}
 
 	/**
-	 * Unload the named player.
-	 *
-	 * @param name of the player
+	 * 
+	 * @param name The Key
+	 * @param board The CoreBoard to add
+	 * @throws NullPointerException If the key or CoreBoard are null
 	 */
-	public void unloadPlayer(String name) {
-		/*PlayerDataUnloadEvent e = */CommonUtil.callEvent(new PlayerDataUnloadEvent(getPlayer(name), false));
-		players.remove(name);
-	}
-
-	/**
-	 * Checks if is player is in memory.
-	 *
-	 * @param name of the player.
-	 * @return true, if is player in memory
-	 */
-	public boolean isPlayerInMemory(String name) {
-		return players.containsKey(name);
+	public void addCoreBoard(CoreBoard board){
+		if (board == null)
+			throw new NullPointerException("Cannot CoreBoard to active CoreBoard list");
+		
+		this.coreBoards.put(board.p.getName(), board);
 	}
 	
-	/**
-	 * Save player.
-	 *
-	 * @see #savePlayer(NoxPlayer)
-	 * @param name of the player
-	 */
-	public void savePlayer(String name) {
-		savePlayer(getPlayer(name));
-	}
-
-	/**
-	 * Save player.
-	 *
-	 * @see #savePlayer(NoxPlayer)
-	 * @param player of the player
-	 */
-	public void savePlayer(OfflinePlayer player){
-		savePlayer(getPlayer(player));
-	}
-	
-	/**
-	 * Save player.
-	 *
-	 * @param player the player
-	 */
-	public void savePlayer(NoxPlayer player) 
-	{
-		player.save();
-	}
-	
-	/**
-	 * Load player.
-	 *
-	 * @param noxPlayer the NoxPlayer object to load
-	 */
-	public void loadPlayer(NoxPlayer noxPlayer) {
-		noxPlayer.load();
-	}
-	
-	
-
-	/**
-	 * Load player.
-	 *
-	 * @param name of the player
-	 */
-	public void loadPlayer(String name) {
-		loadPlayer(getPlayer(name));
-	}
-	
-	
-
-	
-	
-//////// HELPER FUNCTIONS
-	/**
-	 * Checks if is multi file.
-	 * <b>INTERNALLY USED METHOD</b>
-	 * @return true, if is using the multi file structure for player data.
-	 */
-	public boolean isMultiFile() { return NoxCore.isUseUserFile(); }
-	
-	/**
-	 * Gets the player file.
-	 *
-	 * @param name of the player
-	 * @return the player file
-	 */
-	public File getPlayerFile(String name)
-	{
-		return NoxCore.getInstance().getDataFile("playerdata", name);
-	}
-	
-	public NoxPlayer[] getLoadedPlayers() {
-		return players.values().toArray(new NoxPlayer[0]);
-	}
-	
-	/**
-	 * Gets the player file.
-	 *
-	 * @see #getPlayerFile(String)
-	 * @param noxPlayer the NoxPlayer object
-	 * @return the player file
-	 */
-	public File getPlayerFile(NoxPlayer noxPlayer) {
-		return getPlayerFile(noxPlayer.getName());
-	}
-
 	public List<String> getAllPlayerNames() {
 		List<String> ret = new ArrayList<String>();
 		if (isMultiFile())
@@ -275,55 +92,7 @@ public class PlayerManager implements Persistant {
 		
 		return ret;
 	}
-	
-	/**
-	 * Gets all the currently active coreBoards
-	 * 
-	 * @return Collection<CoreBoard> The CoreBoards
-	 */
-	public Collection<CoreBoard> getCoreBoards(){
-		return this.coreBoards.values();
-	}
-	
-	/**
-	 * 
-	 * @param name The Key
-	 * @return CoreBoard The CoreBoard
-	 * @throws NullPointerException If the key is null
-	 */
-	public CoreBoard getCoreBoard(String name){
-		if (name == null)
-			throw new NullPointerException("Cannot use with null key");
-			
-		return this.coreBoards.get(name);
-	}
-	
-	/**
-	 * 
-	 * @param name The Key
-	 * @return boolean If there is a CoreBoard active with the specific key
-	 * @throws NullPointerException If the key is null
-	 */
-	public boolean hasCoreBoard(String name){
-		if (name == null)
-			throw new NullPointerException("Cannot check with null key");
-			
-		return this.coreBoards.containsKey(name);
-	}
-	
-	/**
-	 * 
-	 * @param name The Key
-	 * @param board The CoreBoard to add
-	 * @throws NullPointerException If the key or CoreBoard are null
-	 */
-	public void addCoreBoard(CoreBoard board){
-		if (board == null)
-			throw new NullPointerException("Cannot CoreBoard to active CoreBoard list");
-		
-		this.coreBoards.put(board.p.getName(), board);
-	}
-	
+
 	/**
 	 * 
 	 * 
@@ -341,6 +110,104 @@ public class PlayerManager implements Persistant {
 	/**
 	 * 
 	 * @param name The Key
+	 * @return CoreBoard The CoreBoard
+	 * @throws NullPointerException If the key is null
+	 */
+	public CoreBoard getCoreBoard(String name){
+		if (name == null)
+			throw new NullPointerException("Cannot use with null key");
+			
+		return this.coreBoards.get(name);
+	}
+	
+	
+	/**
+	 * Gets all the currently active coreBoards
+	 * 
+	 * @return Collection<CoreBoard> The CoreBoards
+	 */
+	public Collection<CoreBoard> getCoreBoards(){
+		return this.coreBoards.values();
+	}
+	
+	public NoxPlayer[] getLoadedPlayers() {
+		return players.values().toArray(new NoxPlayer[0]);
+	}
+	
+	/**
+	 * Gets the player.
+	 *
+	 * @see #getPlayer(String)
+	 * @param player the player
+	 * @return the player
+	 */
+	public NoxPlayer getPlayer(OfflinePlayer player) {
+		if (player == null)
+			return null;
+		return getPlayer(player.getName());
+	}
+
+	/**
+	 * Gets the specified player.
+	 *
+	 * @param name of the player
+	 * @return the player
+	 */
+	public NoxPlayer getPlayer(String name)
+	{
+		NoxPlayer player = null;
+		if (players.containsKey(name))
+			player = players.get(name);
+		else {
+			player = new NoxPlayer(this, name);
+			players.put(name, player);
+		}
+		return player;
+	}
+
+	/**
+	 * Gets the player file.
+	 *
+	 * @see #getPlayerFile(String)
+	 * @param noxPlayer the NoxPlayer object
+	 * @return the player file
+	 */
+	public File getPlayerFile(NoxPlayer noxPlayer) {
+		return getPlayerFile(noxPlayer.getName());
+	}
+	
+	/**
+	 * Gets the player file.
+	 *
+	 * @param name of the player
+	 * @return the player file
+	 */
+	public File getPlayerFile(String name)
+	{
+		return NoxCore.getInstance().getDataFile("playerdata", name);
+	}
+
+	/**
+	 * Gets the player node.
+	 * <b>INTERNAL METHOD</b> Best not to use this!
+	 * @param name the name
+	 * @return the player node
+	 */
+	public ConfigurationNode getPlayerNode(String name)
+	{
+		if (isMultiFile())
+			return new FileConfiguration(NoxCore.getInstance(), "playerdata"+File.separatorChar+name+".yml");
+		else if (config != null)
+			return config.getNode("players").getNode(name);
+		else
+			return null;
+	}
+	
+	public NoxCore getPlugin() { return plugin; }
+	
+	/**
+	 * 
+	 * @param name The Key
 	 * @return boolean If there is a CoreBar active with the specific key
 	 * @throws NullPointerException If the key is null
 	 */
@@ -351,17 +218,79 @@ public class PlayerManager implements Persistant {
 		return this.coreBars.containsKey(name);
 	}
 	
+	
+
 	/**
 	 * 
 	 * @param name The Key
-	 * @param bar The CoreBar to add
-	 * @throws NullPointerException If the key or CoreBar are null
+	 * @return boolean If there is a CoreBoard active with the specific key
+	 * @throws NullPointerException If the key is null
 	 */
-	public void addCoreBar(CoreBar bar){
-		if (bar == null)
-			throw new NullPointerException("Cannot CoreBar to active CoreBar list");
+	public boolean hasCoreBoard(String name){
+		if (name == null)
+			throw new NullPointerException("Cannot check with null key");
+			
+		return this.coreBoards.containsKey(name);
+	}
+	
+	
+
+	
+	
+//////// HELPER FUNCTIONS
+	/**
+	 * Checks if is multi file.
+	 * <b>INTERNALLY USED METHOD</b>
+	 * @return true, if is using the multi file structure for player data.
+	 */
+	public boolean isMultiFile() { return NoxCore.isUseUserFile(); }
+	
+	/**
+	 * Checks if is player is in memory.
+	 *
+	 * @param name of the player.
+	 * @return true, if is player in memory
+	 */
+	public boolean isPlayerInMemory(String name) {
+		return players.containsKey(name);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.noxpvp.core.Persistant#load()
+	 */
+	public void load() {
+		Collection<String> pls = players.keySet();
+
+		players.clear();
+		config.load();
 		
-		this.coreBars.put(bar.p.getName(), bar);
+		for (String name : pls)
+			loadOrCreate(name);
+		
+		for (Player player : Bukkit.getOnlinePlayers())
+			loadOrCreate(player.getName());
+	}
+	
+	private void loadOrCreate(String name) {
+		loadPlayer(getPlayer(name));
+	}
+
+	/**
+	 * Load player.
+	 *
+	 * @param noxPlayer the NoxPlayer object to load
+	 */
+	public void loadPlayer(NoxPlayer noxPlayer) {
+		noxPlayer.load();
+	}
+	
+	/**
+	 * Load player.
+	 *
+	 * @param name of the player
+	 */
+	public void loadPlayer(String name) {
+		loadPlayer(getPlayer(name));
 	}
 	
 	/**
@@ -389,5 +318,78 @@ public class PlayerManager implements Persistant {
 		this.coreBoards.remove(name); return this;
 	}
 	
-	public NoxCore getPlugin() { return plugin; }
+	/* (non-Javadoc)
+	 * @see com.noxpvp.core.Persistant#save()
+	 */
+	public void save() {
+		config.save();
+	}
+	
+	/**
+	 * Save player.
+	 *
+	 * @param player the player
+	 */
+	public void savePlayer(NoxPlayer player) 
+	{
+		player.save();
+	}
+	
+	/**
+	 * Save player.
+	 *
+	 * @see #savePlayer(NoxPlayer)
+	 * @param player of the player
+	 */
+	public void savePlayer(OfflinePlayer player){
+		savePlayer(getPlayer(player));
+	}
+	
+	/**
+	 * Save player.
+	 *
+	 * @see #savePlayer(NoxPlayer)
+	 * @param name of the player
+	 */
+	public void savePlayer(String name) {
+		savePlayer(getPlayer(name));
+	}
+	
+	/**
+	 * Unload and save player.
+	 * 
+	 * @see #unloadPlayer(String)
+	 * @see #savePlayer(String)
+	 * @param name the name
+	 */
+	public void unloadAndSavePlayer(String name) {
+		savePlayer(name);
+		unloadPlayer(name);
+	}
+	
+	/**
+	 * Unload if player is offline.
+	 * <br/>
+	 * <b> WARNING IF THERE ARE PLUGINS THAT ARE IMPROPERLY CACHING THIS OBJECT. IT WILL NEVER TRUELY UNLOAD</b>
+	 * @param name of the player
+	 * @return true, if it unloads the player from memory.
+	 */
+	public boolean unloadIfOffline(String name) {
+		if (isPlayerInMemory(name) && getPlayer(name).getPlayer() != null)
+		{
+			unloadAndSavePlayer(name);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Unload the named player.
+	 *
+	 * @param name of the player
+	 */
+	public void unloadPlayer(String name) {
+		/*PlayerDataUnloadEvent e = */CommonUtil.callEvent(new PlayerDataUnloadEvent(getPlayer(name), false));
+		players.remove(name);
+	}
 }

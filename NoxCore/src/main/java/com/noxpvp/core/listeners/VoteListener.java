@@ -17,10 +17,6 @@ import com.vexsoftware.votifier.model.VotifierEvent;
 
 public class VoteListener extends NoxListener<NoxCore> {
 	private final PlayerManager manager;
-	private static ModuleLogger log = null;
-	private static FileHandler handle = null;
-	private static boolean isGood = false;
-	
 	public VoteListener()
 	{
 		super(NoxCore.getInstance());
@@ -28,25 +24,6 @@ public class VoteListener extends NoxListener<NoxCore> {
 		destroy();
 		init();
 	}
-	
-	private static void init()
-	{
-		try {
-			handle = new FileHandler(NoxCore.getInstance().getDataFile("votelogs.log").getPath(), true);
-			log = NoxCore.getInstance().getModuleLogger("Vote", "Log");
-			log.addHandler(handle);
-			isGood = handle != null;
-		} catch (SecurityException e) {
-			if (handle != null)
-				handle.close();
-			e.printStackTrace();
-		} catch (IOException e) {
-			if (handle != null)
-				handle.close();
-			e.printStackTrace();
-		}
-	}
-	
 	public void destroy()
 	{
 		if (isGood)
@@ -59,7 +36,6 @@ public class VoteListener extends NoxListener<NoxCore> {
 			
 		handle = null;
 	}
-	
 	@EventHandler(priority= EventPriority.MONITOR)
 	public void onVote(VotifierEvent event)
 	{
@@ -92,6 +68,30 @@ public class VoteListener extends NoxListener<NoxCore> {
 			synchronized (player) {
 				player.incrementVote();
 			}
+		}
+	}
+	
+	private static FileHandler handle = null;
+	
+	private static boolean isGood = false;
+	
+	private static ModuleLogger log = null;
+	
+	private static void init()
+	{
+		try {
+			handle = new FileHandler(NoxCore.getInstance().getDataFile("votelogs.log").getPath(), true);
+			log = NoxCore.getInstance().getModuleLogger("Vote", "Log");
+			log.addHandler(handle);
+			isGood = handle != null;
+		} catch (SecurityException e) {
+			if (handle != null)
+				handle.close();
+			e.printStackTrace();
+		} catch (IOException e) {
+			if (handle != null)
+				handle.close();
+			e.printStackTrace();
 		}
 	}
 }

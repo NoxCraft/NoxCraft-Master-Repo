@@ -58,6 +58,16 @@ public abstract class NoxPlugin extends PluginBase {
 		return false;
 	}
 	
+	public abstract NoxCore getCore();
+	
+	public String getGlobalLocale(String path, String... args)
+	{
+		NoxCore c;
+		if ((c = getCore())==null)
+			throw new IllegalStateException("This plugin depends on NoxCore! Its not loaded!");
+		return c.getGlobalLocale(path, args);
+	}
+	
 	/**
     * Gets a localization configuration node
     * 
@@ -72,20 +82,14 @@ public abstract class NoxPlugin extends PluginBase {
        return c.getGlobalLocalizationNode(path);
    }
 	
-	public abstract NoxCore getCore();
-	
-	public String getGlobalLocale(String path, String... args)
-	{
-		NoxCore c;
-		if ((c = getCore())==null)
-			throw new IllegalStateException("This plugin depends on NoxCore! Its not loaded!");
-		return c.getGlobalLocale(path, args);
-	}
-	
 	@Override
 	public int getMinimumLibVersion() {
 		return Common.VERSION;
 	}
+	
+	public abstract PermissionHandler getPermissionHandler();
+	
+	public abstract Class<? extends ConfigurationSerializable>[] getSerialiables();
 	
 	public void registerCommand(Command runner)
 	{
@@ -126,8 +130,4 @@ public abstract class NoxPlugin extends PluginBase {
 		for (Command runner : runners)
 			registerCommand(runner);
 	}
-	
-	public abstract PermissionHandler getPermissionHandler();
-	
-	public abstract Class<? extends ConfigurationSerializable>[] getSerialiables();
 }

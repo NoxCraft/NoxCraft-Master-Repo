@@ -73,7 +73,6 @@ public class HomeCommand extends BaseCommand {
 		return true;
 	}
 
-
 	public String[] getHelp() {
 		MessageBuilder mb = new MessageBuilder();
 		mb.gold("/").blue(COMMAND_NAME).aqua(" [name]").newLine();

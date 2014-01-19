@@ -48,11 +48,17 @@ public abstract class BaseCommand implements Command {
 		return containsSubComman(command.getName());
 	}
 	
-	public final BaseCommand getSubCommand(String name)
-	{
-		if (containsSubComman(name))
-			return subCommands.getLower(name);
-		return null;
+	public final void displayHelp(CommandSender sender) {
+		MessageBuilder mb = new MessageBuilder();
+		
+		mb.setSeparator("\n");
+		mb.newLine();
+		for (String line : GlobalLocale.HELP_HEADER.get(getPlugin().getName(), COMMAND_NAME).split("\n"))
+			mb.append(line);
+		for (String line : getHelp())
+			mb.append(line);
+		
+		MessageUtil.sendMessage(sender, mb.lines());
 	}
 
 	public abstract boolean execute(CommandContext context) throws NoPermissionException;
@@ -71,8 +77,6 @@ public abstract class BaseCommand implements Command {
 			return subCMD.executeCommand(newContext);
 		return execute(context);
 	}
-	
-	protected StringMap<BaseCommand> getSubCommandMap() { return subCommands; }
 	
 	public final String getFullName() {
 		StringBuilder sb = new StringBuilder();
@@ -107,6 +111,15 @@ public abstract class BaseCommand implements Command {
 			return getParent().getRoot();
 	}
 	
+	public final BaseCommand getSubCommand(String name)
+	{
+		if (containsSubComman(name))
+			return subCommands.getLower(name);
+		return null;
+	}
+	
+	protected StringMap<BaseCommand> getSubCommandMap() { return subCommands; }
+	
 	public boolean hasArgumentLimit() {
 		return getMaxArguments() < 0;
 	}
@@ -121,12 +134,6 @@ public abstract class BaseCommand implements Command {
 		return isRoot;
 	}
 	
-	public final void registerSubCommands(BaseCommand... commands)
-	{
-		for (BaseCommand c : commands)
-			registerSubCommand(c);
-	}
-	
 	public final void registerSubCommand(BaseCommand command) {
 		if (containsSubCommand(command))
 		{
@@ -138,21 +145,14 @@ public abstract class BaseCommand implements Command {
 		subCommands.putLower(command.getName(), command);
 	}
 	
+	public final void registerSubCommands(BaseCommand... commands)
+	{
+		for (BaseCommand c : commands)
+			registerSubCommand(c);
+	}
+
 	private void setParent(BaseCommand command) { this.parent = command; this.isRoot = false; }
 
 	public static final String COMMAND_NAME = "reloader";
-
-	public final void displayHelp(CommandSender sender) {
-		MessageBuilder mb = new MessageBuilder();
-		
-		mb.setSeparator("\n");
-		mb.newLine();
-		for (String line : GlobalLocale.HELP_HEADER.get(getPlugin().getName(), COMMAND_NAME).split("\n"))
-			mb.append(line);
-		for (String line : getHelp())
-			mb.append(line);
-		
-		MessageUtil.sendMessage(sender, mb.lines());
-	}
 }
 

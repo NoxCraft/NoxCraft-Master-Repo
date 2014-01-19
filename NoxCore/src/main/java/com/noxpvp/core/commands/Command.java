@@ -3,25 +3,25 @@ package com.noxpvp.core.commands;
 import org.bukkit.command.CommandSender;
 
 public interface Command {
-	public String getName();
+	public void displayHelp(CommandSender sender);
 	
-	public boolean isRoot();
+	public boolean executeCommand(CommandContext context) throws NoPermissionException;
 	
 	public String[] getFlags();
 	
-	public boolean hasArgumentLimit();
+	public String[] getHelp();
 	
 	public int getMaxArguments();
 	
-	public String[] getHelp();
-	
-	public boolean isPlayerOnly();
+	public String getName();
 	
 	public Command getParent();
 	
 	public Command getRoot();
 	
-	public boolean executeCommand(CommandContext context) throws NoPermissionException;
+	public boolean hasArgumentLimit();
+	
+	public boolean isPlayerOnly();
 
-	public void displayHelp(CommandSender sender);
+	public boolean isRoot();
 }

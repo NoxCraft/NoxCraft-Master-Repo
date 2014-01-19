@@ -14,12 +14,12 @@ public class OnLogoutSaveListener extends NoxListener<NoxCore> {
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-	public void onLogoutEvent(PlayerQuitEvent event) {
+	public void onKickEvent(PlayerKickEvent event) {
 		getPlugin().getPlayerManager().unloadAndSavePlayer(event.getPlayer().getName());
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-	public void onKickEvent(PlayerKickEvent event) {
+	public void onLogoutEvent(PlayerQuitEvent event) {
 		getPlugin().getPlayerManager().unloadAndSavePlayer(event.getPlayer().getName());
 	}
 }

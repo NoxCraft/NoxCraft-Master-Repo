@@ -12,17 +12,10 @@ public class PermissionHandler {
 	private final com.bergerkiller.bukkit.common.internal.PermissionHandler permHandler;
 	private NoxPlugin plugin;
 	
-	public static boolean defaultLogToConsole = true;
-	
 	public PermissionHandler(NoxPlugin plugin)
 	{
 		this.plugin = plugin;
 		permHandler = CommonPlugin.getInstance().getPermissionHandler();
-	}
-	
-	public boolean hasPermission(CommandSender sender, String permission)
-	{
-		return hasPermission(sender, defaultLogToConsole,  permission);
 	}
 	
 	public boolean hasPermission(CommandSender sender, boolean logConsole, String permission)
@@ -34,5 +27,12 @@ public class PermissionHandler {
 		
 		return isTrue;
 	}
+	
+	public boolean hasPermission(CommandSender sender, String permission)
+	{
+		return hasPermission(sender, defaultLogToConsole,  permission);
+	}
+	
+	public static boolean defaultLogToConsole = true;
 
 }

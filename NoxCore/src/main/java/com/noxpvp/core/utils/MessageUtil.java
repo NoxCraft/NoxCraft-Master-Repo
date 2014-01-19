@@ -49,6 +49,16 @@ public class MessageUtil {
 		sendMessage(world.getPlayers().toArray(new Player[0]), permission, messages);	
 	}
 	
+	public static String getGlobalLocale(NoxPlugin plugin, String locale, String... params)
+	{
+		return plugin.getGlobalLocale(locale, params);
+	}
+	
+	public static String getLocale(NoxPlugin plugin, String locale, String... params)
+	{
+		return plugin.getLocale(locale, params);
+	}
+	
 	public static boolean globalLocaleExists(NoxPlugin plugin, String locale, String... args)
 	{
 		String l = getGlobalLocale(plugin, locale, args);
@@ -61,11 +71,6 @@ public class MessageUtil {
 		return (l == null || l.length() == 0 || l == "" || l.equals("")); //TODO: Remove unneeded checks. Not sure which yet.
 	}
 	
-	public static String parseColor(String message)
-	{
-		return StringUtil.ampToColor(message);
-	}
-	
 	public static String parseArguments(String message, String... args)
 	{
 		StringBuilder msg = new StringBuilder(message);
@@ -76,14 +81,19 @@ public class MessageUtil {
 		return msg.toString();
 	}
 	
-	public static void sendLocale(CommandSender sender, LocalizationEnum locale, String... args)
+	public static String parseColor(String message)
 	{
-		locale.message(sender, args);
+		return StringUtil.ampToColor(message);
 	}
 	
 	public static void sendGlobalLocale(NoxPlugin plugin, CommandSender sender, String locale, String... params) 
 	{
 		sender.sendMessage(parseColor(plugin.getGlobalLocale(locale, params)));
+	}
+	
+	public static void sendLocale(CommandSender sender, LocalizationEnum locale, String... args)
+	{
+		locale.message(sender, args);
 	}
 	
 	public static void sendLocale(NoxPlugin plugin, CommandSender sender, String locale, String... params)
@@ -101,7 +111,7 @@ public class MessageUtil {
 		for (String message : messages)
 			sendMessage(sender, message);
 	}
-	
+
 	public static void sendMessage(CommandSender[] senders, Filter<CommandSender> filter, String message)
 	{
 		for (CommandSender sender : senders)
@@ -115,7 +125,7 @@ public class MessageUtil {
 			if (filter.isFiltered(sender))
 				sendMessage(sender, messages);
 	}
-
+	
 	public static void sendMessage(CommandSender[] senders, String message)
 	{
 		for (CommandSender sender : senders)
@@ -216,16 +226,6 @@ public class MessageUtil {
 				return false;
 			}
 		}, messages);
-	}
-	
-	public static String getLocale(NoxPlugin plugin, String locale, String... params)
-	{
-		return plugin.getLocale(locale, params);
-	}
-	
-	public static String getGlobalLocale(NoxPlugin plugin, String locale, String... params)
-	{
-		return plugin.getGlobalLocale(locale, params);
 	}
 }
 	

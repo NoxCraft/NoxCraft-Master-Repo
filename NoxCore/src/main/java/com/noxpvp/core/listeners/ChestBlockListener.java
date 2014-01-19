@@ -21,13 +21,56 @@ import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.events.ChestBlockedEvent;
 
 public class ChestBlockListener implements Listener {
-	public static boolean usePlaceEvent = true;
-	public static boolean usePistonEvent = true;
-	public static boolean useFormEvent = false;
-	public static boolean isRemovingOnInteract;
+	public List<Block> getAdjacentChests(Block block)
+	{
+		ArrayList<Block> blocks = new ArrayList<Block>();
+		for (BlockFace face : sides)
+			if (isChest(block.getRelative(face)))
+				blocks.add(block.getRelative(face));
+		
+		return blocks;
+	}
+	public List<Block> getAdjacentChests(Location loc)
+	{
+		return getAdjacentChests(loc.getBlock());
+	}
+	private boolean isBlocked(Block block)
+	{
+		boolean isChest = isChest(block);
+		if (isChest)
+			return !(block.getRelative(BlockFace.UP).getType().isTransparent());
+		else
+			return !(block.getRelative(BlockFace.DOWN).getType().isTransparent());
+	}
+	private boolean isBlocked(Collection<Block> blocks)
+	{
+		for (Block b : blocks)
+			if (isBlocked(b))
+				return true;
+		return false;
+	}
 	
-	public static final BlockFace[] sides = {BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH};
+	private boolean isChest(Block block)
+	{
+		return isChest(block.getType());
+	}
 	
+	
+	private boolean isChest(Material type)
+	{
+		return (type == Material.CHEST || type == Material.TRAPPED_CHEST);
+	}
+	
+	@EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onBlockForm(BlockFormEvent event)
+	{
+		if (!useFormEvent)
+			return;
+		
+		if (isBlocked(event.getBlock()))
+			if (CommonUtil.callEvent(new ChestBlockedEvent(event)).isCancelled())
+				event.setCancelled(true);
+	}
 	
 	@EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event)
@@ -54,76 +97,6 @@ public class ChestBlockListener implements Listener {
 		else
 			event.setCancelled(true);
 	}
-	
-	@EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onBlockForm(BlockFormEvent event)
-	{
-		if (!useFormEvent)
-			return;
-		
-		if (isBlocked(event.getBlock()))
-			if (CommonUtil.callEvent(new ChestBlockedEvent(event)).isCancelled())
-				event.setCancelled(true);
-	}
-	
-	public List<Block> getAdjacentChests(Block block)
-	{
-		ArrayList<Block> blocks = new ArrayList<Block>();
-		for (BlockFace face : sides)
-			if (isChest(block.getRelative(face)))
-				blocks.add(block.getRelative(face));
-		
-		return blocks;
-	}
-	
-	public List<Block> getAdjacentChests(Location loc)
-	{
-		return getAdjacentChests(loc.getBlock());
-	}
-	
-	private boolean isBlocked(Collection<Block> blocks)
-	{
-		for (Block b : blocks)
-			if (isBlocked(b))
-				return true;
-		return false;
-	}
-	
-	private boolean isBlocked(Block block)
-	{
-		boolean isChest = isChest(block);
-		if (isChest)
-			return !(block.getRelative(BlockFace.UP).getType().isTransparent());
-		else
-			return !(block.getRelative(BlockFace.DOWN).getType().isTransparent());
-	}
-	
-	private boolean isChest(Block block)
-	{
-		return isChest(block.getType());
-	}
-	
-	private boolean isChest(Material type)
-	{
-		return (type == Material.CHEST || type == Material.TRAPPED_CHEST);
-	}
-	
-//	@EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
-//	public void onPistonMoveEvent(BlockPistonEvent event0)
-//	{
-//		if (event0 instanceof BlockPistonExtendEvent)
-//		{
-//			BlockPistonExtendEvent event = (BlockPistonExtendEvent) event0;
-//			List<Block> blocks = event.getBlocks();
-//			BlockFace face = event.getDirection();
-//			
-//		} else {
-//			BlockPistonRetractEvent event = (BlockPistonRetractEvent) event0;
-//			Location l = event.getRetractLocation();
-//			Block b = event.getBlock();
-//			
-//		}
-//	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event)
@@ -159,4 +132,31 @@ public class ChestBlockListener implements Listener {
 			}
 		
 	}
+	
+	public static boolean isRemovingOnInteract;
+	
+	public static final BlockFace[] sides = {BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH};
+	
+	public static boolean useFormEvent = false;
+	
+	public static boolean usePistonEvent = true;
+	
+//	@EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
+//	public void onPistonMoveEvent(BlockPistonEvent event0)
+//	{
+//		if (event0 instanceof BlockPistonExtendEvent)
+//		{
+//			BlockPistonExtendEvent event = (BlockPistonExtendEvent) event0;
+//			List<Block> blocks = event.getBlocks();
+//			BlockFace face = event.getDirection();
+//			
+//		} else {
+//			BlockPistonRetractEvent event = (BlockPistonRetractEvent) event0;
+//			Location l = event.getRetractLocation();
+//			Block b = event.getBlock();
+//			
+//		}
+//	}
+	
+	public static boolean usePlaceEvent = true;
 }

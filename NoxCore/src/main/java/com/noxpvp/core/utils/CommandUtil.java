@@ -11,11 +11,11 @@ import org.bukkit.command.CommandSender;
 import com.noxpvp.core.commands.CommandContext;
 
 public class CommandUtil {
-	private static List<Character> quoteChars = new ArrayList<Character>(Arrays.asList('\'', '"'));
-	
 	private static final char escapeChar = '\\';
-
+	
 	private static final char flagChar = '-';
+
+	private static List<Character> quoteChars = new ArrayList<Character>(Arrays.asList('\'', '"'));
 	
 	///WARNING THIS IS A COMPLEX FUNCTION DO NOT MODIFY WITHOUT PROPER TESTING!
 	public static CommandContext parseCommand(CommandSender sender, String argLine)
