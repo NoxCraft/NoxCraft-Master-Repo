@@ -152,7 +152,5 @@ public abstract class BaseCommand implements Command {
 	}
 
 	private void setParent(BaseCommand command) { this.parent = command; this.isRoot = false; }
-
-	public static final String COMMAND_NAME = "reloader";
 }
 

@@ -14,6 +14,8 @@ import com.noxpvp.core.utils.PermissionHandler;
 public class ReloadCommand extends BaseCommand {
 	private NoxCore core;
 	
+	public static final String COMMAND_NAME = "reloader";
+	
 	private PermissionHandler handler;
 	public ReloadCommand(){
 		super(COMMAND_NAME, false);
