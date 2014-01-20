@@ -115,6 +115,7 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 			last = null;
 			while (!b2t.empty()) {
 				Entity e = b2t.pop();
+				e.eject();
 				e.teleport(getLocation());
 				if (last != null)
 					last.setPassenger(e);
