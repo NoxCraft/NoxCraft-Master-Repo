@@ -84,7 +84,7 @@ public abstract class BaseCommand implements Command {
 		while (current != null)
 		{
 			last = current;
-			if (!last.equals(current))
+			if (!last.equals(this))
 				sb.insert(0, " ");
 			
 			current = current.getParent();
