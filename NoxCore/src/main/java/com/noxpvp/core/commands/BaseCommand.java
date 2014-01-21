@@ -53,7 +53,7 @@ public abstract class BaseCommand implements Command {
 		
 		mb.setSeparator("\n");
 		mb.newLine();
-		for (String line : GlobalLocale.HELP_HEADER.get(getPlugin().getName(), COMMAND_NAME).split("\n"))
+		for (String line : GlobalLocale.HELP_HEADER.get(getPlugin().getName(), name).split("\n"))
 			mb.append(line);
 		for (String line : getHelp())
 			mb.append(line);
