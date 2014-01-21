@@ -45,10 +45,13 @@ public class DeathListener extends NoxListener<NoxCore> {
 		EntityDamageEvent ede =  e.getEntity().getLastDamageCause();
 		if (ede instanceof EntityDamageByEntityEvent) {
 			EntityDamageByEntityEvent edbe = (EntityDamageByEntityEvent) ede;
-			if (edbe.getDamager() instanceof Projectile)
-				if ((p=(Player) ((Projectile)edbe.getDamager()).getShooter()) instanceof Player)
+			if (edbe.getDamager() instanceof Projectile) {
+				if (((Projectile)edbe.getDamager()).getShooter() instanceof Player) {
+					p = (Player)((Projectile)edbe.getDamager()).getShooter();
 					if ((np = pm.getPlayer(p)) != null)
 						np.setLastKill(e.getEntity());
+				}
+			}
 		}
 	}
 }
