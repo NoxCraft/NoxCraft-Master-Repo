@@ -24,6 +24,7 @@ import com.noxpvp.mmo.classes.player.main.axes.ChampionClass;
 import com.noxpvp.mmo.classes.player.main.axes.WarlordClass;
 import com.noxpvp.mmo.listeners.BlockListener;
 import com.noxpvp.mmo.listeners.DamageListener;
+import com.noxpvp.mmo.listeners.ExperienceListener;
 import com.noxpvp.mmo.listeners.PacketListeners;
 import com.noxpvp.mmo.listeners.PacketListeners.EntityEquipmentListener;
 import com.noxpvp.mmo.listeners.PacketListeners.WorldSoundListener;
@@ -41,12 +42,14 @@ public class NoxMMO extends NoxPlugin {
 	DamageListener damageListener;
 	PlayerTargetListener playerTargetListener;
 	BlockListener blockListener;
+	ExperienceListener experieneceListener;
 	
 	PacketListeners packetListeners;
 	EntityEquipmentListener equipmentPacketListener;
 	WorldSoundListener worldSoundListener;
 	
 	private FileConfiguration config;
+	private FileConfiguration experience;
 	
 	private MasterListener masterListener;
 	
@@ -75,6 +78,12 @@ public class NoxMMO extends NoxPlugin {
 			config = new FileConfiguration(this, "config.yml");
 		return config;
 	}
+	
+	public FileConfiguration getExperienceConfig(){
+		if (experience == null)
+			experience = new FileConfiguration(this, "experience.yml");
+		return experience;
+	}
 
 	@Override
 	public void enable() {
@@ -93,6 +102,7 @@ public class NoxMMO extends NoxPlugin {
 		damageListener = new DamageListener(instance);
 		playerTargetListener = new PlayerTargetListener(instance);
 		blockListener = new BlockListener(instance);
+		experieneceListener = new ExperienceListener(instance);
 		
 		packetListeners = new PacketListeners();
 		equipmentPacketListener = packetListeners.new EntityEquipmentListener();
@@ -102,6 +112,7 @@ public class NoxMMO extends NoxPlugin {
 		playerTargetListener.register();
 		blockListener.register();
 		permHandler = new PermissionHandler(this);
+		experieneceListener.register();
 		
 		register(equipmentPacketListener, PacketType.OUT_ENTITY_EQUIPMENT);
 		register(worldSoundListener, PacketType.OUT_NAMED_SOUND_EFFECT);

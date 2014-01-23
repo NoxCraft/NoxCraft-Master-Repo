@@ -131,6 +131,13 @@ public abstract class BasePlayerClass implements PlayerClass {
 		return maxHealth;
 	}
 
+	public PlayerClass addExp(int amount) {
+		if (amount > 0 )
+			this.setExp(this.exp + amount);
+		
+		return this;
+	}
+	
 	public final PlayerClass setExp(int amount) {
 		exp = amount;
 		
@@ -253,4 +260,5 @@ public abstract class BasePlayerClass implements PlayerClass {
 	public Set<String> getAbilityNames() {
 		return abilities;
 	}
+
 }
