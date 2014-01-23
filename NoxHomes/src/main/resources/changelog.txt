@@ -5,5 +5,5 @@
 	Fixed #68: NoxHomes do not truely delete
 			Now erases on save then rewrites data.
 0.2.0
-	Now saves on sethome and delhome.
+	Homes truely save on every removal and addition to homes data.
 	
