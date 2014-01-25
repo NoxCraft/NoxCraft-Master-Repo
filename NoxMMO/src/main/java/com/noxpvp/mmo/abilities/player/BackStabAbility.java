@@ -3,7 +3,7 @@ package com.noxpvp.mmo.abilities.player;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
@@ -15,7 +15,7 @@ import com.noxpvp.mmo.classes.PlayerClass;
  * @author NoxPVP
  *
  */
-public class BackStabAbility extends BasePlayerAbility implements PassiveAbility{
+public class BackStabAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent> {
 	
 	public static final String PERM_NODE = "backstab";
 	public static final String ABILITY_NAME = "BackStab";
@@ -23,7 +23,6 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 	private float damagePercent;
 	private double Damage;
 	private double accuracy = 20;
-	private EntityDamageEvent event;
 	
 	/**
 	 * 
@@ -88,13 +87,11 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 	 * 
 	 * @param player The Player type user for this ability instance
 	 */
-	public BackStabAbility(Player player, EntityDamageEvent event){
+	public BackStabAbility(Player player){
 		super(ABILITY_NAME, player);
-		
-		this.event = event;
 	}
 	
-	public boolean execute() {
+	public boolean execute(EntityDamageByEntityEvent event) {
 		if (!mayExecute())
 			return false;
 		
@@ -124,6 +121,10 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 		
 		event.setDamage(event.getDamage() + getDamage());
 		
+		return true;
+	}
+	
+	public boolean execute() {
 		return true;
 	}
 	

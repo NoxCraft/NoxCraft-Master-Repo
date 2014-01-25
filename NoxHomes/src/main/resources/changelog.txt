@@ -6,3 +6,6 @@
 			Now erases on save then rewrites data.
 0.1.6
 	Fixed multi entity teleporting. (Stacked riders)
+0.2.0
+	Homes truely save on every removal and addition to homes data.
+	

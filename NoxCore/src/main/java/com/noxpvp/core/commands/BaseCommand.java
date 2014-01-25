@@ -53,7 +53,7 @@ public abstract class BaseCommand implements Command {
 		
 		mb.setSeparator("\n");
 		mb.newLine();
-		for (String line : GlobalLocale.HELP_HEADER.get(getPlugin().getName(), COMMAND_NAME).split("\n"))
+		for (String line : GlobalLocale.HELP_HEADER.get(getPlugin().getName(), name).split("\n"))
 			mb.append(line);
 		for (String line : getHelp())
 			mb.append(line);
@@ -84,7 +84,7 @@ public abstract class BaseCommand implements Command {
 		while (current != null)
 		{
 			last = current;
-			if (!last.equals(current))
+			if (!last.equals(this))
 				sb.insert(0, " ");
 			
 			current = current.getParent();
@@ -152,7 +152,5 @@ public abstract class BaseCommand implements Command {
 	}
 
 	private void setParent(BaseCommand command) { this.parent = command; this.isRoot = false; }
-
-	public static final String COMMAND_NAME = "reloader";
 }
 

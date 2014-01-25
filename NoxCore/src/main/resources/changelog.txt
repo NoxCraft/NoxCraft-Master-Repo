@@ -1,0 +1,8 @@
+0.1.5
+	Added #66 death cause tracking.
+		Planned #69 Item Drop tracking.
+	Fixed possible NPE's on fetching offline players.
+0.2.0
+	Implemented remote data save event execution.
+	Made save and load functions on NoxPlayer synchronized
+	Added reloader for players data.

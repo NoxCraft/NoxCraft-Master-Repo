@@ -27,7 +27,7 @@ public class LoginListener extends NoxListener<NoxCore> {
 			
 			VaultAdapter.GroupUtils.reloadGroupName(p);
 			
-			getPlugin().getPlayerManager().loadPlayer(e.getPlayer().getName());
+//			getPlugin().getPlayerManager().loadPlayer(e.getPlayer().getName());
 		}
 		
 		@Override

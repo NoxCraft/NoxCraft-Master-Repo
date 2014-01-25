@@ -11,9 +11,11 @@ import org.bukkit.OfflinePlayer;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.conversion.Conversion;
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
+import com.noxpvp.core.events.PlayerDataSaveEvent;
 import com.noxpvp.homes.tp.BaseHome;
 import com.noxpvp.homes.tp.DefaultHome;
 
@@ -88,11 +90,16 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	 * @see com.noxpvp.core.Persistant#save()
 	 */
 	public void save() {
+		save(false);
+	}
+	
+	public void save(boolean throwEvent) {
 		getNoxPlayer().getPersistantData().remove("homes");
 		ConfigurationNode var = getNoxPlayer().getPersistantData().getNode("homes");
 		for (BaseHome home : homes)
 			var.set(home.getName(), home);
-		
+		if (throwEvent)
+			CommonUtil.callEvent(new PlayerDataSaveEvent(this, true));
 	}
 
 	/* (non-Javadoc)
@@ -139,7 +146,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			homes_index.put(home.getName(), homes_index.size());
 			homes.add(home);
 		}
-		save();
+		save(true);
 	}
 	
 	/**
@@ -170,7 +177,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			return false;
 		
 		updateIndex();
-		save();
+		save(true);
 		return true;
 	}
 
@@ -200,7 +207,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 				homes_index.put(home.getName(), i);
 			}
 		
-		save();
+		save(true);
 	}
 
 	/**

@@ -232,7 +232,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			return true;
 	}
 	
-	public void load() {
+	public synchronized void load() {
 		if (persistant_data == null)
 			persistant_data = manager.getPlayerNode(name);
 		
@@ -267,15 +267,22 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			cd_cache.remove(name);
 		}
 	}
-
-	public void save() {
+	
+	public synchronized void save(boolean throwEvent)
+	{
 		persistant_data.set("cooldowns", getCoolDowns());
-		/*PlayerDataSaveEvent e = */CommonUtil.callEvent(new PlayerDataSaveEvent(this ,false));
+		if (throwEvent)
+			CommonUtil.callEvent(new PlayerDataSaveEvent(this ,false));
+		
 		if (persistant_data instanceof FileConfiguration)
 		{
 			FileConfiguration configNode = (FileConfiguration) persistant_data;
 			configNode.save();
 		}
+	}
+
+	public synchronized void save() {
+		save(true);
 	}
 	
 	public void saveLastLocation(){
@@ -371,5 +378,9 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	public void setVotes(int amount)
 	{
 		persistant_data.set("vote-count", amount);
+	}
+
+	public boolean isOnline() {
+		return getOfflinePlayer().isOnline();
 	}
 }

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import com.noxpvp.core.NoxCore;
 
 public class CoreCommand extends BaseCommand {
+	public final static String COMMAND_NAME = "core";
 	public CoreCommand() {
 		super(COMMAND_NAME, false);
 	}

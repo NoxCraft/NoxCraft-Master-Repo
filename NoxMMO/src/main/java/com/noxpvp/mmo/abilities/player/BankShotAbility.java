@@ -36,7 +36,7 @@ public class BankShotAbility extends BasePlayerAbility{
 	
 	public void eventExecute(Arrow a){
 		
-		if (!this.a.contains(a))
+		if (!this.arrows.contains(a))
 			return;
 		
 		if (!(a.getShooter() instanceof Player))
@@ -82,7 +82,7 @@ public class BankShotAbility extends BasePlayerAbility{
 	private BaseMMOEventHandler<ProjectileHitEvent> hitHandler;
 	private BaseMMOEventHandler<ProjectileLaunchEvent> launchHandler;
 	
-	private List<Arrow> a = new ArrayList<Arrow>();
+	private List<Arrow> arrows = new ArrayList<Arrow>();
 	
 	private boolean firing = false;
 	private boolean active = false;
@@ -159,7 +159,7 @@ public class BankShotAbility extends BasePlayerAbility{
 	public boolean isActive() { return active; }
 	
 	/**
-	 * Tells whether or not we are actively shooting a bot.
+	 * Tells whether or not we are actively shooting arrows bot.
 	 * @return true or false if we are listing for bow shoot events.
 	 */
 	public boolean isFiring() { return firing; }
@@ -175,7 +175,7 @@ public class BankShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @param range The Integer range that the ricochet'd arrow should look for a target
+	 * @param range The Integer range that the ricochet'd arrow should look for arrows target
 	 * @return BankShotAbility This instance, used for chaining
 	 */
 	public BankShotAbility setRange(int range) {this.range = range; return this;}
@@ -213,14 +213,14 @@ public class BankShotAbility extends BasePlayerAbility{
 	/**
 	 * 
 	 * 
-	 * @return Boolean If the ricochet'd arrow can consider the shooter as a target
+	 * @return Boolean If the ricochet'd arrow can consider the shooter as arrows target
 	 */
 	public boolean isHitSelf() {return hitSelf;}
 	
 	/**
 	 * 
 	 * 
-	 * @param hitSelf Boolean if the ricochet'd arrow should consider the shooter as a target
+	 * @param hitSelf Boolean if the ricochet'd arrow should consider the shooter as arrows target
 	 * @return BankShotAbility this instance, used for chaining
 	 */
 	public BankShotAbility setHitSelf(boolean hitSelf) {this.hitSelf = hitSelf; return this;}
@@ -237,7 +237,7 @@ public class BankShotAbility extends BasePlayerAbility{
 					}
 
 					public void execute(ProjectileHitEvent event) {
-						if (event.getEntity().equals(BankShotAbility.this.a))
+						if (event.getEntity().equals(BankShotAbility.this.arrows))
 							BankShotAbility.this.eventExecute((Arrow) event.getEntity());
 					}
 
@@ -278,10 +278,10 @@ public class BankShotAbility extends BasePlayerAbility{
 						if (!shooter.equals(BankShotAbility.this.getPlayer()))
 							return;
 						
-						if (isSingleShotMode() && !a.isEmpty())
-							a.clear();
+						if (isSingleShotMode() && !arrows.isEmpty())
+							arrows.clear();
 						
-						a.add(arrow);
+						arrows.add(arrow);
 						
 						if (isSingleShotMode())
 							setFiring(false);

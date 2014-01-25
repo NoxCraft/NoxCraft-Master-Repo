@@ -18,6 +18,7 @@ public class GlobalLocale extends LocalizationEnum {
 	public void message(CommandSender sender, String... arguments) {
 		MessageUtil.sendMessage(sender, MessageUtil.parseArguments(get(), arguments).split("\n"));
 	}
+	
 	public static GlobalLocale COMMAND_FAILED;
 	public static GlobalLocale COMMAND_SUCCESS;
 	public static GlobalLocale CONSOLE_NEEDPLAYER;

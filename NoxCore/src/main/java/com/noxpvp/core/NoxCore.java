@@ -34,6 +34,7 @@ import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.listeners.ChatPingListener;
 import com.noxpvp.core.listeners.ChestBlockListener;
+import com.noxpvp.core.listeners.DataListener;
 import com.noxpvp.core.listeners.DeathListener;
 import com.noxpvp.core.listeners.LoginListener;
 import com.noxpvp.core.listeners.OnLogoutSaveListener;
@@ -52,6 +53,7 @@ public class NoxCore extends NoxPlugin {
 	private DeathListener deathListener;
 	private FileConfiguration globalLocales;
 	private LoginListener loginListener;
+	private DataListener dataListener;
 	
 	private MasterReloader masterReloader = null;
 	
@@ -149,6 +151,7 @@ public class NoxCore extends NoxPlugin {
 		
 		masterReloader = new MasterReloader();
 		
+		
 		Conversion.register(new BasicConverter<NoxPlayer>(NoxPlayer.class) {
 			@Override
 			protected NoxPlayer convertSpecial(Object object, Class<?> obType, NoxPlayer def) {
@@ -164,12 +167,14 @@ public class NoxCore extends NoxPlugin {
 		deathListener = new DeathListener();
 		loginListener = new LoginListener();
 		saveListener = new OnLogoutSaveListener(this); 
+		dataListener = new DataListener();
 		
 		chatPingListener.register();
 		
 		if (CommonUtil.isPluginEnabled("Votifier")) //Fixes console error message.
 			voteListener.register();
 		
+		dataListener.register();
 		saveListener.register();
 		deathListener.register();
 		loginListener.register();
@@ -188,6 +193,13 @@ public class NoxCore extends NoxPlugin {
 		r.addModule(new BaseReloader(r, "config.yml") {
 			public boolean reload() {
 				NoxCore.this.reloadConfig();
+				return true;
+			}
+		});
+		
+		r.addModule(new BaseReloader(r, "players") {
+			public boolean reload() {
+				NoxCore.this.getPlayerManager().load();
 				return true;
 			}
 		});
