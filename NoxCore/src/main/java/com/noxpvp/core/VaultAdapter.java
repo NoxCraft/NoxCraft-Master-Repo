@@ -1,19 +1,21 @@
 package com.noxpvp.core;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard;
 import com.bergerkiller.bukkit.common.scoreboards.CommonTeam;
 import com.bergerkiller.bukkit.common.scoreboards.CommonTeam.FriendlyFireType;
+import com.noxpvp.core.locales.CoreLocale;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -24,13 +26,58 @@ public class VaultAdapter {
 		private static LinkedList<String> groupList = new LinkedList<String>(Arrays.asList(
 				"hadmin", "admin", "mod", "jmod", "helper", "imperial", "king", "sponsor", "vip", "peasant"));
 		
+		private static List<String> teamNames = new ArrayList<String>();
+		
 		public static List<String> getGroupList() {
 			return Collections.unmodifiableList(groupList);
 		}
 		
-		private static void loadGroupName(Player p) {
-			if (!p.isOnline() || p == null) return;
+		public static void setGroupList(Collection<String> s) {
+			groupList = new LinkedList<String>(s);
 			
+			teamNames.clear();
+			for (String group : groupList)
+				teamNames.add(group + "Team");
+			
+			setupTeams();
+			reloadAllGroupTags();
+		}
+		
+		private static void setupTeams() {
+			for (String name : teamNames) {
+				if (CommonScoreboard.getTeam(name) == null) {
+					
+					CommonTeam team = CommonScoreboard.newTeam(name);
+					
+					team.setFriendlyFire(FriendlyFireType.ON);
+					team.setPrefix(CoreLocale.GROUP_TAG_PREFIX.get(name.replace("Team", "")));
+					team.setSuffix(CoreLocale.GROUP_TAG_SUFFIX.get(name.replace("Team", "")));
+					team.setSendToAll(true);
+					
+					team.show();
+				} else {
+					CommonTeam team = CommonScoreboard.getTeam(name);
+					
+					team.setPrefix(CoreLocale.GROUP_TAG_PREFIX.get(name.replace("Team", "")));
+					team.setSuffix(CoreLocale.GROUP_TAG_SUFFIX.get(name.replace("Team", "")));
+				}
+			}
+		}
+
+		public static void reloadAllGroupTags() {
+			if (isChatLoaded() && isPermissionsLoaded() && permission.hasGroupSupport())
+				for (Player p : Bukkit.getOnlinePlayers()) {
+					loadGroupTag(p);
+				}
+		}
+		
+		public static void reloadGroupTag(Player p) {
+			if (p == null) return;
+			
+			loadGroupTag(p);
+		}
+		
+		private static void loadGroupTag(Player p) {
 			String[] groups = VaultAdapter.permission.getPlayerGroups(p);
 			
 			if (groups.length < 0) return;
@@ -39,50 +86,32 @@ public class VaultAdapter {
 			String finalGroup = null;
 			
 			for (String group : groups) {
-				if (groupList.indexOf(group) < ind) {
+				if (groupList.indexOf(group) >= 0 && groupList.indexOf(group) < ind) {
 					ind = groupList.indexOf(group);
 					finalGroup = group;
+					
 				}
 			}
+			Bukkit.broadcastMessage("final group for " + p.getName() + "- " + finalGroup);
 			
-			if (finalGroup != null) {
-					
-				String teamName = finalGroup + "Team";
-				World w = p.getWorld();
-				
-				if (CommonScoreboard.getTeam(teamName) != null) {
-					CommonScoreboard.loadTeam(teamName).addPlayer(p);
-				} else if (VaultAdapter.isChatLoaded()){
-					CommonTeam team = CommonScoreboard.newTeam(teamName);
-					
-					team.setSendToAll(true);
-					team.setFriendlyFire(FriendlyFireType.ON);
-					
-					team.setPrefix(VaultAdapter.chat.getGroupPrefix(w, finalGroup));
-					team.setSuffix(VaultAdapter.chat.getGroupSuffix(w, finalGroup));
-					
-					team.show();
-						
-				}
+			CommonScoreboard pBoard = CommonScoreboard.get(p);
+			CommonTeam team = CommonScoreboard.getTeam(finalGroup + "Team");
+			
+			if (team == null) { 
+				NoxCore.getInstance().log(Level.WARNING, "The team was not found.");
+				team = CommonScoreboard.dummyTeam;
 			}
-		}
-		
-		public static void reloadGroupName(Player p) {
-			if (!p.isOnline() || p == null) return;
 			
-			loadGroupName(p);
-		}
+			for (CommonTeam t2 :CommonScoreboard.getTeams()) {
+				if (teamNames.contains(t2.getName()))
+					if (t2.getPlayers().contains(p.getName()))
+						t2.removePlayer(p);
+			}
+			
+			pBoard.setTeam(team);
+			team.addPlayer(p);
+		}		
 		
-		public static void reloadGroupNames() {
-			if (isChatLoaded() && isPermissionsLoaded() && permission.hasGroupSupport())
-				for (Player p : Bukkit.getOnlinePlayers()) {
-					loadGroupName(p);
-				}
-		}
-		
-		public static void setGroupList(Collection<String> s) {
-			groupList = new LinkedList<String>(s);
-		}
 	}
 	
 	public static Chat chat = null;
@@ -95,12 +124,14 @@ public class VaultAdapter {
 	public static boolean isEconomyLoaded() { return (economy != null); }
 	
 	public static boolean isPermissionsLoaded() { return (permission != null); }
+	
 	public static void load()
 	{
 		setupChat();
 		setupEconomy();
 		setupPermission();
 	}
+	
 	public static boolean setupChat()
 	{
 		RegisteredServiceProvider<Chat> service = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);

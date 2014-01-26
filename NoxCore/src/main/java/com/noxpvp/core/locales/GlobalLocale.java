@@ -1,22 +1,17 @@
 package com.noxpvp.core.locales;
 
-import org.bukkit.command.CommandSender;
-
-import com.bergerkiller.bukkit.common.localization.LocalizationEnum;
 import com.noxpvp.core.NoxCore;
+import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.utils.MessageUtil;
 
-public class GlobalLocale extends LocalizationEnum {
+public class GlobalLocale extends NoxLocale {
 	public GlobalLocale(String name, String def) {
 		super(name, def);
 	}
+	
 	@Override
 	public String get(String... args) {
 		return MessageUtil.parseColor(NoxCore.getInstance().getGlobalLocale(getName(), args));
-	}
-	@Override
-	public void message(CommandSender sender, String... arguments) {
-		MessageUtil.sendMessage(sender, MessageUtil.parseArguments(get(), arguments).split("\n"));
 	}
 	
 	public static GlobalLocale COMMAND_FAILED;
@@ -51,5 +46,10 @@ public class GlobalLocale extends LocalizationEnum {
 		//CONSOLE
 		CONSOLE_NEEDPLAYER = new GlobalLocale("console.needplayer", "This command requires a player: %0%");
 		CONSOLE_ONLYPLAYER = new GlobalLocale("console.onlyplayer", "This command can only be run by a player.");
+	}
+
+	@Override
+	public NoxPlugin getPlugin() {
+		return NoxCore.getInstance();
 	}
 }
