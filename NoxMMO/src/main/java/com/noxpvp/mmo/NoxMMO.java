@@ -3,6 +3,7 @@ package com.noxpvp.mmo;
 import java.util.logging.Level;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
@@ -11,6 +12,8 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.permissions.NoxPermission;
+import com.noxpvp.core.reloader.BaseReloader;
+import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.mmo.abilities.entity.*;
 import com.noxpvp.mmo.abilities.player.*;
@@ -24,6 +27,7 @@ import com.noxpvp.mmo.classes.player.main.axes.ChampionClass;
 import com.noxpvp.mmo.classes.player.main.axes.WarlordClass;
 import com.noxpvp.mmo.listeners.BlockListener;
 import com.noxpvp.mmo.listeners.DamageListener;
+import com.noxpvp.mmo.listeners.ExperienceListener;
 import com.noxpvp.mmo.listeners.PacketListeners;
 import com.noxpvp.mmo.listeners.PacketListeners.EntityEquipmentListener;
 import com.noxpvp.mmo.listeners.PacketListeners.WorldSoundListener;
@@ -41,12 +45,14 @@ public class NoxMMO extends NoxPlugin {
 	DamageListener damageListener;
 	PlayerTargetListener playerTargetListener;
 	BlockListener blockListener;
+	ExperienceListener experieneceListener;
 	
 	PacketListeners packetListeners;
 	EntityEquipmentListener equipmentPacketListener;
 	WorldSoundListener worldSoundListener;
 	
 	private FileConfiguration config;
+	private FileConfiguration experience;
 	
 	private MasterListener masterListener;
 	
@@ -75,6 +81,12 @@ public class NoxMMO extends NoxPlugin {
 			config = new FileConfiguration(this, "config.yml");
 		return config;
 	}
+	
+	public FileConfiguration getExperienceConfig(){
+		if (experience == null)
+			experience = new FileConfiguration(this, "experience.yml");
+		return experience;
+	}
 
 	@Override
 	public void enable() {
@@ -93,6 +105,7 @@ public class NoxMMO extends NoxPlugin {
 		damageListener = new DamageListener(instance);
 		playerTargetListener = new PlayerTargetListener(instance);
 		blockListener = new BlockListener(instance);
+		experieneceListener = new ExperienceListener(instance);
 		
 		packetListeners = new PacketListeners();
 		equipmentPacketListener = packetListeners.new EntityEquipmentListener();
@@ -102,9 +115,40 @@ public class NoxMMO extends NoxPlugin {
 		playerTargetListener.register();
 		blockListener.register();
 		permHandler = new PermissionHandler(this);
+		experieneceListener.register();
 		
 		register(equipmentPacketListener, PacketType.OUT_ENTITY_EQUIPMENT);
 		register(worldSoundListener, PacketType.OUT_NAMED_SOUND_EFFECT);
+		
+		Reloader base = new BaseReloader(getMasterReloader(), "NoxMMO") {
+			public boolean reload() {
+				return true;
+			}
+		};
+		
+		base.addModule(new BaseReloader(base, "config.yml") {
+			
+			public boolean reload() {
+				reloadConfig();
+				return true;
+			}
+		});
+		
+		base.addModule(new BaseReloader(base, "locale") {
+			
+			public boolean reload() {
+				localization();
+				return true;
+			}
+		});
+		
+		base.addModule(new BaseReloader(base, "experience.yml") {
+			
+			public boolean reload() {
+				getExperienceConfig().load();
+				return true;
+			}
+		});
 	}
 
 	private void setInstance(NoxMMO noxMMO) {
@@ -231,5 +275,10 @@ public class NoxMMO extends NoxPlugin {
 	}
 	
 	public static NoxMMO getInstance() { return instance; }
+
+	@Override
+	public Class<? extends ConfigurationSerializable>[] getSerialiables() {
+		return new Class[0];
+	}
 	
 }

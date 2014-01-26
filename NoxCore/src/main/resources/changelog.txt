@@ -9,3 +9,7 @@
 	Fixed issue where text containing - in middle of words will parse as flags.
 		This will no longer do that and it will be part of argument.
 		Flags must have a space before the '-'
+0.1.10
+	Added getMasterReloader function to NoxPlugin
+		Simpler way to get master reloader for core.
+			WARNING THIS MUST NOT BE OVERRIDEN EXCEPT IN CORE
