@@ -36,14 +36,14 @@ public class ChatPingListener extends NoxListener<NoxCore> {
 		
 		if (!token.startsWith(chatChar)) return;
 		
-		String tempToken = token.substring(token.indexOf(chatChar));
+		String tempToken = token.substring(token.indexOf(chatChar) + 1);
 		Player tabber = event.getPlayer();
 		
 		for (Player p : CommonUtil.getOnlinePlayers()){
 			String name = p.getName();
 			
 			if (name.toLowerCase().startsWith(tempToken.toLowerCase()) && tabber.canSee(p))
-				event.getTabCompletions().add(token + name.substring(name.indexOf(tempToken)));//yes this works, says someone on bukkit
+				event.getTabCompletions().add(token + name.substring(name.indexOf(tempToken + 1)));//yes this works, says someone on bukkit
 		}
 	}
 	
@@ -78,7 +78,7 @@ public class ChatPingListener extends NoxListener<NoxCore> {
 		StringBuilder sb = new StringBuilder(new String(msg));
 		String lastCol = ChatColor.getLastColors(sb.toString());
 		
-		final String reset = lastCol;
+		final String reset = ChatColor.RESET + lastCol;
 		
 		int i = 0;
 		
