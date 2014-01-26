@@ -92,8 +92,6 @@ public class VaultAdapter {
 					
 				}
 			}
-			Bukkit.broadcastMessage("final group for " + p.getName() + "- " + finalGroup);
-			
 			CommonScoreboard pBoard = CommonScoreboard.get(p);
 			CommonTeam team = CommonScoreboard.getTeam(finalGroup + "Team");
 			
