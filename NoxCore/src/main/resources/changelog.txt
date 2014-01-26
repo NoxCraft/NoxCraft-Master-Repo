@@ -13,3 +13,5 @@
 	Added getMasterReloader function to NoxPlugin
 		Simpler way to get master reloader for core.
 			WARNING THIS MUST NOT BE OVERRIDEN EXCEPT IN CORE
+0.1.10.2
+	Fixed Locales for Chat Pings.

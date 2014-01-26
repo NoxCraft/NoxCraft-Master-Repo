@@ -12,11 +12,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 
-import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.events.ChatPingEvent;
-import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.locales.CoreLocale;
 
 public class ChatPingListener extends NoxListener<NoxCore> {
 	
@@ -27,10 +26,8 @@ public class ChatPingListener extends NoxListener<NoxCore> {
 	{
 		super(NoxCore.getInstance());
 		
-		ConfigurationNode localNode = getPlugin().getLocalizationNode("Special.ChatPing");
-		
-		this.color = MessageUtil.parseColor(localNode.get("Color", "&2"));
-		this.chatChar = localNode.get("Chat-Character", "@");
+		this.color = CoreLocale.SPECIAL_CHAT_PINGCOLOR.get();
+		this.chatChar = CoreLocale.SPECIAL_CHAT_PINGSYMBAL.get();
 	}
 	
 	@EventHandler(priority=EventPriority.NORMAL, ignoreCancelled = true)
