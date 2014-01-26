@@ -36,6 +36,13 @@ public class ChatPingListener extends NoxListener<NoxCore> {
 		
 		if (!token.startsWith(chatChar)) return;
 		
+		int index = token.indexOf(chatChar);
+		
+		if (index < 0)
+			return;
+		if ((index + 1) >= token.length())
+			return;
+		
 		String tempToken = token.substring(token.indexOf(chatChar) + 1);
 		Player tabber = event.getPlayer();
 		
@@ -43,7 +50,7 @@ public class ChatPingListener extends NoxListener<NoxCore> {
 			String name = p.getName();
 			
 			if (name.toLowerCase().startsWith(tempToken.toLowerCase()) && tabber.canSee(p))
-				event.getTabCompletions().add(token + name.substring(name.indexOf(tempToken + 1)));//yes this works, says someone on bukkit
+				event.getTabCompletions().add(chatChar + name);//yes this works, says someone on bukkit
 		}
 	}
 	
