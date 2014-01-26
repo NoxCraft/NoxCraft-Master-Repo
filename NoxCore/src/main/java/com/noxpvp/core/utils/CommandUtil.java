@@ -36,7 +36,8 @@ public class CommandUtil {
 		
 		while (i < r.length)
 		{
-			if (r[i] == flagChar) {
+//			if (((i - 1) >= 0) && r[i-1] == ' ') 
+			if (r[i] == flagChar && (((i - 1) >= 0) && r[i-1] == ' ')) {
 				isFlag = true;
 				if (r[i + 1] == flagChar) {
 					isLongFlag = true;

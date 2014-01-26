@@ -130,6 +130,14 @@ public class CoreCommandParser {
 	}
 	
 	@Test
+	public void testMixedArgFlag() {
+		String argLine = "test-poo";
+		CommandContext context = CommandUtil.parseCommand(mockSender, argLine);
+		Map<String, Object> res = context.getFlags();
+		assertThat(res, hasSize(0));
+	}
+	
+	@Test
 	public void testLongSingleFlagValue() {
 		String argLine = "test --player test";
 		CommandContext context = CommandUtil.parseCommand(mockSender, argLine);
