@@ -2,6 +2,8 @@ package com.noxpvp.mmo.classes;
 
 import java.util.Set;
 
+import com.noxpvp.mmo.listeners.ExperienceListener.experienceType;
+
 public interface PlayerClass {
 	public int getId();
 	public String getName();
@@ -19,10 +21,11 @@ public interface PlayerClass {
 	public int getLevelTotalExp();
 	
 	public int getNeededExpForLevel();
-	
+	public boolean canGainExp(experienceType entityKill);
 	
 	public int getLevelCap();
 
+	public PlayerClass addExp(int amount);
 	public PlayerClass setExp(int amount);
 	public PlayerClass setLevel(int amount);
 	public PlayerClass setLevelCap(int amount);

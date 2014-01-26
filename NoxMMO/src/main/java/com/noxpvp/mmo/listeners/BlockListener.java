@@ -23,7 +23,6 @@ public class BlockListener extends NoxListener<NoxMMO>{
 	public BlockListener() {
 		this(NoxMMO.getInstance());
 	}
-
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBreak(BlockBreakEvent e) {
