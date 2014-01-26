@@ -21,6 +21,7 @@ import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.permissions.NoxPermission;
+import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.CommandUtil;
 import com.noxpvp.core.utils.MessageUtil;
 import com.noxpvp.core.utils.PermissionHandler;
@@ -129,5 +130,17 @@ public abstract class NoxPlugin extends PluginBase {
 	{
 		for (Command runner : runners)
 			registerCommand(runner);
+	}
+	
+	public final void register(Reloader reloader) {
+		NoxCore.getInstance().addReloader(reloader);
+	}
+
+	/**
+	 * <b>DO NOT OVERRIDE ONLY CORE PLUGIN MUST OVERRIDE</b>
+	 * @return Core Master Reloader
+	 */
+	public MasterReloader getMasterReloader() {
+		return NoxCore.getInstance().getMasterReloader();
 	}
 }

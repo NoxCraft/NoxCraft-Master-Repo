@@ -219,7 +219,7 @@ public class NoxCore extends NoxPlugin {
 			}
 		});
 		
-		addReloader(r);
+		register(r);
 		
 		
 		// ==== Localization ====
@@ -303,6 +303,7 @@ public class NoxCore extends NoxPlugin {
 		return this.globalLocales.getNode(path);
 	}
 
+	@Override
 	public MasterReloader getMasterReloader()
 	{
 		return masterReloader;

@@ -3,6 +3,7 @@ package com.noxpvp.mmo;
 import java.util.logging.Level;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
@@ -11,6 +12,8 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.permissions.NoxPermission;
+import com.noxpvp.core.reloader.BaseReloader;
+import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.mmo.abilities.entity.*;
 import com.noxpvp.mmo.abilities.player.*;
@@ -116,6 +119,36 @@ public class NoxMMO extends NoxPlugin {
 		
 		register(equipmentPacketListener, PacketType.OUT_ENTITY_EQUIPMENT);
 		register(worldSoundListener, PacketType.OUT_NAMED_SOUND_EFFECT);
+		
+		Reloader base = new BaseReloader(getMasterReloader(), "NoxMMO") {
+			public boolean reload() {
+				return true;
+			}
+		};
+		
+		base.addModule(new BaseReloader(base, "config.yml") {
+			
+			public boolean reload() {
+				reloadConfig();
+				return true;
+			}
+		});
+		
+		base.addModule(new BaseReloader(base, "locale") {
+			
+			public boolean reload() {
+				localization();
+				return true;
+			}
+		});
+		
+		base.addModule(new BaseReloader(base, "experience.yml") {
+			
+			public boolean reload() {
+				getExperienceConfig().load();
+				return true;
+			}
+		});
 	}
 
 	private void setInstance(NoxMMO noxMMO) {
@@ -242,5 +275,10 @@ public class NoxMMO extends NoxPlugin {
 	}
 	
 	public static NoxMMO getInstance() { return instance; }
+
+	@Override
+	public Class<? extends ConfigurationSerializable>[] getSerialiables() {
+		return new Class[0];
+	}
 	
 }

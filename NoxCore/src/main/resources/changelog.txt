@@ -5,3 +5,7 @@
 0.1.8
 	Added and repaired Tab Chat Features (Not sure of better name. SCREW IT)
 		Take a look in your tab...
+0.1.10
+	Added getMasterReloader function to NoxPlugin
+		Simpler way to get master reloader for core.
+			WARNING THIS MUST NOT BE OVERRIDEN EXCEPT IN CORE
