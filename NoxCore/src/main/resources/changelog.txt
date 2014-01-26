@@ -2,7 +2,6 @@
 	Added #66 death cause tracking.
 		Planned #69 Item Drop tracking.
 	Fixed possible NPE's on fetching offline players.
-0.2.0
-	Implemented remote data save event execution.
-	Made save and load functions on NoxPlayer synchronized
-	Added reloader for players data.
+0.1.8
+	Added and repaired Tab Chat Features (Not sure of better name. SCREW IT)
+		Take a look in your tab...

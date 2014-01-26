@@ -2,7 +2,6 @@ package com.noxpvp.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -39,6 +38,7 @@ import com.noxpvp.core.listeners.DeathListener;
 import com.noxpvp.core.listeners.LoginListener;
 import com.noxpvp.core.listeners.OnLogoutSaveListener;
 import com.noxpvp.core.listeners.VoteListener;
+import com.noxpvp.core.locales.CoreLocale;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
@@ -197,6 +197,13 @@ public class NoxCore extends NoxPlugin {
 			}
 		});
 		
+		r.addModule(new BaseReloader(r, "locale") {
+			public boolean reload() {
+				localization();
+				return true;
+			}
+		});
+		
 		r.addModule(new BaseReloader(r, "players") {
 			public boolean reload() {
 				NoxCore.this.getPlayerManager().load();
@@ -207,7 +214,7 @@ public class NoxCore extends NoxPlugin {
 		r.addModule(new BaseReloader(r, "group-name") {
 			
 			public boolean reload() {
-				VaultAdapter.GroupUtils.reloadGroupNames();
+				VaultAdapter.GroupUtils.reloadAllGroupTags();
 				return true;
 			}
 		});
@@ -219,6 +226,8 @@ public class NoxCore extends NoxPlugin {
         if (!this.globalLocales.isEmpty()) {
                 this.saveGlobalLocalization();
         }
+        
+        reloadConfig();
 	}
 
 	/**
@@ -356,10 +365,9 @@ public class NoxCore extends NoxPlugin {
 	
 	@Override
 	public void localization() {
-		
+		Common.loadClasses("com.noxpvp.core.locales.CoreLocale", "com.noxpvp.core.VaultAdapter");
 		
 		globalLocales = new FileConfiguration(this, "Global-Localization.yml");
-		
 		
 		// load
         if (this.globalLocales.exists()) {
@@ -371,9 +379,14 @@ public class NoxCore extends NoxPlugin {
         this.globalLocales.addHeader("For colors, use the & character followed up by 0 - F");
         this.globalLocales.addHeader("Need help with this file? Please visit:");
         this.globalLocales.addHeader("http://dev.bukkit.org/server-mods/bkcommonlib/pages/general/localization/");
-
 		
 		loadGlobalLocales(GlobalLocale.class);
+		loadLocales(CoreLocale.class);
+		for (String group : VaultAdapter.GroupUtils.getGroupList())
+		{
+			loadLocale(CoreLocale.GROUP_TAG_PREFIX.getName() + "." + group, group);
+			loadLocale(CoreLocale.GROUP_TAG_SUFFIX.getName() + "." +  group, "");
+		}
 	}
 	
 	@Override
@@ -408,8 +421,12 @@ public class NoxCore extends NoxPlugin {
 
 	@Override
 	public void reloadConfig() {
+		if (!getCoreConfig().exists())
+			saveConfig();
+		
 		getCoreConfig().load();
-		VaultAdapter.GroupUtils.setGroupList(config.get("group.priorities", new LinkedList<String>()));
+		
+		VaultAdapter.GroupUtils.setGroupList(config.get("group.priorities", List.class));
 		
 		ChestBlockListener.isRemovingOnInteract = config.get("custom.events.chestblocked.isRemovingOnInteract", ChestBlockListener.isRemovingOnInteract);
 		ChestBlockListener.usePlaceEvent = config.get("custom.events.chestblocked.usePlaceEvent", ChestBlockListener.usePlaceEvent);
