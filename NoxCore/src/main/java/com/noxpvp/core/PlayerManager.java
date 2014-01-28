@@ -159,8 +159,8 @@ public class PlayerManager implements Persistant {
 		if (players.containsKey(name))
 			player = players.get(name);
 		else {
-			player = new NoxPlayer(this, name);
-			players.put(name, player);
+			players.put(name, new NoxPlayer(this, name));
+			player = players.get(name);
 		}
 		return player;
 	}

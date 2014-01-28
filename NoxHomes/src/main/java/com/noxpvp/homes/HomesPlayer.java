@@ -44,13 +44,11 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	public HomesPlayer(OfflinePlayer player)
 	{
 		super(player);
-		load();
 	}
 	
 	public HomesPlayer(NoxPlayerAdapter player)
 	{
 		super(player);
-		load();
 	}
 	
 	/**
@@ -96,8 +94,10 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	public void save(boolean throwEvent) {
 		getNoxPlayer().getPersistantData().remove("homes");
 		ConfigurationNode var = getNoxPlayer().getPersistantData().getNode("homes");
+
 		for (BaseHome home : homes)
 			var.set(home.getName(), home);
+		
 		if (throwEvent)
 			CommonUtil.callEvent(new PlayerDataSaveEvent(this, true));
 	}
@@ -125,6 +125,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		
 		for(int i : pending)
 			homes.remove(i);
+		
 		if (pending.size() > 0)
 			NoxHomes.getInstance().log(Level.WARNING, "Removed " + pending.size() + " null homes.");
 		

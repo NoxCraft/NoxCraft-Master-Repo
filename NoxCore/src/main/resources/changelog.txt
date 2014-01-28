@@ -15,3 +15,8 @@
 			WARNING THIS MUST NOT BE OVERRIDEN EXCEPT IN CORE
 0.1.10.2
 	Fixed Locales for Chat Pings.
+0.1.11
+	Fixed double save on kick resulting in
+		DELETION OF ALL PLAYER DATA HAHA... 
+			not really funny. 
+			but hell that explains why i could not figure out how that broke...

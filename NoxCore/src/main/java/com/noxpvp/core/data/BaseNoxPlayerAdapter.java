@@ -2,8 +2,11 @@ package com.noxpvp.core.data;
 
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import com.noxpvp.core.NoxCore;
 
@@ -41,10 +44,21 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter {
 	
 	public final String getPlayerName() { return playerName; }
 	
+	public final OfflinePlayer getOfflinePlayer() { return Bukkit.getOfflinePlayer(getPlayerName()); }
+	
+	public final boolean isOnline() { return getOfflinePlayer().isOnline(); }
+	
+	public final Player getPlayer() {
+		if (isOnline())
+			return (Player) getOfflinePlayer();
+		else
+			return null;
+	}
+	
 	public final boolean isAlive() { return playerRef.get() != null; }
 	
 	public final void updateReference() {
-		playerRef = new SoftReference<NoxPlayer>(getNoxPlayer(playerName));
+		playerRef = new WeakReference<NoxPlayer>(getNoxPlayer(playerName));
 	}
 	
 	private static NoxPlayer getNoxPlayer(String name) {

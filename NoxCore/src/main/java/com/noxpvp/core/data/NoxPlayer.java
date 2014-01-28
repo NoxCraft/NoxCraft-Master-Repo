@@ -232,6 +232,10 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			return true;
 	}
 	
+	public boolean isOnline() {
+		return getOfflinePlayer().isOnline();
+	}
+	
 	public synchronized void load() {
 		if (persistant_data == null)
 			persistant_data = manager.getPlayerNode(name);
@@ -252,13 +256,13 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		rebuild_cache();
 		/*PlayerDataLoadEvent e = */CommonUtil.callEvent(new PlayerDataLoadEvent(this, false));
 	}
-	
+
 	public void rebuild_cache() {
 		cd_cache.clear();
 		for (CoolDown cd: cds)
 			cd_cache.put(cd.getName(), cd);
 	}
-
+	
 	public void removeCooldDown(String name)
 	{
 		if (cd_cache.containsKey(name))
@@ -267,29 +271,32 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			cd_cache.remove(name);
 		}
 	}
-	
-	public synchronized void save(boolean throwEvent)
-	{
-		persistant_data.set("cooldowns", getCoolDowns());
-		if (throwEvent)
-			CommonUtil.callEvent(new PlayerDataSaveEvent(this ,false));
-		
-		if (persistant_data instanceof FileConfiguration)
-		{
-			FileConfiguration configNode = (FileConfiguration) persistant_data;
-			configNode.save();
-		}
-	}
 
 	public synchronized void save() {
 		save(true);
 	}
 	
+	public synchronized void save(boolean throwEvent)
+	{
+		if (throwEvent)
+			CommonUtil.callEvent(new PlayerDataSaveEvent(this ,false));
+		persistant_data.set("cooldowns", getCoolDowns());
+		
+		if (persistant_data instanceof FileConfiguration)
+		{
+			FileConfiguration configNode = (FileConfiguration) persistant_data;
+			configNode.save();
+		} else {
+			manager.save();
+		}
+			
+	}
+
 	public void saveLastLocation(){
 		if (getPlayer() != null)
 			persistant_data.set("last.location", new SafeLocation(getPlayer().getLocation()));
 	}
-
+	
 	public void saveLastLocation(Player player){
 		if (!player.getName().equals(name))
 			throw new IllegalArgumentException("Must be the same player as object holder");
@@ -349,12 +356,12 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	{
 		setLastDeathTS((NoxCore.isUsingNanoTime()?System.nanoTime(): System.currentTimeMillis()));
 	}
-	
+		
 	public void setLastDeathTS(long stamp)
 	{
 		this.persistant_data.set("last.death.timestamp", stamp);
 	}
-		
+
 	public void setLastKill(Entity entity) {
 		this.persistant_data.remove("last.kill");
 		
@@ -368,19 +375,15 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			this.persistant_data.set("last.kill.entity.name", "UNTRACKED");
 		
 	}
-
+	
 	public void setLastKillTS() { setLastKillTS((NoxCore.isUsingNanoTime()?System.nanoTime(): System.currentTimeMillis())); }
 	
 	public void setLastKillTS(long stamp) {
 		this.persistant_data.set("last.kill.timestamp", stamp);
 	}
-	
+
 	public void setVotes(int amount)
 	{
 		persistant_data.set("vote-count", amount);
-	}
-
-	public boolean isOnline() {
-		return getOfflinePlayer().isOnline();
 	}
 }

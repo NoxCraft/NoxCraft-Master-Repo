@@ -10,4 +10,6 @@
 	Homes truely save on every removal and addition to homes data.
 0.1.8
 	No Changes
+0.1.11
+	Fixed deletion of homes on kick. See NoxCore changelogs...
 	

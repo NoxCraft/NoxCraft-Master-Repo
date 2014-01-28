@@ -14,6 +14,7 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.homes.tp.BaseHome;
 
 public class HomeManager implements Persistant { //FIXME: Javadocs
@@ -61,6 +62,11 @@ public class HomeManager implements Persistant { //FIXME: Javadocs
 	public HomesPlayer getPlayer(OfflinePlayer player)
 	{
 		return getPlayer(player.getName());
+	}
+	
+	public HomesPlayer getPlayer(NoxPlayerAdapter adapter)
+	{
+		return getPlayer(adapter.getNoxPlayer().getName());
 	}
 	
 	public HomesPlayer getPlayer(String player) {
