@@ -67,10 +67,8 @@ public class ParryAbility extends BasePlayerAbility implements PassiveAbility<En
 		this.mustBlock = false;
 	}
 	
-	@Override
 	public boolean execute() { return true; }
-	
-	@Override
+
 	public boolean execute(EntityDamageByEntityEvent event){
 		if (event.getEntity() != getPlayer() || !mayExecute()) return false;
 		

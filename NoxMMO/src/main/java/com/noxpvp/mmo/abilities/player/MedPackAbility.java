@@ -1,6 +1,7 @@
 package com.noxpvp.mmo.abilities.player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -89,7 +90,7 @@ public class MedPackAbility extends BasePlayerAbility{
 						Location ploc = player.getLocation();
 						ploc.setY(ploc.getY() + 2);
 						
-						EffectsRunnable hearts = new EffectsRunnable("heart", ploc, 0, 1, false, false, null);
+						EffectsRunnable hearts = new EffectsRunnable(Arrays.asList("heart"), false, ploc, 0, 3, 2, null);
 						hearts.runTask(NoxMMO.getInstance());
 						
 						MessageUtil.sendLocale(NoxMMO.getInstance(), player, "ability.medpack.pick-up", player.getName(), (abilPlayer != null? abilPlayer.getName() :  MedPackAbility.this.getNoxPlayer().getName()));
@@ -116,7 +117,7 @@ public class MedPackAbility extends BasePlayerAbility{
 		Item drop = p.getWorld().dropItem(p.getLocation(), pack);
 		packs.add(drop);
 		
-		new EffectsRunnable("townaura", null, .1F, 10, true, true, drop).runTaskTimer(NoxMMO.getInstance(), 20, 12);
+		new EffectsRunnable(Arrays.asList("townaura"), true, null, 1F, 4, 0, drop).runTaskTimer(NoxMMO.getInstance(), 20, 12);
 		if (!packs.isEmpty())
 			setActive(true);
 		

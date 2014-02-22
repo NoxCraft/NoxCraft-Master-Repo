@@ -35,7 +35,7 @@ public class MassDestructionAbility extends BasePlayerAbility{
 		int range = ab.getRange();
 		NoxMMO mmo = NoxMMO.getInstance();
 		
-		new EffectsRunnable(Arrays.asList("explode", "explode"), pLoc, 0, 2, false, false, null).runTask(mmo);
+		new EffectsRunnable(Arrays.asList("explode"), false, pLoc, 0, 2, 1, null).runTask(mmo);
 		new ShockWaveAnimation(pLoc, 2, range, 0.3).runTask(mmo);
 		new ExpandingDamageRunnable(p, p.getLocation(), ab.getDamage(), range, 2).runTask(mmo);
 	}

@@ -40,7 +40,7 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 			loc = new Location(itLoc.getWorld(), itLoc.getX(), itLoc.getY()+1.75, itLoc.getZ());
 			
 			((Damageable) it).damage(damage - (damage / 4), attacker);
-			new EffectsRunnable(Arrays.asList("blockcrack_155_0"), loc, .1F, 20, false, false, null).runTask(NoxMMO.getInstance());
+			new EffectsRunnable(Arrays.asList("blockcrack_155_0"), false, loc, .1F, 20, 2, null).runTask(NoxMMO.getInstance());
 		}
 		
 		return;

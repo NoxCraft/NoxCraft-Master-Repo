@@ -84,8 +84,7 @@ public class RejuvenationAbility extends BasePlayerAbility{
 		NoxMMO instance = NoxMMO.getInstance();
 		
 		new HealRunnable(getPlayer(), healthPerHeal, heals).runTaskTimer(instance, 0, delayBetweenHeals);
-		new EffectsRunnable(Arrays.asList("heart", "heart", "heart"),
-				getPlayer().getLocation(), 0F, 1, true, false, null).runTaskTimer(instance, 0, delayBetweenHeals);
+		new EffectsRunnable(Arrays.asList("heart"), true, getPlayer().getLocation(), 0F, 3, 5, null).runTaskTimer(instance, 0, delayBetweenHeals);
 		
 		
 		return true;

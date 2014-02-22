@@ -73,7 +73,7 @@ public class BankShotAbility extends BasePlayerAbility{
 		Location pLoc = a.getLocation();
 		Location eLoc = e.getLocation();
 		
-		new EffectsRunnable(Arrays.asList("explode", "explode"), eLoc, 0, 3, false, false, null).runTask(NoxMMO.getInstance());
+		new EffectsRunnable(Arrays.asList("explode"), false, eLoc, 0, 2, 3, null).runTask(NoxMMO.getInstance());
 		a.setVelocity(eLoc.toVector().subtract(pLoc.toVector()));
 		
 		return;

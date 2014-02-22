@@ -165,7 +165,7 @@ public class TrackingAbility extends BasePlayerAbility{
 		
 		NoxMMO instance = NoxMMO.getInstance();
 		
-		new EffectsRunnable(Arrays.asList("flame"), null, 0, 4, true, true, tracker).runTaskTimer(instance, 0, effectFreq);
+		new EffectsRunnable(Arrays.asList("flame"), true, null, 0, 0, 4, it).runTaskTimer(instance, 0, effectFreq);
 		new DespawnRunnable(tracker).runTaskLater(instance, duration);
 		
 		return false;

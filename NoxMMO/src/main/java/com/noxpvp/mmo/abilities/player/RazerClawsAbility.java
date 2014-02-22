@@ -28,7 +28,6 @@ public class RazerClawsAbility extends BasePlayerAbility implements PassiveAbili
 
 	public boolean execute() { return true; }
 
-	@Override
 	public boolean execute(EntityDamageByEntityEvent event) {
 
 		if (event.getEntity() != getPlayer() || !mayExecute())
