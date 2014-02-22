@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -97,7 +96,6 @@ public class EffectsRunnable extends BukkitRunnable{
 				CommonPacket commonEffect = new CommonPacket(PacketType.OUT_WORLD_PARTICLES);
 				NMSPacketPlayOutWorldParticles effect = new NMSPacketPlayOutWorldParticles();
 				
-				Bukkit.broadcastMessage("editing data");
 				commonEffect.write(effect.effectName, effectName);
 				commonEffect.write(effect.particleCount, amount);
 				commonEffect.write(effect.speed, data);
@@ -113,7 +111,6 @@ public class EffectsRunnable extends BukkitRunnable{
 				}
 				
 				PacketUtil.broadcastPacketNearby(loc, 256, commonEffect);//max render distance
-				Bukkit.broadcastMessage("effect sent");
 			
 			} catch (Exception e) {e.printStackTrace(); safeCancel(); return;}
 		}
