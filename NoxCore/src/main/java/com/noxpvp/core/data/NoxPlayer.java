@@ -23,12 +23,13 @@ import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
-import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.events.PlayerDataLoadEvent;
 import com.noxpvp.core.events.PlayerDataSaveEvent;
-import com.noxpvp.core.utils.PermissionHandler;
+import com.noxpvp.core.internal.PermissionHandler;
+import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.gui.CoolDown;
 
 public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	private WeakHashMap<String, CoolDown> cd_cache;
@@ -100,10 +101,18 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	public String getFullName() {
 		StringBuilder text = new StringBuilder();
-		
 		text.append(VaultAdapter.chat.getGroupPrefix(getLastWorld(), getMainGroup()) + getPlayer().getName());
 		
-		return text.toString();
+		String v = persistant_data.get("formatted-name", text.toString());
+		
+		if (!isOnline())
+			return v;
+		
+		String v2 = VaultAdapter.GroupUtils.getFormatedPlayerName(getPlayer());
+		if (!v2.equals(v))
+			persistant_data.set("formatted-name", v2);
+
+		return v2;
 	}
 	
 	public Location getLastDeathLocation()

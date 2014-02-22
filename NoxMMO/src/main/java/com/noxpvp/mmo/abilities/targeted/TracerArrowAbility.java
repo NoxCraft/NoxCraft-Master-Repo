@@ -28,7 +28,7 @@ public class TracerArrowAbility extends BaseTargetedPlayerAbility{
 	 * @return boolean If the execution ran successfully
 	 */
 	public static boolean eventExecute(Player player, final Arrow arrow){
-		MMOPlayer mmoP = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(player);
+		MMOPlayer mmoP = NoxMMO.getInstance().getPlayerManager().getPlayer(player);
 		String name = player.getName();
 		
 		if (abilityCue.containsKey(name))

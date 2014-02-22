@@ -2,8 +2,8 @@ package com.noxpvp.mmo.abilities;
 
 import org.bukkit.entity.Player;
 
-import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.manager.PlayerManager;
 
 public abstract class BasePlayerAbility extends BaseEntityAbility implements PlayerAbility {
 	
@@ -18,7 +18,7 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements Pla
 
 	public NoxPlayer getNoxPlayer() {
 		if (isValid())
-			return NoxCore.getInstance().getPlayerManager().getPlayer(getPlayer());
+			return PlayerManager.getInstance().getPlayer(getPlayer());
 		return null;
 	}
 	

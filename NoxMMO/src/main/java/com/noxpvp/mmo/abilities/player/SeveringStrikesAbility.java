@@ -69,9 +69,9 @@ public class SeveringStrikesAbility extends BasePlayerAbility{
 		final String name = getPlayer().getName();
 		
 		SeveringStrikesAbility.strikers.put(name, this);
-		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(getPlayer()).getMainPlayerClass();
+		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getPlayer(getPlayer()).getPrimaryClass();
 		
-		this.bleed = (20 * pClass.getTotalLevels()) / 16;
+		this.bleed = (20 * pClass.getTotalLevel()) / 16;
 		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
 			
 			public void run() {

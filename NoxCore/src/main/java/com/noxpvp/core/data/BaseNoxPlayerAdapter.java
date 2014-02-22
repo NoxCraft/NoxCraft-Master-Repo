@@ -8,7 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import com.noxpvp.core.NoxCore;
+import com.bergerkiller.bukkit.common.config.ConfigurationNode;
+import com.noxpvp.core.manager.PlayerManager;
 
 public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter {
 	private final String playerName;
@@ -36,10 +37,18 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter {
 	
 	public final NoxPlayer getNoxPlayer(boolean cache)
 	{
-		if (cache && !isAlive())
+		if (!cache && !isAlive())
 			updateReference();
 		
 		return playerRef.get();
+	}
+	
+	public final ConfigurationNode getPersistantData() {
+		return getNoxPlayer(false).getPersistantData();
+	}
+	
+	public final ConfigurationNode getTempData() {
+		return getNoxPlayer(false).getTempData();
 	}
 	
 	public final String getPlayerName() { return playerName; }
@@ -62,6 +71,6 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter {
 	}
 	
 	private static NoxPlayer getNoxPlayer(String name) {
-		return NoxCore.getInstance().getPlayerManager().getPlayer(name);
+		return PlayerManager.getInstance().getPlayer(name);
 	}
 }

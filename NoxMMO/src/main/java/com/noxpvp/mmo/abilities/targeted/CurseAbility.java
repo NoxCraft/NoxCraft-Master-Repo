@@ -67,7 +67,7 @@ public class CurseAbility extends BaseTargetedPlayerAbility{
 	
 	public CurseAbility(Player player){
 		
-		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getMMOPlayer(player).getTarget());
+		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getPlayer(player).getTarget());
 		
 		this.duration = 100;
 		this.lethality = 1;

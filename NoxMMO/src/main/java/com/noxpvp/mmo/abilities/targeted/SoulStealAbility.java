@@ -38,7 +38,7 @@ public class SoulStealAbility extends BaseTargetedPlayerAbility{
 	 * @param player The Player type user for this ability instance
 	 */
 	public SoulStealAbility(Player player){
-		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getMMOPlayer(player).getTarget());
+		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getPlayer(player).getTarget());
 	}
 	
 	/**

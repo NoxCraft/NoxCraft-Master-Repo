@@ -20,23 +20,8 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 	public static final String ABILITY_NAME = "Demoralizing Roar";
 	public static final String PERM_NODE = "demoralizing-roar";
 	
-	private int range;
 	private HashSet<Creature> creatures = null;
-	
-	/**
-	 * 
-	 * 
-	 * @return Integer Currently set range to look for targets
-	 */
-	public int getRange() {return range;}
-	
-	/**
-	 * 
-	 * 
-	 * @param range Integer range to look that this ability should look for targets
-	 * @return DemoralizingRoarAbility This instance, used for chaining
-	 */
-	public DemoralizingRoarAbility setRange(int range) {this.range = range; return this;}
+	private int range;
 	
 	/**
 	 * 
@@ -47,7 +32,7 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 		super(ABILITY_NAME, entity);
 		creatures = new HashSet<Creature>();
 	}
-
+	
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
@@ -86,5 +71,20 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 		
 		return true;
 	}
+	
+	/**
+	 * 
+	 * 
+	 * @return Integer Currently set range to look for targets
+	 */
+	public int getRange() {return range;}
+
+	/**
+	 * 
+	 * 
+	 * @param range Integer range to look that this ability should look for targets
+	 * @return DemoralizingRoarAbility This instance, used for chaining
+	 */
+	public DemoralizingRoarAbility setRange(int range) {this.range = range; return this;}
 	
 }

@@ -86,7 +86,7 @@ public class PickPocketAbility extends BaseTargetedPlayerAbility{
 	 * (The PickPocket)
 	 */
 	public PickPocketAbility(Player player){
-		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getMMOPlayer(player).getTarget());
+		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getPlayer(player).getTarget());
 	}
 	
 	public boolean execute() {

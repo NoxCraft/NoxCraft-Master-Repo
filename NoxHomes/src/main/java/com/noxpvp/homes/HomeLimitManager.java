@@ -5,13 +5,14 @@ import org.bukkit.World;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
-import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
+import com.noxpvp.core.manager.PlayerManager;
 
 public class HomeLimitManager implements Persistant {
+	private static HomeLimitManager instance;
 	
 	private NoxHomes plugin;
 	private FileConfiguration config;
@@ -31,13 +32,28 @@ public class HomeLimitManager implements Persistant {
 	public static final void setSuperPerms(boolean superPerms) {
 		HomeLimitManager.superPerms = superPerms;
 	}
-
-	public HomeLimitManager()
+	
+	public static HomeLimitManager getInstance() {
+		if (instance == null)
+			instance = new HomeLimitManager();
+		
+		return instance;
+	}
+	
+	public static HomeLimitManager getInstance(NoxHomes homes)
+	{
+		if (instance == null)
+			instance = new HomeLimitManager(homes);
+		
+		return instance;
+	}
+	
+	private HomeLimitManager()
 	{
 		this(NoxHomes.getInstance());
 	}
 	
-	public HomeLimitManager(NoxHomes plugin)
+	private HomeLimitManager(NoxHomes plugin)
 	{
 		this.plugin = plugin;
 		config = new FileConfiguration(plugin.getDataFile("limits.yml"));
@@ -126,10 +142,7 @@ public class HomeLimitManager implements Persistant {
 
 	public void load() {
 		if (!config.exists())
-		{
 			genDefault();
-		}
-		
 		
 		config.load();
 		setSuperPerms(config.get("superPerms", isSuperPerms()));
@@ -165,6 +178,6 @@ public class HomeLimitManager implements Persistant {
 	
 	private static NoxPlayer getNoxPlayer(String name)
 	{
-		return NoxCore.getInstance().getPlayerManager().getPlayer(name);
+		return PlayerManager.getInstance().getPlayer(name);
 	}
 }

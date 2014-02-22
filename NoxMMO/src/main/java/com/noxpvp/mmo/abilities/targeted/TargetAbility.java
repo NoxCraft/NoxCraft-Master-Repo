@@ -3,19 +3,18 @@ package com.noxpvp.mmo.abilities.targeted;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.data.NoxPlayer;
-import com.noxpvp.core.utils.Vector3D;
+import com.noxpvp.core.data.Vector3D;
+import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.classes.PlayerClass;
 
 public class TargetAbility extends BasePlayerAbility{
 	
@@ -82,22 +81,23 @@ public class TargetAbility extends BasePlayerAbility{
 		Vector3D maximum = targetPos.add(0.6, 1.75, 0.6); 
 
 		if (hasIntersection(observerStart, observerEnd, minimum, maximum)) {
-			NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p.getName()).setTarget(target_ref.get());
+			NoxMMO.getInstance().getPlayerManager().getPlayer(p.getName()).setTarget(target_ref.get());
 			
-			ChatColor color = ChatColor.RED;
-			PlayerManager pm = NoxCore.getInstance().getPlayerManager();
+			PlayerManager pm = PlayerManager.getInstance();
 			
 			NoxPlayer noxPlayer = pm.getPlayer(p);
-			MMOPlayer mmoPlayer = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p);
+			MMOPlayer mmoPlayer = NoxMMO.getInstance().getPlayerManager().getPlayer(p);
 			
 			if (noxPlayer == null) return false;
 			
-			String name = noxPlayer.getFullName() + color;
-			if (mmoPlayer != null && mmoPlayer.getMainPlayerClass() != null) {
-				name.concat(" - " + mmoPlayer.getMainPlayerClass().getDisplayName() + color);
+			String name = noxPlayer.getFullName();
+			
+			PlayerClass c = mmoPlayer.getPrimaryClass();
+			if (mmoPlayer != null && c != null) {
+				name = name + " - " + c.getDisplayName();
 			}
 			
-			pm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, color);
+			pm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, null);
 		}
 		
 		return true;

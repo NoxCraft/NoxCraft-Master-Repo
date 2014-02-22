@@ -11,10 +11,10 @@ import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.utils.MessageUtil;
-import com.noxpvp.core.utils.PermissionHandler;
-import com.noxpvp.homes.HomeManager;
+import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.tp.BaseHome;
 
@@ -23,7 +23,7 @@ public class HomeListCommand extends BaseCommand {
 	private final PermissionHandler permHandler;
 	private NoxHomes plugin;
 	public static final String LIST_PERM_NODE = "list";
-	private HomeManager manager;
+	private PlayerManager manager;
 	
 	public HomeListCommand()
 	{

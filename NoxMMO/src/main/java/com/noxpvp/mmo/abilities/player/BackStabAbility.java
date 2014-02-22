@@ -106,13 +106,13 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 		if (!(pYaw <= (tYaw + accuracy)) && (pYaw >= (tYaw - accuracy)))
 			return false;
 		
-		MMOPlayer player = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p);
+		MMOPlayer player = NoxMMO.getInstance().getPlayerManager().getPlayer(p);
 		if (player == null)
 			return false;
 		
-		PlayerClass clazz = player.getMainPlayerClass();
+		PlayerClass clazz = player.getPrimaryClass();
 		
-		float chance = (clazz.getLevel() + clazz.getTotalLevels()) / 10;//up to 40% at max 400 total levels
+		float chance = (clazz.getLevel() + clazz.getTotalLevel()) / 10;//up to 40% at max 400 total levels
 		if ((Math.random() * 100) > chance)
 			return false;
 					

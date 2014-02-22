@@ -4,7 +4,7 @@ import org.bukkit.command.CommandSender;
 
 import com.bergerkiller.bukkit.common.localization.LocalizationEnum;
 import com.noxpvp.core.NoxPlugin;
-import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.chat.MessageUtil;
 
 public abstract class NoxLocale extends LocalizationEnum {
 
@@ -26,6 +26,11 @@ public abstract class NoxLocale extends LocalizationEnum {
 	
 	@Override
 	public void message(CommandSender sender, String... args) {
-		MessageUtil.sendMessage(sender, getSafe(args).split("\n"));
+		MessageUtil.sendMessage(sender, getSafe(args).split("\n")); //TODO: Discuss if we should ignore messages if Blank
+	}
+	
+	public boolean isEmpty(String... args) {
+		String m = get(args);
+		return (m.isEmpty() || m.length()==0);
 	}
 }

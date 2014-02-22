@@ -33,9 +33,9 @@ public class SuperBreakerAbility extends BasePlayerAbility {
 			return false;
 		
 		Player p = getPlayer();
-		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p).getMainPlayerClass();
+		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getPlayer(p).getPrimaryClass();
 		
-		int length = (20 * pClass.getTotalLevels()) / 16;
+		int length = (20 * pClass.getTotalLevel()) / 16;
 		return p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, length, 50));
 	}
 

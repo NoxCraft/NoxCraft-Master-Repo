@@ -38,7 +38,7 @@ public class SootheAbility extends BaseTargetedPlayerAbility{
 	 * @param player The ability's user
 	 */
 	public SootheAbility(Player player) {
-		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getMMOPlayer(player).getTarget());
+		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getPlayer(player).getTarget());
 		
 		this.healAmount = 8;
 	}

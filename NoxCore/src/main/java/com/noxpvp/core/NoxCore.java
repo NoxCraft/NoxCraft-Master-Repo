@@ -15,6 +15,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
 import com.bergerkiller.bukkit.common.Common;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
@@ -28,9 +29,11 @@ import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.Command;
 import com.noxpvp.core.commands.ReloadCommand;
-import com.noxpvp.core.data.CoolDown;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
+import com.noxpvp.core.internal.CooldownHandler;
+import com.noxpvp.core.internal.PermissionHandler;
+import com.noxpvp.core.gui.CoolDown;
 import com.noxpvp.core.listeners.ChatPingListener;
 import com.noxpvp.core.listeners.ChestBlockListener;
 import com.noxpvp.core.listeners.DataListener;
@@ -40,10 +43,13 @@ import com.noxpvp.core.listeners.OnLogoutSaveListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.locales.CoreLocale;
 import com.noxpvp.core.locales.GlobalLocale;
+import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
 import com.noxpvp.core.reloader.Reloader;
-import com.noxpvp.core.utils.PermissionHandler;
+import com.noxpvp.core.utils.StaticCleaner;
+import com.palmergames.bukkit.towny.Towny;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 public class NoxCore extends NoxPlugin {
 	private ChatPingListener chatPingListener;
@@ -55,17 +61,36 @@ public class NoxCore extends NoxPlugin {
 	private LoginListener loginListener;
 	private DataListener dataListener;
 	
-	private MasterReloader masterReloader = null;
-	
 	private PermissionHandler permHandler;
 	private transient WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>> permission_cache = new WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>>();
 	
 	private List<NoxPermission> permissions = new ArrayList<NoxPermission>();
 	
-	private PlayerManager playerManager = null;
 	private OnLogoutSaveListener saveListener;
 
 	private VoteListener voteListener = null;
+	
+	private Towny towny = null;
+	private WorldGuardPlugin worldGuard = null;
+	
+	private CooldownHandler cds;
+	
+	public final Towny getTowny() {
+		return towny;
+	}
+	
+	public final WorldGuardPlugin getWorldGuard() {
+		return worldGuard;
+	}
+	
+	public final boolean isWorldGuardActive() {
+		return worldGuard != null && Bukkit.getPluginManager().isPluginEnabled(worldGuard);
+	}
+	
+	public final boolean isTownyActive() {
+		return towny != null && Bukkit.getPluginManager().isPluginEnabled(towny);
+	}
+		
 	
 	@Override
 	public void addPermission(NoxPermission permission)
@@ -114,22 +139,43 @@ public class NoxCore extends NoxPlugin {
 			addPermission(perm);
 	}
 	
+	/**
+	 * @deprecated Use {@link MasterReloader#getInstance()} instead.
+	 * @param r reloader to add.
+	 * @return true if successful and false otherwise.
+	 */
 	public boolean addReloader(Reloader r)
 	{
-		return masterReloader.addModule(r);
+		return getMasterReloader().addModule(r);
 	}
+	
 	@Override
 	public void disable() {
-		if (voteListener != null)
-			voteListener.destroy();
-		
-		playerManager.save();
+		cds.stop();
+		cleanup();
+	}
+	
+	private void cleanup() {
 		
 		HandlerList.unregisterAll(this);
 		setInstance(null);
-		VaultAdapter.unload();
+		
+		if (voteListener != null)
+			voteListener.destroy();
+		
+		Class<?>[] classes = {
+				VaultAdapter.class,
+				VaultAdapter.GroupUtils.class,
+				CoreLocale.class, GlobalLocale.class,
+				PlayerManager.class, MasterReloader.class
+		};
+		
+		String[] internalClasses = { };
+		
+		new StaticCleaner(this, getClassLoader(), internalClasses, classes).resetAll();;
+		
+		
 	}
-	
 	@Override
 	public void enable() {
 		if (instance != null)
@@ -145,11 +191,11 @@ public class NoxCore extends NoxPlugin {
 			if (p instanceof NoxPlugin && CommonUtil.isDepending(p, this))
 				registerSerials((NoxPlugin)p);
 		
-		playerManager = new PlayerManager();
+		getPlayerManager(); //Self loads
 		
 		permHandler = new PermissionHandler(this);
 		
-		masterReloader = new MasterReloader();
+		getMasterReloader();
 		
 		
 		Conversion.register(new BasicConverter<NoxPlayer>(NoxPlayer.class) {
@@ -182,7 +228,18 @@ public class NoxCore extends NoxPlugin {
 		CommonUtil.queueListenerLast(loginListener, PlayerLoginEvent.class);
 		VaultAdapter.load();
 		
-		Reloader r = new BaseReloader(masterReloader, "NoxCore") {
+		PluginManager pm = Bukkit.getPluginManager();
+		Plugin plugin = pm.getPlugin("Towny");
+		
+		if (plugin != null && plugin instanceof Towny)
+			towny = (Towny) plugin;
+		
+		plugin = null;
+		plugin = pm.getPlugin("WorldGuard");
+		if (plugin != null && plugin instanceof WorldGuardPlugin)
+			worldGuard = (WorldGuardPlugin) plugin;
+		
+		Reloader r = new BaseReloader(getMasterReloader(), "NoxCore") {
 			public boolean reload() {
 				return false;
 			}
@@ -226,6 +283,10 @@ public class NoxCore extends NoxPlugin {
         if (!this.globalLocales.isEmpty()) {
                 this.saveGlobalLocalization();
         }
+        
+        cds = new CooldownHandler();
+        
+        cds.start();
         
         reloadConfig();
 	}
@@ -304,12 +365,6 @@ public class NoxCore extends NoxPlugin {
 	}
 
 	@Override
-	public MasterReloader getMasterReloader()
-	{
-		return masterReloader;
-	}
-	
-	@Override
 	public int getMinimumLibVersion() {
 		return Common.VERSION;
 	}
@@ -318,13 +373,19 @@ public class NoxCore extends NoxPlugin {
 		return permHandler;
 	}
 
+	/**
+	 * @deprecated Use {@link PlayerManager#getInstance()} instead.
+	 */
 	public PlayerManager getPlayerManager() {
-		return playerManager;
+		return PlayerManager.getInstance();
 	}
 	
+	/**
+	 * @deprecated Use {@link MasterReloader#getInstance()} instead.
+	 */
 	public Reloader getReloader(String path)
 	{
-		return masterReloader.getModule(path);
+		return getMasterReloader().getModule(path);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -333,14 +394,20 @@ public class NoxCore extends NoxPlugin {
 		return new Class[]{SafeLocation.class, CoolDown.class};
 	}
 
+	/**
+	 * @deprecated Use {@link MasterReloader#getInstance()} instead.
+	 */
 	public boolean hasReloader(String path)
 	{
-		return masterReloader.hasModule(path);
+		return getMasterReloader().hasModule(path);
 	}
 	
+	/**
+	 * @deprecated Use {@link MasterReloader#getInstance()} instead.
+	 */
 	public boolean hasReloaders()
 	{
-		return masterReloader.hasModules();
+		return getMasterReloader().hasModules();
 	}
 	
 	public void loadGlobalLocale(ILocalizationDefault localizationDefault)
@@ -420,6 +487,7 @@ public class NoxCore extends NoxPlugin {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void reloadConfig() {
 		if (!getCoreConfig().exists())

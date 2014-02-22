@@ -1,27 +1,21 @@
 package com.noxpvp.mmo;
 
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.LivingEntity;
 
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
-import com.noxpvp.mmo.abilities.Ability;
+import com.noxpvp.core.events.PlayerDataSaveEvent;
 import com.noxpvp.mmo.abilities.PassiveAbility;
+import com.noxpvp.mmo.abilities.PlayerAbility;
+import com.noxpvp.mmo.classes.ExperienceType;
 import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
-
-	private PlayerClass curMainClass, curSubClass;
-	private Reference<LivingEntity> target_ref;
-	private Map<String, Ability> abilities = new HashMap<String, Ability>();
 	
 	public MMOPlayer(OfflinePlayer player)
 	{
@@ -38,81 +32,81 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		super(player);
 	}
 	
-	public Ability[] getAbilities()
-	{
-		return abilities.values().toArray(new Ability[abilities.size()]);
+	public PlayerClass getPrimaryClass() {
+		throw new NotImplementedException("PlayerClasses not completed.");
 	}
 	
-	public PassiveAbility[] getPassiveAbilities()
-	{
-		List<PassiveAbility> passive = new ArrayList<PassiveAbility>();
-		for (Ability a : getAbilities())
-			if (a instanceof PassiveAbility)
-				passive.add((PassiveAbility)a);
+	public PlayerClass getSecondaryClass() {
+		throw new NotImplementedException("PlayerClasses not completed.");
+	}
+	
+	public void setClass(String c) {
+		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
+			c = PlayerClassUtil.getIdByClassName(c);
 		
-		return passive.toArray(new PassiveAbility[passive.size()]);
+		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));
+	}
+	
+	public void setClass(PlayerClass c) {
+		throw new NotImplementedException("PlayerClasses not completed.");
+	}
+	
+	public void setPrimaryClass(String c) {
+		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
+			c = PlayerClassUtil.getIdByClassName(c);
+		
+		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));
+	}
+	
+	public void setPrimaryClass(PlayerClass c) {
+		throw new NotImplementedException("PlayerClasses not completed.");
+	}
+	
+	public void setSecondaryClass(String c) {
+		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
+			c = PlayerClassUtil.getIdByClassName(c);
+		
+		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));
+	}
+	
+	public void setSecondaryClass(PlayerClass c) {
+		throw new NotImplementedException("PlayerClasses not completed.");
+	}
+	
+	public LivingEntity getTarget() {
+		throw new NotImplementedException("Targets need reimplementation");
+	}
+	
+	public void setTarget(LivingEntity entity) {
+		throw new NotImplementedException("Targets need reimplementation");
+	}
+	
+	public PlayerAbility[] getPlayerAbilities() {
+		throw new NotImplementedException();
+	}
+	
+	public PassiveAbility<?>[] getPassiveAbilities() {
+		throw new NotImplementedException();
+	}
+	
+	public void addExp(ExperienceType type, int amount) {
+		throw new NotImplementedException();
+		
+		/*
+		 * If successful, do this
+		 */
+//		Player p = getPlayer();
+//		p.playSound(p.getLocation(), Sound.ORB_PICKUP, 10, 0);
+	}
+	
+	public void load() {
+		// TODO Implement loading below this line.
+		
 	}
 	
 	public void save() {
-		if (getNoxPlayer() == null)
-			return;
 		
-		//TODO: Implement Saving
+		// TODO Implement saving above this line.
+		CommonUtil.callEvent(new PlayerDataSaveEvent(this, true));
 	}
-
-	public void load() {
-		if (getNoxPlayer() == null)
-			return;
-		
-		//TODO: Implement Loading.
-	}
-	
-	public PlayerClass getSubPlayerClass() {
-		return this.curSubClass;
-	}
-	
-	public PlayerClass getMainPlayerClass() {
-		return this.curMainClass;
-	}
-
-	public Ability getAbility(String abilityName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	/**
-	 * 
-	 * @param target - The LivingEntity to set as the current target
-	 * @return MMOPlayer - This instance
-	 * 
-	 * @throws IllegalStateException - If the target is dead
-	 */
-	public MMOPlayer setTarget(LivingEntity target){
-		if (target != null && target.isDead())
-		{
-			throw new IllegalStateException("Target cannot be dead");
-		}
-		
-		this.target_ref = new SoftReference<LivingEntity>(target);
-		
-		return this;
-	}
-	
-	/**
-	 * 
-	 * @return LivingEntity - This players currently set target
-	 */
-	public LivingEntity getTarget(){return this.target_ref.get();}
-	
-	/**
-	 * 
-	 * @return boolean - If this player has a target set
-	 */
-	public boolean hasTarget(){
-		if ( target_ref.get() == null || target_ref.get().isDead())
-			return false;
-		
-		return true;
-	}
-
 }

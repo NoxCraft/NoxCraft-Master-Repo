@@ -40,7 +40,7 @@ public class ShadowStepAbility extends BaseTargetedPlayerAbility{
 	 * @param player the Player type user for this ability instance
 	 */
 	public ShadowStepAbility(Player player){
-		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getMMOPlayer(player).getTarget());
+		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getPlayer(player).getTarget());
 		
 		this.range = 10;
 	}

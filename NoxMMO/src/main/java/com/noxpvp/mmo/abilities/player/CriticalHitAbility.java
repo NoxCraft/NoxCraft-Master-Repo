@@ -34,14 +34,14 @@ public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbil
 		if (playerAttacker == null || !playerAttacker.equals(getPlayer()))
 			return false;
 		
-		MMOPlayer player = pm.getMMOPlayer(getPlayer());
+		MMOPlayer player = pm.getPlayer(getPlayer());
 		
 		if (player == null)
 			return false;
 		
-		PlayerClass clazz = player.getMainPlayerClass();
+		PlayerClass clazz = player.getPrimaryClass();
 		
-		double damage = (clazz.getLevel() + clazz.getTotalLevels()) / 75;
+		double damage = (clazz.getLevel() + clazz.getTotalLevel()) / 75;
 		if ((Math.random() * 100) > (damage * 45)) return false;
 		
 		event.setDamage(damage);

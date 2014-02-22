@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.SafeLocation;
+import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.tp.WarpPoint;
-import com.noxpvp.core.utils.PermissionHandler;
 import com.noxpvp.homes.NoxHomes;
 
 public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {

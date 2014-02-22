@@ -29,7 +29,7 @@ public class PlayerTargetListener extends GenericNoxListener<PlayerInteractEvent
 	public void onInteract(PlayerInteractEvent e) {
 		
 		Player p;
-		MMOPlayer player = pm.getMMOPlayer(p = e.getPlayer());
+		MMOPlayer player = pm.getPlayer(p = e.getPlayer());
 		
 		if (player == null) return;
 		

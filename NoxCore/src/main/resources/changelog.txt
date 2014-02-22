@@ -19,4 +19,8 @@
 	Fixed double save on kick resulting in
 		DELETION OF ALL PLAYER DATA HAHA... 
 			not really funny. 
+0.2.0
+	Implemented remote data save event execution.
+	Made save and load functions on NoxPlayer synchronized
+	Added reloader for players data.
 			but hell that explains why i could not figure out how that broke...

@@ -18,13 +18,13 @@ public class DataListener extends NoxListener<NoxHomes> {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDataLoadEvent(PlayerDataLoadEvent event)
 	{
-		getPlugin().getHomeManager().loadHomes(event.getPlayer().getNoxPlayer().getName());
+		getPlugin().getHomeManager().loadPlayer(event.getPlayer().getNoxPlayer().getName());
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDataUnloadEvent(PlayerDataUnloadEvent event) 
 	{
-		getPlugin().getHomeManager().unload(event.getBukkitPlayer());
+		getPlugin().getHomeManager().unloadPlayer(event.getBukkitPlayer());
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)

@@ -48,9 +48,7 @@ public class PacketListeners {
 				/*
 				 * silent walking ability
 				 */
-				if (VaultAdapter.permission.has(p, NoxMMO.PERM_NODE + ".ability." + SilentWalkingAbility.PERM_NODE)) {
-					arg0.setCancelled(new SilentWalkingAbility(p, packet).execute());
-				}
+				arg0.setCancelled(new SilentWalkingAbility(p, packet).execute());
 				
 			}
 		}

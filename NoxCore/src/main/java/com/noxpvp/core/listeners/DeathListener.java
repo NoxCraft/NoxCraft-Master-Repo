@@ -10,8 +10,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.manager.PlayerManager;
 
 public class DeathListener extends NoxListener<NoxCore> {
 	private PlayerManager pm;

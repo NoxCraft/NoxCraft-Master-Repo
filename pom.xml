@@ -8,7 +8,8 @@
 		<module>NoxCore</module>
 		<module>NoxHomes</module>
 		<module>NoxMMO</module>
-		
+
+		<module>NoxChat</module>
 	</modules>
 	<repositories>
 		<repository>
@@ -45,6 +46,10 @@
 				<enabled>true</enabled>
 			</releases>
 		</repository>
+		 <repository>
+            <id>sk89q</id>
+            <url>http://maven.sk89q.com/repo/</url>
+        </repository>
 	</repositories>
 	<dependencyManagement>
 		<dependencies>
@@ -89,6 +94,18 @@
 				<version>2.7.1</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.palmergames.towny</groupId>
+				<artifactId>Towny</artifactId>
+				<version>0.84.0.9</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.sk89q</groupId>
+				<artifactId>worldguard</artifactId>
+				<version>5.8.1-SNAPSHOT</version>
+				<scope>provided</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -113,6 +130,15 @@
 		<dependency>
 			<groupId>me.confuser.barapi</groupId>
 			<artifactId>BarAPI</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sk89q</groupId>
+			<artifactId>worldguard</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.palmergames.towny</groupId>
+			<artifactId>Towny</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -142,5 +168,6 @@ We add all sorts of features. Specifically coded for our server in mind.
 		<MasterVersion>0.1.11 - Beta</MasterVersion>
 		<NoxCoreVersion>${MasterVersion}</NoxCoreVersion>
 		<NoxMMOVersion>0.1 - SNAPSHOT</NoxMMOVersion>
+		<NoxChatVersion>${MasterVersion}</NoxChatVersion>
 	</properties>
 </project>

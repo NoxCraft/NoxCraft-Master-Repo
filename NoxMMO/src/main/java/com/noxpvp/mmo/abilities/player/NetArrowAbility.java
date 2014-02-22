@@ -16,7 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 
-import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.chat.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;

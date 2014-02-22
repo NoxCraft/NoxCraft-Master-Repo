@@ -9,9 +9,8 @@ import com.bergerkiller.bukkit.common.utils.PlayerUtil;
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.PassiveAbility;
 
-public class SilentWalkingAbility extends BasePlayerAbility implements PassiveAbility{
+public class SilentWalkingAbility extends BasePlayerAbility{
 
 	public final static String ABILITY_NAME = "Silent Walking";
 	public final static String PERM_NODE = "silent-walk";
@@ -45,7 +44,7 @@ public class SilentWalkingAbility extends BasePlayerAbility implements PassiveAb
 		
 		if (closest == null || lowestDistance > 5) return false;
 		
-		if (VaultAdapter.permission.has(closest, NoxMMO.PERM_NODE + ".ability." + this.PERM_NODE)){
+		if (VaultAdapter.permission.has(closest, NoxMMO.PERM_NODE + ".ability." + SilentWalkingAbility.PERM_NODE)){
 			return true;
 		}
 		

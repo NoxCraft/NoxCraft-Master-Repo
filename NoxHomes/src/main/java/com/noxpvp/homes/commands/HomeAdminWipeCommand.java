@@ -9,15 +9,15 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.utils.MessageUtil;
-import com.noxpvp.homes.HomeManager;
+import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
 
 public class HomeAdminWipeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "wipehomes";
 	public static final String PERM_NODE = "wipe.homes";
 	private static final Random r = new Random();
-	private HomeManager manager;
+	private PlayerManager manager;
 	private NoxHomes plugin;
 	
 	private String key;

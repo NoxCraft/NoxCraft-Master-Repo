@@ -10,8 +10,8 @@ import org.bukkit.event.HandlerList;
 import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.manager.PlayerManager;
 import com.vexsoftware.votifier.model.Vote;
 import com.vexsoftware.votifier.model.VotifierEvent;
 
@@ -20,7 +20,7 @@ public class VoteListener extends NoxListener<NoxCore> {
 	public VoteListener()
 	{
 		super(NoxCore.getInstance());
-		manager = NoxCore.getInstance().getPlayerManager();
+		manager = PlayerManager.getInstance();
 		destroy();
 		init();
 	}

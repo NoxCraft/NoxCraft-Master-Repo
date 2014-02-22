@@ -52,7 +52,7 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 	/**
 	 * gets the currently set range for this ability
 	 * 
-	 * @return double The Range
+	 * @return double The Ranged
 	 */
 	public double getRange() {return range;}
 
@@ -103,9 +103,9 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 		final String name = getPlayer().getName();
 		
 		SkullSmasherAbility.smashers.put(name, this);
-		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(getPlayer()).getMainPlayerClass();
+		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getPlayer(getPlayer()).getPrimaryClass();
 		
-		int length = (20 * (pClass.getTotalLevels())) / 16;
+		int length = (20 * (pClass.getTotalLevel())) / 16;
 		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
 			
 			public void run() {

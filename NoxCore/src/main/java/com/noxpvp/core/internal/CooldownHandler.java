@@ -1,7 +1,5 @@
 package com.noxpvp.core.internal;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,11 +10,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
+import com.google.common.collect.MapMaker;
 import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.data.CoolDown;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.events.CooldownExpireEvent;
+import com.noxpvp.core.gui.CoolDown;
+import com.noxpvp.core.manager.PlayerManager;
 
 public class CooldownHandler extends BukkitRunnable {
 	private Map<String, List<CoolDown>> cds;
@@ -24,7 +24,7 @@ public class CooldownHandler extends BukkitRunnable {
 	
 	public CooldownHandler()
 	{
-		cds = Collections.synchronizedMap(new HashMap<String, List<CoolDown>>());
+		cds = new MapMaker().concurrencyLevel(2).makeMap();
 		core = NoxCore.getInstance();
 	}
 	
@@ -37,12 +37,12 @@ public class CooldownHandler extends BukkitRunnable {
 
 	public void loadPlayer(OfflinePlayer player)
 	{
-		loadPlayer(core.getPlayerManager().getPlayer(player));
+		loadPlayer(PlayerManager.getInstance().getPlayer(player));
 	}
 	
 	public void loadPlayer(String name)
 	{
-		loadPlayer(core.getPlayerManager().getPlayer(name));
+		loadPlayer(PlayerManager.getInstance().getPlayer(name));
 	}
 	
 	public void run() {

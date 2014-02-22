@@ -9,7 +9,7 @@ import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.collections.StringMap;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.chat.MessageUtil;
 
 public abstract class BaseCommand implements Command {
 	private final boolean isPlayerOnly;
@@ -73,8 +73,13 @@ public abstract class BaseCommand implements Command {
 		CommandContext newContext = new CommandContext(context.getSender(), context.getFlags(), Arrays.copyOfRange(args, 1, args.length-1));
 		
 		BaseCommand subCMD = getSubCommand(nextArg);
-		if (subCMD != null)
+		if (subCMD != null) {
+			if (subCMD.isPlayerOnly() && !context.isPlayer()) {
+				GlobalLocale.CONSOLE_ONLYPLAYER.message(context.getSender());
+				return true;
+			}
 			return subCMD.executeCommand(newContext);
+		}
 		return execute(context);
 	}
 	

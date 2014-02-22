@@ -43,6 +43,33 @@ public class VaultAdapter {
 			reloadAllGroupTags();
 		}
 		
+		public static String getPlayerGroup(Player p) {
+			String[] groups = VaultAdapter.permission.getPlayerGroups(p);
+			
+			if (groups.length < 0) return null;
+			
+			int ind = 100;
+			String finalGroup = null;
+			
+			for (String group : groups) {
+				if (groupList.indexOf(group) >= 0 && groupList.indexOf(group) < ind) {
+					ind = groupList.indexOf(group);
+					finalGroup = group;
+					
+				}
+			}
+			return finalGroup;
+		}
+		
+		public static String getFormatedPlayerName(Player p) {
+			String group = getPlayerGroup(p);
+			
+			if (group != null)
+				return CoreLocale.GROUP_TAG_PREFIX.get(group) + p.getName() + CoreLocale.GROUP_TAG_SUFFIX.get(group);
+			
+			return p.getName();
+		}		
+		
 		private static void setupTeams() {
 			for (String name : teamNames) {
 				if (CommonScoreboard.getTeam(name) == null) {
@@ -78,20 +105,10 @@ public class VaultAdapter {
 		}
 		
 		private static void loadGroupTag(Player p) {
-			String[] groups = VaultAdapter.permission.getPlayerGroups(p);
+			String finalGroup;
 			
-			if (groups.length < 0) return;
+			if ((finalGroup = getPlayerGroup(p)) == null) return;
 			
-			int ind = 100;
-			String finalGroup = null;
-			
-			for (String group : groups) {
-				if (groupList.indexOf(group) >= 0 && groupList.indexOf(group) < ind) {
-					ind = groupList.indexOf(group);
-					finalGroup = group;
-					
-				}
-			}
 			CommonScoreboard pBoard = CommonScoreboard.get(p);
 			CommonTeam team = CommonScoreboard.getTeam(finalGroup + "Team");
 			
@@ -108,7 +125,7 @@ public class VaultAdapter {
 			
 			pBoard.setTeam(team);
 			team.addPlayer(p);
-		}		
+		}
 		
 	}
 	
@@ -152,12 +169,5 @@ public class VaultAdapter {
 		if (service != null)
 			permission = service.getProvider();
 		return (permission != null);
-	}
-	
-	public static void unload()
-	{
-		economy = null;
-		permission = null;
-		chat = null;
 	}
 }

@@ -3,11 +3,12 @@ package com.noxpvp.core.listeners;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.VaultAdapter;
+import com.noxpvp.core.manager.PlayerManager;
 
 public class LoginListener extends NoxListener<NoxCore> {
 		public LoginListener()
@@ -21,18 +22,18 @@ public class LoginListener extends NoxListener<NoxCore> {
 		}
 		
 		@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
-		public void onLogin(PlayerLoginEvent e)
+		public void onLogin(PlayerJoinEvent e)
 		{
 			Player p = e.getPlayer();
 			
 			VaultAdapter.GroupUtils.reloadGroupTag(p);
 			
-			getPlugin().getPlayerManager().loadPlayer(e.getPlayer().getName());
+			PlayerManager.getInstance().loadPlayer(e.getPlayer().getName());
 		}
 		
 		@Override
 		public void register() {
 			super.register();
-			CommonUtil.queueListenerLast(this, PlayerLoginEvent.class);
+			CommonUtil.queueListenerLast(this, PlayerJoinEvent.class);
 		}
 }

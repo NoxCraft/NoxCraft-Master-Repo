@@ -19,12 +19,12 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.Command;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.CommandUtil;
-import com.noxpvp.core.utils.MessageUtil;
-import com.noxpvp.core.utils.PermissionHandler;
+import com.noxpvp.core.utils.chat.MessageUtil;
 
 public abstract class NoxPlugin extends PluginBase {
 
@@ -133,14 +133,13 @@ public abstract class NoxPlugin extends PluginBase {
 	}
 	
 	public final void register(Reloader reloader) {
-		NoxCore.getInstance().addReloader(reloader);
+		getMasterReloader().addModule(reloader);
 	}
 
 	/**
-	 * <b>DO NOT OVERRIDE ONLY CORE PLUGIN MUST OVERRIDE</b>
 	 * @return Core Master Reloader
 	 */
-	public MasterReloader getMasterReloader() {
-		return NoxCore.getInstance().getMasterReloader();
+	public final MasterReloader getMasterReloader() {
+		return MasterReloader.getInstance();
 	}
 }

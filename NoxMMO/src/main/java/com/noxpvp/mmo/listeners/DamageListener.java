@@ -14,12 +14,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.VaultAdapter;
-import com.noxpvp.core.data.CoreBar;
 import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.core.listeners.NoxListener;
+import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoArmor;
 import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoSword;
@@ -37,7 +36,7 @@ public class DamageListener extends NoxListener<NoxMMO>{
 	{
 		super(mmo);
 		
-		this.pm = NoxCore.getInstance().getPlayerManager();
+		this.pm = PlayerManager.getInstance();
 	}
 	
 	public DamageListener() {
@@ -69,7 +68,7 @@ public class DamageListener extends NoxListener<NoxMMO>{
 			 */
 			if (playerAttacker.getItemInHand().getType() == Material.GOLD_SWORD && 
 					VaultAdapter.permission.has(playerAttacker, NoxMMO.PERM_NODE + ".ability." + AutoSword.PERM_NODE)) {
-				new AutoSword(playerAttacker, e).execute();
+				new AutoSword(playerAttacker).execute();
 				
 			}
 			
@@ -80,7 +79,7 @@ public class DamageListener extends NoxListener<NoxMMO>{
 				String itemName = playerAttacker.getItemInHand().getType().name();
 				
 				if (itemName.contains("SWORD") || itemName.contains("AXE"))
-					new BackStabAbility(playerAttacker, pe);
+					new BackStabAbility(playerAttacker);
 			}
 			
 			/*
@@ -90,7 +89,7 @@ public class DamageListener extends NoxListener<NoxMMO>{
 				String itemName = playerAttacker.getItemInHand().getType().name();
 				
 				if (itemName.contains("SWORD") || itemName.contains("AXE"))
-					new CriticalHitAbility(playerAttacker, pe);
+					new CriticalHitAbility(playerAttacker);
 			}
 			
 			/*

@@ -36,9 +36,9 @@ public class MaliciousBiteAbility extends BaseEntityAbility implements PassiveAb
 		
 		Player o = (Player) a;
 		
-		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(o).getMainPlayerClass();
+		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getPlayer(o).getPrimaryClass();
 		
-		return RandomUtils.nextFloat() < (pClass.getTierLevel() * pClass.getLevel()) / 1000;
+		return RandomUtils.nextFloat() < (pClass.getCurrentTierLevel() * pClass.getLevel()) / 1000;
 	}
 	
 	public boolean execute() {

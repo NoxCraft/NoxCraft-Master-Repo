@@ -20,7 +20,7 @@ public class BandageAbility extends BaseEntityAbility{
 	public BandageAbility(Entity entity) {
 		super(ABILITY_NAME, entity);
 	}
-
+	
 	public boolean execute() {
 		if (!mayExecute())
 			return false;		

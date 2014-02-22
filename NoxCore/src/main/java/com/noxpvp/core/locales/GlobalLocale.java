@@ -2,7 +2,7 @@ package com.noxpvp.core.locales;
 
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
-import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.chat.MessageUtil;
 
 public class GlobalLocale extends NoxLocale {
 	public GlobalLocale(String name, String def) {
@@ -14,17 +14,24 @@ public class GlobalLocale extends NoxLocale {
 		return MessageUtil.parseColor(NoxCore.getInstance().getGlobalLocale(getName(), args));
 	}
 	
-	public static GlobalLocale COMMAND_FAILED;
-	public static GlobalLocale COMMAND_SUCCESS;
-	public static GlobalLocale CONSOLE_NEEDPLAYER;
-	public static GlobalLocale CONSOLE_ONLYPLAYER;
-	public static GlobalLocale ERROR_NULL;
+	/**
+	 * Argument 1: Plugin Name<br>
+	 * Argument 2: Command Name (Context label preferred)
+	 */
+	public static GlobalLocale HELP_HEADER;
 	
 	public static GlobalLocale FAILED_PERMISSION;
-	
 	public static GlobalLocale FAILED_PERMISSION_VERBOSE;
 	
-	public static GlobalLocale HELP_HEADER;
+	public static GlobalLocale COMMAND_SUCCESS;
+	public static GlobalLocale COMMAND_FAILED;
+	
+	public static GlobalLocale ERROR_NULL;
+	
+	public static GlobalLocale CONSOLE_NEEDPLAYER;
+	public static GlobalLocale CONSOLE_ONLYPLAYER;
+	
+	public static GlobalLocale CHAT_COLOR_GLOBAL;
 	
 	static {
 		//Help Dialogs
@@ -46,6 +53,10 @@ public class GlobalLocale extends NoxLocale {
 		//CONSOLE
 		CONSOLE_NEEDPLAYER = new GlobalLocale("console.needplayer", "This command requires a player: %0%");
 		CONSOLE_ONLYPLAYER = new GlobalLocale("console.onlyplayer", "This command can only be run by a player.");
+		
+		//CHAT
+		CHAT_COLOR_GLOBAL = new GlobalLocale("chat.color.global", "&b");
+		
 	}
 
 	@Override

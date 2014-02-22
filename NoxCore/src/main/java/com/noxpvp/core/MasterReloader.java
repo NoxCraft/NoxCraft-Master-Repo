@@ -4,7 +4,9 @@ import com.noxpvp.core.reloader.BaseReloader;
 
 
 public final class MasterReloader extends BaseReloader {
-	public MasterReloader() {
+	private static MasterReloader instance;
+	
+	private MasterReloader() {
 		super(null, root);
 	}
 	
@@ -23,4 +25,11 @@ public final class MasterReloader extends BaseReloader {
 	
 	private static final String root = "Master";
 
+	public static MasterReloader getInstance() {
+		if (instance == null)
+			instance = new MasterReloader();
+		
+		return instance;
+	}
+	
 }

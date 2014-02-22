@@ -7,9 +7,9 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.MasterReloader;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.reloader.Reloader;
-import com.noxpvp.core.utils.PermissionHandler;
 
 public class ReloadCommand extends BaseCommand {
 	private NoxCore core;

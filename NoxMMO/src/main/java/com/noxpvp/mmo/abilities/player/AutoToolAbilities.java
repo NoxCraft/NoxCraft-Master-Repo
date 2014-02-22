@@ -33,13 +33,13 @@ public class AutoToolAbilities {
 			Player p = getPlayer();
 			Entity e = event.getEntity();
 			
-			MMOPlayer mmoPlayer = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p);
+			MMOPlayer mmoPlayer = NoxMMO.getInstance().getPlayerManager().getPlayer(p);
 			
 			int fireTicks = 50;
 			
-			PlayerClass clazz = mmoPlayer.getMainPlayerClass();
+			PlayerClass clazz = mmoPlayer.getPrimaryClass();
 			
-			fireTicks = (int) (((mmoPlayer != null) && clazz != null)? clazz.getTotalLevels() / 2.5 : fireTicks);
+			fireTicks = (int) (((mmoPlayer != null) && clazz != null)? clazz.getTotalLevel() / 2.5 : fireTicks);
 			
 			e.setFireTicks(fireTicks);
 			
