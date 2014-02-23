@@ -41,17 +41,17 @@ public class SetHomeCommand extends BaseCommand {
 		return mb.lines();
 	}
 	
-	public boolean execute(CommandContext context) {
+	public CommandResult execute(CommandContext context) {
 		if (!context.isPlayer())
 		{
 			MessageUtil.sendLocale(context.getSender(), GlobalLocale.CONSOLE_ONLYPLAYER);
-			return true;
+			return new CommandResult(this, true);
 		}
 		
 		Player sender = context.getPlayer();
 		
 		if (context.hasFlag("h") || context.hasFlag("help"))
-			return false;
+			return new CommandResult(this, false);
 		
 		String player = null;
 		
@@ -94,7 +94,7 @@ public class SetHomeCommand extends BaseCommand {
 					manager.removeHome(plugin.getHomeManager().getHome(player, homeName));
 				} else {
 					MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "You already " + plugin.getHomeManager().getHomes(player).size() + "/"+ plugin.getLimitsManager().getLimit(player) + " of the maximum amount of homes allowed.");
-					return true;
+					return new CommandResult(this, true);
 				}
 			}
 		}
@@ -115,7 +115,7 @@ public class SetHomeCommand extends BaseCommand {
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Home never stored in memory...");
 		}
 		
-		return true;
+		return new CommandResult(this, true);
 	}
 
 	public String[] getFlags() {

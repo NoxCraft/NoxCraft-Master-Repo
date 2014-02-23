@@ -12,14 +12,14 @@ public class CoreCommand extends BaseCommand {
 		super(COMMAND_NAME, false);
 	}
 	
-	public boolean execute(CommandContext context) {
+	public CommandResult execute(CommandContext context) {
 		CommandSender sender = context.getSender();
 		String m = new StringBuilder().append(ChatColor.RED).append("Command is not implemented yet..").toString();
 		if (!(sender instanceof Player))
 			sender.sendMessage(ChatColor.stripColor(m));
 		else
 			sender.sendMessage(m);
-		return true;
+		return new CommandResult(this, true);
 	}
 	
 	public String[] getFlags() {

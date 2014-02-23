@@ -32,13 +32,14 @@ public class DeleteHomeCommand extends BaseCommand {
 	}
 	
 	
-	public boolean execute(CommandContext context) {
+	public CommandResult execute(CommandContext context) {
 		if (context.hasFlag("h") || context.hasFlag("help"))
 		{
 			displayHelp(context.getSender());
 			if (!context.isPlayer())
-				MessageUtil.sendMessage(context.getSender(), "Use (-p | --player) to specify a player to use this on.");
-			return true;
+				return new CommandResult(this, false, "Use (-p | --player) to specify a player to use this on.");
+			else
+				return new CommandResult(this, false);
 		}
 		
 		Player player;
@@ -53,7 +54,7 @@ public class DeleteHomeCommand extends BaseCommand {
 		if (player == null)
 		{
 			MessageUtil.sendLocale(context.getSender(), GlobalLocale.CONSOLE_NEEDPLAYER, "To delete a home.");
-			return true;
+			return new CommandResult(this, true);
 		}
 		
 		boolean own = player.equals(context.getSender());
@@ -73,7 +74,7 @@ public class DeleteHomeCommand extends BaseCommand {
 			manager.removeHome(home);
 		
 		MessageUtil.sendLocale(plugin, context.getSender(), "homes.delhome"+((own)?".own":""), player.getName(), (homeName == null? "default": homeName));
-		return true;
+		return new CommandResult(this, true);
 	}
 	
 	public String[] getHelp()

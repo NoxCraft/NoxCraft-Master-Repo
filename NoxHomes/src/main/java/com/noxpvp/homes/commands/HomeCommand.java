@@ -32,17 +32,17 @@ public class HomeCommand extends BaseCommand {
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
-	public boolean execute(CommandContext context) {
+	public CommandResult execute(CommandContext context) {
 		
 		if (!context.isPlayer()) {
 			MessageUtil.sendLocale(context.getSender(), GlobalLocale.CONSOLE_ONLYPLAYER);
-			return true;
+			return new CommandResult(this, true);
 		}
 		
-		Player sender = context.getPlayer();
-		
 		if (context.hasFlag("h") || context.hasFlag("help"))
-			return false; //Its caught anyway why repeat display help code...
+			return new CommandResult(this, false); //Its caught anyway why repeat display help code...
+		
+		Player sender = context.getPlayer();
 
 		String player = null, homeName = null;
 
@@ -70,7 +70,7 @@ public class HomeCommand extends BaseCommand {
 		else
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Could not teleport home.");
 		
-		return true;
+		return new CommandResult(this, true);
 	}
 
 	public String[] getHelp() {

@@ -48,17 +48,17 @@ public class ClassSwitchCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean execute(CommandContext context) throws NoPermissionException {
+	public CommandResult execute(CommandContext context) throws NoPermissionException {
 		if (!context.hasFlag("nogui"))
 		{
 			new ClassChooseMenu(context.getPlayer(), null).show();
-			return true;
+			return new CommandResult(this, true);
 		}
 		
 		String cName = null;
 		String sTier = null;
 		if (!context.hasArgument(0))
-			return false;
+			return new CommandResult(this, false);
 		cName = context.getArgument(0);
 		
 		if (context.hasArgument(1))
@@ -75,7 +75,7 @@ public class ClassSwitchCommand extends BaseCommand {
 		if (!PlayerClassUtil.hasClassId(cName))
 		{
 			MMOLocale.CLASS_NONE_BY_NAME.message(context.getSender(), cName);
-			return true;
+			return new CommandResult(this, true);
 		}
 		
 		PlayerClass c = PlayerClassUtil.safeConstructClass(cName, context.getPlayer());
@@ -88,13 +88,13 @@ public class ClassSwitchCommand extends BaseCommand {
 		if (!c.canUseTier(tier))
 		{
 			MMOLocale.CLASS_TIER_LOCKED.message(context.getSender(), cName, ""+ tier, "(RAW) class.canUseTier(" + tier + ") == false");
-			return true;
+			return new CommandResult(this, true);
 		}
 		c.setCurrentTier(tier);
 		
 		p.setClass(c);
 		
-		return true;
+		return new CommandResult(this, true);
 	}
 
 	@Override

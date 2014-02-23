@@ -22,7 +22,7 @@ public class ReloadCommand extends BaseCommand {
 		core = NoxCore.getInstance();
 		handler = core.getPermissionHandler();
 	}
-	public boolean execute(CommandContext context) {
+	public CommandResult execute(CommandContext context) {
 		
 		CommandSender sender = context.getSender();
 		String[] args = context.getArguments();
@@ -33,7 +33,7 @@ public class ReloadCommand extends BaseCommand {
 		if (context.getFlag("?", false)|| context.getFlag("h", false)|| context.getFlag("help", false) || args.length == 0)
 		{
 			displayHelp(sender);
-			return true;
+			return new CommandResult(this, true);
 		}
 		
 		
@@ -76,7 +76,7 @@ public class ReloadCommand extends BaseCommand {
 			GlobalLocale.COMMAND_FAILED.message(sender, "An error occured: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return true;
+		return new CommandResult(this, true);
 	}
 	
 	public String[] getDescription() {

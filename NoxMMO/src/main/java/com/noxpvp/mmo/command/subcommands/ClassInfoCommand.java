@@ -28,8 +28,8 @@ public class ClassInfoCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean execute(CommandContext context) throws NoPermissionException {
-		return false;
+	public CommandResult execute(CommandContext context) throws NoPermissionException {
+		return new CommandResult(this, false);
 	}
 
 	@Override

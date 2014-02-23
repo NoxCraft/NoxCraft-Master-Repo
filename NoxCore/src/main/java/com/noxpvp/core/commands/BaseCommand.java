@@ -61,9 +61,9 @@ public abstract class BaseCommand implements Command {
 		MessageUtil.sendMessage(sender, mb.lines());
 	}
 
-	public abstract boolean execute(CommandContext context) throws NoPermissionException;
+	public abstract CommandResult execute(CommandContext context) throws NoPermissionException;
 	
-	public final boolean executeCommand(CommandContext context) throws NoPermissionException {
+	public final CommandResult executeCommand(CommandContext context) throws NoPermissionException {
 		if (!hasSubCommands() || context.getArgumentCount() == 0)
 			return execute(context);
 		
@@ -76,7 +76,7 @@ public abstract class BaseCommand implements Command {
 		if (subCMD != null) {
 			if (subCMD.isPlayerOnly() && !context.isPlayer()) {
 				GlobalLocale.CONSOLE_ONLYPLAYER.message(context.getSender());
-				return true;
+				return new CommandResult(this, true);
 			}
 			return subCMD.executeCommand(newContext);
 		}

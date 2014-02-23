@@ -43,7 +43,7 @@ public class HomeAdminImportCommand extends BaseCommand {
 			importerNames[i] = vals[i].name();
 	}
 	
-	public boolean execute(CommandContext context) {
+	public CommandResult execute(CommandContext context) {
 		CommandSender sender = context.getSender();
 		String[] args = context.getArguments();
 		if (manager == null)
@@ -52,7 +52,7 @@ public class HomeAdminImportCommand extends BaseCommand {
 			if (manager == null);
 			{
 				MessageUtil.sendLocale(sender, GlobalLocale.ERROR_NULL, "PlayerManager reference in Home List Object.");
-				return true;
+				return new CommandResult(this, true);
 			}
 		}
 		
@@ -60,7 +60,7 @@ public class HomeAdminImportCommand extends BaseCommand {
 		if (!permHandler.hasPermission(sender, perm))
 		{
 			MessageUtil.sendLocale(sender, GlobalLocale.FAILED_PERMISSION, "Can not import homes data.", perm);
-			return true;
+			return new CommandResult(this, true);
 		}
 		
 		
@@ -79,7 +79,7 @@ public class HomeAdminImportCommand extends BaseCommand {
 			mb.yellow("[").green(StringUtil.combineNames(importerNames)).yellow("]").newLine().aqua("/").append(COMMAND_NAME).append(" ").yellow("[").green(StringUtil.join("|", importerNames)).yellow("]");
 			
 			mb.send(sender);
-			return true;
+			return new CommandResult(this, true);
 		}
 		MessageBuilder mb = new MessageBuilder();
 		HomeImporter porter = null;
@@ -99,7 +99,7 @@ public class HomeAdminImportCommand extends BaseCommand {
 		}
 		
 		mb.send(sender);
-		return true;
+		return new CommandResult(this, true);
 	}
 
 	public String[] getHelp() {

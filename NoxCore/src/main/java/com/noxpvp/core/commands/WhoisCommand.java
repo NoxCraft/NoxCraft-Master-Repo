@@ -25,9 +25,9 @@ public class WhoisCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean execute(CommandContext context) throws NoPermissionException {
+	public CommandResult execute(CommandContext context) throws NoPermissionException {
 		context.getSender().sendMessage("This command is not implemented.");
-		return true;
+		return new CommandResult(this, true);
 	}
 
 	@Override

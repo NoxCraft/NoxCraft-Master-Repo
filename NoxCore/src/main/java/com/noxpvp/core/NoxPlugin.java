@@ -17,6 +17,7 @@ import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.Command;
+import com.noxpvp.core.commands.Command.CommandResult;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.internal.PermissionHandler;
@@ -50,7 +51,13 @@ public abstract class NoxPlugin extends PluginBase {
 			if (cmd == null)
 				throw new NullPointerException("Command execution class was null!");
 			try {
-				return cmd.executeCommand(context);
+				CommandResult result = cmd.executeCommand(context);
+				
+				if (!result.success) 
+					result.executer.displayHelp(context.getSender());
+				MessageUtil.sendMessage(context.getSender(), result.extraMessages);
+				
+				return true;
 			} catch (NoPermissionException e) {
 				MessageUtil.sendLocale(e.getSender(), GlobalLocale.FAILED_PERMISSION_VERBOSE, e.getMessage(), e.getPermission());
 			}
