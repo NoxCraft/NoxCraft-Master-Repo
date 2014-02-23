@@ -51,7 +51,7 @@ public class SootheAbility extends BaseTargetedPlayerAbility{
 		Location tLoc = t.getLocation(), loc = new Location(tLoc.getWorld(), tLoc.getX(), tLoc.getY()+1.75, tLoc.getZ());
 		
 		t.setHealth(t.getHealth() + getHealAmount());
-		new EffectsRunnable(Arrays.asList("heart"), loc, 0, (int) getHealAmount() / 2, true, false, null).runTaskTimer(NoxMMO.getInstance(), 0, 6);
+		new EffectsRunnable(Arrays.asList("heart"), false, loc, 0, 1, (int) getHealAmount() / 2, null).runTaskTimer(NoxMMO.getInstance(), 0, 6);
 		
 		return false;
 	}

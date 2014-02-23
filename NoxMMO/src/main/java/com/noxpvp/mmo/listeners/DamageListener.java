@@ -1,5 +1,7 @@
 package com.noxpvp.mmo.listeners;
 
+import java.util.Arrays;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -98,7 +100,7 @@ public class DamageListener extends NoxListener<NoxMMO>{
 			if (livingDamaged != null) {
 				Location dLoc = e.getLocation();
 				dLoc.setY(dLoc.getY() + 1.8);
-				new EffectsRunnable("blockdust_152_0", dLoc, .12F, 25, false, false, null).runTask(NoxMMO.getInstance());
+				new EffectsRunnable(Arrays.asList("blockdust_152_0"), false, dLoc, .12F, 25, 1, null).runTask(NoxMMO.getInstance());
 				
 				/*
 				 * joust passive ability

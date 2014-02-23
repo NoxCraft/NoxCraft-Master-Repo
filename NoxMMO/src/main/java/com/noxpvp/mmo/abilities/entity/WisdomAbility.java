@@ -70,7 +70,7 @@ public class WisdomAbility extends BaseEntityAbility{
 		Bukkit.getScheduler().runTaskLater(mmo, new Runnable() {
 			
 			public void run() {
-				new EffectsRunnable("enchantmenttable", null, 1.5F, 250, false, false, e).runTask(mmo);
+				new EffectsRunnable(Arrays.asList("enchantmenttable"), false, null, 1.5F, 250, 1, e).runTask(mmo);
 				e.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * getDuration(), getAmplifier()));
 				
 			}

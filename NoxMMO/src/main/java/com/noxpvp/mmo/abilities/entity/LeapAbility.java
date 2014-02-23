@@ -67,8 +67,7 @@ public class LeapAbility extends BaseEntityAbility {
 		
 		newVelocity.setY(0).multiply(forwardMultiplier).setY(heightVelo);
 		
-		new EffectsRunnable(Arrays.asList("blockcrack_"+ e.getLocation().getBlock().getRelative(BlockFace.DOWN).getTypeId() +"_0"),
-				e.getLocation(), 0, 50, false, false, null).runTask(NoxMMO.getInstance());
+		new EffectsRunnable(Arrays.asList("blockcrack_"+ e.getLocation().getBlock().getRelative(BlockFace.DOWN).getTypeId() +"_0"), false, e.getLocation(), 0, 50, 1, null).runTask(NoxMMO.getInstance());
 		
 		e.setVelocity(newVelocity);		
 		return true;

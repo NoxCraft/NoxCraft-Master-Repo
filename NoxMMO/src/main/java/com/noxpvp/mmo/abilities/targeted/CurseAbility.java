@@ -86,7 +86,7 @@ public class CurseAbility extends BaseTargetedPlayerAbility{
 		t.addPotionEffect(new PotionEffect(PotionEffectType.POISON, duration, lethality));
 		t.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, lethality));
 		
-		new EffectsRunnable(Arrays.asList("angryVillager"), t.getLocation(), 0, 1, false, false, null).runTask(NoxMMO.getInstance());
+		new EffectsRunnable(Arrays.asList("angryVillager"), false, t.getLocation(), 0, 1, 1, null).runTask(NoxMMO.getInstance());
 		
 		return true;
 	}

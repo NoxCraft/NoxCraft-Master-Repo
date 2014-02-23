@@ -54,8 +54,8 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 						itTwo.getLocation().getY()+1.75,
 						itTwo.getLocation().getZ());
 				
-				EffectsRunnable ef1 = new EffectsRunnable(Arrays.asList("angryVillager"), it.getLocation(), 0, 1, false, false, null),
-				ef2 = new EffectsRunnable(Arrays.asList("angryVillager"), itTwo.getLocation(), 0, 1, false, false, null);
+				EffectsRunnable ef1 = new EffectsRunnable(Arrays.asList("angryVillager"), false, it.getLocation(), 0, 1, 1, null),
+				ef2 = new EffectsRunnable(Arrays.asList("angryVillager"), false, itTwo.getLocation(), 0, 1, 1, null);
 				
 				ef1.runTask(NoxMMO.getInstance());
 				ef2.runTask(NoxMMO.getInstance());
