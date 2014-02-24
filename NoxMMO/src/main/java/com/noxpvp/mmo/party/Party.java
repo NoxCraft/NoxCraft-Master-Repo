@@ -5,12 +5,10 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
-import com.noxpvp.core.Persistant;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 
@@ -31,9 +29,7 @@ public class Party implements IParty{
 	public Party(Player owner, @Nullable String name, @Nullable String pass){
 		this.owner = owner.getName();
 		
-		MMOPlayer player;
-		if ((player = PlayerManager.getInstance().getPlayer(owner)) == null)
-			throw new NullArgumentException("Could not create party for null MMOPlayer!");
+		MMOPlayer player = PlayerManager.getInstance().getPlayer(owner);
 		
 		partyData = player.getPersistantData().getNode("party");
 		
@@ -52,7 +48,7 @@ public class Party implements IParty{
 
 	//START MEMBERS
 	public List<String> getMembers() {
-		return this.getMembers();
+		return this.members;
 	}
 	
 	public boolean hasMember(String player) {
@@ -73,6 +69,9 @@ public class Party implements IParty{
 	 * END MEMBERS
 	 */
 
+	/*
+	 * Start getters
+	 */
 	public String getPartyName() {
 		return this.name;
 	}
@@ -88,7 +87,29 @@ public class Party implements IParty{
 	public SharingType getSharingState() {
 		return this.sharing;
 	}
+	
+	public List<Player> getExpGroup() {
+		List<Player> members = new ArrayList<Player>();
+		
+		if (this.sharing == SharingType.FOCUSED)
+			members.add(Bukkit.getPlayerExact(focusedEXPMember));
+		
+		else {	
+			for (String m : this.members){
+				if (Bukkit.getPlayerExact(m) != null)
+					members.add(Bukkit.getPlayerExact(m));
+			}
+		}
+		
+		return members;
+	}
+	/*
+	 * End Getters
+	 */
 
+	/*
+	 * Setters start
+	 */
 	public void setPartyName(String name) {
 		if (name != null && name != this.name){
 			partyData.set("name", name);
@@ -116,21 +137,8 @@ public class Party implements IParty{
 			this.sharing = state;
 		}
 	}
-	
-	public List<Player> getExpGroup() {
-		List<Player> members = new ArrayList<Player>();
-		
-		if (this.sharing == SharingType.FOCUSED)
-			members.add(Bukkit.getPlayerExact(focusedEXPMember));
-		
-		else {	
-			for (String m : this.members){
-				if (Bukkit.getPlayerExact(m) != null)
-					members.add(Bukkit.getPlayerExact(m));
-			}
-		}
-		
-		return members;
-	}
+	/*
+	 * Setters end
+	 */
 
 }
