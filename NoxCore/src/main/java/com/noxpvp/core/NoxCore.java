@@ -9,6 +9,7 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
@@ -49,6 +50,7 @@ import com.noxpvp.core.reloader.BaseReloader;
 import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.StaticCleaner;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.command.TownyAdminCommand;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 public class NoxCore extends NoxPlugin {
@@ -277,7 +279,28 @@ public class NoxCore extends NoxPlugin {
 		});
 		
 		register(r);
-		
+		if (getTowny() != null) {
+			r = new BaseReloader(getMasterReloader(), "Towny") {
+				public boolean reload() {
+					return false;
+				}
+			};
+			
+			r.addModule(new BaseReloader(r, "reload") {
+				
+				public boolean reload() {
+					PluginCommand cmd = getTowny().getCommand("townyadmin");
+					if (cmd == null)
+						return false;
+					if (!(cmd.getExecutor() instanceof TownyAdminCommand))
+						return false;
+					((TownyAdminCommand)cmd.getExecutor()).reloadTowny(false);
+					return true;
+				}
+			});
+			
+			register(r);
+		}
 		
 		// ==== Localization ====
         if (!this.globalLocales.isEmpty()) {
