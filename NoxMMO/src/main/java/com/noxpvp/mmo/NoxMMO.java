@@ -58,7 +58,8 @@ public class NoxMMO extends NoxPlugin {
 		Class<?>[] classes = {
 				ShurikenAbility.class, HammerOfThorAbility.class,
 				HookShotAbility.class, SeveringStrikesAbility.class,
-				PlayerClass.class, PlayerClassUtil.class, AbilityCycler.class,
+				PlayerClass.class, PlayerClassUtil.class,
+				AbilityCycler.class
 		};
 		
 		String[] internals = { };
