@@ -8,11 +8,15 @@ import com.bergerkiller.bukkit.common.conversion.Conversion;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.internal.PermissionHandler;
+import com.noxpvp.core.utils.StaticCleaner;
+import com.palmergames.bukkit.towny.Towny;
 
 public class NoxChat extends NoxPlugin {
 	private PermissionHandler permHandler;
 	
 	private static NoxChat instance;
+	
+	Towny towny;
 	
 	@Override
 	public NoxCore getCore() {
@@ -32,8 +36,12 @@ public class NoxChat extends NoxPlugin {
 
 	@Override
 	public void disable() {
-		// TODO Auto-generated method stub
-
+		String[] internalClasses = new String[]{};
+		Class<?>[] publicClasses = new Class[] {
+				PlayerManager.class
+		};
+		
+		new StaticCleaner(this, getClassLoader(), internalClasses, publicClasses).resetAll();
 	}
 
 	@Override
@@ -49,6 +57,8 @@ public class NoxChat extends NoxPlugin {
 		Conversion.register(new TargetConverter());
 		
 		permHandler = new PermissionHandler(this);
+		
+		towny = getCore().getTowny();
 	}
 	
 	public static NoxChat getInstance() {
