@@ -24,7 +24,7 @@ public class DeathListener extends NoxListener<NoxCore> {
 	public DeathListener(NoxCore core)
 	{
 		super(core);
-		this.pm = core.getPlayerManager();
+		this.pm = PlayerManager.getInstance();
 	}
 	
 	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
