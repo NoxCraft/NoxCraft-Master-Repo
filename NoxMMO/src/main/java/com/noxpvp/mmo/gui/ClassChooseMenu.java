@@ -19,10 +19,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.gui.CoreBoxItem;
+import com.noxpvp.core.utils.InventoryUtils;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.classes.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
+import com.noxpvp.mmo.util.InventoryActionCombo;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class ClassChooseMenu extends CoreBox{
@@ -69,7 +71,7 @@ public class ClassChooseMenu extends CoreBox{
 			
 			ClassChooseMenuItem boxItem = new ClassChooseMenuItem(this, item, clazz) {
 				public void onClick(InventoryClickEvent click) {
-					if (click.getAction() != InventoryAction.PICKUP_ALL && click.getAction() != InventoryAction.COLLECT_TO_CURSOR)
+					if (!InventoryActionCombo.ANY_PICKUP.contains(click.getAction()) && !InventoryActionCombo.ANY_PLACE.contains(click.getAction()))
 						return;
 					
 					ClassChooseMenuItem item;
