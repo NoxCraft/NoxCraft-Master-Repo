@@ -22,7 +22,7 @@ public class BlockListener extends NoxListener<NoxMMO>{
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBreak(BlockBreakEvent e) {
 		if (VaultAdapter.permission.has(e.getPlayer(), NoxMMO.PERM_NODE + ".ability." + AutoTool.PERM_NODE)) {
-			new AutoTool(e.getPlayer()).execute();
+			new AutoTool(e.getPlayer()).execute(e);
 		}
 	}
 	
