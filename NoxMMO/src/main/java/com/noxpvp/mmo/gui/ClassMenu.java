@@ -20,6 +20,7 @@ import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.classes.IClassTier;
 import com.noxpvp.mmo.classes.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
+import com.noxpvp.mmo.util.InventoryActionCombo;
 
 public class ClassMenu extends CoreBox{
 
@@ -60,7 +61,7 @@ public class ClassMenu extends CoreBox{
 			menuItems.put(i++, new ClassMenuItem(this, item, clazz, i) {
 				
 				public void onClick(InventoryClickEvent click) {
-					if (click.getAction() != InventoryAction.PICKUP_ALL && click.getAction() != InventoryAction.COLLECT_TO_CURSOR)
+					if (!InventoryActionCombo.ANY_PICKUP.contains(click.getAction()) && !InventoryActionCombo.ANY_PLACE.contains(click.getAction()))
 						return;
 					
 					ClassMenuItem item;
