@@ -163,11 +163,4 @@
 We add all sorts of features. Specifically coded for our server in mind.
 </description>
 	<version>1.0</version>
-	<properties>
-		<NoxHomesVersion>${MasterVersion}</NoxHomesVersion>
-		<MasterVersion>0.1.11 - Beta</MasterVersion>
-		<NoxCoreVersion>${MasterVersion}</NoxCoreVersion>
-		<NoxMMOVersion>0.1 - SNAPSHOT</NoxMMOVersion>
-		<NoxChatVersion>${MasterVersion}</NoxChatVersion>
-	</properties>
 </project>

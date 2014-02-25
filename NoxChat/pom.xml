@@ -8,7 +8,7 @@
   <artifactId>NoxChat</artifactId>
   <name>NoxChat</name>
   <description>Provides the entire server chat system.</description>
-  <version>${NoxChatVersion}</version>
+  <version>0.0.1 - Test Build</version>
   <properties>
   	<main>com.noxpvp.noxchat.NoxChat</main>
   </properties>
