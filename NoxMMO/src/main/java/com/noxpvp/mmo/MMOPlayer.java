@@ -48,7 +48,10 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 	
 	public void setClass(PlayerClass c) {
-		throw new NotImplementedException("PlayerClasses not completed.");
+		if (c.isPrimaryClass())
+			setPrimaryClass(c);
+		else
+			setSecondaryClass(c);
 	}
 	
 	public void setPrimaryClass(String c) {
