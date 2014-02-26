@@ -127,5 +127,5 @@
 			</resource>
 		</resources>
 	</build>
-	<version>${NoxCoreVersion}</version>
+	<version>0.1.11 - Beta</version>
 </project>
