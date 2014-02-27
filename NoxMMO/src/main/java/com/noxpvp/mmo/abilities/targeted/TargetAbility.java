@@ -86,15 +86,14 @@ public class TargetAbility extends BasePlayerAbility{
 			PlayerManager pm = PlayerManager.getInstance();
 			
 			NoxPlayer noxPlayer = pm.getPlayer(p);
-			MMOPlayer mmoPlayer = NoxMMO.getInstance().getPlayerManager().getPlayer(p);
 			
 			if (noxPlayer == null) return false;
 			
 			String name = noxPlayer.getFullName();
 			
-			PlayerClass c = mmoPlayer.getPrimaryClass();
-			if (mmoPlayer != null && c != null) {
-				name = name + " - " + c.getDisplayName();
+			PlayerClass c = com.noxpvp.mmo.PlayerManager.getInstance().getPlayer(p).getPrimaryClass();
+			if (c != null) {
+				name.concat(" - " + c.getDisplayName());
 			}
 			
 			pm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, null);
