@@ -24,8 +24,6 @@ public class PlayerManager extends BasePlayerManager<HomesPlayer> { //FIXME: Jav
 		return instance;
 	}
 	
-	private Map<String, HomesPlayer> players;
-	
 	private PlayerManager()
 	{
 		super(HomesPlayer.class);
@@ -58,14 +56,14 @@ public class PlayerManager extends BasePlayerManager<HomesPlayer> { //FIXME: Jav
 	
 	public void load()
 	{
-		players.clear();
+		getPlayerMap().clear();
 		for (Player player : Bukkit.getOnlinePlayers())
 			getPlayer(player);
 	}
 	
 	public void save()
 	{
-		for (HomesPlayer player : players.values())
+		for (HomesPlayer player : getPlayerMap().values())
 			player.save();
 	}
 	
@@ -115,7 +113,7 @@ public class PlayerManager extends BasePlayerManager<HomesPlayer> { //FIXME: Jav
 		com.noxpvp.core.manager.PlayerManager pm = com.noxpvp.core.manager.PlayerManager.getInstance();
 		List<String> names = pm.getAllPlayerNames();
 		
-		for (HomesPlayer player : players.values())
+		for (HomesPlayer player : getPlayerMap().values())
 		{
 			if (player.getNoxPlayer(false) == null)
 			{
@@ -125,7 +123,7 @@ public class PlayerManager extends BasePlayerManager<HomesPlayer> { //FIXME: Jav
 			player.setHomes(null);
 		}
 		
-		names.removeAll(new ArrayList<String>(players.keySet()));
+		names.removeAll(new ArrayList<String>(getPlayerMap().keySet()));
 		for(String name : names)
 		{
 			boolean notMem = !pm.isLoaded(name);

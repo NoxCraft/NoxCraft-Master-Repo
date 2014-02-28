@@ -67,7 +67,7 @@ public class ExperienceListener extends NoxListener<NoxMMO> {
 		this.smeltingExp = expNode.get("amounts.base.smelting", 100);
 		
 		this.cachedMultipliers = this.initializePresets();
-		
+		if (this.cachedMultipliers == null) this.cachedMultipliers = new HashMap<String, Integer>();
 	}
 	
 	private Map<String, Integer> initializePresets() {
@@ -81,7 +81,9 @@ public class ExperienceListener extends NoxListener<NoxMMO> {
 		 * Entity Killing / Taming
 		 */
 		for (EntityType type : EntityType.values()) {
-			if (living.isAssignableFrom(type.getEntityClass()))
+			if (type == null ||type.getEntityClass() == null)
+				continue;
+			else if (living.isAssignableFrom(type.getEntityClass()))
 				defs.add("multipliers.kills." + type.name());
 			else if (tamable.isAssignableFrom(type.getEntityClass()))
 				defs.add("multipliers.taming." + type.name());
@@ -130,16 +132,20 @@ public class ExperienceListener extends NoxListener<NoxMMO> {
 		exc.clear();
 		for (Iterator<String> iterator = c2.iterator(); iterator.hasNext();) {
 			String i = iterator.next();
-			Material m = Material.valueOf(i);
-			if (m == null)
-				m = Material.getMaterial(i);
-			if (m == null) {
-				changes = true;
-				iterator.remove();
-				continue;
+			try {
+				Material m = Material.valueOf(i);
+				if (m == null)
+					m = Material.getMaterial(i);
+				if (m == null) {
+					changes = true;
+					iterator.remove();
+					continue;
+				}
+				
+				exc.add(m);
+			} catch (IllegalArgumentException e) {
+				
 			}
-			
-			exc.add(m);
 		}
 		
 		if (changes)

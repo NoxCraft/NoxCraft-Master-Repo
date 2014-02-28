@@ -30,6 +30,7 @@ import com.noxpvp.core.events.PlayerDataSaveEvent;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.gui.CoolDown;
+import com.noxpvp.core.gui.CoreBar;
 
 public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	private WeakHashMap<String, CoolDown> cd_cache;
@@ -39,6 +40,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	private final PermissionHandler permHandler;
 	private ConfigurationNode persistant_data = null;
+	
+	private CoreBar cBar;
 	
 	private ConfigurationNode temp_data = new ConfigurationNode();
 	

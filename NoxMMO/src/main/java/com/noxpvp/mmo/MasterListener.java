@@ -1,5 +1,6 @@
 package com.noxpvp.mmo;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.event.Event;
@@ -9,7 +10,7 @@ import com.noxpvp.mmo.listeners.GenericNoxListener;
 
 @SuppressWarnings("unchecked")
 public class MasterListener {
-	private Map<String, GenericNoxListener<?>> listeners;
+	private Map<String, GenericNoxListener<?>> listeners = new HashMap<String, GenericNoxListener<?>>();
 	
 	public <T extends Event> GenericNoxListener<T> getNoxListener(Class<T> eventClass, String eventName)
 	{

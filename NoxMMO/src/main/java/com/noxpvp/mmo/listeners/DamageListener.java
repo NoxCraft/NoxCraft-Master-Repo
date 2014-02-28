@@ -2,6 +2,7 @@ package com.noxpvp.mmo.listeners;
 
 import java.util.Arrays;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -33,9 +34,11 @@ public class DamageListener extends NoxListener<NoxMMO>{
 	public DamageListener() {
 		this(NoxMMO.getInstance());
 	}
+	
+	
 
 	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
-	private void onDamage(EntityDamageEvent event) {		
+	public void onDamage(EntityDamageEvent event) {		
 		Entity e = event.getEntity();
 		
 		LivingEntity livingDamaged = (LivingEntity) ((e instanceof LivingEntity)? e : null);

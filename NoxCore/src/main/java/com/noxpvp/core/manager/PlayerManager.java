@@ -34,7 +34,6 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	private Map<String, CoreBoard> coreBoards = new HashMap<String, CoreBoard>();
 	private Map<String, CoreBox> coreBoxes = new HashMap<String, CoreBox>();
 	
-	private Map<String, NoxPlayer> players;
 	private NoxCore plugin;
 	
 	public static PlayerManager getInstance() {
@@ -55,7 +54,6 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	protected PlayerManager() {
 		this(new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml")), NoxCore.getInstance());
 		config = new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml"));
-		players = new HashMap<String, NoxPlayer>();
 	}
 	
 	protected PlayerManager(FileConfiguration conf, NoxCore plugin)
@@ -63,7 +61,6 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 		super(NoxPlayer.class);
 		this.plugin = plugin;
 		this.config = conf;
-		players = new HashMap<String, NoxPlayer>();
 	}
 	
 	/**
@@ -182,7 +179,7 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	}
 	
 	public NoxPlayer[] getLoadedPlayers() {
-		return players.values().toArray(new NoxPlayer[0]);
+		return getPlayerMap().values().toArray(new NoxPlayer[0]);
 	}
 	
 	/**
@@ -269,16 +266,18 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 * @see com.noxpvp.core.Persistant#load()
 	 */
 	public void load() {
-		Collection<String> pls = players.keySet();
+		Collection<String> pls = getPlayerMap().keySet();
 
-		players.clear();
+		getPlayerMap().clear();
 		config.load();
-		
-		for (String name : pls)
-			loadOrCreate(name);
 		
 		for (Player player : Bukkit.getOnlinePlayers())
 			loadOrCreate(player.getName());
+		
+		for (String name : pls)
+			if (!isLoaded(name))
+				loadOrCreate(name);
+		
 	}
 	
 	private void loadOrCreate(String name) {
@@ -312,8 +311,7 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	public PlayerManager removeCoreBar(String name){
 		if (name == null)
 			throw new NullPointerException("Cannot remove null Key from list");
-		
-		this.coreBars.remove(name); return this;
+		this.coreBars.remove(name); return this; //FIXME: DESTROY INSTANCE SHIT. TIMERS AND MORE...
 	}
 	
 	/** 

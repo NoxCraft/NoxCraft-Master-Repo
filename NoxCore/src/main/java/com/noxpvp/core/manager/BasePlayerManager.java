@@ -28,6 +28,7 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	
 	public BasePlayerManager(Class<T> t) {
 		this.typeClass = t;
+		this.players = craftNewStorage();
 	}
 
 	public T[] getLoadedPlayers() {
@@ -57,6 +58,10 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	 * @return Object.
 	 */
 	protected abstract T craftNew(String name);
+	
+	protected Map<String, T> getPlayerMap() {
+		return this.players;
+	}
 	
 	/**
 	 * Required to store player data.

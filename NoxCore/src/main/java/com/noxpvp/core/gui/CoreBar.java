@@ -60,10 +60,13 @@ public class CoreBar{
 		}
 		
 		public void update(float percentFilled, String text){
+			this.percentFilled = percentFilled;
 			BarAPI.setMessage(p, text, percentFilled);
 			
 			if (percentFilled <= 0) 
 				this.text = "";
+			else
+				this.text = text;
 			
 		}
 		
@@ -115,6 +118,7 @@ public class CoreBar{
 		
 		public LivingTracker(LivingEntity e, String text, ChatColor color) {
 			this.e = e;
+			
 			distance = p.getLocation().distance(e.getLocation());
 			
 			this.text = new StringBuilder(color + text).append(" - ").append(distance);
@@ -127,6 +131,7 @@ public class CoreBar{
 		public void run() {
 			if (!currentEntry.text.equals(text.toString()) || p == null || !p.isOnline() || p.isDead() || e == null || e.isDead())
 			{
+				currentEntry.update((float) 0, ""); 
 				safeCancel();
 				return;
 			}

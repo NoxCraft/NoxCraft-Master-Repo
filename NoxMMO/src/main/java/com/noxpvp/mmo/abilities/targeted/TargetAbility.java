@@ -3,6 +3,7 @@ package com.noxpvp.mmo.abilities.targeted;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -67,7 +68,7 @@ public class TargetAbility extends BasePlayerAbility{
 			this.target_ref = new SoftReference<LivingEntity>((LivingEntity) it);
 			break;
 		}
-		if (this.target_ref.get() == null)
+		if (this.target_ref == null || this.target_ref.get() == null)
 			return false;
 		
 		Location observerPos = p.getEyeLocation();
@@ -92,11 +93,11 @@ public class TargetAbility extends BasePlayerAbility{
 			
 			String name = noxPlayer.getFullName();
 			
-			PlayerClass c = mmoPlayer.getPrimaryClass();
+			Bukkit.broadcastMessage("TargetAbility Ran");
+			PlayerClass c = null;/*mmoPlayer.getPrimaryClass();*/
 			if (mmoPlayer != null && c != null) {
 				name = name + " - " + c.getDisplayName();
 			}
-			
 			pm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, null);
 		}
 		
