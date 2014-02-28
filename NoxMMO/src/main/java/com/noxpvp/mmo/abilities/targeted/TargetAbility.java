@@ -95,7 +95,7 @@ public class TargetAbility extends BasePlayerAbility{
 			
 			Bukkit.broadcastMessage("TargetAbility Ran");
 			PlayerClass c = null;/*mmoPlayer.getPrimaryClass();*/
-			if (mmoPlayer != null && c != null) {
+			if (c != null) {
 				name = name + " - " + c.getDisplayName();
 			}
 			pm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, null);

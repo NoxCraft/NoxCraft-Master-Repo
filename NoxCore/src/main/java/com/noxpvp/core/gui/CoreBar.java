@@ -24,7 +24,7 @@ public class CoreBar{
 	 */
 	public CoreBar(NoxCore core, Player p){
 		this.p = p;
-		this.pm = core.getPlayerManager();
+		this.pm = PlayerManager.getInstance();
 		
 		String name = p.getName();
 		if (pm.hasCoreBar(name)){
@@ -129,14 +129,14 @@ public class CoreBar{
 		}
 		
 		public void run() {
-			if (!currentEntry.text.equals(text.toString()) || p == null || !p.isOnline() || p.isDead() || e == null || e.isDead())
+			distance = p.getLocation().distance(e.getLocation());
+			if (!currentEntry.text.equals(text.toString()) || distance > 55 || p == null || !p.isOnline() || p.isDead() || e == null || e.isDead())
 			{
 				currentEntry.update((float) 0, ""); 
 				safeCancel();
 				return;
 			}
 			
-			distance = p.getLocation().distance(e.getLocation());
 			int tLength = text.length();
 			
 			text.replace(tLength - (3 + Double.toString(distance).length()), tLength, " - " + distance);

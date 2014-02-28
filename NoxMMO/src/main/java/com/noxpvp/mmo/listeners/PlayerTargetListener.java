@@ -36,7 +36,7 @@ public class PlayerTargetListener extends NoxListener<NoxMMO>{
 		Bukkit.broadcastMessage("EVENT FIRE");
 		if (player == null) return;
 		
-		new TargetAbility(p).setRange(30).execute();//TODO make default range configized
+		new TargetAbility(p).setRange(50).execute();//TODO make default range configized
 		
 	}
 }

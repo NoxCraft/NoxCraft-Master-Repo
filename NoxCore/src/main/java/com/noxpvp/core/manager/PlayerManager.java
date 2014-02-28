@@ -1,6 +1,3 @@
-/*
- * 
- */
 package com.noxpvp.core.manager;
 
 import java.io.File;
