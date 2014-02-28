@@ -17,9 +17,10 @@ public class RejuvenationAbility extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "rejuvenation";
 	public static final String ABILITY_NAME = "Rejuvenation";
-	private double healthPerHeal = 1;
-	private int heals = 6;
-	private int delayBetweenHeals = 15;
+	
+	private double healthPerHeal;
+	private int heals;
+	private int delayBetweenHeals;
 	
 	/**
 	 * 
@@ -75,6 +76,10 @@ public class RejuvenationAbility extends BasePlayerAbility{
 	 */
 	public RejuvenationAbility(Player player){
 		super(ABILITY_NAME, player);
+		
+		this.healthPerHeal = 1;
+		this.heals = 6;
+		this.delayBetweenHeals = 15;
 	}
 	
 	public boolean execute() {

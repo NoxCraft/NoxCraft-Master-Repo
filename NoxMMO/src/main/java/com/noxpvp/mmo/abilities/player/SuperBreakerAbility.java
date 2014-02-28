@@ -18,13 +18,11 @@ public class SuperBreakerAbility extends BasePlayerAbility {
 	public static final String PERM_NODE = "super-breaker";
 	public static final String ABILITY_NAME = "Super Breaker";
 
-	public SuperBreakerAbility(Player player)
-	{
+	public SuperBreakerAbility(Player player){
 		super(ABILITY_NAME, player);
 	}
 	
-	public SuperBreakerAbility(NoxPlayerAdapter adapt)
-	{
+	public SuperBreakerAbility(NoxPlayerAdapter adapt){
 		this(adapt.getNoxPlayer().getPlayer());
 	}
 	

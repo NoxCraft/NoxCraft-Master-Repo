@@ -24,10 +24,10 @@ public class ExplosiveArrowAbility extends BasePlayerAbility{
 	
 	private BaseMMOEventHandler<ProjectileHitEvent> hitHandler;
 	private BaseMMOEventHandler<ProjectileLaunchEvent> launchHandler;
-	private float power;
 	
-	List<Arrow> arrows = new ArrayList<Arrow>();
-	private boolean isActive = false, isFiring = false, isSingleShotMode = true;
+	List<Arrow> arrows;
+	private boolean isActive, isFiring, isSingleShotMode;
+	private float power;
 	
 	public ExplosiveArrowAbility setFiring(boolean firing) { 
 		boolean changed = this.isFiring != firing;
@@ -151,6 +151,11 @@ public class ExplosiveArrowAbility extends BasePlayerAbility{
 			}
 		};
 		
+		
+		this.arrows = new ArrayList<Arrow>();
+		this.isActive = false;
+		this.isFiring = false;
+		this.isSingleShotMode = true;
 		this.power = 4f;
 	}
 	

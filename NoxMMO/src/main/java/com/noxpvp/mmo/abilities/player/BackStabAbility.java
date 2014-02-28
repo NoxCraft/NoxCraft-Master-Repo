@@ -19,10 +19,11 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 	
 	public static final String PERM_NODE = "backstab";
 	public static final String ABILITY_NAME = "BackStab";
+	
 	private LivingEntity target;
 	private float damagePercent;
-	private double Damage;
-	private double accuracy = 20;
+	
+	private double accuracy;
 	
 	/**
 	 * 
@@ -71,24 +72,13 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 	/**
 	 * 
 	 * 
-	 * @return double Currently set initial damage value
-	 */
-	public double getDamage() {return Damage;}
-
-	/**
-	 * 
-	 * 
-	 * @param damage double amount from initial damage event
-	 */
-	public void setDamage(double damage) {Damage = damage;}
-
-	/**
-	 * 
-	 * 
 	 * @param player The Player type user for this ability instance
 	 */
 	public BackStabAbility(Player player){
 		super(ABILITY_NAME, player);
+		
+		this.damagePercent = 150;
+		this.accuracy = 20;
 	}
 	
 	public boolean execute(EntityDamageByEntityEvent event) {
@@ -119,7 +109,7 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 		if (pLoc.distance(tLoc) < .35)//prevent if inside the target
 			return false;
 		
-		event.setDamage(event.getDamage() + getDamage());
+		event.setDamage(event.getDamage() * damagePercent);
 		
 		return true;
 	}

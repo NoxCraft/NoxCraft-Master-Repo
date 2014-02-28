@@ -2,7 +2,6 @@ package com.noxpvp.mmo.abilities.player;
 
 import java.util.Arrays;
 
-import org.bukkit.Effect;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
@@ -23,14 +22,13 @@ public class TrackingAbility extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "track";
 	public static final String ABILITY_NAME = "Tracking";
+	
 	private boolean isInvis;
 	private boolean hasSpeed;
 	private int speedAmp;
 	private Player it;
 	private int radius;
 	private int duration;
-	private int effectFreq;
-	private Effect EffectType;
 
 	/**
 	 * 
@@ -100,36 +98,16 @@ public class TrackingAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @return Integer The rate at which the trackers effect will be applied
-	 */
-	public int getEffectFreq() {return effectFreq;}
-	
-	/**
-	 * 
-	 * @param effectFreq Integer ticks that the trackers effect should be applied
-	 * @return TrackingAbility This instance, used fo chaining
-	 */
-	public TrackingAbility setEffectFreq(int effectFreq) {this.effectFreq = effectFreq; return this;}
-
-	/**
-	 * 
-	 * @return Effect The current set effect type set for tracker (Returns null if setEffectType() has not been used)
-	 */
-	public Effect getEffectType() {return EffectType;}
-	
-	/**
-	 * 
-	 * @param effectType The Effect Type that should be applied to the target
-	 * @return TrackingAbility This instance, used for chaining
-	 */
-	public TrackingAbility setEffectType(Effect effectType) {EffectType = effectType; return this;}
-	
-	/**
-	 * 
 	 * @param player The player that this tracker should be spawned from/ability user
 	 */
 	public TrackingAbility(Player player){
 		super(ABILITY_NAME, player);
+		
+		this.duration = 100;
+		this.hasSpeed = true;
+		this.isInvis = true;
+		this.radius = 75;
+		this.speedAmp = 1;
 	}
 
 	/**
@@ -154,18 +132,18 @@ public class TrackingAbility extends BasePlayerAbility{
 		
 		Monster tracker = (Monster) p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE);
 
-		tracker.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, (duration * effectFreq), 15));
+		tracker.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, (duration * 5), 15));
 		
 		if (hasSpeed)
-			tracker.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (duration * effectFreq), 1));
+			tracker.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (duration * 5), 1));
 		if (isInvis)
-			tracker.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, (duration * effectFreq), 1));
+			tracker.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, (duration * 5), 1));
 		
 		tracker.setTarget(it);
 		
 		NoxMMO instance = NoxMMO.getInstance();
 		
-		new EffectsRunnable(Arrays.asList("flame"), true, null, 0, 0, 4, it).runTaskTimer(instance, 0, effectFreq);
+		new EffectsRunnable(Arrays.asList("flame"), true, null, 0, 0, 4, it).runTaskTimer(instance, 0, 5);
 		new DespawnRunnable(tracker).runTaskLater(instance, duration);
 		
 		return false;

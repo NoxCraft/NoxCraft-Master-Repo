@@ -60,7 +60,7 @@ public class VanishAbility extends BasePlayerAbility{
 	public VanishAbility(Player player){
 		super(ABILITY_NAME, player);
 		
-		this.range = 50;
+		this.range = 75;
 		this.hideFreq = 20;
 		this.time = 60;
 	}

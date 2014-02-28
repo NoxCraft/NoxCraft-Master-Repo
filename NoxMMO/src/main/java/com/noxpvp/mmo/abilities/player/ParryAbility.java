@@ -33,19 +33,6 @@ public class ParryAbility extends BasePlayerAbility implements PassiveAbility<En
 
 	/**
 	 * 
-	 * @return double Get the currently set percentage for this ability's chance of success
-	 */
-	public float getPercentChance() {return percentChance; }
-
-	/**
-	 * 
-	 * @param percentChance The chance to set for this ability's success
-	 * @return ParryAbility This instance, used for chaining
-	 */
-	public ParryAbility setPercentChance(float percentChance) {this.percentChance = percentChance; return this;}
-
-	/**
-	 * 
 	 * @return boolean If this ability is set to only succeed if the user is blocking with a sword
 	 */
 	public boolean isMustBlock() {return mustBlock;}

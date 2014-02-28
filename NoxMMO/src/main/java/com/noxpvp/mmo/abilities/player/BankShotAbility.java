@@ -17,7 +17,6 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.utils.chat.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;

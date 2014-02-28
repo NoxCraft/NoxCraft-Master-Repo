@@ -22,8 +22,9 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "guardian-angel";
 	public static final String ABILITY_NAME = "Guardian Angel";
-	private int range = 5;
-	private double healAmount = 6;
+	
+	private int range;
+	private double healAmount;
 	
 	/**
 	 * 
@@ -62,6 +63,9 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 	 */
 	public GuardianAngelAbility(Player player){
 		super(ABILITY_NAME, player);
+		
+		this.healAmount = 6;
+		this.range = 6;
 	}
 
 	public boolean execute() {

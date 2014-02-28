@@ -26,12 +26,12 @@ public class MedPackAbility extends BasePlayerAbility{
 	public final static String PERM_NODE = "med-pack";
 
 	List<Item> packs = new ArrayList<Item>();
-	
 	private BaseMMOEventHandler<PlayerPickupItemEvent> handler;
-	private int health;
-	private boolean isActive = false;
 	
-	public MedPackAbility setActive(boolean active) {
+	private int health;
+	private boolean isActive;;
+	
+	public MedPackAbility setActive(boolean active){
 		boolean changed = this.isActive != active;
 		
 		MasterListener m = NoxMMO.getInstance().getMasterListener();
@@ -103,6 +103,9 @@ public class MedPackAbility extends BasePlayerAbility{
 				}
 			}
 		};
+		
+		this.health = 8;
+		this.isActive = false;
 	}
 	
 	public boolean execute() {

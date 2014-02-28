@@ -14,10 +14,12 @@ public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbil
 
 	public static final String PERM_NODE = "Critical Hit";
 	public static final String ABILITY_NAME = "critical-hit";
+	
 	private PlayerManager pm;
 	
 	public CriticalHitAbility(Player p) {
 		super(ABILITY_NAME, p);
+		
 		this.pm = NoxMMO.getInstance().getPlayerManager();
 	}
 	

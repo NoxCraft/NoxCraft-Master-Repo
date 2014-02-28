@@ -1,16 +1,12 @@
 package com.noxpvp.mmo.abilities.player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -26,7 +22,7 @@ import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 public class NetArrowAbility extends BasePlayerAbility
 {
 	
-	private List<Arrow> arrows = new ArrayList<Arrow>();
+	private List<Arrow> arrows;
 	
 	public final static String ABILITY_NAME = "Net Arrow";
 	public final static String PERM_NODE = "net-arrow";
@@ -94,10 +90,9 @@ public class NetArrowAbility extends BasePlayerAbility
 	
 	private int size;
 	private int time;
-	private boolean isFiring = false, isActive = false, isSingleShotMode = true;
+	private boolean isFiring, isActive, isSingleShotMode;
 	
-	public NetArrowAbility setFiring(boolean firing)
-	{
+	public NetArrowAbility setFiring(boolean firing){
 		boolean changed = this.isFiring != firing;
 		this.isFiring = firing;
 		
@@ -112,8 +107,7 @@ public class NetArrowAbility extends BasePlayerAbility
 		return this;
 	}
 	
-	public NetArrowAbility setActive(boolean active) 
-	{
+	public NetArrowAbility setActive(boolean active){
 		boolean changed = this.isActive != active;
 		this.isActive = active;
 		
@@ -128,8 +122,7 @@ public class NetArrowAbility extends BasePlayerAbility
 		return this;
 	}
 	
-	public NetArrowAbility setSingleShotMode(boolean single) 
-	{
+	public NetArrowAbility setSingleShotMode(boolean single) {
 		this.isSingleShotMode = single;
 		return this;
 	}
@@ -196,13 +189,18 @@ public class NetArrowAbility extends BasePlayerAbility
 				return "ProjectileHitEvent";
 			}
 		};
+
+		this.arrows = new ArrayList<Arrow>();
 		
 		this.size = 3;
 		this.time = 100;
+		
+		this.isActive = false;
+		this.isFiring = false;
+		this.isSingleShotMode = true;
 	}
 	
-	public boolean execute()
-	{
+	public boolean execute(){
 		if (!mayExecute())
 			return false;
 		

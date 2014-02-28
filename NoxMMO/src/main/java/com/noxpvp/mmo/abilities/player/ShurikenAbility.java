@@ -16,7 +16,6 @@ public class ShurikenAbility extends BasePlayerAbility{
         public static final String ABILITY_NAME = "Shuriken";
         public static final String PERM_NODE = "shuriken";
         
-        
         private double distanceVelo;
         
         /**
@@ -47,6 +46,7 @@ public class ShurikenAbility extends BasePlayerAbility{
          */
         public ShurikenAbility(Player player, double distanceVelo){
                 super(ABILITY_NAME, player);
+                
                 this.distanceVelo = distanceVelo;
         }
 

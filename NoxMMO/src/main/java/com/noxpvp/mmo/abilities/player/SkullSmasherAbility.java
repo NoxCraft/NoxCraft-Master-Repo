@@ -25,27 +25,6 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 	
 	private static Map<String, SkullSmasherAbility> smashers = new HashMap<String, SkullSmasherAbility>();
 	
-	public void eventExecute(Player attacker, double damage){
-		if (!smashers.containsKey(attacker.getName()))
-			return;
-		
-		SkullSmasherAbility a = smashers.get(attacker.getName());
-		
-		for (Entity it : attacker.getNearbyEntities(a.range, a.range, a.range)){
-			if (!(it instanceof Damageable)) continue;
-			
-			if (it == attacker) continue;
-			
-			Location itLoc = it.getLocation(),
-			loc = new Location(itLoc.getWorld(), itLoc.getX(), itLoc.getY()+1.75, itLoc.getZ());
-			
-			((Damageable) it).damage(damage - (damage / 4), attacker);
-			new EffectsRunnable(Arrays.asList("blockcrack_155_0"), false, loc, .1F, 20, 2, null).runTask(NoxMMO.getInstance());
-		}
-		
-		return;
-	}
-	
 	private BaseMMOEventHandler<EntityDamageByEntityEvent> handler;
 	private double range;
 
@@ -116,6 +95,27 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 		}, length);
 		
 		return true;
+	}
+	
+	public void eventExecute(Player attacker, double damage){
+		if (!smashers.containsKey(attacker.getName()))
+			return;
+		
+		SkullSmasherAbility a = smashers.get(attacker.getName());
+		
+		for (Entity it : attacker.getNearbyEntities(a.range, a.range, a.range)){
+			if (!(it instanceof Damageable)) continue;
+			
+			if (it == attacker) continue;
+			
+			Location itLoc = it.getLocation(),
+					loc = new Location(itLoc.getWorld(), itLoc.getX(), itLoc.getY()+1.75, itLoc.getZ());
+			
+			((Damageable) it).damage(damage - (damage / 4), attacker);
+			new EffectsRunnable(Arrays.asList("blockcrack_155_0"), false, loc, .1F, 20, 2, null).runTask(NoxMMO.getInstance());
+		}
+		
+		return;
 	}
 	
 }

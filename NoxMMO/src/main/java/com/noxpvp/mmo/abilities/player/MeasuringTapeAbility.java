@@ -26,6 +26,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 
 	public MeasuringTapeAbility(Player player, Block b) {
 		super(ABILITY_NAME, player);
+		
 		this.b = b;
 	}
 

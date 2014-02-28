@@ -11,8 +11,9 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "hit-vanished-players";
 	public static final String ABILITY_NAME = "Hit Vanished Players";
-	private double range = 3.8;
-	private Player e = null;
+	
+	private double range;
+	private Player e;
 	
 	/**
 	 * 
@@ -37,6 +38,8 @@ public class HitVanishedPlayers extends BasePlayerAbility{
 	 */
 	public HitVanishedPlayers(Player player){
 		super(ABILITY_NAME, player);
+		
+		this.range = 3.8;
 	}
 	
 	public boolean execute() {
