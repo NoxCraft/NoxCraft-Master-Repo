@@ -518,8 +518,6 @@ public class NoxCore extends NoxPlugin {
 		
 		getCoreConfig().load();
 		
-		VaultAdapter.GroupUtils.setGroupList(config.get("group.priorities", List.class));
-		
 		ChestBlockListener.isRemovingOnInteract = config.get("custom.events.chestblocked.isRemovingOnInteract", ChestBlockListener.isRemovingOnInteract);
 		ChestBlockListener.usePlaceEvent = config.get("custom.events.chestblocked.usePlaceEvent", ChestBlockListener.usePlaceEvent);
 		ChestBlockListener.useFormEvent = config.get("custom.events.chestblocked.useFormEvent", ChestBlockListener.useFormEvent);
@@ -566,8 +564,6 @@ public class NoxCore extends NoxPlugin {
 	
 	@Override
 	public void saveConfig() {
-		config.set("group.priorities", VaultAdapter.GroupUtils.getGroupList());
-
 		config.set("custom.events.chestblocked.isRemovingOnInteract", ChestBlockListener.isRemovingOnInteract);
 		config.set("custom.events.chestblocked.usePlaceEvent", ChestBlockListener.usePlaceEvent);
 		config.set("custom.events.chestblocked.useFormEvent", ChestBlockListener.useFormEvent);

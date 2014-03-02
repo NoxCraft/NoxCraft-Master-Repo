@@ -2,9 +2,6 @@ package com.noxpvp.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -14,7 +11,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard;
 import com.bergerkiller.bukkit.common.scoreboards.CommonTeam;
-import com.bergerkiller.bukkit.common.scoreboards.CommonTeam.FriendlyFireType;
 import com.noxpvp.core.locales.CoreLocale;
 
 import net.milkbowl.vault.chat.Chat;
@@ -23,42 +19,19 @@ import net.milkbowl.vault.permission.Permission;
 
 public class VaultAdapter {
 	public static class GroupUtils {
-		private static LinkedList<String> groupList = new LinkedList<String>(Arrays.asList(
-				"hadmin", "admin", "mod", "jmod", "helper", "imperial", "king", "sponsor", "vip", "peasant"));
 		
-		private static List<String> teamNames = new ArrayList<String>();
-		
-		public static List<String> getGroupList() {
-			return Collections.unmodifiableList(groupList);
-		}
-		
-		public static void setGroupList(Collection<String> s) {
-			groupList = new LinkedList<String>(s);
+		public static List<String> getGroupList(){
+			if (isChatLoaded() && isPermissionsLoaded() && permission.hasGroupSupport()){
+				List<String> list = Arrays.asList(VaultAdapter.permission.getGroups());
+				
+				return list;
+			}
 			
-			teamNames.clear();
-			for (String group : groupList)
-				teamNames.add(group + "Team");
-			
-			setupTeams();
-			reloadAllGroupTags();
+			return null;
 		}
 		
 		public static String getPlayerGroup(Player p) {
-			String[] groups = VaultAdapter.permission.getPlayerGroups(p);
-			
-			if (groups.length < 0) return null;
-			
-			int ind = 100;
-			String finalGroup = null;
-			
-			for (String group : groups) {
-				if (groupList.indexOf(group) >= 0 && groupList.indexOf(group) < ind) {
-					ind = groupList.indexOf(group);
-					finalGroup = group;
-					
-				}
-			}
-			return finalGroup;
+			return VaultAdapter.permission.getPrimaryGroup(p);
 		}
 		
 		public static String getFormatedPlayerName(Player p) {
@@ -70,26 +43,6 @@ public class VaultAdapter {
 			return p.getName();
 		}		
 		
-		private static void setupTeams() {
-			for (String name : teamNames) {
-				if (CommonScoreboard.getTeam(name) == null) {
-					
-					CommonTeam team = CommonScoreboard.newTeam(name);
-					
-					team.setFriendlyFire(FriendlyFireType.ON);
-					team.setPrefix(CoreLocale.GROUP_TAG_PREFIX.get(name.replace("Team", "")));
-					team.setSuffix(CoreLocale.GROUP_TAG_SUFFIX.get(name.replace("Team", "")));
-					team.setSendToAll(true);
-					
-					team.show();
-				} else {
-					CommonTeam team = CommonScoreboard.getTeam(name);
-					
-					team.setPrefix(CoreLocale.GROUP_TAG_PREFIX.get(name.replace("Team", "")));
-					team.setSuffix(CoreLocale.GROUP_TAG_SUFFIX.get(name.replace("Team", "")));
-				}
-			}
-		}
 
 		public static void reloadAllGroupTags() {
 			if (isChatLoaded() && isPermissionsLoaded() && permission.hasGroupSupport())
@@ -118,9 +71,10 @@ public class VaultAdapter {
 			}
 			
 			for (CommonTeam t2 :CommonScoreboard.getTeams()) {
-				if (teamNames.contains(t2.getName()))
-					if (t2.getPlayers().contains(p.getName()))
-						t2.removePlayer(p);
+				if (t2.equals(team))
+					continue;
+				if (t2.getPlayers().contains(p.getName()))
+					t2.removePlayer(p);
 			}
 			
 			pBoard.setTeam(team);
