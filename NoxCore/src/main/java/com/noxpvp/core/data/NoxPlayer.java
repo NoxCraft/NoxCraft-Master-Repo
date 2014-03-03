@@ -21,6 +21,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
+import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.SafeLocation;
@@ -159,17 +160,24 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	public World getLastWorld() {
-		World w = null;
-		if (getPlayer() != null)//TODO: replace with string version
-			w = getPlayer().getWorld();
-		else
-			w = Bukkit.getWorld(persistant_data.get("last.world", String.class, "NONE"));
-		return w;
+		String worldName = getLastWorldName();
+		if (LogicUtil.nullOrEmpty(worldName) || worldName.equals("NONE"))
+			return null;
+		
+		return Bukkit.getWorld(worldName);
 	}
+	
 	public String getLastWorldName() {
-		World w = getLastWorld();
+		World w = null;
+		if (getPlayer() != null)
+		{
+			w = getPlayer().getWorld();
+			persistant_data.set("last.world", w.getName());
+		}
+		
 		if (w != null)
 			return w.getName();
+		
 		return persistant_data.get("last.world", String.class, "NONE");
 	}
 	
