@@ -54,6 +54,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this.temp_data = player.temp_data;
 		this.persistant_data = player.persistant_data;
 		this.manager = player.manager;
+		this.cBar = player.cBar;
 	}
 	
 	public NoxPlayer(PlayerManager mn, String name) {
@@ -63,8 +64,18 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		manager = mn;
 		this.persistant_data = mn.getPlayerNode(name);
 		this.name = name;
+		if (getPlayer() != null)
+			this.cBar = new CoreBar(manager.getPlugin(), getPlayer());
 	}
 	
+	/**
+	 * Adds new cooldown to player.
+	 * <br>
+	 * This will use nano seconds if {@link NoxCore#isUsingNanoTime()} returns true. Else it will use millis.
+	// * @param name of cooldown
+	 * @param length of cooldown specified by nanos or millis depending is {@link NoxCore#isUsingNanoTime()}
+//	 * @return
+	 */
 	public boolean addCoolDown(String name, long length)
 	{
 		if (cd_cache.containsKey(name) && !cd_cache.get(name).expired())
@@ -149,7 +160,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	public World getLastWorld() {
 		World w = null;
-		if (getPlayer() != null)
+		if (getPlayer() != null)//TODO: replace with string version
 			w = getPlayer().getWorld();
 		else
 			w = Bukkit.getWorld(persistant_data.get("last.world", String.class, "NONE"));
