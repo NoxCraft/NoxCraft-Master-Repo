@@ -11,6 +11,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard;
 import com.bergerkiller.bukkit.common.scoreboards.CommonTeam;
+import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.locales.CoreLocale;
 
 import net.milkbowl.vault.chat.Chat;
@@ -89,9 +90,20 @@ public class VaultAdapter {
 			if (isPermissionsLoaded())
 				return permission.has(w.getName(), p.getName(), perm);
 			
+			return p.hasPermission(perm);
+		}
+
+		public static boolean hasPermission(NoxPlayer p, String string) {
+			if (p.isOnline())
+				return hasPermission(p.getLastWorld(), p.getPlayer(), string);
+			return hasPermission(p.getLastWorldName(), p.getPlayerName(), string);
+		}
+
+		public static boolean hasPermission(String world, String playerName, String perm) {
+			if (isPermissionsLoaded())
+				return permission.has(world, playerName, perm);
 			return false;
 		}
-		
 	}
 	
 	public static Chat chat = null;
