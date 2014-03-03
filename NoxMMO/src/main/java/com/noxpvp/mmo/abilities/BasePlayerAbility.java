@@ -31,9 +31,26 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements Pla
 	 */
 	public boolean mayExecute() {
 		Player player = getPlayer();
-		NoxPlayer p = PlayerManager.getInstance().getPlayer(player);
+
+		/*
+		 * The below can not work. Must override.
+		 */
 		
-		return player != null && VaultAdapter.PermUtils.hasPermission(p.getLastWorld(), player, (NoxMMO.PERM_NODE + ".ability." + the main perm node));
+		return player != null && hasPermission();
+		
+//		return player != null && VaultAdapter.PermUtils.hasPermission(p.getLastWorld(), player,);
+	}
+	
+	/**
+	 * Recommended to override if you want to add dynamic perm node support.
+	 * @return true if allowed or false if not OR if could not retrieve NoxPlayer object.
+	 */
+	public boolean hasPermission() {
+		NoxPlayer p = getNoxPlayer();
+		if (p == null)
+			return false;
+		
+		return VaultAdapter.PermUtils.hasPermission(p,  (NoxMMO.PERM_NODE + ".ability." + getName().replaceAll(" ", "-").toLowerCase()));
 	}
 	
 }
