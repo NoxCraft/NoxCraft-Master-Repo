@@ -1,11 +1,11 @@
 package com.noxpvp.core;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -79,6 +79,17 @@ public class VaultAdapter {
 			
 			pBoard.setTeam(team);
 			team.addPlayer(p);
+		}
+		
+	}
+	
+	public static class PermUtils {
+		
+		public static boolean hasPermission(World w, Player p, String perm){
+			if (isPermissionsLoaded())
+				return permission.has(w.getName(), p.getName(), perm);
+			
+			return false;
 		}
 		
 	}
