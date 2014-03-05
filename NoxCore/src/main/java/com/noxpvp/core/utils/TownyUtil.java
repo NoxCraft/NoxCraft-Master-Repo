@@ -139,7 +139,7 @@ public class TownyUtil {
 		if (town == null)
 			return false;
 		
-		return town.hasResident(player.getname());
+		return town.hasResident(player.getName());
 	}
 	
 	public static boolean isTownMember(Player player, String townName) {

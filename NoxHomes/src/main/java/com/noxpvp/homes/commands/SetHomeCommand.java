@@ -1,5 +1,6 @@
 package com.noxpvp.homes.commands;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
@@ -11,6 +12,7 @@ import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
+import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.core.utils.chat.MessageUtil;
 import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
@@ -52,6 +54,12 @@ public class SetHomeCommand extends BaseCommand {
 		
 		if (context.hasFlag("h") || context.hasFlag("help"))
 			return new CommandResult(this, false);
+		
+		{//TODO add perms
+			Location loc = sender.getLocation();
+			if (TownyUtil.isClaimedLand(loc) && !TownyUtil.isOwnLand(sender, loc))
+				return new CommandResult(this, false);
+		}
 		
 		String player = null;
 		
