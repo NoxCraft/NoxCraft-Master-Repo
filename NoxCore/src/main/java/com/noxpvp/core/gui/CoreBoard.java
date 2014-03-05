@@ -14,6 +14,7 @@ import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard;
 import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard.Display;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.utils.TimeUtils;
 
 public class CoreBoard{
 	private Map<String, BoardEntry> entries;
@@ -359,26 +360,9 @@ public class CoreBoard{
 			
 			this.timeStamp = System.currentTimeMillis() + (seconds * 1000);
 			
-			long s = (timeStamp - System.currentTimeMillis()) / 1000;
-			
-			this.timerString = getFormattedTime(s);
+			this.timerString = TimeUtils.getReadableMillisTime(timeStamp - System.currentTimeMillis());
 			
 			entry = new BoardEntry(name, (nameColor + displayedName), this.timerString);
-		}
-		
-		private String getFormattedTime(long seconds)
-		{
-			int s = (int) (seconds % 60);
-			seconds /= 60;
-			
-			int m= (int) (seconds % 60);
-			seconds /= 60;
-			
-			int h= (int) (seconds % 24);
-			seconds /= 24;
-			
-			return String.format("%1$02d:%2$02d:%3$02d", h, m, s);
-			
 		}
 		
 		public void run() {
@@ -399,7 +383,7 @@ public class CoreBoard{
 			
 			StringBuilder sb = new StringBuilder();
 			
-			sb.append(getFormattedTime((timeStamp - System.currentTimeMillis())/1000));
+			sb.append(TimeUtils.getReadableMillisTime(System.currentTimeMillis()));
 			
 			sb.insert(0, sc);
 			timerString = sb.toString();

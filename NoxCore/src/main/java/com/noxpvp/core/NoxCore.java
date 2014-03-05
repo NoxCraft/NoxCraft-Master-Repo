@@ -44,6 +44,7 @@ import com.noxpvp.core.listeners.OnLogoutSaveListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.locales.CoreLocale;
 import com.noxpvp.core.locales.GlobalLocale;
+import com.noxpvp.core.logging.PVELog;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
@@ -62,6 +63,8 @@ public class NoxCore extends NoxPlugin {
 	private FileConfiguration globalLocales;
 	private LoginListener loginListener;
 	private DataListener dataListener;
+	
+	private PVELog pveLogger;
 	
 	private PermissionHandler permHandler;
 	private transient WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>> permission_cache = new WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>>();
@@ -217,6 +220,8 @@ public class NoxCore extends NoxPlugin {
 		saveListener = new OnLogoutSaveListener(this); 
 		dataListener = new DataListener();
 		
+		pveLogger = new PVELog(this);
+		
 		chatPingListener.register();
 		
 		if (CommonUtil.isPluginEnabled("Votifier")) //Fixes console error message.
@@ -226,6 +231,8 @@ public class NoxCore extends NoxPlugin {
 		saveListener.register();
 		deathListener.register();
 		loginListener.register();
+		
+		pveLogger.register();
 		
 		CommonUtil.queueListenerLast(loginListener, PlayerLoginEvent.class);
 		VaultAdapter.load();
