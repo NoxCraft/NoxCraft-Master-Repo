@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.mmo.NoxMMO;
 
 public abstract class BasePlayerAbility extends BaseEntityAbility implements PlayerAbility {
@@ -35,14 +36,8 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements Pla
 	 */
 	public boolean mayExecute() {
 		Player player = getPlayer();
-
-		/*
-		 * The below can not work. Must override.
-		 */
 		
-		return player != null && hasPermission();
-		
-//		return player != null && VaultAdapter.PermUtils.hasPermission(p.getLastWorld(), player,);
+		return player != null && hasPermission() && (((this instanceof PVPAbility) && TownyUtil.isPVP(player)) || !(this instanceof PVPAbility));
 	}
 	
 	/**
