@@ -102,6 +102,10 @@ public class TownyUtil {
 		return !isClaimedLand(location); //Negated due to wild. 
 	}
 	
+	public static boolean isOwnLand(Player p) {
+		return isOwnLand(p, p.getLocation());
+	}
+	
 	public static boolean isOwnLand(Player p, SafeLocation location){
 		return isOwnLand(p, location.toLocation());
 	}

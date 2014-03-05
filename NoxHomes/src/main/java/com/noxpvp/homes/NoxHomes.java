@@ -161,6 +161,7 @@ public class NoxHomes extends NoxPlugin {
 						new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "*"), "Allowed to set home of everything including others.", PermissionDefault.FALSE,
 								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, DefaultHome.PERM_NODE), "Allowed to set default home.", PermissionDefault.OP),
 								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, NamedHome.PERM_NODE), "Allowed to set named homes.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", NoxHomes.HOMES_NODE, SetHomeCommand.PERM_NODE, "other-towns"), "Allows setting homes in other towns you don't belong to.", PermissionDefault.FALSE),
 								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", "*"), "Allowed to set any type of other peoples homes.", PermissionDefault.FALSE,
 										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", DefaultHome.PERM_NODE), "Allowed to set other peoples default homes.", PermissionDefault.OP),
 										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", NamedHome.PERM_NODE), "Allowed to set other peoples named homes.", PermissionDefault.OP)

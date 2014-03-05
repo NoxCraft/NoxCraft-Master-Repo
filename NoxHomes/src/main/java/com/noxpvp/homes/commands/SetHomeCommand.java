@@ -55,10 +55,15 @@ public class SetHomeCommand extends BaseCommand {
 		if (context.hasFlag("h") || context.hasFlag("help"))
 			return new CommandResult(this, false);
 		
-		{//TODO add perms
+		/*
+		 * Scoped for variable usage.
+		 */
+		{
+			MessageBuilder mb = new MessageBuilder().red("You are not allowed to set home in other towns.");
 			Location loc = sender.getLocation();
-			if (TownyUtil.isClaimedLand(loc) && !TownyUtil.isOwnLand(sender, loc))
-				return new CommandResult(this, false);
+			String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, "other-towns");
+			if (TownyUtil.isClaimedLand(loc) && !TownyUtil.isOwnLand(sender, loc) && permHandler.hasPermission(sender, perm))
+				return new CommandResult(this, true, mb.lines());
 		}
 		
 		String player = null;
