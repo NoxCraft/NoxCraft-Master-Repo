@@ -1,10 +1,17 @@
 package com.noxpvp.mmo;
 
+import java.util.UUID;
+
 import org.apache.commons.lang.NotImplementedException;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 
+import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
+import com.bergerkiller.bukkit.common.utils.EntityUtil;
+import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
@@ -16,6 +23,12 @@ import com.noxpvp.mmo.classes.PlayerClass;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
+	
+	private static final String PRIMARY_CLASS_NODE = "current.class.primary";
+	private static final String SECONDARY_CLASS_NODE = "current.class.secondary";
+	private static final String TARGET_NODE = "current.target";
+	private  PlayerClass primaryClass, secondaryClass;
+	private LivingEntity target;
 	
 	public MMOPlayer(OfflinePlayer player)
 	{
@@ -33,11 +46,11 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 	
 	public PlayerClass getPrimaryClass() {
-		throw new NotImplementedException("PlayerClasses not completed.");
+		return primaryClass;
 	}
 	
 	public PlayerClass getSecondaryClass() {
-		throw new NotImplementedException("PlayerClasses not completed.");
+		return secondaryClass;
 	}
 	
 	public void setClass(String c) {
@@ -62,7 +75,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 	
 	public void setPrimaryClass(PlayerClass c) {
-		throw new NotImplementedException("PlayerClasses not completed.");
+		this.primaryClass = c;
 	}
 	
 	public void setSecondaryClass(String c) {
@@ -73,15 +86,15 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 	
 	public void setSecondaryClass(PlayerClass c) {
-		throw new NotImplementedException("PlayerClasses not completed.");
+		this.secondaryClass = c;
 	}
 	
 	public LivingEntity getTarget() {
-		throw new NotImplementedException("Targets need reimplementation");
+		return target;
 	}
 	
 	public void setTarget(LivingEntity entity) {
-		throw new NotImplementedException("Targets need reimplementation");
+		this.target = entity;
 	}
 	
 	public PlayerAbility[] getPlayerAbilities() {
@@ -103,13 +116,40 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 	
 	public void load() {
-		// TODO Implement loading below this line.
+		ConfigurationNode node = getPersistantData();
+		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));
+		setSecondaryClass(node.get(SECONDARY_CLASS_NODE, ""));
 		
+		/*
+		 * Seperate the scope Just in case we want to use the variables again.
+		 */
+		{
+			String uid = node.get(TARGET_NODE + ".uuid", String.class);
+			World world = Bukkit.getWorld(node.get(TARGET_NODE + ".world", String.class));
+			if (!LogicUtil.nullOrEmpty(uid) && world != null)
+				setTarget(EntityUtil.getEntity(world, UUID.fromString(uid), LivingEntity.class));
+		}
 	}
 	
 	public void save() {
+		ConfigurationNode node = getPersistantData();
+		if (getPrimaryClass() == null)
+			node.remove(PRIMARY_CLASS_NODE);
+		else
+			node.set(PRIMARY_CLASS_NODE, getPrimaryClass().getUniqueID());
 		
-		// TODO Implement saving above this line.
+		if (getSecondaryClass() == null)
+			node.remove(SECONDARY_CLASS_NODE);
+		else
+			node.set(SECONDARY_CLASS_NODE, getSecondaryClass().getUniqueID());
+		
+		if (getTarget() == null)
+			node.remove(TARGET_NODE);
+		else {
+			node.set(TARGET_NODE + ".world", getTarget().getWorld().getName());
+			node.set(TARGET_NODE + "uuid", getTarget().getUniqueId().toString());
+		}
+		
 		CommonUtil.callEvent(new PlayerDataSaveEvent(this, true));
 	}
 }

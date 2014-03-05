@@ -1,0 +1,16 @@
+Initial:
+	- Added PlayerClass System.
+		Tiers for classes.
+			Exp per tier
+	- Added Abilities
+		Passive
+			[PLACEHOLDER]
+		Active
+			TOO MANY TO LIST FOR INITIAL RELEASE
+	- Half Implemented Ability Cyclers.
+		Missing item tracking listeners to dynamically register listeners for better performance overal.
+	- Implemented GUI
+		- Class Choose Menu
+	- Implemented Class Filter for broadcast messages in NoxCore
+
+	
