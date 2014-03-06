@@ -30,8 +30,8 @@ public class PVELog extends NoxListener<NoxCore>{
 	 * @param uuid The players unique id
 	 * @return the players log file
 	 */
-	private FileConfiguration getPlayerPVELog(UUID uuid){
-		return new FileConfiguration(getPlugin(), PVELog + File.separatorChar + uuid.toString() + ".yml");
+	private File getPlayerPVELog(UUID uuid){
+		return new File(PVELog + File.separatorChar + uuid.toString() + ".yml");
 	}
 	
 	public void log(EntityDamageEvent event) {
@@ -64,7 +64,7 @@ public class PVELog extends NoxListener<NoxCore>{
 
 		log.append(player + " hit for " + damage + " by " + damager + ". At " + loc);
 		
-		getPlayerPVELog(uuid).set(time, log.toString());
+//		getPlayerPVELog(uuid).set(time, log.toString());//guessing this is where i go wrong
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
