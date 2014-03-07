@@ -35,6 +35,7 @@ import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.internal.CooldownHandler;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.gui.CoolDown;
+import com.noxpvp.core.gui.CoreTabView;
 import com.noxpvp.core.listeners.ChatPingListener;
 import com.noxpvp.core.listeners.ChestBlockListener;
 import com.noxpvp.core.listeners.DataListener;
@@ -55,14 +56,16 @@ import com.palmergames.bukkit.towny.command.TownyAdminCommand;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 public class NoxCore extends NoxPlugin {
-	private ChatPingListener chatPingListener;
 
 	private FileConfiguration config;
 	
+	private ChatPingListener chatPingListener;
 	private DeathListener deathListener;
 	private FileConfiguration globalLocales;
 	private LoginListener loginListener;
 	private DataListener dataListener;
+	private OnLogoutSaveListener saveListener;
+	private VoteListener voteListener = null;
 	
 	private PVELog pveLogger;
 	
@@ -70,10 +73,6 @@ public class NoxCore extends NoxPlugin {
 	private transient WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>> permission_cache = new WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>>();
 	
 	private List<NoxPermission> permissions = new ArrayList<NoxPermission>();
-	
-	private OnLogoutSaveListener saveListener;
-
-	private VoteListener voteListener = null;
 	
 	private Towny towny = null;
 	private WorldGuardPlugin worldGuard = null;
@@ -212,6 +211,7 @@ public class NoxCore extends NoxPlugin {
 			}
 		});
 		
+		CoreTabView.setup();
 		
 		chatPingListener = new ChatPingListener();
 		voteListener = new VoteListener();
@@ -222,11 +222,10 @@ public class NoxCore extends NoxPlugin {
 		
 		pveLogger = new PVELog(this);
 		
-		chatPingListener.register();
-		
 		if (CommonUtil.isPluginEnabled("Votifier")) //Fixes console error message.
 			voteListener.register();
 		
+		chatPingListener.register();
 		dataListener.register();
 		saveListener.register();
 		deathListener.register();
