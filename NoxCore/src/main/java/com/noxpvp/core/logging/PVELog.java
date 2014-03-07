@@ -56,8 +56,8 @@ public class PVELog extends NoxListener<NoxCore>{
 	 * @param uuid The players unique id
 	 * @return the players log file
 	 */
-	private FileConfiguration getPlayerPVELog(UUID uuid){
-		return new FileConfiguration(getPlugin(), PVELog + File.separatorChar + uuid.toString() + ".yml");
+	private File getPlayerPVELog(UUID uuid){
+		return new File(PVELog + File.separatorChar + uuid.toString() + ".yml");
 	}
 	
 	public void log(EntityDamageEvent event) {
