@@ -31,9 +31,8 @@ public class DynamicClassTier extends ClassTier {
 	/**
 	 * 
 	 * @param name
-	 * @param tierLevel
+	 * @param tierLevel current tier level
 	 * @param maxLevel Maximum allowed level.
-	 * @param maxExp Maximum allowed exp
 	 */
 	public DynamicClassTier(PlayerClass retainer, String name, int tierLevel, @Nullable Integer maxLevel) {
 		super(retainer, name, tierLevel);
@@ -106,7 +105,7 @@ public class DynamicClassTier extends ClassTier {
 	 * @param node the node to traverse for settings.
 	 */
 	public void loadTierConfig(ConfigurationNode node) {
-		
+		//FIXME: Add some shit mannnn
 	}
 
 	@Override
