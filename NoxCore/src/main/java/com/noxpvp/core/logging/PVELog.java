@@ -2,6 +2,11 @@ package com.noxpvp.core.logging;
 
 import java.io.File;
 import java.util.UUID;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -10,6 +15,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.listeners.NoxListener;
@@ -18,10 +24,30 @@ import com.noxpvp.core.utils.TimeUtils;
 public class PVELog extends NoxListener<NoxCore>{
 
 	private static final String PVELog = "PVELOG";
+	private static FileHandler handler;
+	private static Formatter formatter;
+	private static ModuleLogger log;
+	private static final String newLine = System.lineSeparator();
 	
 	public PVELog(NoxCore core) {
 		super(core);
+	}
+	
+	public static void init() {
+		final NoxCore core = NoxCore.getInstance();
+		File file = core.getDataFile("logs/" + PVELog);
 		
+		if (log == null)
+			log = core.getModuleLogger(PVELog);
+		
+		log.setUseParentHandlers(false);
+		
+		if (handler != null)
+			handler.close();
+
+		handler = null;
+		
+		//TODO: FINISH LOGS
 	}
 	
 	/**
@@ -64,7 +90,7 @@ public class PVELog extends NoxListener<NoxCore>{
 
 		log.append(player + " hit for " + damage + " by " + damager + ". At " + loc);
 		
-		getPlayerPVELog(uuid).set(time, log.toString());
+		this.log.info(log.toString());
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -73,7 +99,5 @@ public class PVELog extends NoxListener<NoxCore>{
 			return;
 		
 		log(e);
-		
 	}
-	
 }
