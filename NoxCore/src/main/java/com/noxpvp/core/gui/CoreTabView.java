@@ -1,5 +1,7 @@
 package com.noxpvp.core.gui;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -54,9 +56,10 @@ public class CoreTabView {
 	
 	public void setupPlayerView(NoxPlayer p) {
 		
+		UUID player = p.getPlayer().getUniqueId();
 		int i = 6;//Refresh other players
 		for (Player it : Bukkit.getOnlinePlayers()){
-			if (it == p)
+			if (it.getUniqueId().equals(player))
 				continue;
 			
 			tab.set((int) Math.floor(i / 3), (int) Math.floor(i % (3 * (i / 3))), p.getFullName(), PlayerUtil.getPing(it));
@@ -67,6 +70,8 @@ public class CoreTabView {
 			
 			itTab.add(p);
 		}
+		
+		tab.displayTo(p.getPlayer());
 		
 	}
 	

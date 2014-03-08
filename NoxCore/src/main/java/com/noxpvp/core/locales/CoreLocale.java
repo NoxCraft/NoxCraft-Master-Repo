@@ -17,7 +17,7 @@ public class CoreLocale extends NoxLocale {
 		GROUP_TAG_SUFFIX = new CoreLocale("special.ptag.suffix", "");
 		SPECIAL_CHAT_PINGCOLOR = new CoreLocale("special.chatping.color", "&2");
 		SPECIAL_CHAT_PINGSYMBAL = new CoreLocale("special.chatping.symbal", "@");
-		TAB_VIEW_HEADER = new CoreLocale("special.tabview.header", "&2    Welcome to\n&cNox Imperialis!");
+		TAB_VIEW_HEADER = new CoreLocale("special.tabview.header", "&2   Welcome to\n&cNox Imperialis!");
 		TAB_VIEW_UNDERLINE = new CoreLocale("special.tabview.underline", "&6[====_~x~_====\n====_*~*_====\n====_~x~_====]");
 	}
 	
