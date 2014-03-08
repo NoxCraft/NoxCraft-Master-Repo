@@ -1,7 +1,6 @@
 package com.noxpvp.core.data;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.WeakHashMap;
 
@@ -32,6 +31,7 @@ import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.gui.CoolDown;
 import com.noxpvp.core.gui.CoreBar;
+import com.noxpvp.core.gui.CoreTabView;
 
 public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	private WeakHashMap<String, CoolDown> cd_cache;
@@ -43,6 +43,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	private ConfigurationNode persistant_data = null;
 	
 	private CoreBar cBar;
+	private CoreTabView tabView;
 	
 	private ConfigurationNode temp_data = new ConfigurationNode();
 	
@@ -56,6 +57,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this.persistant_data = player.persistant_data;
 		this.manager = player.manager;
 		this.cBar = player.cBar;
+		this.tabView = player.getTabView().clone();
 	}
 	
 	public NoxPlayer(PlayerManager mn, String name) {
@@ -65,8 +67,10 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		manager = mn;
 		this.persistant_data = mn.getPlayerNode(name);
 		this.name = name;
-		if (getPlayer() != null)
+		if (getPlayer() != null){
 			this.cBar = new CoreBar(manager.getPlugin(), getPlayer());
+			this.tabView = new CoreTabView(this);
+		}
 	}
 	
 	/**
@@ -130,6 +134,10 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		return v2;
 	}
 	
+	public CoreTabView getTabView() {
+		return tabView;
+	}
+	
 	public Location getLastDeathLocation()
 	{
 		SafeLocation l = null;
@@ -150,6 +158,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		if (cached)
 			return persistant_data.get("last.join", long.class);
 		else
+			
 			return getOfflinePlayer().getLastPlayed();
 	}
 	
@@ -183,22 +192,24 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	private String getMainGroup() {
 	    
-	    String[] groups = VaultAdapter.permission.getPlayerGroups(getPlayer());
-	    LinkedList<String> groupList = new LinkedList<String>();//: put local group list here
-	    
-	    if (groups.length < 0) return null;
-	    
-	    int ind = 100;
-	    String finalGroup = null;
-	    
-	    for (String group : groups) {
-	            if (groupList.indexOf(group) < ind) {
-	                    ind = groupList.indexOf(group);
-	                    finalGroup = group;
-	            }
-	    }
-	    
-	    return finalGroup;
+		//Using weight from pex
+		return VaultAdapter.permission.getPrimaryGroup(getPlayer());
+		
+//	    LinkedList<String> groupList = new LinkedList<String>();//: put local group list here
+//	    
+//	    if (groups.length < 0) return null;
+//	    
+//	    int ind = 100;
+//	    String finalGroup = null;
+//	    
+//	    for (String group : groups) {
+//	            if (groupList.indexOf(group) < ind) {
+//	                    ind = groupList.indexOf(group);
+//	                    finalGroup = group;
+//	            }
+//	    }
+//	    
+//	    return finalGroup;
 	}
 	
 	public Double getMoney() { return VaultAdapter.economy.getBalance(getPlayerName(), getLastWorldName()); }
