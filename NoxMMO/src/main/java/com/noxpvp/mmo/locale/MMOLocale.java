@@ -16,7 +16,6 @@ public class MMOLocale extends NoxLocale {
 	
 	//GUI
 	public final static MMOLocale GUI_MENU_NAME_COLOR;
-	
 	//INTERNAL
 	/**
 	 * @deprecated This is used internally. Do not use!
