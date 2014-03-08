@@ -13,6 +13,7 @@ import com.bergerkiller.bukkit.common.collections.InterpolatedMap;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.bergerkiller.bukkit.common.utils.MathUtil;
+import com.bergerkiller.bukkit.common.utils.ParseUtil;
 import com.noxpvp.mmo.NoxMMO;
 
 public class DynamicClassTier extends ClassTier {
@@ -105,7 +106,18 @@ public class DynamicClassTier extends ClassTier {
 	 * @param node the node to traverse for settings.
 	 */
 	public void loadTierConfig(ConfigurationNode node) {
-		//FIXME: Add some shit mannnn
+		ConfigurationNode eNode = node.getNode("exp-levels");
+		for (String lvl : eNode.getKeys())
+			if (ParseUtil.isNumeric(lvl)) {
+				int l = ParseUtil.parseInt(lvl, -1);
+				if (l < 0)
+					 continue;
+				
+				levelToExpMap.put(l, eNode.get(lvl, levelToExpMap.get(l)));
+			}
+		
+		
+				
 	}
 
 	@Override
