@@ -1,5 +1,6 @@
 package com.noxpvp.core;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -9,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard;
 import com.bergerkiller.bukkit.common.scoreboards.CommonTeam;
 import com.noxpvp.core.data.NoxPlayer;
@@ -20,19 +22,25 @@ import net.milkbowl.vault.permission.Permission;
 
 public class VaultAdapter {
 	public static class GroupUtils {
+		static ModuleLogger log;
 		
 		public static List<String> getGroupList(){
-			if (isChatLoaded() && isPermissionsLoaded() && permission.hasGroupSupport()){
+			if (isPermissionsLoaded() && permission.hasGroupSupport()){
 				List<String> list = Arrays.asList(VaultAdapter.permission.getGroups());
 				
 				return list;
+			} else {
+				if (log != null)
+					log.warning("Could not get group list... " + (!isPermissionsLoaded()?"Permissions not loaded.":permission.hasGroupSupport()?"":"No Group Support") );
 			}
 			
-			return null;
+			return new ArrayList<String>();
 		}
 		
 		public static String getPlayerGroup(Player p) {
-			return VaultAdapter.permission.getPrimaryGroup(p);
+			if (isPermissionsLoaded())
+				return VaultAdapter.permission.getPrimaryGroup(p);
+			return null;
 		}
 		
 		public static String getFormatedPlayerName(Player p) {
@@ -46,14 +54,14 @@ public class VaultAdapter {
 		
 
 		public static void reloadAllGroupTags() {
-			if (isChatLoaded() && isPermissionsLoaded() && permission.hasGroupSupport())
+			if (isPermissionsLoaded() && permission.hasGroupSupport())
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					loadGroupTag(p);
 				}
 		}
 		
 		public static void reloadGroupTag(Player p) {
-			if (p == null) return;
+			if (p == null || !isPermissionsLoaded()) return;
 			
 			loadGroupTag(p);
 		}
@@ -119,6 +127,7 @@ public class VaultAdapter {
 	
 	public static void load()
 	{
+		GroupUtils.log = NoxCore.getInstance().getModuleLogger("VaultAdapter", "GroupUtils");
 		setupChat();
 		setupEconomy();
 		setupPermission();

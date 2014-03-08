@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
 
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.Vector3D;
-import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
 
@@ -82,23 +82,24 @@ public class TargetAbility extends BasePlayerAbility{
 		Vector3D maximum = targetPos.add(0.6, 1.75, 0.6); 
 
 		if (hasIntersection(observerStart, observerEnd, minimum, maximum)) {
-			NoxMMO.getInstance().getPlayerManager().getPlayer(p.getName()).setTarget(target_ref.get());
-			
 			PlayerManager pm = PlayerManager.getInstance();
+			MMOPlayer player = pm.getPlayer(p.getName());
 			
-			NoxPlayer noxPlayer = pm.getPlayer(p);
-			MMOPlayer mmoPlayer = NoxMMO.getInstance().getPlayerManager().getPlayer(p);
+			com.noxpvp.core.manager.PlayerManager cpm = com.noxpvp.core.manager.PlayerManager.getInstance();
 			
-			if (noxPlayer == null) return false;
 			
-			String name = noxPlayer.getFullName();
+			if (player == null) return false;
 			
-			Bukkit.broadcastMessage("TargetAbility Ran");
+			player.setTarget(target_ref.get());
+			
+			String name = player.getFullName();
+			
+//			Bukkit.broadcastMessage("TargetAbility Ran");
 			PlayerClass c = null;/*mmoPlayer.getPrimaryClass();*/
 			if (c != null) {
 				name = name + " - " + c.getDisplayName();
 			}
-			pm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, null);
+			cpm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, null);
 		}
 		
 		return true;

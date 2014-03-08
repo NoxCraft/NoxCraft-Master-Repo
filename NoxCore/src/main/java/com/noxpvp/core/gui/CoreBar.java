@@ -12,9 +12,8 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.manager.PlayerManager;
 
 public class CoreBar{
-	
 	private final Entry currentEntry = new Entry();
-	
+	private Object lock = null;
 	public final Player p;
 	PlayerManager pm;
 	
@@ -35,19 +34,23 @@ public class CoreBar{
 	}
 	
 	public void newFlasher(String text) {
-		this.new Flasher(null);
+		if (lock == null || !lock.equals(text))
+			this.new Flasher(null);
 	}
 	
 	public void newLivingTracker(LivingEntity e, String text, ChatColor color) {
-		this.new LivingTracker(e, text, color);
+		if (lock == null || !lock.equals(e.getUniqueId()))
+			this.new LivingTracker(e, text, color);
 	}
 	
 	public void newScroller(String text, int length, ChatColor color) {
-		this.new Scroller(text, length, color);
+		if (lock == null || !lock.equals(text))
+			this.new Scroller(text, length, color);
 	}
 	
 	public void newShine(String text, int delay) {
-		this.new Shine(text, delay);
+		if (lock == null || !lock.equals(text))
+			this.new Shine(text, delay);
 	}
 	
 	private class Entry{
@@ -55,7 +58,7 @@ public class CoreBar{
 		String text;
 		
 		public Entry(){
-			this.text = "";
+			this.text = "~x~";
 			this.percentFilled = 100F;
 		}
 		
@@ -78,7 +81,7 @@ public class CoreBar{
 	}
 	
 
-	private class Flasher extends BukkitRunnable{
+	private class Flasher extends BukkitRunnable {
 
 		private String text;
 		
@@ -91,7 +94,7 @@ public class CoreBar{
 		}
 		
 		public void run() {
-			if (currentEntry.text != text)
+			if (!currentEntry.text.equals(text))
 			{
 				safeCancel();
 				return;
@@ -125,14 +128,13 @@ public class CoreBar{
 			
 			currentEntry.update((float) (e.getHealth() / e.getMaxHealth() * 100), text.toString());
 			
-			this.runTaskTimer(NoxCore.getInstance(), 0, 10);
+			this.runTaskTimer(NoxCore.getInstance(), 0, 8);
 		}
 		
 		public void run() {
 			distance = p.getLocation().distance(e.getLocation());
-			if (!currentEntry.text.equals(text.toString()) || distance > 55 || p == null || !p.isOnline() || p.isDead() || e == null || e.isDead())
+			if (!currentEntry.text.equals(text.toString()) || distance > 75 || p == null || !p.isOnline() || p.isDead() || e == null || e.isDead())
 			{
-				currentEntry.update((float) 0, ""); 
 				safeCancel();
 				return;
 			}

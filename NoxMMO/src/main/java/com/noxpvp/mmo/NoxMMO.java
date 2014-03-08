@@ -112,7 +112,7 @@ public class NoxMMO extends NoxPlugin {
 		playerTargetListener.register();
 		blockListener.register();
 		permHandler = new PermissionHandler(this);
-		experieneceListener.register();
+//		experieneceListener.register();
 		
 		register(equipmentPacketListener, PacketType.OUT_ENTITY_EQUIPMENT);
 		register(worldSoundListener, PacketType.OUT_NAMED_SOUND_EFFECT);

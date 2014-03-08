@@ -9,12 +9,14 @@ public class CoreLocale extends NoxLocale {
 	public final static CoreLocale GROUP_TAG_SUFFIX;
 	public final static CoreLocale SPECIAL_CHAT_PINGCOLOR;
 	public final static CoreLocale SPECIAL_CHAT_PINGSYMBAL;
+	public final static CoreLocale MOTD_STRINGS;
 	
 	static {
 		GROUP_TAG_PREFIX = new CoreLocale("special.ptag.prefix", "");
 		GROUP_TAG_SUFFIX = new CoreLocale("special.ptag.suffix", "");
 		SPECIAL_CHAT_PINGCOLOR = new CoreLocale("special.chatping.color", "&2");
 		SPECIAL_CHAT_PINGSYMBAL = new CoreLocale("special.chatping.symbal", "@");
+		MOTD_STRINGS = new CoreLocale("special.motd.strings", "example1\nexample2");
 	}
 	
 	public CoreLocale(String name, String defValue) {

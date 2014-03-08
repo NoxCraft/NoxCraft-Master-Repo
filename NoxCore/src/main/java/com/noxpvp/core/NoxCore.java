@@ -183,13 +183,13 @@ public class NoxCore extends NoxPlugin {
 	}
 	@Override
 	public void enable() {
-		if (instance != null)
+		if (instance != null && instance != this)
 		{
 			log(Level.SEVERE, "This plugin already has an instance running!! Disabling second run.");
 			setEnabled(false);
 			return;
-		}
-		setInstance(this);
+		} else if (instance == null)
+			setInstance(this);
 		
 		registerSerials(this);
 		for (Plugin p : CommonUtil.getPlugins())
@@ -463,13 +463,17 @@ public class NoxCore extends NoxPlugin {
 	
 	@Override
 	public void localization() {
+		if (instance == null)
+			setInstance(this);
+		
+		VaultAdapter.load();
 		Common.loadClasses("com.noxpvp.core.locales.CoreLocale", "com.noxpvp.core.VaultAdapter");
 		
 		globalLocales = new FileConfiguration(this, "Global-Localization.yml");
 		
 		// load
         if (this.globalLocales.exists()) {
-                this.loadLocalization();
+            this.loadGlobalLocalization();
         }
 
         // header
@@ -482,7 +486,7 @@ public class NoxCore extends NoxPlugin {
 		loadLocales(CoreLocale.class);
 		for (String group : VaultAdapter.GroupUtils.getGroupList())
 		{
-			loadLocale(CoreLocale.GROUP_TAG_PREFIX.getName() + "." + group, group);
+			loadLocale(CoreLocale.GROUP_TAG_PREFIX.getName() + "." + group, "coaster-sucks"+group);
 			loadLocale(CoreLocale.GROUP_TAG_SUFFIX.getName() + "." +  group, "");
 		}
 	}

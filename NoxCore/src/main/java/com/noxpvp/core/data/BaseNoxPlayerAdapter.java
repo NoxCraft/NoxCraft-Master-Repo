@@ -64,6 +64,10 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter {
 			return null;
 	}
 	
+	public final String getFullName() {
+		return getNoxPlayer().getFullName();
+	}
+	
 	public final boolean isAlive() { return playerRef.get() != null; }
 	
 	public final void updateReference() {

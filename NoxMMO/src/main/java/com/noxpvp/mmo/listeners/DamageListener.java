@@ -17,6 +17,7 @@ import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.utils.chat.MessageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.runnables.EffectsRunnable;
 
@@ -37,8 +38,11 @@ public class DamageListener extends NoxListener<NoxMMO>{
 	
 	
 
-	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
-	public void onDamage(EntityDamageEvent event) {		
+	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = false)
+	public void onDamage(EntityDamageEvent event) {	
+		if (event.isCancelled())
+			MessageUtil.broadcast("EVENT FUCKING CANCELLED");
+		
 		Entity e = event.getEntity();
 		
 		LivingEntity livingDamaged = (LivingEntity) ((e instanceof LivingEntity)? e : null);
@@ -48,13 +52,13 @@ public class DamageListener extends NoxListener<NoxMMO>{
 		EntityDamageByEntityEvent pe = (EntityDamageByEntityEvent)
 				(e.getLastDamageCause() instanceof EntityDamageByEntityEvent? e.getLastDamageCause() : null);
 		
+		MessageUtil.broadcast("CALLED");
 		if (pe != null) {
 			playerAttacker = (Player) ((pe.getDamager() instanceof Player)? pe.getDamager() : null);
-			
 		}
 		
 		if (playerAttacker != null) {
-			
+			MessageUtil.sendMessage(playerAttacker, "DAMAGE");
 			/*
 			 * player / living entity bars
 			 */

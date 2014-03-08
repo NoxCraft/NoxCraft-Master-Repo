@@ -28,8 +28,17 @@ public class MessageUtil {
 		sendMessage(Bukkit.getOnlinePlayers(), permission , messages);
 	}
 	
+	public static void broadcast(String message) {
+		sendMessage(Bukkit.getOnlinePlayers(), message);
+	}
+	
+	public static void broadcast(String... messages){
+		sendMessage(Bukkit.getOnlinePlayers(), messages);
+	}
+	
 	public static void broadcast(World world, String message)
 	{
+		Bukkit.broadcastMessage("TEST");
 		for (Player player : world.getPlayers())
 			sendMessage(player, message);
 	}

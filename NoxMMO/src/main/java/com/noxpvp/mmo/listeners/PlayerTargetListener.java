@@ -20,7 +20,7 @@ public class PlayerTargetListener extends NoxListener<NoxMMO>{
 	{
 		super(mmo);
 		
-		this.pm = NoxMMO.getInstance().getPlayerManager();
+		this.pm = PlayerManager.getInstance();
 	}
 	
 	public PlayerTargetListener() {
