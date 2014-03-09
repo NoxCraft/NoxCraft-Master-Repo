@@ -37,18 +37,6 @@ public class BandageAbility extends BaseEntityAbility{
 		DamageRunnable wereOff = new DamageRunnable(e, e, (e.getMaxHealth() / 10), 10);
 		wereOff.runTaskTimer(NoxMMO.getInstance(), delay, 15);
 		
-		//testing
-		
-		NMSPacketPlayOutNamedEntitySpawn nmsPacket = new NMSPacketPlayOutNamedEntitySpawn();
-		CommonPacket cp = nmsPacket.newInstance();
-		
-		cp.write(nmsPacket.entityId, 12345);
-		cp.write(nmsPacket.profile, "test");
-		
-		
-		
-		
-		
 		return false;
 	}
 
