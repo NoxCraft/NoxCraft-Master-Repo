@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
 
@@ -26,7 +26,7 @@ public class JoustAbility extends BasePlayerAbility{
 	public boolean execute() {
 		
 		MMOPlayer mmoP;
-		PlayerClass clazz = (mmoP = NoxMMO.getInstance().getPlayerManager().getPlayer(getPlayer())) != null? mmoP.getPrimaryClass() : null;
+		PlayerClass clazz = (mmoP = PlayerManager.getInstance().getPlayer(getPlayer())) != null? mmoP.getPrimaryClass() : null;
 		
 		if (clazz == null) return false;
 		

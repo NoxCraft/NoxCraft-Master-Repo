@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.Vector3D;
+import com.noxpvp.core.utils.chat.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
@@ -60,6 +61,8 @@ public class TargetAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 		
+		MessageUtil.broadcast("targeting");
+		
 		Player p = getPlayer();
 		
 		for (Entity it : p.getNearbyEntities(range, range, range)){
@@ -95,8 +98,8 @@ public class TargetAbility extends BasePlayerAbility{
 					PlayerClass c = mmoPlayer.getPrimaryClass();
 					
 					if (c != null) { 
-						name = mmoPlayer.getFullName() + separater + c.getDisplayName();
-					} else name = mmoPlayer.getFullName();
+						name = mmoIt.getFullName() + separater + c.getDisplayName();
+					} else name = mmoIt.getFullName();
 				} else {
 					if (it instanceof Player) name = ((Player)it).getName();
 					else name = it.getType().name();

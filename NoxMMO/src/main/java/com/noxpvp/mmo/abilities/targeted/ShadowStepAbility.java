@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
 /**
@@ -40,7 +41,7 @@ public class ShadowStepAbility extends BaseTargetedPlayerAbility{
 	 * @param player the Player type user for this ability instance
 	 */
 	public ShadowStepAbility(Player player){
-		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getPlayer(player).getTarget());
+		super(ABILITY_NAME, player, PlayerManager.getInstance().getPlayer(player).getTarget());
 		
 		this.range = 10;
 	}

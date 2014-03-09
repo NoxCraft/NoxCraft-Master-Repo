@@ -10,7 +10,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.manager.PlayerManager;
-import com.noxpvp.core.utils.chat.MessageUtil;
 
 public class CoreBar{
 	

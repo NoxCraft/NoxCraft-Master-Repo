@@ -1,14 +1,13 @@
 package com.noxpvp.mmo.filters;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.filtering.Filter;
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.classes.PlayerClass;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
@@ -46,6 +45,6 @@ public class PlayerClassFilter implements Filter<Player> {
 	
 	private static MMOPlayer getMMOPlayer(Player player)
 	{
-		return NoxMMO.getInstance().getPlayerManager().getPlayer(player);
+		return PlayerManager.getInstance().getPlayer(player);
 	}
 }

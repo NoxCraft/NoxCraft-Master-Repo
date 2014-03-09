@@ -8,7 +8,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOutEntityEquipment;
-import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
 
@@ -52,7 +52,7 @@ public class ClassArmorDisguiseAbility extends BasePlayerAbility{
 			
 			if (stack.getType() != Material.AIR) {
 				
-				PlayerClass clazz = NoxMMO.getInstance().getPlayerManager().getPlayer(getPlayer()).getPrimaryClass();
+				PlayerClass clazz = PlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
 				if (clazz == null)
 					return false;
 				

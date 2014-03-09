@@ -19,7 +19,6 @@ public class SilentWalkingAbility extends BasePlayerAbility{
 	public final static String PERM_NODE = "silent-walk";
 	
 	private CommonPacket packet;
-	private NMSPacketPlayOutNamedSoundEffect nms;
 	
 	public SilentWalkingAbility(Player p, CommonPacket packet) {
 		super(ABILITY_NAME, p);
@@ -28,22 +27,23 @@ public class SilentWalkingAbility extends BasePlayerAbility{
 	}
 
 	public boolean execute() {
-		nms = new NMSPacketPlayOutNamedSoundEffect();
+		
+		if (!packet.read(PacketType.OUT_NAMED_SOUND_EFFECT.soundName).contains("step."))
+			return false;
 		
 		Player hearing = getPlayer();
 		Location loc = new Location(hearing.getWorld(),
-				packet.read(PacketType.OUT_NAMED_SOUND_EFFECT.x),
-				packet.read(PacketType.OUT_NAMED_SOUND_EFFECT.y), 
-				packet.read(PacketType.OUT_NAMED_SOUND_EFFECT.z));
+				packet.read(PacketType.OUT_NAMED_SOUND_EFFECT.x) / 8,
+				packet.read(PacketType.OUT_NAMED_SOUND_EFFECT.y) / 8, 
+				packet.read(PacketType.OUT_NAMED_SOUND_EFFECT.z) / 8);
 		
 		double lowestDistance = 100;
 		Player closest = null;
 		
-		for (Player p : PlayerUtil.getNearbyPlayers(hearing, 50)){
+		for (Player p : PlayerUtil.getNearbyPlayers(hearing, 100)){
 			if (p.equals(hearing)) continue;
 			
 			double d = p.getLocation().distance(loc);
-			MessageUtil.broadcast("" + loc);
 			if (d < lowestDistance) {
 				lowestDistance = d;
 				closest = p;
@@ -53,8 +53,6 @@ public class SilentWalkingAbility extends BasePlayerAbility{
 		if (closest == null || lowestDistance > 6) {
 			return false;
 		}
-		
-		MessageUtil.broadcast("closest was " + closest.getName());
 		
 		if (VaultAdapter.permission.has(closest, NoxMMO.PERM_NODE + ".ability." + SilentWalkingAbility.PERM_NODE)){
 			return true;

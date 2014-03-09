@@ -6,6 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.noxpvp.core.listeners.NoxListener;
+import com.noxpvp.core.utils.chat.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
@@ -34,6 +35,7 @@ public class PlayerTargetListener extends NoxListener<NoxMMO>{
 		
 		if (player == null) return;
 		
+		MessageUtil.broadcast("starting target");
 		new TargetAbility(p).setRange(50).execute();//TODO make default range configized
 		
 	}

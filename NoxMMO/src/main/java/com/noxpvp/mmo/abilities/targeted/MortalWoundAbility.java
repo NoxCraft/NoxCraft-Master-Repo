@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
 public class MortalWoundAbility extends BaseTargetedPlayerAbility{
@@ -81,7 +82,7 @@ public class MortalWoundAbility extends BaseTargetedPlayerAbility{
 	public MortalWoundAbility setAmplifier(int amplifier) {this.amplifier = amplifier; return this;}
 
 	public MortalWoundAbility(Player player){
-		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getPlayer(player).getTarget());
+		super(ABILITY_NAME, player, PlayerManager.getInstance().getPlayer(player).getTarget());
 		
 		this.range = 5;
 		this.damage = 6;

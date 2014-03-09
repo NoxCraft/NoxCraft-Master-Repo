@@ -29,7 +29,7 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
 public class ClassChooseMenu extends CoreBox{
 
 	public static final String MENU_NAME = "Class Selection";
-	private final static int size = 36;
+	private final static int size = 18;
 
 	private Map<Integer, ClassChooseMenuItem> menuItems;
 	
@@ -48,9 +48,10 @@ public class ClassChooseMenu extends CoreBox{
 		
 		pMeta.setDisplayName(MMOLocale.GUI_MENU_NAME_COLOR.get() + "Pick a primary class");
 		sMeta.setDisplayName(MMOLocale.GUI_MENU_NAME_COLOR.get() + "Pick a Secondary class");
-
-		pMeta.setLore(Arrays.asList(ChatColor.GOLD + "Click a item on this row", ChatColor.GOLD + "to select the teir you want to use"));
-		sMeta.setLore(Arrays.asList(ChatColor.GOLD + "Click a item on this row", ChatColor.GOLD + "to select a secondary class"));
+		
+		String lorePrefix = ChatColor.GREEN + "" + ChatColor.ITALIC;
+		pMeta.setLore(Arrays.asList(lorePrefix + "Click a item on this row", lorePrefix + "to select the teir you want to use"));
+		sMeta.setLore(Arrays.asList(lorePrefix + "Click a item on this row", lorePrefix + "to select a secondary class"));
 		
 		primarySign.setItemMeta(pMeta);
 		secondarySign.setItemMeta(sMeta);
@@ -124,11 +125,13 @@ public class ClassChooseMenu extends CoreBox{
 			action != InventoryAction.SWAP_WITH_CURSOR)
 			return;
 		
-		ItemStack clickItem = event.getCurrentItem();
+		ItemStack clickItem = event.getCursor() == null? event.getCurrentItem() : event.getCursor();
+		if (clickItem == null)
+			return;
 		
 		ClassChooseMenuItem finalItem = null;
 		for (ClassChooseMenuItem item : menuItems.values()) {
-			if (!item.equals(clickItem)) continue;
+			if (item == null || !item.equals(clickItem)) continue;
 			
 			finalItem = item;
 		}

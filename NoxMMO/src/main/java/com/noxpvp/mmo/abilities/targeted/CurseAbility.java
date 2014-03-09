@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 import com.noxpvp.mmo.runnables.EffectsRunnable;
 
@@ -67,7 +68,7 @@ public class CurseAbility extends BaseTargetedPlayerAbility{
 	
 	public CurseAbility(Player player){
 		
-		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getPlayer(player).getTarget());
+		super(ABILITY_NAME, player, PlayerManager.getInstance().getPlayer(player).getTarget());
 		
 		this.duration = 100;
 		this.lethality = 1;

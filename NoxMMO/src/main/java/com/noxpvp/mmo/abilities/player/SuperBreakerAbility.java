@@ -5,7 +5,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.noxpvp.core.data.NoxPlayerAdapter;
-import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
 
@@ -31,7 +31,7 @@ public class SuperBreakerAbility extends BasePlayerAbility {
 			return false;
 		
 		Player p = getPlayer();
-		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getPlayer(p).getPrimaryClass();
+		PlayerClass pClass = PlayerManager.getInstance().getPlayer(p).getPrimaryClass();
 		
 		int length = (20 * pClass.getTotalLevel()) / 16;
 		return p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, length, 50));

@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
@@ -20,7 +19,7 @@ public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbil
 	public CriticalHitAbility(Player p) {
 		super(ABILITY_NAME, p);
 		
-		this.pm = NoxMMO.getInstance().getPlayerManager();
+		this.pm = PlayerManager.getInstance();
 	}
 	
 	public boolean execute(EntityDamageByEntityEvent event) {

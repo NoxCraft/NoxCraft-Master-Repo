@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
 import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
@@ -82,7 +83,7 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 		final String name = getPlayer().getName();
 		
 		SkullSmasherAbility.smashers.put(name, this);
-		PlayerClass pClass = NoxMMO.getInstance().getPlayerManager().getPlayer(getPlayer()).getPrimaryClass();
+		PlayerClass pClass = PlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
 		
 		int length = (20 * (pClass.getTotalLevel())) / 16;
 		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
