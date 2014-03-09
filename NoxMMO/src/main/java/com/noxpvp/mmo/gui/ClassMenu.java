@@ -6,7 +6,6 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -24,14 +23,14 @@ import com.noxpvp.mmo.util.InventoryActionCombo;
 
 public class ClassMenu extends CoreBox{
 
-	public final static String MENU_NAME = MMOLocale.GUI_MENU_NAME_COLOR + "Class Info";
-	private final static int size = 4;
+	public final static String MENU_NAME = "Class Info";
+	private final static int size = 36;
 	
 	private Map<Integer, ClassMenuItem> menuItems;
 	private PlayerClass clazz;
 	
 	public ClassMenu(final Player p, PlayerClass clazz, CoreBox backButton){
-		super(p, MENU_NAME, size, backButton);
+		super(p, MMOLocale.GUI_MENU_NAME_COLOR.get() + MENU_NAME, size, backButton);
 		
 		this.menuItems = new HashMap<Integer, ClassMenuItem>();
 		this.clazz = clazz;

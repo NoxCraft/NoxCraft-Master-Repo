@@ -3,7 +3,10 @@ package com.noxpvp.mmo.abilities.targeted;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 
+import net.milkbowl.vault.chat.Chat;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -61,45 +64,48 @@ public class TargetAbility extends BasePlayerAbility{
 		
 		for (Entity it : p.getNearbyEntities(range, range, range)){
 			
-			if (!(it instanceof Player)) continue;
-			if (it instanceof Player){
-				if (!(p).canSee((Player) it)) continue;}
+			if (!(it instanceof LivingEntity) || it.equals(p)) continue;
+			if ((it instanceof Player) && !(p).canSee((Player) it)) continue;
 			
-			this.target_ref = new SoftReference<LivingEntity>((LivingEntity) it);
-			break;
-		}
-		if (this.target_ref == null || this.target_ref.get() == null)
-			return false;
-		
-		Location observerPos = p.getEyeLocation();
-		Vector3D observerDir = new Vector3D(observerPos.getDirection());
-
-		Vector3D observerStart = new Vector3D(observerPos);
-		Vector3D observerEnd = observerStart.add(observerDir.multiply(range));
-		
-		Vector3D targetPos = new Vector3D(target_ref.get().getLocation());
-		Vector3D minimum = targetPos.add(-0.6, 0, -0.6); 
-		Vector3D maximum = targetPos.add(0.6, 1.75, 0.6); 
-
-		if (hasIntersection(observerStart, observerEnd, minimum, maximum)) {
-			PlayerManager pm = PlayerManager.getInstance();
-			MMOPlayer player = pm.getPlayer(p.getName());
+			Location observerPos = p.getEyeLocation();
+			Vector3D observerDir = new Vector3D(observerPos.getDirection());
 			
-			com.noxpvp.core.manager.PlayerManager cpm = com.noxpvp.core.manager.PlayerManager.getInstance();
+			Vector3D observerStart = new Vector3D(observerPos);
+			Vector3D observerEnd = observerStart.add(observerDir.multiply(range));
 			
+			Vector3D targetPos = new Vector3D(it.getLocation());
+			Vector3D minimum = targetPos.add(-0.6, 0, -0.6); 
+			Vector3D maximum = targetPos.add(0.6, 1.75, 0.6); 
 			
-			if (player == null) return false;
-			
-			player.setTarget(target_ref.get());
-			
-			String name = player.getFullName();
-			
-//			Bukkit.broadcastMessage("TargetAbility Ran");
-			PlayerClass c = null;/*mmoPlayer.getPrimaryClass();*/
-			if (c != null) {
-				name = name + " - " + c.getDisplayName();
-			}
-			cpm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, null);
+			if (hasIntersection(observerStart, observerEnd, minimum, maximum)) {
+				this.target_ref = new SoftReference<LivingEntity>((LivingEntity) it);
+				
+				PlayerManager pm = PlayerManager.getInstance();
+				MMOPlayer mmoPlayer = pm.getPlayer(p), mmoIt = it instanceof Player? pm.getPlayer((Player) it) : null;
+				com.noxpvp.core.manager.PlayerManager cpm = com.noxpvp.core.manager.PlayerManager.getInstance();
+				
+				if (mmoPlayer == null) continue;
+				
+				mmoPlayer.setTarget(target_ref.get());
+				
+				String name,
+				separater = ChatColor.GOLD + " - " + ChatColor.RESET;
+				
+				if (mmoIt != null){
+					PlayerClass c = mmoPlayer.getPrimaryClass();
+					
+					if (c != null) { 
+						name = mmoPlayer.getFullName() + separater + c.getDisplayName();
+					} else name = mmoPlayer.getFullName();
+				} else {
+					if (it instanceof Player) name = ((Player)it).getName();
+					else name = it.getType().name();
+				} 
+				
+				cpm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, null);
+				
+				return true;
+			} else continue;
 		}
 		
 		return true;

@@ -19,7 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.gui.CoreBoxItem;
-import com.noxpvp.core.utils.InventoryUtils;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.classes.PlayerClass;
@@ -29,13 +28,13 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class ClassChooseMenu extends CoreBox{
 
-	public final static String MENU_NAME = MMOLocale.GUI_MENU_NAME_COLOR + "Class Selection";
-	private final static int size = 4;
+	public static final String MENU_NAME = "Class Selection";
+	private final static int size = 36;
 
 	private Map<Integer, ClassChooseMenuItem> menuItems;
 	
 	public ClassChooseMenu(Player p, @Nullable CoreBox backButton) {
-		super(p, MENU_NAME, size, backButton);
+		super(p, MMOLocale.GUI_MENU_NAME_COLOR.get() + MENU_NAME, size, backButton);
 		
 		Inventory box = getBox();
 		menuItems = new HashMap<Integer, ClassChooseMenuItem>();
@@ -47,11 +46,14 @@ public class ClassChooseMenu extends CoreBox{
 		ItemMeta pMeta = primarySign.getItemMeta();
 		ItemMeta sMeta = secondarySign.getItemMeta();
 		
-		pMeta.setDisplayName(MMOLocale.GUI_MENU_NAME_COLOR + "Pick a primary class");
-		sMeta.setDisplayName(MMOLocale.GUI_MENU_NAME_COLOR + "Pick a Secondary class");
+		pMeta.setDisplayName(MMOLocale.GUI_MENU_NAME_COLOR.get() + "Pick a primary class");
+		sMeta.setDisplayName(MMOLocale.GUI_MENU_NAME_COLOR.get() + "Pick a Secondary class");
 
 		pMeta.setLore(Arrays.asList(ChatColor.GOLD + "Click a item on this row", ChatColor.GOLD + "to select the teir you want to use"));
 		sMeta.setLore(Arrays.asList(ChatColor.GOLD + "Click a item on this row", ChatColor.GOLD + "to select a secondary class"));
+		
+		primarySign.setItemMeta(pMeta);
+		secondarySign.setItemMeta(sMeta);
 		
 		menuItems.put(0, null);
 		box.setItem(0, primarySign);

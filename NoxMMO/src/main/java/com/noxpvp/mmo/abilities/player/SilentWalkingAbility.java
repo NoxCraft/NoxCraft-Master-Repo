@@ -4,9 +4,12 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
+import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOutNamedSoundEffect;
 import com.bergerkiller.bukkit.common.utils.PlayerUtil;
+import com.bergerkiller.bukkit.common.utils.WorldUtil;
 import com.noxpvp.core.VaultAdapter;
+import com.noxpvp.core.utils.chat.MessageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
@@ -28,21 +31,30 @@ public class SilentWalkingAbility extends BasePlayerAbility{
 		nms = new NMSPacketPlayOutNamedSoundEffect();
 		
 		Player hearing = getPlayer();
-		Location loc = new Location(getPlayer().getWorld(), packet.read(nms.x), packet.read(nms.y), packet.read(nms.z));
+		Location loc = new Location(hearing.getWorld(),
+				packet.read(PacketType.OUT_NAMED_SOUND_EFFECT.x),
+				packet.read(PacketType.OUT_NAMED_SOUND_EFFECT.y), 
+				packet.read(PacketType.OUT_NAMED_SOUND_EFFECT.z));
 		
-		double lowestDistance = Double.MAX_VALUE;
+		double lowestDistance = 100;
 		Player closest = null;
 		
-		for (Player p : PlayerUtil.getNearbyPlayers(hearing, 50)) {
-			double d = p.getLocation().distance(loc);
+		for (Player p : PlayerUtil.getNearbyPlayers(hearing, 50)){
+			if (p.equals(hearing)) continue;
 			
+			double d = p.getLocation().distance(loc);
+			MessageUtil.broadcast("" + loc);
 			if (d < lowestDistance) {
 				lowestDistance = d;
 				closest = p;
 			}
 		}
 		
-		if (closest == null || lowestDistance > 5) return false;
+		if (closest == null || lowestDistance > 6) {
+			return false;
+		}
+		
+		MessageUtil.broadcast("closest was " + closest.getName());
 		
 		if (VaultAdapter.permission.has(closest, NoxMMO.PERM_NODE + ".ability." + SilentWalkingAbility.PERM_NODE)){
 			return true;

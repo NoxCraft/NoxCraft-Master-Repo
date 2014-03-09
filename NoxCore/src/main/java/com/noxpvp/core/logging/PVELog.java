@@ -63,7 +63,7 @@ public class PVELog extends NoxListener<NoxCore>{
 	public void log(EntityDamageEvent event) {
 		Player p;
 		
-		if (!(event.getEntity() instanceof Player) || (p = (Player) event.getEntity()) == null)
+		if (true/*!(event.getEntity() instanceof Player) || (p = (Player) event.getEntity()) == null*/)
 			return;
 		
 		StringBuilder log = new StringBuilder();

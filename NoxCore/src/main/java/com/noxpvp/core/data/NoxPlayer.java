@@ -46,6 +46,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	private ConfigurationNode temp_data = new ConfigurationNode();
 	
+	private boolean isFirstLoad = false;
+	
 	public NoxPlayer(NoxPlayer player)
 	{
 		permHandler = player.permHandler;
@@ -56,6 +58,10 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this.persistant_data = player.persistant_data;
 		this.manager = player.manager;
 		this.cBar = player.cBar;
+		this.isFirstLoad = player.isFirstLoad;
+		
+		if (!isFirstLoad)
+			load();
 	}
 	
 	public NoxPlayer(PlayerManager mn, String name) {
@@ -268,6 +274,10 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	public synchronized void load() {
+		load(true);
+	}
+	
+	public synchronized void load(boolean overwrite) {
 		if (persistant_data == null)
 			persistant_data = manager.getPlayerNode(name);
 		
@@ -279,7 +289,10 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		else if (!manager.isMultiFile())
 			manager.load();
 		
-		cds = persistant_data.getList("cooldowns", CoolDown.class);
+		if (overwrite)
+			cds = persistant_data.getList("cooldowns", CoolDown.class);
+		else
+			cds.addAll(persistant_data.getList("cooldowns", CoolDown.class));
 		
 		if (getFirstJoin() == 0)
 			setFirstJoin();
@@ -309,6 +322,9 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	public synchronized void save(boolean throwEvent)
 	{
+		if (!isFirstLoad)
+			load(false);
+		
 		if (throwEvent)
 			CommonUtil.callEvent(new PlayerDataSaveEvent(this ,false));
 		persistant_data.set("cooldowns", getCoolDowns());

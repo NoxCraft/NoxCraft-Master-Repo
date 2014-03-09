@@ -14,6 +14,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -41,6 +42,7 @@ import com.noxpvp.core.listeners.DataListener;
 import com.noxpvp.core.listeners.DeathListener;
 import com.noxpvp.core.listeners.LoginListener;
 import com.noxpvp.core.listeners.OnLogoutSaveListener;
+import com.noxpvp.core.listeners.ServerPingListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.locales.CoreLocale;
 import com.noxpvp.core.locales.GlobalLocale;
@@ -63,6 +65,7 @@ public class NoxCore extends NoxPlugin {
 	private FileConfiguration globalLocales;
 	private LoginListener loginListener;
 	private DataListener dataListener;
+	private ServerPingListener pingListener;
 	
 	private PVELog pveLogger;
 	
@@ -219,6 +222,7 @@ public class NoxCore extends NoxPlugin {
 		loginListener = new LoginListener();
 		saveListener = new OnLogoutSaveListener(this); 
 		dataListener = new DataListener();
+		pingListener = new ServerPingListener(this);
 		
 		pveLogger = new PVELog(this);
 		
@@ -231,8 +235,9 @@ public class NoxCore extends NoxPlugin {
 		saveListener.register();
 		deathListener.register();
 		loginListener.register();
+		pingListener.register();
 		
-		pveLogger.register();
+//		pveLogger.register();
 		
 		CommonUtil.queueListenerLast(loginListener, PlayerLoginEvent.class);
 		VaultAdapter.load();

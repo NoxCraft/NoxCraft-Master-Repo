@@ -90,9 +90,10 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 		if (box == null)
 			throw new IllegalArgumentException("Cannot use null CoreBox to add to active CoreBox list");
 		
-		if (box.isValid())
+		if (box.isValid()){
 			this.coreBoxes.put(box.getPlayer().getName(), box);
-		box.register();
+			box.register();
+		}
 	}
 
 	public List<String> getAllPlayerNames() {

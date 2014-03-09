@@ -10,11 +10,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.utils.chat.MessageUtil;
 
 public class CoreBar{
+	
 	private final Entry currentEntry = new Entry();
-	private Object lock = null;
 	public final Player p;
+	private Object lock = null;
+	private Runnable updater = null;
 	PlayerManager pm;
 	
 	/**
@@ -34,26 +37,30 @@ public class CoreBar{
 	}
 	
 	public void newFlasher(String text) {
-		if (lock == null || !lock.equals(text))
+		if (lock == null || lock != text)
 			this.new Flasher(null);
 	}
 	
 	public void newLivingTracker(LivingEntity e, String text, ChatColor color) {
-		if (lock == null || !lock.equals(e.getUniqueId()))
+		if (lock == null || lock != e.getUniqueId()){
 			this.new LivingTracker(e, text, color);
+			p.sendMessage("new tracker started");
+		}
+		else if (updater != null)
+			updater.run();
 	}
 	
 	public void newScroller(String text, int length, ChatColor color) {
-		if (lock == null || !lock.equals(text))
+		if (lock == null || lock != text)
 			this.new Scroller(text, length, color);
 	}
 	
 	public void newShine(String text, int delay) {
-		if (lock == null || !lock.equals(text))
+		if (lock == null || lock != text)
 			this.new Shine(text, delay);
 	}
 	
-	private class Entry{
+	class Entry{
 		float percentFilled;
 		String text;
 		
@@ -64,18 +71,31 @@ public class CoreBar{
 		
 		public void update(float percentFilled, String text){
 			this.percentFilled = percentFilled;
+			this.text = text;
+			
 			BarAPI.setMessage(p, text, percentFilled);
 			
-			if (percentFilled <= 0) 
-				this.text = "";
-			else
-				this.text = text;
-			
+		}
+		
+		public void update(LivingEntity health, String text){
+			update((float) (health.getHealth() / health.getMaxHealth()) * 100, text);
 		}
 		
 		public void update(String text){
 			this.update(percentFilled, text);
 			
+		}
+		
+		public void update(float percentFilled){
+			update(percentFilled, text);
+		}
+		
+		public void update(LivingEntity health){
+			update(health, text);
+		}
+		
+		public void hide(){
+			BarAPI.removeBar(p);
 		}
 		
 	}
@@ -86,7 +106,10 @@ public class CoreBar{
 		private String text;
 		
 		public Flasher(String text){
+			lock = text;
+			updater = this;
 			this.text = text;
+			
 			
 			currentEntry.update(100F, text);
 			
@@ -115,25 +138,33 @@ public class CoreBar{
 	private class LivingTracker extends BukkitRunnable{
 
 		private double distance;
+		private String stringDist;
 		
 		private LivingEntity e;
+		private float fill;
+		
 		private StringBuilder text;
+		private String separator;
 		
 		public LivingTracker(LivingEntity e, String text, ChatColor color) {
+			lock = e.getUniqueId();
+			updater = this;
+			
 			this.e = e;
 			
+			separator = ChatColor.GOLD + " - " + ChatColor.RESET;
 			distance = p.getLocation().distance(e.getLocation());
 			
-			this.text = new StringBuilder(color + text).append(" - ").append(distance);
+			this.text = new StringBuilder(text).append(separator).append((stringDist = String.format("%0$.1f", distance)));
 			
-			currentEntry.update((float) (e.getHealth() / e.getMaxHealth() * 100), text.toString());
-			
+			currentEntry.update(e, text.toString());
 			this.runTaskTimer(NoxCore.getInstance(), 0, 8);
 		}
 		
 		public void run() {
 			distance = p.getLocation().distance(e.getLocation());
-			if (!currentEntry.text.equals(text.toString()) || distance > 75 || p == null || !p.isOnline() || p.isDead() || e == null || e.isDead())
+			
+			if (lock != e.getUniqueId() || distance > 75 || p == null || e == null || p.isDead() || e.isDead())
 			{
 				safeCancel();
 				return;
@@ -141,13 +172,17 @@ public class CoreBar{
 			
 			int tLength = text.length();
 			
-			text.replace(tLength - (3 + Double.toString(distance).length()), tLength, " - " + distance);
+			text.replace(tLength - (separator.length() + stringDist.length()), tLength, separator + (stringDist = String.format("%0$.1f", distance)));
 			
-			currentEntry.update((float) ((e.getHealth() / e.getMaxHealth()) * 100), text.toString());
+			currentEntry.update(e, text.toString());
 			
 		}
 		
-		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
+		public void safeCancel() {try {
+			lock = null;
+			currentEntry.hide();
+			cancel();
+		} catch (IllegalStateException e) {}}
 		
 	}
 	
@@ -162,8 +197,9 @@ public class CoreBar{
 		private int v;
 		
 		public Scroller(String text, int visibleLength, ChatColor color){
+			lock = text;
+			updater = this;
 			this.v = visibleLength <= 64 ? visibleLength : 64;
-			
 			this.useScrollColor = color != null ? true : false;
 			this.sc = color.toString();
 			this.cChar = ChatColor.COLOR_CHAR;
@@ -196,7 +232,11 @@ public class CoreBar{
 			
 		}
 		
-		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}} 	
+		public void safeCancel() {try {
+			lock = null;
+			currentEntry.hide();
+			cancel();
+		} catch (IllegalStateException e) {}} 	
 		
 	}
 
@@ -212,6 +252,9 @@ public class CoreBar{
 		private StringBuilder text;
 		
 		public Shine(String text, int delay){
+			lock = text;
+			updater = this;
+			
 			this.text = new StringBuilder();
 			this.delay = delay;
 			
@@ -247,7 +290,11 @@ public class CoreBar{
 			
 		}
 		
-		public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}} 	
+		public void safeCancel() {try {
+			lock = null;
+			currentEntry.hide();
+			cancel();
+		} catch (IllegalStateException e) {}} 	
 		
 	}
 	

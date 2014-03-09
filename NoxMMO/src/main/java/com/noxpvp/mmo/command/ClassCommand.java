@@ -35,9 +35,9 @@ public class ClassCommand extends BaseCommand {
 			mb.newLine().append(si);
 		
 		for (String cmd : cmds.keySet())
-			mb.newLine().gold("/").dark_blue(cmd);
+			mb.newLine().gold("/class ").dark_blue(cmd);
 		
-		return null;
+		return mb.lines();
 	}
 
 	public int getMaxArguments() {

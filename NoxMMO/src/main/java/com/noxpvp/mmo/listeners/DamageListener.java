@@ -17,6 +17,7 @@ import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.utils.DamageUtil;
 import com.noxpvp.core.utils.chat.MessageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.runnables.EffectsRunnable;
@@ -40,29 +41,21 @@ public class DamageListener extends NoxListener<NoxMMO>{
 
 	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = false)
 	public void onDamage(EntityDamageEvent event) {	
-		if (event.isCancelled())
-			MessageUtil.broadcast("EVENT FUCKING CANCELLED");
 		
 		Entity e = event.getEntity();
 		
-		LivingEntity livingDamaged = (LivingEntity) ((e instanceof LivingEntity)? e : null);
-		Player playerDamaged = (Player) ((e instanceof Player)? e : null),
-				playerAttacker = null;
+		LivingEntity livingDamaged = DamageUtil.getDamagedEntity(event),
+				livingAttacker = DamageUtil.getAttackingEntity(event);
 		
-		EntityDamageByEntityEvent pe = (EntityDamageByEntityEvent)
-				(e.getLastDamageCause() instanceof EntityDamageByEntityEvent? e.getLastDamageCause() : null);
+		Player playerDamaged = DamageUtil.getDamagedPlayer(event),
+				playerAttacker = DamageUtil.getAttackingPlayer(event);
 		
-		MessageUtil.broadcast("CALLED");
-		if (pe != null) {
-			playerAttacker = (Player) ((pe.getDamager() instanceof Player)? pe.getDamager() : null);
-		}
 		
 		if (playerAttacker != null) {
-			MessageUtil.sendMessage(playerAttacker, "DAMAGE");
-			/*
-			 * player / living entity bars
-			 */
+			
 			if (livingDamaged != null) {
+				com.noxpvp.mmo.PlayerManager.getInstance().getPlayer(playerAttacker).setTarget(livingDamaged);
+				
 				Location dLoc = e.getLocation();
 				dLoc.setY(dLoc.getY() + 1.8);
 				new EffectsRunnable(Arrays.asList("blockdust_152_0"), false, dLoc, .12F, 25, 1, null).runTask(NoxMMO.getInstance());
@@ -76,13 +69,13 @@ public class DamageListener extends NoxListener<NoxMMO>{
 					
 					if (noxPlayerDamaged != null)
 						bar.newLivingTracker(livingDamaged, noxPlayerDamaged.getFullName(), color);
+						
 					
 				} else {
 					bar.newLivingTracker(livingDamaged, livingDamaged.getType().name(), color);
 				}
 				
 			}
-			
 		}
 		
 	}

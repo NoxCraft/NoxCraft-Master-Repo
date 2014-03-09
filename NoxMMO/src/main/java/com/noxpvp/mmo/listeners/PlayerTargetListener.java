@@ -1,6 +1,5 @@
 package com.noxpvp.mmo.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,10 +32,10 @@ public class PlayerTargetListener extends NoxListener<NoxMMO>{
 		Player p;
 		MMOPlayer player = pm.getPlayer(p = e.getPlayer());
 		
-		Bukkit.broadcastMessage("EVENT FIRE");
 		if (player == null) return;
 		
 		new TargetAbility(p).setRange(50).execute();//TODO make default range configized
 		
 	}
+	
 }

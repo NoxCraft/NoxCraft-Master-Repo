@@ -7,9 +7,11 @@ import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
+import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.commands.Command;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.*;
@@ -19,6 +21,7 @@ import com.noxpvp.mmo.abilities.player.*;
 import com.noxpvp.mmo.abilities.player.AutoToolAbilities.*;
 import com.noxpvp.mmo.abilities.targeted.*;
 import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.command.ClassCommand;
 import com.noxpvp.mmo.listeners.*;
 import com.noxpvp.mmo.listeners.PacketListeners.*;
 import com.noxpvp.mmo.locale.MMOLocale;
@@ -39,6 +42,7 @@ public class NoxMMO extends NoxPlugin {
 	ExperienceListener experieneceListener;
 	
 	PacketListeners packetListeners;
+	PlayerAnimationListener playerAnimationListener;
 	EntityEquipmentListener equipmentPacketListener;
 	WorldSoundListener worldSoundListener;
 	
@@ -48,6 +52,8 @@ public class NoxMMO extends NoxPlugin {
 	private MasterListener masterListener;
 	
 	private PlayerManager playerManager = null;
+
+	private Class<Command>[] commands =  (Class<Command>[]) new Class[]{ ClassCommand.class };
 	
 	@Override
 	public void disable() {
@@ -105,6 +111,7 @@ public class NoxMMO extends NoxPlugin {
 		experieneceListener = new ExperienceListener(instance);
 		
 		packetListeners = new PacketListeners();
+		playerAnimationListener = packetListeners.new PlayerAnimationListener();
 		equipmentPacketListener = packetListeners.new EntityEquipmentListener();
 		worldSoundListener = packetListeners.new WorldSoundListener();
 		
@@ -114,6 +121,7 @@ public class NoxMMO extends NoxPlugin {
 		permHandler = new PermissionHandler(this);
 //		experieneceListener.register();
 		
+		register(playerAnimationListener, PacketType.IN_ENTITY_ANIMATION);
 		register(equipmentPacketListener, PacketType.OUT_ENTITY_EQUIPMENT);
 		register(worldSoundListener, PacketType.OUT_NAMED_SOUND_EFFECT);
 		
@@ -146,6 +154,18 @@ public class NoxMMO extends NoxPlugin {
 				return true;
 			}
 		});
+		
+		registerAllCommands();
+	}
+	
+	private void registerAllCommands() {
+		for (Class<Command> cls : commands)
+		{
+			SafeConstructor<Command> cons = new SafeConstructor<Command>(cls, new Class[0]);
+			Command rn = cons.newInstance();
+			if (rn != null)
+				registerCommand(rn);
+		}
 	}
 
 	private void setInstance(NoxMMO noxMMO) {
@@ -209,6 +229,7 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", SeveringStrikesAbility.PERM_NODE), "Allows usage of the Severing Strikes Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", ShadowStepAbility.PERM_NODE), "Allows usage of the Shadow Step Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", ShurikenAbility.PERM_NODE), "Allows usage of the Shuriken Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", SilentWalkingAbility.PERM_NODE), "Allows usage of the SilentWalking Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", SkullSmasherAbility.PERM_NODE), "Allows usage of the Skull Smasher Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", SoulStealAbility.PERM_NODE), "Allows usage of the Soul Steal Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", SootheAbility.PERM_NODE), "Allows usage of the Soothe Ability.", PermissionDefault.OP),

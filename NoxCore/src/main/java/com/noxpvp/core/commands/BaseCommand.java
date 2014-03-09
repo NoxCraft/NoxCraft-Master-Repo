@@ -55,8 +55,9 @@ public abstract class BaseCommand implements Command {
 		mb.newLine();
 		for (String line : GlobalLocale.HELP_HEADER.get(getPlugin().getName(), name).split("\n"))
 			mb.append(line);
-		for (String line : getHelp())
-			mb.append(line);
+		if (getHelp() != null)
+			for (String line : getHelp())
+				mb.append(line);
 		
 		MessageUtil.sendMessage(sender, mb.lines());
 	}
@@ -70,16 +71,21 @@ public abstract class BaseCommand implements Command {
 		String[] args = context.getArguments();
 		
 		String nextArg = context.getArgument(0);
-		CommandContext newContext = new CommandContext(context.getSender(), context.getFlags(), Arrays.copyOfRange(args, 1, args.length-1));
-		
+		CommandContext newContext = null;
+		if (context.getArgumentCount() > 1)
+			newContext = new CommandContext(context.getSender(), context.getFlags(), Arrays.copyOfRange(args, 1, args.length-1));
+		else
+			newContext = new CommandContext(context.getSender(), context.getFlags());
 		BaseCommand subCMD = getSubCommand(nextArg);
-		if (subCMD != null) {
+		
+		if (subCMD != null && newContext != null) {
 			if (subCMD.isPlayerOnly() && !context.isPlayer()) {
 				GlobalLocale.CONSOLE_ONLYPLAYER.message(context.getSender());
 				return new CommandResult(this, true);
 			}
 			return subCMD.executeCommand(newContext);
-		}
+		} 
+			
 		return execute(context);
 	}
 	

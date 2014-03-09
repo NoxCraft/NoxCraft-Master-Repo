@@ -22,6 +22,7 @@ import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.utils.chat.MessageUtil;
 
 public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 	
@@ -37,6 +38,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 		
 		this.pm = PlayerManager.getInstance();
 		this.p = new WeakReference<Player>(p);
+		
 		this.box = Bukkit.getServer().createInventory(null, size, name);
 		pName = p.getName();
 		
@@ -51,7 +53,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 			
 			button.setItemMeta(meta);
 			
-			this.box.setItem(this.box.getSize(), button);
+			this.box.setItem(this.box.getSize()-1, button);
 		}
 		
 		this.closeRunnable = new Runnable() {
@@ -65,6 +67,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 				thisBox.unregister();
 			}
 		};
+		
 	}
 	
 	public CoreBox(Player p, String name, int size, @Nullable CoreBox backButton){
@@ -98,8 +101,10 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 	}
 
 	public void show() {
-		if (isValid())
+		if (isValid()){
+			pm.addCoreBox(this);
 			getPlayer().openInventory(box);
+		}
 	}
 	
 	public void hide() {
@@ -110,8 +115,9 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 	
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onClick(InventoryClickEvent event) {
-		if (!isValid()) {
+		if (!isValid() || box.getViewers().size() < 1) {
 			unregister();
+			pm.getCoreBoxes().remove(this);
 			return;
 		}
 		
@@ -122,10 +128,14 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 			this.unregister();
 		}
 		
-		if (!event.getInventory().equals(box)) return;
-			event.setCancelled(true);
+		if (!box.getViewers().contains(event.getWhoClicked())){
+			return;
+		}
+		
+		event.setCancelled(true);
 			
 		if (backButton != null && event.getCurrentItem().equals(backButton)){
+			p.get().closeInventory();
 			backButton.show();
 			
 			return;
