@@ -28,7 +28,7 @@ public class PlayerTargetListener extends NoxListener<NoxMMO>{
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onInteract(PlayerInteractEvent e) { //TODO: USE PACKET INSTEAD
+	public void onInteract(PlayerInteractEvent e) {
 		
 		Player p;
 		MMOPlayer player = pm.getPlayer(p = e.getPlayer());

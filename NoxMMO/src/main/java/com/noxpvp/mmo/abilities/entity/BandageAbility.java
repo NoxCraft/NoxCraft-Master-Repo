@@ -3,6 +3,8 @@ package com.noxpvp.mmo.abilities.entity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
+import com.bergerkiller.bukkit.common.protocol.CommonPacket;
+import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOutNamedEntitySpawn;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 import com.noxpvp.mmo.runnables.DamageRunnable;
@@ -34,6 +36,18 @@ public class BandageAbility extends BaseEntityAbility{
 		
 		DamageRunnable wereOff = new DamageRunnable(e, e, (e.getMaxHealth() / 10), 10);
 		wereOff.runTaskTimer(NoxMMO.getInstance(), delay, 15);
+		
+		//testing
+		
+		NMSPacketPlayOutNamedEntitySpawn nmsPacket = new NMSPacketPlayOutNamedEntitySpawn();
+		CommonPacket cp = nmsPacket.newInstance();
+		
+		cp.write(nmsPacket.entityId, 12345);
+		cp.write(nmsPacket.profile, "test");
+		
+		
+		
+		
 		
 		return false;
 	}

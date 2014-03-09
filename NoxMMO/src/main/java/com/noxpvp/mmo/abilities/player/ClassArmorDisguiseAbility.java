@@ -12,8 +12,6 @@ import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
 
-//FIXME not made yet
-
 public class ClassArmorDisguiseAbility extends BasePlayerAbility{
 
 	public final static String ABILITY_NAME = "Armor Disguise";
