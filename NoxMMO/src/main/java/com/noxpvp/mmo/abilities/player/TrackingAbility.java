@@ -9,10 +9,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.runnables.DespawnRunnable;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 /**
  * @author NoxPVP

@@ -8,7 +8,11 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.EntityEffect;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,8 +26,7 @@ import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.PlayerManager;
-import com.noxpvp.core.utils.chat.MessageUtil;
-
+import com.noxpvp.core.utils.StaticEffects;
 public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 	
 	public Runnable closeRunnable;
@@ -128,11 +131,23 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 			this.unregister();
 		}
 		
-		if (!box.getViewers().contains(event.getWhoClicked())){
+		HumanEntity clicked = event.getWhoClicked();
+		if (!box.getViewers().contains(clicked)){
 			return;
 		}
 		
 		event.setCancelled(true);
+		
+		if (event.getRawSlot() < box.getSize()){
+			ItemStack clickedItem = event.getCurrentItem();
+		
+			if (clickedItem != null){
+				if (clickedItem.getType() != Material.AIR)
+					StaticEffects.playSound((Player) clicked, "random.click");
+				else
+					StaticEffects.playSound((Player) clicked, "random.fizz");
+			}
+		}
 			
 		if (backButton != null && event.getCurrentItem().equals(backButton)){
 			p.get().closeInventory();

@@ -6,6 +6,8 @@ import com.noxpvp.mmo.abilities.BaseEntityAbility;
 
 public class ForcePullAbility extends BaseEntityAbility {
 
+//TODO Finish
+	
 	public static final String ABILITY_NAME = "ForcePull";
 	public static final String PERM_NODE = "force-pull";
 	
@@ -15,11 +17,6 @@ public class ForcePullAbility extends BaseEntityAbility {
 	}
 	
 	public boolean execute() {
-		return false;
-	}
-
-	public boolean mayExecute() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

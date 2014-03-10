@@ -16,6 +16,8 @@ public class MMOLocale extends NoxLocale {
 	
 	//GUI
 	public final static MMOLocale GUI_MENU_NAME_COLOR;
+	public final static MMOLocale GUI_BAR_COLOR;
+	
 	//INTERNAL
 	/**
 	 * @deprecated This is used internally. Do not use!
@@ -27,6 +29,7 @@ public class MMOLocale extends NoxLocale {
 		ABIL_DISPLAY_NAME = new MMOLocale("display.ability", ""); //This is blank. Will be filled in per ability name.
 		
 		GUI_MENU_NAME_COLOR = new MMOLocale("gui.inventory.name_color", "&6");
+		GUI_BAR_COLOR = new MMOLocale("gui.target_bar.color", "&a");
 		
 		CLASS_NONE_BY_NAME = new MMOLocale("error.class.none-by-name", "&4There is no class by the name of %0%");
 		CLASS_LOCKED = new MMOLocale("error.class.locked", "&4The class %0% is locked. &4Reason:&e %1%");

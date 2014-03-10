@@ -7,9 +7,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 
+import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 /**
  * @author NoxPVP

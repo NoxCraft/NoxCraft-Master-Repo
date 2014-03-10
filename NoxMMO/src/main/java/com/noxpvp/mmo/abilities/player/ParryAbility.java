@@ -15,8 +15,6 @@ import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 
-//FIXME not made yet
-
 /**
  * @author NoxPVP
  *

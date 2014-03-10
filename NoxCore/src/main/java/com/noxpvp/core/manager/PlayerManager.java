@@ -306,10 +306,10 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 * @return PlayerManager This instance
 	 * @throws NullPointerException If the key is null
 	 */
-	public PlayerManager removeCoreBar(String name){
+	public void removeCoreBar(String name){
 		if (name == null)
 			throw new NullPointerException("Cannot remove null Key from list");
-		this.coreBars.remove(name); return this; //FIXME: DESTROY INSTANCE SHIT. TIMERS AND MORE...
+		this.coreBars.remove(name); //FIXME: DESTROY INSTANCE SHIT. TIMERS AND MORE...
 	}
 	
 	/** 
@@ -317,11 +317,11 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 * @return PlayerManager This instance
 	 * @throws NullPointerException If the key is null
 	 */
-	public PlayerManager removeCoreBoard(String name){
+	public void removeCoreBoard(String name){
 		if (name == null)
 			throw new NullPointerException("Cannot remove null Key from list");
 		
-		this.coreBoards.remove(name); return this;
+		this.coreBoards.remove(name);
 	}
 	
 	/* (non-Javadoc)

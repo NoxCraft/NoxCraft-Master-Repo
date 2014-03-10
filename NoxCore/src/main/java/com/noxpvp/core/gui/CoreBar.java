@@ -40,9 +40,13 @@ public class CoreBar{
 			this.new Flasher(null);
 	}
 	
-	public void newLivingTracker(LivingEntity e, String text, ChatColor color) {
+	public void newLivingTracker(LivingEntity e, String text, String color){
+		newLivingTracker(e, text, color, false);
+	}
+	
+	public void newLivingTracker(LivingEntity e, String text, String color, boolean ignoreLOS) {
 		if (lock == null || lock != e.getUniqueId()){
-			this.new LivingTracker(e, text, color);
+			this.new LivingTracker(e, text, color, ignoreLOS);
 			p.sendMessage("new tracker started");
 		}
 		else if (updater != null)
@@ -138,21 +142,22 @@ public class CoreBar{
 
 		private double distance;
 		private String stringDist;
+		private boolean ignoreLOS;
 		
 		private LivingEntity e;
-		private float fill;
 		
 		private StringBuilder text;
 		private String separator;
 		
-		public LivingTracker(LivingEntity e, String text, ChatColor color) {
+		public LivingTracker(LivingEntity e, String text, String color, boolean ignoreLOS) {
 			lock = e.getUniqueId();
 			updater = this;
 			
 			this.e = e;
 			
-			separator = ChatColor.GOLD + " - " + ChatColor.RESET;
-			distance = p.getLocation().distance(e.getLocation());
+			this.separator = ChatColor.GOLD + " - " + ChatColor.RESET;
+			this.distance = p.getLocation().distance(e.getLocation());
+			this.ignoreLOS = ignoreLOS;
 			
 			this.text = new StringBuilder(text).append(separator).append((stringDist = String.format("%0$.1f", distance)));
 			
@@ -165,6 +170,11 @@ public class CoreBar{
 			
 			if (lock != e.getUniqueId() || distance > 75 || p == null || e == null || p.isDead() || e.isDead())
 			{
+				safeCancel();
+				return;
+			}
+			
+			if (!ignoreLOS && !p.hasLineOfSight(e)){
 				safeCancel();
 				return;
 			}

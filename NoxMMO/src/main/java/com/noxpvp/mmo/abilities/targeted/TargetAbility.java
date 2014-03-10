@@ -20,6 +20,7 @@ import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.locale.MMOLocale;
 
 public class TargetAbility extends BasePlayerAbility{
 	
@@ -61,7 +62,7 @@ public class TargetAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 		
-		MessageUtil.broadcast("targeting");
+//		MessageUtil.broadcast("targeting");
 		
 		Player p = getPlayer();
 		
@@ -69,6 +70,7 @@ public class TargetAbility extends BasePlayerAbility{
 			
 			if (!(it instanceof LivingEntity) || it.equals(p)) continue;
 			if ((it instanceof Player) && !(p).canSee((Player) it)) continue;
+			MessageUtil.broadcast("going though nearby peoples");
 			
 			Location observerPos = p.getEyeLocation();
 			Vector3D observerDir = new Vector3D(observerPos.getDirection());
@@ -78,7 +80,7 @@ public class TargetAbility extends BasePlayerAbility{
 			
 			Vector3D targetPos = new Vector3D(it.getLocation());
 			Vector3D minimum = targetPos.add(-0.6, 0, -0.6); 
-			Vector3D maximum = targetPos.add(0.6, 1.75, 0.6); 
+			Vector3D maximum = targetPos.add(0.6, 2.0, 0.6); 
 			
 			if (hasIntersection(observerStart, observerEnd, minimum, maximum)) {
 				this.target_ref = new SoftReference<LivingEntity>((LivingEntity) it);
@@ -92,7 +94,8 @@ public class TargetAbility extends BasePlayerAbility{
 				mmoPlayer.setTarget(target_ref.get());
 				
 				String name,
-				separater = ChatColor.GOLD + " - " + ChatColor.RESET;
+				color = MMOLocale.GUI_BAR_COLOR.get(),
+				separater = color + " - " + ChatColor.RESET;
 				
 				if (mmoIt != null){
 					PlayerClass c = mmoPlayer.getPrimaryClass();
@@ -105,10 +108,13 @@ public class TargetAbility extends BasePlayerAbility{
 					else name = it.getType().name();
 				} 
 				
-				cpm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, null);
+				cpm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, color);
 				
 				return true;
-			} else continue;
+			} else {
+				MessageUtil.broadcast("no intersection");
+				continue;
+			}
 		}
 		
 		return true;
@@ -136,6 +142,7 @@ public class TargetAbility extends BasePlayerAbility{
 		if (Math.abs(d.x * c.y - d.y * c.x) > e.x * ad.y + e.y * ad.x + epsilon)
 			return false;
  
+		MessageUtil.broadcast("has intersection");
 		return true;
 	}
 

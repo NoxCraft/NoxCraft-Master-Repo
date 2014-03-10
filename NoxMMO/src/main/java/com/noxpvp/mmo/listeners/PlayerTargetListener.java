@@ -30,12 +30,13 @@ public class PlayerTargetListener extends NoxListener<NoxMMO>{
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onInteract(PlayerInteractEvent e) {
 		
+//		MessageUtil.broadcast("interact");
 		Player p;
 		MMOPlayer player = pm.getPlayer(p = e.getPlayer());
 		
 		if (player == null) return;
 		
-		MessageUtil.broadcast("starting target");
+//		MessageUtil.broadcast("starting target");
 		new TargetAbility(p).setRange(50).execute();//TODO make default range configized
 		
 	}

@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.runnables;
+package com.noxpvp.core.utils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -366,6 +366,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		setLastDeathTS();
 		EntityDamageEvent ede = event.getEntity().getLastDamageCause();
 		
+		if (ede == null)
+			return;
 		
 		this.persistant_data.set("last.death.cause.damage", ede.getDamage());
 		this.persistant_data.set("last.death.cause.type", ede.getCause().name());

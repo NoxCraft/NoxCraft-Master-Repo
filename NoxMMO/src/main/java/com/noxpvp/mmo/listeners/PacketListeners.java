@@ -6,11 +6,7 @@ import com.bergerkiller.bukkit.common.events.PacketReceiveEvent;
 import com.bergerkiller.bukkit.common.events.PacketSendEvent;
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketListener;
-import com.noxpvp.core.VaultAdapter;
-import com.noxpvp.core.utils.chat.MessageUtil;
-import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.PlayerManager;
+import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.noxpvp.mmo.abilities.player.ClassArmorDisguiseAbility;
 import com.noxpvp.mmo.abilities.player.SilentWalkingAbility;
 import com.noxpvp.mmo.abilities.targeted.TargetAbility;
@@ -20,6 +16,7 @@ public class PacketListeners {
 	public class PlayerAnimationListener implements PacketListener {
 
 		public void onPacketReceive(PacketReceiveEvent arg0) {
+			
 			CommonPacket packet = arg0.getPacket();
 			Player p = arg0.getPlayer();
 			

@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 import org.bukkit.entity.Player;
 
+import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
 import com.noxpvp.mmo.runnables.HealRunnable;
 
 /**

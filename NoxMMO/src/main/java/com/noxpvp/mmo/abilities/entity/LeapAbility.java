@@ -8,9 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.noxpvp.core.VaultAdapter;
+import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 public class LeapAbility extends BaseEntityAbility {
 

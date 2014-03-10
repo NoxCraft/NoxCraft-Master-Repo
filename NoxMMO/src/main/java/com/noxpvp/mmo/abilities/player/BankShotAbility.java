@@ -17,12 +17,12 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.core.utils.chat.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 /**
  * @author NoxPVP

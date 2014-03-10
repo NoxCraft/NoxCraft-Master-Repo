@@ -8,9 +8,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 public class WisdomAbility extends BaseEntityAbility{
 

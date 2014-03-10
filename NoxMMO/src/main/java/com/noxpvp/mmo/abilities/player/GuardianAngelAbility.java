@@ -8,10 +8,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 
+import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.runnables.DespawnRunnable;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
 import com.noxpvp.mmo.runnables.HealRunnable;
 
 /**
