@@ -17,7 +17,7 @@ public class ServerPingListener extends NoxListener<NoxCore>{
 	public ServerPingListener(NoxCore core) {
 		super(core);
 		
-		this.motds = core.getCoreConfig().getList("motd.messages", String.class, Arrays.asList("example1", "example2"));
+		this.motds = core.getCoreConfig().getList("motd.messages", String.class, Arrays.asList("Please notify admin of missing MOTD\nPlease notify admin of missing MOTD"));
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

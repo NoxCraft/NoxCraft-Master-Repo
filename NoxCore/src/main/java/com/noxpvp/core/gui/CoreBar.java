@@ -8,8 +8,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
+import com.google.common.collect.Sets;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 
 public class CoreBar{
 	
@@ -47,10 +50,9 @@ public class CoreBar{
 	public void newLivingTracker(LivingEntity e, String text, String color, boolean ignoreLOS) {
 		if (lock == null || lock != e.getUniqueId()){
 			this.new LivingTracker(e, text, color, ignoreLOS);
-			p.sendMessage("new tracker started");
 		}
 		else if (updater != null)
-			updater.run();
+			CommonUtil.nextTick(updater);
 	}
 	
 	public void newScroller(String text, int length, ChatColor color) {
@@ -168,13 +170,13 @@ public class CoreBar{
 		public void run() {
 			distance = p.getLocation().distance(e.getLocation());
 			
-			if (lock != e.getUniqueId() || distance > 75 || p == null || e == null || p.isDead() || e.isDead())
+			if (lock != e.getUniqueId() || distance > 75 || p == null || e == null || !p.isValid() || !e.isValid())
 			{
 				safeCancel();
 				return;
 			}
 			
-			if (!ignoreLOS && !p.hasLineOfSight(e)){
+			if (!ignoreLOS && !LineOfSightUtil.canSee(p, e.getLocation(), Sets.newHashSet((byte) 0, (byte) 8, (byte) 9, (byte) 10, (byte) 11))){
 				safeCancel();
 				return;
 			}

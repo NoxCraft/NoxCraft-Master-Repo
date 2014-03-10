@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.noxpvp.core.utils.InventoryUtils;
+import com.noxpvp.core.utils.PlayerUtils;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.runnables.BlockTimerRunnable;
@@ -102,7 +102,7 @@ public class HookShotAbility extends BasePlayerAbility{
 			Block hBlock = a.getLocation().getBlock();
 			
 			
-			if (!InventoryUtils.hasItems(inv, pullRegent))
+			if (!PlayerUtils.hasItems(inv, pullRegent))
 				return false;
 			if (!p.hasLineOfSight(a))
 				return false;
@@ -121,7 +121,7 @@ public class HookShotAbility extends BasePlayerAbility{
 			p.teleport(hBlock.getRelative(0, 1, 0).getLocation(), TeleportCause.PLUGIN);
 			a.remove();
 		} else {
-			if (!InventoryUtils.hasItems(inv, shootRegent))
+			if (!PlayerUtils.hasItems(inv, shootRegent))
 				return false;
 			
 			inv.removeItem(shootRegent);

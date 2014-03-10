@@ -159,6 +159,8 @@ public class NoxCore extends NoxPlugin {
 	
 	@Override
 	public void disable() {
+		saveConfig();
+		
 		cds.stop();
 		cleanup();
 	}

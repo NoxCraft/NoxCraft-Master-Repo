@@ -8,10 +8,7 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.EntityEffect;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,6 +24,7 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.StaticEffects;
+
 public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 	
 	public Runnable closeRunnable;
@@ -144,8 +142,6 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 			if (clickedItem != null){
 				if (clickedItem.getType() != Material.AIR)
 					StaticEffects.playSound((Player) clicked, "random.click");
-				else
-					StaticEffects.playSound((Player) clicked, "random.fizz");
 			}
 		}
 			
@@ -156,6 +152,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 			return;
 		}
 		
+		p.get().updateInventory();
 		this.clickHandler(event);
 	}
 	

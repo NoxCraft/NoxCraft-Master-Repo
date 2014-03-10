@@ -70,7 +70,6 @@ public class TargetAbility extends BasePlayerAbility{
 			
 			if (!(it instanceof LivingEntity) || it.equals(p)) continue;
 			if ((it instanceof Player) && !(p).canSee((Player) it)) continue;
-			MessageUtil.broadcast("going though nearby peoples");
 			
 			Location observerPos = p.getEyeLocation();
 			Vector3D observerDir = new Vector3D(observerPos.getDirection());
@@ -112,7 +111,6 @@ public class TargetAbility extends BasePlayerAbility{
 				
 				return true;
 			} else {
-				MessageUtil.broadcast("no intersection");
 				continue;
 			}
 		}
@@ -141,8 +139,7 @@ public class TargetAbility extends BasePlayerAbility{
 			return false;
 		if (Math.abs(d.x * c.y - d.y * c.x) > e.x * ad.y + e.y * ad.x + epsilon)
 			return false;
- 
-		MessageUtil.broadcast("has intersection");
+
 		return true;
 	}
 
