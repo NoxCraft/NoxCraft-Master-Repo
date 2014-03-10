@@ -35,11 +35,7 @@ public class StaticEffects {
 	}
 	
 	public static void BloodEffect(Entity e, NoxPlugin plugin){
-		Location loc = e.getLocation();
-		if (e instanceof Player)
-			loc.setY(loc.getY() + 1.7);
-		
-		new EffectsRunnable(Arrays.asList("blockdust_152_0"), false, loc, .12F, 25, 1, null).runTask(plugin);
+		new EffectsRunnable(Arrays.asList("blockdust_152_0"), false, null, .12F, 15, 1, e).runTaskTimer(plugin, 0, 0);
 	}
 	
 	public static void BroadcastSound(Entity e, Sound sound){

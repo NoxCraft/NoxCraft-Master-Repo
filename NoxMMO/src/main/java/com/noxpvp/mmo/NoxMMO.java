@@ -75,7 +75,7 @@ public class NoxMMO extends NoxPlugin {
 		setInstance(null);
 	}
 	
-	public FileConfiguration getFileConfig(){
+	public FileConfiguration getMMOConfig(){
 		if (config == null)
 			config = new FileConfiguration(this, "config.yml");
 		return config;

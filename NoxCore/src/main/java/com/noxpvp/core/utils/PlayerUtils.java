@@ -71,10 +71,11 @@ public class PlayerUtils {
 		public static Block getTarget(LivingEntity from, int distance, byte... transparentTypeIds) {
 			return getTarget(from.getEyeLocation(), distance, transparentTypeIds);
 		}
-	    public static boolean canSee(LivingEntity from, Location to, Set<Byte> transparentTypeIds) {
+		
+	    public static boolean hasLineOfSight(LivingEntity from, Location to, Set<Byte> transparentTypeIds) {
 	        return getTarget(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypeIds) == null;
 	    }
-		public static boolean canSee(LivingEntity from, Location to, byte... transparentTypeIds) {
+		public static boolean isLookingAt(LivingEntity from, Location to, byte... transparentTypeIds) {
 			return getTarget(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypeIds) == null;
 		}
 		

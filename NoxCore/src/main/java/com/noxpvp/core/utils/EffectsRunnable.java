@@ -7,12 +7,14 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOutWorldParticles;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
+import com.noxpvp.core.utils.chat.MessageUtil;
 
 /**
  * @author NoxPVP
@@ -40,11 +42,11 @@ public class EffectsRunnable extends BukkitRunnable{
 	 * 
 	 * @param List<String> The effect name(s) | List - https://gist.github.com/thinkofdeath/5110835
 	 * @param offSet If each particle should have a random offset
-	 * @param loc The particle location
+	 * @param loc The particle location. Can not be null if tracker is null
 	 * @param data
 	 * @param amount The amount of particles
 	 * @param runs The amount of time to run, EX: 5 amount and 3 runs would have the effect 3 times, each with 5 particles
-	 * @param tracker 
+	 * @param tracker Can not be null if loc is null
 	 */
 	public EffectsRunnable(List<String> name, boolean offSet, @Nullable Location loc, float data, int amount, int runs, @Nullable Entity tracker) {
 		this.names = name;
@@ -66,7 +68,7 @@ public class EffectsRunnable extends BukkitRunnable{
 		this.amount = amount;
 		
 		this.runs = runs;
-		this.tracker = tracker != null? tracker : null;
+		this.tracker = tracker;
 		
 	}
 
@@ -77,18 +79,22 @@ public class EffectsRunnable extends BukkitRunnable{
 	
 	int i = 0;
 	public void run(){
-		if (runs != 0 && i <= runs){
+		
+		if (runs != 0 && i < runs){
 			i++;
-		} else if (runs != 0 && i > runs) {
+		} else if ((runs != 0 && i >= runs) || (runs == 0 && i > 0)) {
 			safeCancel();
 			return;
-		} else if (runs == 0) {
-			if (tracker != null && (tracker.isDead()  || !tracker.isValid())) {
-				safeCancel();
-				return;
-			} else {
-				this.loc = tracker.getLocation();
-			}
+		}
+		
+		if (tracker != null && (tracker.isDead()  || !tracker.isValid())) {
+			safeCancel();
+			return;
+		} else if (tracker != null){
+			if (tracker instanceof LivingEntity){
+				loc = ((LivingEntity) tracker).getEyeLocation();
+			} else
+				loc = tracker.getLocation();
 		}
 		
 		for (String effectName : names){
@@ -110,9 +116,13 @@ public class EffectsRunnable extends BukkitRunnable{
 					commonEffect.write(effect.randomZ, (float) locOffSet.getZ());
 				}
 				
-				PacketUtil.broadcastPacketNearby(loc, 256, commonEffect);//max render distance
+				PacketUtil.broadcastPacketNearby(loc, 125, commonEffect);
 			
-			} catch (Exception e) {e.printStackTrace(); safeCancel(); return;}
+			} catch (Exception e) {
+				e.printStackTrace();
+				safeCancel();
+				return;
+			}
 		}
 	}
 

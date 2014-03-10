@@ -49,7 +49,7 @@ public class DamageListener extends NoxListener<NoxMMO>{
 			if (livingDamaged != null) {
 				com.noxpvp.mmo.PlayerManager.getInstance().getPlayer(playerAttacker).setTarget(livingDamaged);
 				
-				if (getPlugin().getFileConfig().get("effect.damage.blood", Boolean.TRUE))
+				if (getPlugin().getMMOConfig().get("effect.damage.blood", Boolean.class, Boolean.TRUE))
 					StaticEffects.BloodEffect(livingDamaged, getPlugin());
 				
 				String color = MMOLocale.GUI_BAR_COLOR.get();
@@ -60,11 +60,11 @@ public class DamageListener extends NoxListener<NoxMMO>{
 					NoxPlayer noxPlayerDamaged = pm.getPlayer(playerDamaged.getName());
 					
 					if (noxPlayerDamaged != null)
-						bar.newLivingTracker(livingDamaged, noxPlayerDamaged.getFullName(), color);
+						bar.newLivingTracker(livingDamaged, noxPlayerDamaged.getFullName(), false);
 						
 					
 				} else {
-					bar.newLivingTracker(livingDamaged, livingDamaged.getType().name(), color);
+					bar.newLivingTracker(livingDamaged, livingDamaged.getType().name(), false);
 				}
 				
 			}

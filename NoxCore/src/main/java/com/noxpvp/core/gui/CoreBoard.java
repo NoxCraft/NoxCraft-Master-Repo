@@ -104,7 +104,7 @@ public class CoreBoard{
 	public CoreBoard addScroller(String name, String displayedName, String scrollText, int visibleLength, ChatColor nameColor, ChatColor scrollerColor){
 		
 		BoardScroller scroller = new BoardScroller(name, displayedName, scrollText, visibleLength, nameColor, scrollerColor);
-		scroller.runTaskTimer(NoxCore.getInstance(), 0, 5);
+		scroller.runTaskTimer(NoxCore.getInstance(), 0, 4);
 		scrollers.put(scroller.name, scroller);
 		
 		return this;
@@ -332,10 +332,11 @@ public class CoreBoard{
 			this.displayName = nameColor != null? (nameColor + displayedName) : displayedName;
 			
 			this.text = new StringBuilder(scrollText + "  ||  ");
-			this.v = visibleLength <= 14 ? visibleLength : 14;
 			
 			this.useScrollColor = scrollerColor != null? true : false;
 			this.sc = useScrollColor? scrollerColor : null;
+			
+			this.v = useScrollColor? (visibleLength <= 14 ? visibleLength : 14) : (visibleLength <= 16 ? visibleLength : 16);
 
 			entry = new BoardEntry(name, displayName, this.text.substring(0, this.v));
 		}
