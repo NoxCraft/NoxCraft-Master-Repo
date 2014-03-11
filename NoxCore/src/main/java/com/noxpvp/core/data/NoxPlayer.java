@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -32,6 +33,7 @@ import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.gui.CoolDown;
 import com.noxpvp.core.gui.CoreBar;
+import com.noxpvp.core.gui.CoreBoard;
 
 public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	private WeakHashMap<String, CoolDown> cd_cache;
@@ -65,14 +67,19 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	public NoxPlayer(PlayerManager mn, String name) {
-		permHandler = mn.getPlugin().getPermissionHandler();
+		NoxCore core = mn.getPlugin();
+		
+		permHandler = core.getPermissionHandler();
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
 		manager = mn;
 		this.persistant_data = mn.getPlayerNode(name);
 		this.name = name;
-		if (getPlayer() != null)
-			this.cBar = new CoreBar(manager.getPlugin(), getPlayer());
+		
+		if (getPlayer() != null){
+			this.cBar = new CoreBar(core, getPlayer());
+			new CoreBoard(core, getPlayer());
+		}
 	}
 	
 	/**
@@ -83,20 +90,50 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	 * @param length of cooldown specified by nanos or millis depending is {@link NoxCore#isUsingNanoTime()}
 //	 * @return
 	 */
-	public boolean addCoolDown(String name, long length)
+	public boolean addCoolDown(String name, long length, boolean coreBoardTimer)
 	{
+		NoxCore core = manager.getPlugin();
+		boolean isNano = NoxCore.isUsingNanoTime();
+		
 		if (cd_cache.containsKey(name) && !cd_cache.get(name).expired())
 			return false;
 		CoolDown cd;
 		
 		long time = 0;
-		if (NoxCore.isUsingNanoTime())
+		if (isNano)
 			time = System.nanoTime() + length;
+		else
+			time = length;
 		
-		cd = new CoolDown(name, time, NoxCore.isUsingNanoTime());
+		cd = new CoolDown(name, time, isNano);
 		
 		cds.add(cd);
 		cd_cache.put(cd.getName(), cd);
+		
+		if (coreBoardTimer) {
+			ChatColor cdNameColor, cdCDColor;
+			try {
+				cdNameColor = ChatColor.valueOf(core.getCoreConfig().get(
+						"gui.coreboard.cooldowns.name-color",
+						String.class,
+						"&e"));
+				cdCDColor = ChatColor.valueOf(core.getCoreConfig().get(
+						"gui.coreboard.cooldowns.name-color",
+						String.class,
+						"&a"));
+				
+			} catch (IllegalArgumentException e) {
+				cdNameColor = ChatColor.YELLOW;
+				cdCDColor = ChatColor.GREEN;
+			}
+			manager.getCoreBoard(getName()).addTimer(
+					name,
+					name,
+					(int) (isNano ? ((length / 1000) / 1000) : (length / 1000)),
+					cdNameColor,
+					cdCDColor);
+		}
+		
 		return true;
 	}
 	

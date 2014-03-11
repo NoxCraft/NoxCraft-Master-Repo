@@ -14,7 +14,6 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -159,6 +158,8 @@ public class NoxCore extends NoxPlugin {
 	
 	@Override
 	public void disable() {
+		saveConfig();
+		
 		cds.stop();
 		cleanup();
 	}

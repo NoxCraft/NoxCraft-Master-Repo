@@ -3,20 +3,14 @@ package com.noxpvp.mmo.abilities.targeted;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 
-import net.milkbowl.vault.chat.Chat;
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.Vector3D;
-import com.noxpvp.core.utils.chat.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
@@ -70,7 +64,6 @@ public class TargetAbility extends BasePlayerAbility{
 			
 			if (!(it instanceof LivingEntity) || it.equals(p)) continue;
 			if ((it instanceof Player) && !(p).canSee((Player) it)) continue;
-			MessageUtil.broadcast("going though nearby peoples");
 			
 			Location observerPos = p.getEyeLocation();
 			Vector3D observerDir = new Vector3D(observerPos.getDirection());
@@ -108,11 +101,10 @@ public class TargetAbility extends BasePlayerAbility{
 					else name = it.getType().name();
 				} 
 				
-				cpm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, color);
+				cpm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, false);
 				
 				return true;
 			} else {
-				MessageUtil.broadcast("no intersection");
 				continue;
 			}
 		}
@@ -141,8 +133,7 @@ public class TargetAbility extends BasePlayerAbility{
 			return false;
 		if (Math.abs(d.x * c.y - d.y * c.x) > e.x * ad.y + e.y * ad.x + epsilon)
 			return false;
- 
-		MessageUtil.broadcast("has intersection");
+
 		return true;
 	}
 
