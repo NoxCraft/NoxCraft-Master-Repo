@@ -17,6 +17,18 @@ public class TrackedJSONStringer extends JSONStringer {
 	public TrackedJSONStringer() {
 		super();
 	}
+	
+	public boolean isCurrentlyArray() {
+		if (!actions.isEmpty())
+			return actions.peek() == ACTION.ARRAY;
+		return false;
+	}
+	
+	public boolean isCurrentlyObject() {
+		if (!actions.isEmpty())
+			return actions.peek() == ACTION.OBJECT;
+		return false;
+	}
 
 	@Override
 	public JSONWriter array() throws JSONException {

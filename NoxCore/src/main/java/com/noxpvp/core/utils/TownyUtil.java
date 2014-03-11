@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.bergerkiller.bukkit.common.ModuleLogger;
+import com.bergerkiller.bukkit.common.bases.mutable.LocationAbstract;
 import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.SafeLocation;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -65,7 +65,7 @@ public class TownyUtil {
 		}
 	}
 	
-	public static boolean isClaimedLand(SafeLocation location) {
+	public static boolean isClaimedLand(LocationAbstract location) {
 		return isClaimedLand(location.toLocation());
 	}
 	
@@ -83,12 +83,12 @@ public class TownyUtil {
 			world = TownyUniverse.getDataSource().getWorld(location.getWorld().getName());
 		} catch (NotRegisteredException e) {}
 
-		if (world != null)
-			return world.hasTownBlock(Coord.parseCoord(location));
-		else return false;
+		if (world == null)
+			return false;
+		return world.hasTownBlock(Coord.parseCoord(location));
 	}
 	
-	public static boolean isWild(SafeLocation location){
+	public static boolean isWild(LocationAbstract location){
 		return isWild(location.toLocation());
 	}
 	
@@ -106,7 +106,7 @@ public class TownyUtil {
 		return isOwnLand(p, p.getLocation());
 	}
 	
-	public static boolean isOwnLand(Player p, SafeLocation location){
+	public static boolean isOwnLand(Player p, LocationAbstract location){
 		return isOwnLand(p, location.toLocation());
 	}
 	
@@ -162,7 +162,7 @@ public class TownyUtil {
 		return isPVP(entity.getLocation());
 	}
 
-	public static boolean isPVP(SafeLocation loc){
+	public static boolean isPVP(LocationAbstract loc){
 		return isPVP(loc.toLocation());
 	}
 	
@@ -208,6 +208,44 @@ public class TownyUtil {
 		} catch (NotRegisteredException e) { }
 		return town;
 	}
+	
+	public static boolean isAlly(Player player, Entity entity) {
+		return isAlly(player, entity.getLocation());
+	}
+	
+	public static boolean isAlly(Player player, LocationAbstract location) {
+		return isAlly(player, location.toLocation());
+	}
+	
+	public static boolean isAlly(Player player, Location Location) {
+		//TODO: Implement.
+		return false;
+	}
+	
+	public static boolean isAlly(Player player, Player otherPlayer) {
+		//TODO: Implement
+		return false;
+	}
+	
+	public static boolean isNationMember(Player player, Entity entity) {
+		return isNationMember(player, entity.getLocation());
+	}
+	
+	public static boolean isNationMember(Player player, LocationAbstract location) {
+		return isNationMember(player, location.toLocation());
+	}
+	
+	public static boolean isNationMember(Player player, Location location) {
+		//TODO: Implement.
+		return false;
+	}
+	
+	public static boolean isNationMember(Player player, Player otherPlayer) {
+		//TODO: Implement.
+		return false;
+	}
+	
+	
 
 	/*
 	 * is ally land(block / loc)

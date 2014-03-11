@@ -47,7 +47,17 @@ public class PVELog extends NoxListener<NoxCore>{
 
 		handler = null;
 		
+		formatter = new Formatter() {
+			
+			@Override
+			public String format(LogRecord record) {
+				return null;
+			}
+			
+			
+		};
 		//TODO: FINISH LOGS
+		
 	}
 	
 	/**
