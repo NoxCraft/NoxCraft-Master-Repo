@@ -33,14 +33,34 @@ public class TrackedJSONStringer extends JSONStringer {
 	@Override
 	public JSONWriter array() throws JSONException {
 		JSONWriter ret = super.array();
-		actions.push(ACTION.ARRAY);
+		actions.add(ACTION.ARRAY);
 		return ret;
 	}
 
 	@Override
 	public JSONWriter object() throws JSONException {
 		JSONWriter ret = super.object();
-		actions.push(ACTION.OBJECT);
+		actions.add(ACTION.OBJECT);
+		return ret;
+	}
+	
+	@Override
+	public JSONWriter endArray() throws JSONException {
+		JSONWriter ret = super.endArray();
+		if (!actions.isEmpty())
+			if (actions.peek() == ACTION.ARRAY)
+				actions.pop();
+		
+		return ret;
+	}
+	
+	@Override
+	public JSONWriter endObject() throws JSONException {
+		JSONWriter ret = super.endObject();
+		if (!actions.isEmpty())
+			if (actions.peek() == ACTION.OBJECT)
+				actions.pop();
+		
 		return ret;
 	}
 

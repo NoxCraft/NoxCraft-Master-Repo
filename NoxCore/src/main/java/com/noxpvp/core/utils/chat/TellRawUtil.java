@@ -23,46 +23,36 @@ public class TellRawUtil {
 	 * italic:true, strikethrough:true, obfuscated:true }
 	 */
 	public static class JSONBuilder {
-		public static enum FLAG {
-			BOLD(1), UNDERLINE(2), ITALIC(4), STRIKETHROUGH(8), OBFUSCATED(16), OFF(32);
-
-			private int value;
-
-			FLAG(int value) {
-				this.value = value;
-			}
-
-			public int getValue() {
-				return value;
-			}
+		public static class FLAGS {
+			public final static int BOLD = 1;
+			public final static int UNDERLINE = 2;
+			public final static int ITALIC = 4;
+			public final static int STRIKETHROUGH = 8;
+			public final static int OBFUSCATED = 16;
 			
-			public static int getBits(int initial, FLAG... flags) {
-				int bitFlag = initial;
-				for (FLAG flag : flags)
-					bitFlag |= flag.getValue();
-				return bitFlag;
-			}
-
-			public static int getBits(FLAG... flags) {
-				return getBits(0, flags);
-			}
-			
-			public static FLAG valueOf(ChatColor color) {
+			public static int valueOf(ChatColor color) {
 				switch (color) {
 					case BOLD:
 						return BOLD;
-					case ITALIC:
-						return ITALIC;
-					case MAGIC:
-						return OBFUSCATED;
-					case STRIKETHROUGH:
-						return STRIKETHROUGH;
 					case UNDERLINE:
 						return UNDERLINE;
-					default:
-						return null;
+					case ITALIC:
+						return ITALIC;
+					case STRIKETHROUGH:
+						return STRIKETHROUGH;
+					case MAGIC:
+						return OBFUSCATED;
+					default: return 0;
 				}
 			}
+			
+			public static int combineBits(int... bits) {
+				int r = 0;
+				for (int b : bits)
+					r |= b;
+				return r;
+			}
+			
 		}
 		
 		private TrackedJSONStringer json;
@@ -73,16 +63,16 @@ public class TellRawUtil {
 			this(null);
 		}
 		
-		public JSONBuilder(ChatColor color, FLAG... flags) {
-			this(color, "", FLAG.getBits(flags));
+		public JSONBuilder(String text) {
+			this(null, text, 0);
+		}
+		
+		public JSONBuilder(ChatColor color, String text) {
+			this(color, text, 0);
 		}
 		
 		public JSONBuilder(ChatColor color, int bits) {
 			this(color, "", bits);
-		}
-		
-		public JSONBuilder(ChatColor color, String initialText, FLAG... flags) {
-			this(color, initialText, FLAG.getBits(flags));
 		}
 		
 		public JSONBuilder(ChatColor color, @Nullable String initialText, int bits) {
@@ -99,7 +89,7 @@ public class TellRawUtil {
 			json.key("text").value(initialText);
 			
 			if (color != null)
-				json.key("color").value(color.name());
+				json.key("color").value(color);
 			
 			bif(json, bits, 0);
 			
@@ -131,21 +121,15 @@ public class TellRawUtil {
 			return addEnclosedText(color, text, 0, 0);
 		}
 		
-		public JSONBuilder addEnclosedText(ChatColor color, String text, FLAG... flags)
-		{
-			return addEnclosedText(color, text, FLAG.getBits(flags), 0);
-		}
-		
-		public JSONBuilder addEnclosedText(ChatColor color, String text, FLAG[] onFlags, FLAG[] offFlags)
-		{
-			return addEnclosedText(color, text, FLAG.getBits(onFlags), FLAG.getBits(offFlags));
+		public JSONBuilder addEnclosedText(ChatColor color, String text, int bits) {
+			return addEnclosedText(color, text, bits, 0);
 		}
 		
 		public JSONBuilder addEnclosedText(ChatColor color, String text, int onBits, int offBits)
 		{
 			TrackedJSONStringer b = getStringer();
 			if (color != null && color.isFormat()) {
-				onBits = FLAG.getBits(onBits, FLAG.valueOf(color));
+				onBits = FLAGS.combineBits(onBits, FLAGS.valueOf(color));
 				color = null;
 			}
 			if (b.isCurrentlyArray()) {
@@ -177,18 +161,14 @@ public class TellRawUtil {
 			return addOpenText(color, text, 0, 0);
 		}
 		
-		public JSONBuilder addOpenText(ChatColor color, String text, FLAG... flags) {
-			return addOpenText(color, text, FLAG.getBits(flags), 0);
-		}
-		
-		public JSONBuilder addOpenText(ChatColor color, String text, FLAG[] onFlags, FLAG[] offFlags) {
-			return addOpenText(color, text, FLAG.getBits(onFlags), FLAG.getBits(offFlags));
+		public JSONBuilder addOpenText(ChatColor color, String text, int bits) {
+			return addOpenText(color, text, bits, 0);
 		}
 		
 		public JSONBuilder addOpenText(ChatColor color, String text, int onBits, int offBits) {
 			TrackedJSONStringer b = getStringer();
 			if (color != null && color.isFormat()) {
-				onBits = FLAG.getBits(onBits, FLAG.valueOf(color));
+				onBits = FLAGS.combineBits(onBits, FLAGS.valueOf(color));
 				color = null;
 			}
 			if (b.isCurrentlyArray()) {
@@ -235,37 +215,43 @@ public class TellRawUtil {
 		 * </b>
 		 */
 		private void bif(TrackedJSONStringer b, int onBits, int offBits) {
-			int v = (offBits & FLAG.BOLD.getValue()) - (onBits & FLAG.BOLD.getValue());
-			if (v == 1)
+			int bv = (offBits & FLAGS.BOLD) - (onBits & FLAGS.BOLD), v = FLAGS.BOLD, nv = -FLAGS.BOLD;
+			if (bv == v)
 				b.key("bold").value(false);
-			else if (v == -1)
+			else if (bv == nv)
 				b.key("bold").value(true);
 			
-			v = (offBits & FLAG.ITALIC.getValue()) - (onBits & FLAG.ITALIC.getValue());
-			if (v == 1)
+			v = FLAGS.ITALIC;
+			nv = -FLAGS.ITALIC;
+			bv = (offBits & v) - (onBits &v);
+			if (bv == v)
 				b.key("italic").value(false);
-			else if (v == -1)
+			else if (bv == nv)
 				b.key("italic").value(true);
 			
 			
-			v = (offBits & FLAG.STRIKETHROUGH.getValue()) - (onBits & FLAG.STRIKETHROUGH.getValue());
-			if (v == 1)
+			v = FLAGS.STRIKETHROUGH;
+			nv = -FLAGS.STRIKETHROUGH;
+			bv = (offBits & v) - (onBits & v);
+			if (bv == v)
 				b.key("strikethrough").value(false);
-			else if (v == -1)
+			else if (bv == nv)
 				b.key("strikethrough").value(true);
 			
-			
-			v = (offBits & FLAG.UNDERLINE.getValue()) - (onBits & FLAG.UNDERLINE.getValue());
-			if (v == 1)
+			v = FLAGS.UNDERLINE;
+			nv = FLAGS.UNDERLINE;
+			bv = (offBits & v) - (onBits & v);
+			if (bv == v)
 				b.key("underlined").value(false);
-			else if (v == -1)
+			else if (bv == nv)
 				b.key("underlined").value(true);
 			
-			
-			v = (offBits & FLAG.OBFUSCATED.getValue()) - (onBits & FLAG.OBFUSCATED.getValue());
-			if (v == 1)
+			v = FLAGS.OBFUSCATED;
+			nv = FLAGS.OBFUSCATED;
+			bv = (offBits & v) - (onBits & v);
+			if (bv == v)
 				b.key("obfuscated").value(false);
-			else if (v == -1)
+			else if (bv == nv)
 				b.key("obfuscated").value(true);
 		}
 
