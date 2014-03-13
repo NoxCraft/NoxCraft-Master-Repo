@@ -14,8 +14,10 @@ import com.google.common.collect.Sets;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.Cycler;
 import com.noxpvp.core.data.ObjectLock;
+import com.noxpvp.core.data.StringScroller;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
+import com.noxpvp.core.utils.chat.MessageUtil;
 
 public class CoreBar{
 	
@@ -24,6 +26,9 @@ public class CoreBar{
 	private ObjectLock lock;
 	private Runnable updater;
 	PlayerManager pm;
+	
+	private String separater;
+	private String color;
 	
 	/**
 	 * 
@@ -41,11 +46,14 @@ public class CoreBar{
 		lock = new ObjectLock(null);
 		updater = null;
 		
+		this.separater = core.getCoreConfig().get("gui.corebar.separater", String.class, ChatColor.GREEN.toString() + "    ||    " + ChatColor.RESET.toString());
+		this.color = core.getCoreConfig().get("gui.corebar.default-color", String.class, ChatColor.GREEN.toString());
+		
 		pm.addCoreBar(this);
 	}
 	
 	public void newFlasher(String text, int displayTicks) {
-		if (lock.lock == null || (lock.lock != text && lock.canUnlock))
+		if (lock == null || (lock.lock != text && lock.canUnlock))
 			newFlasher(text, displayTicks, true);
 	}
 	
@@ -73,9 +81,12 @@ public class CoreBar{
 			CommonUtil.nextTick(updater);
 	}
 	
-	public void newScroller(String text, int length, ChatColor color, int displayTicks, boolean canBeOverridden) {
+	public void newScroller(String text, int length, int displayTicks, boolean canBeOverridden) {
 		if (lock == null || (lock.lock != text && lock.canUnlock))
-			this.new Scroller(text, length, color, displayTicks, canBeOverridden);
+			this.new Scroller(text, length, displayTicks, canBeOverridden);
+		else
+			MessageUtil.broadcast("no create");
+		
 	}
 	
 	public void newShine(String text, int delay, int displayTicks, boolean canBeOverridden) {
@@ -173,8 +184,7 @@ public class CoreBar{
 				cancel();
 			} catch (IllegalStateException e) {}} 	
 		
-	}
-	
+	}	
 
 	private class LivingTracker extends BukkitRunnable{
 		private final static int runPeriod = 10;
@@ -183,9 +193,7 @@ public class CoreBar{
 		private double distance;
 		private int maxDistance;
 		private boolean ignoreLOS;
-
-		private String color;
-		private String separator;
+		
 		private StringBuilder text;		
 		private String stringDist;
 
@@ -199,13 +207,10 @@ public class CoreBar{
 			NoxCore core = NoxCore.getInstance();
 			
 			this.e = e;
-			
-			this.color = core.getCoreConfig().get("gui.corebar.color", String.class, "&a");
-			this.separator = color + core.getCoreConfig().get("gui.corebar.separater", String.class, " - ");;
 			this.distance = p.getLocation().distance(e.getLocation());
 			this.maxDistance = maxDistance;
 			this.ignoreLOS = ignoreLOS;
-			this.text = new StringBuilder(color).append(text).append(separator).append((stringDist = String.format("%0$.1f", distance)));
+			this.text = new StringBuilder(color).append(text).append(separater).append((stringDist = String.format("%0$.1f", distance)));
 			
 			this.displayTicks = canBeOverridden? displayTicks : (displayTicks <= 0? 500 : displayTicks);
 			this.runs = 0;
@@ -229,7 +234,7 @@ public class CoreBar{
 			
 			int tLength = text.length();
 			
-			text.replace(tLength - (separator.length() + stringDist.length()), tLength, separator + (stringDist = String.format("%0$.1f", distance)));
+			text.replace(tLength - (separater.length() + stringDist.length()), tLength, separater + (stringDist = String.format("%0$.1f", distance)));
 			
 			currentEntry.update(e, text.toString());
 			
@@ -245,28 +250,24 @@ public class CoreBar{
 	}
 	
 	private class Scroller extends BukkitRunnable{
-		private final static int runPeriod = 5;
-
-		private char cChar;
+		private final static int runPeriod = 4;
 		
-		private String sc;
-		private StringBuilder text;
-		
-		private boolean useScrollColor;
+		private ObjectLock locked;
 		private int v;
 
 		private int displayTicks;
 		private int runs;
 		
-		public Scroller(String text, int visibleLength, ChatColor color, int displayTicks, boolean canBeOverridden){
-			lock = new ObjectLock(text, canBeOverridden);
+		private StringScroller text;
+		
+		public Scroller(String text, int visibleLength, int displayTicks, boolean canBeOverridden){
+			lock = (this.locked = new ObjectLock(text, canBeOverridden));
 			updater = this;
 			
-			this.v = visibleLength <= 64 ? visibleLength : 64;
-			this.useScrollColor = color != null ? true : false;
-			this.sc = color.toString();
-			this.cChar = ChatColor.COLOR_CHAR;
-			this.text = new StringBuilder(this.sc + "    " + text);
+			text = text + separater;
+			
+			this.v = (visibleLength <= 64 && visibleLength <= text.length())? visibleLength : ((visibleLength > text.length())? text.length() : visibleLength);
+			this.text = new StringScroller(text);
 
 			this.displayTicks = canBeOverridden? displayTicks : (displayTicks <= 0? 500 : displayTicks);
 			this.runs = 0;
@@ -276,30 +277,20 @@ public class CoreBar{
 			this.runTaskTimer(NoxCore.getInstance(), 0, runPeriod);
 		}
 		public void run() {
-			
-			if (!currentEntry.text.equals(text.substring(0, v)) || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || p == null || !p.isOnline()){
+//			MessageUtil.broadcast("run " + runs);
+			if (lock != locked || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || p == null || !p.isOnline()){
+				MessageUtil.broadcast("canceled 1 - 1" + currentEntry.text + " 2" + text.getString());
 				safeCancel();
 				return;
 			}
-				
-			if (useScrollColor){
-				text.append(text.charAt(2));
-				text.replace(0, 2, this.sc);
-			} else {
-				if (text.substring(0, 1).matches("[&" + cChar + "][0-9a-f]")){
-					text.append(text.substring(0, 2)).delete(0, 2);
-				} else {
-					text.append(text.substring(0)).deleteCharAt(0);
-				}
-				
-			}
 			
-			currentEntry.update(100F, text.substring(0, v));
+			currentEntry.update(100F, text.scroll().substring(0, v));
 			
 		}
 		
 		public void safeCancel() {try {
 			lock = null;
+			updater = null;
 			currentEntry.hide();
 			cancel();
 		} catch (IllegalStateException e) {}} 	
@@ -339,7 +330,7 @@ public class CoreBar{
 		}
 		
 		public void run() {
-			if ((!currentEntry.text.equals(text.toString())) || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || (text.length() <= 7))
+			if (currentEntry.text != text.toString() || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || (text.length() <= 7))
 			{
 				safeCancel();
 				return;

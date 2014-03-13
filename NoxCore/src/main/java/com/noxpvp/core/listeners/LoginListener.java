@@ -1,5 +1,6 @@
 package com.noxpvp.core.listeners;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,10 +25,18 @@ public class LoginListener extends NoxListener<NoxCore> {
 		@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
 		public void onLogin(PlayerJoinEvent e)
 		{
-			Player p = e.getPlayer();
+			final Player p = e.getPlayer();
 			
 			VaultAdapter.GroupUtils.reloadGroupTag(p);
 			PlayerManager.getInstance().loadPlayer(p.getName());
+			CommonUtil.nextTick(new Runnable() {
+				
+				public void run() {
+					PlayerManager.getInstance().getCoreBar(p.getName()).newScroller("test test" + ChatColor.GREEN + " testgreen testgreen", 64, 1000, true);/*
+					PlayerManager.getInstance().getCoreBoard(p.getName()).addScroller("test", "Awesome test", "this is a really long message that can't normally be displayed without lots of special code and stuffs", 14, ChatColor.YELLOW, ChatColor.GREEN).
+					addTimer("test2", "CoolDown", 200, ChatColor.RED, ChatColor.GREEN).show();*/
+				}
+			});
 		}
 		
 		@Override

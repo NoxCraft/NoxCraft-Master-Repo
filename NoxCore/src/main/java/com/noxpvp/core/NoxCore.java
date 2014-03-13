@@ -348,8 +348,11 @@ public class NoxCore extends NoxPlugin {
 	}
 	
 	public FileConfiguration getCoreConfig(){
-		if (config == null)
+		if (config == null){
 			config = new FileConfiguration(getDataFile("config.yml"));
+			config.load();
+		}
+		
 		return config;
 	}
 
