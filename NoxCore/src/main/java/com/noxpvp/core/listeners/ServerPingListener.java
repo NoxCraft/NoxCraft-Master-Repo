@@ -1,5 +1,6 @@
 package com.noxpvp.core.listeners;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.math.RandomUtils;
@@ -16,7 +17,8 @@ public class ServerPingListener extends NoxListener<NoxCore>{
 	public ServerPingListener(NoxCore core) {
 		super(core);
 		
-		this.motds = core.getCoreConfig().getList("motd.messages", String.class);
+		this.motds = core.getCoreConfig().getList("motd.messages", String.class, Arrays.asList("line1" + "\n" + "line2?"));
+		
 		System.out.println(motds.toString());
 	}
 	
@@ -24,7 +26,7 @@ public class ServerPingListener extends NoxListener<NoxCore>{
 	public void onPing(ServerListPingEvent event){
 		if (motds == null || motds.size() < 1) return;
 		
-		int random = RandomUtils.nextInt(motds.size());
+		int random = RandomUtils.nextInt(motds.size() - 1);
 		
 		if (motds.get(random) != null)
 			event.setMotd(motds.get(random));

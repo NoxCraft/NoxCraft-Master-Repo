@@ -348,10 +348,10 @@ public class NoxCore extends NoxPlugin {
 	}
 	
 	public FileConfiguration getCoreConfig(){
-		if (config == null){
+		if (config == null)
 			config = new FileConfiguration(getDataFile("config.yml"));
-			config.load();
-		}
+			
+		config.load();
 		
 		return config;
 	}
@@ -530,13 +530,13 @@ public class NoxCore extends NoxPlugin {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void reloadConfig() {
-		if (!getCoreConfig().exists())
-			saveConfig();
-		
 		getCoreConfig().load();
+		
+		pingListener.unregister();
+		pingListener = new ServerPingListener(this);
+		pingListener.register();
 		
 		ChestBlockListener.isRemovingOnInteract = config.get("custom.events.chestblocked.isRemovingOnInteract", ChestBlockListener.isRemovingOnInteract);
 		ChestBlockListener.usePlaceEvent = config.get("custom.events.chestblocked.usePlaceEvent", ChestBlockListener.usePlaceEvent);

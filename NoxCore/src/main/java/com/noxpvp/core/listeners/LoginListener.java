@@ -32,9 +32,7 @@ public class LoginListener extends NoxListener<NoxCore> {
 			CommonUtil.nextTick(new Runnable() {
 				
 				public void run() {
-					PlayerManager.getInstance().getCoreBar(p.getName()).newScroller("test test" + ChatColor.GREEN + " testgreen testgreen", 64, 1000, true);/*
-					PlayerManager.getInstance().getCoreBoard(p.getName()).addScroller("test", "Awesome test", "this is a really long message that can't normally be displayed without lots of special code and stuffs", 14, ChatColor.YELLOW, ChatColor.GREEN).
-					addTimer("test2", "CoolDown", 200, ChatColor.RED, ChatColor.GREEN).show();*/
+					PlayerManager.getInstance().getCoreBar(p.getName()).newShine(ChatColor.AQUA + "shining shining shining shining shining shining", 500, 0, true);
 				}
 			});
 		}

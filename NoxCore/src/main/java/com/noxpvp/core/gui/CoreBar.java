@@ -1,6 +1,7 @@
 package com.noxpvp.core.gui;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import me.confuser.barapi.BarAPI;
 
@@ -14,18 +15,20 @@ import com.google.common.collect.Sets;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.Cycler;
 import com.noxpvp.core.data.ObjectLock;
-import com.noxpvp.core.data.StringScroller;
+import com.noxpvp.core.data.ColoredStringScroller;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
-import com.noxpvp.core.utils.chat.MessageUtil;
 
 public class CoreBar{
 	
 	private final Entry currentEntry = new Entry();
+	
 	public final Player p;
 	private ObjectLock lock;
 	private Runnable updater;
-	PlayerManager pm;
+	
+	private NoxCore plugin;
+	private PlayerManager pm;
 	
 	private String separater;
 	private String color;
@@ -36,6 +39,8 @@ public class CoreBar{
 	 */
 	public CoreBar(NoxCore core, Player p){
 		this.p = p;
+		
+		this.plugin = NoxCore.getInstance();
 		this.pm = PlayerManager.getInstance();
 		
 		String name = p.getName();
@@ -46,52 +51,26 @@ public class CoreBar{
 		lock = new ObjectLock(null);
 		updater = null;
 		
-		this.separater = core.getCoreConfig().get("gui.corebar.separater", String.class, ChatColor.GREEN.toString() + "    ||    " + ChatColor.RESET.toString());
+		this.separater = core.getCoreConfig().get("gui.corebar.separater", String.class, ChatColor.GREEN + "    ||    " + ChatColor.RESET);
 		this.color = core.getCoreConfig().get("gui.corebar.default-color", String.class, ChatColor.GREEN.toString());
 		
 		pm.addCoreBar(this);
 	}
 	
-	public void newFlasher(String text, int displayTicks) {
-		if (lock == null || (lock.lock != text && lock.canUnlock))
-			newFlasher(text, displayTicks, true);
+	private boolean isChangeable(){
+		return (lock == null || lock.canUnlock);
 	}
 	
-	public void newFlasher(String text, int displayTicks, boolean canBeOverridden){
-		new Flasher(text, displayTicks, canBeOverridden);
-	}
 	
-	public void newLivingTracker(LivingEntity e, String text, boolean ignoreLOS){
-		newLivingTracker(e, text, ignoreLOS, 500, true);
-	}
-	
-	public void newLivingTracker(LivingEntity e, String text, boolean ignoreLOS, int displayTicks){
-		newLivingTracker(e, text, ignoreLOS, displayTicks, true);
-	}
-	
-	public void newLivingTracker(LivingEntity e, String text, boolean ignoreLOS, int displayTicks, boolean canBeOveridden){
-		newLivingTracker(e, text, NoxCore.getInstance().getCoreConfig().get("gui.corebar.default-distance", int.class, 25), ignoreLOS, displayTicks, canBeOveridden);
-	}
-	
-	public void newLivingTracker(LivingEntity e, String text, int maxDistance, boolean ignoreLOS, int displayTicks, boolean canBeOverridden) {
-		if (lock == null || (lock.lock != e.getUniqueId() && lock.canUnlock)){
-			new LivingTracker(e, text, maxDistance, ignoreLOS, displayTicks, canBeOverridden);
-		}
-		else if (updater != null)
-			CommonUtil.nextTick(updater);
-	}
 	
 	public void newScroller(String text, int length, int displayTicks, boolean canBeOverridden) {
-		if (lock == null || (lock.lock != text && lock.canUnlock))
-			this.new Scroller(text, length, displayTicks, canBeOverridden);
-		else
-			MessageUtil.broadcast("no create");
-		
+		if (isChangeable())
+			new Scroller(text, length, displayTicks, canBeOverridden);	
 	}
 	
 	public void newShine(String text, int delay, int displayTicks, boolean canBeOverridden) {
-		if (lock == null || (lock.lock != text && lock.canUnlock))
-			this.new Shine(text, delay, displayTicks, canBeOverridden);
+		if (isChangeable())
+			new Shine(text, delay, displayTicks, canBeOverridden);
 	}
 	
 	class Entry{
@@ -134,9 +113,19 @@ public class CoreBar{
 		
 	}
 	
+	public void newFlasher(String text, int displayTicks) {
+		newFlasher(text, displayTicks, true);
+	}
+	
+	public void newFlasher(String text, int displayTicks, boolean canBeOverridden){
+		if (isChangeable())
+			new Flasher(text, displayTicks, canBeOverridden);
+	}
 
 	private class Flasher extends BukkitRunnable {
 		private final static int runPeriod = 2;
+		
+		private ObjectLock locker;
 		
 		private Cycler<Character> colors;
 		private StringBuilder text;
@@ -146,7 +135,7 @@ public class CoreBar{
 		private int runs;
 		
 		public Flasher(String text, int displayTicks, boolean canBeOverridden){
-			lock = new ObjectLock(text, canBeOverridden);
+			lock = (locker = new ObjectLock(text, canBeOverridden));
 			updater = this;
 			
 			colors = new Cycler<Character>(Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'));
@@ -156,11 +145,11 @@ public class CoreBar{
 			this.runs = 0;
 			
 			currentEntry.update(100F, text);
-			this.runTaskTimer(NoxCore.getInstance(), 0, runPeriod);
+			this.runTaskTimer(plugin, 0, runPeriod);
 		}
 		
 		public void run() {
-			if (!currentEntry.text.equals(text.toString()) || (displayTicks != 0 && ((runs * runPeriod) > displayTicks)) || p == null || !p.isOnline())
+			if (lock != locker || (displayTicks != 0 && ((runs * runPeriod) > displayTicks)) || p == null || !p.isOnline())
 			{
 				safeCancel();
 				return;
@@ -182,9 +171,31 @@ public class CoreBar{
 				updater = null;
 				currentEntry.hide();
 				cancel();
-			} catch (IllegalStateException e) {}} 	
+			} catch (IllegalStateException e) {}
+			
+		}
 		
-	}	
+	}
+	
+	public void newLivingTracker(LivingEntity e, String text, boolean ignoreLOS){
+		newLivingTracker(e, text, ignoreLOS, 500, true);
+	}
+	
+	public void newLivingTracker(LivingEntity e, String text, boolean ignoreLOS, int displayTicks){
+		newLivingTracker(e, text, ignoreLOS, displayTicks, true);
+	}
+	
+	public void newLivingTracker(LivingEntity e, String text, boolean ignoreLOS, int displayTicks, boolean canBeOveridden){
+		newLivingTracker(e, text, NoxCore.getInstance().getCoreConfig().get("gui.corebar.default-distance", int.class, 25), ignoreLOS, displayTicks, canBeOveridden);
+	}
+	
+	public void newLivingTracker(LivingEntity e, String text, int maxDistance, boolean ignoreLOS, int displayTicks, boolean canBeOverridden) {
+		if (lock == null || (lock.lock != e.getUniqueId() && lock.canUnlock)){
+			new LivingTracker(e, text, maxDistance, ignoreLOS, displayTicks, canBeOverridden);
+		}
+		else if (updater != null)
+			CommonUtil.nextTick(updater);
+	}
 
 	private class LivingTracker extends BukkitRunnable{
 		private final static int runPeriod = 10;
@@ -192,7 +203,9 @@ public class CoreBar{
 		private LivingEntity e;
 		private double distance;
 		private int maxDistance;
+		
 		private boolean ignoreLOS;
+		private Set<Byte> transparents;
 		
 		private StringBuilder text;		
 		private String stringDist;
@@ -204,19 +217,20 @@ public class CoreBar{
 			lock = new ObjectLock(e.getUniqueId(), canBeOverridden);
 			updater = this;
 			
-			NoxCore core = NoxCore.getInstance();
-			
 			this.e = e;
 			this.distance = p.getLocation().distance(e.getLocation());
 			this.maxDistance = maxDistance;
+			
 			this.ignoreLOS = ignoreLOS;
+			this.transparents = Sets.newHashSet((byte) 0, (byte) 8, (byte) 9, (byte) 10, (byte) 11);
+			
 			this.text = new StringBuilder(color).append(text).append(separater).append((stringDist = String.format("%0$.1f", distance)));
 			
 			this.displayTicks = canBeOverridden? displayTicks : (displayTicks <= 0? 500 : displayTicks);
 			this.runs = 0;
 			
 			currentEntry.update(e, text.toString());
-			this.runTaskTimer(core, 0, runPeriod);
+			this.runTaskTimer(plugin, 0, runPeriod);
 		}
 		
 		public void run() {
@@ -227,7 +241,7 @@ public class CoreBar{
 				return;
 			}
 			
-			if (!ignoreLOS && !LineOfSightUtil.hasLineOfSight(p, e.getLocation(), Sets.newHashSet((byte) 0, (byte) 8, (byte) 9, (byte) 10, (byte) 11))){
+			if (!ignoreLOS && !LineOfSightUtil.hasLineOfSight(p, e.getLocation(), transparents)){
 				safeCancel();
 				return;
 			}
@@ -250,7 +264,7 @@ public class CoreBar{
 	}
 	
 	private class Scroller extends BukkitRunnable{
-		private final static int runPeriod = 4;
+		private final static int runPeriod = 5;
 		
 		private ObjectLock locked;
 		private int v;
@@ -258,28 +272,26 @@ public class CoreBar{
 		private int displayTicks;
 		private int runs;
 		
-		private StringScroller text;
+		private ColoredStringScroller text;
 		
 		public Scroller(String text, int visibleLength, int displayTicks, boolean canBeOverridden){
 			lock = (this.locked = new ObjectLock(text, canBeOverridden));
 			updater = this;
 			
-			text = text + separater;
+			text = text.concat(ChatColor.GREEN + "     ||     " + ChatColor.RESET);
 			
 			this.v = (visibleLength <= 64 && visibleLength <= text.length())? visibleLength : ((visibleLength > text.length())? text.length() : visibleLength);
-			this.text = new StringScroller(text);
+			this.text = new ColoredStringScroller(text);
 
 			this.displayTicks = canBeOverridden? displayTicks : (displayTicks <= 0? 500 : displayTicks);
 			this.runs = 0;
 			
 			currentEntry.update(100F, text.substring(0, v));
 			
-			this.runTaskTimer(NoxCore.getInstance(), 0, runPeriod);
+			this.runTaskTimer(plugin, 0, runPeriod);
 		}
 		public void run() {
-//			MessageUtil.broadcast("run " + runs);
 			if (lock != locked || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || p == null || !p.isOnline()){
-				MessageUtil.broadcast("canceled 1 - 1" + currentEntry.text + " 2" + text.getString());
 				safeCancel();
 				return;
 			}
@@ -298,80 +310,108 @@ public class CoreBar{
 	}
 
 	private class Shine extends BukkitRunnable{
-		private final static int runPeriod = 1;
+		private final static int runPeriod = 2;
 		
-		private int currentIndex;
-		private int delay;
+		private ObjectLock locker;
 		private boolean canBeOveridden;
+		private int delay;
 		
-		private int i1, i2, i3;
-		
-		private String one = ChatColor.GOLD.toString(), two = ChatColor.YELLOW.toString(), three = ChatColor.RED.toString();
 		private StringBuilder text;
+		private String regexColors;
+		private int curIdx;
+		private int[] taken;
+		private String[] colors;
 		
 		private int displayTicks;
 		private int runs;
 		
 		public Shine(String text, int delay, int displayTicks, boolean canBeOverridden){
-			lock = new ObjectLock(text, canBeOverridden);
+			lock = (this.locker = new ObjectLock(text, canBeOverridden));
 			updater = this;
-			
-			this.text = new StringBuilder();
-			this.delay = delay;
 			this.canBeOveridden = canBeOverridden;
+			this.delay = delay;
+			
+			this.text = new StringBuilder(text);
+			this.regexColors = "[&" + ChatColor.COLOR_CHAR + "][0-9a-frkmlo]";
+			this.curIdx = 0;
+			this.taken = new int[4];
+			this.colors = new String[4];
+			this.colors[0] = ChatColor.GOLD.toString();
+			this.colors[1] = ChatColor.YELLOW.toString();
+			this.colors[2] = ChatColor.RED.toString();
+			this.colors[3] = ChatColor.RESET.toString();
 			
 			this.displayTicks = canBeOverridden? displayTicks : displayTicks <= 0? 500 : displayTicks;
 			this.runs = 0;
 			
 			currentEntry.update(100F, text);
-			this.currentIndex = 0;
 			
-			this.runTaskTimer(NoxCore.getInstance(), 0, runPeriod);
+			this.runTaskTimer(plugin, 0, runPeriod);
 		}
 		
 		public void run() {
-			if (currentEntry.text != text.toString() || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || (text.length() <= 7))
+			if (lock != locker || (displayTicks > 0 && ((runs * runPeriod) > displayTicks)) || (text.length() <= 7) || p == null || !p.isOnline())
 			{
 				safeCancel();
 				return;
 			}
 			
-			if (currentIndex+7 > text.length()){
-				int newDisplayTicks = (displayTicks - (runs * runPeriod));
-				if (newDisplayTicks > 0){
-					safeCancelNoHide();
-					new Shine(this.text.toString(), delay, newDisplayTicks, canBeOveridden).runTaskLater(NoxCore.getInstance(), delay);
+			if (runs > 0){
+				
+				curIdx = runs;
+				if (curIdx > text.length()){
+					safeCancelWithNew();
 					return;
 				}
 				
-				safeCancel();
-				return;
+				int n = text.length();
+				for (int i : taken) {
+					if (i < 0)
+						continue;
+					if (text.length() < n)
+						i = i - (n - text.length());
+					
+					text.delete(i, i + 2);
+				}
+				taken = new int[4];
+				
 			}
 			
-			text.delete(i1, i1+1).delete(i2, i2+1).delete(i3, i3+1);//remove old colors
+			int i = 0;
+			for (String curColor : colors){
+				if (curIdx + 2 <= text.length()){
+					while (text.substring(curIdx, curIdx + 2).matches(regexColors)){
+						colors[3] = text.substring(curIdx, curIdx + 2);
+						curIdx = curIdx + 2;
+					}
+						
+					text.insert(curIdx, curColor);
+					taken[i++] = curIdx;
+					curIdx = curIdx + 3;
+					
+				} else
+					taken[i++] = -1;
+			}
 			
-			currentIndex = currentIndex+2;
-			i1 = currentIndex;
-			i2 = currentIndex+3;
-			i3 = currentIndex+6;
-			
-			text.insert(i1, one).insert(i1+3, two).insert(i1+6, three);//add again
-			
-			currentEntry.update(100F, text.toString());
-			
+			currentEntry.update(100F, text.toString());			
+			runs++;
 		}
 		
-		public void safeCancelNoHide() {
+		public void safeCancelWithNew() {
 			try {
-				lock = null;
+				locker = null;
 				updater = null;
 				cancel();
+				
+				int newDisplayTicks = (displayTicks != 0? (displayTicks - (runs * runPeriod)) : 0);
+				new Shine(this.text.toString(), this.delay, newDisplayTicks, this.canBeOveridden).runTaskLater(plugin, this.delay);
+
 			} catch (IllegalStateException e) {}	
 		}
 		
 		public void safeCancel() {
 			try {
-				lock = null;
+				locker = null;
 				currentEntry.hide();
 				cancel();
 			} catch (IllegalStateException e) {}
