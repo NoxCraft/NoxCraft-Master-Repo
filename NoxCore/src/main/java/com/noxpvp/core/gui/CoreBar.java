@@ -236,7 +236,7 @@ public class CoreBar{
 		public void run() {
 			distance = p.getLocation().distance(e.getLocation());
 
-			if (!lock.lock.equals(e.getUniqueId()) || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || distance > maxDistance || e == null || p == null || !e.isValid() || !p.isValid()){
+			if (e == null || !lock.lock.equals(e.getUniqueId()) || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || distance > maxDistance || p == null || !e.isValid() || !p.isValid()){
 				safeCancel();
 				return;
 			}
