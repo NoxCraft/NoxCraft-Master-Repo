@@ -15,8 +15,9 @@ import com.google.common.collect.Sets;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.Cycler;
 import com.noxpvp.core.data.ObjectLock;
-import com.noxpvp.core.data.ColoredStringScroller;
 import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.utils.ColoredStringScroller;
+import com.noxpvp.core.utils.ShiningStringScroller;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 
 public class CoreBar{
@@ -311,21 +312,16 @@ public class CoreBar{
 	}
 
 	private class Shine extends BukkitRunnable{
-		private final static int runPeriod = 2;
+		private final static int runPeriod = 1;
 		
 		private ObjectLock locker;
 		private boolean canBeOveridden;
 		private int delay;
 		
-		private StringBuilder text;
-		private String regexColors;
-		private int curIdx;
-		private int[] taken;
-		private String[] colors;
+		private ShiningStringScroller text;
 		
 		private int displayTicks;
 		private int runs;
-		private int indexer;
 		
 		public Shine(String text, int delay, int displayTicks, boolean canBeOverridden){
 			lock = (this.locker = new ObjectLock(text, canBeOverridden));
@@ -333,84 +329,23 @@ public class CoreBar{
 			this.canBeOveridden = canBeOverridden;
 			this.delay = delay;
 			
-			this.text = new StringBuilder(text);
-			this.regexColors = "[&" + ChatColor.COLOR_CHAR + "][0-9a-frkmlo]";
-			this.curIdx = 0;
-			this.taken = new int[4];
-			this.colors = new String[4];
-			this.colors[0] = ChatColor.GOLD.toString();
-			this.colors[1] = ChatColor.YELLOW.toString();
-			this.colors[2] = ChatColor.RED.toString();
-			this.colors[3] = ChatColor.RESET.toString();
+			this.text = new ShiningStringScroller(text);
 			
 			this.displayTicks = canBeOverridden? displayTicks : displayTicks <= 0? 500 : displayTicks;
 			this.runs = 0;
-			this.indexer = 0;
-			
-			currentEntry.update(100F, text);
 			
 			this.runTaskTimer(plugin, delay, runPeriod);
 		}
 		
 		public void run() {
-			if (lock != locker || (displayTicks > 0 && ((runs * runPeriod) > displayTicks)) || (text.length() <= 7) || p == null || !p.isOnline())
+			if (lock != locker || (displayTicks > 0 && ((runs * runPeriod) > displayTicks)) || p == null || !p.isOnline())
 			{
 				safeCancel();
 				return;
 			}
-			
-			if (runs > 0){
-				
-				curIdx = ++indexer;
-				if (curIdx > text.length()){
-					safeCancelWithNew();
-					return;
-				}
-				
-				int n = text.length();
-				for (int i : taken) {
-					if (i < 0)
-						continue;
-					if (text.length() < n)
-						i = i - (n - text.length());
-					
-					text.delete(i, i + 2);
-				}
-				taken = new int[4];
-				
-			}
-			
-			int i = 0;
-			for (String curColor : colors){
-				if (curIdx + 2 <= text.length()){
-					while (text.substring(curIdx, curIdx + 2).matches(regexColors)){
-						colors[3] = text.substring(curIdx, curIdx + 2);
-						curIdx = curIdx + 2;
-						indexer = indexer + 2;
-					}
-						
-					text.insert(curIdx, curColor);
-					taken[i++] = curIdx;
-					curIdx = curIdx + 3;
-					
-				} else
-					taken[i++] = -1;
-			}
-			
-			currentEntry.update(100F, text.toString());			
-			runs++;
-		}
-		
-		public void safeCancelWithNew() {
-			try {
-				locker = null;
-				updater = null;
-				cancel();
-				
-				int newDisplayTicks = (displayTicks != 0? (displayTicks - (runs * runPeriod)) : 0);
-				new Shine(this.text.toString(), this.delay, newDisplayTicks, this.canBeOveridden);
 
-			} catch (IllegalStateException e) {}	
+			currentEntry.update(100F, text.shine());			
+			runs++;
 		}
 		
 		public void safeCancel() {

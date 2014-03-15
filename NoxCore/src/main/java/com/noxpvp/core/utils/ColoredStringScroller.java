@@ -1,4 +1,4 @@
-package com.noxpvp.core.data;
+package com.noxpvp.core.utils;
 
 import org.bukkit.ChatColor;
 

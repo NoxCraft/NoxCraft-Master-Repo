@@ -30,7 +30,7 @@ public class LoginListener extends NoxListener<NoxCore> {
 			VaultAdapter.GroupUtils.reloadGroupTag(p);
 			PlayerManager.getInstance().loadPlayer(p.getName());
 			
-			PlayerManager.getInstance().getCoreBar(p.getName()).newShine("shineshineshine" + ChatColor.GREEN + "shineshineshine", 100, 0, true);
+			PlayerManager.getInstance().getCoreBar(p.getName()).newShine("shine" + ChatColor.BOLD + "shineshine" + ChatColor.GREEN + "shine" + ChatColor.RED + "shine" + ChatColor.BLUE + "shine", 100, 0, true);
 
 		}
 		
