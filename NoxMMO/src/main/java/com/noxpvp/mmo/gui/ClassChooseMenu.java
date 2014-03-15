@@ -28,7 +28,9 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class ClassChooseMenu extends CoreBox{
 
-	public static final String MENU_NAME = "Class Selection";
+	public final static String MENU_NAME = "Class Selection";
+	public final static String MENU_MAIN_COLOR = MMOLocale.GUI_MENU_NAME_COLOR.get();
+	
 	private final static int size = 18;
 
 	private Map<Integer, ClassChooseMenuItem> menuItems;
@@ -46,10 +48,11 @@ public class ClassChooseMenu extends CoreBox{
 		ItemMeta pMeta = primarySign.getItemMeta();
 		ItemMeta sMeta = secondarySign.getItemMeta();
 		
-		pMeta.setDisplayName(MMOLocale.GUI_MENU_NAME_COLOR.get() + "Pick a primary class");
-		sMeta.setDisplayName(MMOLocale.GUI_MENU_NAME_COLOR.get() + "Pick a Secondary class");
-		
 		String lorePrefix = ChatColor.GREEN + "" + ChatColor.ITALIC;
+		
+		pMeta.setDisplayName(MENU_MAIN_COLOR + "Pick a primary class");
+		sMeta.setDisplayName(MENU_MAIN_COLOR + "Pick a Secondary class");
+		
 		pMeta.setLore(Arrays.asList(lorePrefix + "Click a item on this row", lorePrefix + "to select the teir you want to use"));
 		sMeta.setLore(Arrays.asList(lorePrefix + "Click a item on this row", lorePrefix + "to select a secondary class"));
 		

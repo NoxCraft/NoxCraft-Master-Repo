@@ -97,6 +97,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		
 		if (cd_cache.containsKey(name) && !cd_cache.get(name).expired())
 			return false;
+		
 		CoolDown cd;
 		
 		long time = 0;
@@ -118,7 +119,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 						String.class,
 						"&e"));
 				cdCDColor = ChatColor.valueOf(core.getCoreConfig().get(
-						"gui.coreboard.cooldowns.name-color",
+						"gui.coreboard.cooldowns.time-color",
 						String.class,
 						"&a"));
 				
@@ -429,7 +430,10 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		} else if (ede instanceof EntityDamageByBlockEvent) {
 			EntityDamageByBlockEvent edbb = (EntityDamageByBlockEvent) ede;
 			
-			this.persistant_data.set("last.death.cause.block.type", edbb.getDamager().getType().name());
+			try {
+				this.persistant_data.set("last.death.cause.block.type", edbb.getDamager().getType().name());
+				
+			} catch (NullPointerException e) {}
 		}
 	}
 	

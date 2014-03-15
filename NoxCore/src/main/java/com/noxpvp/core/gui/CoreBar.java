@@ -234,14 +234,15 @@ public class CoreBar{
 		}
 		
 		public void run() {
-			distance = p.getLocation().distance(e.getLocation());
 
-			if (e == null || !lock.lock.equals(e.getUniqueId()) || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || distance > maxDistance || p == null || !e.isValid() || !p.isValid()){
+			if (e == null  || p == null || lock == null || !lock.lock.equals(e.getUniqueId()) || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || !e.isValid() || !p.isValid()){
 				safeCancel();
 				return;
 			}
 			
-			if (!ignoreLOS && !LineOfSightUtil.hasLineOfSight(p, e.getLocation(), transparents)){
+			distance = p.getLocation().distance(e.getLocation());
+			
+			if (distance > maxDistance || (!ignoreLOS && !LineOfSightUtil.hasLineOfSight(p, e.getLocation(), transparents))){
 				safeCancel();
 				return;
 			}
@@ -324,6 +325,7 @@ public class CoreBar{
 		
 		private int displayTicks;
 		private int runs;
+		private int indexer;
 		
 		public Shine(String text, int delay, int displayTicks, boolean canBeOverridden){
 			lock = (this.locker = new ObjectLock(text, canBeOverridden));
@@ -343,10 +345,11 @@ public class CoreBar{
 			
 			this.displayTicks = canBeOverridden? displayTicks : displayTicks <= 0? 500 : displayTicks;
 			this.runs = 0;
+			this.indexer = 0;
 			
 			currentEntry.update(100F, text);
 			
-			this.runTaskTimer(plugin, 0, runPeriod);
+			this.runTaskTimer(plugin, delay, runPeriod);
 		}
 		
 		public void run() {
@@ -358,7 +361,7 @@ public class CoreBar{
 			
 			if (runs > 0){
 				
-				curIdx = runs;
+				curIdx = ++indexer;
 				if (curIdx > text.length()){
 					safeCancelWithNew();
 					return;
@@ -383,6 +386,7 @@ public class CoreBar{
 					while (text.substring(curIdx, curIdx + 2).matches(regexColors)){
 						colors[3] = text.substring(curIdx, curIdx + 2);
 						curIdx = curIdx + 2;
+						indexer = indexer + 2;
 					}
 						
 					text.insert(curIdx, curColor);
@@ -404,7 +408,7 @@ public class CoreBar{
 				cancel();
 				
 				int newDisplayTicks = (displayTicks != 0? (displayTicks - (runs * runPeriod)) : 0);
-				new Shine(this.text.toString(), this.delay, newDisplayTicks, this.canBeOveridden).runTaskLater(plugin, this.delay);
+				new Shine(this.text.toString(), this.delay, newDisplayTicks, this.canBeOveridden);
 
 			} catch (IllegalStateException e) {}	
 		}
