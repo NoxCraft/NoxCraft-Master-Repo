@@ -1,5 +1,6 @@
 package com.noxpvp.core.listeners;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,7 +35,7 @@ public class LoginListener extends NoxListener<NoxCore> {
 		
 		VaultAdapter.GroupUtils.reloadGroupTag(p);
 		pm.loadPlayer(p.getName());
-		pm.getCoreBar(p.getName()).newScroller(loginMessage, 64, 300, true);
+		pm.getCoreBar(p.getName()).newShine(loginMessage, 0, 500, true);
 
 	}
 	

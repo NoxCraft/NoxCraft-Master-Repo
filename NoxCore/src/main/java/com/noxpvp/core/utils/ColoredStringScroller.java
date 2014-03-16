@@ -43,7 +43,6 @@ public class ColoredStringScroller{
 		}
 		
 		text.append(text.charAt(0)).deleteCharAt(0);
-		System.out.println(text.length() + ": " + MessageUtil.parseColor(curColor + curFormat + text.toString()));
 		return MessageUtil.parseColor(curColor + curFormat + text.toString());
 	}
 
