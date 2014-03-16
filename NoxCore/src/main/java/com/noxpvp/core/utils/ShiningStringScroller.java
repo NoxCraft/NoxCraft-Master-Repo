@@ -5,14 +5,17 @@ import javax.annotation.Nullable;
 import org.bukkit.ChatColor;
 
 public class ShiningStringScroller {
-	private final static String regexColors = "[&" + ChatColor.COLOR_CHAR + "][0-9a-frkmlo]";
+	private final static String regexCodes = "[&" + ChatColor.COLOR_CHAR + "][0-9a-frkmlno]";
+	private final static String regexColors = "[&" + ChatColor.COLOR_CHAR + "][0-9a-fr]";
+	private final static String regexFormats = "[&" + ChatColor.COLOR_CHAR + "][kmlno]";
 	
 	private String text;
 	private String[] colors;
+	private String curColor, curFormat;
 	private int index;
 	
 	public ShiningStringScroller(String text){
-		this(text, null);
+		this(text, (ChatColor[]) null);
 	}
 	
 	/**
@@ -27,13 +30,14 @@ public class ShiningStringScroller {
 			throw new IllegalArgumentException("Text cannot be less than 3 or provided colors[] length");
 		
 		this.text = text;
+		this.curColor = ChatColor.RESET.toString();
+		this.curFormat = "";
 		
 		if (colors == null){
-			this.colors = new String[4];
+			this.colors = new String[3];
 			this.colors[0] = ChatColor.GOLD.toString();
 			this.colors[1] = ChatColor.YELLOW.toString();
 			this.colors[2] = ChatColor.RED.toString();
-			this.colors[3] = ChatColor.RESET.toString();
 		} else {
 			this.colors = new String[colors.length + 1];
 			for (int i = 0; i < colors.length; i++)
@@ -45,26 +49,42 @@ public class ShiningStringScroller {
 		this.index = 0;
 	}
 	
+	public void resetCurrent(){
+		curColor = ChatColor.RESET.toString();
+		curFormat = "";
+	}
+	
 	public String shine(){
 		StringBuilder text = new StringBuilder(this.text.toString());
-		String newColor;
+		String shineColor;
 		
-		for (int i = 0, n = index; i < colors.length; i++, n++){
-			newColor = colors[i];
+		for (int i = 0, n = index; i <= colors.length; i++, n++){
 			
-			if (newColor == null)
+			if (i == colors.length){
+				index++;
+				text.insert(n, curColor + curFormat);
+				return text.toString();
+			}
+			
+			shineColor = colors[i];
+			
+			if (shineColor == null)
 				continue;
 			
 			if (n + 2 > text.length()){
 				index = 0;
-				colors[3] = ChatColor.RESET.toString();
+				resetCurrent();
 				return text.toString();
 			}
 			
-			while (text.substring(n, n + 2).matches(regexColors)){//TODO support color WITH bold and stuff
-				colors[3] = text.substring(n, n + 2);
-				if (i == (colors.length - 1))
-					newColor = colors[3];
+			while (n <= text.length() && text.substring(n, n + 2).matches(regexCodes)){
+				String code = text.substring(n, n + 2);
+				if (code.matches(regexColors)){
+					curColor = code;
+					curFormat = "";
+				} else if (code.matches(regexFormats)){
+					curFormat = code;
+				}
 				
 				if (i == 0)
 					index = index + 2;
@@ -74,11 +94,12 @@ public class ShiningStringScroller {
 			
 			if (n > text.length()){
 				index = 0;
-				colors[3] = ChatColor.RESET.toString();
+				resetCurrent();
+				
 				return text.toString();
 			}
 			
-			text.insert(n, newColor);
+			text.insert(n, shineColor);
 			n = n + 2;
 		}
 		

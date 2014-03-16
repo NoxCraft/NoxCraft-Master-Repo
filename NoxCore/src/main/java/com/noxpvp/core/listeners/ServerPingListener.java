@@ -25,7 +25,7 @@ public class ServerPingListener extends NoxListener<NoxCore>{
 		version = Bukkit.getVersion();
 		version = "&a&l[" + version.substring(version.indexOf("(") + 1, version.indexOf(")")) + "] ";
 		
-		this.motds = core.getCoreConfig().getList("motd.messages", String.class, Arrays.asList("&4&lNoxImperialis &k| &6Build, Battle, Burn!/ntestline"));
+		this.motds = core.getCoreConfig().getList("motd.ping", String.class, Arrays.asList("&4&lNoxImperialis &k| &6Build, Battle, Burn!/ntestline"));
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

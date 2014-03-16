@@ -2,10 +2,13 @@ package com.noxpvp.core.utils;
 
 import org.bukkit.ChatColor;
 
+import com.noxpvp.core.utils.chat.MessageUtil;
+
 public class ColoredStringScroller{
 
 	StringBuilder text;
 	String curColor;
+	String curFormat;
 	char cChar;
 	
 	public ColoredStringScroller(String text) {
@@ -13,22 +16,35 @@ public class ColoredStringScroller{
 		
 		cChar = ChatColor.COLOR_CHAR;
 		curColor = "";
+		curFormat = "";
 	}
 	
 	public String getString(){
 		return text.toString();
 	}
 	
-	public String scroll(){
-		if (text.substring(0, 2).matches("[&" + cChar + "][0-9a-frkmlo]")){
-			curColor = text.substring(0, 2);
-			text.append(curColor + text.charAt(2)).delete(0, 3);
+	public String setCurrent(String code){
+		if (code.matches("[&" + cChar + "][0-9a-fr]")){
+			curFormat = "";
+			return (curColor = code);
 			
-		} else {
-			text.append(text.charAt(0)).deleteCharAt(0);
+		} else if (code.matches("[&" + cChar + "][kmlno]")){
+			return (curFormat = code);
+			
 		}
 		
-		return curColor + text.toString();
+		return "";	
+	}
+	
+	public String scroll(){
+		while (text.substring(0, 2).matches("[&" + cChar + "][0-9a-frkmlno]")){
+			text.append(setCurrent(text.substring(0, 2))).delete(0, 2);
+			
+		}
+		
+		text.append(text.charAt(0)).deleteCharAt(0);
+		System.out.println(text.length() + ": " + MessageUtil.parseColor(curColor + curFormat + text.toString()));
+		return MessageUtil.parseColor(curColor + curFormat + text.toString());
 	}
 
 }

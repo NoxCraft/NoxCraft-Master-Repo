@@ -52,7 +52,7 @@ public class CoreBar{
 		lock = new ObjectLock(null);
 		updater = null;
 		
-		this.separater = core.getCoreConfig().get("gui.corebar.separater", String.class, ChatColor.GREEN + "    ||    " + ChatColor.RESET);
+		this.separater = core.getCoreConfig().get("gui.corebar.separater", String.class, "||");
 		this.color = core.getCoreConfig().get("gui.corebar.default-color", String.class, ChatColor.GREEN.toString());
 		
 		pm.addCoreBar(this);
@@ -266,7 +266,7 @@ public class CoreBar{
 	}
 	
 	private class Scroller extends BukkitRunnable{
-		private final static int runPeriod = 5;
+		private final static int runPeriod = 3;
 		
 		private ObjectLock locked;
 		private int v;
@@ -280,9 +280,19 @@ public class CoreBar{
 			lock = (this.locked = new ObjectLock(text, canBeOverridden));
 			updater = this;
 			
-			text = text.concat(ChatColor.GREEN + "     ||     " + ChatColor.RESET);
+			{
+				int left = (62 - text.length());
+				StringBuilder addon = new StringBuilder();
+				
+				while (addon.length() < left)
+					addon.append(' ');
+				
+				text = (addon.toString() + ChatColor.RESET) + text;
+			}
 			
-			this.v = (visibleLength <= 64 && visibleLength <= text.length())? visibleLength : ((visibleLength > text.length())? text.length() : visibleLength);
+			if (visibleLength > 64)
+				visibleLength = 64;
+			this.v = ((visibleLength > text.length())? text.length() : visibleLength);
 			this.text = new ColoredStringScroller(text);
 
 			this.displayTicks = canBeOverridden? displayTicks : (displayTicks <= 0? 500 : displayTicks);
