@@ -27,7 +27,7 @@ public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbil
 			return false;
 		
 		Player playerAttacker = (Player) ((event.getDamager() instanceof Player)? event.getDamager(): null);
-		String itemName = playerAttacker.getItemInHand().getType().name();
+		String itemName = playerAttacker.getItemInHand().getType().name().toUpperCase();
 		
 		if (!itemName.contains("SWORD") && !itemName.contains("AXE"))
 			return false;

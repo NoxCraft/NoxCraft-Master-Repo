@@ -6,6 +6,7 @@ import java.util.Set;
 import me.confuser.barapi.BarAPI;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -29,8 +30,8 @@ public class CoreBar{
 	
 	private NoxCore plugin;
 	
-	private String separater;
-	private String color;
+	public String separater;
+	public String color;
 	
 	/**
 	 * 
@@ -199,7 +200,7 @@ public class CoreBar{
 		private int maxDistance;
 		
 		private boolean ignoreLOS;
-		private Set<Byte> transparents;
+		private Set<Material> transparents;
 		
 		private StringBuilder text;		
 		private String stringDist;
@@ -216,7 +217,7 @@ public class CoreBar{
 			this.maxDistance = maxDistance;
 			
 			this.ignoreLOS = ignoreLOS;
-			this.transparents = Sets.newHashSet((byte) 0, (byte) 8, (byte) 9, (byte) 10, (byte) 11);
+			this.transparents = Sets.newHashSet(Material.AIR, Material.WATER, Material.LAVA);
 			
 			this.text = new StringBuilder(color).append(text).append(separater).append((stringDist = String.format("%0$.1f", distance)));
 			

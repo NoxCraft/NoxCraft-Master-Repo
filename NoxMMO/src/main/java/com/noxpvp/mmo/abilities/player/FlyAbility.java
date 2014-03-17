@@ -96,13 +96,12 @@ public class FlyAbility extends BasePlayerAbility{
 		
 		public FlyRunnable(){
 			this.p = getPlayer();
-			this.i = p.getInventory();
 		}
 		
 		public void safeCancel() {try { cancel(); } catch (IllegalStateException e) {}}
 		
 		public void run(){
-			if (!PlayerUtils.hasItems(i, getReg())){
+			if (!PlayerUtils.hasAtleast(p, getReg())){
 				p.setAllowFlight(false);
 				p.setFlying(false);
 				

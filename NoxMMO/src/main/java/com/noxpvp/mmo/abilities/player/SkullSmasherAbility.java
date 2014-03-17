@@ -1,30 +1,24 @@
 package com.noxpvp.mmo.abilities.player;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import com.noxpvp.core.utils.EffectsRunnable;
+import com.noxpvp.core.utils.StaticEffects;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
 import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
 
 public class SkullSmasherAbility extends BasePlayerAbility{
 	
 	public static final String ABILITY_NAME = "Skull Smasher";
 	public static final String PERM_NODE = "skull-smasher";
-	
-	private static Map<String, SkullSmasherAbility> smashers = new HashMap<String, SkullSmasherAbility>();
 	
 	private BaseMMOEventHandler<EntityDamageByEntityEvent> handler;
 	private double range;
@@ -68,8 +62,19 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 			}
 			
 			public void execute(EntityDamageByEntityEvent event) {
-				if (event.getDamager().equals(SkullSmasherAbility.this.getPlayer()))
-					SkullSmasherAbility.this.eventExecute(SkullSmasherAbility.this.getPlayer(), event.getDamage());
+				if (!event.getDamager().equals(SkullSmasherAbility.this.getPlayer()))
+					return;
+				
+				double damage = event.getDamage();
+				double range = SkullSmasherAbility.this.range;
+				Player attacker = (Player) event.getDamager();
+				
+				for (Entity it : getPlayer().getNearbyEntities(range, range, range)){
+					if (!(it instanceof Damageable) || it.equals(attacker)) continue;
+					
+					((Damageable) it).damage(damage - (damage / 4), attacker);
+					StaticEffects.SkullBreak((LivingEntity) it);
+				}
 			}
 		};
 		
@@ -80,43 +85,14 @@ public class SkullSmasherAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 		
-		final String name = getPlayer().getName();
-		
-		SkullSmasherAbility.smashers.put(name, this);
 		PlayerClass pClass = PlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
 		
 		int length = (20 * (pClass.getTotalLevel())) / 16;
-		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
-			
-			public void run() {
-				if (SkullSmasherAbility.smashers.containsKey(name))
-					SkullSmasherAbility.smashers.remove(name);
-				
-			}
-		}, length);
+		
+		registerHandler(handler);
+		new UnregisterMMOHandlerRunnable(handler).runTaskLater(NoxMMO.getInstance(), length);
 		
 		return true;
-	}
-	
-	public void eventExecute(Player attacker, double damage){
-		if (!smashers.containsKey(attacker.getName()))
-			return;
-		
-		SkullSmasherAbility a = smashers.get(attacker.getName());
-		
-		for (Entity it : attacker.getNearbyEntities(a.range, a.range, a.range)){
-			if (!(it instanceof Damageable)) continue;
-			
-			if (it == attacker) continue;
-			
-			Location itLoc = it.getLocation(),
-					loc = new Location(itLoc.getWorld(), itLoc.getX(), itLoc.getY()+1.75, itLoc.getZ());
-			
-			((Damageable) it).damage(damage - (damage / 4), attacker);
-			new EffectsRunnable(Arrays.asList("blockcrack_155_0"), false, loc, .1F, 20, 2, null).runTask(NoxMMO.getInstance());
-		}
-		
-		return;
 	}
 	
 }

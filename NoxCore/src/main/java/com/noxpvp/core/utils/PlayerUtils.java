@@ -12,24 +12,30 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BlockIterator;
 
-public class PlayerUtils {
+import com.bergerkiller.bukkit.common.utils.PlayerUtil;
+
+public class PlayerUtils extends PlayerUtil{
 	
-	public static boolean hasItems(Player p, ItemStack item){
-		return hasItems(p.getInventory(), item);
+	public static boolean hasAtleast(Player p, ItemStack item){
+		return hasAtleast(p.getInventory(), item, item.getAmount());
 	}
 	
-	public static boolean hasItems(Inventory inv, ItemStack item){
+	public static boolean hasAtleast(Player p, ItemStack item, int amount){
+		return hasAtleast(p.getInventory(), item, amount);
+	}
+	
+	public static boolean hasAtleast(Inventory inv, ItemStack item, int amount){
 		Material type = item.getType();
 		int totals = 0;
 		
 		for(ItemStack s : inv.getContents()){
-			if (s.getType() != type) continue;
+			if (s == null || s.getType() != type) continue;
 			
 			totals += s.getAmount();
 			
 		}
 		
-		return totals >= item.getAmount();
+		return totals >= amount;
 		
 	}
 	
@@ -38,45 +44,45 @@ public class PlayerUtils {
 	 * 
 	 */
 	public static class LineOfSightUtil{
-		public static Block getTarget(Location from, int distance, byte... transparentTypeIds) {
-			if (transparentTypeIds == null || transparentTypeIds.length == 0) {
-				return getTarget(from, distance, (Set<Byte>) null);
+		public static Block getTarget(Location from, int distance, Material... transparentTypes) {
+			if (transparentTypes == null || transparentTypes.length == 0) {
+				return getTarget(from, distance, (Set<Material>) null);
 			} else {
-				Set<Byte> types = new HashSet<Byte>(transparentTypeIds.length);
-				for (byte b : transparentTypeIds) types.add(b);
+				Set<Material> types = new HashSet<Material>(transparentTypes.length);
+				for (Material b : transparentTypes) types.add(b);
 				return getTarget(from, distance, types);
 			}
 		}
-		public static Block getTarget(Location from, int distance, Set<Byte> transparentTypeIds) {
+		public static Block getTarget(Location from, int distance, Set<Material> transparentTypes) {
 			BlockIterator itr = new BlockIterator(from, 0, distance);
 			while (itr.hasNext()) {
 				Block block = itr.next();
-				int id = block.getTypeId();//TODO use materials
-				if (transparentTypeIds == null) {
-					if (id == 0) continue;
-				} else if (transparentTypeIds.contains((byte) id)) {
+				Material type = block.getType();//TODO use materials
+				if (transparentTypes == null) {
+					if (type == Material.AIR) continue;
+				} else if (transparentTypes.contains(type)) {
 					continue;
 				}
 				return block;
 			}
 			return null;
 		}
-		public static Block getTarget(LivingEntity from, int distance, Set<Byte> transparentTypeIds) {
+		public static Block getTarget(LivingEntity from, int distance, Set<Material> transparentTypes) {
 			Location from2 = from.getEyeLocation();
 			from2.setPitch(0);
 			from2.setYaw(0);
 			
-			return getTarget(from2, distance, transparentTypeIds);
+			return getTarget(from2, distance, transparentTypes);
 		}
-		public static Block getTarget(LivingEntity from, int distance, byte... transparentTypeIds) {
-			return getTarget(from.getEyeLocation(), distance, transparentTypeIds);
+		public static Block getTarget(LivingEntity from, int distance, Material... transparentTypes) {
+			return getTarget(from.getEyeLocation(), distance, transparentTypes);
 		}
 		
-	    public static boolean hasLineOfSight(LivingEntity from, Location to, Set<Byte> transparentTypeIds) {
-	        return getTarget(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypeIds) == null;
+	    public static boolean hasLineOfSight(LivingEntity from, Location to, Set<Material> transparentTypes) {
+	        return getTarget(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypes) == null;
 	    }
-		public static boolean isLookingAt(LivingEntity from, Location to, byte... transparentTypeIds) {
-			return getTarget(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypeIds) == null;
+		public static boolean isLookingAt(LivingEntity from, Location to, Material... transparentTypes) {
+			return getTarget(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypes) == null;
 		}
 		
 	}

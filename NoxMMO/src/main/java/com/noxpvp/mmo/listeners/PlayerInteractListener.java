@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,24 +10,25 @@ import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
-import com.noxpvp.mmo.abilities.targeted.TargetAbility;
+import com.noxpvp.mmo.abilities.player.BankShotAbility;
+import com.noxpvp.mmo.abilities.player.HookShotAbility;
 
-public class PlayerTargetListener extends NoxListener<NoxMMO>{
+public class PlayerInteractListener extends NoxListener<NoxMMO>{
 
 	PlayerManager pm;
 	
-	public PlayerTargetListener(NoxMMO mmo)
+	public PlayerInteractListener(NoxMMO mmo)
 	{
 		super(mmo);
 		
 		this.pm = PlayerManager.getInstance();
 	}
 	
-	public PlayerTargetListener() {
+	public PlayerInteractListener() {
 		this(NoxMMO.getInstance());
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onInteract(PlayerInteractEvent e) {
 		
 		Player p;
@@ -34,7 +36,12 @@ public class PlayerTargetListener extends NoxListener<NoxMMO>{
 		
 		if (player == null) return;
 		
-		new TargetAbility(p).execute();//TODO make default range configized
+//		new TargetAbility(p).execute();//TODO make default range configized
+		if (p.getItemInHand().getType() != Material.STICK)
+			return;
+		
+		System.out.println("mmo");
+		new HookShotAbility(p).execute();
 		
 	}
 	
