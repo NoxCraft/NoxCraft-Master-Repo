@@ -75,8 +75,8 @@ public class VaultAdapter {
 			CommonTeam team = CommonScoreboard.getTeam(finalGroup + "Team");
 			
 			if (team == null) { 
-				NoxCore.getInstance().log(Level.WARNING, "The team was not found.");
 				team = CommonScoreboard.dummyTeam;
+				NoxCore.getInstance().log(Level.WARNING, "The team was not found, creating a team for: " + finalGroup + '.');
 			}
 			
 			for (CommonTeam t2 :CommonScoreboard.getTeams()) {

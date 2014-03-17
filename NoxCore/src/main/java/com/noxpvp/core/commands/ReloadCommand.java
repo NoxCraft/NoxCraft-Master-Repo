@@ -14,14 +14,16 @@ import com.noxpvp.core.reloader.Reloader;
 public class ReloadCommand extends BaseCommand {
 	private NoxCore core;
 	
-	public static final String COMMAND_NAME = "reloader";
+	public static final String COMMAND_NAME = "Reloader";
 	
 	private PermissionHandler handler;
 	public ReloadCommand(){
 		super(COMMAND_NAME, false);
+		
 		core = NoxCore.getInstance();
 		handler = core.getPermissionHandler();
 	}
+	
 	public CommandResult execute(CommandContext context) {
 		
 		CommandSender sender = context.getSender();
@@ -35,8 +37,6 @@ public class ReloadCommand extends BaseCommand {
 			displayHelp(sender);
 			return new CommandResult(this, true);
 		}
-		
-		
 		
 		String module = null;
 		if (args.length > 1)
@@ -89,14 +89,16 @@ public class ReloadCommand extends BaseCommand {
 
 	public String[] getHelp() {
 		MessageBuilder mb = new MessageBuilder();
-		mb.gold("/").blue(COMMAND_NAME).append(' ').red("<<ModuleName> ").aqua("[SubModule ...]").red(">").newLine();
-		mb.gray("Put * on the end of any module to specify to load all sub modules and self").newLine();
-		mb.blue("Current Module Tree");
+		mb.aqua("/").yellow(COMMAND_NAME).append(' ').aqua("<<").yellow("ModuleName").aqua("> [").yellow("SubModule1, SubModule2, ...").aqua("]>").newLine();
+		mb.aqua("Put * on the end of any module to also load all sub modules").newLine().append(' ').newLine();//Have to have something there or it wont NL a null line
+		
+		mb.green("Current reloadable modules:");
+		
 		MasterReloader mr = core.getMasterReloader();
-		mb.newLine();
+		
 		if (mr.hasModules())
 			for (Reloader module : mr.getModules())
-				nextTree(mb.white(" "), module, 0);
+				nextTree(mb.yellow(" "), module, 0);
 		else
 			mb.red("No Modules Loaded?!");
 		
@@ -115,12 +117,13 @@ public class ReloadCommand extends BaseCommand {
 	{
 		mb.newLine();
 		for (int i = 0; i < (level); i++)
-			mb.append("-");
+			mb.yellow("-");
 		if (level > 0)
-			mb.append(ENTER_TREE);
+			mb.append(ENTER_TREE + ' ');
 		
-		mb.append(module.getName());
+		mb.yellow(module.getName());
 		if (module.hasModules())
+			mb.append(':');
 			for (Reloader subModule : module.getModules())
 				nextTree(mb, subModule, level + 1);
 	}

@@ -4,7 +4,6 @@ import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.gui.ClassMenu;
 
 public class ClassInfoCommand extends BaseCommand {
 

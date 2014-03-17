@@ -4,3 +4,5 @@ target/
 */.classpath
 *.orig
 */bin/*
+NoxCore/.classpath
+.gitignore

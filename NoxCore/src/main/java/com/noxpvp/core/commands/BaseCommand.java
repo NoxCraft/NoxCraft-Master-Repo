@@ -39,22 +39,22 @@ public abstract class BaseCommand implements Command {
 		this(null, name, isPlayerOnly);
 	}
 
-	public final boolean containsSubComman(String name)
+	public final boolean containsSubCommand(String name)
 	{
 		return subCommands.containsKeyLower(name);
 	}
 
 	public final boolean containsSubCommand(BaseCommand command) {
-		return containsSubComman(command.getName());
+		return containsSubCommand(command.getName());
 	}
 	
 	public final void displayHelp(CommandSender sender) {
 		MessageBuilder mb = new MessageBuilder();
 		
 		mb.setSeparator("\n");
-		mb.newLine();
-		for (String line : GlobalLocale.HELP_HEADER.get(getPlugin().getName(), name).split("\n"))
-			mb.append(line);
+		
+		mb.newLine().append(GlobalLocale.HELP_HEADER.get(getPlugin().getName()));
+		
 		if (getHelp() != null)
 			for (String line : getHelp())
 				mb.append(line);
@@ -72,10 +72,12 @@ public abstract class BaseCommand implements Command {
 		
 		String nextArg = context.getArgument(0);
 		CommandContext newContext = null;
+		
 		if (context.getArgumentCount() > 1)
-			newContext = new CommandContext(context.getSender(), context.getFlags(), Arrays.copyOfRange(args, 1, args.length-1));
+			newContext = new CommandContext(context.getSender(), context.getFlags(), Arrays.copyOfRange(args, 1, args.length -1));
 		else
 			newContext = new CommandContext(context.getSender(), context.getFlags());
+		
 		BaseCommand subCMD = getSubCommand(nextArg);
 		
 		if (subCMD != null && newContext != null) {
@@ -124,7 +126,7 @@ public abstract class BaseCommand implements Command {
 	
 	public final BaseCommand getSubCommand(String name)
 	{
-		if (containsSubComman(name))
+		if (containsSubCommand(name))
 			return subCommands.getLower(name);
 		return null;
 	}

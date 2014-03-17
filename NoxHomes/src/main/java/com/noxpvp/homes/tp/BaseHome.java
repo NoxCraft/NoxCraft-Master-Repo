@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
@@ -96,10 +98,17 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 	}
 
 	public void teleport(Entity entity, boolean multi) {
+		Location loc = getLocation();
+		Chunk locChunk = loc.getChunk();
+		
+		
 		entity.setFallDistance(0);
 		Entity last = null, current = entity;
 		Stack<Entity> b2t = new Stack<Entity>();
 		if (multi) {
+			if (!loc.getWorld().isChunkLoaded(locChunk))
+				locChunk.load();
+			
 			while (current != null) {
 				last = current;
 				current = current.getPassenger(); //Get topmost to start from there.
@@ -114,15 +123,19 @@ public abstract class BaseHome implements WarpPoint, ConfigurationSerializable {
 			current = last;
 			last = null;
 			while (!b2t.empty()) {
+				
 				Entity e = b2t.pop();
 				e.eject();
-				e.teleport(getLocation());
+				e.teleport(loc);
 				if (last != null)
 					last.setPassenger(e);
 				last = e;
 			}
 		} else
-			entity.teleport(getLocation());
+			if (!loc.getWorld().isChunkLoaded(locChunk))
+				locChunk.load();
+		
+			entity.teleport(loc);
 	}
 	
 	public boolean isOwner(Player player)

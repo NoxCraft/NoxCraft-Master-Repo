@@ -73,7 +73,6 @@ public class HookShotAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * 
 	 * @param blockTime Time before the supporting block is removed
 	 * @return HookShotAbility This instance used for chaining
 	 */
@@ -81,12 +80,14 @@ public class HookShotAbility extends BasePlayerAbility{
 
 	/**
 	 * 
-	 * 
-	 * @param player Player used for the ability (Usually the shooter is a projectile shoot event)
-	 * @param hook Arrow used for the ability (Usually the projectile from a projectile shoot event)
+	 * @param player Player used for the ability
 	 */
 	public HookShotAbility(Player player){
 		super(ABILITY_NAME, player);
+		
+		this.maxDistance = 75;
+		this.blockTime = 20 * 5;
+		this.holdingBlockType = Material.GLASS;
 	}
 
 	public boolean execute() {

@@ -27,10 +27,6 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	
 	protected FileConfiguration config;
 	
-	private Map<String, CoreBar> coreBars = new HashMap<String, CoreBar>();
-	private Map<String, CoreBoard> coreBoards = new HashMap<String, CoreBoard>();
-	private Map<String, CoreBox> coreBoxes = new HashMap<String, CoreBox>();
-	
 	private NoxCore plugin;
 	
 	public static PlayerManager getInstance() {
@@ -59,42 +55,6 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 		this.plugin = plugin;
 		this.config = conf;
 	}
-	
-	/**
-	 * 
-	 * @param name The Key
-	 * @param bar The CoreBar to add
-	 * @throws NullPointerException If the key or CoreBar are null
-	 */
-	public void addCoreBar(CoreBar bar){
-		if (bar == null)
-			throw new IllegalArgumentException("Cannot use null CoreBar to add to active CoreBar list");
-		
-		this.coreBars.put(bar.p.getName(), bar);
-	}
-
-	/**
-	 * 
-	 * @param name The Key
-	 * @param board The CoreBoard to add
-	 * @throws NullPointerException If the key or CoreBoard are null
-	 */
-	public void addCoreBoard(CoreBoard board){
-		if (board == null)
-			throw new IllegalArgumentException("Cannot use null CoreBoard to add to active CoreBoard list");
-		
-		this.coreBoards.put(board.p.getName(), board);
-	}
-	
-	public void addCoreBox(CoreBox box) {
-		if (box == null)
-			throw new IllegalArgumentException("Cannot use null CoreBox to add to active CoreBox list");
-		
-		if (box.isValid()){
-			this.coreBoxes.put(box.getPlayer().getName(), box);
-			box.register();
-		}
-	}
 
 	public List<String> getAllPlayerNames() {
 		List<String> ret = new ArrayList<String>();
@@ -116,64 +76,6 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 				ret.add(p.getName());
 		
 		return ret;
-	}
-
-	/**
-	 * 
-	 * 
-	 * @param name The Key
-	 * @return CoreBar The CoreBar
-	 * @throws NullPointerException If the key is null
-	 */
-	public CoreBar getCoreBar(String name){
-		if (name == null)
-			throw new NullPointerException("Cannot use with null key");
-		
-		return this.coreBars.containsKey(name) ? this.coreBars.get(name) : new CoreBar(NoxCore.getInstance(), Bukkit.getPlayer(name));
-	}
-	
-	/**
-	 * 
-	 * @param name The Key
-	 * @return CoreBoard The CoreBoard
-	 * @throws NullPointerException If the key is null
-	 */
-	public CoreBoard getCoreBoard(String name){
-		if (name == null)
-			throw new NullPointerException("Cannot use with null key");
-			
-		return this.coreBoards.get(name);
-	}	
-	
-	/**
-	 * 
-	 * @param name The Key
-	 * @return CoreBox The CoreBox
-	 * @throws NullPointerException If the key is null
-	 */
-	public CoreBox getCoreBox(String name){
-		if (name == null)
-			throw new NullPointerException("Cannot use with null key");
-		
-		return this.coreBoxes.get(name);
-	}
-	
-	/**
-	 * Gets all the currently active coreBoards
-	 * 
-	 * @return Collection<CoreBoard> The CoreBoards
-	 */
-	public Collection<CoreBoard> getCoreBoards(){
-		return this.coreBoards.values();
-	}
-	
-	/**
-	 * Gets all the currently active CoreBoxes
-	 * 
-	 * @return Collection<BaseCoreBox> The CoreBoxs
-	 */
-	public Collection<CoreBox> getCoreBoxes(){
-		return this.coreBoxes.values();
 	}
 	
 	public NoxPlayer[] getLoadedPlayers() {
@@ -218,39 +120,7 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 			return null;
 	}
 	
-	public NoxCore getPlugin() { return plugin; }
-	
-	/**
-	 * 
-	 * @param name The Key
-	 * @return boolean If there is a CoreBar active with the specific key
-	 * @throws NullPointerException If the key is null
-	 */
-	public boolean hasCoreBar(String name) {
-		if (name == null)
-			throw new NullPointerException("Cannot check with null key");
-		
-		return this.coreBars.containsKey(name);
-	}
-	
-	
-
-	/**
-	 * 
-	 * @param name The Key
-	 * @return boolean If there is a CoreBoard active with the specific key
-	 * @throws NullPointerException If the key is null
-	 */
-	public boolean hasCoreBoard(String name){
-		if (name == null)
-			throw new NullPointerException("Cannot check with null key");
-			
-		return this.coreBoards.containsKey(name);
-	}
-	
-	
-
-	
+	public NoxCore getPlugin() { return plugin; }	
 	
 //////// HELPER FUNCTIONS
 	/**
@@ -298,30 +168,6 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 */
 	public void loadPlayer(String name) {
 		loadPlayer(getPlayer(name));
-	}
-	
-	/**
-	 * 
-	 * @param name The key for the CoreBar to remove
-	 * @return PlayerManager This instance
-	 * @throws NullPointerException If the key is null
-	 */
-	public void removeCoreBar(String name){
-		if (name == null)
-			throw new NullPointerException("Cannot remove null Key from list");
-		this.coreBars.remove(name); //FIXME: DESTROY INSTANCE SHIT. TIMERS AND MORE...
-	}
-	
-	/** 
-	 * @param name The key for the CoreBoard to remove
-	 * @return PlayerManager This instance
-	 * @throws NullPointerException If the key is null
-	 */
-	public void removeCoreBoard(String name){
-		if (name == null)
-			throw new NullPointerException("Cannot remove null Key from list");
-		
-		this.coreBoards.remove(name);
 	}
 	
 	/* (non-Javadoc)
