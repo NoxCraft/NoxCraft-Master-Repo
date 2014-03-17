@@ -18,6 +18,20 @@ public class JSONBuilderTest {
 	}
 	
 	@Test
+	public void testEmbeddedFormat(){
+		String expected = new JSONStringer().object()
+				.key("text").value("")
+				.key("extra").array().object()
+					.key("text").value("OMG TEST")
+					.key("color").value(ChatColor.BLUE)
+					.key("italic").value(true)
+				.endObject().endArray().endObject().toString();
+		String actual = new TellRawUtil.JSONBuilder().addEnclosedText(ChatColor.BLUE, "OMG TEST", FLAGS.ITALIC).getJson();
+		
+		assertEquals(expected, actual);
+	}
+	
+	@Test
 	public void bitTest() {
 		int expected = 1 | 2 | 4;
 		
