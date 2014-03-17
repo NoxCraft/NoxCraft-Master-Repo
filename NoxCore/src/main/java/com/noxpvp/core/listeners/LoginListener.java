@@ -36,6 +36,7 @@ public class LoginListener extends NoxListener<NoxCore> {
 		VaultAdapter.GroupUtils.reloadGroupTag(p);
 		pm.loadPlayer(p.getName());
 		pm.getCoreBar(p.getName()).newShine(loginMessage, 0, 500, true);
+		pm.getCoreBoard(p.getName()).addTimer("time", "Mortalwound", 90, ChatColor.YELLOW, ChatColor.GREEN).show();
 
 	}
 	

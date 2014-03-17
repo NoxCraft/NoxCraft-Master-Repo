@@ -15,7 +15,6 @@ import com.google.common.collect.Sets;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.Cycler;
 import com.noxpvp.core.data.ObjectLock;
-import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.ColoredStringScroller;
 import com.noxpvp.core.utils.ShiningStringScroller;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
@@ -29,7 +28,6 @@ public class CoreBar{
 	private Runnable updater;
 	
 	private NoxCore plugin;
-	private PlayerManager pm;
 	
 	private String separater;
 	private String color;
@@ -42,12 +40,8 @@ public class CoreBar{
 		this.p = p;
 		
 		this.plugin = NoxCore.getInstance();
-		this.pm = PlayerManager.getInstance();
 		
 		String name = p.getName();
-		if (pm.hasCoreBar(name)){
-				pm.removeCoreBar(name);
-		}
 		
 		lock = new ObjectLock(null);
 		updater = null;
@@ -55,7 +49,6 @@ public class CoreBar{
 		this.separater = core.getCoreConfig().get("gui.corebar.separater", String.class, "||");
 		this.color = core.getCoreConfig().get("gui.corebar.default-color", String.class, ChatColor.GREEN.toString());
 		
-		pm.addCoreBar(this);
 	}
 	
 	private boolean isChangeable(){

@@ -1,5 +1,6 @@
 package com.noxpvp.core.data;
 
+import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,8 +35,10 @@ import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.gui.CoolDown;
 import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.core.gui.CoreBoard;
+import com.noxpvp.core.gui.CoreBox;
 
 public class NoxPlayer implements Persistant, NoxPlayerAdapter {
+	
 	private WeakHashMap<String, CoolDown> cd_cache;
 	private List<CoolDown> cds;
 	private PlayerManager manager;
@@ -44,7 +47,9 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	private final PermissionHandler permHandler;
 	private ConfigurationNode persistant_data = null;
 	
-	private CoreBar cBar;
+	private CoreBar coreBar;
+	private CoreBoard coreBoard;
+	private List<Reference<CoreBox>> coreBoxes;
 	
 	private ConfigurationNode temp_data = new ConfigurationNode();
 	
@@ -59,8 +64,11 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this.temp_data = player.temp_data;
 		this.persistant_data = player.persistant_data;
 		this.manager = player.manager;
-		this.cBar = player.cBar;
 		this.isFirstLoad = player.isFirstLoad;
+
+		this.coreBoard = player.coreBoard != null? player.coreBoard : null;
+		this.coreBar = player.coreBar != null? player.coreBar : null;
+		this.coreBoxes = player.coreBoxes != null? player.coreBoxes : null;
 		
 		if (!isFirstLoad)
 			load();
@@ -77,9 +85,23 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this.name = name;
 		
 		if (getPlayer() != null){
-			this.cBar = new CoreBar(core, getPlayer());
+			this.coreBar = new CoreBar(core, getPlayer());
 			new CoreBoard(core, getPlayer());
 		}
+	}
+	
+	public CoreBoard getCoreBoard(){
+		if (coreBoard == null)
+			return (coreBoard = new CoreBoard(manager.getPlugin(), getPlayer()));
+		
+		return coreBoard;
+	}
+	
+	public CoreBar getCoreBar(){
+		if (coreBar == null)
+			return (coreBar = new CoreBar(manager.getPlugin(), getPlayer()));
+		
+		return coreBar;
 	}
 	
 	/**
@@ -127,7 +149,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 				cdNameColor = ChatColor.YELLOW;
 				cdCDColor = ChatColor.GREEN;
 			}
-			manager.getCoreBoard(getName()).addTimer(
+			
+			getCoreBoard().addTimer(
 					name,
 					name,
 					(int) (isNano ? ((length / 1000) / 1000) : (length / 1000)),

@@ -5,7 +5,6 @@ import com.bergerkiller.bukkit.common.collections.StringMap;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
-import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.command.subcommands.ClassInfoCommand;
 import com.noxpvp.mmo.command.subcommands.ClassSwitchCommand;
@@ -32,7 +31,7 @@ public class ClassCommand extends BaseCommand {
 		MessageBuilder mb = new MessageBuilder();
 		
 		for (String cmd : cmds.keySet())
-			mb.newLine().aqua("/").yellow("class" + cmd);
+			mb.newLine().aqua("/").yellow("class" + " " + cmd);
 		
 		return mb.lines();
 	}
