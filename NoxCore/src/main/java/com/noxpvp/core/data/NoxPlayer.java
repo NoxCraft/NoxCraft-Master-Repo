@@ -4,6 +4,7 @@ import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.bukkit.Bukkit;
@@ -22,6 +23,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
+import com.bergerkiller.bukkit.common.proxies.Proxy;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.NoxCore;
@@ -37,12 +39,13 @@ import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.core.gui.CoreBoard;
 import com.noxpvp.core.gui.CoreBox;
 
-public class NoxPlayer implements Persistant, NoxPlayerAdapter {
+public class NoxPlayer implements Proxy<OfflinePlayer>, Persistant, NoxPlayerAdapter {
 	
 	private WeakHashMap<String, CoolDown> cd_cache;
 	private List<CoolDown> cds;
 	private PlayerManager manager;
 	private final String name;
+	private OfflinePlayer player;
 	
 	private final PermissionHandler permHandler;
 	private ConfigurationNode persistant_data = null;
@@ -57,6 +60,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	public NoxPlayer(NoxPlayer player)
 	{
+		this.player = player.player;
 		permHandler = player.permHandler;
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
@@ -74,9 +78,11 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			load();
 	}
 	
+	
+	
 	public NoxPlayer(PlayerManager mn, String name) {
 		NoxCore core = mn.getPlugin();
-		
+		this.player = Bukkit.getOfflinePlayer(name);
 		permHandler = core.getPermissionHandler();
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
@@ -103,6 +109,11 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		
 		return coreBar;
 	}
+	
+	public boolean hasCoreBox(CoreBox box){
+		return coreBoxes.contains(box);
+	}
+	
 	
 	/**
 	 * Adds new cooldown to player.
@@ -498,5 +509,109 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	public void setVotes(int amount)
 	{
 		persistant_data.set("vote-count", amount);
+	}
+
+	public OfflinePlayer getProxyBase() {
+		return this.player;
+	}
+
+	public void setProxyBase(OfflinePlayer arg0) {
+		this.player = arg0;
+	}
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#getBedSpawnLocation()
+	 */
+	public Location getBedSpawnLocation() {
+		return getProxyBase().getBedSpawnLocation();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#getFirstPlayed()
+	 */
+	public long getFirstPlayed() {
+		return getProxyBase().getFirstPlayed();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#getLastPlayed()
+	 */
+	public long getLastPlayed() {
+		return getProxyBase().getLastPlayed();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#hasPlayedBefore()
+	 */
+	public boolean hasPlayedBefore() {
+		return getProxyBase().hasPlayedBefore();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#isBanned()
+	 */
+	public boolean isBanned() {
+		return getProxyBase().isBanned();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.permissions.ServerOperator#isOp()
+	 */
+	public boolean isOp() {
+		return getProxyBase().isOp();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#isWhitelisted()
+	 */
+	public boolean isWhitelisted() {
+		return getProxyBase().isWhitelisted();
+	}
+
+	/**
+	 * @param arg0
+	 * @see org.bukkit.OfflinePlayer#setBanned(boolean)
+	 */
+	public void setBanned(boolean arg0) {
+		getProxyBase().setBanned(arg0);
+	}
+
+
+
+	/**
+	 * @param arg0
+	 * @see org.bukkit.permissions.ServerOperator#setOp(boolean)
+	 */
+	public void setOp(boolean arg0) {
+		getProxyBase().setOp(arg0);
+	}
+
+
+
+	/**
+	 * @param arg0
+	 * @see org.bukkit.OfflinePlayer#setWhitelisted(boolean)
+	 */
+	public void setWhitelisted(boolean arg0) {
+		getProxyBase().setWhitelisted(arg0);
 	}
 }

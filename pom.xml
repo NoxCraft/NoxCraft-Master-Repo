@@ -13,19 +13,19 @@
 	</modules>
 	<repositories>
 		<repository>
-        	<id>kitteh-repo</id>
-        	<url>http://repo.kitteh.org/content/repositories/public/</url>
-        <releases>
-           <enabled>true</enabled>
-        </releases>
-        <snapshots>
-          <enabled>false</enabled>
-        </snapshots>        
-     </repository>
-     <repository>
-        <id>Spiggot</id>
-        <url>http://repo.md-5.net/content/groups/public/</url>
-     </repository>
+			<id>kitteh-repo</id>
+			<url>http://repo.kitteh.org/content/repositories/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>Spiggot</id>
+			<url>http://repo.md-5.net/content/groups/public/</url>
+		</repository>
 		<repository>
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public/</url>
@@ -50,13 +50,22 @@
 				<enabled>true</enabled>
 			</releases>
 		</repository>
-		 <repository>
-            <id>sk89q</id>
-            <url>http://maven.sk89q.com/repo/</url>
-        </repository>
+		<repository>
+			<id>sk89q</id>
+			<url>http://maven.sk89q.com/repo/</url>
+		</repository>
+		<repository>
+			<id>hawk-repo</id>
+			<url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
+		</repository>
 	</repositories>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>com.dsh105</groupId>
+				<artifactId>HoloAPI</artifactId>
+				<version>1.0.7</version>
+			</dependency>
 			<dependency>
 				<groupId>org.bukkit</groupId>
 				<artifactId>bukkit</artifactId>
