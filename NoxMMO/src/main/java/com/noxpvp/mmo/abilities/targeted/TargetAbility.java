@@ -101,7 +101,7 @@ public class TargetAbility extends BasePlayerAbility{
 					else name = it.getType().name();
 				} 
 				
-				cpm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, false);
+				cpm.getPlayer(p.getName()).getCoreBar().newLivingTracker(target_ref.get(), name, false);
 				
 				return true;
 			} else {

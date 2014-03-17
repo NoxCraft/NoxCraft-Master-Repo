@@ -51,7 +51,7 @@ public class PlayerUtils {
 			BlockIterator itr = new BlockIterator(from, 0, distance);
 			while (itr.hasNext()) {
 				Block block = itr.next();
-				int id = block.getTypeId();
+				int id = block.getTypeId();//TODO use materials
 				if (transparentTypeIds == null) {
 					if (id == 0) continue;
 				} else if (transparentTypeIds.contains((byte) id)) {

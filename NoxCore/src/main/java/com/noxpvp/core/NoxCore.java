@@ -24,6 +24,7 @@ import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.conversion.BasicConverter;
 import com.bergerkiller.bukkit.common.conversion.Conversion;
 import com.bergerkiller.bukkit.common.localization.ILocalizationDefault;
+import com.bergerkiller.bukkit.common.proxies.ProxyBase;
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
@@ -200,12 +201,9 @@ public class NoxCore extends NoxPlugin {
 			if (p instanceof NoxPlugin && CommonUtil.isDepending(p, this))
 				registerSerials((NoxPlugin)p);
 		
-		getPlayerManager(); //Self loads
-		
 		permHandler = new PermissionHandler(this);
 		
 		getMasterReloader();
-		
 		
 		Conversion.register(new BasicConverter<NoxPlayer>(NoxPlayer.class) {
 			@Override
@@ -278,7 +276,7 @@ public class NoxCore extends NoxPlugin {
 		
 		r.addModule(new BaseReloader(r, "players") {
 			public boolean reload() {
-				NoxCore.this.getPlayerManager().load();
+				PlayerManager.getInstance().load();
 				return true;
 			}
 		});
@@ -323,6 +321,8 @@ public class NoxCore extends NoxPlugin {
         cds = new CooldownHandler();
         
         cds.start();
+        
+        ProxyBase.validate(NoxPlayer.class);
         
         reloadConfig();
 	}

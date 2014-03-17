@@ -61,7 +61,7 @@ public class CoreBoard{
 		this.ob = sb.getObjective(Display.SIDEBAR);
 		this.ob.setDisplayName(SpaceOut(objName, BOARD_OBJ_NAME_LENGTH_MAX));
 		this.p = p;
-
+		
 		this.scrollers = new HashMap<String, BoardScroller>();
 		this.timers = new HashMap<String, BoardTimer>();
 		this.entries = new HashMap<String, BoardEntry>();
@@ -70,11 +70,7 @@ public class CoreBoard{
 		this.takenSlots = new ArrayList<Integer>();
 		
 		String name = p.getName();
-		if (pm.hasCoreBoard(name)){
-			pm.removeCoreBoard(name);
-		}
 		
-		pm.addCoreBoard(this);
 	}
 
 	/**

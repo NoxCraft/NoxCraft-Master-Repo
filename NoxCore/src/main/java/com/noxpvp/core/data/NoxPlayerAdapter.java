@@ -30,5 +30,7 @@ public interface NoxPlayerAdapter extends Persistant {
 	 */
 	public Player getPlayer();
 	
+	public boolean hasFirstLoaded();
+	
 	public String getPlayerName();
 }

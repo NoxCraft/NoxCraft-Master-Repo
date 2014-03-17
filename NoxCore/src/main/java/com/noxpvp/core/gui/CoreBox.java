@@ -19,8 +19,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.bergerkiller.bukkit.common.internal.NextTickListener;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
+import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.StaticEffects;
@@ -33,6 +35,14 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 	private CoreBox backButton;
 	private Reference<Player> p;
 	private final String pName;
+	
+	public CoreBox(Player p, String name, int size, @Nullable CoreBox backButton){
+		this(p, name, size, backButton, NoxCore.getInstance());
+	}
+	
+	public CoreBox(Player p, String name, int size) {
+		this(p, name, size, null, NoxCore.getInstance());
+	}
 	
 	public CoreBox(final Player p, String name, int size, @Nullable CoreBox backButton, NoxCore core) {
 		super(core);
@@ -58,25 +68,20 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 		}
 		
 		this.closeRunnable = new Runnable() {
-			final Reference<Player> player = CoreBox.this.p;	
 			final CoreBox thisBox = CoreBox.this;
+			final Reference<Player> player = this.thisBox.p;	
 			
 			public void run() { 
-				if (player.get() != null)
+				Player p;
+				if ((p = getPlayer()) != null && box.getViewers().contains(p))
 					p.closeInventory();
 				
 				thisBox.unregister();
 			}
 		};
 		
-	}
-	
-	public CoreBox(Player p, String name, int size, @Nullable CoreBox backButton){
-		this(p, name, size, backButton, NoxCore.getInstance());
-	}
-	
-	public CoreBox(Player p, String name, int size) {
-		this(p, name, size, null, NoxCore.getInstance());
+		pm.getPlayer(p).setCoreBox(this);
+		
 	}
 	
 	public Inventory getBox() {
@@ -84,11 +89,12 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 	}
 	
 	public Player getPlayer() {
-		return p.get();
+		return p == null? null : p.get() == null? null : p.get();
 	}
 	
 	public boolean isValid() {
-		return getPlayer() != null;
+		Player p = getPlayer();
+		return p != null && p.isValid() && pm.getPlayer(p).hasCoreBox(this);
 	}
 	
 	public boolean fixReference() {
@@ -102,31 +108,23 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 	}
 
 	public void show() {
-		if (isValid()){
-			pm.addCoreBox(this);
-			getPlayer().openInventory(box);
-		}
+		getPlayer().openInventory(box);
+		this.register();
 	}
 	
 	public void hide() {
 		if (isValid())
 			if (box.getViewers().contains(getPlayer()))
-			CommonUtil.nextTick(closeRunnable);
+				CommonUtil.nextTick(closeRunnable);
+		
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onClick(InventoryClickEvent event) {
-		if (!isValid() || box.getViewers().size() < 1) {
-			unregister();
-			pm.getCoreBoxes().remove(this);
+		if (!isValid()) {
+			CommonUtil.nextTick(closeRunnable);
+			
 			return;
-		}
-		
-		String name = getPlayer().getName();
-				
-		if (pm.getCoreBox(name) == null) {
-			pm.getCoreBoxes().remove(this);
-			this.unregister();
 		}
 		
 		HumanEntity clicked = event.getWhoClicked();
@@ -152,22 +150,14 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 			return;
 		}
 		
-		p.get().updateInventory();
 		this.clickHandler(event);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onClose(InventoryCloseEvent event) {
 		if (!isValid()) {
-			unregister();
+			CommonUtil.nextTick(closeRunnable);
 			return;
-		}
-			
-		String name = getPlayer().getName();
-		
-		if (pm.getCoreBox(name) == null) {
-			pm.getCoreBoxes().remove(this);
-			this.unregister();
 		}
 		
 		if (event.getInventory().equals(box))

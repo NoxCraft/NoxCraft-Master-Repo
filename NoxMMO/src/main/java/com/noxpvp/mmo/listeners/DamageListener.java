@@ -53,7 +53,7 @@ public class DamageListener extends NoxListener<NoxMMO>{
 					StaticEffects.BloodEffect(livingDamaged, getPlugin());
 				
 				String color = MMOLocale.GUI_BAR_COLOR.get();
-				CoreBar bar = pm.getCoreBar(playerAttacker.getName());
+				CoreBar bar = pm.getPlayer(playerAttacker).getCoreBar();
 				
 				if (playerDamaged != null) {
 					

@@ -1,10 +1,10 @@
 package com.noxpvp.core.data;
 
 import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.bukkit.Bukkit;
@@ -23,7 +23,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
-import com.bergerkiller.bukkit.common.proxies.Proxy;
+import com.bergerkiller.bukkit.common.proxies.ProxyBase;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.NoxCore;
@@ -34,25 +34,21 @@ import com.noxpvp.core.events.PlayerDataLoadEvent;
 import com.noxpvp.core.events.PlayerDataSaveEvent;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.manager.PlayerManager;
-import com.noxpvp.core.gui.CoolDown;
-import com.noxpvp.core.gui.CoreBar;
-import com.noxpvp.core.gui.CoreBoard;
-import com.noxpvp.core.gui.CoreBox;
+import com.noxpvp.core.gui.*;
 
-public class NoxPlayer implements Proxy<OfflinePlayer>, Persistant, NoxPlayerAdapter {
+public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, NoxPlayerAdapter {
 	
 	private WeakHashMap<String, CoolDown> cd_cache;
 	private List<CoolDown> cds;
 	private PlayerManager manager;
 	private final String name;
-	private OfflinePlayer player;
 	
 	private final PermissionHandler permHandler;
 	private ConfigurationNode persistant_data = null;
 	
 	private CoreBar coreBar;
 	private CoreBoard coreBoard;
-	private List<Reference<CoreBox>> coreBoxes;
+	private Reference<CoreBox> coreBox;
 	
 	private ConfigurationNode temp_data = new ConfigurationNode();
 	
@@ -60,7 +56,7 @@ public class NoxPlayer implements Proxy<OfflinePlayer>, Persistant, NoxPlayerAda
 	
 	public NoxPlayer(NoxPlayer player)
 	{
-		this.player = player.player;
+		super(player.getProxyBase());
 		permHandler = player.permHandler;
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
@@ -72,17 +68,15 @@ public class NoxPlayer implements Proxy<OfflinePlayer>, Persistant, NoxPlayerAda
 
 		this.coreBoard = player.coreBoard != null? player.coreBoard : null;
 		this.coreBar = player.coreBar != null? player.coreBar : null;
-		this.coreBoxes = player.coreBoxes != null? player.coreBoxes : null;
+		this.coreBox = player.coreBox != null? player.coreBox : null;
 		
 		if (!isFirstLoad)
 			load();
 	}
 	
-	
-	
 	public NoxPlayer(PlayerManager mn, String name) {
+		super(Bukkit.getOfflinePlayer(name));
 		NoxCore core = mn.getPlugin();
-		this.player = Bukkit.getOfflinePlayer(name);
 		permHandler = core.getPermissionHandler();
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
@@ -94,6 +88,10 @@ public class NoxPlayer implements Proxy<OfflinePlayer>, Persistant, NoxPlayerAda
 			this.coreBar = new CoreBar(core, getPlayer());
 			new CoreBoard(core, getPlayer());
 		}
+	}
+	
+	public boolean hasFirstLoaded() {
+		return isFirstLoad;
 	}
 	
 	public CoreBoard getCoreBoard(){
@@ -110,8 +108,26 @@ public class NoxPlayer implements Proxy<OfflinePlayer>, Persistant, NoxPlayerAda
 		return coreBar;
 	}
 	
+	public boolean hasCoreBox(){
+		return coreBox != null && coreBox.get() != null;
+	}
+	
 	public boolean hasCoreBox(CoreBox box){
-		return coreBoxes.contains(box);
+		return coreBox != null && coreBox.get() == box;
+	}
+	
+	public void setCoreBox(CoreBox box){
+		if (hasCoreBox())
+			deleteCoreBox();
+		
+		coreBox = new WeakReference<CoreBox>(box);
+	}
+
+	public void deleteCoreBox(){
+		if (hasCoreBox())
+			getPlayer().closeInventory();
+		
+		coreBox = null;
 	}
 	
 	
@@ -511,14 +527,6 @@ public class NoxPlayer implements Proxy<OfflinePlayer>, Persistant, NoxPlayerAda
 		persistant_data.set("vote-count", amount);
 	}
 
-	public OfflinePlayer getProxyBase() {
-		return this.player;
-	}
-
-	public void setProxyBase(OfflinePlayer arg0) {
-		this.player = arg0;
-	}
-
 	/**
 	 * @return
 	 * @see org.bukkit.OfflinePlayer#getBedSpawnLocation()
@@ -604,8 +612,6 @@ public class NoxPlayer implements Proxy<OfflinePlayer>, Persistant, NoxPlayerAda
 	public void setOp(boolean arg0) {
 		getProxyBase().setOp(arg0);
 	}
-
-
 
 	/**
 	 * @param arg0

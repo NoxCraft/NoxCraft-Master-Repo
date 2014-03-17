@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.VaultAdapter;
+import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.manager.PlayerManager;
 
 public class LoginListener extends NoxListener<NoxCore> {
@@ -31,12 +32,12 @@ public class LoginListener extends NoxListener<NoxCore> {
 	public void onLogin(PlayerJoinEvent e)
 	{
 		final Player p = e.getPlayer();
-		PlayerManager pm = PlayerManager.getInstance();
 		
 		VaultAdapter.GroupUtils.reloadGroupTag(p);
-		pm.loadPlayer(p.getName());
-		pm.getCoreBar(p.getName()).newShine(loginMessage, 0, 500, true);
-		pm.getCoreBoard(p.getName()).addTimer("time", "Mortalwound", 90, ChatColor.YELLOW, ChatColor.GREEN).show();
+		NoxPlayer nPlayer = PlayerManager.getInstance().getPlayer(p);
+		
+		nPlayer.getCoreBar().newShine(loginMessage, 0, 500, true);
+		nPlayer.getCoreBoard().addTimer("time", "Mortalwound", 90, ChatColor.YELLOW, ChatColor.GREEN).show();
 
 	}
 	
