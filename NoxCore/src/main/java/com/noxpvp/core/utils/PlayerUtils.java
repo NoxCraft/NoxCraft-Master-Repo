@@ -47,6 +47,7 @@ public class PlayerUtils {
 				return getTarget(from, distance, types);
 			}
 		}
+		
 		public static Block getTarget(Location from, int distance, Set<Byte> transparentTypeIds) {
 			BlockIterator itr = new BlockIterator(from, 0, distance);
 			while (itr.hasNext()) {
@@ -61,6 +62,7 @@ public class PlayerUtils {
 			}
 			return null;
 		}
+		
 		public static Block getTarget(LivingEntity from, int distance, Set<Byte> transparentTypeIds) {
 			Location from2 = from.getEyeLocation();
 			from2.setPitch(0);
@@ -68,6 +70,7 @@ public class PlayerUtils {
 			
 			return getTarget(from2, distance, transparentTypeIds);
 		}
+		
 		public static Block getTarget(LivingEntity from, int distance, byte... transparentTypeIds) {
 			return getTarget(from.getEyeLocation(), distance, transparentTypeIds);
 		}
@@ -75,6 +78,7 @@ public class PlayerUtils {
 	    public static boolean hasLineOfSight(LivingEntity from, Location to, Set<Byte> transparentTypeIds) {
 	        return getTarget(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypeIds) == null;
 	    }
+	    
 		public static boolean isLookingAt(LivingEntity from, Location to, byte... transparentTypeIds) {
 			return getTarget(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypeIds) == null;
 		}
