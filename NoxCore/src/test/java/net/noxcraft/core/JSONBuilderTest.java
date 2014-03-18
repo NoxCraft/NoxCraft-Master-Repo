@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.bukkit.ChatColor;
 import org.json.JSONStringer;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.noxpvp.core.utils.chat.TellRawUtil;
@@ -71,6 +72,7 @@ public class JSONBuilderTest {
 	
 	
 	@Test
+	@Ignore
 	public void test() {
 		fail("Not yet implemented");
 	}

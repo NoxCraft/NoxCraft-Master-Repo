@@ -13,7 +13,7 @@ import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 
 public class PacketListeners {
 
-	public class PlayerAnimationListener implements PacketListener {
+/*	public class PlayerAnimationListener implements PacketListener {
 
 		public void onPacketReceive(PacketReceiveEvent arg0) {
 			
@@ -28,7 +28,7 @@ public class PacketListeners {
 
 		public void onPacketSend(PacketSendEvent arg0) {}
 		
-	}
+	}*/
 	
 	public class EntityEquipmentListener implements PacketListener {
 

@@ -37,7 +37,6 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 		final Player p = getPlayer();
 		
 		CommonPacket commonFakeBlock = new CommonPacket(35, true);
-		//NMSPacketPlayOutBlockAction fakeBlock = new NMSPacketPlayOutBlockAction();
 		
 		try {
 			commonFakeBlock.write(0, b.getX());

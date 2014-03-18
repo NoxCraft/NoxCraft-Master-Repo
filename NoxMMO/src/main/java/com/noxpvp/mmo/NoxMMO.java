@@ -37,12 +37,12 @@ public class NoxMMO extends NoxPlugin {
 	private PermissionHandler permHandler;
 	
 	DamageListener damageListener;
-	PlayerTargetListener playerTargetListener;
+	PlayerInteractListener playerTargetListener;
 	BlockListener blockListener;
 	ExperienceListener experieneceListener;
 	
 	PacketListeners packetListeners;
-	PlayerAnimationListener playerAnimationListener;
+//	PlayerAnimationListener playerAnimationListener;
 	EntityEquipmentListener equipmentPacketListener;
 	WorldSoundListener worldSoundListener;
 	
@@ -106,12 +106,12 @@ public class NoxMMO extends NoxPlugin {
 		PlayerClass.init();
 		
 		damageListener = new DamageListener(instance);
-		playerTargetListener = new PlayerTargetListener(instance);
+		playerTargetListener = new PlayerInteractListener(instance);
 		blockListener = new BlockListener(instance);
 		experieneceListener = new ExperienceListener(instance);
 		
 		packetListeners = new PacketListeners();
-		playerAnimationListener = packetListeners.new PlayerAnimationListener();
+//		playerAnimationListener = packetListeners.new PlayerAnimationListener();
 		equipmentPacketListener = packetListeners.new EntityEquipmentListener();
 		worldSoundListener = packetListeners.new WorldSoundListener();
 		
@@ -121,7 +121,7 @@ public class NoxMMO extends NoxPlugin {
 		permHandler = new PermissionHandler(this);
 //		experieneceListener.register();
 		
-		register(playerAnimationListener, PacketType.IN_ENTITY_ANIMATION);
+//		register(playerAnimationListener, PacketType.IN_ENTITY_ANIMATION);
 		register(equipmentPacketListener, PacketType.OUT_ENTITY_EQUIPMENT);
 		register(worldSoundListener, PacketType.OUT_NAMED_SOUND_EFFECT);
 		

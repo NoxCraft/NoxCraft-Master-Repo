@@ -30,6 +30,19 @@ public class StaticEffects {
 
 	private static List<LivingEntity> frozenEntitys = new ArrayList<LivingEntity>();
 	
+	public static void DamageAmountParticle(Entity e, double amount){
+//		holoapi//TODO coaster your holoapi depend is not downloading
+		return;
+	}
+	
+	public static void SkullBreak(LivingEntity e){
+		SkullBreak(e.getEyeLocation(), NoxCore.getInstance());
+	}
+	
+	public static void SkullBreak(Location loc, NoxPlugin plugin){
+		new EffectsRunnable(Arrays.asList("blockcrack_155_0"), false, loc, .1F, 20, 2, null).run();
+	}
+	
 	public static void BloodEffect(Entity e){
 		BloodEffect(e, NoxCore.getInstance());
 	}

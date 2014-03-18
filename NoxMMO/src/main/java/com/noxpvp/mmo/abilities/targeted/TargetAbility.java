@@ -8,17 +8,19 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.noxpvp.core.data.Vector3D;
+import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
-import com.noxpvp.mmo.locale.MMOLocale;
 
-public class TargetAbility extends BasePlayerAbility{
+public class TargetAbility extends BasePlayerAbility implements PassiveAbility<PlayerInteractEvent>{
 	
-	public static final String PERM_NODE = "set-target";
+	public static final String PERM_NODE = "target";
 	public static final String ABILITY_NAME = "Target";
 	
 	private double range;
@@ -50,13 +52,13 @@ public class TargetAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @return Boolean - If this ability has successfully executed
+	 * @return Boolean - PassiveAbililty, return true
 	 */
-	public boolean execute() {
+	public boolean execute() { return true; }
+	
+	public boolean execute(PlayerInteractEvent event){
 		if (!mayExecute())
 			return false;
-		
-//		MessageUtil.broadcast("targeting");
 		
 		Player p = getPlayer();
 		
@@ -86,23 +88,21 @@ public class TargetAbility extends BasePlayerAbility{
 				
 				mmoPlayer.setTarget(target_ref.get());
 				
-				String name,
-				color = MMOLocale.GUI_BAR_COLOR.get(),
-				separater = color + " - " + ChatColor.RESET;
+				String name;
+				CoreBar bar =  cpm.getPlayer(p.getName()).getCoreBar();
 				
 				if (mmoIt != null){
 					PlayerClass c = mmoPlayer.getPrimaryClass();
 					
 					if (c != null) { 
-						name = mmoIt.getFullName() + separater + c.getDisplayName();
+						name = mmoIt.getFullName() + bar.color + bar.separater + ChatColor.RESET + c.getDisplayName();
 					} else name = mmoIt.getFullName();
 				} else {
 					if (it instanceof Player) name = ((Player)it).getName();
 					else name = it.getType().name();
 				} 
 				
-				cpm.getPlayer(p.getName()).getCoreBar().newLivingTracker(target_ref.get(), name, false);
-				
+				bar.newLivingTracker(target_ref.get(), name, false);
 				return true;
 			} else {
 				continue;
