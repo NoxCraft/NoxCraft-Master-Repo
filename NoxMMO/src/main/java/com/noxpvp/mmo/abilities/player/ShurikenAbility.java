@@ -1,17 +1,11 @@
 package com.noxpvp.mmo.abilities.player;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 
-import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class ShurikenAbility extends BasePlayerAbility{
-        public static List<Player> shurikenThrowers = new ArrayList<Player>();
         
         public static final String ABILITY_NAME = "Shuriken";
         public static final String PERM_NODE = "shuriken";
@@ -30,14 +24,6 @@ public class ShurikenAbility extends BasePlayerAbility{
          * @return ShurikenAbility This instance, used for chaining
          */
         public ShurikenAbility setDistanceVelo(double distanceVelo) {this.distanceVelo = distanceVelo; return this;}
-
-        /**
-         * 
-         * @param player The user of this ability instance
-         */
-        public ShurikenAbility(Player player){
-                super(ABILITY_NAME, player);
-        }
         
         /**
          * 
@@ -45,9 +31,19 @@ public class ShurikenAbility extends BasePlayerAbility{
          * @param distanceVelo double multiplier of the users direction used as a velocity
          */
         public ShurikenAbility(Player player, double distanceVelo){
+        	super(ABILITY_NAME, player);
+        	
+        	this.distanceVelo = distanceVelo;
+        }
+
+        /**
+         * 
+         * @param player The user of this ability instance
+         */
+        public ShurikenAbility(Player player){
                 super(ABILITY_NAME, player);
                 
-                this.distanceVelo = distanceVelo;
+                this.distanceVelo = 1;
         }
 
         /**
@@ -63,16 +59,6 @@ public class ShurikenAbility extends BasePlayerAbility{
                 Arrow a = p.launchProjectile(Arrow.class);
                 a.setShooter(p);
                 a.setVelocity(p.getLocation().getDirection().multiply(distanceVelo));
-                
-                ShurikenAbility.shurikenThrowers.add(p);
-                Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
-                        
-                        public void run() {
-                                if (ShurikenAbility.shurikenThrowers.contains(p))
-                                        ShurikenAbility.shurikenThrowers.remove(p);
-                                
-                        }
-                }, 20);
                 
                 return true;
         }
