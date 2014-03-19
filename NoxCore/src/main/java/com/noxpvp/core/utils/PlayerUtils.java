@@ -43,7 +43,7 @@ public class PlayerUtils extends PlayerUtil{
 	 * @author burgerkiller - https://forums.bukkit.org/threads/determine-whether-the-player-can-see-a-mob.56129/
 	 * 
 	 */
-	public static class LineOfSightUtil{
+	public static class LineOfSightUtil {
 		public static Block getTarget(Location from, int distance, Material... transparentTypes) {
 			if (transparentTypes == null || transparentTypes.length == 0) {
 				return getTarget(from, distance, (Set<Material>) null);

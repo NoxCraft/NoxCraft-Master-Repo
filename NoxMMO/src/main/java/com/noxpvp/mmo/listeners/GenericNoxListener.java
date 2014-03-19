@@ -14,7 +14,7 @@ import org.bukkit.event.EventPriority;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.listeners.NoxListener;
 
-public class GenericNoxListener<T extends Event> extends NoxListener {
+public class GenericNoxListener<T extends Event> extends NoxListener<NoxPlugin> {
 	private Class<T> eventType;
 	private WeakHashMap<String, MMOEventHandler<T>> abe_name_cache;
 	private Map<EventPriority, SortedSet<MMOEventHandler<T>>> abilityHandlers;
