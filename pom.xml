@@ -64,7 +64,7 @@
 			<dependency>
 				<groupId>com.dsh105</groupId>
 				<artifactId>HoloAPI</artifactId>
-				<version>1.0.7</version>
+				<version>1.0.7-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.bukkit</groupId>

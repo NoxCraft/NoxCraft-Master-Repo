@@ -16,6 +16,7 @@ import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.core.utils.chat.MessageUtil;
 import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
+import com.noxpvp.homes.locale.HomeLocale;
 import com.noxpvp.homes.tp.BaseHome;
 import com.noxpvp.homes.tp.DefaultHome;
 import com.noxpvp.homes.tp.NamedHome;
@@ -59,11 +60,10 @@ public class SetHomeCommand extends BaseCommand {
 		 * Scoped for variable usage.
 		 */
 		{
-			MessageBuilder mb = new MessageBuilder().red("You are not allowed to set home in other towns.");
 			Location loc = sender.getLocation();
 			String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, "other-towns");
 			if (TownyUtil.isClaimedLand(loc) && !TownyUtil.isOwnLand(sender, loc) && permHandler.hasPermission(sender, perm))
-				return new CommandResult(this, true, mb.lines());
+				return new CommandResult(this, true, HomeLocale.BAD_LOCATION.get("You are not allowed to set home in other towns."));
 		}
 		
 		String player = null;

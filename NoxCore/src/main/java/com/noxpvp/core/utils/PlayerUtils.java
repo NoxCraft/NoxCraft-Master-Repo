@@ -54,6 +54,7 @@ public class PlayerUtils extends PlayerUtil{
 			}
 		}
 		
+		public static Block getTarget(Location from, int distance, Set<Material> transparentTypes) {
 			BlockIterator itr = new BlockIterator(from, 0, distance);
 			while (itr.hasNext()) {
 				Block block = itr.next();
@@ -68,6 +69,7 @@ public class PlayerUtils extends PlayerUtil{
 			return null;
 		}
 		
+		public static Block getTarget(LivingEntity from, int distance, Set<Material> transparentTypes) {
 			Location from2 = from.getEyeLocation();
 			from2.setPitch(0);
 			from2.setYaw(0);
@@ -75,6 +77,7 @@ public class PlayerUtils extends PlayerUtil{
 			return getTarget(from2, distance, transparentTypes);
 		}
 		
+		public static Block getTarget(LivingEntity from, int distance, Material... transparentTypes) {
 			return getTarget(from.getEyeLocation(), distance, transparentTypes);
 		}
 		
@@ -82,6 +85,7 @@ public class PlayerUtils extends PlayerUtil{
 	        return getTarget(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypes) == null;
 	    }
 	    
+	    public static boolean isLookingAt(LivingEntity from, Location to, Material... transparentTypes) {
 			return getTarget(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypes) == null;
 		}
 		

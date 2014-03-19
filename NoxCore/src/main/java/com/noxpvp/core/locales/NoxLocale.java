@@ -28,7 +28,7 @@ public abstract class NoxLocale extends LocalizationEnum {
 	@Override
 	public void message(CommandSender sender, String... args) {
 		if (!LogicUtil.nullOrEmpty(getSafe(args))) //Ignore blank messages.
-			MessageUtil.sendMessage(sender, getSafe(args).split("\n"));
+			MessageUtil.sendMessage(sender, getSafe(args).split("(/n|\n)"));
 	}
 	
 	public boolean isEmpty(String... args) {
