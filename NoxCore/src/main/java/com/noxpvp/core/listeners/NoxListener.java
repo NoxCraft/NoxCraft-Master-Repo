@@ -7,6 +7,11 @@ import com.noxpvp.core.NoxPlugin;
 
 public abstract class NoxListener <T extends NoxPlugin> implements Listener {
 	private T plugin;
+	private boolean isRegistered;
+	
+	public boolean isRegistered() {
+		return isRegistered;
+	}
 	
 	public NoxListener(T plugin)
 	{
@@ -15,7 +20,15 @@ public abstract class NoxListener <T extends NoxPlugin> implements Listener {
 	
 	public T getPlugin() { return this.plugin; }
 	
-	public void register() { plugin.register(this); }
+	public void register() { 
+		if (isRegistered)
+			return;
+		plugin.register(this); 
+		isRegistered = true;
+	}
 	
-	public void unregister() { HandlerList.unregisterAll(this); }
+	public void unregister() {
+		HandlerList.unregisterAll(this);
+		isRegistered = false;
+	}
 }

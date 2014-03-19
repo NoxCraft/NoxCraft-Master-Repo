@@ -13,13 +13,15 @@ import org.bukkit.event.EventPriority;
 
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.listeners.NoxListener;
+import com.noxpvp.mmo.NoxMMO;
 
-public class GenericNoxListener<T extends Event> extends NoxListener<NoxPlugin> {
+public class GenericNoxListener<T extends Event> extends NoxListener<NoxMMO> {
+	
 	private Class<T> eventType;
 	private WeakHashMap<String, MMOEventHandler<T>> abe_name_cache;
 	private Map<EventPriority, SortedSet<MMOEventHandler<T>>> abilityHandlers;
 	
-	public GenericNoxListener(NoxPlugin plugin, Class<T> type) {
+	public GenericNoxListener(NoxMMO plugin, Class<T> type) {
 		super(plugin);
 		eventType = type;
 		
@@ -108,6 +110,16 @@ public class GenericNoxListener<T extends Event> extends NoxListener<NoxPlugin> 
 		
 		abilityHandlers.get(handler.getEventPriority()).remove(handler);
 		abe_name_cache.remove(name);
+		
+		boolean empty = true;
+		for (EventPriority priority : abilityHandlers.keySet()) {
+			if (!abilityHandlers.get(priority).isEmpty()) {
+				empty = false;
+			}
+		}
+		
+		if (empty)
+			unregister();
 	}
 	
 	public void registerHandler(MMOEventHandler<T> handler)
@@ -118,5 +130,14 @@ public class GenericNoxListener<T extends Event> extends NoxListener<NoxPlugin> 
 		
 		abe_name_cache.put(name, handler);
 		abilityHandlers.get(handler.getEventPriority()).add(handler);
+		
+		for (EventPriority priority : abilityHandlers.keySet()) {
+			if (!abilityHandlers.get(priority).isEmpty()) {
+				if (isRegistered())
+					return;
+				else
+					register();
+			}
+		}
 	}
 }

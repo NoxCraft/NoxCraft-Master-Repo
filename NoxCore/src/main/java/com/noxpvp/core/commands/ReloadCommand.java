@@ -52,7 +52,7 @@ public class ReloadCommand extends BaseCommand {
 			module = module.substring(0, module.length()-1);
 		
 		Reloader r = null;
-		if (module == "" || module.length() == 0 && all)
+		if (module.equals("") || module.length() == 0 && all)
 			r = core.getMasterReloader();
 		else
 			r = core.getMasterReloader().getModule(module);

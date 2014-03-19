@@ -29,6 +29,7 @@ import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
+import com.dsh105.holoapi.HoloAPI;
 import com.noxpvp.core.commands.Command;
 import com.noxpvp.core.commands.ReloadCommand;
 import com.noxpvp.core.data.NoxPlayer;
@@ -80,6 +81,7 @@ public class NoxCore extends NoxPlugin {
 	
 	private Towny towny = null;
 	private WorldGuardPlugin worldGuard = null;
+	private HoloAPI holoAPI = null;
 	
 	private CooldownHandler cds;
 	
@@ -91,14 +93,21 @@ public class NoxCore extends NoxPlugin {
 		return worldGuard;
 	}
 	
-	public final boolean isWorldGuardActive() {
-		return worldGuard != null && Bukkit.getPluginManager().isPluginEnabled(worldGuard);
+	public final HoloAPI getHoloAPI() {
+		return holoAPI;
 	}
 	
 	public final boolean isTownyActive() {
 		return towny != null && Bukkit.getPluginManager().isPluginEnabled(towny);
 	}
-		
+	
+	public final boolean isWorldGuardActive() {
+		return worldGuard != null && Bukkit.getPluginManager().isPluginEnabled(worldGuard);
+	}
+	
+	public final boolean isHoloAPIActive() {
+		return holoAPI != null && Bukkit.getPluginManager().isPluginEnabled(holoAPI);
+	}
 	
 	@Override
 	public void addPermission(NoxPermission permission)
@@ -242,15 +251,24 @@ public class NoxCore extends NoxPlugin {
 		VaultAdapter.load();
 		
 		PluginManager pm = Bukkit.getPluginManager();
-		Plugin plugin = pm.getPlugin("Towny");
 		
-		if (plugin != null && plugin instanceof Towny)
-			towny = (Towny) plugin;
+		{
+			Plugin plugin = pm.getPlugin("WorldGuard");
+			if (plugin != null && plugin instanceof WorldGuardPlugin)
+				worldGuard = (WorldGuardPlugin) plugin;
+		}
 		
-		plugin = null;
-		plugin = pm.getPlugin("WorldGuard");
-		if (plugin != null && plugin instanceof WorldGuardPlugin)
-			worldGuard = (WorldGuardPlugin) plugin;
+		{
+			Plugin plugin = pm.getPlugin("Towny");
+			if (plugin != null && plugin instanceof Towny)
+				towny = (Towny) plugin;
+		}
+		
+		{
+			Plugin plugin = pm.getPlugin("HoloAPI");
+			if (plugin != null && plugin instanceof HoloAPI)
+				holoAPI = (HoloAPI) plugin;
+		}
 		
 		Reloader r = new BaseReloader(getMasterReloader(), "NoxCore") {
 			public boolean reload() {

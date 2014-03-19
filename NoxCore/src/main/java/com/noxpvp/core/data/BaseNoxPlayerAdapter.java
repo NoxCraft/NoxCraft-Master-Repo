@@ -85,7 +85,7 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	}
 
 	public NoxPlayer getProxyBase() {
-		return getProxyBase();
+		return super.getProxyBase();
 	}
 
 	public String toString() {
@@ -94,10 +94,6 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 
 	public int hashCode() {
 		return getProxyBase().hashCode();
-	}
-
-	public boolean equals(Object object) {
-		return getProxyBase().equals(object);
 	}
 
 	public CoreBoard getCoreBoard() {

@@ -219,7 +219,7 @@ public class CoreBoard{
 		public BoardEntry(String name, String displayedName, String scoreName)
 		{
 			for (BoardEntry e : entries.values()){
-				if (e.name == name || e.displayedName == displayedName || e.scoreName == scoreName){
+				if (e.name.equals(name) || e.displayedName.equals(displayedName) || e.scoreName.equals(scoreName)){
 					e.remove();
 				}
 			}

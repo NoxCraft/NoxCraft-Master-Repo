@@ -126,6 +126,9 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 			
 			return;
 		}
+		Player player = p.get();
+		if (player == null)
+			return;
 		
 		HumanEntity clicked = event.getWhoClicked();
 		if (!box.getViewers().contains(clicked)){
@@ -143,8 +146,8 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 			}
 		}
 			
-		if (backButton != null && event.getCurrentItem().equals(backButton)){
-			p.get().closeInventory();
+		if (backButton != null && event.getRawSlot() ==  (box.getSize() - 1)){
+			player.closeInventory();
 			backButton.show();
 			
 			return;

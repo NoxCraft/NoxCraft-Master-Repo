@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -21,6 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
+import com.dsh105.holoapi.HoloAPI;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.listeners.NoxListener;
@@ -30,9 +32,12 @@ public class StaticEffects {
 
 	private static List<LivingEntity> frozenEntitys = new ArrayList<LivingEntity>();
 	
-	public static void DamageAmountParticle(Entity e, double amount){
-//		holoapi//TODO coaster your holoapi depend is not downloading
-		return;
+	public static void DamageAmountParticle(LivingEntity e, double amount){
+		DamageAmountParticle(e.getEyeLocation(), ChatColor.RED + Integer.toString((int) amount));
+	}
+	
+	public static void DamageAmountParticle(Location loc, String damage){
+		HoloAPI.getManager().createSimpleHologram(loc, 4, true, damage);
 	}
 	
 	public static void SkullBreak(LivingEntity e){

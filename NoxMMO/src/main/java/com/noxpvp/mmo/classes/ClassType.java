@@ -31,7 +31,8 @@ public enum ClassType {
 	
 	private ClassType(ClassType parent) {
 		this.children = new ArrayList<ClassType>();
-		parent.children.add(this);
+		if (parent != null)
+			parent.children.add(this);
 		this.parent = parent;
 		this.inheritance = new ClassType[0];
 	}
@@ -39,7 +40,8 @@ public enum ClassType {
 	private ClassType(ClassType parent, ClassType... inherits)
 	{
 		this.children = new ArrayList<ClassType>();
-		parent.children.add(this);
+		if (parent != null)
+			parent.children.add(this);
 		this.parent = parent;
 		this.inheritance = inherits;
 	}

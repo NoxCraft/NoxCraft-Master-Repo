@@ -14,7 +14,7 @@ import com.noxpvp.core.manager.PlayerManager;
 
 public class LoginListener extends NoxListener<NoxCore> {
 		
-	private static String loginMessage;
+	private String loginMessage;
 		
 	public LoginListener()
 	{
@@ -37,7 +37,6 @@ public class LoginListener extends NoxListener<NoxCore> {
 		NoxPlayer nPlayer = PlayerManager.getInstance().getPlayer(p);
 		
 		nPlayer.getCoreBar().newShine(loginMessage, 0, 500, true);
-		nPlayer.getCoreBoard().addTimer("time", "Mortalwound", 90, ChatColor.YELLOW, ChatColor.GREEN).show();
 
 	}
 	

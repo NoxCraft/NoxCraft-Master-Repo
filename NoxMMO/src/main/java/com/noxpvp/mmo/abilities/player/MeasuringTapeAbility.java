@@ -37,7 +37,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 				EventPriority.MONITOR, 1) {
 
 					public boolean ignoreCancelled() {
-						return true;
+						return false;
 					}
 
 					public void execute(PlayerInteractEvent event) {
@@ -94,6 +94,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 		
+		registerHandler(handler);
 		new UnregisterMMOHandlerRunnable(handler).runTaskLater(NoxMMO.getInstance(), 20 * 120);
 		return true;
 

@@ -70,6 +70,7 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements Pla
 		if (p == null)
 			return false;
 		
+		System.out.println(NoxMMO.PERM_NODE + ".ability." + getName().replaceAll(" ", "-").toLowerCase());
 		return VaultAdapter.PermUtils.hasPermission(p,  (NoxMMO.PERM_NODE + ".ability." + getName().replaceAll(" ", "-").toLowerCase()));
 	}
 	

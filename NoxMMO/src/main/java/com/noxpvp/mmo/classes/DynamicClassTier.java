@@ -20,13 +20,13 @@ public class DynamicClassTier extends ClassTier {
 
 	private String displayName;
 	private Map<Integer, Integer> expMap = new HashMap<Integer, Integer>();
-	private ExperienceType[] expTypes;
+	private ExperienceType[] expTypes = new ExperienceType[0];
 	
 	private int level, maxLevel;
 	private InterpolatedMap levelToExpMap = new InterpolatedMap();
 	private List<String> lore = new ArrayList<String>();
 	
-	private String permNode;
+	private String permNode = "";
 	private boolean useLevelPerms = false;
 	
 	/**
@@ -142,6 +142,11 @@ public class DynamicClassTier extends ClassTier {
 		if (maxed)
 			amount -= getMaxExp();
 		
+		if (amount < 0)
+			amount = 0;
+		expMap.put(getLevel(), getMaxExp());
+		setLevel(getLevel() + 1);
+		setExp(amount);
 	}
 	
 	public void setLevel(int level) {
