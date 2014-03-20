@@ -10,25 +10,18 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerInteractEvent;
 
+import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.NoxMMO;
 
-public class GenericMMOListener<T extends Event> extends NoxListener<NoxMMO> {
+public class GenericNoxListener<T extends Event> extends NoxListener<NoxMMO> {
 	
 	private Class<T> eventType;
 	private WeakHashMap<String, MMOEventHandler<T>> abe_name_cache;
 	private Map<EventPriority, SortedSet<MMOEventHandler<T>>> abilityHandlers;
 	
-	public static <T extends Event> GenericMMOListener newListener(NoxMMO plugin, Class<T> type) {
-		if (type.isAssignableFrom(PlayerInteractEvent.class))
-			return new PlayerInteractHandler(plugin);
-		return null;
-	}
-	
-	protected GenericMMOListener(NoxMMO plugin, Class<T> type) {
+	public GenericNoxListener(NoxMMO plugin, Class<T> type) {
 		super(plugin);
 		eventType = type;
 		
@@ -145,38 +138,6 @@ public class GenericMMOListener<T extends Event> extends NoxListener<NoxMMO> {
 				else
 					register();
 			}
-		}
-	}
-	
-	public static class EntityDamageHandlers { //Simply used for sorting...
-		public static class EntityDamageByEntityHandler extends GenericMMOListener<EntityDamageByEntityEvent> {
-			public EntityDamageByEntityHandler(NoxMMO plugin) {
-				super(plugin, EntityDamageByEntityEvent.class);
-			}
-		}
-		
-		public static class EntityDamageByBlockHandler extends GenericMMOListener<EntityDamageByBlockEvent> {
-			public EntityDamageByBlockHandler(NoxMMO plugin) {
-				super(plugin, EntityDamageByBlockEvent.class);
-			}
-		}
-		
-		public static class EntityDamageHandler extends GenericMMOListener<EntityDamageEvent> {
-			public EntityDamageHandler(NoxMMO plugin) {
-				super(plugin, EntityDamageEvent.class);
-			}
-		}
-	}
-	
-	public static class PlayerInteractHandler extends GenericMMOListener<PlayerInteractEvent> {
-		public PlayerInteractHandler(NoxMMO plugin) {
-			super(plugin, PlayerInteractEvent.class);
-		}
-	}
-	
-	public static class EntityInteractHandler extends GenericMMOListener<EntityInteractEvent> {
-		public EntityInteractHandler(NoxMMO plugin) {
-			super(plugin, EntityInteractEvent.class);
 		}
 	}
 }
