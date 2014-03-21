@@ -7,7 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.noxpvp.core.listeners.NoxListener;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;

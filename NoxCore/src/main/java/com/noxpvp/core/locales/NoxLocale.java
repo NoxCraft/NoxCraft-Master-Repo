@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 import com.bergerkiller.bukkit.common.localization.LocalizationEnum;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.NoxPlugin;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public abstract class NoxLocale extends LocalizationEnum {
 

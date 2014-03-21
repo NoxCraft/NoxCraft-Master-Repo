@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.mmo.MasterListener;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public interface PlayerAbility extends EntityAbility {
 	

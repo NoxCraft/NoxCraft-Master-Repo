@@ -13,7 +13,7 @@ import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.TownyUtil;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.locale.HomeLocale;

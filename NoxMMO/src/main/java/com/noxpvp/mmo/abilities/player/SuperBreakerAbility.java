@@ -15,7 +15,7 @@ import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
 
 /**

@@ -25,7 +25,7 @@ import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.CommandUtil;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public abstract class NoxPlugin extends PluginBase {
 

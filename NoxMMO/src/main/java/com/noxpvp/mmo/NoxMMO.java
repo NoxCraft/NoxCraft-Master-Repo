@@ -65,7 +65,7 @@ public class NoxMMO extends NoxPlugin {
 				ShurikenAbility.class, HammerOfThorAbility.class,
 				HookShotAbility.class, SeveringStrikesAbility.class,
 				PlayerClass.class, PlayerClassUtil.class,
-				AbilityCycler.class
+				AbilityCycler.class, MasterListener.class
 		};
 		
 		String[] internals = { };
@@ -96,7 +96,9 @@ public class NoxMMO extends NoxPlugin {
 			return;
 		}
 		setInstance(this);
+		MasterListener.init();
 		masterListener = new MasterListener();
+		
 		
 		getPlayerManager();
 		

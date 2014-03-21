@@ -2,7 +2,7 @@ package com.noxpvp.core.locales;
 
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public class GlobalLocale extends NoxLocale {
 	public GlobalLocale(String name, String def) {

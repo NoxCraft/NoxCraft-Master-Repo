@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.listeners;
+package com.noxpvp.mmo.handlers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,20 +8,36 @@ import java.util.WeakHashMap;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.noxpvp.core.NoxPlugin;
+import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.handlers.listeners.*;
 
-public class GenericNoxListener<T extends Event> extends NoxListener<NoxMMO> {
+public class GenericMMOListener<T extends Event> extends NoxListener<NoxMMO> {
+	
+	protected static Map<Class<?>, SafeConstructor<GenericMMOListener<?>>> constructors = new HashMap<Class<?>, SafeConstructor<GenericMMOListener<?>>>();
+	
+	static {
+		constructors.put(EntityDamageEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(EntityDamageListener.class, NoxMMO.class));
+		constructors.put(PlayerInteractEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(PlayerInteractListener.class, NoxMMO.class));
+		constructors.put(InventoryPickupItemEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(ItemPickupListener.class, NoxMMO.class));
+		constructors.put(ProjectileLaunchEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(ProjectileLaunchListener.class, NoxMMO.class));
+		constructors.put(ProjectileHitEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(ProjectileHitListener.class, NoxMMO.class));
+		
+	}
 	
 	private Class<T> eventType;
 	private WeakHashMap<String, MMOEventHandler<T>> abe_name_cache;
 	private Map<EventPriority, SortedSet<MMOEventHandler<T>>> abilityHandlers;
 	
-	public GenericNoxListener(NoxMMO plugin, Class<T> type) {
+	protected GenericMMOListener(NoxMMO plugin, Class<T> type) {
 		super(plugin);
 		eventType = type;
 		
@@ -31,8 +47,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener<NoxMMO> {
 			abilityHandlers.put(pri, new TreeSet<MMOEventHandler<T>>());
 	}
 	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEventLowest(T event)
+	protected void onEventLowest(T event)
 	{
 		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.LOWEST))
 		{
@@ -42,8 +57,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener<NoxMMO> {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.LOW)
-	public void onEventLow(T event)
+	protected void onEventLow(T event)
 	{
 		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.LOW))
 		{
@@ -53,8 +67,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener<NoxMMO> {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onEventNormal(T event)
+	protected void onEventNormal(T event)
 	{
 		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.NORMAL))
 		{
@@ -64,8 +77,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener<NoxMMO> {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onEventHigh(T event)
+	protected void onEventHigh(T event)
 	{
 		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.HIGH))
 		{
@@ -75,8 +87,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener<NoxMMO> {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onEventHighest(T event)
+	protected void onEventHighest(T event)
 	{
 		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.HIGHEST))
 		{
@@ -86,8 +97,7 @@ public class GenericNoxListener<T extends Event> extends NoxListener<NoxMMO> {
 		}	
 	}
 	
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onEventMonitor(T event)
+	protected void onEventMonitor(T event)
 	{
 		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.MONITOR))
 		{
@@ -139,5 +149,11 @@ public class GenericNoxListener<T extends Event> extends NoxListener<NoxMMO> {
 					register();
 			}
 		}
+	}
+	
+	public static <T extends Event> GenericMMOListener<T> newListener(NoxMMO plugin, Class<T> type) {
+		if (constructors.containsKey(type))
+			return (GenericMMOListener<T>) constructors.get(type).newInstance(plugin);
+		return null;
 	}
 }

@@ -11,7 +11,7 @@ import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public abstract class BasePlayerAbility extends BaseEntityAbility implements PlayerAbility {
 	

@@ -7,8 +7,8 @@ import org.json.JSONStringer;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.noxpvp.core.utils.chat.TellRawUtil;
-import com.noxpvp.core.utils.chat.TellRawUtil.JSONBuilder.FLAGS;
+import com.noxpvp.core.utils.gui.TellRawUtil;
+import com.noxpvp.core.utils.gui.TellRawUtil.JSONBuilder.FLAGS;
 
 public class JSONBuilderTest {
 

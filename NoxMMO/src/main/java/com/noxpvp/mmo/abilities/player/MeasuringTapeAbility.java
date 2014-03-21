@@ -15,7 +15,7 @@ import com.bergerkiller.bukkit.common.utils.PacketUtil;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
 
 public class MeasuringTapeAbility extends BasePlayerAbility{

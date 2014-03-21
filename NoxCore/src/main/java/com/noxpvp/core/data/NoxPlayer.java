@@ -38,6 +38,10 @@ import com.noxpvp.core.gui.*;
 
 public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, NoxPlayerAdapter {
 	
+	static {
+		ProxyBase.validate(NoxPlayer.class);
+	}
+	
 	private WeakHashMap<String, CoolDown> cd_cache;
 	private List<CoolDown> cds;
 	private PlayerManager manager;

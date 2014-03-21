@@ -8,7 +8,7 @@ import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.events.PlayerDataSaveEvent;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public class ChatPlayer extends BaseNoxPlayerAdapter implements Targetable {
 

@@ -1,4 +1,4 @@
-package com.noxpvp.core.utils.chat;
+package com.noxpvp.core.utils.gui;
 
 import java.util.Collection;
 

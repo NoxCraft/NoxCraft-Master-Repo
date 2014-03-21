@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.listeners;
+package com.noxpvp.mmo.handlers;
 
 import java.util.Comparator;
 

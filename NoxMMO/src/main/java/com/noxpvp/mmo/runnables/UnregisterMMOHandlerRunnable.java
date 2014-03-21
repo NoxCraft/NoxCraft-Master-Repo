@@ -4,7 +4,7 @@ import org.bukkit.event.Event;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public class UnregisterMMOHandlerRunnable extends BukkitRunnable {
 

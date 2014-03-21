@@ -16,9 +16,9 @@ import com.google.common.collect.Sets;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.Cycler;
 import com.noxpvp.core.data.ObjectLock;
-import com.noxpvp.core.utils.ColoredStringScroller;
-import com.noxpvp.core.utils.ShiningStringScroller;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
+import com.noxpvp.core.utils.gui.ColoredStringScroller;
+import com.noxpvp.core.utils.gui.ShiningStringScroller;
 
 public class CoreBar{
 	

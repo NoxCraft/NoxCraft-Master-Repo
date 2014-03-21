@@ -14,7 +14,7 @@ import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOutWorldParticles;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 /**
  * @author NoxPVP

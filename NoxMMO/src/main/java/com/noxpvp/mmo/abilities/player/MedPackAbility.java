@@ -14,11 +14,11 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.noxpvp.core.utils.EffectsRunnable;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public class MedPackAbility extends BasePlayerAbility{
 	

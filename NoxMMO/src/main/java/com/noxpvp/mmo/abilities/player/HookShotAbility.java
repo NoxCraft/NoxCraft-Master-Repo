@@ -18,7 +18,7 @@ import com.bergerkiller.bukkit.common.wrappers.DataWatcher;
 import com.noxpvp.core.utils.PlayerUtils;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 
 /**

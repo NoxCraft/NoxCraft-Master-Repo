@@ -17,7 +17,7 @@ import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard.Display;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.TimeUtils;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public class CoreBoard{
 	private final static int BOARD_MAX_ENTRIES = 15;

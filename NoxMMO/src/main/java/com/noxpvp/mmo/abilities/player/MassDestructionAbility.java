@@ -13,7 +13,7 @@ import org.bukkit.util.Vector;
 import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.SetVelocityRunnable;
 import com.noxpvp.mmo.runnables.ShockWaveAnimation;

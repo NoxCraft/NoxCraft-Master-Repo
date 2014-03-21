@@ -340,8 +340,6 @@ public class NoxCore extends NoxPlugin {
         
         cds.start();
         
-        ProxyBase.validate(NoxPlayer.class);
-        
         reloadConfig();
 	}
 

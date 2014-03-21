@@ -9,7 +9,7 @@ import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOu
 import com.bergerkiller.bukkit.common.utils.PlayerUtil;
 import com.bergerkiller.bukkit.common.utils.WorldUtil;
 import com.noxpvp.core.VaultAdapter;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 

@@ -9,7 +9,7 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
 

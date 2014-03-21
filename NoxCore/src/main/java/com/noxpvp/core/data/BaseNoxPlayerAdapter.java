@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
+import com.bergerkiller.bukkit.common.proxies.ProxyBase;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.gui.CoolDown;
 import com.noxpvp.core.gui.CoreBar;
@@ -21,6 +22,10 @@ import com.noxpvp.core.proxies.WeakProxyBase;
 
 public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> implements NoxPlayerAdapter {
 	private final String playerName;
+	
+	static {
+		ProxyBase.validate(BaseNoxPlayerAdapter.class);
+	}
 	
 	public BaseNoxPlayerAdapter(NoxPlayerAdapter player)
 	{

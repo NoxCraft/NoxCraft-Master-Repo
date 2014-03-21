@@ -10,7 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.server.ServerListPingEvent;
 
 import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public class ServerPingListener extends NoxListener<NoxCore>{
 

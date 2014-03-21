@@ -1,8 +1,6 @@
-package com.noxpvp.core.utils;
+package com.noxpvp.core.utils.gui;
 
 import org.bukkit.ChatColor;
-
-import com.noxpvp.core.utils.chat.MessageUtil;
 
 public class ColoredStringScroller{
 

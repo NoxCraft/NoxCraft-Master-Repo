@@ -9,7 +9,7 @@ import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.collections.StringMap;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.utils.chat.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public abstract class BaseCommand implements Command {
 	private final boolean isPlayerOnly;
