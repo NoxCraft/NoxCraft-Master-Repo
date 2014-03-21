@@ -14,6 +14,7 @@ import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.player.BankShotAbility;
 import com.noxpvp.mmo.abilities.player.HookShotAbility;
 import com.noxpvp.mmo.abilities.player.MeasuringTapeAbility;
+import com.noxpvp.mmo.abilities.player.MedPackAbility;
 import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 
 public class PlayerInteractListener extends NoxListener<NoxMMO>{
@@ -43,7 +44,7 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 			return;
 		MessageUtil.broadcast("sticked");
 		
-		new MeasuringTapeAbility(p).execute();
+		new MedPackAbility(p).execute();
 		
 	}
 	

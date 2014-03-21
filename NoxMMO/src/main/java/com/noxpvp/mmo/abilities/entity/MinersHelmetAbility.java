@@ -145,9 +145,7 @@ public class MinersHelmetAbility extends BaseEntityAbility {
 				BlockChangeArray change = new BlockChangeArray(1);
 				
 				change.getBlockChange(0).
-				setRelativeX((int) loc.getX()).
-				setRelativeZ((int) loc.getZ()).
-				setAbsoluteY((int) loc.getY()).
+				setLocation(loc).
 				setBlockID(BlockType.getId());
 				
 				commonFakeBlock.write(fakeBlock.chunk, new IntVector2(last.getChunk()));

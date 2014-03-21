@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -29,7 +30,7 @@ public class EffectsRunnable extends BukkitRunnable{
 	private List<String> names = new ArrayList<String>();
 	
 	private Location loc;
-	private Location locOffSet;
+	private boolean offSet;
 	
 	private float data;
 	private int amount;
@@ -52,17 +53,7 @@ public class EffectsRunnable extends BukkitRunnable{
 		this.names = name;
 		
 		this.loc = loc;
-		
-		if (offSet){
-			boolean upOrDown = (float) Math.random() > .5? true : false;
-			float random = (float) Math.random();
-			
-			double x = upOrDown? loc.getX() + random : loc.getBlockX() - random;
-			double y = upOrDown? loc.getY() + random : loc.getBlockY() - random;
-			double z = upOrDown? loc.getZ() + random : loc.getBlockZ() - random;
-			
-			this.locOffSet = new Location(loc.getWorld(), x, y, z);
-		}
+		this.offSet = offSet;
 		
 		this.data = data;
 		this.amount = amount;
@@ -110,10 +101,10 @@ public class EffectsRunnable extends BukkitRunnable{
 				commonEffect.write(effect.y, (float) loc.getY());
 				commonEffect.write(effect.z, (float) loc.getZ());
 	
-				if (locOffSet != null) {
-					commonEffect.write(effect.randomX, (float) locOffSet.getX());
-					commonEffect.write(effect.randomY, (float) locOffSet.getY());
-					commonEffect.write(effect.randomZ, (float) locOffSet.getZ());
+				if (offSet) {
+					commonEffect.write(effect.randomX, RandomUtils.nextFloat());
+					commonEffect.write(effect.randomY, RandomUtils.nextFloat());
+					commonEffect.write(effect.randomZ, RandomUtils.nextFloat());
 				}
 				
 				PacketUtil.broadcastPacketNearby(loc, 125, commonEffect);
