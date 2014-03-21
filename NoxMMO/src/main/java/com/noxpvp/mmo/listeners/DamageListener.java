@@ -32,7 +32,7 @@ public class DamageListener extends NoxListener<NoxMMO>{
 	
 	
 
-	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = false)
+	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
 	public void onDamage(EntityDamageEvent event) {	
 		
 //		Entity e = event.getEntity();

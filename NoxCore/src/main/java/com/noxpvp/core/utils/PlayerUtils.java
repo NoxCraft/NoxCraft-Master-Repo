@@ -70,12 +70,8 @@ public class PlayerUtils extends PlayerUtil{
 			return null;
 		}
 		
-		public static Block getTargetBlock(LivingEntity from, int distance, Set<Material> transparentTypes) {
-			Location from2 = from.getEyeLocation();
-			from2.setPitch(0);
-			from2.setYaw(0);
-			
-			return getTargetBlock(from2, distance, transparentTypes);
+		public static Block getTargetBlock(LivingEntity from, int distance, Set<Material> transparentTypes) {	
+			return getTargetBlock(from.getEyeLocation(), distance, transparentTypes);
 		}
 		
 		public static Block getTargetBlock(LivingEntity from, int distance, Material... transparentTypes) {

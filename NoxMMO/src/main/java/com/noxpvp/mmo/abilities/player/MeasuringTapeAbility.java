@@ -10,8 +10,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import com.avaje.ebeaninternal.server.cluster.Packet;
+import com.bergerkiller.bukkit.common.bases.IntVector2;
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
+import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
+import com.noxpvp.core.utils.BlockChangeArray;
+import com.noxpvp.core.utils.BlockChangeArray.BlockChange;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
@@ -55,16 +60,17 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 								return;
 							
 							blocks[0] = b;
-							fakeBlock(b.getLocation(), Material.WOOL, 14);
+							fakeBlock(b.getLocation(), Material.WOOL);
 							
 							firstDone = true;
+							return;
 						} else {
 							b = LineOfSightUtil.getTargetBlock(player, 10, (Set<Material>) null);
 							if (b == null)
 								return;
 							
 							blocks[1] = b;
-							fakeBlock(b.getLocation(), Material.WOOL, 14);
+							fakeBlock(b.getLocation(), Material.WOOL);
 							
 							unRegisterHandler(this);
 							Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
@@ -74,6 +80,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 								}
 							}, 20 * 5);
 							
+							return;
 						}
 						
 					}
@@ -100,19 +107,22 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 
 	}
 
-	private void fakeBlock(Location loc, Material mat, int data) {
-		CommonPacket commonFakeBlock = new CommonPacket(35, true);
+	@SuppressWarnings("deprecation")
+	private void fakeBlock(Location loc, Material mat) {
+		CommonPacket fakeBlock = new CommonPacket(PacketType.OUT_MULTI_BLOCK_CHANGE);
+		BlockChangeArray change = new BlockChangeArray(1);
 		
-		try {
-			commonFakeBlock.write(0, loc.getX());//need to test and use *32?
-			commonFakeBlock.write(1, loc.getY());
-			commonFakeBlock.write(2, loc.getZ());
-			commonFakeBlock.write(3, mat.getId());
-			commonFakeBlock.write(4, data);
-			
-			PacketUtil.sendPacket(getPlayer(), commonFakeBlock);
-			
-		} catch (IllegalArgumentException e) {e.printStackTrace();}
+		change.getBlockChange(0).
+		setRelativeX((int) loc.getX()).
+		setRelativeZ((int) loc.getZ()).
+		setAbsoluteY((int) loc.getY()).
+		setBlockID(mat.getId());
+		
+		fakeBlock.write(PacketType.OUT_MULTI_BLOCK_CHANGE.chunk, new IntVector2(loc.getChunk()));
+		fakeBlock.write(PacketType.OUT_MULTI_BLOCK_CHANGE.blockCount, 1);
+		fakeBlock.write(PacketType.OUT_MULTI_BLOCK_CHANGE.blockData, change.toByteArray());
+		
+		PacketUtil.broadcastPacket(fakeBlock, false);
 	}
 	
 	private void refreshBlocks(){
@@ -120,7 +130,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 			if (b == null)
 				continue;
 			
-			fakeBlock(b.getLocation(), b.getType(), b.getData());
+			fakeBlock(b.getLocation(), b.getType());
 		}
 		
 	}

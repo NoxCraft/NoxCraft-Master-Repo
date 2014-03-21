@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 
 import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.core.utils.gui.MessageUtil;
-import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
@@ -34,14 +33,12 @@ public class MedPackAbility extends BasePlayerAbility{
 	public MedPackAbility setActive(boolean active){
 		boolean changed = this.isActive != active;
 		
-		MasterListener m = NoxMMO.getInstance().getMasterListener();
-		
 		this.isActive = active;
 		
 		if (active)
-			m.registerHandler(handler);
+			registerHandler(handler);
 		else
-			m.unregisterHandler(handler);
+			unRegisterHandler(handler);
 		
 		return this;
 	}
@@ -73,9 +70,11 @@ public class MedPackAbility extends BasePlayerAbility{
 			
 			public void execute(PlayerPickupItemEvent event) {
 				if (event.getPlayer().equals(MedPackAbility.this.getPlayer())) {
+					
 					Item eventItem = event.getItem();
 					Player player = event.getPlayer();
 					Player abilPlayer = MedPackAbility.this.getPlayer();
+					
 					if (MedPackAbility.this.packs.contains(eventItem))
 					{
 						event.setCancelled(true);
@@ -115,7 +114,7 @@ public class MedPackAbility extends BasePlayerAbility{
 		Player p = getPlayer();
 		
 		ItemStack pack = new ItemStack(Material.EMERALD, 1);
-		pack.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+//		pack.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);//TODO fix this, can't add enchantment error
 		
 		Item drop = p.getWorld().dropItem(p.getLocation(), pack);
 		packs.add(drop);
