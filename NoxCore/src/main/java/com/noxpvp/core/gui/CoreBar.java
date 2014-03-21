@@ -47,7 +47,7 @@ public class CoreBar{
 		lock = new ObjectLock(null);
 		updater = null;
 		
-		this.separater = core.getCoreConfig().get("gui.corebar.separater", String.class, "||");
+		this.separater = core.getCoreConfig().get("gui.corebar.separater", String.class, "  ||  ");
 		this.color = core.getCoreConfig().get("gui.corebar.default-color", String.class, ChatColor.GREEN.toString());
 		
 	}
@@ -244,7 +244,7 @@ public class CoreBar{
 			
 			int tLength = text.length();
 			
-			text.replace(tLength - (separater.length() + stringDist.length()), tLength, separater + (stringDist = String.format("%0$.1f", distance)));
+			text.replace(tLength - (separater.length() + stringDist.length()), tLength, separater + (stringDist = String.format("%.1f", distance)));
 			
 			currentEntry.update(e, text.toString());
 			

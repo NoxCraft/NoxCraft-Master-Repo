@@ -32,12 +32,12 @@ public class StaticEffects {
 
 	private static List<LivingEntity> frozenEntitys = new ArrayList<LivingEntity>();
 	
-	public static void DamageAmountParticle(LivingEntity e, double amount){
-		DamageAmountParticle(e.getEyeLocation(), ChatColor.RED + Integer.toString((int) amount));
+	public static void DamageAmountParticle(LivingEntity e, double damage){
+		DamageAmountParticle(e.getEyeLocation(), damage);
 	}
 	
-	public static void DamageAmountParticle(Location loc, String damage){
-		HoloAPI.getManager().createSimpleHologram(loc, 4, true, damage);
+	public static void DamageAmountParticle(Location loc, double damage){
+		HoloAPI.getManager().createSimpleHologram(loc, 5, true, ChatColor.RED + String.format("%.1f", damage));
 	}
 	
 	public static void SkullBreak(LivingEntity e){
@@ -53,7 +53,7 @@ public class StaticEffects {
 	}
 	
 	public static void BloodEffect(Entity e, NoxPlugin plugin){
-		new EffectsRunnable(Arrays.asList("blockdust_152_0"), false, null, .12F, 15, 1, e).runTaskTimer(plugin, 0, 0);
+		new EffectsRunnable(Arrays.asList("blockdust_35_14"), false, null, .12F, 15, 1, e).runTaskTimer(plugin, 0, 0);
 	}
 	
 	public static void BroadcastSound(Entity e, Sound sound){
