@@ -1,11 +1,11 @@
 package com.noxpvp.mmo.abilities.player;
 
+import org.apache.commons.lang.math.RandomUtils;
+import org.bukkit.Sound;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Wolf;
 
 import com.bergerkiller.bukkit.common.controller.EntityController;
@@ -23,15 +23,12 @@ public class AlphaMaleAbility extends BasePlayerAbility {
 
 
 	private CommonLivingEntity<Wolf> wolf;
-	private LivingEntity target;
-	private WolfController wolfController = new WolfController() {
-		
-		@Override
-		public void onDamage(DamageSource damageSource, double damage) {
-			super.onDamage(damageSource, damage);
-		}
-		
-	};
+	
+	public Creature getActiveTarget() {
+		return wolfController.getTarget();
+	}
+	
+	private WolfController wolfController = new WolfController();
 	
 	public void setWolf(Wolf wolf) {
 		this.wolf = new CommonLivingEntity<Wolf>(wolf);
@@ -51,26 +48,54 @@ public class AlphaMaleAbility extends BasePlayerAbility {
 		private Creature currentTarget;
 		private AnimalTamer tamer;
 		
+		private short growlTicker = 0;
+		private short nextGrowlTick = (short) RandomUtils.nextInt(100);
+		
 		@Override
 		public void onDamage(DamageSource damageSource, double damage) {
-			// TODO Auto-generated method stub
-			super.onDamage(damageSource, damage);
 			if (!isAnyNonAttackingSource(damageSource) && damageSource.getEntity() != null)
-				trySetAggro(damageSource.getEntity());
+				setTarget(damageSource.getEntity());
 			
+			super.onDamage(damageSource, damage);
 		}
 		
 		public Wolf getWolf() { return getEntity().getEntity(); }
 		
-		private void trySetAggro(Entity entity) {
+		public void setTarget(Entity entity) {
+			Wolf w = getWolf();
 			if (entity instanceof Creature && entity != tamer) {
 				Creature creature = (Creature) entity;
 				currentTarget = creature;
 			
-				Wolf w = getWolf();
 				if (w != null) {
 					w.setAngry(true);
 					w.setTarget(creature);
+				}
+			} else if (entity == null) {
+				w.setTarget(null);
+				w.setAngry(false);
+				growlTicker = 0; //Reset tick logic.
+			}
+		}
+		
+		private boolean isAngry() {
+			return getWolf().isAngry();
+		}
+		
+		public void growl() {
+			getEntity().makeRandomSound(Sound.WOLF_GROWL, 100, 1);
+		}
+		
+		@Override
+		public void onTick() {
+			super.onTick();
+			
+			if (isAngry()) { //Growling logic.
+				growlTicker++;
+				if (growlTicker >= nextGrowlTick) {
+					nextGrowlTick = (short) RandomUtils.nextInt(100);
+					growlTicker = 0;
+					growl();
 				}
 			}
 		}
