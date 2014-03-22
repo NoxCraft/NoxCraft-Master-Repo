@@ -20,9 +20,8 @@ public class LocateHomeCommand extends BaseCommand {
 		return new String[] {"THIS COMMAND IS NOT IMPLEMENTED" };
 	}
 	
-	public boolean execute(CommandContext context) {
-		displayHelp(context.getSender());
-		return true;
+	public CommandResult execute(CommandContext context) {
+		return new CommandResult(this, false);
 	}
 
 	public String[] getFlags() {

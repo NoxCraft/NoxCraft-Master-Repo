@@ -7,22 +7,24 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.MasterReloader;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.reloader.Reloader;
-import com.noxpvp.core.utils.PermissionHandler;
 
 public class ReloadCommand extends BaseCommand {
 	private NoxCore core;
 	
-	public static final String COMMAND_NAME = "reloader";
+	public static final String COMMAND_NAME = "Reloader";
 	
 	private PermissionHandler handler;
 	public ReloadCommand(){
 		super(COMMAND_NAME, false);
+		
 		core = NoxCore.getInstance();
 		handler = core.getPermissionHandler();
 	}
-	public boolean execute(CommandContext context) {
+	
+	public CommandResult execute(CommandContext context) {
 		
 		CommandSender sender = context.getSender();
 		String[] args = context.getArguments();
@@ -33,10 +35,8 @@ public class ReloadCommand extends BaseCommand {
 		if (context.getFlag("?", false)|| context.getFlag("h", false)|| context.getFlag("help", false) || args.length == 0)
 		{
 			displayHelp(sender);
-			return true;
+			return new CommandResult(this, true);
 		}
-		
-		
 		
 		String module = null;
 		if (args.length > 1)
@@ -52,7 +52,7 @@ public class ReloadCommand extends BaseCommand {
 			module = module.substring(0, module.length()-1);
 		
 		Reloader r = null;
-		if (module == "" || module.length() == 0 && all)
+		if (module.equals("") || module.length() == 0 && all)
 			r = core.getMasterReloader();
 		else
 			r = core.getMasterReloader().getModule(module);
@@ -76,7 +76,7 @@ public class ReloadCommand extends BaseCommand {
 			GlobalLocale.COMMAND_FAILED.message(sender, "An error occured: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return true;
+		return new CommandResult(this, true);
 	}
 	
 	public String[] getDescription() {
@@ -89,14 +89,16 @@ public class ReloadCommand extends BaseCommand {
 
 	public String[] getHelp() {
 		MessageBuilder mb = new MessageBuilder();
-		mb.gold("/").blue(COMMAND_NAME).append(' ').red("<<ModuleName> ").aqua("[SubModule ...]").red(">").newLine();
-		mb.gray("Put * on the end of any module to specify to load all sub modules and self").newLine();
-		mb.blue("Current Module Tree");
+		mb.aqua("/").yellow(COMMAND_NAME).append(' ').aqua("<<").yellow("ModuleName").aqua("> [").yellow("SubModule1, SubModule2, ...").aqua("]>").newLine();
+		mb.aqua("Put * on the end of any module to also load all sub modules").newLine().append(' ').newLine();//Have to have something there or it wont NL a null line
+		
+		mb.green("Current reloadable modules:");
+		
 		MasterReloader mr = core.getMasterReloader();
-		mb.newLine();
+		
 		if (mr.hasModules())
 			for (Reloader module : mr.getModules())
-				nextTree(mb.white(" "), module, 0);
+				nextTree(mb.yellow(" "), module, 0);
 		else
 			mb.red("No Modules Loaded?!");
 		
@@ -115,12 +117,13 @@ public class ReloadCommand extends BaseCommand {
 	{
 		mb.newLine();
 		for (int i = 0; i < (level); i++)
-			mb.append("-");
+			mb.yellow("-");
 		if (level > 0)
-			mb.append(ENTER_TREE);
+			mb.append(ENTER_TREE + ' ');
 		
-		mb.append(module.getName());
+		mb.yellow(module.getName());
 		if (module.hasModules())
+			mb.append(':');
 			for (Reloader subModule : module.getModules())
 				nextTree(mb, subModule, level + 1);
 	}

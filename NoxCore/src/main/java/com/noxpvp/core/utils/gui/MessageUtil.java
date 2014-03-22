@@ -1,6 +1,7 @@
-package com.noxpvp.core.utils;
+package com.noxpvp.core.utils.gui;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -27,8 +28,17 @@ public class MessageUtil {
 		sendMessage(Bukkit.getOnlinePlayers(), permission , messages);
 	}
 	
+	public static void broadcast(String message) {
+		sendMessage(Bukkit.getOnlinePlayers(), message);
+	}
+	
+	public static void broadcast(String... messages){
+		sendMessage(Bukkit.getOnlinePlayers(), messages);
+	}
+	
 	public static void broadcast(World world, String message)
 	{
+		Bukkit.broadcastMessage("TEST");
 		for (Player player : world.getPlayers())
 			sendMessage(player, message);
 	}
@@ -108,8 +118,9 @@ public class MessageUtil {
 	
 	public static void sendMessage(CommandSender sender, String...messages)
 	{
-		for (String message : messages)
-			sendMessage(sender, message);
+		if (!LogicUtil.nullOrEmpty(messages))
+			for (String message : messages)
+				sendMessage(sender, message);
 	}
 
 	public static void sendMessage(CommandSender[] senders, Filter<CommandSender> filter, String message)
@@ -226,6 +237,41 @@ public class MessageUtil {
 				return false;
 			}
 		}, messages);
+	}
+	
+	public static String getLastColors(String message) {
+		char[] chars = message.toCharArray();
+		
+		int i = 0;
+		
+		String ret = "";
+		boolean c = false, f = false;
+		while (i < chars.length) {
+			if (!c) {
+				if (chars[i] == ChatColor.COLOR_CHAR)
+					c = true;
+				i++;
+				continue;
+			} else {
+				ChatColor color = ChatColor.getByChar(chars[i]);
+				if (color != null)
+				{
+					if (!f) {
+						ret = color.toString();
+						f = true;
+					} else {
+						if (color.isColor())
+							ret = color.toString();
+						ret += color.toString();
+					}
+				}
+				c = false;
+				i++;
+				continue;
+			}
+		}
+		
+		return ret;
 	}
 }
 	

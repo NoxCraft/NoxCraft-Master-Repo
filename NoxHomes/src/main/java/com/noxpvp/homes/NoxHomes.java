@@ -8,19 +8,22 @@ import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
+import com.noxpvp.core.MasterReloader;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.commands.Command;
+import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
 import com.noxpvp.core.reloader.Reloader;
-import com.noxpvp.core.utils.PermissionHandler;
+import com.noxpvp.core.utils.StaticCleaner;
 import com.noxpvp.homes.commands.DeleteHomeCommand;
 import com.noxpvp.homes.commands.HomeAdminCommand;
 import com.noxpvp.homes.commands.HomeAdminImportCommand;
 import com.noxpvp.homes.commands.HomeCommand;
 import com.noxpvp.homes.commands.HomeListCommand;
 import com.noxpvp.homes.commands.SetHomeCommand;
+import com.noxpvp.homes.locale.HomeLocale;
 import com.noxpvp.homes.tp.BaseHome;
 import com.noxpvp.homes.tp.DefaultHome;
 import com.noxpvp.homes.tp.NamedHome;
@@ -52,14 +55,20 @@ public class NoxHomes extends NoxPlugin {
 	public static final String HOMES_NODE = "nox.homes";
 	private static NoxHomes instance;
 	
-	private HomeLimitManager limitManager;
-	private HomeManager homeManager;
-	
 	@Override
 	public void disable() {
 		saveConfig();
-		homeManager.save();
-		limitManager.save();
+		
+		getHomeManager().save();
+		getLimitsManager().save();
+		
+		String[] internals = { };
+		Class<?>[] classes = {
+				PlayerManager.class,
+				HomeLimitManager.class,
+		};
+		
+		new StaticCleaner(this, getClassLoader(), internals, classes).resetAll();
 		
 		setInstance(null);
 	}
@@ -84,15 +93,14 @@ public class NoxHomes extends NoxPlugin {
 		core = NoxCore.getInstance();
 		
 		commandExecs = new HashMap<String, Command>();
-		homeManager = new HomeManager(NoxCore.getInstance());
-		limitManager = new HomeLimitManager();
+		
+		getLimitsManager().load();
+		getHomeManager().load();
+		
 		dataL = new DataListener(this);
 		dataL.register();
 		
-		homeManager.load();
-		limitManager.load();
-		
-		Reloader r = new BaseReloader(core.getMasterReloader(), "NoxHomes") {
+		Reloader r = new BaseReloader(MasterReloader.getInstance(), "NoxHomes") {
 			public boolean reload() {
 				reloadConfig();
 				return true;
@@ -113,7 +121,7 @@ public class NoxHomes extends NoxPlugin {
 			}
 		});
 		
-		core.addReloader(r);
+		MasterReloader.getInstance().addModule(r);
 		registerAllCommands();
 		
 	}
@@ -122,9 +130,10 @@ public class NoxHomes extends NoxPlugin {
 		return core;
 	}
 	
-	public HomeManager getHomeManager()
+	public PlayerManager getHomeManager()
 	{
-		return homeManager;
+		return PlayerManager.getInstance();
+		
 	}
 
 	@Override
@@ -144,6 +153,7 @@ public class NoxHomes extends NoxPlugin {
 						new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "*"), "Allowed to set home of everything including others.", PermissionDefault.FALSE,
 								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, DefaultHome.PERM_NODE), "Allowed to set default home.", PermissionDefault.OP),
 								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, NamedHome.PERM_NODE), "Allowed to set named homes.", PermissionDefault.OP),
+								new NoxPermission(this, StringUtil.join(".", NoxHomes.HOMES_NODE, SetHomeCommand.PERM_NODE, "other-towns"), "Allows setting homes in other towns you don't belong to.", PermissionDefault.FALSE),
 								new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", "*"), "Allowed to set any type of other peoples homes.", PermissionDefault.FALSE,
 										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", DefaultHome.PERM_NODE), "Allowed to set other peoples default homes.", PermissionDefault.OP),
 										new NoxPermission(this, StringUtil.join(".", HOMES_NODE, SetHomeCommand.PERM_NODE, "others", NamedHome.PERM_NODE), "Allowed to set other peoples named homes.", PermissionDefault.OP)
@@ -203,28 +213,7 @@ public class NoxHomes extends NoxPlugin {
 	
 	@Override
 	public void localization() {
-		//Home List Locales
-		loadLocale("homes.list.own", "&3Your Homes&r: &e%1%");
-		loadLocale("homes.list.default", "&e%0%'s &3homes: &e%1%");
-
-		//home Command
-		loadLocale("homes.home.own", "&3You teleported to home: %1%");
-		loadLocale("homes.home.default", "&3You teleported to %0%'s home named &e%1%");
-		
-		//delhome
-		loadLocale("homes.delhome.own", "&cRemoved your home:&e%1%");
-		loadLocale("homes.delhome.default", "&cDeleted &e%0%'s&c home named &e%1%");
-		
-		//Sethome
-		loadLocale("homes.sethome.own", "&aSet new home named &e%1%&a at &6%2%");
-		loadLocale("homes.sethome.default", "&aSet new home for &e%0%&2 &anamed: &e%1%&a at &6%2%");
-		
-		//Admin Commands
-		//// NEED SOME LOCALES
-		
-		//Restrictors
-		loadLocale("homes.warmup", "&3Warmup started. &cDo not move!"); //%0% is the time to warmup in seconds
-		loadLocale("homes.cooldown", "&4Your too tired to get home.&e Wait another &4%0%&e seconds");
+		loadLocales(HomeLocale.class);
 	}
 
 	private void registerAllCommands() {
@@ -238,7 +227,7 @@ public class NoxHomes extends NoxPlugin {
 	}
 
 	public HomeLimitManager getLimitsManager() {
-		return limitManager;
+		return HomeLimitManager.getInstance(this);
 	}
 
 	@Override

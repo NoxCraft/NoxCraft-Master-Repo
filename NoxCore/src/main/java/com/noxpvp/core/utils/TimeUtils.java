@@ -94,6 +94,33 @@ public final class TimeUtils {
 		}
 	}
 	
+	public static String getReadableSecTime(long sec)
+	{
+		
+		int seconds = (int) (sec % 60);
+		sec /= 60;
+		
+		int minutes = (int) (sec % 60);
+		sec /= 60;
+		
+		int hours = (int) (sec % 24);
+		sec /= 24;
+		
+		int days = (int) (sec % Integer.MAX_VALUE);
+		
+		StringBuilder sb = new StringBuilder();
+		if (days != 0)
+			sb.append("D: ").append(days);
+		if (hours != 0)
+			sb.append(" H: ").append(hours);
+		if (minutes != 0)
+			sb.append(" M: ").append(minutes);
+		if (seconds != 0)
+			sb.append(" S: ").append(seconds);
+		
+		return sb.toString();
+	}
+	
 	public static String getReadableMillisTime(long millis)
 	{
 		int ms = (int) (millis % 1000);
@@ -112,15 +139,15 @@ public final class TimeUtils {
 		
 		StringBuilder sb = new StringBuilder();
 		if (days != 0)
-			sb.append(days).append("d ");
+			sb.append(days).append("D ");
 		if (hours != 0)
-			sb.append(hours).append("h ");
+			sb.append(hours).append("H ");
 		if (minutes != 0)
-			sb.append(minutes).append("m ");
+			sb.append(minutes).append("M ");
 		if (seconds != 0)
-			sb.append(seconds).append("s ");
+			sb.append(seconds).append("S ");
 		if (ms != 0)
-			sb.append(ms).append("ms ");
+			sb.append(ms).append("MS ");
 		
 		return sb.toString();
 	}

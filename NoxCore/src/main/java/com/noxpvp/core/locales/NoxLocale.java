@@ -3,8 +3,9 @@ package com.noxpvp.core.locales;
 import org.bukkit.command.CommandSender;
 
 import com.bergerkiller.bukkit.common.localization.LocalizationEnum;
+import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.NoxPlugin;
-import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public abstract class NoxLocale extends LocalizationEnum {
 
@@ -26,6 +27,12 @@ public abstract class NoxLocale extends LocalizationEnum {
 	
 	@Override
 	public void message(CommandSender sender, String... args) {
-		MessageUtil.sendMessage(sender, getSafe(args).split("\n"));
+		if (!LogicUtil.nullOrEmpty(getSafe(args))) //Ignore blank messages.
+			MessageUtil.sendMessage(sender, getSafe(args).split("(/n|\n)"));
+	}
+	
+	public boolean isEmpty(String... args) {
+		String m = get(args);
+		return (m.isEmpty() || m.length()==0);
 	}
 }

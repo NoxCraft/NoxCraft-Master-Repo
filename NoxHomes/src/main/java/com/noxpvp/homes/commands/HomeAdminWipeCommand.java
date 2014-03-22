@@ -9,15 +9,15 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.utils.MessageUtil;
-import com.noxpvp.homes.HomeManager;
+import com.noxpvp.core.utils.gui.MessageUtil;
+import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
 
 public class HomeAdminWipeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "wipehomes";
 	public static final String PERM_NODE = "wipe.homes";
 	private static final Random r = new Random();
-	private HomeManager manager;
+	private PlayerManager manager;
 	private NoxHomes plugin;
 	
 	private String key;
@@ -33,7 +33,7 @@ public class HomeAdminWipeCommand extends BaseCommand {
 		manager = plugin.getHomeManager();
 	}
 	
-	public boolean execute(CommandContext context) {
+	public CommandResult execute(CommandContext context) {
 		String[] args = context.getArguments();
 		CommandSender sender = context.getSender();
 		
@@ -41,8 +41,9 @@ public class HomeAdminWipeCommand extends BaseCommand {
 		if (args.length < 1)
 		{
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Must Specify Safety Key.");
-			return false;
+			return new CommandResult(this, false);
 		}
+		
 		String k = null;
 		if (args.length > 0) 
 		{
@@ -55,7 +56,7 @@ public class HomeAdminWipeCommand extends BaseCommand {
 				wiped = true;
 			} else {
 				MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Incorrect safety key. Key is not \"" + k + "\"");
-				return true;
+				return new CommandResult(this, false);
 			}
 		}
 		
@@ -68,7 +69,7 @@ public class HomeAdminWipeCommand extends BaseCommand {
 		} else {
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Could not wipe data.");
 		}
-		return true;
+		return new CommandResult(this, true);
 	}
 	
 	private String getNextKey() {

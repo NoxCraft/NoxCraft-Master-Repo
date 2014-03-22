@@ -8,19 +8,22 @@
 		<module>NoxCore</module>
 		<module>NoxHomes</module>
 		<module>NoxMMO</module>
-		
 	</modules>
 	<repositories>
 		<repository>
-        	<id>kitteh-repo</id>
-        	<url>http://repo.kitteh.org/content/repositories/public/</url>
-        <releases>
-           <enabled>true</enabled>
-        </releases>
-        <snapshots>
-          <enabled>false</enabled>
-        </snapshots>        
-     </repository>
+			<id>kitteh-repo</id>
+			<url>http://repo.kitteh.org/content/repositories/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>Spiggot</id>
+			<url>http://repo.md-5.net/content/groups/public/</url>
+		</repository>
 		<repository>
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public/</url>
@@ -45,9 +48,22 @@
 				<enabled>true</enabled>
 			</releases>
 		</repository>
+		<repository>
+			<id>sk89q</id>
+			<url>http://maven.sk89q.com/repo/</url>
+		</repository>
+		<repository>
+			<id>hawk-repo</id>
+			<url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
+		</repository>
 	</repositories>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>com.dsh105</groupId>
+				<artifactId>HoloAPI</artifactId>
+				<version>1.0.7-SNAPSHOT</version>
+			</dependency>
 			<dependency>
 				<groupId>org.bukkit</groupId>
 				<artifactId>bukkit</artifactId>
@@ -89,6 +105,18 @@
 				<version>2.7.1</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.palmergames.towny</groupId>
+				<artifactId>Towny</artifactId>
+				<version>0.84.0.9</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.sk89q</groupId>
+				<artifactId>worldguard</artifactId>
+				<version>5.8.1-SNAPSHOT</version>
+				<scope>provided</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -115,6 +143,15 @@
 			<artifactId>BarAPI</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.sk89q</groupId>
+			<artifactId>worldguard</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.palmergames.towny</groupId>
+			<artifactId>Towny</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -137,10 +174,4 @@
 We add all sorts of features. Specifically coded for our server in mind.
 </description>
 	<version>1.0</version>
-	<properties>
-		<NoxHomesVersion>${MasterVersion}</NoxHomesVersion>
-		<MasterVersion>0.1.11 - Beta</MasterVersion>
-		<NoxCoreVersion>${MasterVersion}</NoxCoreVersion>
-		<NoxMMOVersion>0.1 - SNAPSHOT</NoxMMOVersion>
-	</properties>
 </project>

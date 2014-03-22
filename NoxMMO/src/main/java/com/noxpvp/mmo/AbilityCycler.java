@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.noxpvp.core.data.Cycler;
 import com.noxpvp.core.data.NoxPlayerAdapter;
-import com.noxpvp.core.utils.Cycler;
 import com.noxpvp.mmo.abilities.Ability;
 
 public class AbilityCycler extends Cycler<Ability> {

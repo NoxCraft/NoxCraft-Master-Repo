@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 public interface Command {
 	public void displayHelp(CommandSender sender);
 	
-	public boolean executeCommand(CommandContext context) throws NoPermissionException;
+	public CommandResult executeCommand(CommandContext context) throws NoPermissionException;
 	
 	public String[] getFlags();
 	
@@ -24,4 +24,16 @@ public interface Command {
 	public boolean isPlayerOnly();
 
 	public boolean isRoot();
+	
+	public static class CommandResult {
+		public final boolean success;
+		public final BaseCommand executer;
+		public final String[] extraMessages;
+		
+		public CommandResult(BaseCommand executer, boolean success, String... msgs) {
+			this.executer = executer;
+			this.success = success;
+			this.extraMessages = msgs;
+		}
+	}
 }

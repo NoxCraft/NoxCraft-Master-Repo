@@ -8,11 +8,13 @@ import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.utils.MessageUtil;
-import com.noxpvp.core.utils.PermissionHandler;
-import com.noxpvp.homes.HomeManager;
+import com.noxpvp.core.utils.TownyUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
+import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
+import com.noxpvp.homes.locale.HomeLocale;
 import com.noxpvp.homes.tp.BaseHome;
 import com.noxpvp.homes.tp.DefaultHome;
 import com.noxpvp.homes.tp.NamedHome;
@@ -20,7 +22,7 @@ import com.noxpvp.homes.tp.NamedHome;
 public class HomeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "home";
 	public static final String PERM_NODE = "home";
-	private HomeManager manager;
+	private PlayerManager manager;
 	private NoxHomes plugin;
 	private final PermissionHandler permHandler;
 	
@@ -32,17 +34,17 @@ public class HomeCommand extends BaseCommand {
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
-	public boolean execute(CommandContext context) {
+	public CommandResult execute(CommandContext context) {
 		
 		if (!context.isPlayer()) {
 			MessageUtil.sendLocale(context.getSender(), GlobalLocale.CONSOLE_ONLYPLAYER);
-			return true;
+			return new CommandResult(this, true);
 		}
 		
-		Player sender = context.getPlayer();
-		
 		if (context.hasFlag("h") || context.hasFlag("help"))
-			return false; //Its caught anyway why repeat display help code...
+			return new CommandResult(this, false); //Its caught anyway why repeat display help code...
+		
+		Player sender = context.getPlayer();
 
 		String player = null, homeName = null;
 
@@ -65,12 +67,20 @@ public class HomeCommand extends BaseCommand {
 		BaseHome home = manager.getHome(player, homeName);
 		if (home == null) 
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "The home \"" + (homeName == null? "default": homeName) + "\" does not exist");
-		else if (home.tryTeleport(sender, permHandler.hasPermission(sender, perm + ".multi")))
+		else if (home.tryTeleport(sender, permHandler.hasPermission(sender, perm + ".multi"))) {
 			MessageUtil.sendLocale(plugin, sender, "homes.home"+ (own?".own":""), player, (homeName == null? "default": homeName));
-		else
+			if (home.isOwner(sender)) {
+				String perm2 = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, "other-towns");
+				if (TownyUtil.isClaimedLand(home.getLocation()) && !TownyUtil.isOwnLand(sender, home.getLocation()) && permHandler.hasPermission(sender, perm2)) {
+				
+					MessageUtil.sendLocale(sender, HomeLocale.DELHOME_INVALID, HomeLocale.BAD_LOCATION.get("Not part of wild and not your own town."));
+					manager.removeHome(home);
+				}
+			}
+		} else
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Could not teleport home.");
 		
-		return true;
+		return new CommandResult(this, true);
 	}
 
 	public String[] getHelp() {

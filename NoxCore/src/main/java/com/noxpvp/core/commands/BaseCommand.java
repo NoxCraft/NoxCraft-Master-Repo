@@ -9,7 +9,7 @@ import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.collections.StringMap;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public abstract class BaseCommand implements Command {
 	private final boolean isPlayerOnly;
@@ -39,42 +39,58 @@ public abstract class BaseCommand implements Command {
 		this(null, name, isPlayerOnly);
 	}
 
-	public final boolean containsSubComman(String name)
+	public final boolean containsSubCommand(String name)
 	{
 		return subCommands.containsKeyLower(name);
 	}
 
 	public final boolean containsSubCommand(BaseCommand command) {
-		return containsSubComman(command.getName());
+		return containsSubCommand(command.getName());
 	}
 	
 	public final void displayHelp(CommandSender sender) {
 		MessageBuilder mb = new MessageBuilder();
 		
 		mb.setSeparator("\n");
-		mb.newLine();
-		for (String line : GlobalLocale.HELP_HEADER.get(getPlugin().getName(), name).split("\n"))
-			mb.append(line);
-		for (String line : getHelp())
-			mb.append(line);
+		
+		if (!getName().equals(""))
+			mb.newLine().append(GlobalLocale.COMMAND_HELP_HEADER.get(getPlugin().getName(), getName()));
+		else
+			mb.newLine().append(GlobalLocale.HELP_HEADER.get(getPlugin().getName()));
+
+		if (getHelp() != null)
+			for (String line : getHelp())
+				mb.append(line);
 		
 		MessageUtil.sendMessage(sender, mb.lines());
 	}
 
-	public abstract boolean execute(CommandContext context) throws NoPermissionException;
+	public abstract CommandResult execute(CommandContext context) throws NoPermissionException;
 	
-	public final boolean executeCommand(CommandContext context) throws NoPermissionException {
+	public final CommandResult executeCommand(CommandContext context) throws NoPermissionException {
 		if (!hasSubCommands() || context.getArgumentCount() == 0)
 			return execute(context);
 		
 		String[] args = context.getArguments();
 		
 		String nextArg = context.getArgument(0);
-		CommandContext newContext = new CommandContext(context.getSender(), context.getFlags(), Arrays.copyOfRange(args, 1, args.length-1));
+		CommandContext newContext = null;
+		
+		if (context.getArgumentCount() > 1)
+			newContext = new CommandContext(context.getSender(), context.getFlags(), Arrays.copyOfRange(args, 1, args.length -1));
+		else
+			newContext = new CommandContext(context.getSender(), context.getFlags());
 		
 		BaseCommand subCMD = getSubCommand(nextArg);
-		if (subCMD != null)
+		
+		if (subCMD != null && newContext != null) {
+			if (subCMD.isPlayerOnly() && !context.isPlayer()) {
+				GlobalLocale.CONSOLE_ONLYPLAYER.message(context.getSender());
+				return new CommandResult(this, true);
+			}
 			return subCMD.executeCommand(newContext);
+		} 
+			
 		return execute(context);
 	}
 	
@@ -113,7 +129,7 @@ public abstract class BaseCommand implements Command {
 	
 	public final BaseCommand getSubCommand(String name)
 	{
-		if (containsSubComman(name))
+		if (containsSubCommand(name))
 			return subCommands.getLower(name);
 		return null;
 	}

@@ -1,4 +1,4 @@
-package com.noxpvp.core.utils;
+package com.noxpvp.core.internal;
 
 import java.util.logging.Level;
 

@@ -16,6 +16,7 @@ import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.events.ChatPingEvent;
 import com.noxpvp.core.locales.CoreLocale;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public class ChatPingListener extends NoxListener<NoxCore> {
 	
@@ -83,7 +84,7 @@ public class ChatPingListener extends NoxListener<NoxCore> {
 		List<String> list = new ArrayList<String>();
 		List<String> newNames = new ArrayList<String>();
 		StringBuilder sb = new StringBuilder(new String(msg));
-		String lastCol = ChatColor.getLastColors(sb.toString());
+		String lastCol = MessageUtil.getLastColors(sb.toString());
 		
 		final String reset = ChatColor.RESET + lastCol;
 		

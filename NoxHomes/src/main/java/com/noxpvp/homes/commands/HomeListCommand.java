@@ -11,10 +11,10 @@ import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.utils.MessageUtil;
-import com.noxpvp.core.utils.PermissionHandler;
-import com.noxpvp.homes.HomeManager;
+import com.noxpvp.core.utils.gui.MessageUtil;
+import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.tp.BaseHome;
 
@@ -23,7 +23,7 @@ public class HomeListCommand extends BaseCommand {
 	private final PermissionHandler permHandler;
 	private NoxHomes plugin;
 	public static final String LIST_PERM_NODE = "list";
-	private HomeManager manager;
+	private PlayerManager manager;
 	
 	public HomeListCommand()
 	{
@@ -33,9 +33,9 @@ public class HomeListCommand extends BaseCommand {
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
-	public boolean execute(CommandContext context) {
+	public CommandResult execute(CommandContext context) {
 		if (context.hasFlag("h") || context.hasFlag("help"))
-			return false;
+			return new CommandResult(this, false);
 		
 		CommandSender sender = context.getSender();
 		
@@ -44,7 +44,7 @@ public class HomeListCommand extends BaseCommand {
 			manager = plugin.getHomeManager();
 			if (manager == null);
 			{
-				return true;
+				return new CommandResult(this, true);
 			}
 		}
 		
@@ -59,10 +59,10 @@ public class HomeListCommand extends BaseCommand {
 		
 		if ((player == null || player.length() == 0) && context.isPlayer()) {
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Player match failed. Player was " + ((player == null)? "null": "blank"));
-			return true;
+			return new CommandResult(this, true);
 		} else if ((player == null || player.length() == 0)) {
 			MessageUtil.sendLocale(sender, GlobalLocale.CONSOLE_NEEDPLAYER, "Use the -p \"PlayerName\" flag");
-			return true;
+			return new CommandResult(this, true);
 		}
 		
 		boolean own = false;
@@ -92,7 +92,7 @@ public class HomeListCommand extends BaseCommand {
 			player = "own";
 		
 		MessageUtil.sendLocale(plugin, sender, "homes.list", player, homelist);//TODO: Prettify large lists.
-		return true;
+		return new CommandResult(this, true);
 	}
 	
 	public String[] getHelp()

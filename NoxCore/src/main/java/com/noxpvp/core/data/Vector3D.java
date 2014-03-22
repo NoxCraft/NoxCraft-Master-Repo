@@ -1,14 +1,15 @@
-package com.noxpvp.core.utils;
+package com.noxpvp.core.data;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
  
 public class Vector3D {
 	// Use protected members, like Bukkit
+	
 	public final double x;
- 
 	public final double y;
 	public final double z;
+	
 	/**
 	 * Construct an immutable 3D vector.
 	 */
