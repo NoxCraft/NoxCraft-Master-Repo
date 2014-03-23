@@ -5,6 +5,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.bukkit.Bukkit;
@@ -24,14 +25,11 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.proxies.ProxyBase;
-import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.VaultAdapter;
-import com.noxpvp.core.events.PlayerDataLoadEvent;
-import com.noxpvp.core.events.PlayerDataSaveEvent;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.gui.*;
@@ -45,7 +43,7 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	private WeakHashMap<String, CoolDown> cd_cache;
 	private List<CoolDown> cds;
 	private PlayerManager manager;
-	private final String name;
+	private String name;
 	
 	private final PermissionHandler permHandler;
 	private ConfigurationNode persistant_data = null;
@@ -57,6 +55,7 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	private ConfigurationNode temp_data = new ConfigurationNode();
 	
 	private boolean isFirstLoad = false;
+	private UUID uid;
 	
 	public NoxPlayer(NoxPlayer player)
 	{
@@ -85,13 +84,46 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
 		manager = mn;
-		this.persistant_data = mn.getPlayerNode(name);
 		this.name = name;
 		
 		if (getPlayer() != null){
 			this.coreBar = new CoreBar(core, getPlayer());
 			new CoreBoard(core, getPlayer());
 		}
+		this.persistant_data = mn.getPlayerNode(this);
+	}
+	
+	public NoxPlayer(PlayerManager mn, UUID uid) {
+		super(null);
+		NoxCore core = mn.getPlugin();
+		permHandler = core.getPermissionHandler();
+		cds = new ArrayList<CoolDown>();
+		cd_cache = new WeakHashMap<String, CoolDown>();
+		manager = mn;
+		this.name = null;
+		this.uid = uid;
+		
+		if (getPlayer() != null){
+			this.coreBar = new CoreBar(core, getPlayer());
+			new CoreBoard(core, getPlayer());
+		}
+		this.persistant_data = mn.getPlayerNode(this);
+	}
+	
+	public NoxPlayer(PlayerManager mn, String name, String uid) {
+		this(mn, name);
+		this.uid = UUID.fromString(uid);
+	}
+	
+	public UUID getUUID() {
+		return uid;
+	}
+	
+	public String getUID() {
+		if (getUUID() != null)
+			return getUUID().toString();
+		else
+			return null;
 	}
 	
 	public boolean hasFirstLoaded() {
@@ -304,17 +336,30 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	public Double getMoney(String worldName) { return VaultAdapter.economy.getBalance(getPlayerName(), worldName); }
 	
 	public String getName(){
-		return name;
+		return getPlayerName();
 	}
 	public NoxPlayer getNoxPlayer() { return this; }
 	
-	public OfflinePlayer getOfflinePlayer() { return Bukkit.getOfflinePlayer(getPlayerName());}
+	public OfflinePlayer getOfflinePlayer() { 
+		if (getPlayerName() != null)
+			return Bukkit.getOfflinePlayer(getPlayerName());
+		return getProxyBase();
+	}
 	
 	public final ConfigurationNode getPersistantData() { return persistant_data;}
 	
-	public Player getPlayer() { return Bukkit.getPlayerExact(getPlayerName()); }
+	public Player getPlayer() {
+		if (getPlayerName() != null)
+			return Bukkit.getPlayerExact(getPlayerName());
+		else
+			return Bukkit.getPlayerExact(getProxyBase().getName());
+	}
 	
-	public final String getPlayerName(){ return name;}
+	public final String getPlayerName(){
+		if (name == null && getProxyBase() != null)
+			setName(getProxyBase().getName());
+		return name;
+	}
 	
 	public final ConfigurationNode getTempData() { return temp_data; }
 	
@@ -371,7 +416,7 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	
 	public synchronized void load(boolean overwrite) {
 		if (persistant_data == null)
-			persistant_data = manager.getPlayerNode(name);
+			persistant_data = manager.getPlayerNode(this);
 		
 		if (persistant_data instanceof FileConfiguration)
 		{
@@ -389,8 +434,13 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		if (getFirstJoin() == 0)
 			setFirstJoin();
 		
+		setName(persistant_data.get("last.ign", String.class));
+		
 		rebuild_cache();
-		/*PlayerDataLoadEvent e = */CommonUtil.callEvent(new PlayerDataLoadEvent(this, false));
+	}
+
+	public final void setName(String name) {
+		this.name = name;
 	}
 
 	public void rebuild_cache() {
@@ -409,17 +459,11 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	}
 
 	public synchronized void save() {
-		save(true);
-	}
-	
-	public synchronized void save(boolean throwEvent)
-	{
 		if (!isFirstLoad)
 			load(false);
 		
-		if (throwEvent)
-			CommonUtil.callEvent(new PlayerDataSaveEvent(this ,false));
 		persistant_data.set("cooldowns", getCoolDowns());
+		persistant_data.set("last.ign", getName());
 		
 		if (persistant_data instanceof FileConfiguration)
 		{
@@ -428,7 +472,18 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		} else {
 			manager.save();
 		}
-			
+	}
+	
+	public final void updateUID() {
+		if (getName() != null)
+			if (isOnline())
+				this.uid = getPlayer().getUniqueId();
+	}
+	
+	@Deprecated
+	public synchronized void save(boolean throwEvent)
+	{
+		save();
 	}
 
 	public void saveLastLocation(){

@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.permissions.PermissionDefault;
 
+import com.bergerkiller.bukkit.common.Common;
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.MasterReloader;
@@ -55,9 +56,6 @@ public class NoxHomes extends NoxPlugin {
 	public static final String HOMES_NODE = "nox.homes";
 	private static NoxHomes instance;
 	
-	private HomeLimitManager limitManager;
-	private PlayerManager playerManager;
-	
 	@Override
 	public void disable() {
 		saveConfig();
@@ -90,6 +88,7 @@ public class NoxHomes extends NoxPlugin {
 			return;
 		}
 		
+		Common.loadClasses("com.noxpvp.homes.locale.HomeLocale");
 		permHandler = new PermissionHandler(this);
 		
 		instance = this;
@@ -97,8 +96,8 @@ public class NoxHomes extends NoxPlugin {
 		
 		commandExecs = new HashMap<String, Command>();
 		
-		getLimitsManager();
-		getHomeManager();
+		getLimitsManager().load();
+		getHomeManager().load();
 		
 		dataL = new DataListener(this);
 		dataL.register();
@@ -135,13 +134,8 @@ public class NoxHomes extends NoxPlugin {
 	
 	public PlayerManager getHomeManager()
 	{
-		PlayerManager c = PlayerManager.getInstance();
-		if (playerManager == null)
-			playerManager = c;
-		else if (playerManager != c)
-			playerManager = c;
+		return PlayerManager.getInstance();
 		
-		return playerManager;
 	}
 
 	@Override
@@ -235,13 +229,7 @@ public class NoxHomes extends NoxPlugin {
 	}
 
 	public HomeLimitManager getLimitsManager() {
-		HomeLimitManager c = HomeLimitManager.getInstance(this);
-		if (limitManager == null)
-			limitManager = c;
-		else if (limitManager != c)
-			limitManager = c;
-		
-		return limitManager;
+		return HomeLimitManager.getInstance(this);
 	}
 
 	@Override

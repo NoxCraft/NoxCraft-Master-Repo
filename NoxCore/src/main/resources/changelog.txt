@@ -31,10 +31,10 @@
 		This will put a step forward to being able to use bukkits /reload command. 
 			Other plugins are not very compatible with it at moment. So this won't work for a while.
 	- Added Towny Integration and utils.
+	- Added effects stuff.
+	- Added static effects utils.
+	- Added top secret gui effect. (Later to come through NoxMMO)
+	- Much more but lost track.
 	=== Features ===
 	- Fixed chat format for ping system.
 	- Made save and load functions on NoxPlayer synchronized
-	- Added more customized Vanilla death messages.
-		Uses the vanilla data. Then replaces it with special stuff. While maintaining the vanilla feel.
-	- 
-	

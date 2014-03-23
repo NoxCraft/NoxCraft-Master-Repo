@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.FileUtil;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
@@ -17,9 +19,6 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.events.PlayerDataUnloadEvent;
-import com.noxpvp.core.gui.CoreBar;
-import com.noxpvp.core.gui.CoreBoard;
-import com.noxpvp.core.gui.CoreBox;
 
 public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persistant {
 
@@ -83,14 +82,28 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	}
 	
 	/**
-	 * Gets the player file.
+	 * Gets the player file. <br><br>
+	 * 
+	 * Will not auto move files that are not updated for 1.8 UID.
+	 *
+	 * New files will grab UID version of file.
 	 *
 	 * @see #getPlayerFile(String)
 	 * @param noxPlayer the NoxPlayer object
 	 * @return the player file
 	 */
 	public File getPlayerFile(NoxPlayer noxPlayer) {
-		return getPlayerFile(noxPlayer.getName());
+		File old = getPlayerFile(noxPlayer.getName());
+		File supposed = getPlayerFile("NEED-UID", noxPlayer.getName());
+		if (old.exists() && !supposed.exists())
+			if (FileUtil.copy(old, supposed))
+				if (!old.delete())
+					old.deleteOnExit(); //Attempt to delete on exit.
+		
+		if (noxPlayer.getUUID() == null)
+			return supposed;
+		else
+			return getPlayerFile(noxPlayer.getUUID().toString());
 	}
 	
 	/**
@@ -99,27 +112,45 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 * @param name of the player
 	 * @return the player file
 	 */
-	public File getPlayerFile(String name)
+	public File getPlayerFile(String... path)
 	{
-		return NoxCore.getInstance().getDataFile("playerdata", name);
+		String[] oPath = path;
+		path = new String[oPath.length+1];
+		path[0] = "playerdata";
+		
+		//Rough Copy.
+		for (int i = 0; i < oPath.length; i++)
+			path[i+1] = oPath[i];
+		
+		return NoxCore.getInstance().getDataFile(path);
 	}
 
 	/**
 	 * Gets the player node.
 	 * <b>INTERNAL METHOD</b> Best not to use this!
+	 * @param isUID 
 	 * @param name the name
 	 * @return the player node
 	 */
-	public ConfigurationNode getPlayerNode(String name)
+	public ConfigurationNode getPlayerNode(NoxPlayer player)
 	{
 		if (isMultiFile())
-			return new FileConfiguration(NoxCore.getInstance(), "playerdata"+File.separatorChar+name+".yml");
+			return new FileConfiguration(getPlayerFile(player));
 		else if (config != null)
-			return config.getNode("players").getNode(name);
+			if (player.getUUID() == null && player.getName() != null)
+				return config.getNode("players").getNode(player.getName());
+			else if (player.getUUID() != null)
+				return config.getNode("players").getNode(player.getUUID().toString());
+			else
+				return null;
 		else
 			return null;
 	}
 	
+	private File getPlayerFile(boolean isUID, String name) {
+		return null;
+	}
+
 	public NoxCore getPlugin() { return plugin; }	
 	
 //////// HELPER FUNCTIONS

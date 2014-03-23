@@ -1,6 +1,7 @@
 package com.noxpvp.core.data;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -43,8 +44,16 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 		
 	}
 	
+	public final void setName(String name) {
+		getProxyBase().setName(name);
+	}
+	
+	public final void updateUID() {
+		getProxyBase().updateUID();
+	}
+	
 	public final NoxPlayer getNoxPlayer() {
-		return getNoxPlayer(true);
+		return getProxyBase();
 	}
 	
 	public boolean hasFirstLoaded() {
@@ -57,11 +66,11 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	}
 	
 	public final ConfigurationNode getPersistantData() {
-		return getNoxPlayer(false).getPersistantData();
+		return getProxyBase().getPersistantData();
 	}
 	
 	public final ConfigurationNode getTempData() {
-		return getNoxPlayer(false).getTempData();
+		return getProxyBase().getTempData();
 	}
 	
 	public final String getPlayerName() { return playerName; }
@@ -216,11 +225,28 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	public void removeCooldDown(String name) {
 		getProxyBase().removeCooldDown(name);
 	}
-
-	public void save() {
+	
+	public final void superSave() {
 		getProxyBase().save();
 	}
+	
+	public final void superLoad() {
+		getProxyBase().load();
+	}
+	
+	public final UUID getUUID() {
+		return getProxyBase().getUUID();
+	}
+	
+	public final String getUID() {
+		return getProxyBase().getUID();
+	}
+	
+	public void save() {
+		superSave();
+	}
 
+	@Deprecated
 	public void save(boolean throwEvent) {
 		getProxyBase().save(throwEvent);
 	}

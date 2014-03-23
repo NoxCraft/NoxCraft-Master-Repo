@@ -45,8 +45,11 @@ public class TownyUtil {
 	}
 	
 	public static boolean isTownyEnabled() {
-		if (towny == null)
-			return false;
+		if (towny == null) {
+			setup();
+			if (towny == null)
+				return false;
+		}
 		return towny.isEnabled();
 	}
 	

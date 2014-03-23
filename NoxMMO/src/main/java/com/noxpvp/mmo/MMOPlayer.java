@@ -9,13 +9,11 @@ import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
-import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.EntityUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
-import com.noxpvp.core.events.PlayerDataSaveEvent;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.abilities.PlayerAbility;
 import com.noxpvp.mmo.classes.ExperienceType;
@@ -116,6 +114,8 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 	
 	public void load() {
+		superLoad();
+		
 		ConfigurationNode node = getPersistantData();
 		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));
 		setSecondaryClass(node.get(SECONDARY_CLASS_NODE, ""));
@@ -150,6 +150,6 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			node.set(TARGET_NODE + "uuid", getTarget().getUniqueId().toString());
 		}
 		
-		CommonUtil.callEvent(new PlayerDataSaveEvent(this, true));
+		superSave();
 	}
 }

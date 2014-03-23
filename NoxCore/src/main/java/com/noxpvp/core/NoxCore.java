@@ -39,7 +39,6 @@ import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.gui.CoolDown;
 import com.noxpvp.core.listeners.ChatPingListener;
 import com.noxpvp.core.listeners.ChestBlockListener;
-import com.noxpvp.core.listeners.DataListener;
 import com.noxpvp.core.listeners.DeathListener;
 import com.noxpvp.core.listeners.LoginListener;
 import com.noxpvp.core.listeners.OnLogoutSaveListener;
@@ -47,7 +46,6 @@ import com.noxpvp.core.listeners.ServerPingListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.locales.CoreLocale;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.logging.PVELog;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
@@ -65,10 +63,8 @@ public class NoxCore extends NoxPlugin {
 	private DeathListener deathListener;
 	private FileConfiguration globalLocales;
 	private LoginListener loginListener;
-	private DataListener dataListener;
 	private ServerPingListener pingListener;
 	
-	private PVELog pveLogger;
 	
 	private PermissionHandler permHandler;
 	private transient WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>> permission_cache = new WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>>();
@@ -229,23 +225,19 @@ public class NoxCore extends NoxPlugin {
 		deathListener = new DeathListener();
 		loginListener = new LoginListener();
 		saveListener = new OnLogoutSaveListener(this); 
-		dataListener = new DataListener();
 		pingListener = new ServerPingListener(this);
 		
-		pveLogger = new PVELog(this);
 		
 		chatPingListener.register();
 		
 		if (CommonUtil.isPluginEnabled("Votifier")) //Fixes console error message.
 			voteListener.register();
 		
-		dataListener.register();
 		saveListener.register();
 		deathListener.register();
 		loginListener.register();
 		pingListener.register();
 		
-//		pveLogger.register();
 		
 		CommonUtil.queueListenerLast(loginListener, PlayerLoginEvent.class);
 		VaultAdapter.load();
@@ -511,7 +503,7 @@ public class NoxCore extends NoxPlugin {
 		loadLocales(CoreLocale.class);
 		for (String group : VaultAdapter.GroupUtils.getGroupList())
 		{
-			loadLocale(CoreLocale.GROUP_TAG_PREFIX.getName() + "." + group, "coaster-sucks"+group);
+			loadLocale(CoreLocale.GROUP_TAG_PREFIX.getName() + "." + group, group);
 			loadLocale(CoreLocale.GROUP_TAG_SUFFIX.getName() + "." +  group, "");
 		}
 	}
@@ -549,6 +541,10 @@ public class NoxCore extends NoxPlugin {
 	@Override
 	public void reloadConfig() {
 		getCoreConfig().load();
+		
+		loginListener.unregister();
+		loginListener = new LoginListener(this);
+		loginListener.register();
 		
 		pingListener.unregister();
 		pingListener = new ServerPingListener(this);
@@ -603,7 +599,6 @@ public class NoxCore extends NoxPlugin {
 		config.set("custom.events.chestblocked.isRemovingOnInteract", ChestBlockListener.isRemovingOnInteract);
 		config.set("custom.events.chestblocked.usePlaceEvent", ChestBlockListener.usePlaceEvent);
 		config.set("custom.events.chestblocked.useFormEvent", ChestBlockListener.useFormEvent);
-		
 		config.save();
 	}
 

@@ -14,6 +14,7 @@ import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
+import com.noxpvp.homes.HomesPlayer;
 import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
 import com.noxpvp.homes.locale.HomeLocale;
@@ -62,8 +63,27 @@ public class SetHomeCommand extends BaseCommand {
 		{
 			Location loc = sender.getLocation();
 			String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, "other-towns");
-			if (TownyUtil.isClaimedLand(loc) && !TownyUtil.isOwnLand(sender, loc) && permHandler.hasPermission(sender, perm))
+			if (TownyUtil.isClaimedLand(loc) && !TownyUtil.isOwnLand(sender, loc) && !permHandler.hasPermission(sender, perm))
 				return new CommandResult(this, true, HomeLocale.BAD_LOCATION.get("You are not allowed to set home in other towns."));
+			else
+			{
+				String t = "";
+				if (TownyUtil.isClaimedLand(loc))
+					t = "land is claimed";
+				else
+					t = "land not claimed";
+				
+				if (TownyUtil.isOwnLand(sender, loc))
+					t = "Own land.";
+				else
+					t = "not Own Land.";
+				
+				if (permHandler.hasPermission(sender, perm))
+					t = "had bypass perm";
+				else
+					t = " what??";
+				t = "failed";
+			}
 		}
 		
 		String player = null;
@@ -96,27 +116,30 @@ public class SetHomeCommand extends BaseCommand {
 		if (newHome instanceof DefaultHome)
 			homeName = DefaultHome.PERM_NODE;
 		boolean good = false;
+		
+		HomesPlayer hPlayer = PlayerManager.getInstance().getPlayer(player);
+		
 		if (own)
 		{
-			if (plugin.getLimitsManager().canAddHome(player))
+			if (plugin.getLimitsManager().canAddHome(hPlayer))
 			{
 				good = true;
 			} else {
-				if ( manager.getHome(player, homeName) != null) {
-					good = true;
-					manager.removeHome(plugin.getHomeManager().getHome(player, homeName));
-				} else {
-					MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "You already " + plugin.getHomeManager().getHomes(player).size() + "/"+ plugin.getLimitsManager().getLimit(player) + " of the maximum amount of homes allowed.");
-					return new CommandResult(this, true);
-				}
+				MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "You already " + plugin.getHomeManager().getHomes(player).size() + "/"+ plugin.getLimitsManager().getLimit(player) + " of the maximum amount of homes allowed.");
+				return new CommandResult(this, true);
 			}
 		}
 		else
 			good = true;
 		
+		if ( manager.getHome(hPlayer, homeName) != null) {
+			good = true;
+			hPlayer.removeHome(plugin.getHomeManager().getHome(player, homeName));
+		}
+		
 		if (good) {
-			manager.addHome(newHome);
-			success = manager.getHome(player, homeName) != null;
+			hPlayer.addHome(newHome);
+			success = manager.getHome(hPlayer, homeName) != null;
 		} else
 			success = false;
 		if (success) {

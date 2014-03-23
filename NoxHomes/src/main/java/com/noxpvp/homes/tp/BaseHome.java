@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;

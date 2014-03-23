@@ -7,14 +7,11 @@ import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.VaultAdapter;
-import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
-import com.noxpvp.core.manager.PlayerManager;
 
 public class HomeLimitManager implements Persistant {
 	private static HomeLimitManager instance;
 	
-	private NoxHomes plugin;
 	private FileConfiguration config;
 	private static boolean cumulativeLimits = false;
 	private static boolean superPerms = true;
@@ -55,7 +52,6 @@ public class HomeLimitManager implements Persistant {
 	
 	private HomeLimitManager(NoxHomes plugin)
 	{
-		this.plugin = plugin;
 		config = new FileConfiguration(plugin.getDataFile("limits.yml"));
 	}
 	
@@ -69,7 +65,7 @@ public class HomeLimitManager implements Persistant {
 		int limit;
 		limit = 0;
 		
-		NoxPlayer p = getNoxPlayer(noxplayer);
+		HomesPlayer p = getNoxPlayer(noxplayer);
 		
 		limit = getLimit(p);
 		
@@ -91,7 +87,7 @@ public class HomeLimitManager implements Persistant {
 	
 	public int getLimit(NoxPlayerAdapter p)
 	{
-		NoxPlayer nPlayer = getNoxPlayer(p);
+		HomesPlayer nPlayer = getNoxPlayer(p);
 		String player = nPlayer.getName();
 		
 		World world = nPlayer.getLastWorld();
@@ -124,9 +120,9 @@ public class HomeLimitManager implements Persistant {
 		return canAddHome(getNoxPlayer(playerName));
 	}
 	
-	public boolean canAddHome(NoxPlayer player)
+	public boolean canAddHome(HomesPlayer player)
 	{
-		HomesPlayer p = plugin.getHomeManager().getPlayer(player.getName());
+		HomesPlayer p = PlayerManager.getInstance().getPlayer(player);
 		return inRange(p, p.getHomeCount()+1);
 	}
 	
@@ -168,15 +164,15 @@ public class HomeLimitManager implements Persistant {
 		save();
 	}
 
-	private static NoxPlayer getNoxPlayer(NoxPlayerAdapter adapt)
+	private static HomesPlayer getNoxPlayer(NoxPlayerAdapter adapt)
 	{
-		if (adapt instanceof NoxPlayer)
-			return (NoxPlayer) adapt;
+		if (adapt instanceof HomesPlayer)
+			return (HomesPlayer) adapt;
 		else
-			return adapt.getNoxPlayer();
+			return PlayerManager.getInstance().getPlayer(adapt);
 	}
 	
-	private static NoxPlayer getNoxPlayer(String name)
+	private static HomesPlayer getNoxPlayer(String name)
 	{
 		return PlayerManager.getInstance().getPlayer(name);
 	}
