@@ -11,9 +11,6 @@ import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
-import com.noxpvp.mmo.abilities.player.BankShotAbility;
-import com.noxpvp.mmo.abilities.player.HookShotAbility;
-import com.noxpvp.mmo.abilities.player.MeasuringTapeAbility;
 import com.noxpvp.mmo.abilities.player.MedPackAbility;
 import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 
@@ -40,6 +37,8 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 		if (player == null) return;
 		
 		new TargetAbility(p).execute();//TODO make default range configized
+		
+		//debug===========================================
 		if (p.getItemInHand().getType() != Material.STICK)
 			return;
 		MessageUtil.broadcast("sticked");

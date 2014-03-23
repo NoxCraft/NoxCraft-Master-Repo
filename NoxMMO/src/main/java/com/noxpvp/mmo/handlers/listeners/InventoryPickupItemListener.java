@@ -7,8 +7,9 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.handlers.GenericMMOListener;
 
-public class ItemPickupListener extends GenericMMOListener<InventoryPickupItemEvent> {
-	public ItemPickupListener(NoxMMO plugin) {
+public class InventoryPickupItemListener extends GenericMMOListener<InventoryPickupItemEvent> {
+
+	public InventoryPickupItemListener(NoxMMO plugin) {
 		super(plugin, InventoryPickupItemEvent.class);
 	}
 	
@@ -41,4 +42,5 @@ public class ItemPickupListener extends GenericMMOListener<InventoryPickupItemEv
 	public void onMonitor(InventoryPickupItemEvent event) {
 		onEventMonitor(event);
 	}
+
 }
