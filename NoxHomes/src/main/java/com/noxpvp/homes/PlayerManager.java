@@ -99,8 +99,11 @@ public class PlayerManager extends BasePlayerManager<HomesPlayer> { //FIXME: Jav
 	 */
 	public BaseHome getHome(String owner, String name)
 	{
-		HomesPlayer player = getPlayer(owner);
-		return player.getHome(name);
+		return getHome(getPlayer(owner), name);
+	}
+	
+	public BaseHome getHome(HomesPlayer player, String homeName) {
+		return player.getHome(homeName);
 	}
 	
 	/**
