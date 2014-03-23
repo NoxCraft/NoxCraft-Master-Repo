@@ -2,21 +2,13 @@ package com.noxpvp.mmo.abilities.player;
 
 import java.util.Set;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.avaje.ebeaninternal.server.cluster.Packet;
-import com.bergerkiller.bukkit.common.bases.IntVector2;
-import com.bergerkiller.bukkit.common.protocol.CommonPacket;
-import com.bergerkiller.bukkit.common.protocol.PacketType;
-import com.bergerkiller.bukkit.common.utils.PacketUtil;
-import com.noxpvp.core.utils.BlockChangeArray;
-import com.noxpvp.core.utils.BlockChangeArray.BlockChange;
+import com.noxpvp.core.packet.PacketUtil;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
@@ -60,7 +52,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 								return;
 							
 							blocks[0] = b;
-							fakeBlock(b.getLocation(), Material.WOOL);
+							PacketUtil.FakeBlock(10, Material.WOOL, b.getLocation());
 							
 							firstDone = true;
 							return;
@@ -70,15 +62,9 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 								return;
 							
 							blocks[1] = b;
-							fakeBlock(b.getLocation(), Material.WOOL);
+							PacketUtil.FakeBlock(10, Material.WOOL, b.getLocation());
 							
 							unRegisterHandler(this);
-							Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
-								
-								public void run() {
-									MeasuringTapeAbility.this.refreshBlocks();
-								}
-							}, 20 * 5);
 							
 							return;
 						}
@@ -105,34 +91,6 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 		new UnregisterMMOHandlerRunnable(handler).runTaskLater(NoxMMO.getInstance(), 20 * 120);
 		return true;
 
-	}
-
-	@SuppressWarnings("deprecation")
-	private void fakeBlock(Location loc, Material mat) {
-		CommonPacket fakeBlock = new CommonPacket(PacketType.OUT_MULTI_BLOCK_CHANGE);
-		BlockChangeArray change = new BlockChangeArray(1);
-		
-		change.getBlockChange(0).
-		setRelativeX((int) loc.getX()).
-		setRelativeZ((int) loc.getZ()).
-		setAbsoluteY((int) loc.getY()).
-		setBlockID(mat.getId());
-		
-		fakeBlock.write(PacketType.OUT_MULTI_BLOCK_CHANGE.chunk, new IntVector2(loc.getChunk()));
-		fakeBlock.write(PacketType.OUT_MULTI_BLOCK_CHANGE.blockCount, 1);
-		fakeBlock.write(PacketType.OUT_MULTI_BLOCK_CHANGE.blockData, change.toByteArray());
-		
-		PacketUtil.broadcastPacket(fakeBlock, false);
-	}
-	
-	private void refreshBlocks(){
-		for (Block b : blocks){
-			if (b == null)
-				continue;
-			
-			fakeBlock(b.getLocation(), b.getType());
-		}
-		
 	}
 
 }

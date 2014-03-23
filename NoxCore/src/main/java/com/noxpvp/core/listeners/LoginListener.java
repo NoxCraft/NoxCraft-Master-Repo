@@ -1,6 +1,5 @@
 package com.noxpvp.core.listeners;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,6 +10,7 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public class LoginListener extends NoxListener<NoxCore> {
 		
@@ -25,7 +25,7 @@ public class LoginListener extends NoxListener<NoxCore> {
 	{
 		super(core);
 		
-		loginMessage = core.getCoreConfig().get("motd.login", String.class, "&6Welcome to &cNoxImperialis!");
+		loginMessage = MessageUtil.parseColor(core.getCoreConfig().get("motd.login", String.class, "&6Welcome to &cNoxImperialis!"));
 	}
 	
 	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)

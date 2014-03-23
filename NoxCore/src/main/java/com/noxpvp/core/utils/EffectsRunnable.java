@@ -1,6 +1,7 @@
 package com.noxpvp.core.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -15,7 +16,6 @@ import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOutWorldParticles;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
-import com.noxpvp.core.utils.gui.MessageUtil;
 
 /**
  * @author NoxPVP
@@ -39,6 +39,14 @@ public class EffectsRunnable extends BukkitRunnable{
 	
 	private Entity tracker;
 	
+	public EffectsRunnable(ParticleType type, boolean offSet, @Nullable Location loc, float data, int amount, int runs, @Nullable Entity tracker) {
+		this(type.name(), offSet, loc, data, amount, runs, tracker);
+	}
+	
+	public EffectsRunnable(String particleName, boolean offSet, @Nullable Location loc, float data, int amount, int runs, @Nullable Entity tracker) {
+		this(Arrays.asList(particleName), offSet, loc, data, amount, runs, tracker);
+	}
+
 	/**
 	 * 
 	 * @param List<String> The effect name(s) | List - https://gist.github.com/thinkofdeath/5110835

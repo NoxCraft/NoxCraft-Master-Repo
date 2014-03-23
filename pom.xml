@@ -13,17 +13,7 @@
 	</modules>
 	<repositories>
 		<repository>
-			<id>kitteh-repo</id>
-			<url>http://repo.kitteh.org/content/repositories/public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>Spiggot</id>
+			<id>Spigot</id>
 			<url>http://repo.md-5.net/content/groups/public/</url>
 		</repository>
 		<repository>
@@ -99,12 +89,6 @@
 				<groupId>me.confuser.barapi</groupId>
 				<artifactId>BarAPI</artifactId>
 				<version>2.0</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.kitteh</groupId>
-				<artifactId>tagapi</artifactId>
-				<version>2.7.1</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
