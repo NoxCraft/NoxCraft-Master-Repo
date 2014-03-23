@@ -12,6 +12,7 @@ public class HomeLocale extends NoxLocale {
 	public final static HomeLocale HOME_OTHERS;
 	                               
 	public final static HomeLocale DELHOME_OWN;
+	public final static HomeLocale DELHOME_INVALID;
 	public final static HomeLocale DELHOME_OTHERS;
 	                               
 	public final static HomeLocale SETHOME_OWN;
@@ -21,7 +22,6 @@ public class HomeLocale extends NoxLocale {
 	public final static HomeLocale COOLDOWN;
 	
 	public final static HomeLocale BAD_LOCATION;
-	public static final LocalizationEnum DELHOME_INVALID;
 	
 	static {
 		LIST_OWN 		= new HomeLocale("homes.list.own", "&3Your Homes&r: &e%1%");
@@ -31,6 +31,7 @@ public class HomeLocale extends NoxLocale {
 		HOME_OTHERS 	= new HomeLocale("homes.home.default", "&3You teleported to %0%'s home named &e%1%");
 		
 		DELHOME_OWN		= new HomeLocale("homes.delhome.own", "&cRemoved your home:&e%1%");
+		DELHOME_INVALID = new HomeLocale("homes.delhome.invalid", "&cYour home \"%0%\" has been removed. /n&4Reason: %1%");
 		DELHOME_OTHERS	= new HomeLocale("homes.delhome.default", "&cDeleted &e%0%'s&c home named &e%1%");
 		
 		SETHOME_OWN		= new HomeLocale("homes.sethome.own", "&aSet new home named &e%1%&a at &6%2%");
@@ -41,7 +42,6 @@ public class HomeLocale extends NoxLocale {
 		
 		BAD_LOCATION = new HomeLocale("homes.bad.location", "&4You cannot set homes here. Reason: %0%");
 		
-		DELHOME_INVALID = new HomeLocale("homes.delhome.invalid", "&cYour home \"%0%\" has been removed. /n&4Reason: %1%");
 	}
 	
 	

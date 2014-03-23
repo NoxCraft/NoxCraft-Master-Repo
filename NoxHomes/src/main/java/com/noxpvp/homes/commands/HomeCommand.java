@@ -70,9 +70,10 @@ public class HomeCommand extends BaseCommand {
 		else if (home.tryTeleport(sender, permHandler.hasPermission(sender, perm + ".multi"))) {
 			MessageUtil.sendLocale(plugin, sender, "homes.home"+ (own?".own":""), player, (homeName == null? "default": homeName));
 			if (home.isOwner(sender)) {
+				
 				String perm2 = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, "other-towns");
 				if (TownyUtil.isClaimedLand(home.getLocation()) && !TownyUtil.isOwnLand(sender, home.getLocation()) && !permHandler.hasPermission(sender, perm2)) {
-					MessageUtil.sendLocale(sender, HomeLocale.DELHOME_INVALID, HomeLocale.BAD_LOCATION.get("Not part of wild and not your own town."));
+					MessageUtil.sendLocale(sender, HomeLocale.DELHOME_INVALID, (homeName == null? "default": homeName), HomeLocale.BAD_LOCATION.get("Not part of wild and not your own town."));
 					manager.removeHome(home);
 				}
 			}
