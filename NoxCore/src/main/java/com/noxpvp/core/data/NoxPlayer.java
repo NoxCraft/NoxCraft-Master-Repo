@@ -1,5 +1,7 @@
 package com.noxpvp.core.data;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -30,9 +32,12 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.VaultAdapter;
+import com.noxpvp.core.gui.CoolDown;
+import com.noxpvp.core.gui.CoreBar;
+import com.noxpvp.core.gui.CoreBoard;
+import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.manager.PlayerManager;
-import com.noxpvp.core.gui.*;
 
 public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, NoxPlayerAdapter {
 	
@@ -115,7 +120,34 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		this.uid = UUID.fromString(uid);
 	}
 	
+	private void updateFileLocation() {
+		FileConfiguration f = (FileConfiguration)((getPersistantData() instanceof FileConfiguration)?getPersistantData():null);
+		if (f == null)
+			return;
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(manager.getPlayerFile(this));
+			f.saveToStream(out);
+		} catch (IOException e) {
+			if (out != null)
+				try {
+					out.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			e.printStackTrace();
+		}
+		persistant_data = manager.getPlayerNode(this);
+		load();
+	}
+	
 	public UUID getUUID() {
+		Player p = getPlayer();
+		if (uid == null && p != null) {
+			uid = p.getUniqueId();
+			updateFileLocation();
+		}
+		
 		return uid;
 	}
 	
@@ -461,6 +493,8 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	public synchronized void save() {
 		if (!isFirstLoad)
 			load(false);
+		
+		getUUID();
 		
 		persistant_data.set("cooldowns", getCoolDowns());
 		persistant_data.set("last.ign", getName());

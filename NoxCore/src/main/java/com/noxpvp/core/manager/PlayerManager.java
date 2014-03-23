@@ -93,17 +93,29 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 * @return the player file
 	 */
 	public File getPlayerFile(NoxPlayer noxPlayer) {
-		File old = getPlayerFile(noxPlayer.getName());
-		File supposed = getPlayerFile("NEED-UID", noxPlayer.getName());
-		if (old.exists() && !supposed.exists())
+		File old = getPlayerFile(noxPlayer.getName() + ".yml");
+		File supposed = getPlayerFile("NEED-UID", noxPlayer.getName() + ".yml");
+		File uidF = getPlayerFile(noxPlayer.getUUID().toString() + ".yml");
+		if (old.exists() && noxPlayer.getUUID() == null)
 			if (FileUtil.copy(old, supposed))
 				if (!old.delete())
 					old.deleteOnExit(); //Attempt to delete on exit.
-		
 		if (noxPlayer.getUUID() == null)
 			return supposed;
-		else
-			return getPlayerFile(noxPlayer.getUUID().toString());
+		else {
+			if (supposed.exists()) {
+				if (FileUtil.copy(supposed, uidF))
+					if (!supposed.delete())
+						supposed.deleteOnExit();
+			} else if (old.exists()) {
+				if (FileUtil.copy(old, uidF))
+					if (!old.delete())
+						old.deleteOnExit();
+			}
+			
+			return uidF;
+			
+		}
 	}
 	
 	/**
