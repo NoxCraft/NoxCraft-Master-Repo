@@ -181,7 +181,7 @@ public class CoreBar{
 	}
 	
 	public void newLivingTracker(LivingEntity e, String text, boolean ignoreLOS, int displayTicks, boolean canBeOveridden){
-		newLivingTracker(e, text, NoxCore.getInstance().getCoreConfig().get("gui.corebar.default-distance", int.class, 25), ignoreLOS, displayTicks, canBeOveridden);
+		newLivingTracker(e, text, NoxCore.getInstance().getCoreConfig().get("gui.corebar.living-tracker.distance", Integer.class, 25), ignoreLOS, displayTicks, canBeOveridden);
 	}
 	
 	public void newLivingTracker(LivingEntity e, String text, int maxDistance, boolean ignoreLOS, int displayTicks, boolean canBeOverridden) {
@@ -237,7 +237,7 @@ public class CoreBar{
 			
 			distance = p.getLocation().distance(e.getLocation());
 			
-			if (distance > maxDistance || (!ignoreLOS && !LineOfSightUtil.hasLineOfSight(p, e.getLocation(), transparents))){
+			if (distance > maxDistance || (!ignoreLOS && !LineOfSightUtil.hasLineOfSight(p, e.getEyeLocation(), transparents))){
 				safeCancel();
 				return;
 			}
@@ -250,12 +250,14 @@ public class CoreBar{
 			
 		}
 		
-		public void safeCancel() {try {
-			lock = null;
-			updater = null;
-			currentEntry.hide();
-			cancel();
-		} catch (IllegalStateException e) {}}
+		public void safeCancel() {
+			try {
+				lock = null;
+				updater = null;
+				currentEntry.hide();
+				cancel();
+			} catch (IllegalStateException e) {}
+		}
 		
 	}
 	

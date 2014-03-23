@@ -13,6 +13,8 @@ import com.noxpvp.mmo.runnables.DamageRunnable;
 
 public class SeveringStrikesAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>{
 	
+	//TODO make this
+	
 	public static final String ABILITY_NAME = "Severing Strikes";
 	public static final String PERM_NODE = "severing-strikes";
 	

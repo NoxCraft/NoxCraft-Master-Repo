@@ -10,6 +10,8 @@ public class ShurikenAbility extends BasePlayerAbility{
         public static final String ABILITY_NAME = "Shuriken";
         public static final String PERM_NODE = "shuriken";
         
+        //TODO make this
+        
         private double distanceVelo;
         
         /**

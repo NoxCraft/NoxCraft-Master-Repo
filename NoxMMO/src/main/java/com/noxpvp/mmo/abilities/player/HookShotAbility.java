@@ -27,6 +27,8 @@ import com.noxpvp.mmo.runnables.BlockTimerRunnable;
  */
 public class HookShotAbility extends BasePlayerAbility{
 	
+	//TODO make this;
+	
 	public static final String PERM_NODE = "hookshot";
 	public static final String ABILITY_NAME = "Hook Shot";
 	public static int batId = Short.MAX_VALUE + 1000;

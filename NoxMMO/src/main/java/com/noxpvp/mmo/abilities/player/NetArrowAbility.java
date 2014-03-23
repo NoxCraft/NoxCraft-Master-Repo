@@ -165,7 +165,9 @@ public class NetArrowAbility extends BasePlayerAbility
 	{
 		super(ABILITY_NAME, player);
 		
-		hitHandler = new BaseMMOEventHandler<ProjectileHitEvent>(new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileHitEvent").toString(), EventPriority.NORMAL, 1) {
+		hitHandler = new BaseMMOEventHandler<ProjectileHitEvent>(
+				new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileHitEvent").toString(),
+				EventPriority.NORMAL, 1) {
 
 			public boolean ignoreCancelled() {
 				return true;

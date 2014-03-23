@@ -1,6 +1,8 @@
 package com.noxpvp.mmo.abilities.player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,44 +15,86 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.bergerkiller.bukkit.common.events.PacketReceiveEvent;
-import com.bergerkiller.bukkit.common.events.PacketSendEvent;
-import com.bergerkiller.bukkit.common.protocol.CommonPacket;
-import com.bergerkiller.bukkit.common.protocol.PacketType;
-import com.bergerkiller.bukkit.common.wrappers.DataWatcher;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.noxpvp.core.NoxPlugin;
-import com.noxpvp.core.listeners.NoxPacketListener;
+import com.noxpvp.core.listeners.NoxPLPacketListener;
 import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
+import com.noxpvp.mmo.runnables.HealRunnable;
 
 public class MedPackAbility extends BasePlayerAbility{
 	
 	public final static String ABILITY_NAME = "Med Pack";
 	public final static String PERM_NODE = "med-pack";
 	
+	private static List<MedPackDataWrapper> packs = new ArrayList<MedPackAbility.MedPackDataWrapper>();
+	
+	private static boolean hasPack(Item pack) {
+		return hasPack(pack.getEntityId());
+	}
+	
+	private static boolean hasPack(int entityId) {
+		for (MedPackDataWrapper wrap : packs)
+			if (wrap.pack.getEntityId() == entityId) {
+				return true;
+			} else {
+				continue;
+			}
+		
+		return false;
+	}
+	
+	private static MedPackDataWrapper getPack(Item pack) {
+		for (MedPackDataWrapper wrap : packs)
+			if (wrap.pack.equals(pack))
+				return wrap;
+		
+		return null;
+	}
+	
+	
+	
 	private BaseMMOEventHandler<PlayerPickupItemEvent> handler;
 	private BaseMMOEventHandler<InventoryPickupItemEvent> inventoryPickupHandler;
-	private NoxPacketListener camoflouge;
+	private NoxPLPacketListener camoflouge;
 	
 	private int health;
 	private boolean isActive;
-	private Item pack;
+	
+	private class MedPackDataWrapper {
+		public Item pack;
+		public Player user;
+		public double health;
+		
+		public MedPackDataWrapper(Item pack, Player user, double healAmount) {
+			this.pack = pack;
+			this.user = user;
+			this.health = healAmount;
+		}
+		
+	}
 	
 	public MedPackAbility setActive(boolean active){
+		boolean changed = this.isActive != active;
 		this.isActive = active;
 		
-		if (active) {
+		if (changed)
+			if (active) {
 			registerHandler(handler);
 			registerHandler(inventoryPickupHandler);
 			camoflouge.register();
-		} else {
+			} else {
 			unRegisterHandler(handler);
 			unRegisterHandler(inventoryPickupHandler);
 			camoflouge.unRegister();
-		}
+			}
+		
 		return this;
 	}
 	
@@ -63,7 +107,9 @@ public class MedPackAbility extends BasePlayerAbility{
 	public MedPackAbility(Player player) {
 		super(ABILITY_NAME, player);
 		
-		this.handler = new BaseMMOEventHandler<PlayerPickupItemEvent>(new StringBuilder().append(ABILITY_NAME).append(player.getName()).append("PlayerPickupItemEvent").toString(), EventPriority.NORMAL, 1) {
+		this.handler = new BaseMMOEventHandler<PlayerPickupItemEvent>(
+				new StringBuilder().append(ABILITY_NAME).append(player.getName()).append("PlayerPickupItemEvent").toString(),
+				EventPriority.NORMAL, 1) {
 			
 			public boolean ignoreCancelled() {
 				return true;
@@ -78,33 +124,35 @@ public class MedPackAbility extends BasePlayerAbility{
 			}
 			
 			public void execute(PlayerPickupItemEvent event) {
-				if (!isValid()) {
-					setActive(false);
+				Item eventItem = event.getItem();
+				if (!hasPack(eventItem)) {
 					return;
 				}
-				
-				Item eventItem = event.getItem();
-				if (pack != eventItem)
-					return;
 				
 				event.setCancelled(true);
 				
 				Player abilPlayer = getPlayer();
-				if (event.getPlayer() == abilPlayer)
+				Player pickupPlayer = event.getPlayer();
+				if (event.getPlayer() == abilPlayer || pickupPlayer.getHealth() == pickupPlayer.getMaxHealth())
 					return;
 				
 				eventItem.remove();
-				Player player = event.getPlayer();
 				
-				player.setHealth(player.getHealth() + getHealth());
+				double health = getPack(eventItem).health;
 				
-				EffectsRunnable hearts = new EffectsRunnable(Arrays.asList("heart"), false, player.getEyeLocation(), 0, 3, 2, null);
-				hearts.runTask(NoxMMO.getInstance());
+				new EffectsRunnable(Arrays.asList("heart"), false, null, 0, 1, (int) health, pickupPlayer).runTaskTimer(NoxMMO.getInstance(), 5, 5);
+				new HealRunnable(pickupPlayer, 1, (int) health).runTaskTimer(NoxMMO.getInstance(), 5, 5);
 				
-				MessageUtil.sendLocale(NoxMMO.getInstance(), player, "ability.medpack.pick-up", player.getName(), (abilPlayer != null? abilPlayer.getName() :  MedPackAbility.this.getNoxPlayer().getName()));
+				MessageUtil.sendLocale(NoxMMO.getInstance(), pickupPlayer, "ability.medpack.pick-up", pickupPlayer.getName(), (abilPlayer != null? abilPlayer.getName() :  MedPackAbility.this.getNoxPlayer().getName()));
 				if (abilPlayer != null && abilPlayer.isOnline())
-					MessageUtil.sendLocale(NoxMMO.getInstance(), abilPlayer, "ability.medpack.pick-up.other", player.getName(), MedPackAbility.this.getNoxPlayer().getName());
+					MessageUtil.sendLocale(NoxMMO.getInstance(), abilPlayer, "ability.medpack.pick-up.other", pickupPlayer.getName(), MedPackAbility.this.getNoxPlayer().getName());
 
+				packs.remove(getPack(eventItem));
+				
+				if (packs.isEmpty())
+					setActive(false);
+				
+				return;
 			}
 		};
 		
@@ -125,38 +173,55 @@ public class MedPackAbility extends BasePlayerAbility{
 			}
 			
 			public void execute(InventoryPickupItemEvent event) {
-				if (event.getItem() == pack)
+				if (packs.contains(event.getItem()))
 					event.setCancelled(true);
 				
-				if (!isValid())
+				if (packs.isEmpty())
 					setActive(false);
 				
 				return;
 			}
 		};
 		
-		this.camoflouge = new NoxPacketListener(PacketType.OUT_ENTITY_METADATA) {
+		this.camoflouge = new NoxPLPacketListener(NoxMMO.getInstance(), PacketType.Play.Server.ENTITY_METADATA) {
 			
-			public void onPacketSend(PacketSendEvent arg0) {
-				CommonPacket packet = arg0.getPacket();
+			@Override
+			public void onPacketSending(PacketEvent event) {
 				
-				if (packet.read(PacketType.OUT_ENTITY_METADATA.entityId) != pack.getEntityId())
-					return;
+				PacketContainer packet = event.getPacket();
 				
-				try {
+				try {	
+					if (packet.getEntityModifier(event).read(0) instanceof Item) {
+						
+						int id = packet.getEntityModifier(event).read(0).getEntityId();
+						
+						WrappedDataWatcher watcher = new WrappedDataWatcher(packet.getWatchableCollectionModifier().read(0));
+						ItemStack stack = watcher.getItemStack(10);
+						
+						if (stack != null && hasPack(id)) {
+							
+							stack = new ItemStack(stack);
+							ItemMeta meta = stack.getItemMeta();
+							
+							stack.setType(Material.EMERALD);
+							meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+							
+							stack.setItemMeta(meta);
+							
+							watcher = watcher.deepClone();
+							watcher.setObject(10, stack);
+							
+							packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
+						}
 					
-					DataWatcher dw = new DataWatcher(packet.read(PacketType.OUT_ENTITY_METADATA.watchedObjects));
-					System.out.println(dw.get(0));
-					
-					ItemStack stack = new ItemStack((ItemStack) dw.get(0));
-					stack.setType(Material.EMERALD);
-					
-					dw.set(10, stack);
-					
+					}
 				} catch (Exception e) { e.printStackTrace(); }
+				
+				if (packs.isEmpty())
+					setActive(false);
+				
+				return;
 			}
-			
-			public void onPacketReceive(PacketReceiveEvent arg0) { return; }
 			
 			@Override
 			public NoxPlugin getPlugin() {
@@ -168,26 +233,36 @@ public class MedPackAbility extends BasePlayerAbility{
 		this.isActive = false;
 	}
 	
+	private ItemStack craftNewPackStack() {
+		ItemStack medPack = new ItemStack(Material.COAL, 1);
+		ItemMeta meta = medPack.getItemMeta();
+		
+		meta.setDisplayName(ChatColor.RED + "Report me to bbc please!");
+		meta.setLore(Arrays.asList(getPlayer().getName() + ABILITY_NAME + System.currentTimeMillis()));
+		
+		medPack.setItemMeta(meta);
+		
+		return medPack;
+	}
+	
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
 		
 		Player p = getPlayer();
+		ItemStack medPack = craftNewPackStack();
 		
-		ItemStack medPack = new ItemStack(Material.DIRT, 1);
-		ItemMeta meta = medPack.getItemMeta();
+		Item pack = p.getWorld().dropItem(p.getLocation() , medPack);
+		new EffectsRunnable(Arrays.asList("happyVillager"), true, null, 1F, 6, 0, pack).runTaskTimer(NoxMMO.getInstance(), 0, 10);
 		
-		meta.setDisplayName(ChatColor.RED + "DO_NOT_USE");
-		meta.setLore(null);
+		if (!packs.add(new MedPackDataWrapper(pack, p, health))) {
+			pack.remove();
+			return false;
+		}
 		
-		medPack.setItemMeta(meta);
-		
-		this.pack = p.getWorld().dropItem(p.getLocation(), medPack);
-		
-		new EffectsRunnable(Arrays.asList("happyVillager"), true, null, 1F, 10, 0, this.pack).runTaskTimer(NoxMMO.getInstance(), 0, 10);
-		setActive(true);
 		MessageUtil.sendLocale(NoxMMO.getInstance(), p, "ability.medpack.use");
 
+		setActive(true);
 		return true;
 	}
 

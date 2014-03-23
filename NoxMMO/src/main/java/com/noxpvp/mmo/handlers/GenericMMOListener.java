@@ -14,6 +14,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.noxpvp.core.listeners.NoxListener;
@@ -30,7 +31,7 @@ public class GenericMMOListener<T extends Event> extends NoxListener<NoxMMO> {
 		constructors.put(InventoryPickupItemEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(ItemPickupListener.class, NoxMMO.class));
 		constructors.put(ProjectileLaunchEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(ProjectileLaunchListener.class, NoxMMO.class));
 		constructors.put(ProjectileHitEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(ProjectileHitListener.class, NoxMMO.class));
-		
+		constructors.put(InventoryPickupItemEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(InventoryPickupItemListener.class, NoxMMO.class));
 	}
 	
 	private Class<T> eventType;

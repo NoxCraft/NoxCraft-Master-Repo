@@ -11,7 +11,6 @@ import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
-import com.noxpvp.mmo.abilities.player.MedPackAbility;
 import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 
 public class PlayerInteractListener extends NoxListener<NoxMMO>{
@@ -36,14 +35,13 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 		MMOPlayer player = pm.getPlayer((p = e.getPlayer()));
 		if (player == null) return;
 		
-		new TargetAbility(p).execute();//TODO make default range configized
+		System.out.println("interact");
+		new TargetAbility(p).execute(e);//TODO make default range configized || passiveness
 		
 		//debug===========================================
 		if (p.getItemInHand().getType() != Material.STICK)
 			return;
 		MessageUtil.broadcast("sticked");
-		
-		new MedPackAbility(p).execute();
 		
 	}
 	

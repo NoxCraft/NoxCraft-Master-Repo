@@ -47,7 +47,7 @@ public class TargetAbility extends BasePlayerAbility implements PassiveAbility<P
 	public TargetAbility(Player player){
 		super(ABILITY_NAME, player);
 		
-		this.range = 20;
+		this.range = 25;
 	}
 	
 	/**

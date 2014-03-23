@@ -57,7 +57,9 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements Pla
 	public boolean mayExecute() {
 		Player player = getPlayer();
 		
-		return player != null && player.isValid() && player.isOnline() && hasPermission() && (((this instanceof PVPAbility) && TownyUtil.isPVP(player)) || !(this instanceof PVPAbility));
+		return player != null && player.isValid() && 
+				player.isOnline() && hasPermission() &&
+				(((this instanceof PVPAbility) && TownyUtil.isPVP(player)) || !(this instanceof PVPAbility));
 	}
 	
 	/**
@@ -70,7 +72,6 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements Pla
 		if (p == null)
 			return false;
 		
-		System.out.println(NoxMMO.PERM_NODE + ".ability." + getName().replaceAll(" ", "-").toLowerCase());
 		return VaultAdapter.PermUtils.hasPermission(p,  (NoxMMO.PERM_NODE + ".ability." + getName().replaceAll(" ", "-").toLowerCase()));
 	}
 	
