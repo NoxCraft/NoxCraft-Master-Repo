@@ -5,6 +5,8 @@ import java.lang.ref.SoftReference;
 
 import org.bukkit.entity.Entity;
 
+import com.noxpvp.core.utils.TownyUtil;
+
 public abstract class BaseEntityAbility extends BaseAbility implements EntityAbility {
 	private Reference<Entity> entityRef;
 	
@@ -26,7 +28,9 @@ public abstract class BaseEntityAbility extends BaseAbility implements EntityAbi
 	 * @return boolean If the execute() method is normally able to start
 	 */
 	public boolean mayExecute() {
-		return getEntity() != null;
+		Entity entity = getEntity();
+		
+		return entity != null && (((this instanceof PVPAbility) && TownyUtil.isPVP(entity)) || !(this instanceof PVPAbility));
 	}
 	
 }

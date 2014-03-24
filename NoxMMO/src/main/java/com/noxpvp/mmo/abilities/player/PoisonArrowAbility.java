@@ -13,11 +13,11 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public class PoisonArrowAbility extends BasePlayerAbility{
 	
@@ -52,13 +52,11 @@ public class PoisonArrowAbility extends BasePlayerAbility{
 		boolean changed = this.isActive != active;
 		this.isActive = active;
 		
-		MasterListener m = NoxMMO.getInstance().getMasterListener();
-		
 		if (changed)
 			if (active)
-				m.registerHandler(hitHandler);
+				registerHandler(hitHandler);
 			else
-				m.unregisterHandler(hitHandler);
+				unRegisterHandler(hitHandler);
 		
 		return this; 
 	}
@@ -102,7 +100,9 @@ public class PoisonArrowAbility extends BasePlayerAbility{
 	public PoisonArrowAbility(Player player) {
 		super(ABILITY_NAME, player);
 		
-		hitHandler = new BaseMMOEventHandler<EntityDamageByEntityEvent>(new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("EntityDamageByEntityEvent").toString(), EventPriority.NORMAL, 1) {
+		hitHandler = new BaseMMOEventHandler<EntityDamageByEntityEvent>(
+				new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("EntityDamageByEntityEvent").toString(),
+				EventPriority.NORMAL, 1) {
 
 			public boolean ignoreCancelled() {
 				return true;
@@ -146,7 +146,9 @@ public class PoisonArrowAbility extends BasePlayerAbility{
 			}
 		};
 		
-		launchHandler = new BaseMMOEventHandler<ProjectileLaunchEvent>(new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileLaunchEvent").toString(), EventPriority.MONITOR, 1) {
+		launchHandler = new BaseMMOEventHandler<ProjectileLaunchEvent>(
+				new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileLaunchEvent").toString(),
+				EventPriority.MONITOR, 1) {
 			
 			
 			public boolean ignoreCancelled() {

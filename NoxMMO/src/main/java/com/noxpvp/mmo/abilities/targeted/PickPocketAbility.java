@@ -8,6 +8,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
 /**
@@ -86,7 +87,7 @@ public class PickPocketAbility extends BaseTargetedPlayerAbility{
 	 * (The PickPocket)
 	 */
 	public PickPocketAbility(Player player){
-		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getMMOPlayer(player).getTarget());
+		super(ABILITY_NAME, player, PlayerManager.getInstance().getPlayer(player).getTarget());
 	}
 	
 	public boolean execute() {

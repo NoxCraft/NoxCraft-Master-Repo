@@ -10,10 +10,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;
 
+import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.SetVelocityRunnable;
 import com.noxpvp.mmo.runnables.ShockWaveAnimation;
@@ -26,19 +26,6 @@ public class MassDestructionAbility extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "mass-destruction";
 	public static final String ABILITY_NAME = "Mass Destruction";
-	
-	public void eventExecute(MassDestructionAbility ab) {
-		
-		Player p = ab.getPlayer();
-		Location pLoc = p.getLocation();
-		
-		int range = ab.getRange();
-		NoxMMO mmo = NoxMMO.getInstance();
-		
-		new EffectsRunnable(Arrays.asList("explode", "explode"), pLoc, 0, 2, false, false, null).runTask(mmo);
-		new ShockWaveAnimation(pLoc, 2, range, 0.3).runTask(mmo);
-		new ExpandingDamageRunnable(p, p.getLocation(), ab.getDamage(), range, 2).runTask(mmo);
-	}
 	
 	private BaseMMOEventHandler<EntityDamageEvent> handler;
 	private double damage = 6;
@@ -139,6 +126,19 @@ public class MassDestructionAbility extends BasePlayerAbility{
 		shootDown.runTaskLater(instance, 30);
 	
 		return true;
+	}
+	
+	public void eventExecute(MassDestructionAbility ab) {
+		
+		Player p = ab.getPlayer();
+		Location pLoc = p.getLocation();
+		
+		int range = ab.getRange();
+		NoxMMO mmo = NoxMMO.getInstance();
+		
+		new EffectsRunnable(Arrays.asList("explode"), false, pLoc, 0, 2, 1, null).runTask(mmo);
+		new ShockWaveAnimation(pLoc, 2, range, 0.3).runTask(mmo);
+		new ExpandingDamageRunnable(p, p.getLocation(), ab.getDamage(), range, 2).runTask(mmo);
 	}
 
 }

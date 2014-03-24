@@ -8,10 +8,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 
+import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.runnables.DespawnRunnable;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
 import com.noxpvp.mmo.runnables.HealRunnable;
 
 /**
@@ -22,8 +22,9 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 	
 	public static final String PERM_NODE = "guardian-angel";
 	public static final String ABILITY_NAME = "Guardian Angel";
-	private int range = 5;
-	private double healAmount = 6;
+	
+	private int range;
+	private double healAmount;
 	
 	/**
 	 * 
@@ -62,6 +63,9 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 	 */
 	public GuardianAngelAbility(Player player){
 		super(ABILITY_NAME, player);
+		
+		this.healAmount = 6;
+		this.range = 6;
 	}
 
 	public boolean execute() {
@@ -79,10 +83,10 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 			LivingEntity e = (LivingEntity) it;
 			
 			new HealRunnable(e, getHealAmount(), 1).runTaskLater(instance, 40);
-			new EffectsRunnable("heart", e.getLocation(), 0, (int) getHealAmount()/2, false, false, null).runTaskTimer(instance, 25, 5);
+			new EffectsRunnable(Arrays.asList("heart"), false, e.getLocation(), 0, (int) getHealAmount()/2, 2, null).runTaskTimer(instance, 25, 5);
 		}
 		
-		new EffectsRunnable("angryVillager", null, 0, 1, false, false, v).runTaskLater(instance, 60);
+		new EffectsRunnable(Arrays.asList("angryVillager"), false, null, 0f, 1, 1, v).runTaskLater(instance, 60);
 		new DespawnRunnable(v).runTaskLater(instance, 60);
 		
 		return true;

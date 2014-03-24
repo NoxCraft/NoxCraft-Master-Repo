@@ -63,6 +63,7 @@ public class ReincarnateAbility extends BasePlayerAbility{
 	 */
 	public ReincarnateAbility(Player player){
 		super(ABILITY_NAME, player);
+		
 		this.timeLimit = 60;
 		this.maxRadius = 10;
 	}

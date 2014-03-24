@@ -1,11 +1,17 @@
 package com.noxpvp.core.data;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.WeakHashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -20,29 +26,45 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
-import com.bergerkiller.bukkit.common.utils.CommonUtil;
+import com.bergerkiller.bukkit.common.proxies.ProxyBase;
+import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
-import com.noxpvp.core.PlayerManager;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.VaultAdapter;
-import com.noxpvp.core.events.PlayerDataLoadEvent;
-import com.noxpvp.core.events.PlayerDataSaveEvent;
-import com.noxpvp.core.utils.PermissionHandler;
+import com.noxpvp.core.gui.CoolDown;
+import com.noxpvp.core.gui.CoreBar;
+import com.noxpvp.core.gui.CoreBoard;
+import com.noxpvp.core.gui.CoreBox;
+import com.noxpvp.core.internal.PermissionHandler;
+import com.noxpvp.core.manager.PlayerManager;
 
-public class NoxPlayer implements Persistant, NoxPlayerAdapter {
+public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, NoxPlayerAdapter {
+	
+	static {
+		ProxyBase.validate(NoxPlayer.class);
+	}
+	
 	private WeakHashMap<String, CoolDown> cd_cache;
 	private List<CoolDown> cds;
 	private PlayerManager manager;
-	private final String name;
+	private String name;
 	
 	private final PermissionHandler permHandler;
 	private ConfigurationNode persistant_data = null;
 	
+	private CoreBar coreBar;
+	private CoreBoard coreBoard;
+	private Reference<CoreBox> coreBox;
+	
 	private ConfigurationNode temp_data = new ConfigurationNode();
+	
+	private boolean isFirstLoad = false;
+	private UUID uid;
 	
 	public NoxPlayer(NoxPlayer player)
 	{
+		super(player.getProxyBase());
 		permHandler = player.permHandler;
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
@@ -50,31 +72,187 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this.temp_data = player.temp_data;
 		this.persistant_data = player.persistant_data;
 		this.manager = player.manager;
+		this.isFirstLoad = player.isFirstLoad;
+
+		this.coreBoard = player.coreBoard != null? player.coreBoard : null;
+		this.coreBar = player.coreBar != null? player.coreBar : null;
+		this.coreBox = player.coreBox != null? player.coreBox : null;
+		
+		if (!isFirstLoad)
+			load();
 	}
 	
 	public NoxPlayer(PlayerManager mn, String name) {
-		permHandler = mn.getPlugin().getPermissionHandler();
+		super(Bukkit.getOfflinePlayer(name));
+		NoxCore core = mn.getPlugin();
+		permHandler = core.getPermissionHandler();
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
 		manager = mn;
-		this.persistant_data = mn.getPlayerNode(name);
 		this.name = name;
+		
+		if (getPlayer() != null){
+			this.coreBar = new CoreBar(core, getPlayer());
+			new CoreBoard(core, getPlayer());
+		}
+		this.persistant_data = mn.getPlayerNode(this);
 	}
 	
-	public boolean addCoolDown(String name, long length)
+	public NoxPlayer(PlayerManager mn, UUID uid) {
+		super(null);
+		NoxCore core = mn.getPlugin();
+		permHandler = core.getPermissionHandler();
+		cds = new ArrayList<CoolDown>();
+		cd_cache = new WeakHashMap<String, CoolDown>();
+		manager = mn;
+		this.name = null;
+		this.uid = uid;
+		
+		if (getPlayer() != null){
+			this.coreBar = new CoreBar(core, getPlayer());
+			new CoreBoard(core, getPlayer());
+		}
+		this.persistant_data = mn.getPlayerNode(this);
+	}
+	
+	public NoxPlayer(PlayerManager mn, String name, String uid) {
+		this(mn, name);
+		this.uid = UUID.fromString(uid);
+	}
+	
+	private void updateFileLocation() {
+		FileConfiguration f = (FileConfiguration)((getPersistantData() instanceof FileConfiguration)?getPersistantData():null);
+		if (f == null)
+			return;
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(manager.getPlayerFile(this));
+			f.saveToStream(out);
+		} catch (IOException e) {
+			if (out != null)
+				try {
+					out.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			e.printStackTrace();
+		}
+		persistant_data = manager.getPlayerNode(this);
+		load();
+	}
+	
+	public UUID getUUID() {
+		Player p = getPlayer();
+		if (uid == null && p != null) {
+			uid = p.getUniqueId();
+			updateFileLocation();
+		}
+		
+		return uid;
+	}
+	
+	public String getUID() {
+		if (getUUID() != null)
+			return getUUID().toString();
+		else
+			return null;
+	}
+	
+	public boolean hasFirstLoaded() {
+		return isFirstLoad;
+	}
+	
+	public CoreBoard getCoreBoard(){
+		if (coreBoard == null)
+			return (coreBoard = new CoreBoard(manager.getPlugin(), getPlayer()));
+		
+		return coreBoard;
+	}
+	
+	public CoreBar getCoreBar(){
+		if (coreBar == null)
+			return (coreBar = new CoreBar(manager.getPlugin(), getPlayer()));
+		
+		return coreBar;
+	}
+	
+	public boolean hasCoreBox(){
+		return coreBox != null && coreBox.get() != null;
+	}
+	
+	public boolean hasCoreBox(CoreBox box){
+		return coreBox != null && coreBox.get() == box;
+	}
+	
+	public void setCoreBox(CoreBox box){
+		if (hasCoreBox())
+			deleteCoreBox();
+		
+		coreBox = new WeakReference<CoreBox>(box);
+	}
+
+	public void deleteCoreBox(){
+		if (hasCoreBox())
+			getPlayer().closeInventory();
+		
+		coreBox = null;
+	}
+	
+	
+	/**
+	 * Adds new cooldown to player.
+	 * <br>
+	 * This will use nano seconds if {@link NoxCore#isUsingNanoTime()} returns true. Else it will use millis.
+	// * @param name of cooldown
+	 * @param length of cooldown specified by nanos or millis depending is {@link NoxCore#isUsingNanoTime()}
+//	 * @return
+	 */
+	public boolean addCoolDown(String name, long length, boolean coreBoardTimer)
 	{
+		NoxCore core = manager.getPlugin();
+		boolean isNano = NoxCore.isUsingNanoTime();
+		
 		if (cd_cache.containsKey(name) && !cd_cache.get(name).expired())
 			return false;
+		
 		CoolDown cd;
 		
 		long time = 0;
-		if (NoxCore.isUsingNanoTime())
+		if (isNano)
 			time = System.nanoTime() + length;
+		else
+			time = length;
 		
-		cd = new CoolDown(name, time, NoxCore.isUsingNanoTime());
+		cd = new CoolDown(name, time, isNano);
 		
 		cds.add(cd);
 		cd_cache.put(cd.getName(), cd);
+		
+		if (coreBoardTimer) {
+			ChatColor cdNameColor, cdCDColor;
+			try {
+				cdNameColor = ChatColor.valueOf(core.getCoreConfig().get(
+						"gui.coreboard.cooldowns.name-color",
+						String.class,
+						"&e"));
+				cdCDColor = ChatColor.valueOf(core.getCoreConfig().get(
+						"gui.coreboard.cooldowns.time-color",
+						String.class,
+						"&a"));
+				
+			} catch (IllegalArgumentException e) {
+				cdNameColor = ChatColor.YELLOW;
+				cdCDColor = ChatColor.GREEN;
+			}
+			
+			getCoreBoard().addTimer(
+					name,
+					name,
+					(int) (isNano ? ((length / 1000) / 1000) : (length / 1000)),
+					cdNameColor,
+					cdCDColor);
+		}
+		
 		return true;
 	}
 	
@@ -100,10 +278,18 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	public String getFullName() {
 		StringBuilder text = new StringBuilder();
-		
 		text.append(VaultAdapter.chat.getGroupPrefix(getLastWorld(), getMainGroup()) + getPlayer().getName());
 		
-		return text.toString();
+		String v = persistant_data.get("formatted-name", text.toString());
+		
+		if (!isOnline())
+			return v;
+		
+		String v2 = VaultAdapter.GroupUtils.getFormatedPlayerName(getPlayer());
+		if (!v2.equals(v))
+			persistant_data.set("formatted-name", v2);
+
+		return v2;
 	}
 	
 	public Location getLastDeathLocation()
@@ -136,17 +322,24 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	public World getLastWorld() {
+		String worldName = getLastWorldName();
+		if (LogicUtil.nullOrEmpty(worldName) || worldName.equals("NONE"))
+			return null;
+		
+		return Bukkit.getWorld(worldName);
+	}
+	
+	public String getLastWorldName() {
 		World w = null;
 		if (getPlayer() != null)
+		{
 			w = getPlayer().getWorld();
-		else
-			w = Bukkit.getWorld(persistant_data.get("last.world", String.class, "NONE"));
-		return w;
-	}
-	public String getLastWorldName() {
-		World w = getLastWorld();
+			persistant_data.set("last.world", w.getName());
+		}
+		
 		if (w != null)
 			return w.getName();
+		
 		return persistant_data.get("last.world", String.class, "NONE");
 	}
 	
@@ -175,17 +368,30 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	public Double getMoney(String worldName) { return VaultAdapter.economy.getBalance(getPlayerName(), worldName); }
 	
 	public String getName(){
-		return name;
+		return getPlayerName();
 	}
 	public NoxPlayer getNoxPlayer() { return this; }
 	
-	public OfflinePlayer getOfflinePlayer() { return Bukkit.getOfflinePlayer(getPlayerName());}
+	public OfflinePlayer getOfflinePlayer() { 
+		if (getPlayerName() != null)
+			return Bukkit.getOfflinePlayer(getPlayerName());
+		return getProxyBase();
+	}
 	
 	public final ConfigurationNode getPersistantData() { return persistant_data;}
 	
-	public Player getPlayer() { return Bukkit.getPlayerExact(getPlayerName()); }
+	public Player getPlayer() {
+		if (getPlayerName() != null)
+			return Bukkit.getPlayerExact(getPlayerName());
+		else
+			return Bukkit.getPlayerExact(getProxyBase().getName());
+	}
 	
-	public final String getPlayerName(){ return name;}
+	public final String getPlayerName(){
+		if (name == null && getProxyBase() != null)
+			setName(getProxyBase().getName());
+		return name;
+	}
 	
 	public final ConfigurationNode getTempData() { return temp_data; }
 	
@@ -237,8 +443,12 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	public synchronized void load() {
+		load(true);
+	}
+	
+	public synchronized void load(boolean overwrite) {
 		if (persistant_data == null)
-			persistant_data = manager.getPlayerNode(name);
+			persistant_data = manager.getPlayerNode(this);
 		
 		if (persistant_data instanceof FileConfiguration)
 		{
@@ -248,13 +458,21 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		else if (!manager.isMultiFile())
 			manager.load();
 		
-		cds = persistant_data.getList("cooldowns", CoolDown.class);
+		if (overwrite)
+			cds = persistant_data.getList("cooldowns", CoolDown.class);
+		else
+			cds.addAll(persistant_data.getList("cooldowns", CoolDown.class));
 		
 		if (getFirstJoin() == 0)
 			setFirstJoin();
 		
+		setName(persistant_data.get("last.ign", String.class));
+		
 		rebuild_cache();
-		/*PlayerDataLoadEvent e = */CommonUtil.callEvent(new PlayerDataLoadEvent(this, false));
+	}
+
+	public final void setName(String name) {
+		this.name = name;
 	}
 
 	public void rebuild_cache() {
@@ -273,14 +491,13 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 
 	public synchronized void save() {
-		save(true);
-	}
-	
-	public synchronized void save(boolean throwEvent)
-	{
-		if (throwEvent)
-			CommonUtil.callEvent(new PlayerDataSaveEvent(this ,false));
+		if (!isFirstLoad)
+			load(false);
+		
+		getUUID();
+		
 		persistant_data.set("cooldowns", getCoolDowns());
+		persistant_data.set("last.ign", getName());
 		
 		if (persistant_data instanceof FileConfiguration)
 		{
@@ -289,7 +506,18 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		} else {
 			manager.save();
 		}
-			
+	}
+	
+	public final void updateUID() {
+		if (getName() != null)
+			if (isOnline())
+				this.uid = getPlayer().getUniqueId();
+	}
+	
+	@Deprecated
+	public synchronized void save(boolean throwEvent)
+	{
+		save();
 	}
 
 	public void saveLastLocation(){
@@ -319,6 +547,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		setLastDeathTS();
 		EntityDamageEvent ede = event.getEntity().getLastDamageCause();
 		
+		if (ede == null)
+			return;
 		
 		this.persistant_data.set("last.death.cause.damage", ede.getDamage());
 		this.persistant_data.set("last.death.cause.type", ede.getCause().name());
@@ -343,7 +573,10 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		} else if (ede instanceof EntityDamageByBlockEvent) {
 			EntityDamageByBlockEvent edbb = (EntityDamageByBlockEvent) ede;
 			
-			this.persistant_data.set("last.death.cause.block.type", edbb.getDamager().getType().name());
+			try {
+				this.persistant_data.set("last.death.cause.block.type", edbb.getDamager().getType().name());
+				
+			} catch (NullPointerException e) {}
 		}
 	}
 	
@@ -385,5 +618,99 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	public void setVotes(int amount)
 	{
 		persistant_data.set("vote-count", amount);
+	}
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#getBedSpawnLocation()
+	 */
+	public Location getBedSpawnLocation() {
+		return getProxyBase().getBedSpawnLocation();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#getFirstPlayed()
+	 */
+	public long getFirstPlayed() {
+		return getProxyBase().getFirstPlayed();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#getLastPlayed()
+	 */
+	public long getLastPlayed() {
+		return getProxyBase().getLastPlayed();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#hasPlayedBefore()
+	 */
+	public boolean hasPlayedBefore() {
+		return getProxyBase().hasPlayedBefore();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#isBanned()
+	 */
+	public boolean isBanned() {
+		return getProxyBase().isBanned();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.permissions.ServerOperator#isOp()
+	 */
+	public boolean isOp() {
+		return getProxyBase().isOp();
+	}
+
+
+
+	/**
+	 * @return
+	 * @see org.bukkit.OfflinePlayer#isWhitelisted()
+	 */
+	public boolean isWhitelisted() {
+		return getProxyBase().isWhitelisted();
+	}
+
+	/**
+	 * @param arg0
+	 * @see org.bukkit.OfflinePlayer#setBanned(boolean)
+	 */
+	public void setBanned(boolean arg0) {
+		getProxyBase().setBanned(arg0);
+	}
+
+
+
+	/**
+	 * @param arg0
+	 * @see org.bukkit.permissions.ServerOperator#setOp(boolean)
+	 */
+	public void setOp(boolean arg0) {
+		getProxyBase().setOp(arg0);
+	}
+
+	/**
+	 * @param arg0
+	 * @see org.bukkit.OfflinePlayer#setWhitelisted(boolean)
+	 */
+	public void setWhitelisted(boolean arg0) {
+		getProxyBase().setWhitelisted(arg0);
 	}
 }

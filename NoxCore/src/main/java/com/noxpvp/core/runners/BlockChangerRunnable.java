@@ -1,0 +1,110 @@
+package com.noxpvp.core.runners;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.noxpvp.core.data.Pair;
+import com.noxpvp.core.utils.BlockStateUtils;
+
+import org.apache.commons.lang.math.RandomUtils;
+import org.bukkit.block.BlockState;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import com.bergerkiller.bukkit.common.Task;
+
+//TODO: TestRun
+public class BlockChangerRunnable extends Task {
+
+	public BlockChangerRunnable(JavaPlugin plugin) {
+		super(plugin);
+	}
+
+	//First should be the one to check for if checking to match.
+	//Second should be to change to.
+	private List<Pair<BlockState>> states;
+//	private List<Pair<BlockState>> pending; //For the placement safety system.
+	
+	public BlockChangerRunnable(JavaPlugin plugin, List<BlockState> states, List<BlockState> oldStates, boolean random, boolean checkCurrent, int restoreRate, long restoreInterval)
+	{
+		super(plugin);
+		if (states.size() != oldStates.size())
+			throw new IllegalArgumentException("States and old states do not match. You must specify equal number for each.");
+		states = new ArrayList<BlockState>();
+		for (int i = 0; i < states.size(); i++)
+			if (oldStates.get(i).getBlock().equals(states.get(i).getBlock()))
+				this.states.add(new Pair<BlockState>(oldStates.get(i), states.get(i)));
+		setRestoreRate(restoreRate);
+		setRestoreInterval(restoreInterval);
+	}
+	
+	private boolean checkCurrent = true;
+	
+	private long restoreInterval;
+	private int restoreRate;
+	
+	private boolean isRandom = false;
+	
+	public BlockChangerRunnable setUsingRandom(boolean random) {
+		this.isRandom = random;
+		return this;
+	}
+	
+	public boolean isRandom() { return this.isRandom; }
+	
+	public BlockChangerRunnable setRestoreInterval(long ticks) {
+		this.restoreInterval = ticks;
+		return this;
+	}
+	
+	public BlockChangerRunnable setRestoreRate(int amount) {
+		this.restoreRate = amount;
+		return this;
+	}
+	
+	public long getRestoreInterval() { return this.restoreInterval; }
+	public int getRestoreRate() { return this.restoreRate; }
+
+	private boolean isSame(BlockState previousState)
+	{
+		return BlockStateUtils.blockStatesPerfectMatch(previousState, previousState.getBlock().getState());
+	}
+	
+	private void clean() {
+		if (!checkCurrent)
+			return;
+		
+		List<Pair<BlockState>> pending = new ArrayList<Pair<BlockState>>();
+		for (Pair<BlockState> pair : states)
+			if (!isSame(pair.first))
+				pending.add(pair);
+		
+		states.removeAll(pending);
+		pending = null;
+	}
+	
+	public void run() {
+		clean();
+		
+		if (getRestoreRate() >= states.size())
+			for (Pair<BlockState> pair : states)
+				pair.second.update(true, false); //TODO: Add safecode for fixing stuff that can break the moment it is spawned in air. Such as redstone!
+		else {
+			if (!isRandom())
+				for (int i = 0; i < getRestoreRate(); i++)
+					states.remove(0).second.update(true, false);
+			else{
+				int i = 0;
+				while (i < getRestoreRate())
+				{
+					int next = RandomUtils.nextInt(states.size()-1);
+					states.remove(next).second.update(true, false);
+					
+					i++;
+				}
+			}
+		}
+		
+		if (states.size() > 0)
+			start(restoreInterval);
+	}
+}

@@ -5,8 +5,13 @@ import java.util.List;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.Material;
+import org.bukkit.entity.Damageable;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+import com.noxpvp.mmo.MMOPlayer;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 
@@ -14,41 +19,15 @@ import com.noxpvp.mmo.abilities.PassiveAbility;
  * @author NoxPVP
  *
  */
-public class ParryAbility extends BasePlayerAbility implements PassiveAbility{
+public class ParryAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>{
 	
 	public static final String ABILITY_NAME = "Parry";
 	public static final String PERM_NODE = "parry";
 	
 	public List<Material> parriedWeapons= new ArrayList<Material>();
-	private Player e;
+	
 	private float percentChance;
-	private boolean mustBlock = true;
-	
-	/**
-	 * 
-	 * @return Entity The currently set target for this ability instance
-	 */
-	public Player getE() {return e;}
-	
-	/**
-	 * 
-	 * @param e the target to set for this ability instance
-	 * @return ParryAbility This instance, used for chaining
-	 */
-	public ParryAbility setE(Player e) {this.e = e; return this;}
-
-	/**
-	 * 
-	 * @return double Get the currently set percentage for this ability's chance of success
-	 */
-	public float getPercentChance() {return percentChance; }
-
-	/**
-	 * 
-	 * @param percentChance The chance to set for this ability's success
-	 * @return ParryAbility This instance, used for chaining
-	 */
-	public ParryAbility setPercentChance(float percentChance) {this.percentChance = percentChance; return this;}
+	private boolean mustBlock;
 
 	/**
 	 * 
@@ -69,17 +48,31 @@ public class ParryAbility extends BasePlayerAbility implements PassiveAbility{
 	 */
 	public ParryAbility(Player player){
 		super(ABILITY_NAME, player);
+		
+		this.mustBlock = false;
 	}
 	
-	public boolean execute(){
-		if (!mayExecute()) return false;
+	public boolean execute() { return true; }
+
+	public boolean execute(EntityDamageByEntityEvent event){
+		if (event.getEntity() != getPlayer() || !mayExecute()) return false;
 		
 		Player p = getPlayer();
-		Material i = getE().getItemInHand().getType();
 		
-		if (!parriedWeapons.contains(i)) return false;
-		if (mustBlock && !p.isBlocking()) return false;
+		MMOPlayer mmoPlayer;
+		
+		if ((mmoPlayer = PlayerManager.getInstance().getPlayer(p)) == null || (mustBlock && (!parriedWeapons.contains(p.getItemInHand().getType()))))
+				return false;
+		
+		float chance = mmoPlayer.getPrimaryClass().getTotalLevel() / 6;
+		percentChance = (chance <= 75)? chance : 75;
 		if (RandomUtils.nextFloat() > percentChance) return false;
+		
+		
+		Entity damager = event.getDamager();
+		if (damager instanceof Damageable){
+			((Damageable) damager).damage(event.getDamage() / .7, p);
+		}
 		
 		return true;
 	}

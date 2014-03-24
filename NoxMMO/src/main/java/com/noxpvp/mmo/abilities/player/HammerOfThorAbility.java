@@ -13,9 +13,10 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 public class HammerOfThorAbility extends BasePlayerAbility{
         public static List<Player> hammerThrowers = new ArrayList<Player>();
         
+        //TODO make this
+        
         public static final String ABILITY_NAME = "Hammer of Thor";
         public static final String PERM_NODE = "hammer-of-thor";
-        
         
         private double distanceVelo;
         
@@ -38,6 +39,8 @@ public class HammerOfThorAbility extends BasePlayerAbility{
          */
         public HammerOfThorAbility(Player player){
                 super(ABILITY_NAME, player);
+                
+                this.distanceVelo = 2;
         }
         
         /**
@@ -47,6 +50,7 @@ public class HammerOfThorAbility extends BasePlayerAbility{
          */
         public HammerOfThorAbility(Player player, double distanceVelo){
                 super(ABILITY_NAME, player);
+                
                 this.distanceVelo = distanceVelo;
         }
         

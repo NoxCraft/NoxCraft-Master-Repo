@@ -19,9 +19,8 @@ public class HomeAdminCommand extends BaseCommand {
 		);
 	}
 
-	public boolean execute(CommandContext context) {
-		displayHelp(context.getSender());
-		return true;
+	public CommandResult execute(CommandContext context) {
+		return new CommandResult(this, false);
 	}
 	
 	public String[] getHelp() {

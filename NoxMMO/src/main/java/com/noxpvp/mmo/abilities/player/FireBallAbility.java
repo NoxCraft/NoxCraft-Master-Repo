@@ -15,6 +15,7 @@ public class FireBallAbility extends BaseEntityAbility{
 	
 	public static final String PERM_NODE = "fireball";
 	public static final String ABILITY_NAME = "FireBall";
+	
 	private double power;
 	
 	/**
@@ -40,6 +41,8 @@ public class FireBallAbility extends BaseEntityAbility{
 	 */
 	public FireBallAbility(Entity e){
 		super(ABILITY_NAME, e);
+		
+		this.power = 3;
 	}
 
 	public boolean execute() {

@@ -8,5 +8,5 @@
   <artifactId>NoxMMO</artifactId>
   <name>NoxMMO</name>
   <description>Nox classes and level plugin. Used for many special abilities and skills you can use.</description>
-  <version>${NoxMMOVersion}</version>
+  <version>0.0.1 - Test Build b3</version>
 </project>

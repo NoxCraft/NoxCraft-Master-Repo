@@ -7,9 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 public class CurseAbility extends BaseTargetedPlayerAbility{
 	
@@ -67,7 +68,7 @@ public class CurseAbility extends BaseTargetedPlayerAbility{
 	
 	public CurseAbility(Player player){
 		
-		super(ABILITY_NAME, player, NoxMMO.getInstance().getPlayerManager().getMMOPlayer(player).getTarget());
+		super(ABILITY_NAME, player, PlayerManager.getInstance().getPlayer(player).getTarget());
 		
 		this.duration = 100;
 		this.lethality = 1;
@@ -86,7 +87,7 @@ public class CurseAbility extends BaseTargetedPlayerAbility{
 		t.addPotionEffect(new PotionEffect(PotionEffectType.POISON, duration, lethality));
 		t.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, lethality));
 		
-		new EffectsRunnable(Arrays.asList("angryVillager"), t.getLocation(), 0, 1, false, false, null).runTask(NoxMMO.getInstance());
+		new EffectsRunnable(Arrays.asList("angryVillager"), false, t.getLocation(), 0, 1, 1, null).runTask(NoxMMO.getInstance());
 		
 		return true;
 	}

@@ -3,3 +3,8 @@ version: ${project.version}
 description: Nox MMO system.
 main: com.noxpvp.mmo.NoxMMO
 author: Christopher Krier (AKA Coaster3000)
+depend: [NoxCore]
+commands:
+  class:
+    description: Class commands.
+    usage: /<command> -h

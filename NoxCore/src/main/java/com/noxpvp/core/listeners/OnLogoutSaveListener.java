@@ -2,10 +2,10 @@ package com.noxpvp.core.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.noxpvp.core.NoxCore;
+import com.noxpvp.core.manager.PlayerManager;
 
 public class OnLogoutSaveListener extends NoxListener<NoxCore> {
 
@@ -15,6 +15,6 @@ public class OnLogoutSaveListener extends NoxListener<NoxCore> {
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void onLogoutEvent(PlayerQuitEvent event) {
-		getPlugin().getPlayerManager().unloadAndSavePlayer(event.getPlayer().getName());
+		PlayerManager.getInstance().unloadAndSavePlayer(event.getPlayer().getName());
 	}
 }

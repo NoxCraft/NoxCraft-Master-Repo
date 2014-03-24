@@ -8,18 +8,19 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.PlayerManager;
-import com.noxpvp.core.data.NoxPlayer;
-import com.noxpvp.core.utils.Vector3D;
+import com.noxpvp.core.data.Vector3D;
+import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PassiveAbility;
+import com.noxpvp.mmo.classes.PlayerClass;
 
-public class TargetAbility extends BasePlayerAbility{
+public class TargetAbility extends BasePlayerAbility implements PassiveAbility<PlayerInteractEvent>{
 	
-	public static final String PERM_NODE = "set-target";
+	public static final String PERM_NODE = "target";
 	public static final String ABILITY_NAME = "Target";
 	
 	private double range;
@@ -46,14 +47,16 @@ public class TargetAbility extends BasePlayerAbility{
 	public TargetAbility(Player player){
 		super(ABILITY_NAME, player);
 		
-		this.range = 20;
+		this.range = 25;
 	}
 	
 	/**
 	 * 
-	 * @return Boolean - If this ability has successfully executed
+	 * @return Boolean - PassiveAbililty, return true
 	 */
-	public boolean execute() {
+	public boolean execute() { return true; }
+	
+	public boolean execute(PlayerInteractEvent event){
 		if (!mayExecute())
 			return false;
 		
@@ -61,43 +64,49 @@ public class TargetAbility extends BasePlayerAbility{
 		
 		for (Entity it : p.getNearbyEntities(range, range, range)){
 			
-			if (!(it instanceof Player)) continue;
-			if (it instanceof Player){
-				if (!(p).canSee((Player) it)) continue;}
+			if (!(it instanceof LivingEntity) || it.equals(p)) continue;
+			if ((it instanceof Player) && !(p).canSee((Player) it)) continue;
 			
-			this.target_ref = new SoftReference<LivingEntity>((LivingEntity) it);
-			break;
-		}
-		if (this.target_ref.get() == null)
-			return false;
-		
-		Location observerPos = p.getEyeLocation();
-		Vector3D observerDir = new Vector3D(observerPos.getDirection());
-
-		Vector3D observerStart = new Vector3D(observerPos);
-		Vector3D observerEnd = observerStart.add(observerDir.multiply(range));
-		
-		Vector3D targetPos = new Vector3D(target_ref.get().getLocation());
-		Vector3D minimum = targetPos.add(-0.6, 0, -0.6); 
-		Vector3D maximum = targetPos.add(0.6, 1.75, 0.6); 
-
-		if (hasIntersection(observerStart, observerEnd, minimum, maximum)) {
-			NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p.getName()).setTarget(target_ref.get());
+			Location observerPos = p.getEyeLocation();
+			Vector3D observerDir = new Vector3D(observerPos.getDirection());
 			
-			ChatColor color = ChatColor.RED;
-			PlayerManager pm = NoxCore.getInstance().getPlayerManager();
+			Vector3D observerStart = new Vector3D(observerPos);
+			Vector3D observerEnd = observerStart.add(observerDir.multiply(range));
 			
-			NoxPlayer noxPlayer = pm.getPlayer(p);
-			MMOPlayer mmoPlayer = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p);
+			Vector3D targetPos = new Vector3D(it.getLocation());
+			Vector3D minimum = targetPos.add(-0.6, 0, -0.6); 
+			Vector3D maximum = targetPos.add(0.6, 2.0, 0.6); 
 			
-			if (noxPlayer == null) return false;
-			
-			String name = noxPlayer.getFullName() + color;
-			if (mmoPlayer != null && mmoPlayer.getMainPlayerClass() != null) {
-				name.concat(" - " + mmoPlayer.getMainPlayerClass().getDisplayName() + color);
+			if (hasIntersection(observerStart, observerEnd, minimum, maximum)) {
+				this.target_ref = new SoftReference<LivingEntity>((LivingEntity) it);
+				
+				PlayerManager pm = PlayerManager.getInstance();
+				MMOPlayer mmoPlayer = pm.getPlayer(p), mmoIt = it instanceof Player? pm.getPlayer((Player) it) : null;
+				com.noxpvp.core.manager.PlayerManager cpm = com.noxpvp.core.manager.PlayerManager.getInstance();
+				
+				if (mmoPlayer == null) continue;
+				
+				mmoPlayer.setTarget(target_ref.get());
+				
+				String name;
+				CoreBar bar =  cpm.getPlayer(p.getName()).getCoreBar();
+				
+				if (mmoIt != null){
+					PlayerClass c = mmoPlayer.getPrimaryClass();
+					
+					if (c != null) { 
+						name = mmoIt.getFullName() + bar.color + bar.separater + ChatColor.RESET + c.getDisplayName();
+					} else name = mmoIt.getFullName();
+				} else {
+					if (it instanceof Player) name = ((Player)it).getName();
+					else name = it.getType().name();
+				} 
+				
+				bar.newLivingTracker(target_ref.get(), name, false);
+				return true;
+			} else {
+				continue;
 			}
-			
-			pm.getCoreBar(p.getName()).newLivingTracker(target_ref.get(), name, color);
 		}
 		
 		return true;
@@ -124,7 +133,7 @@ public class TargetAbility extends BasePlayerAbility{
 			return false;
 		if (Math.abs(d.x * c.y - d.y * c.x) > e.x * ad.y + e.y * ad.x + epsilon)
 			return false;
- 
+
 		return true;
 	}
 

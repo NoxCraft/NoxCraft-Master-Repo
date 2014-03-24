@@ -3,6 +3,8 @@ package com.noxpvp.mmo.abilities.entity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
+import com.bergerkiller.bukkit.common.protocol.CommonPacket;
+import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOutNamedEntitySpawn;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 import com.noxpvp.mmo.runnables.DamageRunnable;
@@ -20,7 +22,7 @@ public class BandageAbility extends BaseEntityAbility{
 	public BandageAbility(Entity entity) {
 		super(ABILITY_NAME, entity);
 	}
-
+	
 	public boolean execute() {
 		if (!mayExecute())
 			return false;		

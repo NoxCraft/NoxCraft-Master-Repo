@@ -1,26 +1,33 @@
 package com.noxpvp.mmo;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.event.Event;
 
-import com.noxpvp.mmo.listeners.MMOEventHandler;
-import com.noxpvp.mmo.listeners.GenericNoxListener;
+import com.bergerkiller.bukkit.common.ModuleLogger;
+import com.noxpvp.mmo.handlers.GenericMMOListener;
+import com.noxpvp.mmo.handlers.MMOEventHandler;
 
 @SuppressWarnings("unchecked")
 public class MasterListener {
-	private Map<String, GenericNoxListener<?>> listeners;
+	private static ModuleLogger log;
 	
-	public <T extends Event> GenericNoxListener<T> getNoxListener(Class<T> eventClass, String eventName)
+	private Map<String, GenericMMOListener<?>> listeners = new HashMap<String, GenericMMOListener<?>>();
+	
+	public <T extends Event> GenericMMOListener<T> getNoxListener(Class<T> eventClass, String eventName)
 	{
-		GenericNoxListener<T> listener = (GenericNoxListener<T>)listeners.get(eventName);
-		if (listener == null)
-			listeners.put(eventName, (listener = new GenericNoxListener<T>(NoxMMO.getInstance(), eventClass)));
-		
+		GenericMMOListener<T> listener = (GenericMMOListener<T>)listeners.get(eventName);
+		if (listener == null) {
+			listener = GenericMMOListener.newListener(NoxMMO.getInstance(), eventClass);
+			if (listener != null)
+				listeners.put(eventName, listener);
+		}
+
 		return listener;
 	}
 	
-	public <T extends Event> GenericNoxListener<T> getNoxListener(T event)
+	public <T extends Event> GenericMMOListener<T> getNoxListener(T event)
 	{
 		return getNoxListener((Class<T>)event.getClass(), event.getEventName());
 	}
@@ -31,9 +38,11 @@ public class MasterListener {
 		if (!listeners.containsKey(eventName))
 			return false;
 		try {
-			((GenericNoxListener<T>)listeners.get(eventName)).unregisterHandler(handler);
+			((GenericMMOListener<T>)listeners.get(eventName)).unregisterHandler(handler);
 			return true;
 		} catch (IllegalStateException e) {
+			return false;
+		} catch (NullPointerException e) { 
 			return false;
 		}
 	}
@@ -41,22 +50,27 @@ public class MasterListener {
 	public <T extends Event> boolean registerHandler(MMOEventHandler<T> handler)
 	{
 		String eventName = handler.getEventName();
-		GenericNoxListener<T> listener;
-		if (!listeners.containsKey(eventName))
-			listeners.put(eventName, new GenericNoxListener<T>(NoxMMO.getInstance(), handler.getEventType()));
-
-		listener = (GenericNoxListener<T>) listeners.get(eventName);
+		GenericMMOListener<T> listener = getNoxListener(handler.getEventType(), eventName);
+		
+		if (listener == null) {
+			log.severe("There is no event listener class for event '" + eventName + "'");
+			return false;
+		}
 		
 		try { 
 			listener.registerHandler(handler);
 			return true;
 		} catch (IllegalStateException e) {
 			return false;
-		}
+		} 
 	}
 
 	public void unregisterAll() {
-		for (GenericNoxListener<?> listener : listeners.values())
+		for (GenericMMOListener<?> listener : listeners.values())
 			listener.unregister();
+	}
+
+	public static void init() {
+		log = NoxMMO.getInstance().getModuleLogger("MasterListener");
 	}
 }

@@ -98,6 +98,7 @@ public class CoreCommandParser {
 	}
 	
 	static String[] testFlagsExistsTestArgLines = {"come --all", "this --all  test", "oh --all"};
+	
 	@Test
 	public void testFlagsExists() {
 		for (String argLine : testFlagsExistsTestArgLines)

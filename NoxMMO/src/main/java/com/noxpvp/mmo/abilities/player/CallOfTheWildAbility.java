@@ -58,6 +58,7 @@ public class CallOfTheWildAbility extends BasePlayerAbility{
 
 	public CallOfTheWildAbility(Player player) {
 		super(ABILITY_NAME, player);
+		
 		this.cancelIfNearby = true;
 		this.range = 50;
 		this.spawnType = EntityType.WOLF;

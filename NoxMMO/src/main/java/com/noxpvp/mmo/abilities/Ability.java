@@ -21,6 +21,12 @@ public interface Ability {
 	public boolean execute();
 	
 	/**
+	 * Retrieves the display name locale of this ability.
+	 * @return Colored String Value
+	 */
+	public String getDisplayName();
+	
+	/**
 	 * Tells whether or not an ability should be allowed to be executed.
 	 * @return true if allowed and false if not.
 	 */

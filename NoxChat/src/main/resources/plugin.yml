@@ -1,0 +1,7 @@
+name: NoxChat
+version: ${project.version}
+description: |
+  Provides the essential chat system to the server.
+  This is also meant to replace TownyChat.
+main: ${main}
+depend: [NoxCore]

@@ -31,13 +31,14 @@ public class HealRunnable extends BukkitRunnable{
 	}
 	
 	public void run(){
-		if (!(runs >= runsLimit))
+		if (runs++ >= runsLimit)
 		{
 			safeCancel();
 			return;
 		}
 		
-		e.setHealth(e.getHealth() + health);
+		double ha = e.getHealth() + health;
+		e.setHealth(ha > e.getMaxHealth()? e.getMaxHealth() : ha);
 	}
 
 }

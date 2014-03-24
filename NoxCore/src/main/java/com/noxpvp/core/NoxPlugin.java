@@ -17,14 +17,15 @@ import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.Command;
+import com.noxpvp.core.commands.Command.CommandResult;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.CommandUtil;
-import com.noxpvp.core.utils.MessageUtil;
-import com.noxpvp.core.utils.PermissionHandler;
+import com.noxpvp.core.utils.gui.MessageUtil;
 
 public abstract class NoxPlugin extends PluginBase {
 
@@ -50,7 +51,13 @@ public abstract class NoxPlugin extends PluginBase {
 			if (cmd == null)
 				throw new NullPointerException("Command execution class was null!");
 			try {
-				return cmd.executeCommand(context);
+				CommandResult result = cmd.executeCommand(context);
+				
+				if (!result.success) 
+					result.executer.displayHelp(context.getSender());
+				MessageUtil.sendMessage(context.getSender(), result.extraMessages);
+				
+				return true;
 			} catch (NoPermissionException e) {
 				MessageUtil.sendLocale(e.getSender(), GlobalLocale.FAILED_PERMISSION_VERBOSE, e.getMessage(), e.getPermission());
 			}
@@ -133,14 +140,13 @@ public abstract class NoxPlugin extends PluginBase {
 	}
 	
 	public final void register(Reloader reloader) {
-		NoxCore.getInstance().addReloader(reloader);
+		getMasterReloader().addModule(reloader);
 	}
 
 	/**
-	 * <b>DO NOT OVERRIDE ONLY CORE PLUGIN MUST OVERRIDE</b>
 	 * @return Core Master Reloader
 	 */
-	public MasterReloader getMasterReloader() {
-		return NoxCore.getInstance().getMasterReloader();
+	public final MasterReloader getMasterReloader() {
+		return MasterReloader.getInstance();
 	}
 }

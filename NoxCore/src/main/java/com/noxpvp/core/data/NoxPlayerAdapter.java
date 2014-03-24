@@ -1,5 +1,9 @@
 package com.noxpvp.core.data;
 
+import org.bukkit.entity.Player;
+
+import com.noxpvp.core.Persistant;
+
 /**
  * Using this interface you are required to implement a constructor with the
  * argument NoxPlayer as part of the implementation. <br />
@@ -12,11 +16,21 @@ package com.noxpvp.core.data;
  * 
  * @author Chris
  */
-public interface NoxPlayerAdapter {
+public interface NoxPlayerAdapter extends Persistant {
 	
 	/**
 	 * Retrieves the player object that this adaptor uses for data.
 	 * @return NoxPlayer instance
 	 */
 	public NoxPlayer getNoxPlayer();
+	
+	/**
+	 * Retrieves the player represented by this object.
+	 * @return Player
+	 */
+	public Player getPlayer();
+	
+	public boolean hasFirstLoaded();
+	
+	public String getPlayerName();
 }

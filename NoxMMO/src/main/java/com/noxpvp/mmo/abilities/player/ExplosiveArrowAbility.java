@@ -11,11 +11,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 
-import com.noxpvp.core.utils.MessageUtil;
-import com.noxpvp.mmo.MasterListener;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public class ExplosiveArrowAbility extends BasePlayerAbility{
 	
@@ -24,22 +23,20 @@ public class ExplosiveArrowAbility extends BasePlayerAbility{
 	
 	private BaseMMOEventHandler<ProjectileHitEvent> hitHandler;
 	private BaseMMOEventHandler<ProjectileLaunchEvent> launchHandler;
-	private float power;
 	
-	List<Arrow> arrows = new ArrayList<Arrow>();
-	private boolean isActive = false, isFiring = false, isSingleShotMode = true;
+	List<Arrow> arrows;
+	private boolean isActive, isFiring, isSingleShotMode;
+	private float power;
 	
 	public ExplosiveArrowAbility setFiring(boolean firing) { 
 		boolean changed = this.isFiring != firing;
 		this.isFiring = firing;
 		
-		MasterListener m = NoxMMO.getInstance().getMasterListener();
-		
 		if (changed)
 			if (firing)
-				m.registerHandler(launchHandler);
+				registerHandler(launchHandler);
 			else
-				m.unregisterHandler(hitHandler);
+				unRegisterHandler(hitHandler);
 		
 		return this; 
 	}
@@ -48,13 +45,11 @@ public class ExplosiveArrowAbility extends BasePlayerAbility{
 		boolean changed = this.isActive != active;
 		this.isActive = active;
 		
-		MasterListener m = NoxMMO.getInstance().getMasterListener();
-		
 		if (changed)
 			if (active)
-				m.registerHandler(hitHandler);
+				registerHandler(hitHandler);
 			else
-				m.unregisterHandler(hitHandler);
+				unRegisterHandler(hitHandler);
 		
 		return this; 
 	}
@@ -84,7 +79,9 @@ public class ExplosiveArrowAbility extends BasePlayerAbility{
 	public ExplosiveArrowAbility(Player player) {
 		super(ABILITY_NAME, player);
 		
-		hitHandler = new BaseMMOEventHandler<ProjectileHitEvent>(new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileHitEvent").toString(), EventPriority.NORMAL, 1) {
+		hitHandler = new BaseMMOEventHandler<ProjectileHitEvent>(
+				new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileHitEvent").toString(),
+				EventPriority.NORMAL, 1) {
 
 			public boolean ignoreCancelled() {
 				return true;
@@ -151,6 +148,11 @@ public class ExplosiveArrowAbility extends BasePlayerAbility{
 			}
 		};
 		
+		
+		this.arrows = new ArrayList<Arrow>();
+		this.isActive = false;
+		this.isFiring = false;
+		this.isSingleShotMode = true;
 		this.power = 4f;
 	}
 	

@@ -8,20 +8,21 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.noxpvp.core.utils.EffectsRunnable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
 
 public class WisdomAbility extends BaseEntityAbility{
 
 	public final static String ABILITY_NAME = "Wisdom";
+	public final static String PERM_NODE = "wisdom";
 
 	private NoxMMO mmo;
 	private int duration;
 	private int amplifier;
 
 	/**
-	 * Gets the duration
+	 * Gets the duration is seconds
 	 * 
 	 * @return Integer The duration
 	 */
@@ -30,7 +31,7 @@ public class WisdomAbility extends BaseEntityAbility{
 	/**
 	 * Sets the duration
 	 * 
-	 * @param duration
+	 * @param duration in seconds
 	 * @return WisdomAbility This instance
 	 */
 	public WisdomAbility setDuration(int duration) {this.duration = duration; return this;}
@@ -70,7 +71,7 @@ public class WisdomAbility extends BaseEntityAbility{
 		Bukkit.getScheduler().runTaskLater(mmo, new Runnable() {
 			
 			public void run() {
-				new EffectsRunnable("enchantmenttable", null, 1.5F, 250, false, false, e).runTask(mmo);
+				new EffectsRunnable(Arrays.asList("enchantmenttable"), false, null, 1.5F, 250, 1, e).runTask(mmo);
 				e.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * getDuration(), getAmplifier()));
 				
 			}

@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
@@ -14,11 +13,13 @@ public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbil
 
 	public static final String PERM_NODE = "Critical Hit";
 	public static final String ABILITY_NAME = "critical-hit";
+	
 	private PlayerManager pm;
 	
 	public CriticalHitAbility(Player p) {
 		super(ABILITY_NAME, p);
-		this.pm = NoxMMO.getInstance().getPlayerManager();
+		
+		this.pm = PlayerManager.getInstance();
 	}
 	
 	public boolean execute(EntityDamageByEntityEvent event) {
@@ -26,7 +27,7 @@ public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbil
 			return false;
 		
 		Player playerAttacker = (Player) ((event.getDamager() instanceof Player)? event.getDamager(): null);
-		String itemName = playerAttacker.getItemInHand().getType().name();
+		String itemName = playerAttacker.getItemInHand().getType().name().toUpperCase();
 		
 		if (!itemName.contains("SWORD") && !itemName.contains("AXE"))
 			return false;
@@ -34,14 +35,14 @@ public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbil
 		if (playerAttacker == null || !playerAttacker.equals(getPlayer()))
 			return false;
 		
-		MMOPlayer player = pm.getMMOPlayer(getPlayer());
+		MMOPlayer player = pm.getPlayer(getPlayer());
 		
 		if (player == null)
 			return false;
 		
-		PlayerClass clazz = player.getMainPlayerClass();
+		PlayerClass clazz = player.getPrimaryClass();
 		
-		double damage = (clazz.getLevel() + clazz.getTotalLevels()) / 75;
+		double damage = (clazz.getLevel() + clazz.getTotalLevel()) / 75;
 		if ((Math.random() * 100) > (damage * 45)) return false;
 		
 		event.setDamage(damage);

@@ -9,5 +9,5 @@
   <properties>
   	<main>com.noxpvp.homes.NoxHomes</main>
   </properties>
-  <version>${NoxHomesVersion}</version>
+  <version>0.2 Beta</version>
 </project>

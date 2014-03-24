@@ -17,13 +17,12 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.bergerkiller.bukkit.common.utils.StringUtil;
-import com.noxpvp.core.utils.MessageUtil;
+import com.noxpvp.core.utils.EffectsRunnable;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.listeners.BaseMMOEventHandler;
-import com.noxpvp.mmo.runnables.EffectsRunnable;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 /**
  * @author NoxPVP
@@ -31,7 +30,7 @@ import com.noxpvp.mmo.runnables.EffectsRunnable;
  */
 public class BankShotAbility extends BasePlayerAbility{
 	
-	public static final String PERM_NODE = "bankshot";
+	public static final String PERM_NODE = "bank-shot";
 	private static final String ABILITY_NAME = "Bank Shot";
 	
 	public void eventExecute(Arrow a){
@@ -73,7 +72,7 @@ public class BankShotAbility extends BasePlayerAbility{
 		Location pLoc = a.getLocation();
 		Location eLoc = e.getLocation();
 		
-		new EffectsRunnable(Arrays.asList("explode", "explode"), eLoc, 0, 3, false, false, null).runTask(NoxMMO.getInstance());
+		new EffectsRunnable(Arrays.asList("explode"), false, eLoc, 0, 2, 3, null).runTask(NoxMMO.getInstance());
 		a.setVelocity(eLoc.toVector().subtract(pLoc.toVector()));
 		
 		return;
@@ -89,7 +88,7 @@ public class BankShotAbility extends BasePlayerAbility{
 	
 	private long firingTicks = 100L; //5 seconds default
 	
-	private int range;
+	private int range = 20;
 	private boolean hitPlayers = true;
 	private boolean hitCreatures = true;
 	private boolean hitSelf = false;
@@ -232,60 +231,61 @@ public class BankShotAbility extends BasePlayerAbility{
 				new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileHitEvent").toString(),
 				EventPriority.NORMAL, 1) {
 
-					public boolean ignoreCancelled() {
-						return true;
-					}
+			public boolean ignoreCancelled() {
+				return true;
+			}
 
-					public void execute(ProjectileHitEvent event) {
-						if (event.getEntity().equals(BankShotAbility.this.arrows))
-							BankShotAbility.this.eventExecute((Arrow) event.getEntity());
-					}
+			public void execute(ProjectileHitEvent event) {
+				if (event.getEntity().equals(BankShotAbility.this.arrows))
+					BankShotAbility.this.eventExecute((Arrow) event.getEntity());
+			}
 
-					public Class<ProjectileHitEvent> getEventType() {
-						return ProjectileHitEvent.class;
-					}
+			public Class<ProjectileHitEvent> getEventType() {
+				return ProjectileHitEvent.class;
+			}
 
-					public String getEventName() {
-						return "ProjectileHitEvent";
-					}
+			public String getEventName() {
+				return "ProjectileHitEvent";
+			}
 		};
 		
 		launchHandler = new BaseMMOEventHandler<ProjectileLaunchEvent>(
-				new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileLaunchEvent").toString(), 
-				EventPriority.MONITOR, 1) {
+			new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileLaunchEvent").toString(), 
+			EventPriority.MONITOR, 1) {
+		
+			public boolean ignoreCancelled() {
+				return true;
+			}
 			
-					public boolean ignoreCancelled() {
-						return true;
-					}
-					
-					public Class<ProjectileLaunchEvent> getEventType() {
-						return ProjectileLaunchEvent.class;
-					}
-					
-					public String getEventName() {
-						return "ProjectileLaunchEvent";
-					}
-					
-					public void execute(ProjectileLaunchEvent event) {
-						if (event.getEntityType() != EntityType.ARROW)
-							return;
-						
-						Arrow arrow = (Arrow)event.getEntity();
-						if (!(arrow.getShooter() instanceof Player))
-							return;
-						
-						Player shooter = (Player) arrow.getShooter();
-						if (!shooter.equals(BankShotAbility.this.getPlayer()))
-							return;
-						
-						if (isSingleShotMode() && !arrows.isEmpty())
-							arrows.clear();
-						
-						arrows.add(arrow);
-						
-						if (isSingleShotMode())
-							setFiring(false);
-					}
+			public Class<ProjectileLaunchEvent> getEventType() {
+				return ProjectileLaunchEvent.class;
+			}
+			
+			public String getEventName() {
+				return "ProjectileLaunchEvent";
+			}
+			
+			public void execute(ProjectileLaunchEvent event) {
+				if (event.getEntityType() != EntityType.ARROW)
+					return;
+				
+				Arrow arrow = (Arrow) event.getEntity();
+				if (!(arrow.getShooter() instanceof Player))
+					return;
+				
+				Player shooter = (Player) arrow.getShooter();
+				if (!shooter.equals(BankShotAbility.this.getPlayer()))
+					return;
+				
+				if (isSingleShotMode() && !arrows.isEmpty())
+					arrows.clear();
+				
+				arrows.add(arrow);
+				setActive(true);
+				
+				if (isSingleShotMode())
+					setFiring(false);
+			}
 		};
 	}
 
@@ -293,14 +293,13 @@ public class BankShotAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 
-		if (!isFiring() && isActive())
+		if (!isFiring() && !isActive())
 		{
 			setFiring(true);
 			
 			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.activated", "Bank Shot Ability");
 			return true;
-		} else
-		{
+		} else {
 			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.already-active", ABILITY_NAME);
 			return false;
 		}

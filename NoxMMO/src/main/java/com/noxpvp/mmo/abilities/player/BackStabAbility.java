@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
@@ -19,10 +19,11 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 	
 	public static final String PERM_NODE = "backstab";
 	public static final String ABILITY_NAME = "BackStab";
+	
 	private LivingEntity target;
 	private float damagePercent;
-	private double Damage;
-	private double accuracy = 20;
+	
+	private double accuracy;
 	
 	/**
 	 * 
@@ -71,24 +72,13 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 	/**
 	 * 
 	 * 
-	 * @return double Currently set initial damage value
-	 */
-	public double getDamage() {return Damage;}
-
-	/**
-	 * 
-	 * 
-	 * @param damage double amount from initial damage event
-	 */
-	public void setDamage(double damage) {Damage = damage;}
-
-	/**
-	 * 
-	 * 
 	 * @param player The Player type user for this ability instance
 	 */
 	public BackStabAbility(Player player){
 		super(ABILITY_NAME, player);
+		
+		this.damagePercent = 150;
+		this.accuracy = 20;
 	}
 	
 	public boolean execute(EntityDamageByEntityEvent event) {
@@ -106,20 +96,20 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 		if (!(pYaw <= (tYaw + accuracy)) && (pYaw >= (tYaw - accuracy)))
 			return false;
 		
-		MMOPlayer player = NoxMMO.getInstance().getPlayerManager().getMMOPlayer(p);
+		MMOPlayer player = PlayerManager.getInstance().getPlayer(p);
 		if (player == null)
 			return false;
 		
-		PlayerClass clazz = player.getMainPlayerClass();
+		PlayerClass clazz = player.getPrimaryClass();
 		
-		float chance = (clazz.getLevel() + clazz.getTotalLevels()) / 10;//up to 40% at max 400 total levels
+		float chance = (clazz.getLevel() + clazz.getTotalLevel()) / 10;//up to 40% at max 400 total levels
 		if ((Math.random() * 100) > chance)
 			return false;
 					
 		if (pLoc.distance(tLoc) < .35)//prevent if inside the target
 			return false;
 		
-		event.setDamage(event.getDamage() + getDamage());
+		event.setDamage(event.getDamage() * damagePercent);
 		
 		return true;
 	}

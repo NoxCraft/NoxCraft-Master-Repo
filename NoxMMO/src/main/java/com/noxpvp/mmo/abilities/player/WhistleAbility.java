@@ -11,7 +11,7 @@ public class WhistleAbility extends BasePlayerAbility{
 	public static final String ABILITY_NAME = "Whistle";
 	public static final String PERM_NODE = "whistle";
 	
-	private int range = 15;
+	private int range;
 	
 	/**
 	 * 
@@ -26,7 +26,10 @@ public class WhistleAbility extends BasePlayerAbility{
 	 */
 	public WhistleAbility setRange(int range) {this.range = range; return this;}
 
-	public WhistleAbility(Player player){super(ABILITY_NAME, player);}
+	public WhistleAbility(Player player){
+		super(ABILITY_NAME, player);
+		this.range = 15;
+	}
 
 	/**
 	 * 
