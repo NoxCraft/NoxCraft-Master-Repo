@@ -11,6 +11,7 @@ import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.abilities.entity.WisdomAbility;
 import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 
 public class PlayerInteractListener extends NoxListener<NoxMMO>{
@@ -42,6 +43,8 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 		if (p.getItemInHand().getType() != Material.STICK)
 			return;
 		MessageUtil.broadcast("sticked");
+		
+		new WisdomAbility(p).execute();
 		
 	}
 	

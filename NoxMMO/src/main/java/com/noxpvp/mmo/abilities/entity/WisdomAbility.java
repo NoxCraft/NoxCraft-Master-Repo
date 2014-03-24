@@ -1,14 +1,15 @@
 package com.noxpvp.mmo.abilities.entity;
 
-import java.util.Arrays;
-
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.noxpvp.core.utils.EffectsRunnable;
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
+import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 
@@ -55,7 +56,7 @@ public class WisdomAbility extends BaseEntityAbility{
 		super(ABILITY_NAME, e);
 		
 		this.mmo = NoxMMO.getInstance();
-		this.duration = 10;
+		this.duration = 15;
 		this.amplifier = 3;
 	}
 
@@ -67,15 +68,23 @@ public class WisdomAbility extends BaseEntityAbility{
 		
 		if (e == null) return false;
 		
-		e.addPotionEffects(Arrays.asList(new PotionEffect(PotionEffectType.SLOW, 45, 50), new PotionEffect(PotionEffectType.JUMP, 45, -50)));
+		final Location loc = e.getLocation().clone();
+		e.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 45, -100), true);
+		e.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 45, -100), true);
+		
+		new ParticleRunner(ParticleType.enchantmenttable, e, false, 2F, 150, 1).start(10);
+		new ParticleRunner(ParticleType.fireworksSpark, e, false, 0.3F, 50, 1).start(45);
+		new ParticleRunner(ParticleType.flame, e, false, 0.05F, 50, 1).start(45);
+
+		
 		Bukkit.getScheduler().runTaskLater(mmo, new Runnable() {
 			
 			public void run() {
-				new EffectsRunnable(Arrays.asList("enchantmenttable"), false, null, 1.5F, 250, 1, e).runTask(mmo);
-				e.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * getDuration(), getAmplifier()));
-				
+				e.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * getDuration(), getAmplifier()), true);
+				e.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * getDuration(), getAmplifier()), true);
+				e.teleport(loc);
 			}
-		}, 12);
+		}, 45);
 		
 		return true;
 	}

@@ -1,10 +1,9 @@
 package com.noxpvp.mmo.abilities.player;
 
-import java.util.Arrays;
-
 import org.bukkit.entity.Player;
 
-import com.noxpvp.core.utils.EffectsRunnable;
+import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.runnables.HealRunnable;
@@ -86,11 +85,10 @@ public class RejuvenationAbility extends BasePlayerAbility{
 		if (!mayExecute())
 			return false;
 		
-		NoxMMO instance = NoxMMO.getInstance();
+		Player p = getPlayer();
 		
-		new HealRunnable(getPlayer(), healthPerHeal, heals).runTaskTimer(instance, 0, delayBetweenHeals);
-		new EffectsRunnable(Arrays.asList("heart"), true, getPlayer().getLocation(), 0F, 3, 5, null).runTaskTimer(instance, 0, delayBetweenHeals);
-		
+		new HealRunnable(p, healthPerHeal, heals).runTaskTimer(NoxMMO.getInstance(), 0, delayBetweenHeals);
+		new ParticleRunner(ParticleType.heart, p, true, 0F, 3, 5).start(0, delayBetweenHeals);
 		
 		return true;
 	}
