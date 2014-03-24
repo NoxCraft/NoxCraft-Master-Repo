@@ -53,16 +53,22 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	}
 	
 	public final NoxPlayer getNoxPlayer() {
-		return getProxyBase();
+		if (getProxyBase() != null)
+			return getProxyBase();
+		else
+			return PlayerManager.getInstance().getPlayer(getPlayerName());
 	}
 	
 	public boolean hasFirstLoaded() {
 		return getProxyBase().hasFirstLoaded();
 	}
 	
-	public final NoxPlayer getNoxPlayer(boolean cache)
+	public final NoxPlayer getNoxPlayer(boolean forceUpdate)
 	{
-		return getProxyBase();
+		if (forceUpdate)
+			return PlayerManager.getInstance().getPlayer(getPlayerName());
+		else
+			return getProxyBase();
 	}
 	
 	public final ConfigurationNode getPersistantData() {
@@ -94,11 +100,14 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 		return PlayerManager.getInstance().getPlayer(name);
 	}
 
-	public void setProxyBase(OfflinePlayer base) {
-		getProxyBase().setProxyBase(base);
+	public void setProxyBase(NoxPlayer base) {
+		super.setProxyBase(base);
 	}
 
 	public NoxPlayer getProxyBase() {
+		if (super.getProxyBase() == null)
+			setProxyBase(getNoxPlayer(true));
+			
 		return super.getProxyBase();
 	}
 
