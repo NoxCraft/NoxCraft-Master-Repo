@@ -253,6 +253,7 @@ public class MedPackAbility extends BasePlayerAbility{
 		ItemStack medPack = craftNewPackStack();
 		
 		Item pack = p.getWorld().dropItem(p.getLocation() , medPack);
+		pack.setVelocity(p.getLocation().getDirection());
 		new EffectsRunnable(Arrays.asList("happyVillager"), true, null, 1F, 6, 0, pack).runTaskTimer(NoxMMO.getInstance(), 0, 10);
 		
 		if (!packs.add(new MedPackDataWrapper(pack, p, health))) {
