@@ -1,7 +1,5 @@
 package com.noxpvp.mmo.abilities.player;
 
-import java.util.Arrays;
-
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -10,7 +8,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;
 
-import com.noxpvp.core.utils.EffectsRunnable;
+import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
@@ -136,8 +135,8 @@ public class MassDestructionAbility extends BasePlayerAbility{
 		int range = ab.getRange();
 		NoxMMO mmo = NoxMMO.getInstance();
 		
-		new EffectsRunnable(Arrays.asList("explode"), false, pLoc, 0, 2, 1, null).runTask(mmo);
-		new ShockWaveAnimation(pLoc, 2, range, 0.3).runTask(mmo);
+		new ParticleRunner(ParticleType.explode, pLoc, false, 0, 2, 1).runTask(mmo);
+		new ShockWaveAnimation(p, pLoc, 2, range, 0.3).runTask(mmo);
 		new ExpandingDamageRunnable(p, p.getLocation(), ab.getDamage(), range, 2).runTask(mmo);
 	}
 

@@ -1,24 +1,66 @@
 package com.noxpvp.mmo.runnables;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.util.Vector;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 /**
  * @author NoxPVP
  *
  */
 public class ShockWaveAnimation extends BukkitRunnable{
+	private static MetadataValue shockMeta = new FixedMetadataValue(NoxMMO.getInstance(), "noland");
+	private static BaseMMOEventHandler<EntityChangeBlockEvent> landHandler  = new BaseMMOEventHandler<EntityChangeBlockEvent>(
+			new StringBuilder("ShockWaveAnimation").toString(),
+			EventPriority.HIGHEST, 1) {
+		
+		public boolean ignoreCancelled() {
+			return true;
+		}
+		
+		public Class<EntityChangeBlockEvent> getEventType() {
+			return EntityChangeBlockEvent.class;
+		}
+		
+		public String getEventName() {
+			return "EntityChangeBlockEvent";
+		}
+		
+		public void execute(EntityChangeBlockEvent event) {
+			
+			Entity e = event.getEntity();
+			if (!(e instanceof FallingBlock))
+				return;
+			
+			if (!e.hasMetadata("ShockWave"))
+				return;
+			
+			e.remove();
+			event.setCancelled(true);
+			
+		}
+	};
+	
+	
+	private Player p;
 	private Block center;
 	private int shockSpeed;
 	private int shockRange;
@@ -26,8 +68,8 @@ public class ShockWaveAnimation extends BukkitRunnable{
 	private boolean isCircle;
 	
 	private int i;
-	private HashSet<FallingBlock> novaBlocks;
 	private List<Material> flowers;
+	
 	
 	/**
 	 * 
@@ -37,16 +79,8 @@ public class ShockWaveAnimation extends BukkitRunnable{
 	 * @param shockRange the range from the location the shockwave will extend
 	 * @param shockVelo the velocity height of the shockwave blocks
 	 */
-	public ShockWaveAnimation(Location shockCenter, int shockSpeed, int shockRange, double shockVelo) {
-		this.center = shockCenter.getBlock().getRelative(BlockFace.DOWN);
-		this.shockSpeed = shockSpeed;
-		this.shockRange = shockRange;
-		this.shockVelo = new Vector().setY(shockVelo);
-		
-		this.i = 0;
-		this.novaBlocks = new HashSet<FallingBlock>();
-		this.flowers = Arrays.asList(Material.LONG_GRASS, Material.RED_ROSE, Material.YELLOW_FLOWER, Material.CROPS, Material.DEAD_BUSH, Material.VINE, Material.SAPLING);
-		
+	public ShockWaveAnimation(Player p, Location shockCenter, int shockSpeed, int shockRange, double shockVelo) {
+		this(p, shockCenter, shockSpeed, shockRange, shockVelo, false);
 	}
 	
 	/**
@@ -58,7 +92,8 @@ public class ShockWaveAnimation extends BukkitRunnable{
 	 * @param shockVelo the velocity height of the shockwave blocks
 	 * @param isCircle If the animation is circular, other wise square
 	 */
-	public ShockWaveAnimation(Location shockCenter, int shockSpeed, int shockRange, double shockVelo, boolean isCircle) {
+	public ShockWaveAnimation(Player p, Location shockCenter, int shockSpeed, int shockRange, double shockVelo, boolean isCircle) {
+		this.p = p;
 		this.center = shockCenter.getBlock().getRelative(BlockFace.DOWN);
 		this.shockSpeed = shockSpeed;
 		this.shockRange = shockRange;
@@ -66,9 +101,7 @@ public class ShockWaveAnimation extends BukkitRunnable{
 		this.isCircle = isCircle;
 		
 		this.i = 0;
-		this.novaBlocks = new HashSet<FallingBlock>();
 		this.flowers = Arrays.asList(Material.LONG_GRASS, Material.RED_ROSE, Material.YELLOW_FLOWER, Material.CROPS, Material.DEAD_BUSH, Material.VINE, Material.SAPLING);
-		
 	}
 	
 	private boolean isThrowable(Material type){
@@ -119,16 +152,11 @@ public class ShockWaveAnimation extends BukkitRunnable{
 	public void safeCancel() {try { cancel(); } catch (IllegalStateException e) {}	}
 
 	public void start(int delay) {
+		NoxMMO.getInstance().getMasterListener().registerHandler(landHandler);
 		runTaskTimer(NoxMMO.getInstance(), delay, shockSpeed);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void run() {
-		// remove old blocks
-		for (FallingBlock block : novaBlocks) {
-			block.setDropItem(false);
-		}
-		novaBlocks.clear();
 		
 		i += 1;
 		if (i <= shockRange) {
@@ -136,14 +164,15 @@ public class ShockWaveAnimation extends BukkitRunnable{
 			int bx = center.getX();
 			int y = center.getY();
 			int bz = center.getZ();
+			
 			for (int x = bx - i; x <= bx + i; x++) {
 				for (int z = bz - i; z <= bz + i; z++) {
 					Block b = null;
 					
 					if (isCircle) {
-						if (Math.abs( (int) b.getLocation().distance(center.getLocation()) ) == i) {
-							b = center.getWorld().getBlockAt(x, y+3, z);
-						} else continue;
+						b = center.getWorld().getBlockAt(x, y+3, z);
+						if (Math.abs( (int) b.getLocation().distance(center.getLocation()) ) != i)
+							continue;
 						
 					} else if (Math.abs(x-bx) == i || Math.abs(z-bz) == i) {
 						b = center.getWorld().getBlockAt(x, y+3, z);//+3 - max height above location
@@ -151,27 +180,30 @@ public class ShockWaveAnimation extends BukkitRunnable{
 					
 					if (b == null) continue;
 					
-					while(!isThrowable(b.getType()) && b.getLocation().getY() >= (center.getY()-3)){
+					while(!isThrowable(b.getType()) && b.getLocation().getY() > (center.getY()-4)){
 						b = b.getRelative(BlockFace.DOWN);
 					}
 					
-					if (flowers.contains(b.getType())) {b.breakNaturally();}
+					if (flowers.contains(b.getType())) {
+						if (CommonUtil.callEvent(new BlockBreakEvent(b, p)).isCancelled())
+							continue;
+						
+						b.breakNaturally();
+					}
 					if (b.getType() == Material.GRASS) {b.setType(Material.DIRT);}
 					
-					final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData()),
-							nb2 = b.getWorld().spawnFallingBlock(b.getRelative(0, 1, 0).getLocation(), b.getType(), b.getData());
+					final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getRelative(BlockFace.UP).getLocation(), b.getType(), b.getData());
 					
 					nb.setVelocity(shockVelo);
-					nb2.setVelocity(shockVelo);
-					
-					novaBlocks.add(nb);
-					novaBlocks.add(nb2);
+					nb.setMetadata("ShockWave", shockMeta);
+					nb.setDropItem(false);
 					   
 				}
 			}
+			
 		} else if (i > shockRange) {
 			safeCancel();
 			return;
-			}
 		}
 	}
+}

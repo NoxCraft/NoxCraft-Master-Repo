@@ -19,3 +19,5 @@
 		Bypassable through perm node.
 	- Homes will delete after warping if they are within a town you are not part of.
 	- Cleaned up locales.	
+0.2.1:
+	- Fixed home saving on logout. (Never saved to file)

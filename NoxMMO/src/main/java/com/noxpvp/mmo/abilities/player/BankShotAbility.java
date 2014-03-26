@@ -1,6 +1,5 @@
 package com.noxpvp.mmo.abilities.player;
 
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,8 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.noxpvp.core.utils.EffectsRunnable;
+import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
@@ -70,10 +70,9 @@ public class BankShotAbility extends BasePlayerAbility{
 			return;
 		
 		Location pLoc = a.getLocation();
-		Location eLoc = e.getLocation();
 		
-		new EffectsRunnable(Arrays.asList("explode"), false, eLoc, 0, 2, 3, null).runTask(NoxMMO.getInstance());
-		a.setVelocity(eLoc.toVector().subtract(pLoc.toVector()));
+		new ParticleRunner(ParticleType.explode, e, false, 0, 2, 3).start(0);
+		a.setVelocity(e.getLocation().toVector().subtract(pLoc.toVector()));
 		
 		return;
 	}

@@ -9,7 +9,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.noxpvp.core.utils.PlayerUtils;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
@@ -42,13 +41,13 @@ public class FlyAbility extends BasePlayerAbility{
 	
 	/**
 	 * 
-	 * @return Integer - The amount of ticks to wait between regent collecting checks
+	 * @return Integer - The amount of seconds to wait between regent collecting checks
 	 */
 	public int getRegFreq() {return regFreq;}
 	
 	/**
 	 * 
-	 * @param regFreq - The amount of ticks the ability should wait between collecting regents
+	 * @param regFreq - The amount of seconds the ability should wait between collecting regents
 	 * @return FlyAbility - This instance, used for chaining
 	 */
 	public FlyAbility setRegFreq(int regFreq) {this.regFreq = regFreq; return this;}
@@ -60,9 +59,8 @@ public class FlyAbility extends BasePlayerAbility{
 	public FlyAbility(Player player) {
 		super(ABILITY_NAME, player);
 		
-		this.reg.setAmount(1);
-		this.reg.setType(Material.FEATHER);
-		this.regFreq = (1200);
+		this.reg = new ItemStack(Material.FEATHER, 1);
+		this.regFreq = 15;
 	}
 	
 	public boolean execute() {
@@ -78,40 +76,48 @@ public class FlyAbility extends BasePlayerAbility{
 			
 			return true;
 		}
-		if (!p.getInventory().containsAtLeast(getReg(), getReg().getAmount())) return false;
+		Inventory i = p.getInventory();
+		if (!i.containsAtLeast(getReg(), getReg().getAmount())) return false;
 		
+		i.removeItem(getReg());
+		p.updateInventory();
 		FlyAbility.flyers.add(p);
 		p.setAllowFlight(true);
-		p.setFlying(true);
 		
-		FlyRunnable regChecker = new FlyRunnable();
-		regChecker.runTaskTimer(NoxMMO.getInstance(), 0, getRegFreq());
+		new FlyRunnable(p, reg).runTaskTimer(NoxMMO.getInstance(), getRegFreq() * 20, getRegFreq() * 20);
 		
 		return true;
 	}
 	
 	private class FlyRunnable extends BukkitRunnable{
+		private ItemStack regent;
 		private Player p;
 		private Inventory i;
 		
-		public FlyRunnable(){
-			this.p = getPlayer();
+		public FlyRunnable(Player p, ItemStack regent){
+			this.p = p;
+			this.regent = regent;
+			this.i = p.getInventory();
 		}
 		
 		public void safeCancel() {try { cancel(); } catch (IllegalStateException e) {}}
 		
 		public void run(){
-			if (!PlayerUtils.hasAtleast(p, getReg())){
-				p.setAllowFlight(false);
+			if (p == null || !p.isOnline() || !p.getAllowFlight() || !flyers.contains(p)) {
+				safeCancel();
+				return;
+			}
+			if (!i.containsAtLeast(regent, regent.getAmount())){
 				p.setFlying(false);
+				p.setAllowFlight(false);
 				
 				FlyAbility.flyers.remove(p);
 				
 				safeCancel();
 				return;
-			}else
-			{
-				i.removeItem(reg);
+			} else {
+				i.removeItem(regent);
+				p.updateInventory();
 			}
 		}
 	}

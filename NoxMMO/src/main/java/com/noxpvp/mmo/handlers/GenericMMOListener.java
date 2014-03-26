@@ -9,10 +9,12 @@ import java.util.WeakHashMap;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
@@ -28,10 +30,12 @@ public class GenericMMOListener<T extends Event> extends NoxListener<NoxMMO> {
 	static {
 		constructors.put(EntityDamageEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(EntityDamageListener.class, NoxMMO.class));
 		constructors.put(PlayerInteractEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(PlayerInteractListener.class, NoxMMO.class));
-		constructors.put(InventoryPickupItemEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(ItemPickupListener.class, NoxMMO.class));
+		constructors.put(PlayerPickupItemEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(PlayerPickupItemListener.class, NoxMMO.class));
 		constructors.put(ProjectileLaunchEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(ProjectileLaunchListener.class, NoxMMO.class));
 		constructors.put(ProjectileHitEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(ProjectileHitListener.class, NoxMMO.class));
 		constructors.put(InventoryPickupItemEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(InventoryPickupItemListener.class, NoxMMO.class));
+		constructors.put(PlayerInteractEntityEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(PlayerInteractEntityListener.class, NoxMMO.class));
+		constructors.put(EntityChangeBlockEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(EntityChangeBlockListener.class, NoxMMO.class));
 	}
 	
 	private Class<T> eventType;

@@ -39,3 +39,7 @@
 	=== Features ===
 	- Fixed chat format for ping system.
 	- Made save and load functions on NoxPlayer synchronized
+0.2.1:
+	- Reintroduced the save event system due to complex bug.
+		Using this as a temporary fix until the main system works again. (This was the original working system)
+

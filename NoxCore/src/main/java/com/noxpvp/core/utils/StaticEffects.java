@@ -26,6 +26,7 @@ import com.dsh105.holoapi.HoloAPI;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.listeners.NoxListener;
+import com.noxpvp.core.packet.ParticleRunner;
 
 
 public class StaticEffects {
@@ -45,7 +46,7 @@ public class StaticEffects {
 	}
 	
 	public static void SkullBreak(Location loc, NoxPlugin plugin){
-		new EffectsRunnable(Arrays.asList("blockcrack_155_0"), false, loc, .1F, 20, 2, null).run();
+		new ParticleRunner("blockcrack_155_0", loc, false, .1F, 20, 2).start(0);
 	}
 	
 	public static void BloodEffect(Entity e){
@@ -53,7 +54,7 @@ public class StaticEffects {
 	}
 	
 	public static void BloodEffect(Entity e, NoxPlugin plugin){
-		new EffectsRunnable(Arrays.asList("blockdust_35_14"), false, null, .12F, 15, 1, e).runTaskTimer(plugin, 0, 0);
+		new ParticleRunner("blockdust_35_14", e, false, .12F, 15, 1).runTaskTimer(plugin, 0, 0);
 	}
 	
 	public static void BroadcastSound(Entity e, Sound sound){

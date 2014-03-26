@@ -21,7 +21,8 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.listeners.NoxPLPacketListener;
-import com.noxpvp.core.utils.EffectsRunnable;
+import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
@@ -140,7 +141,7 @@ public class MedPackAbility extends BasePlayerAbility{
 				
 				double health = getPack(eventItem).health;
 				
-				new EffectsRunnable(Arrays.asList("heart"), false, null, 0, 1, (int) health, pickupPlayer).runTaskTimer(NoxMMO.getInstance(), 5, 5);
+				new ParticleRunner(ParticleType.heart, pickupPlayer, false, 0, 1, (int) health).runTaskTimer(NoxMMO.getInstance(), 5, 5);
 				new HealRunnable(pickupPlayer, 1, (int) health).runTaskTimer(NoxMMO.getInstance(), 5, 5);
 				
 				MessageUtil.sendLocale(NoxMMO.getInstance(), pickupPlayer, "ability.medpack.pick-up", pickupPlayer.getName(), (abilPlayer != null? abilPlayer.getName() :  MedPackAbility.this.getNoxPlayer().getName()));
@@ -253,7 +254,8 @@ public class MedPackAbility extends BasePlayerAbility{
 		ItemStack medPack = craftNewPackStack();
 		
 		Item pack = p.getWorld().dropItem(p.getLocation() , medPack);
-		new EffectsRunnable(Arrays.asList("happyVillager"), true, null, 1F, 6, 0, pack).runTaskTimer(NoxMMO.getInstance(), 0, 10);
+		pack.setVelocity(p.getLocation().getDirection());
+		new ParticleRunner(ParticleType.happyVillager, pack, false, 1F, 6, 0).start(0, 10);
 		
 		if (!packs.add(new MedPackDataWrapper(pack, p, health))) {
 			pack.remove();
