@@ -1,13 +1,11 @@
 package com.noxpvp.mmo.abilities.targeted;
 
-import java.util.Arrays;
-
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import com.noxpvp.core.utils.EffectsRunnable;
-import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
@@ -52,7 +50,7 @@ public class SootheAbility extends BaseTargetedPlayerAbility{
 		Location tLoc = t.getLocation(), loc = new Location(tLoc.getWorld(), tLoc.getX(), tLoc.getY()+1.75, tLoc.getZ());
 		
 		t.setHealth(t.getHealth() + getHealAmount());
-		new EffectsRunnable(Arrays.asList("heart"), false, loc, 0, 1, (int) getHealAmount() / 2, null).runTaskTimer(NoxMMO.getInstance(), 0, 6);
+		new ParticleRunner(ParticleType.heart, loc, false, 0, 1, (int) getHealAmount() / 2).start(0, 6);
 		
 		return false;
 	}

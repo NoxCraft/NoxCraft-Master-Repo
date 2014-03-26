@@ -1,4 +1,4 @@
-package com.noxpvp.core.utils;
+package com.noxpvp.core.packet;
 
 public enum ParticleType {
 	hugeexplosion,

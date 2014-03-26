@@ -1,14 +1,12 @@
 package com.noxpvp.mmo.abilities.entity;
 
-import java.util.Arrays;
 import java.util.HashSet;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 
-import com.noxpvp.core.utils.EffectsRunnable;
-import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 
 /**
@@ -48,18 +46,8 @@ public class DemoralizingRoarAbility extends BaseEntityAbility{
 				((Creature) it).setTarget((Creature) itTwo);
 				((Creature) itTwo).setTarget((Creature) it);
 				
-				
-				new Location(itTwo.getWorld(),
-						itTwo.getLocation().getX(),
-						itTwo.getLocation().getY()+1.75,
-						itTwo.getLocation().getZ());
-				
-				EffectsRunnable ef1 = new EffectsRunnable(Arrays.asList("angryVillager"), false, it.getLocation(), 0, 1, 1, null),
-				ef2 = new EffectsRunnable(Arrays.asList("angryVillager"), false, itTwo.getLocation(), 0, 1, 1, null);
-				
-				ef1.runTask(NoxMMO.getInstance());
-				ef2.runTask(NoxMMO.getInstance());
-
+				new ParticleRunner(ParticleType.angryVillager, it, false, 0, 1, 1).start(0);
+				new ParticleRunner(ParticleType.angryVillager, itTwo, false, 0, 1, 1).start(0);
 				
 				creatures.add((Creature) it);
 				creatures.add((Creature) itTwo);

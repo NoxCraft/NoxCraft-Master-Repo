@@ -1,14 +1,11 @@
 package com.noxpvp.mmo.abilities.targeted;
 
-import java.util.Arrays;
-
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.noxpvp.core.utils.EffectsRunnable;
-import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
@@ -87,7 +84,7 @@ public class CurseAbility extends BaseTargetedPlayerAbility{
 		t.addPotionEffect(new PotionEffect(PotionEffectType.POISON, duration, lethality));
 		t.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, lethality));
 		
-		new EffectsRunnable(Arrays.asList("angryVillager"), false, t.getLocation(), 0, 1, 1, null).runTask(NoxMMO.getInstance());
+		new ParticleRunner("angryVillager", t, false, 0, 1, 1).start(0);
 		
 		return true;
 	}

@@ -35,6 +35,7 @@
 	- Added static effects utils.
 	- Added top secret gui effect. (Later to come through NoxMMO)
 	- Much more but lost track.
+	- Proxified the Player data system.
 	=== Features ===
 	- Fixed chat format for ping system.
 	- Made save and load functions on NoxPlayer synchronized

@@ -19,8 +19,8 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.noxpvp.core.utils.EffectsRunnable;
-import com.noxpvp.core.utils.ParticleType;
+import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
@@ -158,14 +158,14 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 			LivingEntity e = (LivingEntity) it;
 			
 			new HealRunnable(e, 1, (int) healAmount).runTaskTimer(instance, 40, 5);
-			new EffectsRunnable(ParticleType.heart, false, null, 0, 1, (int) healAmount, e).runTaskTimer(instance, 40, 5);
+			new ParticleRunner(ParticleType.heart, e, false, 0, 1, (int) healAmount).runTaskTimer(instance, 40, 5);
 		}
 		
 		guardians.add(guardian);
 		Bukkit.getScheduler().runTaskLater(instance, new Runnable() {
 			
 			public void run() {
-				new EffectsRunnable(ParticleType.happyVillager, true, null, 0f, 10, 5, guardian).runTaskTimer(instance, 0, 1);
+				new ParticleRunner(ParticleType.happyVillager, guardian, true, 0f, 10, 5).start(0, 1);
 				new SetVelocityRunnable(guardian, guardian.getVelocity().clone().setY(3)).runTask(instance);
 				new DespawnRunnable(guardian).runTaskLater(instance, 5);
 				
