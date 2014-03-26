@@ -31,7 +31,6 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	public HomesPlayer(String playerName)
 	{
 		super(playerName);
-		load();
 	}
 	
 	/**
@@ -82,28 +81,15 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		return homes.size() > 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.noxpvp.core.Persistant#save()
-	 */
-	public void save() {
-		save(false);
-	}
 	
 	public void save(boolean throwEvent) {
-		getPersistantData().remove("homes");
-		ConfigurationNode var = getPersistantData().getNode("homes");
-
-		for (BaseHome home : homes)
-			var.set(home.getName(), home);
-		
-		superSave();
+		super.save(throwEvent);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.noxpvp.core.Persistant#load()
 	 */
 	public void load() {
-		superLoad();
 		ConfigurationNode var = getPersistantData().getNode("homes");
 		
 		homes.clear();
@@ -225,6 +211,16 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			return homes.get(homes_index.get(name));
 		else
 			return null;
+	}
+
+	@Override
+	public void saveInternally() {
+		ConfigurationNode node = getPersistantData();
+		node.remove("homes");
+		ConfigurationNode var = node.getNode("homes");
+
+		for (BaseHome home : homes)
+			var.set(home.getName(), home);
 	}
 	
 }

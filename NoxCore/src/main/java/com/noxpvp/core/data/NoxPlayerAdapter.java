@@ -14,7 +14,6 @@ import com.noxpvp.core.Persistant;
  * Failure to do so if you register your object as a player object. Will result
  * in it not automatically being converted when supplied.
  * 
- * @author Chris
  */
 public interface NoxPlayerAdapter extends Persistant {
 	
@@ -33,4 +32,9 @@ public interface NoxPlayerAdapter extends Persistant {
 	public boolean hasFirstLoaded();
 	
 	public String getPlayerName();
+	
+	/**
+	 * All data must be set in here. Do not save to file from here though.
+	 */
+	public void saveInternally();
 }
