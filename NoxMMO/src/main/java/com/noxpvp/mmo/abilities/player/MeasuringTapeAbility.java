@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.noxpvp.core.packet.PacketUtil;
+import com.noxpvp.core.packet.NoxPacketUtil;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
@@ -52,7 +52,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 								return;
 							
 							blocks[0] = b;
-							PacketUtil.FakeBlock(10, Material.WOOL, b.getLocation());
+							NoxPacketUtil.FakeBlock(10, Material.WOOL, b.getLocation());
 							
 							firstDone = true;
 							return;
@@ -62,7 +62,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 								return;
 							
 							blocks[1] = b;
-							PacketUtil.FakeBlock(10, Material.WOOL, b.getLocation());
+							NoxPacketUtil.FakeBlock(10, Material.WOOL, b.getLocation());
 							
 							unRegisterHandler(this);
 							

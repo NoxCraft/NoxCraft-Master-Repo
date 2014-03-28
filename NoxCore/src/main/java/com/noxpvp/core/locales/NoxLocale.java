@@ -3,7 +3,6 @@ package com.noxpvp.core.locales;
 import org.bukkit.command.CommandSender;
 
 import com.bergerkiller.bukkit.common.localization.LocalizationEnum;
-import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.utils.gui.MessageUtil;
 

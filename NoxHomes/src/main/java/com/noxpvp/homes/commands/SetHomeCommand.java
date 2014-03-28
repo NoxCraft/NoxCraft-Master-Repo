@@ -65,25 +65,6 @@ public class SetHomeCommand extends BaseCommand {
 			String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, "other-towns");
 			if (TownyUtil.isClaimedLand(loc) && !TownyUtil.isOwnLand(sender, loc) && !permHandler.hasPermission(sender, perm))
 				return new CommandResult(this, true, HomeLocale.BAD_LOCATION.get("You are not allowed to set home in other towns."));
-			else
-			{
-				String t = "";
-				if (TownyUtil.isClaimedLand(loc))
-					t = "land is claimed";
-				else
-					t = "land not claimed";
-				
-				if (TownyUtil.isOwnLand(sender, loc))
-					t = "Own land.";
-				else
-					t = "not Own Land.";
-				
-				if (permHandler.hasPermission(sender, perm))
-					t = "had bypass perm";
-				else
-					t = " what??";
-				t = "failed";
-			}
 		}
 		
 		String player = null;

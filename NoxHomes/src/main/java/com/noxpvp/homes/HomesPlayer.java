@@ -82,10 +82,6 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 
 	
-	public void save(boolean throwEvent) {
-		super.save(throwEvent);
-	}
-
 	/* (non-Javadoc)
 	 * @see com.noxpvp.core.Persistant#load()
 	 */
@@ -114,7 +110,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			NoxHomes.getInstance().log(Level.WARNING, "Removed " + pending.size() + " null homes.");
 		
 		updateIndex();
-		save();
+		superSave();
 	}
 	
 	/**
@@ -131,7 +127,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			homes_index.put(home.getName(), homes_index.size());
 			homes.add(home);
 		}
-		save(true);
+		superSave();
 	}
 	
 	/**
@@ -162,7 +158,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			return false;
 		
 		updateIndex();
-		save(true);
+		superSave();
 		return true;
 	}
 
@@ -192,7 +188,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 				homes_index.put(home.getName(), i);
 			}
 		
-		save(true);
+		superSave();
 	}
 
 	/**
@@ -214,7 +210,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 
 	@Override
-	public void saveInternally() {
+	public void save() {
 		ConfigurationNode node = getPersistantData();
 		node.remove("homes");
 		ConfigurationNode var = node.getNode("homes");

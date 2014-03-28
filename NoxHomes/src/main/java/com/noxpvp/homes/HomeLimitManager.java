@@ -122,8 +122,7 @@ public class HomeLimitManager implements Persistant {
 	
 	public boolean canAddHome(HomesPlayer player)
 	{
-		HomesPlayer p = PlayerManager.getInstance().getPlayer(player);
-		return inRange(p, p.getHomeCount()+1);
+		return inRange(player, player.getHomeCount()+1);
 	}
 	
 	public static boolean usingCumulativeLimits() { return cumulativeLimits; }

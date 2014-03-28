@@ -42,7 +42,7 @@ public class CoreBar{
 		
 		this.plugin = NoxCore.getInstance();
 		
-		String name = p.getName();
+//		String name = p.getName();
 		
 		lock = new ObjectLock(null);
 		updater = null;

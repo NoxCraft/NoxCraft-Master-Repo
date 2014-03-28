@@ -4,58 +4,27 @@ import java.util.List;
 
 import org.bukkit.OfflinePlayer;
 
-import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
-import com.noxpvp.core.events.PlayerDataSaveEvent;
 import com.noxpvp.core.utils.gui.MessageUtil;
 
 public class ChatPlayer extends BaseNoxPlayerAdapter implements Targetable {
 
-	private Targetable target;
-	private List<String> mutes;
-	
-	/**
-	 * @param player
-	 */
 	public ChatPlayer(NoxPlayerAdapter player) {
 		super(player);
 	}
 
-	/**
-	 * @param player
-	 */
 	public ChatPlayer(OfflinePlayer player) {
 		super(player);
 	}
 
-	/**
-	 * @param name
-	 */
 	public ChatPlayer(String name) {
 		super(name);
 	}
 
-	public void load() {
-		//TODO: Finish loader
-	}
-
-	public void save() {
-		Targetable target = getTarget();
-		if (target == null)
-			getPersistantData().remove("chat.target.type");
-		else {
-			getPersistantData().set("chat.target.type", target.getType());
-			getPersistantData().set("chat.target.name", target.getName());
-		}
-	}
+	private Targetable target;
+	private List<String> mutes;
 	
-	public void save(boolean callEvent) {
-		save();
-		if (callEvent)
-			CommonUtil.callEvent(new PlayerDataSaveEvent(this, true));
-	}
-
 	public Targetable getTarget() {
 		return this.target;
 	}
@@ -117,5 +86,21 @@ public class ChatPlayer extends BaseNoxPlayerAdapter implements Targetable {
 	public void sendMessage(Targetable from, String... messages) {
 		if (!isMuted(from))
 			sendMessage(messages);
+	}
+
+	@Override
+	public void save() {
+		Targetable target = getTarget();
+		if (target == null)
+			getPersistantData().remove("chat.target");
+		else {
+			getPersistantData().set("chat.target.type", target.getType());
+			getPersistantData().set("chat.target.name", target.getName());
+		}
+	}
+
+	@Override
+	public void load() {
+		
 	}
 }

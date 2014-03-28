@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.manager.BasePlayerManager;
 
 public class PlayerManager extends BasePlayerManager<ChatPlayer>{
@@ -24,10 +25,6 @@ public class PlayerManager extends BasePlayerManager<ChatPlayer>{
 		super(ChatPlayer.class);
 	}
 
-	public NoxPlugin getPlugin() {
-		return NoxChat.getInstance();
-	}
-
 	@Override
 	protected ChatPlayer craftNew(String name) {
 		return new ChatPlayer(name);
@@ -38,8 +35,17 @@ public class PlayerManager extends BasePlayerManager<ChatPlayer>{
 		return new HashMap<String, ChatPlayer>();
 	}
 
-	@Override
-	protected boolean preUnloadPlayer(String name) {
-		return true;
+	public NoxPlugin getPlugin() {
+		return NoxChat.getInstance();
 	}
+
+	public void loadPlayer(NoxPlayer player) {
+		getPlayer(player.getName());
+	}
+
+	@Override
+	protected ChatPlayer craftNew(NoxPlayer player) {
+		return new ChatPlayer(player);
+	}
+
 }

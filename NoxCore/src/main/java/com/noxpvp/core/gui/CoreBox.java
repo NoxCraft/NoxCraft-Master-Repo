@@ -19,10 +19,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.bergerkiller.bukkit.common.internal.NextTickListener;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.StaticEffects;

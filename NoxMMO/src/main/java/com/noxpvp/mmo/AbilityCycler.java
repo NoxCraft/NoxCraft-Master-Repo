@@ -348,7 +348,7 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 			@EventHandler(ignoreCancelled = true, priority=EventPriority.MONITOR)
 			public void onLogin(PlayerJoinEvent event) {
 				Player p = event.getPlayer();
-				PlayerManager.getInstance().isPlayerInMemory(p.getName());
+				PlayerManager.getInstance().isLoaded(p.getName());
 			}
 		};
 	}

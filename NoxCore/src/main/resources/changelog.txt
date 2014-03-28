@@ -42,4 +42,8 @@
 0.2.1:
 	- Reintroduced the save event system due to complex bug.
 		Using this as a temporary fix until the main system works again. (This was the original working system)
+0.2.2:
+	- Removed and deprecated old event save system.
+		Now uses a dynamic save manager through core player manager. 
+			Uses all managers from other nox plugins to save data. BEFORE writing to file..
 

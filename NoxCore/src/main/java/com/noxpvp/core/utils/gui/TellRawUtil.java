@@ -8,8 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
-import com.bergerkiller.bukkit.common.protocol.PacketType;
-import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses;
 import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOutChat;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;

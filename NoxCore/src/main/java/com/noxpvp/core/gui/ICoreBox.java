@@ -6,8 +6,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.noxpvp.core.data.NoxPlayer;
-
 public interface ICoreBox {
 	
 	/**

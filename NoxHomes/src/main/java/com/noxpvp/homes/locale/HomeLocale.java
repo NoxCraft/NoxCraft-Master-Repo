@@ -1,6 +1,5 @@
 package com.noxpvp.homes.locale;
 
-import com.bergerkiller.bukkit.common.localization.LocalizationEnum;
 import com.noxpvp.core.locales.NoxLocale;
 import com.noxpvp.homes.NoxHomes;
 

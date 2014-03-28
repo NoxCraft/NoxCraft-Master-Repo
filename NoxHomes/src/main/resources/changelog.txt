@@ -21,3 +21,6 @@
 	- Cleaned up locales.	
 0.2.1:
 	- Fixed home saving on logout. (Never saved to file)
+0.2.2:
+	- Updated to new save system.
+	

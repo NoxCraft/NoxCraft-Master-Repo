@@ -69,7 +69,7 @@ public class CoreBoard{
 		
 		this.takenSlots = new ArrayList<Integer>();
 		
-		String name = p.getName();
+//		String name = p.getName();
 		
 	}
 

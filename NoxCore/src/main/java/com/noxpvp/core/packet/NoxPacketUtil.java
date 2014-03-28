@@ -18,7 +18,7 @@ import com.dsh105.holoapi.util.TagIdGenerator;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.utils.BlockChangeArray;
 
-public class PacketUtil extends com.bergerkiller.bukkit.common.utils.PacketUtil {
+public class NoxPacketUtil extends com.bergerkiller.bukkit.common.utils.PacketUtil {
 	
 	private static List<Integer> MagicEntityId = new ArrayList<Integer>();
 	private static int SHARED_IDS = Short.MAX_VALUE;

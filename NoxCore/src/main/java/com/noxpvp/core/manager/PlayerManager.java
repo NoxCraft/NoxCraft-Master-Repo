@@ -6,27 +6,47 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.FileUtil;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
-import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.NoxPlayer;
-import com.noxpvp.core.events.PlayerDataUnloadEvent;
+import com.noxpvp.core.data.NoxPlayerAdapter;
 
 public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persistant {
-
+	
 	private static PlayerManager instance;
+	private static List<IPlayerManager<?>> managers = new ArrayList<IPlayerManager<?>>();
 	
-	protected FileConfiguration config;
+	public static void addManager(IPlayerManager<?> manager) {
+		if (PlayerManager.managers.contains(manager))
+			return;
+		
+		PlayerManager.managers.add(manager);
+	}
 	
-	private NoxCore plugin;
+	@Override
+	public boolean unloadIfOffline(String name) {
+		boolean unloaded = super.unloadIfOffline(name);
+		if (unloaded)
+			unloadPlayer(name);
+		return unloaded;
+	}
+	
+	@Override
+	public void unloadPlayer(String name) {
+		super.unloadPlayer(name);
+		for (IPlayerManager<?> manager : managers)
+			if (manager != this)
+				manager.unloadPlayer(name);
+	}
+	
 	
 	public static PlayerManager getInstance() {
 		if (instance == null)
@@ -43,16 +63,35 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 		return instance;
 	}
 	
+	protected FileConfiguration config;
+	
+	private NoxCore plugin;
+	
 	protected PlayerManager() {
 		this(new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml")), NoxCore.getInstance());
 		config = new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml"));
 	}
-	
+
 	protected PlayerManager(FileConfiguration conf, NoxCore plugin)
 	{
 		super(NoxPlayer.class);
 		this.plugin = plugin;
 		this.config = conf;
+	}
+	
+	@Override
+	protected NoxPlayer craftNew(NoxPlayerAdapter adapter) {
+		return adapter.getNoxPlayer();
+	}
+	
+	@Override
+	protected NoxPlayer craftNew(String name) {
+		return new NoxPlayer(this, name);
+	}
+	
+	@Override
+	protected Map<String, NoxPlayer> craftNewStorage() {
+		return new HashMap<String, NoxPlayer>();
 	}
 
 	public List<String> getAllPlayerNames() {
@@ -79,6 +118,16 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	
 	public NoxPlayer[] getLoadedPlayers() {
 		return getPlayerMap().values().toArray(new NoxPlayer[0]);
+	}	
+	
+/**
+	 * ARE YOU CRAZY!?
+	 * @deprecated returns the param that was given. 
+	 * @param player
+	 * @return player param
+	 */
+	public NoxPlayer getPlayer(NoxPlayer player) {
+		return player;
 	}
 	
 	/**
@@ -146,9 +195,19 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 */
 	public ConfigurationNode getPlayerNode(NoxPlayer player)
 	{
-		if (isMultiFile())
-			return new FileConfiguration(getPlayerFile(player));
-		else if (config != null)
+		if (isMultiFile() && !(player.getPersistantData() instanceof FileConfiguration))
+		{
+			FileConfiguration c = new FileConfiguration(getPlayerFile(player)); 
+			ConfigurationNode old = player.getPersistantData();
+			if (old != null)
+				for (Entry<String, Object> entry : old.getValues().entrySet()) //Copy data.
+					c.set(entry.getKey(), entry.getValue());
+			
+			return c;
+		}
+		else if (isMultiFile() && (player.getPersistantData() instanceof FileConfiguration))
+			return (FileConfiguration) player.getPersistantData();
+		else if (config != null && !isMultiFile())
 			if (player.getUUID() == null && player.getName() != null)
 				return config.getNode("players").getNode(player.getName());
 			else if (player.getUUID() != null)
@@ -159,13 +218,9 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 			return null;
 	}
 	
-	private File getPlayerFile(boolean isUID, String name) {
-		return null;
-	}
-
-	public NoxCore getPlugin() { return plugin; }	
+	public NoxCore getPlugin() { return plugin; }
 	
-//////// HELPER FUNCTIONS
+	//////// HELPER FUNCTIONS
 	/**
 	 * Checks if is multi file.
 	 * <b>INTERNALLY USED METHOD</b>
@@ -194,14 +249,29 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	private void loadOrCreate(String name) {
 		loadPlayer(getPlayer(name));
 	}
-
+	
 	/**
 	 * Load player.
 	 *
 	 * @param noxPlayer the NoxPlayer object to load
 	 */
 	public void loadPlayer(NoxPlayer noxPlayer) {
-		noxPlayer.load();
+		ConfigurationNode persistant_data = getPlayerNode(noxPlayer); 
+
+		if (persistant_data != noxPlayer.getPersistantData()) //Remove desyncs...
+			noxPlayer.setPersistantData(persistant_data); 
+		
+		if (persistant_data instanceof FileConfiguration)
+		{
+			FileConfiguration fNode = (FileConfiguration) persistant_data;
+			fNode.load();
+		} else {
+			load();
+		}
+		
+		for (IPlayerManager<?> manager : managers)
+			if (manager != this)
+				manager.loadPlayer(noxPlayer);
 	}
 	
 	/**
@@ -212,14 +282,17 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	public void loadPlayer(String name) {
 		loadPlayer(getPlayer(name));
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.noxpvp.core.Persistant#save()
 	 */
 	public void save() {
-		config.save();
+		if (!isMultiFile())
+			config.save();
+//		else
+//			//TODO: add logging.
 	}
-	
+
 	/**
 	 * Save player.
 	 *
@@ -227,22 +300,31 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 */
 	public void savePlayer(NoxPlayer player) 
 	{
-		player.save();
-	}
-	
-	@Override
-	protected NoxPlayer craftNew(String name) {
-		return new NoxPlayer(this, name);
-	}
-	
-	@Override
-	protected Map<String, NoxPlayer> craftNewStorage() {
-		return new HashMap<String, NoxPlayer>();
-	}
-	
-	protected boolean preUnloadPlayer(String name) {
-		/*PlayerDataUnloadEvent e = */CommonUtil.callEvent(new PlayerDataUnloadEvent(getPlayer(name), false));
-		return true;
+		
+		ConfigurationNode persistant_data = getPlayerNode(player);
+		if (persistant_data != player.getPersistantData()) //Remove desyncs...
+			player.setPersistantData(persistant_data); 
+		
+		for (IPlayerManager<?> manager : managers) { //Iterate through all plugin.
+			if (manager != this)
+				manager.savePlayer(player); 
+		}
+		
+		if (persistant_data instanceof FileConfiguration)
+		{
+			FileConfiguration configNode = (FileConfiguration) persistant_data;
+			configNode.save();
+		} else {
+			if (config != null)
+				config.save();
+		}
 	}
 
+	/**
+	 * Are you crazy!
+	 * @deprecated returns the specified argument.. 
+	 */
+	protected NoxPlayer craftNew(NoxPlayer adapter) {
+		return adapter;
+	}
 }

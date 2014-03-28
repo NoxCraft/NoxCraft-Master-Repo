@@ -1,8 +1,10 @@
 package com.noxpvp.core.data;
 
+import java.util.UUID;
+
 import org.bukkit.entity.Player;
 
-import com.noxpvp.core.Persistant;
+import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 
 /**
  * Using this interface you are required to implement a constructor with the
@@ -15,7 +17,7 @@ import com.noxpvp.core.Persistant;
  * in it not automatically being converted when supplied.
  * 
  */
-public interface NoxPlayerAdapter extends Persistant {
+public interface NoxPlayerAdapter {
 	
 	/**
 	 * Retrieves the player object that this adaptor uses for data.
@@ -33,8 +35,17 @@ public interface NoxPlayerAdapter extends Persistant {
 	
 	public String getPlayerName();
 	
+	public void load();
+	
+	public String getUID();
+	
+	public UUID getUUID();
+	
+	public ConfigurationNode getPersistantData();
+	public ConfigurationNode getTempData();
+	
 	/**
 	 * All data must be set in here. Do not save to file from here though.
 	 */
-	public void saveInternally();
+	public void save();
 }

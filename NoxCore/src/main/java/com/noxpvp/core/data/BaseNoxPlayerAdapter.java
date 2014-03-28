@@ -32,7 +32,8 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	
 	public BaseNoxPlayerAdapter(NoxPlayerAdapter player)
 	{
-		this(player.getPlayerName());
+		super(player.getNoxPlayer());
+		this.playerName = player.getPlayerName();
 	}
 	
 	public BaseNoxPlayerAdapter(OfflinePlayer player) {
@@ -41,9 +42,7 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	
 	public BaseNoxPlayerAdapter(String name)
 	{
-		super(getNoxPlayer(name));
-		this.playerName = name;
-		
+		this(getNoxPlayer(name));
 	}
 	
 	public final void setName(String name) {
@@ -220,17 +219,9 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	public boolean isCooldownExpired(String name) {
 		return getProxyBase().isCooldownExpired(name);
 	}
-
-	public void load() {
-		getProxyBase().load();
-	}
-
-	public void load(boolean overwrite) {
+	
+	public void superLoad(boolean overwrite) {
 		getProxyBase().load(overwrite);
-	}
-
-	public void rebuild_cache() {
-		getProxyBase().rebuild_cache();
 	}
 
 	public void removeCooldDown(String name) {
@@ -253,27 +244,17 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 		return getProxyBase().getUID();
 	}
 	
-	public void save() {
-		save(true);
-//		superSave();
-	}
-	
 	/**
 	 * All data must be set in here. Do not save to file from here though.
 	 */
-	public abstract void saveInternally();
+	public abstract void save();
+	
+	public abstract void load();
 	
 	protected final void throwSaveEvent() {
 		CommonUtil.callEvent(new PlayerDataSaveEvent(this, true));
 	}
 	
-	public void save(boolean throwEvent) {
-		saveInternally();
-		if (throwEvent)
-			throwSaveEvent();
-//		getProxyBase().save(throwEvent);
-	}
-
 	public void saveLastLocation() {
 		getProxyBase().saveLastLocation();
 	}

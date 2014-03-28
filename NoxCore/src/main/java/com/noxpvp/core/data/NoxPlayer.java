@@ -55,6 +55,10 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	private final PermissionHandler permHandler;
 	private ConfigurationNode persistant_data = null;
 	
+	public void setPersistantData(ConfigurationNode persistant_data) {
+		this.persistant_data = persistant_data;
+	}
+
 	private CoreBar coreBar;
 	private CoreBoard coreBoard;
 	private Reference<CoreBox> coreBox;
@@ -62,6 +66,15 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	private ConfigurationNode temp_data = new ConfigurationNode();
 	
 	private boolean isFirstLoad = true;
+
+	public boolean isFirstLoad() {
+		return isFirstLoad;
+	}
+
+	public void setFirstLoad(boolean isFirstLoad) {
+		this.isFirstLoad = isFirstLoad;
+	}
+
 	private UUID uid;
 	
 	public NoxPlayer(NoxPlayer player)
@@ -449,19 +462,6 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	}
 	
 	public synchronized void load(boolean overwrite) {
-		if (isFirstLoad)
-			isFirstLoad = false;
-		if (persistant_data == null)
-			persistant_data = manager.getPlayerNode(this);
-		
-		if (persistant_data instanceof FileConfiguration)
-		{
-			FileConfiguration fNode = (FileConfiguration) persistant_data;
-			fNode.load();
-		}
-		else if (!manager.isMultiFile())
-			manager.load();
-		
 		if (overwrite)
 			cds = persistant_data.getList("cooldowns", CoolDown.class);
 		else
@@ -479,7 +479,7 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		this.name = name;
 	}
 
-	public void rebuild_cache() {
+	private void rebuild_cache() {
 		cd_cache.clear();
 		for (CoolDown cd: cds)
 			cd_cache.put(cd.getName(), cd);
@@ -494,15 +494,11 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		}
 	}
 
-	public void saveInternally() {
+	public void save() {
 		getUUID();
 		
 		persistant_data.set("cooldowns", getCoolDowns());
 		persistant_data.set("last.ign", getName());
-	}
-	
-	public synchronized void save() {
-		save(true);
 	}
 	
 	public final void updateUID() {
@@ -516,15 +512,7 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		if (isFirstLoad)
 			load(false);
 		
-		saveInternally();
-		
-		if (persistant_data instanceof FileConfiguration)
-		{
-			FileConfiguration configNode = (FileConfiguration) persistant_data;
-			configNode.save();
-		} else {
-			manager.save();
-		}
+		save();
 		
 		if (throwEvent)
 			CommonUtil.callEvent(new PlayerDataSaveEvent(this, false));

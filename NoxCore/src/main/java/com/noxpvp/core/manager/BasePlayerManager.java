@@ -7,60 +7,35 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
+import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 
 public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements IPlayerManager<T> {
-	private PlayerManager pm = null;
-	
 	private Map<String, T> players;
+	
+	private PlayerManager pm = null;
 
 	private Class<T> typeClass;
-	
-	/**
-	 * This should never be called in the constructor.
-	 * @return PlayerManager from NoxCore
-	 */
-	protected PlayerManager getCorePlayerManager() {
-		if (pm == null)
-			pm = PlayerManager.getInstance();
-		return pm;
-	}
 	
 	public BasePlayerManager(Class<T> t) {
 		this.typeClass = t;
 		this.players = craftNewStorage();
+		PlayerManager.addManager(this);
 	}
-
-	public T[] getLoadedPlayers() {
-		return LogicUtil.toArray(players.values(), typeClass);
+	
+	protected T craftNew(NoxPlayerAdapter adapter) {
+		return craftNew(adapter.getNoxPlayer());
 	}
-
-	public final T getPlayer(OfflinePlayer player) {
-		if (player == null)
-			return null;
-		return getPlayer(player.getName());
-	}
-
-	public final T getPlayer(String name) {
-		T player = null;
-		if (players.containsKey(name))
-			player = players.get(name);
-		else {
-			player = craftNew(name);
-			players.put(name, player);
-		}
-		return player;
-	}
+	
+	protected abstract T craftNew(NoxPlayer adapter);
 
 	/**
 	 * Required to grab objects.
 	 * @param name of player.
 	 * @return Object.
 	 */
-	protected abstract T craftNew(String name);
-	
-	protected Map<String, T> getPlayerMap() {
-		return this.players;
+	protected T craftNew(String name) {
+		return craftNew(getCorePlayerManager().getPlayer(name));
 	}
 	
 	/**
@@ -68,9 +43,94 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	 * @return
 	 */
 	protected abstract Map<String, T> craftNewStorage();
+	
+	/**
+	 * Should never be called in the constructor of the core manager.
+	 * @return PlayerManager from NoxCore
+	 */
+	protected PlayerManager getCorePlayerManager() {
+		if (pm == null)
+			pm = PlayerManager.getInstance();
+		return pm;
+	}
 
-	public void savePlayer(T player) {
-		player.save();
+	public T[] getLoadedPlayers() {
+		return LogicUtil.toArray(players.values(), typeClass);
+	}
+	
+	public T getPlayer(NoxPlayer noxPlayer) {
+		T player = null;
+		String name = noxPlayer.getName();
+		if (isLoaded(name))
+			player = players.get(name);
+		else {
+			player = craftNew(noxPlayer);
+			players.put(name, player);
+		}
+		return player;
+	}
+
+	public T getPlayer(NoxPlayerAdapter adapt) { //TODO: remove duplicate code ID(gp1)
+		return getPlayer(adapt.getNoxPlayer());
+	}
+	
+	public final T getPlayer(OfflinePlayer player) {
+		if (player == null)
+			return null;
+		return getPlayer(player.getName());
+	}
+	
+	public final T getPlayer(String name) { //TODO: remove duplicate code ID(gp1)
+		T player = null;
+		if (isLoaded(name))
+			player = players.get(name);
+		else {
+			player = craftNew(name);
+			players.put(name, player);
+		}
+		return player;
+	}
+	
+	protected Map<String, T> getPlayerMap() {
+		return this.players;
+	}
+
+	public final boolean isLoaded(OfflinePlayer player) {
+		return isLoaded(player.getName());
+	}
+
+	public final boolean isLoaded(String name) {
+		return players.containsKey(name);
+	}
+
+	public void load() {
+		for (Player p : Bukkit.getOnlinePlayers())
+			loadPlayer(p);
+	}
+
+	public void loadPlayer(OfflinePlayer player) {
+		loadPlayer(getPlayer(player));
+	}
+
+	public void loadPlayer(String name) {
+		loadPlayer(getPlayer(name));
+	}
+
+	public void loadPlayer(T player) {
+		player.load();
+	}
+	
+	public void save() {
+		for (T p : getLoadedPlayers())
+			savePlayer(p);
+	}
+	
+	public void savePlayer(NoxPlayer player) {
+		getPlayer(player).save();
+	}
+	
+	public final void savePlayer(OfflinePlayer player) {
+		savePlayer(player.getName());
 	}
 
 	public final void savePlayer(String name) {
@@ -78,16 +138,19 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 			savePlayer(getPlayer(name));
 	}
 
-	public final void savePlayer(OfflinePlayer player) {
-		savePlayer(player.getName());
+	public void savePlayer(T player) {
+		player.save();
 	}
 
-	public final boolean isLoaded(String name) {
-		return players.containsKey(name);
-	}
-
-	public final boolean isLoaded(OfflinePlayer player) {
-		return isLoaded(player.getName());
+	/**
+	 * Unload and save player.
+	 * @see #unloadAndSavePlayer(String)
+	 * @see #unloadPlayer(String)
+	 * @see #savePlayer(String)
+	 * @param name the name
+	 */
+	public final void unloadAndSavePlayer(OfflinePlayer player) {
+		unloadAndSavePlayer(player.getName());
 	}
 
 	/**
@@ -103,17 +166,6 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	}
 	
 	/**
-	 * Unload and save player.
-	 * @see #unloadAndSavePlayer(String)
-	 * @see #unloadPlayer(String)
-	 * @see #savePlayer(String)
-	 * @param name the name
-	 */
-	public final void unloadAndSavePlayer(OfflinePlayer player) {
-		unloadAndSavePlayer(player.getName());
-	}
-	
-	/**
 	 * Unload if player is offline.
 	 * <br/>
 	 * <b> WARNING IF THERE ARE PLUGINS THAT ARE IMPROPERLY CACHING THIS OBJECT. IT WILL NEVER TRUELY UNLOAD</b>
@@ -121,45 +173,21 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	 * @return true, if it unloads the player from memory.
 	 */
 	public boolean unloadIfOffline(String name) {
-		if (isLoaded(name) && (getPlayer(name).getPlayer() == null || !getPlayer(name).getPlayer().isOnline()))
-		{
-			unloadAndSavePlayer(name);
-			return true;
-		}
+		if (isLoaded(name)) 
+			if (getPlayer(name).getPlayer() == null || !getPlayer(name).getPlayer().isOnline())
+			{
+				unloadAndSavePlayer(name);
+				return true;
+			}
 		return false;
 	}
 	
-	protected abstract boolean preUnloadPlayer(String name);
-	
-	public void unloadPlayer(String name) {
-		if (preUnloadPlayer(name))
-			if (isLoaded(name))
-				players.remove(name);
-	}
-
 	public final void unloadPlayer(OfflinePlayer player) {
 		unloadPlayer(player.getName());
 	}
 
-	public void loadPlayer(T player) {
-		player.load();
-	}
-
-	public void loadPlayer(String name) {
-		loadPlayer(getPlayer(name));
-	}
-
-	public void loadPlayer(OfflinePlayer player) {
-		loadPlayer(getPlayer(player));
-	}
-	
-	public void save() {
-		for (T p : getLoadedPlayers())
-			savePlayer(p);
-	}
-	
-	public void load() {
-		for (Player p : Bukkit.getOnlinePlayers())
-			loadPlayer(p);
+	public void unloadPlayer(String name) {
+		if (isLoaded(name))
+			players.remove(name);
 	}
 }
