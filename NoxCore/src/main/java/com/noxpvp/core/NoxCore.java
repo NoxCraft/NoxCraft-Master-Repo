@@ -38,7 +38,6 @@ import com.noxpvp.core.internal.CooldownHandler;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.listeners.ChatPingListener;
 import com.noxpvp.core.listeners.ChestBlockListener;
-import com.noxpvp.core.listeners.DataListener;
 import com.noxpvp.core.listeners.DeathListener;
 import com.noxpvp.core.listeners.LoginListener;
 import com.noxpvp.core.listeners.OnLogoutSaveListener;
@@ -64,7 +63,6 @@ public class NoxCore extends NoxPlugin {
 	private FileConfiguration globalLocales;
 	private LoginListener loginListener;
 	private ServerPingListener pingListener;
-	private DataListener dataListener;
 	
 	private PermissionHandler permHandler;
 	private transient WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>> permission_cache = new WeakHashMap<NoxPlugin, WeakHashMap<String, NoxPermission>>();
@@ -226,7 +224,6 @@ public class NoxCore extends NoxPlugin {
 		loginListener = new LoginListener();
 		saveListener = new OnLogoutSaveListener(this); 
 		pingListener = new ServerPingListener(this);
-		dataListener = new DataListener(this);
 		
 		chatPingListener.register();
 		
@@ -237,7 +234,6 @@ public class NoxCore extends NoxPlugin {
 		deathListener.register();
 		loginListener.register();
 		pingListener.register();
-		dataListener.register();
 		
 		CommonUtil.queueListenerLast(loginListener, PlayerLoginEvent.class);
 		VaultAdapter.load();

@@ -300,11 +300,11 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 */
 	public void savePlayer(NoxPlayer player) 
 	{
-		
 		ConfigurationNode persistant_data = getPlayerNode(player);
 		if (persistant_data != player.getPersistantData()) //Remove desyncs...
 			player.setPersistantData(persistant_data); 
 		
+		player.save();
 		for (IPlayerManager<?> manager : managers) { //Iterate through all plugin.
 			if (manager != this)
 				manager.savePlayer(player); 

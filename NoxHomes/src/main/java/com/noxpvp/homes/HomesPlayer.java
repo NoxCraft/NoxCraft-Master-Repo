@@ -110,7 +110,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			NoxHomes.getInstance().log(Level.WARNING, "Removed " + pending.size() + " null homes.");
 		
 		updateIndex();
-		superSave();
+		saveToManager();
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			homes_index.put(home.getName(), homes_index.size());
 			homes.add(home);
 		}
-		superSave();
+		saveToManager();
 	}
 	
 	/**
@@ -158,7 +158,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			return false;
 		
 		updateIndex();
-		superSave();
+		saveToManager();
 		return true;
 	}
 
@@ -188,7 +188,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 				homes_index.put(home.getName(), i);
 			}
 		
-		superSave();
+		saveToManager();
 	}
 
 	/**

@@ -34,7 +34,6 @@ public class NoxHomes extends NoxPlugin {
 	NoxCore core;
 	
 	private PermissionHandler permHandler;
-	private DataListener dataL;
 	
 	public static NoxHomes getInstance() {
 		return instance;
@@ -98,9 +97,6 @@ public class NoxHomes extends NoxPlugin {
 		
 		getLimitsManager().load();
 		getHomeManager().load();
-		
-		dataL = new DataListener(this);
-		dataL.register();
 		
 		Reloader r = new BaseReloader(MasterReloader.getInstance(), "NoxHomes") {
 			public boolean reload() {

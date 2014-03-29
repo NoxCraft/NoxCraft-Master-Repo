@@ -48,4 +48,6 @@ public interface NoxPlayerAdapter {
 	 * All data must be set in here. Do not save to file from here though.
 	 */
 	public void save();
+	
+	public void saveToManager();
 }

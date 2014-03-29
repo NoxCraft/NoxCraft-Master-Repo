@@ -27,13 +27,11 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.proxies.ProxyBase;
-import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.VaultAdapter;
-import com.noxpvp.core.events.PlayerDataSaveEvent;
 import com.noxpvp.core.gui.CoolDown;
 import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.core.gui.CoreBoard;
@@ -496,7 +494,7 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 
 	public void save() {
 		getUUID();
-		
+		saveLastLocation();
 		persistant_data.set("cooldowns", getCoolDowns());
 		persistant_data.set("last.ign", getName());
 	}
@@ -507,17 +505,6 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 				this.uid = getPlayer().getUniqueId();
 	}
 	
-	public synchronized void save(boolean throwEvent)
-	{
-		if (isFirstLoad)
-			load(false);
-		
-		save();
-		
-		if (throwEvent)
-			CommonUtil.callEvent(new PlayerDataSaveEvent(this, false));
-	}
-
 	public void saveLastLocation(){
 		if (getPlayer() != null)
 			persistant_data.set("last.location", new SafeLocation(getPlayer().getLocation()));
@@ -710,6 +697,10 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	 */
 	public void setWhitelisted(boolean arg0) {
 		getProxyBase().setWhitelisted(arg0);
+	}
+
+	public void saveToManager() {
+		PlayerManager.getInstance().savePlayer(this);
 	}
 
 }

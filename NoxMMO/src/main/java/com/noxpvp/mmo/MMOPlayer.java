@@ -131,6 +131,10 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		}
 	}
 	
+	/**
+	 * Warning this does not save to file. You must call saveToManager() method after using this method.
+	 * DO NOT USE saveToManager() in this method. It will infinite loop. Or you can use saveToManager() without this... It will work just fine.
+	 */
 	public void save() {
 		ConfigurationNode node = getPersistantData();
 		if (getPrimaryClass() == null)

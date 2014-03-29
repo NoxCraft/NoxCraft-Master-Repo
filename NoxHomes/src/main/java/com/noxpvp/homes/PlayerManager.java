@@ -118,10 +118,6 @@ public class PlayerManager extends BasePlayerManager<HomesPlayer> { //FIXME: Jav
 		return getPlayer(player).getHomes();
 	}
 	
-	public HomesPlayer getPlayer(NoxPlayer player) {
-		return null;
-	}
-	
 	public NoxHomes getPlugin() {
 		return NoxHomes.getInstance();
 	}

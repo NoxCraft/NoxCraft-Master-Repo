@@ -13,9 +13,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.proxies.ProxyBase;
-import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.SafeLocation;
-import com.noxpvp.core.events.PlayerDataSaveEvent;
 import com.noxpvp.core.gui.CoolDown;
 import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.core.gui.CoreBoard;
@@ -251,10 +249,6 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	
 	public abstract void load();
 	
-	protected final void throwSaveEvent() {
-		CommonUtil.callEvent(new PlayerDataSaveEvent(this, true));
-	}
-	
 	public void saveLastLocation() {
 		getProxyBase().saveLastLocation();
 	}
@@ -341,5 +335,9 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 
 	public void setWhitelisted(boolean arg0) {
 		getProxyBase().setWhitelisted(arg0);
+	}
+	
+	public void saveToManager() {
+		PlayerManager.getInstance().savePlayer(getNoxPlayer());
 	}
 }
