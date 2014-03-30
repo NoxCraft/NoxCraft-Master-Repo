@@ -10,6 +10,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -29,6 +30,7 @@ public class GenericMMOListener<T extends Event> extends NoxListener<NoxMMO> {
 	
 	static {
 		constructors.put(EntityDamageEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(EntityDamageListener.class, NoxMMO.class));
+		constructors.put(EntityDamageByEntityEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(EntityDamageByEntityListener.class, NoxMMO.class));
 		constructors.put(PlayerInteractEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(PlayerInteractListener.class, NoxMMO.class));
 		constructors.put(PlayerPickupItemEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(PlayerPickupItemListener.class, NoxMMO.class));
 		constructors.put(ProjectileLaunchEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(ProjectileLaunchListener.class, NoxMMO.class));
