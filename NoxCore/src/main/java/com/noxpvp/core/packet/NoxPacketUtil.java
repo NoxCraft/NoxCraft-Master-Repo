@@ -12,22 +12,21 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import com.bergerkiller.bukkit.common.bases.IntVector2;
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
+import com.bergerkiller.bukkit.common.utils.PacketUtil;
 import com.bergerkiller.bukkit.common.wrappers.DataWatcher;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.concurrency.PacketTypeSet;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.dsh105.holoapi.util.TagIdGenerator;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.utils.BlockChangeArray;
 
-public class NoxPacketUtil extends com.bergerkiller.bukkit.common.utils.PacketUtil {
+public class NoxPacketUtil extends PacketUtil {
 	
 	private static List<Integer> MagicEntityId = new ArrayList<Integer>();
 	private static int SHARED_IDS = Short.MAX_VALUE;
