@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import com.noxpvp.core.packet.PacketUtil;
+import com.noxpvp.core.packet.NoxPacketUtil;
 import com.noxpvp.core.utils.DamageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
@@ -168,7 +168,7 @@ public class HammerOfThorAbility extends BasePlayerAbility{
 		meta.addEnchant(Enchantment.ARROW_DAMAGE, 5, true);
 		hammer.setItemMeta(meta);
 		
-		PacketUtil.disguiseArrow(a, hammer);
+		NoxPacketUtil.disguiseArrow(a, hammer);
 		
 		setActive(true);
 		return true;
