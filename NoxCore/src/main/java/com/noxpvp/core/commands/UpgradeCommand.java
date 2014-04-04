@@ -13,6 +13,7 @@ import com.bergerkiller.bukkit.common.Task;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.commands.Command.CommandResult;
 import com.noxpvp.core.internal.LockerCaller;
 import com.noxpvp.core.internal.SafeLocker;
 import com.noxpvp.core.locales.GlobalLocale;
@@ -47,6 +48,7 @@ public class UpgradeCommand extends BaseCommand {
 		if (!handler.hasPermission(context.getSender(), perm))
 			throw new NoPermissionException(context.getSender(), perm, "You are not allowed to upgrade the nox plugins.");
 		upgradeToUID(context.getSender());
+		return new CommandResult(this, true);
 	}
 
 	@Override

@@ -19,11 +19,11 @@ import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
 import com.bergerkiller.bukkit.common.wrappers.DataWatcher;
-import com.comphenix.packetwrapper.BlockChangeArray;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.dsh105.holoapi.util.TagIdGenerator;
+import com.noxpvp.com.comphenix.packetwrapper.BlockChangeArray;
 import com.noxpvp.core.NoxCore;
 
 public class NoxPacketUtil extends PacketUtil {
