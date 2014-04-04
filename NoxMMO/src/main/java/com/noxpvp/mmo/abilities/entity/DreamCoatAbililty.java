@@ -1,6 +1,8 @@
 package com.noxpvp.mmo.abilities.entity;
 
-import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.WeakHashMap;
 
 import javax.annotation.Nullable;
@@ -17,6 +19,7 @@ import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOutEntityEquipment;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
+import com.noxpvp.core.data.Cycler;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 
@@ -25,7 +28,22 @@ public class DreamCoatAbililty extends BaseEntityAbility{
 	public final static String ABILITY_NAME = "Dream Coat";
 	public final static String PERM_NODE = "dream-coat";
 	
-	public static WeakHashMap<WeakReference<LivingEntity>, DreamCoatRunnable> runnables = new WeakHashMap<WeakReference<LivingEntity>, DreamCoatAbililty.DreamCoatRunnable>();
+	private static WeakHashMap<LivingEntity, DreamCoatRunnable> runnables = new WeakHashMap<LivingEntity, DreamCoatAbililty.DreamCoatRunnable>();
+	private static SortedMap<Long, Color> colours = new TreeMap<Long, Color>(Collections.reverseOrder());
+	
+	private void setupColors() {
+		int[] values = new int[]{0, 32, 64, 96, 128, 160, 192, 224, 255};
+		for (int r : values) {
+			for (int g : values) {
+				for (int b : values) {
+					long brightness = (r + g + b) / 3;
+					long colourScore = (brightness << 24) + (r << 8) + (g << 16) + b;
+					colours.put(colourScore, Color.fromRGB(r, g, b));
+				}
+			}
+		}
+		
+	}
 	
 	private boolean anyArmor;
 
@@ -35,6 +53,7 @@ public class DreamCoatAbililty extends BaseEntityAbility{
 	public DreamCoatAbililty(Entity e) {
 		super(ABILITY_NAME, e);
 		
+		setupColors();
 		this.setAnyArmor(false);
 	}
 
@@ -45,20 +64,20 @@ public class DreamCoatAbililty extends BaseEntityAbility{
 		LivingEntity a = (LivingEntity) getEntity();
 		
 		if (runnables.containsKey(a)){
-			runnables.get(a).safeCancel();
-			
+			while (runnables.containsKey(a)) {
+				runnables.get(a).safeCancel();
+				runnables.remove(a);
+			}			
 			sendFakeArmor(a, null);
-			
-//			if (a instanceof Player)
-//				((Player) a).sendMessage(MMOLocale.);
 			
 			return false;
 		}
 		
+		System.out.println("starting");
 		DreamCoatRunnable b = new DreamCoatRunnable(a);
-		runnables.put(new WeakReference<LivingEntity>((LivingEntity) a), b);
+		runnables.put(a, b);
 		
-		b.runTaskTimer(NoxMMO.getInstance(), 0, 5);
+		b.runTaskTimer(NoxMMO.getInstance(), 0, 1);
 		return true;
 	}
 	
@@ -110,7 +129,7 @@ public class DreamCoatAbililty extends BaseEntityAbility{
 	private class DreamCoatRunnable extends BukkitRunnable{
 		
 		private LivingEntity e;
-		private int r = 0, g = 0, b = 0;
+		private Cycler<Color> colors = new Cycler<Color>(colours.values());
 	
 		public void safeCancel(){
 			try {
@@ -128,22 +147,7 @@ public class DreamCoatAbililty extends BaseEntityAbility{
 			if (e == null || !e.isValid() || e.isDead())
 				safeCancel();
 			
-			sendFakeArmor(e, Color.fromRGB(r, g, b));
-			
-			if (b < 255)
-				b++;
-			else if (g < 255){
-				g++;
-				b = 0;
-			} else if (r < 255){
-				r++;
-				g = 0;
-				b = 0;
-			} else {
-				b = 0;
-				g = 0;
-				r = 0;
-			}
+			sendFakeArmor(e, colors.next());
 			
 		}
 		

@@ -59,7 +59,7 @@ public class PlayerUtils extends PlayerUtil{
 			BlockIterator itr = new BlockIterator(from, 0, distance);
 			while (itr.hasNext()) {
 				Block block = itr.next();
-				Material type = block.getType();//TODO use materials
+				Material type = block.getType();
 				if (transparentTypes == null) {
 					if (type == Material.AIR) continue;
 				} else if (transparentTypes.contains(type)) {

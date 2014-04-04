@@ -7,11 +7,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.noxpvp.core.listeners.NoxListener;
-import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
-import com.noxpvp.mmo.abilities.entity.WisdomAbility;
+import com.noxpvp.mmo.abilities.entity.DreamCoatAbililty;
 import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 
 public class PlayerInteractListener extends NoxListener<NoxMMO>{
@@ -36,15 +35,13 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 		MMOPlayer player = pm.getPlayer((p = e.getPlayer()));
 		if (player == null) return;
 		
-		System.out.println("interact");
 		new TargetAbility(p).execute(e);//TODO make default range configized || passiveness
 		
 		//debug===========================================
 		if (p.getItemInHand().getType() != Material.STICK)
 			return;
-		MessageUtil.broadcast("sticked");
 		
-		new WisdomAbility(p).execute();
+		new DreamCoatAbililty(p).execute();
 		
 	}
 	

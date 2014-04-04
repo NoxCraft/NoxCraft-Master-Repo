@@ -38,11 +38,10 @@ public class DamageListener extends NoxListener<NoxMMO>{
 //		Entity e = event.getEntity();
 		
 		LivingEntity livingDamaged = DamageUtil.getDamagedEntity(event),
-				livingAttacker = DamageUtil.getAttackingEntity(event);
+				livingAttacker = DamageUtil.getAttackingLivingEntity(event);
 		
 		Player playerDamaged = DamageUtil.getDamagedPlayer(event),
 				playerAttacker = DamageUtil.getAttackingPlayer(event);
-		
 		
 		if (playerAttacker != null) {
 			
