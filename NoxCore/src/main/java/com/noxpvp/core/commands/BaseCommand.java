@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.collections.StringMap;
 import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.gui.MessageUtil;
 
@@ -18,6 +19,7 @@ public abstract class BaseCommand implements Command {
 	private BaseCommand parent;
 	
 	private StringMap<BaseCommand> subCommands = new StringMap<BaseCommand>();
+	protected PermissionHandler handler;
 	
 	private BaseCommand(BaseCommand parent, String name, boolean isPlayerOnly)
 	{
@@ -29,6 +31,8 @@ public abstract class BaseCommand implements Command {
 		this.parent = parent;
 		this.name = name;
 		this.isPlayerOnly = isPlayerOnly;
+		
+		handler = getPlugin().getPermissionHandler();
 	}
 	
 	/**

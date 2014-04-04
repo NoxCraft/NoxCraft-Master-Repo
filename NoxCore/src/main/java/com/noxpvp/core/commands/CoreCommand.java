@@ -1,15 +1,19 @@
 package com.noxpvp.core.commands;
 
+import java.util.Map.Entry;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.noxpvp.core.NoxCore;
 
 public class CoreCommand extends BaseCommand {
 	public final static String COMMAND_NAME = "core";
 	public CoreCommand() {
 		super(COMMAND_NAME, false);
+		registerSubCommand(new UpgradeCommand());
 	}
 	
 	public CommandResult execute(CommandContext context) {
@@ -23,15 +27,23 @@ public class CoreCommand extends BaseCommand {
 	}
 	
 	public String[] getFlags() {
-		return new String[0];
+		return new String[]{"h", "help"};
 	}
 	
 	public String[] getHelp() {
-		return new String[0];
+		MessageBuilder mb = new MessageBuilder();
+		mb.setIndent(1);
+		mb.setSeparator("\n");
+		for (Entry<String, BaseCommand> entry : getSubCommandMap().entrySet())
+			for (String line : entry.getValue().getHelp())
+				mb.append(line);
+		mb.setIndent(0);
+		
+		return mb.lines();
 	}
 	
 	public int getMaxArguments() {
-		return 0;
+		return -1;
 	}
 
 	@Override

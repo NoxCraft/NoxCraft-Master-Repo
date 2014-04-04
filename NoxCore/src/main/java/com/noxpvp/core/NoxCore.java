@@ -510,7 +510,8 @@ public class NoxCore extends NoxPlugin {
 			new NoxPermission(this, "core.*", "All noxcore permissions (Including admin nodes).", PermissionDefault.OP,
 					new NoxPermission(this, "core.reload", "Reload command for Nox Core", PermissionDefault.OP),
 					new NoxPermission(this, "core.save", "Save permission for saving everything in core.", PermissionDefault.OP),
-					new NoxPermission(this, "core.load", "Load permission for loading everything in core.", PermissionDefault.OP)
+					new NoxPermission(this, "core.load", "Load permission for loading everything in core.", PermissionDefault.OP),
+					new NoxPermission(this, "nox.upgrade", "Upgrade permission for the upgrade command in the core.", PermissionDefault.OP)
 			)
 		);
 	}

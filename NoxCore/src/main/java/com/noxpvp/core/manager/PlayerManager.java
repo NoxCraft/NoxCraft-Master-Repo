@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,11 +20,16 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
+import com.noxpvp.core.internal.LockerCaller;
+import com.noxpvp.core.internal.SafeLocker;
 
-public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persistant {
+public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persistant, LockerCaller, SafeLocker {
 	
 	private static PlayerManager instance;
 	private static List<IPlayerManager<?>> managers = new ArrayList<IPlayerManager<?>>();
+	
+	private AtomicBoolean isLocked = new AtomicBoolean();
+	private LockerCaller lockCaller = null;
 	
 	public static void addManager(IPlayerManager<?> manager) {
 		if (PlayerManager.managers.contains(manager))
@@ -94,13 +101,34 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 		return new HashMap<String, NoxPlayer>();
 	}
 
+	public List<File> getAllDeprecatedPlayerFiles() {
+		List<File> ret = new ArrayList<File>();
+		try {
+			for (File f : NoxCore.getInstance().getDataFile("playerdata").listFiles()) {
+				String name = f.getName().replace(".yml", "");
+				if (!name.matches("(\\w{8})-?(\\w{4})-?(\\w{4})-?(\\w{4})-?(\\w{12})"))
+					ret.add(f);
+			}
+		} catch (NullPointerException e) {//We don't have a nullfix yet... 
+			
+		}
+		return ret;
+	}
+	
+	/**
+	 * @deprecated Uses old file names... This will break.. Use " MISSING METHOD " instead. 
+	 * @return list of player names.
+	 */
 	public List<String> getAllPlayerNames() {
 		List<String> ret = new ArrayList<String>();
 		if (isMultiFile())
 		{
 			try {
-				for (File f : NoxCore.getInstance().getDataFile("playerdata").listFiles())
-					ret.add(f.getName().replace(".yml", ""));
+				for (File f : NoxCore.getInstance().getDataFile("playerdata").listFiles()) {
+					String name = f.getName().replace(".yml", "");
+					if (!name.matches("(\\w{8})-?(\\w{4})-?(\\w{4})-?(\\w{4})-?(\\w{12})"))
+						ret.add(name);
+				}
 			} catch (NullPointerException e) {//We don't have a nullfix yet...
 				 
 			}
@@ -300,11 +328,17 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 */
 	public void savePlayer(NoxPlayer player) 
 	{
+//		if (!lockFiles.isLocked()) {
+//			getPlugin().log(Level.SEVERE, "Could not save player '" + player.getName() + ":=" + player.getUID() + "' due to file lock.");
+//			return;
+//		}
+		
 		ConfigurationNode persistant_data = getPlayerNode(player);
 		if (persistant_data != player.getPersistantData()) //Remove desyncs...
 			player.setPersistantData(persistant_data); 
 		
 		player.save();
+		persistant_data.set("last.save", System.currentTimeMillis());
 		for (IPlayerManager<?> manager : managers) { //Iterate through all plugin.
 			if (manager != this)
 				manager.savePlayer(player); 
@@ -326,5 +360,51 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 */
 	protected NoxPlayer craftNew(NoxPlayer adapter) {
 		return adapter;
+	}
+
+	public void complain(SafeLocker lock) {
+		complain(lock, null);
+	}
+
+	public boolean isLocked() {
+		return isLocked.get();
+	}
+
+	public LockerCaller getCaller() {
+		return lockCaller;
+	}
+
+	public boolean tryLock(LockerCaller caller) {
+
+		boolean ret = false;
+		if (getCaller() == null) {
+			ret = true;
+			isLocked.set(true); 
+		} else if (getCaller() == caller) {
+			ret = true;
+			isLocked.set(true);
+		}
+		
+		if (ret)
+			lockCaller = caller;
+		return ret;
+	}
+
+	public boolean tryUnlock(LockerCaller caller) {
+		boolean ret = false;
+		if (getCaller() == null) {
+			ret = isLocked.compareAndSet(true, false);
+			if (!ret)
+				getPlugin().log(Level.SEVERE, "PlayerManager has a lock from an unknown caller. When the lock was previously activated.");
+		} else if (getCaller() == caller) {
+			ret = true;
+			isLocked.set(true);
+			lockCaller = null;
+		}
+		return ret;
+	}
+
+	public void complain(SafeLocker lock, LockerCaller complainer) {
+		getPlugin().log(Level.SEVERE, "PlayerManager is on file lock. " + ((complainer != null) ? ("Complainer: " + complainer.getClass().getName()):""));
 	}
 }
