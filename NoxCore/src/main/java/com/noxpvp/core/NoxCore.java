@@ -163,6 +163,7 @@ public class NoxCore extends NoxPlugin {
 	@Override
 	public void disable() {
 		saveConfig();
+		PlayerManager.getInstance().save();
 		
 		cds.stop();
 		cleanup();

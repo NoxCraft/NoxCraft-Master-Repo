@@ -1,12 +1,12 @@
 package com.noxpvp.core.data;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
@@ -25,7 +25,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
-import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.proxies.ProxyBase;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.NoxCore;
@@ -38,6 +37,7 @@ import com.noxpvp.core.gui.CoreBoard;
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.utils.UUIDUtil;
 
 public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, NoxPlayerAdapter {
 	
@@ -53,7 +53,18 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	private final PermissionHandler permHandler;
 	private ConfigurationNode persistant_data = null;
 	
+	/**
+	 * Safely changes the persistant data object.
+	 * <p>Cloning all data from original node.
+	 * @param persistant_data to replace with.
+	 */
 	public void setPersistantData(ConfigurationNode persistant_data) {
+		if (this.persistant_data != null)
+		{
+			Map<String, Object> values = this.persistant_data.getValues();
+			for (Entry<String, Object> entry : values.entrySet())
+				persistant_data.set(entry.getKey(), entry.getValue());
+		}
 		this.persistant_data = persistant_data;
 	}
 
@@ -133,33 +144,9 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		this.uid = UUID.fromString(uid);
 	}
 	
-	private void updateFileLocation() {
-		FileConfiguration f = (FileConfiguration)((getPersistantData() instanceof FileConfiguration)?getPersistantData():null);
-		if (f == null)
-			return;
-		FileOutputStream out = null;
-		try {
-			out = new FileOutputStream(manager.getPlayerFile(this));
-			f.saveToStream(out);
-		} catch (IOException e) {
-			if (out != null)
-				try {
-					out.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			e.printStackTrace();
-		}
-		persistant_data = manager.getPlayerNode(this);
-		load();
-	}
-	
 	public UUID getUUID() {
-		Player p = getPlayer();
-		if (uid == null && p != null) {
-			uid = p.getUniqueId();
-			updateFileLocation();
-		}
+		if (this.uid == null || this.uid == UUIDUtil.ZERO_UUID)
+			this.uid = UUIDUtil.getInstance().tryGetID(getName());
 		
 		return uid;
 	}
@@ -167,8 +154,7 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	public String getUID() {
 		if (getUUID() != null)
 			return getUUID().toString();
-		else
-			return null;
+		return null;
 	}
 	
 	public boolean hasFirstLoaded() {
