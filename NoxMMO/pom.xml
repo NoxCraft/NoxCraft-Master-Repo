@@ -9,7 +9,7 @@
 	<artifactId>NoxMMO</artifactId>
 	<name>NoxMMO</name>
 	<description>Nox classes and level plugin. Used for many special abilities and skills you can use.</description>
-	<version>0.0.1 - Test Build b3</version>
+	<version>0.0.1 - Test Build {SNAPSHOT}</version>
 	<build>
 
 		<finalName>${project.artifactId}</finalName>
@@ -44,10 +44,10 @@
 								<tstamp>
 									<format property="snapshotstamp" pattern="HH - d-MM" />
 								</tstamp>
-								<replaceregexp byline="true">
-									<regexp pattern="(.+-Snapshot)" />
-									<substitution expression="$1 (${snapshotstamp})" />
-									<fileset dir="src/">
+								<replaceregexp>
+									<regexp pattern="\{Snapshot\}" />
+									<substitution expression="Snapshot (${snapshotstamp})" />
+									<fileset dir="target/classes">
 										<exclude name="*.class" />
 										<exclude name="*.java" />
 									</fileset>

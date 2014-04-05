@@ -10,7 +10,7 @@
 	<properties>
 		<main>com.noxpvp.homes.NoxHomes</main>
 	</properties>
-	<version>0.2.2-Snapshot</version>
+	<version>0.2.2-{Snapshot}</version>
 
 	<build>
 		<plugins>
@@ -37,10 +37,10 @@
 								<tstamp>
 									<format property="snapshotstamp" pattern="HH - d-MM" />
 								</tstamp>
-								<replaceregexp byline="true">
-									<regexp pattern="(.+-Snapshot)" />
-									<substitution expression="$1 (${snapshotstamp})" />
-									<fileset dir="src/">
+								<replaceregexp>
+									<regexp pattern="\{Snapshot\}" />
+									<substitution expression="Snapshot (${snapshotstamp})" />
+									<fileset dir="target/classes">
 										<exclude name="*.class" />
 										<exclude name="*.java" />
 									</fileset>
