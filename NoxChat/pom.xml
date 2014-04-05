@@ -1,15 +1,67 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.noxpvp</groupId>
-    <artifactId>NoxCraft</artifactId>
-    <version>1.0</version>
-  </parent>
-  <artifactId>NoxChat</artifactId>
-  <name>NoxChat</name>
-  <description>Provides the entire server chat system.</description>
-  <version>0.0.1 - Test Build</version>
-  <properties>
-  	<main>com.noxpvp.noxchat.NoxChat</main>
-  </properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.noxpvp</groupId>
+		<artifactId>NoxCraft</artifactId>
+		<version>1.0</version>
+	</parent>
+	<artifactId>NoxChat</artifactId>
+	<name>NoxChat</name>
+	<description>Provides the entire server chat system.</description>
+	<version>0.0.1 - Test Build</version>
+	<properties>
+		<main>com.noxpvp.noxchat.NoxChat</main>
+	</properties>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+
+				<dependencies>
+					<dependency>
+						<groupId>ant</groupId>
+						<artifactId>ant-nodeps</artifactId>
+						<version>1.6.5</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>add-Snapshot</id>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<tasks>
+								<tstamp>
+									<format property="snapshotstamp" pattern="HH - d-MM" />
+								</tstamp>
+								<replaceregexp byline="true">
+									<regexp pattern="(.+-Snapshot)" />
+									<substitution expression="$1 (${snapshotstamp})" />
+									<fileset dir="src/">
+										<exclude name="*.class" />
+										<exclude name="*.java" />
+									</fileset>
+								</replaceregexp>
+							</tasks>
+
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+	</build>
 </project>

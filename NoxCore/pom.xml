@@ -118,6 +118,14 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
+				
+				<dependencies>
+					<dependency>
+						<groupId>ant</groupId>
+						<artifactId>ant-nodeps</artifactId>
+						<version>1.6.5</version>
+					</dependency>
+				</dependencies>
 				<executions>
 					<execution>
 						<id>add-Snapshot</id>
@@ -135,8 +143,8 @@
 									<regexp pattern="(.+-Snapshot)" />
 									<substitution expression="$1 (${snapshotstamp})" />
 									<fileset dir="src/">
-										<exclude name="*.class"/>
-										<exclude name="*.java"/>
+										<exclude name="*.class" />
+										<exclude name="*.java" />
 									</fileset>
 								</replaceregexp>
 							</tasks>
