@@ -94,7 +94,7 @@
 			<dependency>
 				<groupId>com.palmergames.towny</groupId>
 				<artifactId>Towny</artifactId>
-				<version>0.84.0.9</version>
+				<version>0.85.0.8</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -102,6 +102,12 @@
 				<artifactId>worldguard</artifactId>
 				<version>5.8.1-SNAPSHOT</version>
 				<scope>provided</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>*</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
