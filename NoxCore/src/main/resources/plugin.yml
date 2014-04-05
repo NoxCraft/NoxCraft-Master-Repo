@@ -6,6 +6,6 @@ softdepend: [Vault, Votifier, ProtocolLib, Towny, WorldGuard, HoloAPI]
 commands:
   reloader:
     description: Reload any plugin. 
-  noxcore:
+  nox:
     description: Current does nothing.
-    alias: [noxcore]
+    alias: [noximperials]

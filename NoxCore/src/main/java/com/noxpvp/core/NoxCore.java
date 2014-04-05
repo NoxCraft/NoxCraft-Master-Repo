@@ -30,6 +30,7 @@ import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.noxpvp.core.commands.Command;
+import com.noxpvp.core.commands.NoxCommand;
 import com.noxpvp.core.commands.ReloadCommand;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
@@ -78,6 +79,8 @@ public class NoxCore extends NoxPlugin {
 	private HoloAPI holoAPI = null;
 	
 	private CooldownHandler cds;
+
+	private Command noxCommand;
 	
 	public final Towny getTowny() {
 		return towny;
@@ -522,9 +525,26 @@ public class NoxCore extends NoxPlugin {
 		{
 			SafeConstructor<Command> cons = new SafeConstructor<Command>(cls, new Class[0]);
 			Command rn = cons.newInstance();
-			if (rn != null)
+				
+			if (rn != null) {
+				if (rn.getName().equals(NoxCommand.COMMAND_NAME))
+					setNoxCommand(rn);
 				registerCommand(rn);
+			}
 		}
+	}
+
+	private void setNoxCommand(Command rn) {
+		this.noxCommand = rn;
+	}
+	
+	/**
+	 * Used to create command tree's unique to nox.
+	 * <p>Mainly for if people prefer to type /nox before commands. Mehh Not really big deal.
+	 * @return the master command.
+	 */
+	public Command getNoxCommand() {
+		return this.noxCommand;
 	}
 
 	private void registerSerials(NoxPlugin p) {
@@ -605,7 +625,7 @@ public class NoxCore extends NoxPlugin {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static final Class<Command>[] commands = (Class<Command>[]) new Class[]{ /*CoreCommand.class,*/ ReloadCommand.class};
+	private static final Class<Command>[] commands = (Class<Command>[]) new Class[]{ NoxCommand.class, ReloadCommand.class};
 	
 	private static NoxCore instance;
 	

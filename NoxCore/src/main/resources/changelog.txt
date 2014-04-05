@@ -47,3 +47,6 @@
 		Now uses a dynamic save manager through core player manager. 
 			Uses all managers from other nox plugins to save data. BEFORE writing to file..
 	- Added some data cloning code to prevent possible data loss on updating player file locations.
+	- Added /Nox command
+		Has a upgrade sub command but not implemented.
+	

@@ -315,10 +315,10 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	 * @see com.noxpvp.core.Persistant#save()
 	 */
 	public void save() {
+		super.save();
+		
 		if (!isMultiFile())
 			config.save();
-//		else
-//			//TODO: add logging.
 	}
 
 	/**
@@ -338,7 +338,6 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 			player.setPersistantData(persistant_data); 
 		
 		player.save();
-		persistant_data.set("last.save", System.currentTimeMillis());
 		for (IPlayerManager<?> manager : managers) { //Iterate through all plugin.
 			if (manager != this)
 				manager.savePlayer(player); 
@@ -346,11 +345,11 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 		
 		if (persistant_data instanceof FileConfiguration)
 		{
+			persistant_data.set("last.save", System.currentTimeMillis()); //Snapshot
 			FileConfiguration configNode = (FileConfiguration) persistant_data;
 			configNode.save();
 		} else {
-			if (config != null)
-				config.save();
+			persistant_data.set("last.save", (long) -1); //Magic Number
 		}
 	}
 

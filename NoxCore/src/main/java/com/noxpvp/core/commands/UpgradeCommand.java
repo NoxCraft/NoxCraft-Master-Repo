@@ -1,30 +1,21 @@
 package com.noxpvp.core.commands;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+//import java.util.HashMap;
+//import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 
-import com.bergerkiller.bukkit.common.AsyncTask;
 import com.bergerkiller.bukkit.common.MessageBuilder;
-import com.bergerkiller.bukkit.common.Task;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
-import com.noxpvp.core.commands.Command.CommandResult;
-import com.noxpvp.core.internal.LockerCaller;
-import com.noxpvp.core.internal.SafeLocker;
-import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.manager.PlayerManager;
-import com.noxpvp.core.utils.gui.MessageUtil;
+//import com.noxpvp.core.internal.LockerCaller;
 
 public class UpgradeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "upgrade";
 	public static final String PERM_NODE = "upgrade";
 	
-	private final Map<CommandSender, LockerCaller> lockers = new HashMap<CommandSender, LockerCaller>();
+//	private final Map<CommandSender, LockerCaller> lockers = new HashMap<CommandSender, LockerCaller>();
 	
 	public UpgradeCommand() {
 		super(COMMAND_NAME, false);
@@ -47,8 +38,8 @@ public class UpgradeCommand extends BaseCommand {
 		String perm = StringUtil.join(".", "nox", "core", PERM_NODE);
 		if (!handler.hasPermission(context.getSender(), perm))
 			throw new NoPermissionException(context.getSender(), perm, "You are not allowed to upgrade the nox plugins.");
-		upgradeToUID(context.getSender());
-		return new CommandResult(this, true);
+		return new CommandResult(this, true, new MessageBuilder().red("Not implemented").lines());
+//		upgradeToUID(context.getSender());
 	}
 
 	@Override
@@ -56,7 +47,6 @@ public class UpgradeCommand extends BaseCommand {
 		return NoxCore.getInstance();
 	}
 
-	//Warning this will desync debuggers. haha.
 	private void upgradeToUID(final CommandSender sender) {
 //		final LockerCaller caller = new LockerCaller() {
 //			
