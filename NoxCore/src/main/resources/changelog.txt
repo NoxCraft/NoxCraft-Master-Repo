@@ -49,4 +49,5 @@
 	- Added some data cloning code to prevent possible data loss on updating player file locations.
 	- Added /Nox command
 		Has a upgrade sub command but not implemented.
+	- Fixed command NPE's
 	

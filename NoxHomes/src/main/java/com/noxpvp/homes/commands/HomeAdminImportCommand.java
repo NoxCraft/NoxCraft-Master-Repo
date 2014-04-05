@@ -5,21 +5,19 @@ import org.bukkit.command.CommandSender;
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.gui.MessageUtil;
-import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
+import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.homes.HomeImporter;
 
 public class HomeAdminImportCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "import";
 	public static final String PERM_NODE = "import";
 	private PlayerManager manager;
-	private NoxHomes plugin;
 	
 	private final PermissionHandler permHandler;
 	private String[] importerNames;
@@ -32,8 +30,7 @@ public class HomeAdminImportCommand extends BaseCommand {
 		if (NoxCore.getInstance() == null)
 			throw new RuntimeException("NoxCore plugin is not loaded! Do not use this class in other plugins please.");
 		
-		this.plugin = NoxHomes.getInstance();
-		manager = plugin.getHomeManager();
+		manager = getPlugin().getHomeManager();
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 		
 		HomeImporter[] vals = HomeImporter.values();
@@ -48,7 +45,7 @@ public class HomeAdminImportCommand extends BaseCommand {
 		String[] args = context.getArguments();
 		if (manager == null)
 		{
-			manager = plugin.getHomeManager();
+			manager = getPlugin().getHomeManager();
 			if (manager == null);
 			{
 				MessageUtil.sendLocale(sender, GlobalLocale.ERROR_NULL, "PlayerManager reference in Home List Object.");
@@ -127,7 +124,7 @@ public class HomeAdminImportCommand extends BaseCommand {
 	}
 
 	@Override
-	public NoxPlugin getPlugin() {
-		return plugin;
+	public NoxHomes getPlugin() {
+		return NoxHomes.getInstance();
 	}
 }

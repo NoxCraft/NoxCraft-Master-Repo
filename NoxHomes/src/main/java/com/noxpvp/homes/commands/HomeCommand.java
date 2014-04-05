@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
-import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
@@ -12,8 +11,8 @@ import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
-import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
+import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.locale.HomeLocale;
 import com.noxpvp.homes.tp.BaseHome;
 import com.noxpvp.homes.tp.DefaultHome;
@@ -23,14 +22,12 @@ public class HomeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "home";
 	public static final String PERM_NODE = "home";
 	private PlayerManager manager;
-	private NoxHomes plugin;
 	private final PermissionHandler permHandler;
 	
 	public HomeCommand()
 	{
 		super(COMMAND_NAME, true);
-		plugin = NoxHomes.getInstance();
-		manager = plugin.getHomeManager();
+		manager = getPlugin().getHomeManager();
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
@@ -68,7 +65,7 @@ public class HomeCommand extends BaseCommand {
 		if (home == null) 
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "The home \"" + (homeName == null? "default": homeName) + "\" does not exist");
 		else if (home.tryTeleport(sender, permHandler.hasPermission(sender, perm + ".multi"))) {
-			MessageUtil.sendLocale(plugin, sender, "homes.home"+ (own?".own":""), player, (homeName == null? "default": homeName));
+			MessageUtil.sendLocale(getPlugin(), sender, "homes.home"+ (own?".own":""), player, (homeName == null? "default": homeName));
 			if (home.isOwner(sender)) {
 				
 				String perm2 = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, "other-towns");
@@ -97,8 +94,8 @@ public class HomeCommand extends BaseCommand {
 		return 1;
 	}
 
-	public NoxPlugin getPlugin() {
-		return plugin;
+	public NoxHomes getPlugin() {
+		return NoxHomes.getInstance();
 	}
 
 }

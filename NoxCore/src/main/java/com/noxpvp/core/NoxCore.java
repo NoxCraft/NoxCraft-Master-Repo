@@ -193,6 +193,7 @@ public class NoxCore extends NoxPlugin {
 		
 		
 	}
+	
 	@Override
 	public void enable() {
 		if (instance != null && instance != this)

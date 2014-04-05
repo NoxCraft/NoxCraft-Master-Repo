@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
-import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
@@ -15,8 +14,8 @@ import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.homes.HomesPlayer;
-import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
+import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.locale.HomeLocale;
 import com.noxpvp.homes.tp.BaseHome;
 import com.noxpvp.homes.tp.DefaultHome;
@@ -28,13 +27,11 @@ public class SetHomeCommand extends BaseCommand {
 	
 	private PlayerManager manager;
 	private final PermissionHandler permHandler;
-	private NoxHomes plugin;
 	
 	public SetHomeCommand()
 	{
 		super(COMMAND_NAME, true);
-		plugin = NoxHomes.getInstance();
-		manager = plugin.getHomeManager();
+		manager = getPlugin().getHomeManager();
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
@@ -46,6 +43,7 @@ public class SetHomeCommand extends BaseCommand {
 	}
 	
 	public CommandResult execute(CommandContext context) {
+		NoxHomes plugin = getPlugin();
 		if (!context.isPlayer())
 		{
 			MessageUtil.sendLocale(context.getSender(), GlobalLocale.CONSOLE_ONLYPLAYER);
@@ -143,7 +141,7 @@ public class SetHomeCommand extends BaseCommand {
 		return 1;
 	}
 
-	public NoxPlugin getPlugin() {
-		return plugin;
+	public NoxHomes getPlugin() {
+		return NoxHomes.getInstance();
 	}
 }

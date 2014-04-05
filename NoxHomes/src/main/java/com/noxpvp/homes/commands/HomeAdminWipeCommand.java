@@ -18,19 +18,17 @@ public class HomeAdminWipeCommand extends BaseCommand {
 	public static final String PERM_NODE = "wipe.homes";
 	private static final Random r = new Random();
 	private PlayerManager manager;
-	private NoxHomes plugin;
 	
 	private String key;
 	private String[] helpLines;
 	
 	public HomeAdminWipeCommand() {
 		super(COMMAND_NAME, false);
-		plugin = NoxHomes.getInstance();
 		key = getNextKey();
 		
 		updateHelp();
 		
-		manager = plugin.getHomeManager();
+		manager = getPlugin().getHomeManager();
 	}
 	
 	public CommandResult execute(CommandContext context) {
@@ -102,7 +100,7 @@ public class HomeAdminWipeCommand extends BaseCommand {
 	}
 
 	public NoxHomes getPlugin() {
-		return plugin;
+		return NoxHomes.getInstance();
 	}
 	
 }

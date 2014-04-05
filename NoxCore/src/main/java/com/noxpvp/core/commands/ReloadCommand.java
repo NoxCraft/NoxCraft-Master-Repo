@@ -6,19 +6,14 @@ import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.MasterReloader;
 import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.reloader.Reloader;
 
 public class ReloadCommand extends BaseCommand {
-	private NoxCore core;
-	
 	public static final String COMMAND_NAME = "Reloader";
 	
 	public ReloadCommand(){
 		super(COMMAND_NAME, false);
-		
-		core = NoxCore.getInstance();
 	}
 	
 	public CommandResult execute(CommandContext context) {
@@ -50,9 +45,9 @@ public class ReloadCommand extends BaseCommand {
 		
 		Reloader r = null;
 		if (module.equals("") || module.length() == 0 && all)
-			r = core.getMasterReloader();
+			r = getPlugin().getMasterReloader();
 		else
-			r = core.getMasterReloader().getModule(module);
+			r = getPlugin().getMasterReloader().getModule(module);
 		
 		try {
 			if (all)
@@ -91,7 +86,7 @@ public class ReloadCommand extends BaseCommand {
 		
 		mb.green("Current reloadable modules:");
 		
-		MasterReloader mr = core.getMasterReloader();
+		MasterReloader mr = getPlugin().getMasterReloader();
 		
 		if (mr.hasModules())
 			for (Reloader module : mr.getModules())
@@ -106,8 +101,8 @@ public class ReloadCommand extends BaseCommand {
 		return -1;
 	}
 
-	public NoxPlugin getPlugin() {
-		return core;
+	public NoxCore getPlugin() {
+		return NoxCore.getInstance();
 	}
 
 	private void nextTree(MessageBuilder mb, Reloader module, int level)

@@ -7,29 +7,26 @@ import org.bukkit.command.CommandSender;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
-import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.gui.MessageUtil;
-import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
+import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.tp.BaseHome;
 
 public class HomeListCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "homes";
 	private final PermissionHandler permHandler;
-	private NoxHomes plugin;
 	public static final String LIST_PERM_NODE = "list";
 	private PlayerManager manager;
 	
 	public HomeListCommand()
 	{
 		super(COMMAND_NAME, false);
-		plugin = NoxHomes.getInstance();
-		manager = plugin.getHomeManager();
+		manager = getPlugin().getHomeManager();
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
@@ -41,7 +38,7 @@ public class HomeListCommand extends BaseCommand {
 		
 		if (manager == null)
 		{
-			manager = plugin.getHomeManager();
+			manager = getPlugin().getHomeManager();
 			if (manager == null);
 			{
 				return new CommandResult(this, true);
@@ -91,7 +88,7 @@ public class HomeListCommand extends BaseCommand {
 		if (own)
 			player = "own";
 		
-		MessageUtil.sendLocale(plugin, sender, "homes.list", player, homelist);//TODO: Prettify large lists.
+		MessageUtil.sendLocale(getPlugin(), sender, "homes.list", player, homelist);//TODO: Prettify large lists.
 		return new CommandResult(this, true);
 	}
 	
@@ -111,7 +108,7 @@ public class HomeListCommand extends BaseCommand {
 		return 0;
 	}
 
-	public NoxPlugin getPlugin() {
-		return plugin;
+	public NoxHomes getPlugin() {
+		return NoxHomes.getInstance();
 	}
 }

@@ -5,15 +5,14 @@ import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
-import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.gui.MessageUtil;
-import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.NoxHomes;
+import com.noxpvp.homes.PlayerManager;
 import com.noxpvp.homes.tp.BaseHome;
 
 public class DeleteHomeCommand extends BaseCommand {
@@ -21,13 +20,11 @@ public class DeleteHomeCommand extends BaseCommand {
 	public static final String PERM_NODE = "delhome";
 	private PlayerManager manager;
 	private PermissionHandler permHandler;
-	private NoxHomes plugin;
 	
 	public DeleteHomeCommand()
 	{
 		super(COMMAND_NAME, false);
-		plugin = NoxHomes.getInstance();
-		manager = plugin.getHomeManager();
+		manager = getPlugin().getHomeManager();
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
 	
@@ -73,7 +70,7 @@ public class DeleteHomeCommand extends BaseCommand {
 		if (home != null)
 			manager.removeHome(home);
 		
-		MessageUtil.sendLocale(plugin, context.getSender(), "homes.delhome"+((own)?".own":""), player.getName(), (homeName == null? "default": homeName));
+		MessageUtil.sendLocale(getPlugin(), context.getSender(), "homes.delhome"+((own)?".own":""), player.getName(), (homeName == null? "default": homeName));
 		return new CommandResult(this, true);
 	}
 	
@@ -93,7 +90,7 @@ public class DeleteHomeCommand extends BaseCommand {
 	}
 
 	@Override
-	public NoxPlugin getPlugin() {
-		return plugin;
+	public NoxHomes getPlugin() {
+		return NoxHomes.getInstance();
 	}
 }
