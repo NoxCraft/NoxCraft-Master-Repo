@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,7 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -26,8 +27,12 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
 import com.bergerkiller.bukkit.common.AsyncTask;
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.google.common.collect.ImmutableList;
 import com.noxpvp.core.NoxCore;
+import com.noxpvp.core.annotation.Blocking;
+import com.noxpvp.core.events.uuid.NoxUUIDFoundEvent;
+import com.noxpvp.core.events.uuid.NoxUUIDLostEvent;
 import com.noxpvp.core.listeners.NoxListener;
 
 public class UUIDUtil extends NoxListener<NoxCore>{
@@ -116,7 +121,7 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 		register();
 	}
 	
-	private void ensurePlayerUUIDByName(String name) {
+	public void ensurePlayerUUIDByName(String name) {
 		ensurePlayerUUIDsByName(toList(name));
 	}
 	
@@ -124,12 +129,35 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 		for (String name : names)
 			name2UUID.put(name, ZERO_UUID);
 		
-		fetchByOnlineNames(names);
+		if (Bukkit.isPrimaryThread())
+			fetchByOnlineNames(names);
+		
 		new AsyncTask() {
 			public void run() {
 				fetchByNames(names);
 			}
 		}.start();
+	}
+	
+	private void mapIDS(Map<String, UUID> map) {
+		for (Entry<String, UUID> entry : map.entrySet())
+			mapID(entry);
+	}
+	
+	private void mapID(Entry<String, UUID> entry) {
+		mapID(entry.getKey(), entry.getValue());
+	}
+	
+	private void mapID(String username, UUID id) {
+		if ((name2UUID.containsKey(username) || name2UUID.get(username) == ZERO_UUID)  && !name2UUID.get(username).equals(id)) {
+			CommonUtil.callEvent(new NoxUUIDLostEvent(username, name2UUID.get(username)));
+			name2UUID.remove(username);
+		}
+		
+		if (!name2UUID.containsKey(username) || name2UUID.get(username) == ZERO_UUID) {
+			name2UUID.put(username, id);
+			CommonUtil.callEvent(new NoxUUIDFoundEvent(username, id));
+		}
 	}
 	
 	private void fetchByNames(List<String> names) {
@@ -142,8 +170,7 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		name2UUID.putAll(call);
+		mapIDS(call);
 	}
 
 	private Map<String, UUID> fetchByOnlineNames(List<String> names) {
@@ -152,28 +179,34 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 		Map<String, UUID> call = new HashMap<String, UUID>();
 		for (Iterator<String> iterator = names.iterator(); iterator.hasNext();) {
 			String name = iterator.next();
-			Player p = Bukkit.getPlayerExact(name); //Check if player is actually online. Save up on that heavy lock.
+			Player p = Bukkit.getPlayer(name); //Check if player is actually online. Save up on that heavy lock.
 			if (p != null && p.getUniqueId() != null) {
 				call.put(name, p.getUniqueId());
 				iterator.remove();
 			} 
 		}
+		mapIDS(call);
 		return call;
 	}
 	
 	/**
-	 * <b>WARNING NOT THREAD SAFE THIS CALL IS BLOCKING!</b>
 	 * @param name of player
 	 * @return UUID of player
 	 */
+	@Blocking
 	public UUID getID(String name) {
-		if (name2UUID.contains(name))
-			return name2UUID.get(name);
+		if (name2UUID.containsKey(name)) {
+			UUID id = name2UUID.get(name);
+			
+			if (id != ZERO_UUID)
+				return id;
+		}
+		
 		fetchByNames(toList(name));
 		return name2UUID.get(name);
 	}
 
-	private <T> List<T> toList(T name) {
+	public static <T> List<T> toList(T name) {
 		List<T> names = new ArrayList<T>();
 		names.add(name);
 		return names;
@@ -185,13 +218,16 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 	 * @return UUID of player or null if never cached which in return should be available in future.
 	 */
 	public UUID tryGetID(String name) {
-		if (name2UUID.contains(name))
-			return name2UUID.get(name);
-		else {
+		if (name2UUID.containsKey(name)) {
+			UUID id = name2UUID.get(name);
+			return (id == ZERO_UUID)? null : id;
+		} else {
 			if (Bukkit.isPrimaryThread()) {
-				fetchByOnlineNames(toList(name)); //Last effort.
-				if (name2UUID.contains(name))
-					return name2UUID.get(name);
+				UUID id = fetchByOnlineNames(toList(name)).get(name);
+				if (id != null) {
+					name2UUID.put(name, id);
+					return id;
+				}
 			}
 			
 			ensurePlayerUUIDByName(name);
@@ -199,10 +235,33 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 		}
 	}
 	
-	@EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
-	public void onJoin(PlayerLoginEvent event) {
-		if (event.getResult().equals(PlayerLoginEvent.Result.ALLOWED))
-			ensurePlayerUUIDByName(event.getPlayer().getName());
+	/**
+	 * Attempts to get a UUID without blocking threads.
+	 * @param player object
+	 * @return UUID of player or null if never cached which in return should be available in future.
+	 */
+	public UUID tryGetID(Player player) {
+		String name = player.getName();
+		if (name2UUID.containsKey(name)) {
+			UUID id = name2UUID.get(name);
+			return (id == ZERO_UUID)? null : id;
+		} else {
+			if (Bukkit.isPrimaryThread()) {
+				UUID id = player.getUniqueId();
+				if (id != null) {
+					name2UUID.put(name, id);
+					return id;
+				}
+			}
+			
+			ensurePlayerUUIDByName(name);
+			return null;
+		}
+	}
+	
+	@EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
+	public void onJoin(PlayerJoinEvent event) {
+		ensurePlayerUUIDByName(event.getPlayer().getName());
 	}
 	
 	@EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
@@ -215,7 +274,9 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 	}
 
 	private void remove(String name) {
-		if (name2UUID.contains(name))
+		if (name2UUID.containsKey(name)) {
+			CommonUtil.callEvent(new NoxUUIDLostEvent(name, name2UUID.get(name)));
 			name2UUID.remove(name);
+		}
 	}
 }

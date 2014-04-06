@@ -51,6 +51,7 @@ import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
 import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.StaticCleaner;
+import com.noxpvp.core.utils.UUIDUtil;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.command.TownyAdminCommand;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -77,6 +78,8 @@ public class NoxCore extends NoxPlugin {
 	private Towny towny = null;
 	private WorldGuardPlugin worldGuard = null;
 	private HoloAPI holoAPI = null;
+	
+	private UUIDUtil uuidUtil;
 	
 	private CooldownHandler cds;
 
@@ -203,6 +206,8 @@ public class NoxCore extends NoxPlugin {
 			return;
 		} else if (instance == null)
 			setInstance(this);
+		
+		uuidUtil = UUIDUtil.getInstance();
 		
 		registerSerials(this);
 		for (Plugin p : CommonUtil.getPlugins())

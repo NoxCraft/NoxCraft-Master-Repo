@@ -45,19 +45,17 @@ public class PlayerManager extends BasePlayerManager<HomesPlayer> { //FIXME: Jav
 	
 	/**
 	 * Erases all home data on every player.
-	 * 
 	 */
 	public void clear() {
-		
 		
 		com.noxpvp.core.manager.PlayerManager pm = com.noxpvp.core.manager.PlayerManager.getInstance();
 		List<String> names = pm.getAllPlayerNames();
 		
 		for (HomesPlayer player : getPlayerMap().values())
 		{
-			if (player.getNoxPlayer(false) == null)
+			if (!pm.isLoaded(player.getName()))
 			{
-				names.add(player.getPlayerName());
+				names.add(player.getName());
 				continue;
 			}
 			player.setHomes(null);
@@ -67,7 +65,9 @@ public class PlayerManager extends BasePlayerManager<HomesPlayer> { //FIXME: Jav
 		for(String name : names)
 		{
 			boolean notMem = !pm.isLoaded(name);
-			pm.getPlayer(name).getPersistantData().remove("homes");
+			NoxPlayer np = pm.getPlayer(name);
+			np.getPersistantData().remove("homes");
+			np.save();
 			
 			if (notMem)
 				pm.unloadAndSavePlayer(name);

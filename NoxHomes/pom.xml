@@ -10,7 +10,7 @@
 	<properties>
 		<main>com.noxpvp.homes.NoxHomes</main>
 	</properties>
-	<version>0.2.2-{Snapshot}</version>
+	<version>0.2.3-{Snapshot}</version>
 
 	<build>
 		<plugins>

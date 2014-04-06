@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
+import com.bergerkiller.bukkit.common.proxies.Proxy;
 import com.bergerkiller.bukkit.common.proxies.ProxyBase;
 import com.noxpvp.core.SafeLocation;
 import com.noxpvp.core.gui.CoolDown;
@@ -19,9 +20,8 @@ import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.core.gui.CoreBoard;
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.manager.PlayerManager;
-import com.noxpvp.core.proxies.WeakProxyBase;
 
-public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> implements NoxPlayerAdapter {
+public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<NoxPlayer> {
 	private final String playerName;
 	
 	static {
@@ -30,8 +30,7 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	
 	public BaseNoxPlayerAdapter(NoxPlayerAdapter player)
 	{
-		super(player.getNoxPlayer());
-		this.playerName = player.getPlayerName();
+		this(player.getPlayerName());
 	}
 	
 	public BaseNoxPlayerAdapter(OfflinePlayer player) {
@@ -40,7 +39,7 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	
 	public BaseNoxPlayerAdapter(String name)
 	{
-		this(getNoxPlayer(name));
+		this.playerName = name;
 	}
 	
 	public final void setName(String name) {
@@ -51,23 +50,18 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 		getProxyBase().updateUID();
 	}
 	
+	public NoxPlayer getProxyBase() {
+		return getNoxPlayer(this.getName());
+	}
+	
+	public final void setProxyBase(NoxPlayer player) { };
+	
 	public final NoxPlayer getNoxPlayer() {
-		if (getProxyBase() != null)
-			return getProxyBase();
-		else
-			return PlayerManager.getInstance().getPlayer(getPlayerName());
+		return getProxyBase();
 	}
 	
 	public boolean hasFirstLoaded() {
 		return getProxyBase().hasFirstLoaded();
-	}
-	
-	public final NoxPlayer getNoxPlayer(boolean forceUpdate)
-	{
-		if (forceUpdate)
-			return PlayerManager.getInstance().getPlayer(getPlayerName());
-		else
-			return getProxyBase();
 	}
 	
 	public final ConfigurationNode getPersistantData() {
@@ -78,9 +72,12 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 		return getProxyBase().getTempData();
 	}
 	
-	public final String getPlayerName() { return playerName; }
+	/**
+	 * @deprecated calls {@link #getName()}. Use that instead for less processing. 
+	 */
+	public final String getPlayerName() { return getName(); }
 	
-	public final OfflinePlayer getOfflinePlayer() { return Bukkit.getOfflinePlayer(getPlayerName()); }
+	public final OfflinePlayer getOfflinePlayer() { return Bukkit.getOfflinePlayer(getName()); }
 	
 	public final boolean isOnline() { return getOfflinePlayer().isOnline(); }
 	
@@ -97,17 +94,6 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	
 	private static NoxPlayer getNoxPlayer(String name) {
 		return PlayerManager.getInstance().getPlayer(name);
-	}
-
-	public void setProxyBase(NoxPlayer base) {
-		super.setProxyBase(base);
-	}
-
-	public NoxPlayer getProxyBase() {
-		if (super.getProxyBase() == null)
-			setProxyBase(getNoxPlayer(true));
-			
-		return super.getProxyBase();
 	}
 
 	public String toString() {
@@ -191,7 +177,7 @@ public abstract class BaseNoxPlayerAdapter extends WeakProxyBase<NoxPlayer> impl
 	}
 
 	public String getName() {
-		return getProxyBase().getName();
+		return playerName;
 	}
 
 	public int getVotes() {

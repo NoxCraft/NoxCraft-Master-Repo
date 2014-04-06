@@ -22,6 +22,7 @@ import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.internal.LockerCaller;
 import com.noxpvp.core.internal.SafeLocker;
+import com.noxpvp.core.utils.UUIDUtil;
 
 public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persistant, LockerCaller, SafeLocker {
 	
@@ -93,7 +94,9 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	
 	@Override
 	protected NoxPlayer craftNew(String name) {
-		return new NoxPlayer(this, name);
+		NoxPlayer player = new NoxPlayer(this, name);
+		loadPlayer(player);
+		return player;
 	}
 	
 	@Override
@@ -172,7 +175,7 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	public File getPlayerFile(NoxPlayer noxPlayer) {
 		File old = getPlayerFile(noxPlayer.getName() + ".yml");
 		File supposed = getPlayerFile("NEED-UID", noxPlayer.getName() + ".yml");
-		File uidF = getPlayerFile(noxPlayer.getUUID().toString() + ".yml");
+		File uidF = getPlayerFile(noxPlayer.getUID() + ".yml");
 		if (old.exists() && noxPlayer.getUUID() == null)
 			if (FileUtil.copy(old, supposed))
 				if (!old.delete())
@@ -238,7 +241,7 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 		else if (config != null && !isMultiFile())
 			if (player.getUUID() == null && player.getName() != null)
 				return config.getNode("players").getNode(player.getName());
-			else if (player.getUUID() != null)
+			else if (player.getUUID() != null && player.getUUID() != UUIDUtil.ZERO_UUID)
 				return config.getNode("players").getNode(player.getUUID().toString());
 			else
 				return null;
@@ -275,7 +278,7 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	}
 	
 	private void loadOrCreate(String name) {
-		loadPlayer(getPlayer(name));
+		loadPlayer(name);
 	}
 	
 	/**
@@ -286,8 +289,10 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	public void loadPlayer(NoxPlayer noxPlayer) {
 		ConfigurationNode persistant_data = getPlayerNode(noxPlayer); 
 
-		if (persistant_data != noxPlayer.getPersistantData()) //Remove desyncs...
-			noxPlayer.setPersistantData(persistant_data); 
+		if (persistant_data != noxPlayer.getPersistantData()) {//Remove desyncs...
+			noxPlayer.setPersistantData(persistant_data);
+			getPlugin().log(Level.INFO, "Player data object mismatch. Syncing objects for player\"" + noxPlayer.getName() +":"+ noxPlayer.getUID() + "\"");
+		}
 		
 		if (persistant_data instanceof FileConfiguration)
 		{
@@ -296,6 +301,8 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 		} else {
 			load();
 		}
+		
+		super.loadPlayer(noxPlayer);
 		
 		for (IPlayerManager<?> manager : managers)
 			if (manager != this)
@@ -334,8 +341,10 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 //		}
 		
 		ConfigurationNode persistant_data = getPlayerNode(player);
-		if (persistant_data != player.getPersistantData()) //Remove desyncs...
+		if (persistant_data != player.getPersistantData()) {//Remove desyncs...
 			player.setPersistantData(persistant_data); 
+			getPlugin().log(Level.INFO, "Player data object mismatch. Syncing objects for player\"" + player.getName() +":"+ player.getUID() + "\"");
+		}
 		
 		player.save();
 		for (IPlayerManager<?> manager : managers) { //Iterate through all plugin.

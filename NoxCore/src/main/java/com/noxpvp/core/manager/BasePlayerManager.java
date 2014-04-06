@@ -65,6 +65,7 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 			player = players.get(name);
 		else {
 			player = craftNew(noxPlayer);
+			player.load();
 			players.put(name, player);
 		}
 		return player;

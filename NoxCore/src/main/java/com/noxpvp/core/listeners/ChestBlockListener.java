@@ -21,8 +21,7 @@ import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.events.ChestBlockedEvent;
 
 public class ChestBlockListener implements Listener {
-	public List<Block> getAdjacentChests(Block block)
-	{
+	public List<Block> getAdjacentChests(Block block) {
 		ArrayList<Block> blocks = new ArrayList<Block>();
 		for (BlockFace face : sides)
 			if (isChest(block.getRelative(face)))
@@ -30,40 +29,38 @@ public class ChestBlockListener implements Listener {
 		
 		return blocks;
 	}
-	public List<Block> getAdjacentChests(Location loc)
-	{
+	
+	public List<Block> getAdjacentChests(Location loc) {
 		return getAdjacentChests(loc.getBlock());
 	}
-	private boolean isBlocked(Block block)
-	{
+	
+	private boolean isBlocked(Block block) {
 		boolean isChest = isChest(block);
 		if (isChest)
 			return !(block.getRelative(BlockFace.UP).getType().isTransparent());
 		else
 			return !(block.getRelative(BlockFace.DOWN).getType().isTransparent());
 	}
-	private boolean isBlocked(Collection<Block> blocks)
-	{
+	
+	private boolean isBlocked(Collection<Block> blocks) {
 		for (Block b : blocks)
 			if (isBlocked(b))
 				return true;
 		return false;
 	}
 	
-	private boolean isChest(Block block)
-	{
+	
+	private boolean isChest(Block block) {
 		return isChest(block.getType());
 	}
 	
 	
-	private boolean isChest(Material type)
-	{
+	private boolean isChest(Material type) {
 		return (type == Material.CHEST || type == Material.TRAPPED_CHEST);
 	}
 	
 	@EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onBlockForm(BlockFormEvent event)
-	{
+	public void onBlockForm(BlockFormEvent event) {
 		if (!useFormEvent)
 			return;
 		
@@ -73,8 +70,7 @@ public class ChestBlockListener implements Listener {
 	}
 	
 	@EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onBlockPlace(BlockPlaceEvent event)
-	{
+	public void onBlockPlace(BlockPlaceEvent event) {
 		if (!usePlaceEvent)
 			return;
 		
@@ -99,8 +95,7 @@ public class ChestBlockListener implements Listener {
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPlayerInteract(PlayerInteractEvent event)
-	{
+	public void onPlayerInteract(PlayerInteractEvent event) 	{
 		if (!isRemovingOnInteract)
 			return;
 		
@@ -140,6 +135,8 @@ public class ChestBlockListener implements Listener {
 	public static boolean useFormEvent = false;
 	
 	public static boolean usePistonEvent = true;
+
+	public static boolean usePlaceEvent = true;
 	
 //	@EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
 //	public void onPistonMoveEvent(BlockPistonEvent event0)
@@ -158,5 +155,4 @@ public class ChestBlockListener implements Listener {
 //		}
 //	}
 	
-	public static boolean usePlaceEvent = true;
 }

@@ -115,11 +115,17 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		manager = mn;
 		this.name = name;
 		
+		getUID();
+		
 		if (getPlayer() != null){
 			this.coreBar = new CoreBar(core, getPlayer());
 			new CoreBoard(core, getPlayer());
 		}
-		this.persistant_data = mn.getPlayerNode(this);
+		setPersistantData(mn.getPlayerNode(this));
+	}
+	
+	public void updatePersistantData() {
+		manager.loadPlayer(this);
 	}
 	
 	public NoxPlayer(PlayerManager mn, UUID uid) {
@@ -144,9 +150,18 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		this.uid = UUID.fromString(uid);
 	}
 	
-	public UUID getUUID() {
+	private boolean isBadUID() {
 		if (this.uid == null || this.uid == UUIDUtil.ZERO_UUID)
+			return true;
+		return false;
+	}
+	
+	public UUID getUUID() {
+		if (isBadUID())
 			this.uid = UUIDUtil.getInstance().tryGetID(getName());
+		
+		if (isBadUID())
+			this.uid = null;
 		
 		return uid;
 	}
