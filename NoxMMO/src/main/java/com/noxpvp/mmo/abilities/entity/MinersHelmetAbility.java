@@ -11,7 +11,7 @@ import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOutMultiBlockChange;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
-import com.noxpvp.com.comphenix.packetwrapper.BlockChangeArray;
+import com.comphenix.packetwrapper.BlockChangeArray;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 

@@ -9,6 +9,7 @@ import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.commands.Command.CommandResult;
 //import com.noxpvp.core.internal.LockerCaller;
 
 public class UpgradeCommand extends BaseCommand {
