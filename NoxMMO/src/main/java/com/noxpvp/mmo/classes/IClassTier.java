@@ -1,8 +1,11 @@
 package com.noxpvp.mmo.classes;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
+import com.noxpvp.core.annotation.Temporary;
+import com.noxpvp.mmo.abilities.Ability;
 
 public interface IClassTier {
 	
@@ -33,6 +36,12 @@ public interface IClassTier {
 	public void setExp(int amount);
 	public void addExp(int amount);
 	public void removeExp(int amount);
+	
+	@Temporary
+	public Map<String, Ability> getAbilityMap();
+	
+	@Temporary
+	public List<Ability> getAbilities();
 	
 	public ExperienceType[] getExpTypes();
 	

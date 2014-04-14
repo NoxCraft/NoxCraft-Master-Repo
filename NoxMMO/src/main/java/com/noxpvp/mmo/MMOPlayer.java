@@ -25,7 +25,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	private static final String PRIMARY_CLASS_NODE = "current.class.primary";
 	private static final String SECONDARY_CLASS_NODE = "current.class.secondary";
 	private static final String TARGET_NODE = "current.target";
-	private  PlayerClass primaryClass, secondaryClass;
+	private PlayerClass primaryClass, secondaryClass;
 	private LivingEntity target;
 	
 	public MMOPlayer(OfflinePlayer player)

@@ -1,6 +1,7 @@
 package com.noxpvp.mmo.classes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.bergerkiller.bukkit.common.utils.MathUtil;
 import com.bergerkiller.bukkit.common.utils.ParseUtil;
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.abilities.Ability;
 
 public class DynamicClassTier extends ClassTier {
 
@@ -146,6 +148,10 @@ public class DynamicClassTier extends ClassTier {
 			amount = 0;
 		expMap.put(getLevel(), getMaxExp());
 		setLevel(getLevel() + 1);
+		
+		if (amount <= 0)
+			return;
+		
 		setExp(amount);
 	}
 	
@@ -163,6 +169,14 @@ public class DynamicClassTier extends ClassTier {
 		ret = MathUtil.floor(value);
 		
 		return ret;
+	}
+
+	public Map<String, Ability> getAbilityMap() {
+		return Collections.emptyMap();
+	}
+
+	public List<Ability> getAbilities() {
+		return Collections.emptyList();
 	}
 	
 }

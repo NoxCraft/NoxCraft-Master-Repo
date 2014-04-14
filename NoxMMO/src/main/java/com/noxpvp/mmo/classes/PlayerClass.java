@@ -17,7 +17,10 @@ import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.utils.ParseUtil;
+import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.abilities.Ability;
+import com.noxpvp.mmo.abilities.EntityAbility;
 
 /**
  * When Implementing you must use all of the following constructors and params.
@@ -91,6 +94,20 @@ public abstract class PlayerClass implements IPlayerClass {
 	}
 	
 	protected abstract Map<Integer, IClassTier> craftClassTiers();
+	
+	//// START TEMP
+	
+	@Temporary
+	public Map<String, Ability> getAbilityMap() {
+		return getTier().getAbilityMap();
+	}
+	
+	@Temporary
+	public List<Ability> getAbilities() {
+		return getTier().getAbilities();
+	}
+	
+	//// END TEMP
 	
 	public final void addExp(int amount) {
 		getTier().addExp(amount);

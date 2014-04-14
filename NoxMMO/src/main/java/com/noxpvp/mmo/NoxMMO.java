@@ -39,7 +39,7 @@ public class NoxMMO extends NoxPlugin {
 	DamageListener damageListener;
 	PlayerInteractListener playerTargetListener;
 	BlockListener blockListener;
-	ExperienceListener experieneceListener;
+//	ExperienceListener experieneceListener;
 	
 	PacketListeners packetListeners;
 //	PlayerAnimationListener playerAnimationListener;
@@ -110,7 +110,7 @@ public class NoxMMO extends NoxPlugin {
 		damageListener = new DamageListener(instance);
 		playerTargetListener = new PlayerInteractListener(instance);
 		blockListener = new BlockListener(instance);
-		experieneceListener = new ExperienceListener(instance);
+//		experieneceListener = new ExperienceListener(instance);
 		
 		packetListeners = new PacketListeners();
 //		playerAnimationListener = packetListeners.new PlayerAnimationListener();

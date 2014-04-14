@@ -1,9 +1,12 @@
 package com.noxpvp.mmo.classes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
+import com.noxpvp.mmo.abilities.Ability;
 
 public class DummyClassTier extends ClassTier {
 
@@ -64,6 +67,14 @@ public class DummyClassTier extends ClassTier {
 
 	public ExperienceType[] getExpTypes() {
 		return b ;
+	}
+
+	public Map<String, Ability> getAbilityMap() {
+		return Collections.emptyMap();
+	}
+
+	public List<Ability> getAbilities() {
+		return Collections.emptyList();
 	}
 
 }

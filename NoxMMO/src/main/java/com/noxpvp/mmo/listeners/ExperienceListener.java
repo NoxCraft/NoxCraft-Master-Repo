@@ -214,7 +214,7 @@ public class ExperienceListener extends NoxListener<NoxMMO> {
 		MMOPlayer player = pm.getPlayer(smelter);
 		
 		if (player == null) return;
-		double xpMulti = cachedMultipliers.get(event.getItemType());
+		double xpMulti = cachedMultipliers.get(event.getItemType().name());
 		if (xpMulti != 0)
 			xpMulti =+ getExpBoost(smelter);
 		
@@ -235,7 +235,7 @@ public class ExperienceListener extends NoxListener<NoxMMO> {
 		MMOPlayer mmoPlayer;
 		if ((mmoPlayer = pm.getPlayer(player)) == null) return;
 		
-		double xpMulti = cachedMultipliers.get(event.getEntityType());
+		double xpMulti = cachedMultipliers.get(event.getEntityType().name());
 		if (xpMulti != 0)
 			xpMulti =+ getExpBoost(player);
 		
