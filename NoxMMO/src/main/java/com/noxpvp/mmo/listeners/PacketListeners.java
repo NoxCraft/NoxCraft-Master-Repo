@@ -6,10 +6,8 @@ import com.bergerkiller.bukkit.common.events.PacketReceiveEvent;
 import com.bergerkiller.bukkit.common.events.PacketSendEvent;
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketListener;
-import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.noxpvp.mmo.abilities.player.ClassArmorDisguiseAbility;
 import com.noxpvp.mmo.abilities.player.SilentWalkingAbility;
-import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 
 public class PacketListeners {
 

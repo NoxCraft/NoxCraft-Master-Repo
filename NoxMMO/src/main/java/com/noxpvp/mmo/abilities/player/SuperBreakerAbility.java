@@ -2,14 +2,9 @@ package com.noxpvp.mmo.abilities.player;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.material.Sandstone;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-import com.bergerkiller.bukkit.common.utils.MaterialUtil;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;

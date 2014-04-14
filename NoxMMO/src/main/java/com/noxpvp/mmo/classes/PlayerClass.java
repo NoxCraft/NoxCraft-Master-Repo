@@ -20,7 +20,6 @@ import com.bergerkiller.bukkit.common.utils.ParseUtil;
 import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.Ability;
-import com.noxpvp.mmo.abilities.EntityAbility;
 
 /**
  * When Implementing you must use all of the following constructors and params.

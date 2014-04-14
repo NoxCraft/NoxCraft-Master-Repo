@@ -2,12 +2,8 @@ package com.noxpvp.mmo;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 
-import com.google.common.collect.MapMaker;
-import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.data.NoxPlayer;
-import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.manager.BasePlayerManager;
 
 public class PlayerManager extends BasePlayerManager<MMOPlayer> {
