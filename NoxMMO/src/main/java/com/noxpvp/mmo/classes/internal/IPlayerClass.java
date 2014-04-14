@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.classes;
+package com.noxpvp.mmo.classes.internal;
 
 import java.util.List;
 import java.util.Map.Entry;

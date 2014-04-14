@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.bergerkiller.bukkit.common.filtering.Filter;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
-import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class PlayerClassFilter implements Filter<Player> {

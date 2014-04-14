@@ -17,6 +17,9 @@ import com.bergerkiller.bukkit.common.utils.MathUtil;
 import com.bergerkiller.bukkit.common.utils.ParseUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.Ability;
+import com.noxpvp.mmo.classes.internal.ClassTier;
+import com.noxpvp.mmo.classes.internal.ExperienceType;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
 
 public class DynamicClassTier extends ClassTier {
 

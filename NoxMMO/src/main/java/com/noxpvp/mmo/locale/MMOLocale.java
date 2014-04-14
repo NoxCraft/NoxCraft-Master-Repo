@@ -11,7 +11,11 @@ public class MMOLocale extends NoxLocale {
 	public final static MMOLocale CLASS_TIER_LOCKED;
 	public final static MMOLocale CLASS_NO_TIER;
 
-	//ABILITIES
+	//CLASS DISPLAY
+	public final static MMOLocale CLASS_DN;
+	public final static MMOLocale CLASS_DISPLAY_NAME;
+
+	//ABILITIES DISPLAY
 	public final static MMOLocale ABIL_DISPLAY_NAME;
 	
 	//GUI
@@ -27,6 +31,9 @@ public class MMOLocale extends NoxLocale {
 	static {
 		ABIL_DN = new MMOLocale("display.ability.default", "%1%%0%");
 		ABIL_DISPLAY_NAME = new MMOLocale("display.ability", ""); //This is blank. Will be filled in per ability name.
+		
+		CLASS_DN = new MMOLocale("display.class.default", "%1%%0%");
+		CLASS_DISPLAY_NAME = new MMOLocale("display.class", ""); //This is blank. Will be filled in per ability name.
 		
 		GUI_MENU_NAME_COLOR = new MMOLocale("gui.inventory.name_color", "&6");
 		GUI_BAR_COLOR = new MMOLocale("gui.target_bar.color", "&a");

@@ -30,7 +30,7 @@ import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
-import com.noxpvp.mmo.classes.ExperienceType;
+import com.noxpvp.mmo.classes.internal.ExperienceType;
 
 public class ExperienceListener extends NoxListener<NoxMMO> {
 	

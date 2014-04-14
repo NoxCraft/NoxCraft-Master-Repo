@@ -10,7 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
-import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
 
 public class MaliciousBiteAbility extends BaseEntityAbility implements PassiveAbility<EntityDamageByEntityEvent> {
 	

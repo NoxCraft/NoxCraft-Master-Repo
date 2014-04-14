@@ -8,7 +8,7 @@ import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
-import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.runnables.DamageRunnable;
 
 public class RazerClawsAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent> {

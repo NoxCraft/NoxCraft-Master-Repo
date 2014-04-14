@@ -6,7 +6,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
 
 //FIXME not made yet
 

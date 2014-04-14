@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.classes;
+package com.noxpvp.mmo.classes.internal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +20,8 @@ import com.bergerkiller.bukkit.common.utils.ParseUtil;
 import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.Ability;
+import com.noxpvp.mmo.classes.DynamicClassTier;
+import com.noxpvp.mmo.util.PlayerClassUtil;
 
 /**
  * When Implementing you must use all of the following constructors and params.
@@ -149,7 +151,7 @@ public abstract class PlayerClass implements IPlayerClass {
 	/**
 	 * {@inheritDoc} <br/><br/>
 	 * <b>Warning. This is calculated every run!</b>
-	 * @see com.noxpvp.mmo.classes.IPlayerClass#getTotalExp()
+	 * @see com.noxpvp.mmo.classes.internal.IPlayerClass#getTotalExp()
 	 */
 	public int getTotalExp() {
 		int value = 0;
@@ -296,6 +298,8 @@ public abstract class PlayerClass implements IPlayerClass {
 	private static void checkAndRegisterClass(PlayerClass playerClass) {
 		if (registeredClasses.contains(playerClass.getClass()))
 			return;
+		
+		PlayerClassUtil.registerPlayerClass(playerClass.getClass());
 		
 		//TODO: do registers.
 	}
