@@ -10,9 +10,11 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import com.bergerkiller.bukkit.common.Common;
 import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard;
 import com.bergerkiller.bukkit.common.scoreboards.CommonTeam;
+import com.bergerkiller.bukkit.common.scoreboards.CommonTeam.FriendlyFireType;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.locales.CoreLocale;
 
@@ -71,23 +73,36 @@ public class VaultAdapter {
 			
 			if ((finalGroup = getPlayerGroup(p)) == null) return;
 			
-			CommonScoreboard pBoard = CommonScoreboard.get(p);
-			CommonTeam team = CommonScoreboard.getTeam(finalGroup + "Team");
+			String teamName = finalGroup + "Team";
 			
-			if (team == null) { 
-				team = CommonScoreboard.dummyTeam;
-				NoxCore.getInstance().log(Level.WARNING, "The team was not found, creating a team for: " + finalGroup + '.');
-			}
+			CommonScoreboard pBoard = CommonScoreboard.get(p);
 			
 			for (CommonTeam t2 :CommonScoreboard.getTeams()) {
-				if (t2.equals(team))
+				if (t2.equals(pBoard.getTeam()))
 					continue;
 				if (t2.getPlayers().contains(p.getName()))
 					t2.removePlayer(p);
 			}
 			
-			pBoard.setTeam(team);
-			team.addPlayer(p);
+			if (CommonScoreboard.getTeam(teamName) != null) {
+				CommonScoreboard.loadTeam(teamName).addPlayer(p);
+			} else if (isChatLoaded()) {
+				
+				CommonTeam team = CommonScoreboard.newTeam(teamName);
+				
+				team.setSendToAll(true);
+				team.setFriendlyFire(FriendlyFireType.ON);
+
+				team.setDisplayName(teamName);
+				team.setPrefix(VaultAdapter.chat.getGroupPrefix(p.getWorld(), finalGroup));
+				team.setSuffix(VaultAdapter.chat.getGroupSuffix(p.getWorld(), finalGroup));
+				
+				pBoard.setTeam(team);
+				team.addPlayer(p);
+				
+				team.show();
+			}
+			
 		}
 		
 	}

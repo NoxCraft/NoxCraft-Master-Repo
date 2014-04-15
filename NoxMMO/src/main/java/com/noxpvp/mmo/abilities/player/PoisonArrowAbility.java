@@ -17,9 +17,10 @@ import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
-public class PoisonArrowAbility extends BasePlayerAbility{
+public class PoisonArrowAbility extends BasePlayerAbility implements PVPAbility {
 	
 	private final static String ABILITY_NAME = "Poison Arrow";
 	public final static String PERM_NODE = "poison-arrow";

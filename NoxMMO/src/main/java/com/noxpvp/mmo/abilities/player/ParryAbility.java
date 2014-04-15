@@ -13,13 +13,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 
 /**
  * @author NoxPVP
  *
  */
-public class ParryAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>{
+public class ParryAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>, PVPAbility{
 	
 	public static final String ABILITY_NAME = "Parry";
 	public static final String PERM_NODE = "parry";

@@ -9,8 +9,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 
-public class MortalWoundAbility extends BaseTargetedPlayerAbility{
+public class MortalWoundAbility extends BaseTargetedPlayerAbility implements PVPAbility {
 	
 	public static final String ABILITY_NAME = "Mortal Wound";
 	public static final String PERM_NODE = "mortal-wound";

@@ -6,15 +6,16 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 
 /**
  * @author NoxPVP
  *
  */
-public class FireBallAbility extends BaseEntityAbility{
+public class FireBallAbility extends BaseEntityAbility implements PVPAbility {
 	
-	public static final String PERM_NODE = "fireball";
 	public static final String ABILITY_NAME = "FireBall";
+	public static final String PERM_NODE = "fireball";
 	
 	private double power;
 	

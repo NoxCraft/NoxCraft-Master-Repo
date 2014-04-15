@@ -6,10 +6,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.classes.PlayerClass;
 
-public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent> {
+public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>, PVPAbility {
 
 	public static final String PERM_NODE = "Critical Hit";
 	public static final String ABILITY_NAME = "critical-hit";

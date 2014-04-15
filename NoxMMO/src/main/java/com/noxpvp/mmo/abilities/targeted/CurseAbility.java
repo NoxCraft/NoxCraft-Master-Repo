@@ -8,8 +8,9 @@ import org.bukkit.potion.PotionEffectType;
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 
-public class CurseAbility extends BaseTargetedPlayerAbility{
+public class CurseAbility extends BaseTargetedPlayerAbility implements PVPAbility {
 	
 	private final static String ABILITY_NAME = "Curse";
 	public final static String PERM_NODE = "curse";

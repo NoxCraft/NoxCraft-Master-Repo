@@ -8,10 +8,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.runnables.DamageRunnable;
 
-public class SeveringStrikesAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>{
+public class SeveringStrikesAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>, PVPAbility{
 	
 	//TODO make this
 	

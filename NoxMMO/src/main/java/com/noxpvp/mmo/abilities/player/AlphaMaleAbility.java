@@ -12,10 +12,12 @@ import com.bergerkiller.bukkit.common.controller.EntityController;
 import com.bergerkiller.bukkit.common.entity.type.CommonLivingEntity;
 import com.bergerkiller.bukkit.common.wrappers.DamageSource;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 
-public class AlphaMaleAbility extends BasePlayerAbility {
-	public static final String PERM_NODE = "alpha-male";
+public class AlphaMaleAbility extends BasePlayerAbility implements PVPAbility {
+	
 	public static final String ABILITY_NAME = "Alpha Male";
+	public static final String PERM_NODE = "alpha-male";
 	
 	public AlphaMaleAbility(Player player) {
 		super(ABILITY_NAME, player);
