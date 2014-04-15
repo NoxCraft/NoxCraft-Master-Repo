@@ -8,6 +8,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -19,8 +20,9 @@ import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 
-public class TornadoAbility extends BasePlayerAbility{
+public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 
 	public final static String ABILITY_NAME = "Tornado";
 	public final static String PERM_NODE = "tornado";
@@ -97,14 +99,12 @@ public class TornadoAbility extends BasePlayerAbility{
 				if (l.getBlock().getType() != Material.AIR) {
 					
 					Block b = l.getBlock();
-					entity = l.getWorld().spawnFallingBlock(l, b.getType(), b.getData());
+					entity = l.getWorld().spawnFallingBlock(b.getRelative(BlockFace.UP).getLocation(), b.getType(), b.getData());
 					
-					if (b.getType() != Material.WATER)
-						b.setType(Material.AIR);
 					
 				}
 				else {
-					entity = l.getWorld().spawnFallingBlock(l, m, d);
+					entity = l.getWorld().spawnFallingBlock(l.getBlock().getRelative(BlockFace.UP).getLocation(), m, d);
 					removable = true;
 				}
 				
@@ -148,7 +148,7 @@ public class TornadoAbility extends BasePlayerAbility{
 				for(Entity e : entities) {
 					if(!e.hasMetadata("vortex")) {
 						new_blocks.add(new VortexBlock(e));
-						if (e instanceof LivingEntity)
+						if (e instanceof LivingEntity && !e.equals(getPlayer()))
 							((LivingEntity) e).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 35, 1));
 					}
 				}

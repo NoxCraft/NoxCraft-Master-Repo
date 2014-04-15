@@ -8,12 +8,13 @@ import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 
 /**
  * @author NoxPVP
  *
  */
-public class ShadowStepAbility extends BaseTargetedPlayerAbility{
+public class ShadowStepAbility extends BaseTargetedPlayerAbility implements PVPAbility {
 	
 	public static final String PERM_NODE = "shadow-step";
 	public static final String ABILITY_NAME = "Shadow Step";

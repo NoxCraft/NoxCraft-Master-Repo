@@ -1,6 +1,5 @@
 package com.noxpvp.core.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,7 +43,7 @@ public class LoginListener extends NoxListener<NoxCore> {
 		NoxPlayer nPlayer = PlayerManager.getInstance().getPlayer(p);
 		
 		nPlayer.getCoreBar().newShine(loginMessage, 0, 500, true);
-		PlayerManager.getInstance().loadPlayer(nPlayer);
+//		PlayerManager.getInstance().loadPlayer(nPlayer);
 	}
 	
 	@EventHandler(priority=EventPriority.MONITOR)

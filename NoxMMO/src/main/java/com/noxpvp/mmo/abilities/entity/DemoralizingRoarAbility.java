@@ -8,12 +8,13 @@ import org.bukkit.entity.Entity;
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 
 /**
  * @author NoxPVP
  *
  */
-public class DemoralizingRoarAbility extends BaseEntityAbility{
+public class DemoralizingRoarAbility extends BaseEntityAbility implements PVPAbility {
 	
 	public static final String ABILITY_NAME = "Demoralizing Roar";
 	public static final String PERM_NODE = "demoralizing-roar";

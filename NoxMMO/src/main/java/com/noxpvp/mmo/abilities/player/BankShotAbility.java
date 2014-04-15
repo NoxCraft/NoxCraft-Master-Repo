@@ -22,16 +22,17 @@ import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 /**
  * @author NoxPVP
  *
  */
-public class BankShotAbility extends BasePlayerAbility{
+public class BankShotAbility extends BasePlayerAbility implements PVPAbility {
 	
-	public static final String PERM_NODE = "bank-shot";
 	private static final String ABILITY_NAME = "Bank Shot";
+	public static final String PERM_NODE = "bank-shot";
 	
 	public void eventExecute(Arrow a){
 		

@@ -14,9 +14,10 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
-public class ExplosiveArrowAbility extends BasePlayerAbility{
+public class ExplosiveArrowAbility extends BasePlayerAbility implements PVPAbility {
 	
 	private final static String ABILITY_NAME = "Explosive Arrow";
 	public final static String PERM_NODE = "explosive-arrow";

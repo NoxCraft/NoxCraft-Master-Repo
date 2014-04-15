@@ -16,11 +16,11 @@ import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 
-public class NetArrowAbility extends BasePlayerAbility
-{
+public class NetArrowAbility extends BasePlayerAbility implements PVPAbility {
 	
 	private List<Arrow> arrows;
 	

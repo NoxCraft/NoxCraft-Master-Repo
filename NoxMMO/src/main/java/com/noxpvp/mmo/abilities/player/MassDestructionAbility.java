@@ -12,6 +12,7 @@ import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.SetVelocityRunnable;
@@ -21,7 +22,7 @@ import com.noxpvp.mmo.runnables.ShockWaveAnimation;
  * @author NoxPVP
  *
  */
-public class MassDestructionAbility extends BasePlayerAbility{
+public class MassDestructionAbility extends BasePlayerAbility implements PVPAbility {
 	
 	public static final String PERM_NODE = "mass-destruction";
 	public static final String ABILITY_NAME = "Mass Destruction";

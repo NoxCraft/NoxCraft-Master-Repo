@@ -7,11 +7,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.runnables.DamageRunnable;
 
-public class RazerClawsAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent> {
+public class RazerClawsAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>, PVPAbility{
 
 	public final static String ABILITY_NAME = "Razer Claws";
 	public final static String PERM_NODE = "razer-claws";

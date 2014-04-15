@@ -16,9 +16,10 @@ import com.noxpvp.core.packet.NoxPacketUtil;
 import com.noxpvp.core.utils.DamageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
-public class HammerOfThorAbility extends BasePlayerAbility{
+public class HammerOfThorAbility extends BasePlayerAbility  implements PVPAbility {
 	public static FixedMetadataValue hammerSecurity = new FixedMetadataValue(NoxMMO.getInstance(), "HammerSecurity");
 	
 	public static final String ABILITY_NAME = "Hammer of Thor";

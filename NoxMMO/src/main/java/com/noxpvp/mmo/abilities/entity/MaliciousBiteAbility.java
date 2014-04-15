@@ -9,10 +9,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 
-public class MaliciousBiteAbility extends BaseEntityAbility implements PassiveAbility<EntityDamageByEntityEvent> {
+public class MaliciousBiteAbility extends BaseEntityAbility implements PassiveAbility<EntityDamageByEntityEvent>,  PVPAbility{
 	
 	public static final String ABILITY_NAME = "Malicious bite";
 	public static final String PERM_NODE = "malicious-bite";

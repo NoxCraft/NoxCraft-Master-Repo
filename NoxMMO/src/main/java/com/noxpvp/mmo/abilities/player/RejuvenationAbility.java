@@ -6,16 +6,17 @@ import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.runnables.HealRunnable;
 
 /**
  * @author NoxPVP
  *
  */
-public class RejuvenationAbility extends BasePlayerAbility{
+public class RejuvenationAbility extends BasePlayerAbility implements PVPAbility {
 	
-	public static final String PERM_NODE = "rejuvenation";
 	public static final String ABILITY_NAME = "Rejuvenation";
+	public static final String PERM_NODE = "rejuvenation";
 	
 	private double healthPerHeal;
 	private int heals;

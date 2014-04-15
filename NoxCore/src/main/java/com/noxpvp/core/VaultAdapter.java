@@ -2,6 +2,9 @@ package com.noxpvp.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -13,6 +16,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard;
 import com.bergerkiller.bukkit.common.scoreboards.CommonTeam;
+import com.bergerkiller.bukkit.common.scoreboards.CommonTeam.FriendlyFireType;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.locales.CoreLocale;
 
@@ -50,42 +54,68 @@ public class VaultAdapter {
 				return CoreLocale.GROUP_TAG_PREFIX.get(group) + p.getName() + CoreLocale.GROUP_TAG_SUFFIX.get(group);
 			
 			return p.getName();
-		}		
-		
+		}
+
+		private static void setupTeams() {
+			for (String group : getGroupList()) {
+				
+				String name = group + "Team";
+				if (CommonScoreboard.getTeam(name) == null) {
+
+					CommonTeam team = CommonScoreboard.newTeam(name);
+
+					team.setFriendlyFire(FriendlyFireType.ON);
+					team.setPrefix(CoreLocale.GROUP_TAG_PREFIX.get(group));
+					team.setSuffix(CoreLocale.GROUP_TAG_SUFFIX.get(group));
+					team.setSendToAll(true);
+
+					team.show();
+				} else {
+					CommonTeam team = CommonScoreboard.getTeam(name);
+
+					team.setPrefix(CoreLocale.GROUP_TAG_PREFIX.get(group));
+					team.setSuffix(CoreLocale.GROUP_TAG_SUFFIX.get(group));
+				}
+			}
+		}
 
 		public static void reloadAllGroupTags() {
-			if (isPermissionsLoaded() && permission.hasGroupSupport())
+			if (isChatLoaded() && isPermissionsLoaded() && permission.hasGroupSupport())
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					loadGroupTag(p);
 				}
 		}
-		
+
 		public static void reloadGroupTag(Player p) {
-			if (p == null || !isPermissionsLoaded()) return;
-			
+			if (p == null) return;
+
 			loadGroupTag(p);
 		}
-		
+
 		private static void loadGroupTag(Player p) {
-			String finalGroup;
+			String[] groups = VaultAdapter.permission.getPlayerGroups(p);
+
+			if (groups.length < 0) return;
+
+			int ind = 100;
+			String finalGroup = getPlayerGroup(p);
 			
-			if ((finalGroup = getPlayerGroup(p)) == null) return;
-			
+			Bukkit.broadcastMessage("final group for " + p.getName() + "- " + finalGroup);
+
 			CommonScoreboard pBoard = CommonScoreboard.get(p);
 			CommonTeam team = CommonScoreboard.getTeam(finalGroup + "Team");
-			
+
 			if (team == null) { 
+				NoxCore.getInstance().log(Level.WARNING, "The team was not found.");
 				team = CommonScoreboard.dummyTeam;
-				NoxCore.getInstance().log(Level.WARNING, "The team was not found, creating a team for: " + finalGroup + '.');
 			}
-			
+
 			for (CommonTeam t2 :CommonScoreboard.getTeams()) {
-				if (t2.equals(team))
-					continue;
-				if (t2.getPlayers().contains(p.getName()))
-					t2.removePlayer(p);
+				if (getGroupList().contains(t2.getName().replace("Team", "")))
+					if (t2.getPlayers().contains(p.getName()))
+						t2.removePlayer(p);
 			}
-			
+
 			pBoard.setTeam(team);
 			team.addPlayer(p);
 		}
@@ -128,9 +158,22 @@ public class VaultAdapter {
 	public static void load()
 	{
 		GroupUtils.log = NoxCore.getInstance().getModuleLogger("VaultAdapter", "GroupUtils");
+		setupGroupUtils();
 		setupChat();
 		setupEconomy();
 		setupPermission();
+	}
+	
+	public static boolean setupGroupUtils() {
+		if (isPermissionsLoaded()) {
+			GroupUtils.setupTeams();
+			GroupUtils.reloadAllGroupTags();
+			
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 	
 	public static boolean setupChat()

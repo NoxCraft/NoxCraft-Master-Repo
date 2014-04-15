@@ -9,13 +9,14 @@ import org.bukkit.entity.Player;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.ShockWaveAnimation;
 
-public class GrappleThrowAbility extends BasePlayerAbility{
+public class GrappleThrowAbility extends BasePlayerAbility implements PVPAbility {
 	
 	public static final String ABILITY_NAME = "Grapple Throw";
-	public static final String PERM_NODE = "grapplethrow";
+	public static final String PERM_NODE = "grapple-throw";
 	
 	private int range;
 	private int maxTargets;
