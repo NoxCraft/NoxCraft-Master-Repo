@@ -59,10 +59,10 @@ public class VaultAdapter {
 		private static void setupTeams() {
 			for (String group : getGroupList()) {
 				
-				String name = group + "Team";
+				String name = (group + "Team");
 				if (CommonScoreboard.getTeam(name) == null) {
 
-					CommonTeam team = CommonScoreboard.newTeam(name);
+					CommonTeam team = CommonScoreboard.loadTeam(name);
 
 					team.setFriendlyFire(FriendlyFireType.ON);
 					team.setPrefix(CoreLocale.GROUP_TAG_PREFIX.get(group));
@@ -70,11 +70,8 @@ public class VaultAdapter {
 					team.setSendToAll(true);
 
 					team.show();
-				} else {
-					CommonTeam team = CommonScoreboard.getTeam(name);
-
-					team.setPrefix(CoreLocale.GROUP_TAG_PREFIX.get(group));
-					team.setSuffix(CoreLocale.GROUP_TAG_SUFFIX.get(group));
+					
+					CommonScoreboard.saveTeam(team);
 				}
 			}
 		}
@@ -97,27 +94,30 @@ public class VaultAdapter {
 
 			if (groups.length < 0) return;
 
-			int ind = 100;
-			String finalGroup = getPlayerGroup(p);
-			
-			Bukkit.broadcastMessage("final group for " + p.getName() + "- " + finalGroup);
+			String group = getPlayerGroup(p);
+			String teamName = group + "Team";
 
 			CommonScoreboard pBoard = CommonScoreboard.get(p);
-			CommonTeam team = CommonScoreboard.getTeam(finalGroup + "Team");
+			CommonTeam team;
+			
+			if ((team = CommonScoreboard.getTeam(teamName)) == null)
+				team = CommonScoreboard.loadTeam(teamName);
+			
+			if (team != null) {
+				for (CommonTeam t2 :CommonScoreboard.getTeams()) {
+					if (team.getName() == t2.getName())
+						if (t2.getPlayers().contains(p.getName())) {
+							
+							t2.removePlayer(p);
+							CommonScoreboard.saveTeam(team);
+						}
+				}
 
-			if (team == null) { 
-				NoxCore.getInstance().log(Level.WARNING, "The team was not found.");
-				team = CommonScoreboard.dummyTeam;
+				pBoard.setTeam(team);
+				team.addPlayer(p);
+				CommonScoreboard.saveTeam(team);
 			}
 
-			for (CommonTeam t2 :CommonScoreboard.getTeams()) {
-				if (getGroupList().contains(t2.getName().replace("Team", "")))
-					if (t2.getPlayers().contains(p.getName()))
-						t2.removePlayer(p);
-			}
-
-			pBoard.setTeam(team);
-			team.addPlayer(p);
 		}
 		
 	}
@@ -158,13 +158,12 @@ public class VaultAdapter {
 	public static void load()
 	{
 		GroupUtils.log = NoxCore.getInstance().getModuleLogger("VaultAdapter", "GroupUtils");
-		setupGroupUtils();
 		setupChat();
 		setupEconomy();
 		setupPermission();
 	}
 	
-	public static boolean setupGroupUtils() {
+	public static boolean reloadTeams() {
 		if (isPermissionsLoaded()) {
 			GroupUtils.setupTeams();
 			GroupUtils.reloadAllGroupTags();

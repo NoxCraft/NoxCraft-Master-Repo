@@ -321,8 +321,6 @@ public class CoreBar{
 		private final static int runPeriod = 1;
 		
 		private ObjectLock locker;
-		private boolean canBeOveridden;
-		private int delay;
 		
 		private ShiningStringScroller text;
 		
@@ -332,15 +330,13 @@ public class CoreBar{
 		public Shine(String text, int delay, int displayTicks, boolean canBeOverridden){
 			lock = (this.locker = new ObjectLock(text, canBeOverridden));
 			updater = this;
-			this.canBeOveridden = canBeOverridden;
-			this.delay = delay;
 			
 			this.text = new ShiningStringScroller(text);
 			
 			this.displayTicks = canBeOverridden? displayTicks : displayTicks <= 0? 500 : displayTicks;
 			this.runs = 0;
 			
-			this.runTaskTimer(plugin, delay, runPeriod);
+			this.runTaskTimer(plugin, 1 + delay, runPeriod);
 		}
 		
 		public void run() {

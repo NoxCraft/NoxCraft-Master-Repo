@@ -507,6 +507,7 @@ public class NoxCore extends NoxPlugin {
 		
 		loadGlobalLocales(GlobalLocale.class);
 		loadLocales(CoreLocale.class);
+		
 		for (String group : VaultAdapter.GroupUtils.getGroupList())
 		{
 			loadLocale(CoreLocale.GROUP_TAG_PREFIX.getName() + "." + group, group);
@@ -577,6 +578,8 @@ public class NoxCore extends NoxPlugin {
 		ChestBlockListener.isRemovingOnInteract = config.get("custom.events.chestblocked.isRemovingOnInteract", ChestBlockListener.isRemovingOnInteract);
 		ChestBlockListener.usePlaceEvent = config.get("custom.events.chestblocked.usePlaceEvent", ChestBlockListener.usePlaceEvent);
 		ChestBlockListener.useFormEvent = config.get("custom.events.chestblocked.useFormEvent", ChestBlockListener.useFormEvent);
+		
+		VaultAdapter.reloadTeams();
 	}
 
 	public void removePermission(NoxPlugin plugin, String name)
