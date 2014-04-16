@@ -16,8 +16,8 @@ import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.gui.CoreBoxItem;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
-import com.noxpvp.mmo.classes.IClassTier;
-import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.classes.internal.IClassTier;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
 import com.noxpvp.mmo.util.InventoryActionCombo;
 

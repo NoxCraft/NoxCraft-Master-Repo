@@ -9,7 +9,7 @@ import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
-import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.gui.ClassChooseMenu;
 import com.noxpvp.mmo.locale.MMOLocale;
 import com.noxpvp.mmo.util.PlayerClassUtil;

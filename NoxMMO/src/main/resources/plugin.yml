@@ -8,3 +8,6 @@ commands:
   class:
     description: Class commands.
     usage: /<command> -h
+  ability:
+    description: Ability Commands
+    usage: /<command> [Ability Name]

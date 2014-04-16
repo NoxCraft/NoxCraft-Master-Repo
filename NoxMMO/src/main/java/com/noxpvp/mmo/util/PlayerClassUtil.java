@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.ModuleLogger;
+import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.reflection.SafeField;
@@ -15,10 +17,9 @@ import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.google.common.collect.MapMaker;
 import com.noxpvp.core.collection.DualAccessMap;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
 public class PlayerClassUtil {
 	public static final String LOG_MODULE_NAME = "PlayerClass";
 	private static ModuleLogger log;
@@ -32,10 +33,19 @@ public class PlayerClassUtil {
 	
 	/**
 	 *  Classes must have the following constructors. (Each number represent a constructor with the following params.
-	 *  <br/> Bold Defines absolutely required..
+	 * Bold signifies that internal mechanisms depend heavily on and <b>MUST</b> be implemented.
 	 * <ol>
-	 * 	<li><b>(String playerName) </b></li>
+	 * 	<li><b>(String playerName)</b></li>
 	 * </ol>
+	 * <br/><br/>
+	 * You must implement the following:<br/>
+	 * <ul>
+	 * 	<li> public static final String variable of "uniqueID";</li>
+	 * 	<li> public static final String variable of "className";</li>
+	 * </ul>
+	 * 
+	 * <p>
+	 * This will discard invalid classes and throw {@linkplain Level#SEVERE} log message into console.l
 	 * @param clazz
 	 */
 	public static void registerPlayerClass(Class<? extends PlayerClass> clazz) {
@@ -47,8 +57,6 @@ public class PlayerClassUtil {
 			log.severe("PlayerClass \"" + clazz.getName() + "\" is not valid. It does not have a static String of className");
 			good = false;
 		}
-		
-			
 		
 		if (!className.isValid() || !className.isStatic()) {
 			log.severe("PlayerClass \"" + clazz.getName() + "\" is not valid. It does not have a static String of uniqueID");
@@ -65,9 +73,11 @@ public class PlayerClassUtil {
 
 		NoxMMO mmo = NoxMMO.getInstance();
 		
-		FileConfiguration f = (FileConfiguration) mmo.getLocalizationNode("display").getParent();
+		ConfigurationNode n = mmo.getLocalizationNode("display").getParent();
 		
-		mmo.loadLocale(MMOLocale.ABIL_DISPLAY_NAME.getName() + "." + cName, cName);
+		FileConfiguration f = (FileConfiguration) n;
+		
+		mmo.loadLocale(MMOLocale.CLASS_DISPLAY_NAME.getName() + "." + cName, cName);
 		
 		f.save();
 		

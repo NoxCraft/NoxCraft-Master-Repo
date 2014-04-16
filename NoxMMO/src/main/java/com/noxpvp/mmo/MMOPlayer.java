@@ -16,8 +16,8 @@ import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.abilities.PlayerAbility;
-import com.noxpvp.mmo.classes.ExperienceType;
-import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.classes.internal.ExperienceType;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {

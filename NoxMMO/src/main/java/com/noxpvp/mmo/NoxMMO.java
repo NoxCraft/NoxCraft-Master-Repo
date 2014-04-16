@@ -20,7 +20,8 @@ import com.noxpvp.mmo.abilities.entity.*;
 import com.noxpvp.mmo.abilities.player.*;
 import com.noxpvp.mmo.abilities.player.AutoToolAbilities.*;
 import com.noxpvp.mmo.abilities.targeted.*;
-import com.noxpvp.mmo.classes.PlayerClass;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
+import com.noxpvp.mmo.command.AbilityCommand;
 import com.noxpvp.mmo.command.ClassCommand;
 import com.noxpvp.mmo.listeners.*;
 import com.noxpvp.mmo.listeners.PacketListeners.*;
@@ -53,7 +54,7 @@ public class NoxMMO extends NoxPlugin {
 	
 	private PlayerManager playerManager = null;
 
-	private Class<Command>[] commands =  (Class<Command>[]) new Class[]{ ClassCommand.class };
+	private Class<Command>[] commands =  (Class<Command>[]) new Class[]{ ClassCommand.class, AbilityCommand.class };
 	
 	@Override
 	public void disable() {

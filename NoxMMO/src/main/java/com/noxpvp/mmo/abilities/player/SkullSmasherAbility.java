@@ -11,8 +11,8 @@ import com.noxpvp.core.utils.StaticEffects;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.abilities.PVPAbility;
-import com.noxpvp.mmo.classes.PlayerClass;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
 
