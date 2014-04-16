@@ -134,9 +134,9 @@ public class ClassChooseMenu extends CoreBox{
 		
 		ClassChooseMenuItem finalItem = null;
 		for (ClassChooseMenuItem item : menuItems.values()) {
-			if (item == null || !item.equals(clickItem)) continue;
-			
-			finalItem = item;
+			if (item != null && item.getItem().equals(clickItem)) finalItem = item;
+			else continue;
+			break;
 		}
 		
 		if (finalItem != null)
@@ -153,11 +153,6 @@ public class ClassChooseMenu extends CoreBox{
 			super(parent, item);
 			
 			this.pClass = clazz;
-		}
-		
-		@Override
-		public ClassChooseMenu getParentBox(){
-			return getParentBox();
 		}
 		
 		public PlayerClass getPlayerClass(){

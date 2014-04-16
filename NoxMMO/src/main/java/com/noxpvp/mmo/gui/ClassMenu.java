@@ -103,11 +103,6 @@ public class ClassMenu extends CoreBox{
 			this.tier = tier;
 		}
 		
-		@Override
-		public ClassMenu getParentBox(){
-			return getParentBox();
-		}
-
 		public PlayerClass getPlayerClass(){
 			return clazz;
 		}
