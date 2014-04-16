@@ -103,7 +103,7 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 	    }
 	}
 	
-	private static UUIDUtil instance;
+	private volatile static UUIDUtil instance;
 	
 	public static final UUID ZERO_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 

@@ -26,7 +26,7 @@ import com.noxpvp.core.utils.UUIDUtil;
 
 public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persistant, LockerCaller, SafeLocker {
 	
-	private static PlayerManager instance;
+	private volatile static PlayerManager instance;
 	private static List<IPlayerManager<?>> managers = new ArrayList<IPlayerManager<?>>();
 	
 	private AtomicBoolean isLocked = new AtomicBoolean();
