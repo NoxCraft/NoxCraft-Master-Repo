@@ -29,7 +29,7 @@ public class BlockChangerRunnable extends Task {
 		super(plugin);
 		if (states.size() != oldStates.size())
 			throw new IllegalArgumentException("States and old states do not match. You must specify equal number for each.");
-		states = new ArrayList<BlockState>();
+		this.states = new ArrayList<Pair<BlockState>>();
 		for (int i = 0; i < states.size(); i++)
 			if (oldStates.get(i).getBlock().equals(states.get(i).getBlock()))
 				this.states.add(new Pair<BlockState>(oldStates.get(i), states.get(i)));

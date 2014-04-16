@@ -36,6 +36,9 @@ public class ReloadCommand extends BaseCommand {
 		else if (args.length == 1)
 			module = args[0];
 		
+		if (module == null)
+			module = "";
+		
 		boolean all = false;
 		if (module != null)
 			all = module.endsWith("*");
