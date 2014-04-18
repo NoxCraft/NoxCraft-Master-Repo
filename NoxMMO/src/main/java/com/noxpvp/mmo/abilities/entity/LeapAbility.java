@@ -55,6 +55,11 @@ public class LeapAbility extends BaseEntityAbility {
 		this.forwardMultiplier = forwardMultiplier;
 	}
 	
+	public LeapAbility(Entity ent)
+	{
+		this(ent, 3, 3);
+	}
+	
 	public boolean execute() {
 		if (!mayExecute())
 			return false;

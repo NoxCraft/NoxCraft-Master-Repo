@@ -72,9 +72,4 @@ public class DummyClassTier extends ClassTier {
 	public Map<String, Ability> getAbilityMap() {
 		return Collections.emptyMap();
 	}
-
-	public List<Ability> getAbilities() {
-		return Collections.emptyList();
-	}
-
 }

@@ -1,10 +1,12 @@
 package com.noxpvp.mmo.classes.internal;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.meta.When;
@@ -39,34 +41,57 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
  *
  */
 public abstract class PlayerClass implements IPlayerClass {
-	public static final String LOG_MODULE_NAME = "PlayerClass";
 	private static final String DYNAMIC_TIER_PATH = "dynamic.tiers";
+	public static final String LOG_MODULE_NAME = "PlayerClass";
 	//Debug and errors
 	protected static ModuleLogger pcLog;
 	
 	@SuppressWarnings("rawtypes")
 	private static List<Class> registeredClasses;
-	protected ModuleLogger log;
+	private static void checkAndRegisterClass(PlayerClass playerClass) {
+		if (registeredClasses.contains(playerClass.getClass()))
+			return;
+		
+		PlayerClassUtil.registerPlayerClass(playerClass.getClass());
+		
+		//TODO: do registers.
+	}
 
+	////	Helper Methods
+	public static int getTierLevel(IClassTier tier) {
+		return tier.getTierLevel();
+	}
+	//THIS MUST BE STARTED ON ENABLE!
+	@SuppressWarnings("rawtypes")
+	public static void init() {
+		pcLog = NoxMMO.getInstance().getModuleLogger(LOG_MODULE_NAME);
+		registeredClasses = new ArrayList<Class>();
+	}
+	
 	private int cTierLevel = 1;
+	protected ModuleLogger log;
+	
 	private String name;
-	
-	//Player Data
-	private String playerName;
-	//Tiers
-	private Map<Integer, IClassTier> tiers;
-	
-	//Identification
-	private final String uid;
 	
 	//Colors
 	// IMPLEMENT THIS STATICALLY IN CLASS FILE. //THIS IS NOT GOING TO BE IN HERE BBC....
 //	private static Color armourColor;
 //	private static ChatColor colorChar;
 	
+	//Player Data
+	private String playerName;
+	
+	//Tiers
+	private Map<Integer, IClassTier> tiers;
+	
+	//Identification
+	private final String uid;
+	
 	public PlayerClass(String uid, @Nonnull String name, @Nonnull Player player) {
 		this(uid, name, null, player);
 	}
+	
+	//// START TEMP
 	
 	public PlayerClass(String uid, @Nonnull String name, @Nonnull String playerName) {
 		this(uid, name, playerName, null);
@@ -95,139 +120,43 @@ public abstract class PlayerClass implements IPlayerClass {
 		checkAndRegisterClass(this);
 	}
 	
-	protected abstract Map<Integer, IClassTier> craftClassTiers();
-	
-	//// START TEMP
-	
-	@Temporary
-	public Map<String, Ability> getAbilityMap() {
-		return getTier().getAbilityMap();
-	}
-	
-	@Temporary
-	public List<Ability> getAbilities() {
-		return getTier().getAbilities();
-	}
-	
 	//// END TEMP
 	
 	public final void addExp(int amount) {
 		getTier().addExp(amount);
 	}
 
-	public final int getCurrentTierLevel() {
-		return cTierLevel;
+	public void addExp(int tier, int amount) {
+		getTier(tier).addExp(amount);
 	}
 	
-	public final int getExp() {
-		return getExp(getCurrentTierLevel());
-	}
-	
-	public final int getMaxExp() {
-		return getMaxExp(getCurrentTierLevel());
-	}
-	
-	public final String getName() {
-		return name;
-	}
-	
-	public final Player getPlayer() {
-		return Bukkit.getPlayer(getPlayerName());
-	}
-	
-	public final String getPlayerName() {
-		return playerName;
-	}
-	
-	public final IClassTier getTier() {
-		return getTier(getCurrentTierLevel());
-	}
-	
-	public final IClassTier getTier(int level) {
-		if (hasTier(level))
-			return tiers.get(level);
-		return null;
-	}
-	
-	public final Set<Entry<Integer, IClassTier>> getTiers() {
-		return tiers.entrySet();
-	}
-	
-	/**
-	 * {@inheritDoc} <br/><br/>
-	 * <b>Warning. This is calculated every run!</b>
-	 * @see com.noxpvp.mmo.classes.internal.IPlayerClass#getTotalExp()
-	 */
-	public int getTotalExp() {
-		int value = 0;
-		for (Entry<Integer, IClassTier> tier : getTiers())
-			if (canUseTier(tier.getKey()))
-				value += tier.getValue().getExp();
-		return value;
-	}
-	
-	public final String getUniqueID() {
-		return uid;
-	}
-	
-	public final boolean hasTier(int level) {
-		return tiers.containsKey(level);
-	}
-	
-	/**
-	 * Load additional data from the node on player class loading. <br/><br/>
-	 * <b>Warning the node is already in proper position. No need to re position node.</b>
-	 * <br/>
-	 * <br/>
-	 * You do not need to load the following. Just implement the set functions and it will work fine. <br/>
-	 * <ul>
-	 * 	<li></li>
-	 * </ul>
-	 * @param node The PlayerClass section of player configuration. 
-	 */
-	public abstract void load(ConfigurationNode node);
-	
-	public void onLoad(ConfigurationNode node) {
-		if (!node.get("uid", "").equals(getUniqueID()))
-			throw new IllegalArgumentException("Configuration node was does not match UID. UID supposed to be " + getUniqueID() + " but got " + node.get("uid", "$BLANK$"));
-		
-		int a = node.get("current.tier", -1);
-		if (a < 0) {
-			if (a != -1) //Only throw error if tier did not exist. (-1 signifies it)
-				log.severe(new StringBuilder().append("The configuration node for currently selected tier of the playerclass is invalid. It must be higher then 0. It is currently ").append(a).append("\n").append("Resetting value to 1").toString());
-			a = 1;
+	private void checkTierCount() {
+		if (tiers.size() != getHighestPossibleTier())
+		{
+			pcLog.warning("Possible missing tiers for classes found.");
+			log.severe("Tier count mismatch. Current tier count is " + tiers.size() + " when supposed to be " + getHighestPossibleTier());
+			
+			if (tiers.size() < getHighestPossibleTier())
+			{
+				int h = tiers.size() - 1;
+				int i = h + 1;
+				while (i < getHighestPossibleTier())
+				{
+					ClassTier dumb = new DummyClassTier(this, i);
+					tiers.put(i, dumb);
+					i++;
+				}
+			}
+			
+			
+			//TODO: Message about missing tiers... URRRRGGGHHHh
+			
+			//IF DUMMIES USED
+//			log.severe("Dummy tiers were used for missing tier objects") //FIXME: Better debug message.
 		}
-		
-		setCurrentTier(a);
-		
-		checkTierCount(); //Check and repair tiers.
-		
-		for (IClassTier tier : tiers.values())
-			tier.onLoad(node);
-		
-		load(node);
-	}
-
-	public void onSave(ConfigurationNode node) {
-		node = node.getNode(getUniqueID());
-		node.set("current.tier", getCurrentTierLevel());
-		
-		checkTierCount(); //Check and repair tiers.
-		
-		for (IClassTier tier : tiers.values())
-			tier.onSave(node);
-		
-		save(node);
 	}
 	
-	/**
-	 * Save additional data to the node on player class saving. <br/><br/>
-	 * <b>Warning the node is already in proper position. No need to re position node.</b>
-	 * @param node The PlayerClass section of player configuration. 
-	 */
-	public abstract void save(ConfigurationNode node);
-	
-	protected abstract FileConfiguration getClassConfig();
+	protected abstract Map<Integer, IClassTier> craftClassTiers();
 	
 	protected final Map<Integer, IClassTier> craftDynamicTiers() {
 		return craftDynamicTiers(getClassConfig());
@@ -261,51 +190,197 @@ public abstract class PlayerClass implements IPlayerClass {
 		return nTiers;
 	}
 	
+	@Temporary
+	public Collection<Ability> getAbilities() {
+		return getAbilityMap().values();
+	}
 	
-	private void checkTierCount() {
-		if (tiers.size() != getHighestPossibleTier())
-		{
-			pcLog.warning("Possible missing tiers for classes found.");
-			log.severe("Tier count mismatch. Current tier count is " + tiers.size() + " when supposed to be " + getHighestPossibleTier());
-			
-			if (tiers.size() < getHighestPossibleTier())
-			{
-				int h = tiers.size() - 1;
-				int i = h + 1;
-				while (i < getHighestPossibleTier())
-				{
-					ClassTier dumb = new DummyClassTier(this, i);
-					tiers.put(i, dumb);
-					i++;
-				}
-			}
-			
-			
-			//TODO: Message about missing tiers... URRRRGGGHHHh
-			
-			//IF DUMMIES USED
-//			log.severe("Dummy tiers were used for missing tier objects") //FIXME: Better debug message.
+	@Temporary
+	public Map<String, Ability> getAbilityMap() {
+		return getTier().getAbilityMap();
+	}
+	
+	protected abstract FileConfiguration getClassConfig();
+	
+	public final int getCurrentTierLevel() {
+		return cTierLevel;
+	}
+	
+	public final int getExp() {
+		return getExp(getCurrentTierLevel());
+	}
+	
+	public int getExp(int tier) {
+		return getTier(tier).getExp();
+	}
+	
+	public int getHighestAllowedTier() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	public int getLatestTier() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	public final int getLevel() {
+		return getLevel(getCurrentTierLevel());
+	}
+
+	public int getLevel(int tier) {
+		return getTier(tier).getLevel();
+	}
+	
+	public List<String> getLore() {
+		return getTier().getLore();
+	}
+	
+	public final int getMaxExp() {
+		return getMaxExp(getCurrentTierLevel());
+	}
+	
+	public int getMaxExp(int tier) {
+		return getTier(tier).getMaxExp();
+	}
+	
+	public final int getMaxLevel() {
+		return getMaxLevel(getCurrentTierLevel());
+	}
+	
+	public int getMaxLevel(int tier) {
+		return getTier().getMaxLevel();
+	}
+	
+	public final String getName() {
+		return name;
+	}
+	
+	public final Player getPlayer() {
+		return Bukkit.getPlayer(getPlayerName());
+	}
+	
+	public final String getPlayerName() {
+		return playerName;
+	}
+
+	
+	public final IClassTier getTier() {
+		return getTier(getCurrentTierLevel());
+	}
+	
+	public final IClassTier getTier(int level) {
+		if (hasTier(level))
+			return tiers.get(level);
+		return null;
+	}
+
+	public final Set<Entry<Integer, IClassTier>> getTiers() {
+		return tiers.entrySet();
+	}
+
+	/**
+	 * {@inheritDoc} <br/><br/>
+	 * <b>Warning. This is calculated every run!</b>
+	 * @see com.noxpvp.mmo.classes.internal.IPlayerClass#getTotalExp()
+	 */
+	public int getTotalExp() {
+		int value = 0;
+		for (Entry<Integer, IClassTier> tier : getTiers())
+			if (canUseTier(tier.getKey()))
+				value += tier.getValue().getExp();
+		return value;
+	}
+
+	public int getTotalLevel() {
+		int ret = 0;
+		for (IClassTier tier : tiers.values())
+			ret += tier.getLevel();
+		return ret;
+	}
+
+	public final String getUniqueID() {
+		return uid;
+	}
+
+	public final boolean hasTier(int level) {
+		return tiers.containsKey(level);
+	}
+
+	/**
+	 * Load additional data from the node on player class loading. <br/><br/>
+	 * <b>Warning the node is already in proper position. No need to re position node.</b>
+	 * <br/>
+	 * <br/>
+	 * You do not need to load the following. Just implement the set functions and it will work fine. <br/>
+	 * <ul>
+	 * 	<li></li>
+	 * </ul>
+	 * @param node The PlayerClass section of player configuration. 
+	 */
+	public abstract void load(ConfigurationNode node);
+
+	public void onLoad(ConfigurationNode node) {
+		if (!node.get("uid", "").equals(getUniqueID()))
+			throw new IllegalArgumentException("Configuration node was does not match UID. UID supposed to be " + getUniqueID() + " but got " + node.get("uid", "$BLANK$"));
+		
+		int a = node.get("current.tier", -1);
+		if (a < 0) {
+			if (a != -1) //Only throw error if tier did not exist. (-1 signifies it)
+				log.severe(new StringBuilder().append("The configuration node for currently selected tier of the playerclass is invalid. It must be higher then 0. It is currently ").append(a).append("\n").append("Resetting value to 1").toString());
+			a = 1;
 		}
-	}
-	
-	////	Helper Methods
-	public static int getTierLevel(IClassTier tier) {
-		return tier.getTierLevel();
-	}
-	
-//THIS MUST BE STARTED ON ENABLE!
-	@SuppressWarnings("rawtypes")
-	public static void init() {
-		pcLog = NoxMMO.getInstance().getModuleLogger(LOG_MODULE_NAME);
-		registeredClasses = new ArrayList<Class>();
-	}
-	
-	private static void checkAndRegisterClass(PlayerClass playerClass) {
-		if (registeredClasses.contains(playerClass.getClass()))
-			return;
 		
-		PlayerClassUtil.registerPlayerClass(playerClass.getClass());
+		setCurrentTier(a);
 		
-		//TODO: do registers.
+		checkTierCount(); //Check and repair tiers.
+		
+		for (IClassTier tier : tiers.values())
+			tier.onLoad(node);
+		
+		load(node);
+	}
+
+	public void onSave(ConfigurationNode node) {
+		node = node.getNode(getUniqueID().toString());
+		node.set("current.tier", getCurrentTierLevel());
+		
+		checkTierCount(); //Check and repair tiers.
+		
+		for (IClassTier tier : tiers.values())
+			tier.onSave(node);
+		
+		save(node);
+	}
+
+	public final void removeExp(int amount) {
+		removeExp(getCurrentTierLevel(), amount);
+	}
+
+	public void removeExp(int tier, int amount) {
+		getTier(tier).removeExp(amount);
+	}
+
+	/**
+	 * Save additional data to the node on player class saving. <br/><br/>
+	 * <b>Warning the node is already in proper position. No need to re position node.</b>
+	 * @param node The PlayerClass section of player configuration. 
+	 */
+	public abstract void save(ConfigurationNode node);
+
+	public void setCurrentTier(IClassTier tier) {
+		setCurrentTier(tier.getLevel());
+	}
+
+	public void setCurrentTier(int tierLevel) {
+		cTierLevel = tierLevel;
+	}
+
+	public final void setExp(int amount) {
+		setExp(getCurrentTierLevel(), amount);
+	}
+	
+	public void setExp(int tier, int amount) {
+		getTier(tier).setExp(amount);
 	}
 }

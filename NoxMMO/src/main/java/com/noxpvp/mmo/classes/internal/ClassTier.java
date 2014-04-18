@@ -1,11 +1,14 @@
 package com.noxpvp.mmo.classes.internal;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
+import com.noxpvp.mmo.abilities.Ability;
 
 public abstract class ClassTier implements IClassTier {
 
@@ -129,5 +132,9 @@ public abstract class ClassTier implements IClassTier {
 	
 	public void update() {
 		setTotalExp(getTotalExp());
+	}
+
+	public final Collection<Ability> getAbilities() {
+		return Collections.unmodifiableCollection(getAbilityMap().values());
 	}
 }

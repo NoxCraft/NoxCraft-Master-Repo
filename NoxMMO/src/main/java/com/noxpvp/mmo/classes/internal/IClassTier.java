@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.classes.internal;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public interface IClassTier {
 	public Map<String, Ability> getAbilityMap();
 	
 	@Temporary
-	public List<Ability> getAbilities();
+	public Collection<Ability> getAbilities();
 	
 	public ExperienceType[] getExpTypes();
 	
