@@ -124,7 +124,7 @@ public interface IPlayerClass {
 	 */
 	public int getCurrentTierLevel();
 	
-	public ExperienceType getExpTypes();
+	public ExperienceType[] getExpTypes();
 	
 	/**
 	 * Grabs the specified tier object.

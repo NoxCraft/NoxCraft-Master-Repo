@@ -75,6 +75,7 @@ public abstract class PlayerClass implements IPlayerClass {
 	public PlayerClass(String uid, @Nonnull String name, @Nonnull(when = When.MAYBE) String playerName,  @Nonnull(when = When.MAYBE) Player player)
 	{
 		Validate.notNull(name, "The name of class must not be null!");
+		Validate.notNull(uid, "The UID of class must not be null!");
 		Validate.isTrue((player != null || playerName != null), "Either the player or the playerName must not be null!");
 		
 		this.uid = uid;
@@ -146,6 +147,10 @@ public abstract class PlayerClass implements IPlayerClass {
 		if (hasTier(level))
 			return tiers.get(level);
 		return null;
+	}
+	
+	public final Set<Entry<Integer, IClassTier>> getTiers() {
+		return tiers.entrySet();
 	}
 	
 	/**
