@@ -20,7 +20,7 @@ import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
 
-public class PlayerClassUtil {
+public class PlayerClassUtil { //TODO: UUID's
 	public static final String LOG_MODULE_NAME = "PlayerClass";
 	private static ModuleLogger log;
 	

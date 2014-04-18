@@ -21,4 +21,8 @@ public abstract class BaseAbility implements Ability {
 	public String getName() {
 		return name;
 	}
+	
+	public String getDescription() {
+		return "";
+	}
 }

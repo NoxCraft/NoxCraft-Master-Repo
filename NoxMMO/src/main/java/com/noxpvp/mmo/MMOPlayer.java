@@ -1,5 +1,10 @@
 package com.noxpvp.mmo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang.NotImplementedException;
@@ -12,8 +17,10 @@ import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.EntityUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.Persistant;
+import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
+import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.abilities.PlayerAbility;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
@@ -41,6 +48,29 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	public MMOPlayer(NoxPlayerAdapter player)
 	{
 		super(player);
+	}
+	
+	@Temporary
+	public List<Ability> getAllAbilities() {
+		
+		List<Ability> ret = new ArrayList<Ability>();
+		if (getPrimaryClass() != null)
+			ret.addAll(getPrimaryClass().getAbilities());
+		if (getSecondaryClass() != null)
+			ret.addAll(getSecondaryClass().getAbilities());
+		
+		return Collections.unmodifiableList(ret);
+	}
+	
+	@Temporary
+	public Map<String, Ability> getAllMappedAbilities() {
+		Map<String, Ability> ret = new HashMap<String, Ability>();
+		if (getPrimaryClass() != null)
+			ret.putAll(getPrimaryClass().getAbilityMap());
+		if (getSecondaryClass() != null)
+			ret.putAll(getSecondaryClass().getAbilityMap());
+		
+		return Collections.unmodifiableMap(ret);
 	}
 	
 	public PlayerClass getPrimaryClass() {
