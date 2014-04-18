@@ -20,6 +20,7 @@ import com.noxpvp.core.commands.Command;
 import com.noxpvp.core.commands.Command.CommandResult;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.commands.SafeNullPointerException;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.permissions.NoxPermission;
@@ -59,7 +60,11 @@ public abstract class NoxPlugin extends PluginBase {
 				
 				return true;
 			} catch (NoPermissionException e) {
-				MessageUtil.sendLocale(e.getSender(), GlobalLocale.FAILED_PERMISSION_VERBOSE, e.getMessage(), e.getPermission());
+				MessageUtil.sendLocale(sender, GlobalLocale.FAILED_PERMISSION_VERBOSE, e.getMessage(), e.getPermission());
+			} catch (NullPointerException e) {
+				MessageUtil.sendLocale(sender, GlobalLocale.ERROR_NULL, e.getMessage());
+				if (!(e instanceof SafeNullPointerException))
+					e.printStackTrace();
 			}
 			return true;
 		}

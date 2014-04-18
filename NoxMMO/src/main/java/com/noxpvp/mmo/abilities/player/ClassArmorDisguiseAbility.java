@@ -56,7 +56,8 @@ public class ClassArmorDisguiseAbility extends BasePlayerAbility{
 				
 				LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
 				
-				meta.setColor(clazz.getArmourColor());
+				if (clazz.getArmourColor() != null)
+					meta.setColor(clazz.getArmourColor());
 				
 				if (clazz.getLevel() == clazz.getMaxLevel())
                 	meta.addEnchant(Enchantment.OXYGEN, 1, true);//fake enchant for maxed tiers
