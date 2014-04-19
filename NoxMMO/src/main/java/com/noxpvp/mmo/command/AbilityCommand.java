@@ -6,6 +6,7 @@ import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.commands.SafeNullPointerException;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
@@ -26,7 +27,7 @@ public class AbilityCommand extends BaseCommand {
 	}
 
 	public String[] getHelp() {
-		return new String[]{"/ability <ability name>"};
+		return new String[]{"/ability [info] <ability name>"};
 	}
 
 	public int getMaxArguments() {
@@ -37,13 +38,29 @@ public class AbilityCommand extends BaseCommand {
 	public CommandResult execute(CommandContext context)
 			throws NoPermissionException {
 		
+		if (!context.hasArgument(1))
+			return new CommandResult(this, false);
+		
+		String abilityName = context.getArgument(0);
+		
 		MMOPlayer mPlayer = PlayerManager.getInstance().getPlayer(context.getPlayer());
 		
 		if (mPlayer == null)
 			return new CommandResult(this, true, new MessageBuilder().red("mPlayer object is null!").lines());
 		
 		Map<String, Ability> abilities = mPlayer.getAllMappedAbilities();
-		return null;
+		
+		Ability ability = null;
+		if (abilities.containsKey(abilityName))
+			ability = abilities.get(abilityName);
+		
+		if (ability == null)
+			throw new SafeNullPointerException("Ability does not exist!");
+		
+		if (ability.mayExecute())
+			ability.execute();
+		
+		return new CommandResult(this, true);
 	}
 
 	@Override

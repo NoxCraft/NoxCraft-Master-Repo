@@ -383,4 +383,11 @@ public abstract class PlayerClass implements IPlayerClass {
 	public void setExp(int tier, int amount) {
 		getTier(tier).setExp(amount);
 	}
+
+	public String getDisplayName() {
+		if (getTier().getDisplayName() != null)
+			return getTier().getDisplayName();
+		else
+			return getName();
+	}
 }

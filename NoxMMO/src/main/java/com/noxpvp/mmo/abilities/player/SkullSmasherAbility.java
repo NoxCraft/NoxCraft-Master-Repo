@@ -82,6 +82,10 @@ public class SkullSmasherAbility extends BasePlayerAbility implements PVPAbility
 		this.range = range;
 	}
 
+	public SkullSmasherAbility(Player player) {
+		this(player, 5);
+	}
+
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
