@@ -212,7 +212,7 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", FireBallAbility.PERM_NODE), "Allows usage of the Fire Ball Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", FireNovaAbility.PERM_NODE), "Allows usage of the Fire Nova Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", ForcePullAbility.PERM_NODE), "Allows usage of the Force Pull Ability.", PermissionDefault.OP),
-				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", GrappleThrowAbility.PERM_NODE), "Allows usage of the Grapple Throw Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", ThrowAbility.PERM_NODE), "Allows usage of the Grapple Throw Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", GuardianAngelAbility.PERM_NODE), "Allows usage of the Guardian Angel Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", HammerOfThorAbility.PERM_NODE), "Allows usage of the Hammer Of Thor Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", HitVanishedPlayers.PERM_NODE), "Allows usage of the Hit Vanished Players Ability.", PermissionDefault.OP),

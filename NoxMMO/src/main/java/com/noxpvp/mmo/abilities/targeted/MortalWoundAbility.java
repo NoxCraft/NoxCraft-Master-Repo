@@ -16,6 +16,11 @@ public class MortalWoundAbility extends BaseTargetedPlayerAbility implements PVP
 	public static final String ABILITY_NAME = "Mortal Wound";
 	public static final String PERM_NODE = "mortal-wound";
 	
+	@Override
+	public String getDescription() {
+		return "Bypass all your targets powers and hit them as the mortal they are, causing slowness and posion";
+	}
+	
 	private double range;
 	private double damage;
 	private int duration;
@@ -100,7 +105,8 @@ public class MortalWoundAbility extends BaseTargetedPlayerAbility implements PVP
 		Player p = getPlayer();
 		
 		t.damage(damage, p);
-		return t.addPotionEffects(Arrays.asList(new PotionEffect(PotionEffectType.POISON, duration, amplifier),
+		return t.addPotionEffects(Arrays.asList(
+				new PotionEffect(PotionEffectType.POISON, duration, amplifier),
 				new PotionEffect(PotionEffectType.SLOW, duration, amplifier)));
 	}
 	

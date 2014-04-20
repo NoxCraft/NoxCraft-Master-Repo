@@ -17,6 +17,7 @@ import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.SetVelocityRunnable;
 import com.noxpvp.mmo.runnables.ShockWaveAnimation;
+import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
 
 /**
  * @author NoxPVP
@@ -26,6 +27,11 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 	
 	public static final String PERM_NODE = "mass-destruction";
 	public static final String ABILITY_NAME = "Mass Destruction";
+	
+	@Override
+	public String getDescription() {
+		return "You leap high into the air causing the ground to shake when you land, dealing " + String.format("%.1f", getDamage()) + " to all enemys within " + String.format("%.2f", getRange()) + " blocks";
+	}
 	
 	private BaseMMOEventHandler<EntityDamageEvent> handler;
 	private double damage = 6;
@@ -100,8 +106,10 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 				
 				Player p = (Player) event.getEntity();
 				
-				if (p.equals(MassDestructionAbility.this.getPlayer()))
+				if (p.equals(MassDestructionAbility.this.getPlayer())) {
+					event.setCancelled(true);
 					MassDestructionAbility.this.eventExecute(MassDestructionAbility.this);
+				}
 			}
 		};
 	}
@@ -124,6 +132,7 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 		
 		shootUp.runTask(instance);
 		shootDown.runTaskLater(instance, 30);
+		new UnregisterMMOHandlerRunnable(handler).runTaskLater(instance, 300);//Unregister the handler in 15 seconds
 	
 		return true;
 	}
@@ -139,6 +148,7 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 		new ParticleRunner(ParticleType.explode, pLoc, false, 0, 2, 1).runTask(mmo);
 		new ShockWaveAnimation(p, pLoc, 2, range, 0.3).runTask(mmo);
 		new ExpandingDamageRunnable(p, p.getLocation(), ab.getDamage(), range, 2).runTask(mmo);
+		
 	}
 
 }

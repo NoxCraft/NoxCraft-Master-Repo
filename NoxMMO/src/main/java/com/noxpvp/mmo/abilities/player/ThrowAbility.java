@@ -13,10 +13,15 @@ import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.ShockWaveAnimation;
 
-public class GrappleThrowAbility extends BasePlayerAbility implements PVPAbility {
+public class ThrowAbility extends BasePlayerAbility implements PVPAbility {
 	
 	public static final String ABILITY_NAME = "Grapple Throw";
 	public static final String PERM_NODE = "grapple-throw";
+	
+	@Override
+	public String getDescription() {
+		return "You grab all nearby enemys within " + String.format("%.2f", getRange()) + " blocks and throw them high into the air";
+	}
 	
 	private int range;
 	private int maxTargets;
@@ -33,7 +38,7 @@ public class GrappleThrowAbility extends BasePlayerAbility implements PVPAbility
 	 * @param range Integer range to look for target in this ability instance
 	 * @return GrappleThrowAbility This instance, used for chaining
 	 */
-	public GrappleThrowAbility setRange(int range) {this.range = range; return this;}
+	public ThrowAbility setRange(int range) {this.range = range; return this;}
 
 	/**
 	 * 
@@ -46,7 +51,7 @@ public class GrappleThrowAbility extends BasePlayerAbility implements PVPAbility
 	 * @param maxTargets Integer amount of targets this ability is allowed to target at max
 	 * @return GrappleThrowAbility This instance, used for chaining
 	 */
-	public GrappleThrowAbility setMaxTargets(int maxTargets) {this.maxTargets = maxTargets; return this;}
+	public ThrowAbility setMaxTargets(int maxTargets) {this.maxTargets = maxTargets; return this;}
 
 	/**
 	 * 
@@ -59,13 +64,13 @@ public class GrappleThrowAbility extends BasePlayerAbility implements PVPAbility
 	 * @param pushDelay Integer amount of ticks to wait before throwing the target(s) and executing the shockwave
 	 * @return GrappleThrowAbility This instance, used for chaining
 	 */
-	public GrappleThrowAbility setPushDelay(int pushDelay) {this.pushDelay = pushDelay; return this;}
+	public ThrowAbility setPushDelay(int pushDelay) {this.pushDelay = pushDelay; return this;}
 
 	/**
 	 * 
 	 * @param player The Player type user object for this ability instance
 	 */
-	public GrappleThrowAbility(Player player){
+	public ThrowAbility(Player player){
 		super(ABILITY_NAME, player);
 		
 		this.maxTargets = 1;

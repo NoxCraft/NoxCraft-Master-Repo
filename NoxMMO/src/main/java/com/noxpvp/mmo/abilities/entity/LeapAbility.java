@@ -15,6 +15,11 @@ public class LeapAbility extends BaseEntityAbility {
 	public static final String ABILITY_NAME = "Leap";
 	public static final String PERM_NODE = "leap";
 	
+	@Override
+	public String getDescription() {
+		return "You leap forward in your current direction";
+	}
+	
 	private double forwardMultiplier;
 	private double heightVelo;
 	

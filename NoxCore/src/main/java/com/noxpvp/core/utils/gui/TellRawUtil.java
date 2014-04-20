@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
+import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.protocol.PacketTypeClasses.NMSPacketPlayOutChat;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
@@ -307,10 +308,11 @@ public class TellRawUtil {
 	 * @param raw message to send
 	 */
 	public static void sendRaw(Player player, String raw) {
-		NMSPacketPlayOutChat chat = new NMSPacketPlayOutChat();
-		CommonPacket cp = new CommonPacket(chat);
-		cp.write(chat.isFromServer, true);
-		cp.write(chat.chatComponent, WrappedChatComponent.fromJson(raw));
+		CommonPacket cp = new CommonPacket(PacketType.OUT_CHAT);
+		
+		cp.write(PacketType.OUT_CHAT.isFromServer, true);
+		cp.write(PacketType.OUT_CHAT.chatComponent, WrappedChatComponent.fromJson(raw));
+		
 		PacketUtil.sendPacket(player, cp);
 	}
 	
@@ -323,10 +325,10 @@ public class TellRawUtil {
 	 * @param raw message to send
 	 */
 	public static void sendRaw(Player[] players, String raw) {
-		NMSPacketPlayOutChat chat = new NMSPacketPlayOutChat();
-		CommonPacket cp = new CommonPacket(chat);
-		cp.write(chat.isFromServer, true);
-		cp.write(chat.chatComponent, WrappedChatComponent.fromJson(raw));
+		CommonPacket cp = new CommonPacket(PacketType.OUT_CHAT);
+		
+		cp.write(PacketType.OUT_CHAT.isFromServer, true);
+		cp.write(PacketType.OUT_CHAT.chatComponent, WrappedChatComponent.fromJson(raw));
 		
 		for (Player player: players)
 			PacketUtil.sendPacket(player, cp);
@@ -341,10 +343,10 @@ public class TellRawUtil {
 	 * @param raw message to send
 	 */
 	public static void sendRaw(Collection<Player> players, String raw) {
-		NMSPacketPlayOutChat chat = new NMSPacketPlayOutChat();
-		CommonPacket cp = new CommonPacket(chat);
-		cp.write(chat.isFromServer, true);
-		cp.write(chat.chatComponent, WrappedChatComponent.fromJson(raw));
+		CommonPacket cp = new CommonPacket(PacketType.OUT_CHAT);
+		
+		cp.write(PacketType.OUT_CHAT.isFromServer, true);
+		cp.write(PacketType.OUT_CHAT.chatComponent, WrappedChatComponent.fromJson(raw));
 		
 		for (Player player: players)
 			PacketUtil.sendPacket(player, cp);

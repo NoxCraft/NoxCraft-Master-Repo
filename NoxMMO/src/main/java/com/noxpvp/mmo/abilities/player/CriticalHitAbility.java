@@ -1,7 +1,11 @@
 package com.noxpvp.mmo.abilities.player;
 
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.omg.CosNaming.IstringHelper;
 
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
@@ -14,6 +18,11 @@ public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbil
 
 	public static final String PERM_NODE = "Critical Hit";
 	public static final String ABILITY_NAME = "critical-hit";
+	
+	@Override
+	public String getDescription() {
+		return "A random change to land a critical hit, causing nausia and increased damage on the target";
+	}
 	
 	private PlayerManager pm;
 	
@@ -47,6 +56,11 @@ public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbil
 		if ((Math.random() * 100) > (damage * 45)) return false;
 		
 		event.setDamage(damage);
+		
+		if (event.getEntity() instanceof LivingEntity)
+			((LivingEntity) event.getEntity()).addPotionEffect(
+					new PotionEffect(PotionEffectType.CONFUSION, 40, 2, false));
+		
 		return true;
 	}
 	

@@ -24,6 +24,11 @@ public class FireNovaAbility extends BaseEntityAbility  implements PVPAbility {
 	public static final String ABILITY_NAME = "Fire Nova";
 	public static final String PERM_NODE = "fire-nova";
 	
+	@Override
+	public String getDescription() {
+		return "Summons an expanding ring of fire, burning all enemys within " + getRange() + " blocks";
+	}
+	
 	private int range;
 	private int tickSpeed;
 	private Material blockType = Material.FIRE;

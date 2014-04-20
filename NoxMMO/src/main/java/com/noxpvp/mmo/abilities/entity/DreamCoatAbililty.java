@@ -28,6 +28,11 @@ public class DreamCoatAbililty extends BaseEntityAbility{
 	public final static String ABILITY_NAME = "Dream Coat";
 	public final static String PERM_NODE = "dream-coat";
 	
+	@Override
+	public String getDescription() {
+		return "The coat of much technicolor";
+	}
+	
 	private static WeakHashMap<LivingEntity, DreamCoatRunnable> runnables = new WeakHashMap<LivingEntity, DreamCoatAbililty.DreamCoatRunnable>();
 	private static SortedMap<Long, Color> colours = new TreeMap<Long, Color>(Collections.reverseOrder());
 	

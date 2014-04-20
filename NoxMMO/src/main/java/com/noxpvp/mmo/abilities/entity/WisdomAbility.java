@@ -18,6 +18,11 @@ public class WisdomAbility extends BaseEntityAbility implements PVPAbility {
 	public final static String ABILITY_NAME = "Wisdom";
 	public final static String PERM_NODE = "wisdom";
 
+	@Override
+	public String getDescription() {
+		return "You gain a burst of sudden wisdom, increasing your attack strength for " + getDuration() + " seconds";
+	}
+	
 	private NoxMMO mmo;
 	private int duration;
 	private int amplifier;

@@ -21,6 +21,11 @@ public class SkullSmasherAbility extends BasePlayerAbility implements PVPAbility
 	public static final String ABILITY_NAME = "Skull Smasher";
 	public static final String PERM_NODE = "skull-smasher";
 	
+	@Override
+	public String getDescription() {
+		return "Your axe becomes ingulfed with power! Dealing 75% damage to all enemys surrounding anything you damage";
+	}
+	
 	private BaseMMOEventHandler<EntityDamageByEntityEvent> handler;
 	private double range;
 
