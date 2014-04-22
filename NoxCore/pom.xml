@@ -105,6 +105,12 @@
 			<groupId>com.dsh105</groupId>
 			<artifactId>HoloAPI</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.comphenix.packetwrapper</groupId>
+			<artifactId>PacketWrapper</artifactId>
+			<version>1.7.2-R0.5</version>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -153,6 +159,34 @@
 					</execution>
 				</executions>
 			</plugin>
+			 <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                	<artifactSet>
+                		<includes>
+                			<include>com.comphenix.packetwrapper:PacketWrapper</include>
+                		</includes>
+                	</artifactSet>
+                    <filters>
+						<filter>
+							<artifact>com.comphenix.packetwrapper:PacketWrapper</artifact>
+							<excludes>
+								<exclude>com/comphenix/packetwrapper/PacketWrapper</exclude>
+							</excludes>
+						</filter>
+                    </filters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 
 	</build>
