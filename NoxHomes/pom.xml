@@ -10,7 +10,7 @@
 	<properties>
 		<main>com.noxpvp.homes.NoxHomes</main>
 	</properties>
-	<version>0.2.3-{Snapshot}</version>
+	<version>0.2.4-Snapshot</version>
 
 	<build>
 		<plugins>
@@ -38,7 +38,7 @@
 									<format property="snapshotstamp" pattern="HH - d-MM" />
 								</tstamp>
 								<replaceregexp>
-									<regexp pattern="\{Snapshot\}" />
+									<regexp pattern="Snapshot" />
 									<substitution expression="Snapshot (${snapshotstamp})" />
 									<fileset dir="target/classes">
 										<exclude name="*.class" />
@@ -53,4 +53,12 @@
 		</plugins>
 
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.noxpvp</groupId>
+			<artifactId>NoxCore</artifactId>
+			<version>0.2.4-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 </project>

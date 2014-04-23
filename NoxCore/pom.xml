@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>NoxCore</artifactId>
 	<name>NoxCore</name>
-	<version>0.2.4-{Snapshot}</version>
+	<version>0.2.4-Snapshot</version>
 	<developers>
 		<developer>
 			<email>ckrier.3000@gmail.com</email>
@@ -146,7 +146,7 @@
 									<format property="snapshotstamp" pattern="HH - d-MM" />
 								</tstamp>
 								<replaceregexp>
-									<regexp pattern="\{Snapshot\}" />
+									<regexp pattern="Snapshot" />
 									<substitution expression="Snapshot (${snapshotstamp})" />
 									<fileset dir="target/classes">
 										<exclude name="*.class" />
@@ -164,6 +164,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
+                <finalName>NoxCore</finalName>
                 	<artifactSet>
                 		<includes>
                 			<include>com.comphenix.packetwrapper:PacketWrapper</include>
