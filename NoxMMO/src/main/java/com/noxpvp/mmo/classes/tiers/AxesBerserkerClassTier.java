@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.mmo.abilities.Ability;
-import com.noxpvp.mmo.abilities.entity.LeapAbility;
+import com.noxpvp.mmo.abilities.entity.ChargeAbility;
 import com.noxpvp.mmo.classes.internal.ClassTier;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
@@ -24,7 +24,7 @@ public class AxesBerserkerClassTier extends ClassTier {
 		super(retainer, TIER_NAME, 3);
 		
 		abilities.putAll(retainer.getTier(getTierLevel()-1).getAbilityMap());
-		abilities.put("Charge", new LeapAbility(getPlayer(), 0, 3)); //TODO: Make a real ability for this.
+		abilities.put("Charge", new ChargeAbility(getPlayer(), 3));
 	}
 
 	

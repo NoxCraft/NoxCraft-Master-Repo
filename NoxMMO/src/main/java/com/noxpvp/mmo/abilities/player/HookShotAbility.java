@@ -1,8 +1,10 @@
 package com.noxpvp.mmo.abilities.player;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -11,11 +13,11 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.bergerkiller.bukkit.common.protocol.CommonPacket;
-import com.bergerkiller.bukkit.common.protocol.PacketType;
-import com.bergerkiller.bukkit.common.utils.PacketUtil;
-import com.bergerkiller.bukkit.common.wrappers.DataWatcher;
+import com.comphenix.packetwrapper.WrapperPlayServerAttachEntity;
+import com.comphenix.packetwrapper.WrapperPlayServerSpawnEntityLiving;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.noxpvp.core.utils.PlayerUtils;
+import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
@@ -29,8 +31,9 @@ public class HookShotAbility extends BasePlayerAbility{
 	
 	//TODO make this;
 	
-	public static final String PERM_NODE = "hookshot";
 	public static final String ABILITY_NAME = "Hook Shot";
+	public static final String PERM_NODE = "hook-shot";
+	
 	public static int batId = Short.MAX_VALUE + 1000;
 	
 	private ItemStack pullRegent = new ItemStack(Material.STRING, 1);
@@ -131,33 +134,34 @@ public class HookShotAbility extends BasePlayerAbility{
 					return;
 				
 				arrow = (Arrow) event.getEntity();
-				CommonPacket rope = new CommonPacket(PacketType.OUT_ENTITY_ATTACH),
-						holder = new CommonPacket(PacketType.OUT_ENTITY_SPAWN_LIVING);
+				WrapperPlayServerAttachEntity rope = new WrapperPlayServerAttachEntity();
+				WrapperPlayServerSpawnEntityLiving holder = new WrapperPlayServerSpawnEntityLiving();
 				
-				DataWatcher dw = new DataWatcher();
-				dw.set(0, (byte) 0x20);
-				dw.set(6, (float) 2);
-				dw.set(12, 1);
+				WrappedDataWatcher dw = new WrappedDataWatcher();
+				dw.setObject(0, (byte) 0);
+				dw.setObject(6, (float) 1);
+				dw.setObject(12, 0);
 				
 				if (batId > (Short.MAX_VALUE + 10000))
 					batId = Short.MAX_VALUE + 1000;
 				
 				int id = batId++;
 				
-				holder.write(PacketType.OUT_ENTITY_SPAWN_LIVING.entityId, id);
-				holder.write(PacketType.OUT_ENTITY_SPAWN_LIVING.entityType, 65);
-				holder.write(PacketType.OUT_ENTITY_SPAWN_LIVING.x, batId);
-				holder.write(PacketType.OUT_ENTITY_SPAWN_LIVING.x, batId);
-				holder.write(PacketType.OUT_ENTITY_SPAWN_LIVING.x, batId);
-				holder.write(PacketType.OUT_ENTITY_SPAWN_LIVING.dataWatcher, dw);
+				holder.setEntityID(id);
+				holder.setType(EntityType.BAT);
+				holder.setMetadata(dw);
 				
-				rope.write(PacketType.OUT_ENTITY_ATTACH.lead, 1);
-				rope.write(PacketType.OUT_ENTITY_ATTACH.passengerId, id);
-				rope.write(PacketType.OUT_ENTITY_ATTACH.vehicleId, p.getEntityId());
+				Location loc = arrow.getLocation();
+				holder.setX(loc.getX());
+				holder.setY(loc.getY());
+				holder.setZ(loc.getZ());
 				
+				rope.setLeached(true);
+				rope.setEntityId(id);
+				rope.setVehicleId(p.getEntityId());
 				
-				PacketUtil.broadcastPacketNearby(p.getLocation(), 100, holder);
-				PacketUtil.broadcastPacketNearby(p.getLocation(), 100, rope);
+				holder.sendPacket(p);
+				rope.sendPacket(p);
 				
 			}
 		};
@@ -183,7 +187,7 @@ public class HookShotAbility extends BasePlayerAbility{
 						
 						if (!PlayerUtils.hasAtleast(inv, pullRegent, pullRegent.getAmount()))
 							return;
-						if (!p.hasLineOfSight(arrow))
+						if (LineOfSightUtil.hasLineOfSight(p, arrow.getLocation(), Material.AIR))
 							return;
 						if (hBlock.getType() != Material.AIR || hBlock.getRelative(0, 1, 0).getType() != Material.AIR || hBlock.getRelative(0, 2, 0).getType() != Material.AIR){
 							NoxMMO.getInstance().getMasterListener().unregisterHandler(this);
@@ -199,7 +203,6 @@ public class HookShotAbility extends BasePlayerAbility{
 						
 						p.teleport(hBlock.getRelative(0, 1, 0).getLocation(), TeleportCause.PLUGIN);
 						arrow.remove();
-						
 						
 					}
 
