@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
@@ -121,11 +123,15 @@ public class PoisonArrowAbility extends BasePlayerAbility implements PVPAbility 
 				
 				
 				Arrow a = (Arrow) event.getDamager();		
-				
-				if (a.getShooter().getType() != EntityType.PLAYER)
+				ProjectileSource source = a.getShooter();
+				if (!(source instanceof Entity))
 					return;
 				
-				if (a.getShooter().equals(getPlayer()))
+				Entity ar = (Entity) source;
+				if (ar.getType() != EntityType.PLAYER)
+					return;
+					
+				if (ar.equals(getPlayer()))
 				
 				if (PoisonArrowAbility.this.arrows.contains(a))
 					e.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getDuration(), getAmplifier()));
