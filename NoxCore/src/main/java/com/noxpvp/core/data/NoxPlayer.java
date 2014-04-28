@@ -10,11 +10,13 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
+import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -23,6 +25,7 @@ import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.projectiles.BlockProjectileSource;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.proxies.ProxyBase;
@@ -386,8 +389,10 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	}
 	public NoxPlayer getNoxPlayer() { return this; }
 	
-	public OfflinePlayer getOfflinePlayer() { 
-		if (getPlayerName() != null)
+	public OfflinePlayer getOfflinePlayer() {
+		if (getUUID() != null)
+			return Bukkit.getOfflinePlayer(getUUID());
+		else if (getPlayerName() != null)
 			return Bukkit.getOfflinePlayer(getPlayerName());
 		return getProxyBase();
 	}
@@ -395,7 +400,9 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	public final ConfigurationNode getPersistantData() { return persistant_data;}
 	
 	public Player getPlayer() {
-		if (getPlayerName() != null)
+		if (getUUID() != null)
+			return Bukkit.getPlayer(getUUID());
+		else if (getPlayerName() != null)
 			return Bukkit.getPlayerExact(getPlayerName());
 		else
 			return Bukkit.getPlayerExact(getProxyBase().getName());
@@ -543,10 +550,15 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 			EntityDamageByEntityEvent edbe = (EntityDamageByEntityEvent) ede;
 			
 			Entity damager = edbe.getDamager();
+			Block bDamager = null;
 			if (!(damager instanceof Projectile))
 				this.persistant_data.set("last.death.cause.entity.type", damager.getType());
-			else
-				damager = ((Projectile)damager).getShooter(); //TODO: add projectile info?
+			else if (((Projectile)damager).getShooter() instanceof Entity)
+				damager = (Entity) ((Projectile)damager).getShooter(); //TODO: add projectile info?
+			else {
+				bDamager = ((BlockProjectileSource)((Projectile)damager).getShooter()).getBlock();
+				damager = null; //TODO: Hook into block logging and retrieve builder.
+			}
 			
 			if (damager instanceof Player) {
 				Player d = (Player)damager;
@@ -554,8 +566,11 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 				manager.getPlayer(d).setLastKill(getPlayer());
 			} else if (damager instanceof LivingEntity)
 				this.persistant_data.set("last.death.cause.entity.name", ((LivingEntity)damager).getCustomName());
-			else
-				this.persistant_data.set("last.death.cause.entity.name", "UNTRACKED");
+			else if (bDamager != null) {
+				this.persistant_data.set("last.death.cause.block.name", bDamager.getType().name());
+			} else {
+				this.persistant_data.set("last.death.cause.entity", "UNTRACKED");
+			}
 		} else if (ede instanceof EntityDamageByBlockEvent) {
 			EntityDamageByBlockEvent edbb = (EntityDamageByBlockEvent) ede;
 			

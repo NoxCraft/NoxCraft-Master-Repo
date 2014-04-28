@@ -17,11 +17,18 @@ import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.google.common.collect.MapMaker;
 import com.noxpvp.core.collection.DualAccessMap;
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.classes.AxesPlayerClass;
+import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
 
 public class PlayerClassUtil { //TODO: UUID's
 	public static final String LOG_MODULE_NAME = "PlayerClass";
+	
+	private static final Class<? extends PlayerClass>[] classes = new Class[] {
+		AxesPlayerClass.class
+	};
+	
 	private static ModuleLogger log;
 	
 	private static Map<String, PlayerClass> classCache;
@@ -212,5 +219,12 @@ public class PlayerClassUtil { //TODO: UUID's
 		pClasses = new DualAccessMap<String, Class<? extends PlayerClass>>();
 		
 		classCache = new MapMaker().weakValues().concurrencyLevel(2).makeMap();
+		
+		addDefaults();
+	}
+
+	private static void addDefaults() {
+		for (Class<? extends PlayerClass> clazz : classes) 
+			registerPlayerClass(clazz);
 	}
 }
