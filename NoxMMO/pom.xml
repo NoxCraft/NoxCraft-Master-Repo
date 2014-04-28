@@ -61,4 +61,12 @@
 		</plugins>
 
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.noxpvp</groupId>
+			<artifactId>NoxCore</artifactId>
+			<version>0.2.4-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 </project>

@@ -144,8 +144,6 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 	
 	public void load() {
-		superLoad();
-		
 		ConfigurationNode node = getPersistantData();
 		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));
 		setSecondaryClass(node.get(SECONDARY_CLASS_NODE, ""));
@@ -183,7 +181,5 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			node.set(TARGET_NODE + ".world", getTarget().getWorld().getName());
 			node.set(TARGET_NODE + "uuid", getTarget().getUniqueId().toString());
 		}
-		
-		superSave();
 	}
 }

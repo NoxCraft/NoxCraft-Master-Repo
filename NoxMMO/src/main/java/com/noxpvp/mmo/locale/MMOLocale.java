@@ -22,6 +22,9 @@ public class MMOLocale extends NoxLocale {
 	public final static MMOLocale GUI_MENU_NAME_COLOR;
 	public final static MMOLocale GUI_BAR_COLOR;
 	
+	//Ability Information
+	public final static MMOLocale ABIL_INFO;
+	
 	//INTERNAL
 	/**
 	 * @deprecated This is used internally. Do not use!
@@ -31,6 +34,8 @@ public class MMOLocale extends NoxLocale {
 	static {
 		ABIL_DN = new MMOLocale("display.ability.default", "%1%%0%");
 		ABIL_DISPLAY_NAME = new MMOLocale("display.ability", ""); //This is blank. Will be filled in per ability name.
+		
+		ABIL_INFO = new MMOLocale("display.ability.info", "&7Ability: &e%0%&a %1%");
 		
 		CLASS_DN = new MMOLocale("display.class.default", "%1%%0%");
 		CLASS_DISPLAY_NAME = new MMOLocale("display.class", ""); //This is blank. Will be filled in per ability name.
