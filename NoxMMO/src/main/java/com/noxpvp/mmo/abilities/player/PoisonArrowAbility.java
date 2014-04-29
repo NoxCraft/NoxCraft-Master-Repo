@@ -119,10 +119,10 @@ public class PoisonArrowAbility extends BasePlayerAbility implements PVPAbility 
 				if (e == null)
 					return;
 				
+				Arrow a = (Arrow) event.getDamager();
 				
-				Arrow a = (Arrow) event.getDamager();		
-				
-				if (a.getShooter().getType() != EntityType.PLAYER)
+				Player shooter = a.getShooter() instanceof Player? (Player) a.getShooter() : null;
+				if (shooter == null)
 					return;
 				
 				if (a.getShooter().equals(getPlayer()))
