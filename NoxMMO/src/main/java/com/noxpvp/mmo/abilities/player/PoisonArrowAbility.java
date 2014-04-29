@@ -121,17 +121,13 @@ public class PoisonArrowAbility extends BasePlayerAbility implements PVPAbility 
 				if (e == null)
 					return;
 				
+				Arrow a = (Arrow) event.getDamager();
 				
-				Arrow a = (Arrow) event.getDamager();		
-				ProjectileSource source = a.getShooter();
-				if (!(source instanceof Entity))
+				Player shooter = a.getShooter() instanceof Player? (Player) a.getShooter() : null;
+				if (shooter == null)
 					return;
 				
-				Entity ar = (Entity) source;
-				if (ar.getType() != EntityType.PLAYER)
-					return;
-					
-				if (ar.equals(getPlayer()))
+				if (a.getShooter().equals(getPlayer()))
 				
 				if (PoisonArrowAbility.this.arrows.contains(a))
 					e.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getDuration(), getAmplifier()));

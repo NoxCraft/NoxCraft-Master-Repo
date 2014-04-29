@@ -8,6 +8,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
@@ -65,12 +66,11 @@ public class AxesPlayerClass extends PlayerClass {
 	}
 
 	public Color getArmourColor() {
-		return null; //TODO: BBC < Set your main color in base then Tell me colors for each tier if you like. 
+		return Color.fromRGB(215, 0, 0);
 	}
 
 	public Color getBaseArmourColor() {
-		// TODO Auto-generated method stub
-		return null;
+		return ((LeatherArmorMeta) new ItemStack(Material.LEATHER_HELMET).getItemMeta()).getColor();
 	}
 
 	public boolean canUseClass() {
