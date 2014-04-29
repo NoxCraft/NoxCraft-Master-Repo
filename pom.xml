@@ -19,7 +19,7 @@
 
 		<repository>
 			<id>Spigot</id>
-			<url>http://repo.md-5.net/content/groups/public/</url>
+			<url>http://repo.md-5.net/content/repositories/snapshots</url>
 		</repository>
 
 		<repository>
@@ -135,6 +135,12 @@
 				</exclusions>
 				<version>5.9</version>
 			</dependency>
+			<dependency>
+				<groupId>org.spigotmc</groupId>
+				<artifactId>spigot</artifactId>
+				<version>1.7.9-R0.1-SNAPSHOT</version>
+				<scope>provided</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -147,10 +153,6 @@
 			<groupId>com.comphenix.protocol</groupId>
 			<artifactId>ProtocolLib</artifactId>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
@@ -167,6 +169,11 @@
 		<dependency>
 			<groupId>com.palmergames.towny</groupId>
 			<artifactId>Towny</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
