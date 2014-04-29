@@ -270,6 +270,8 @@ public class MessageUtil {
 				continue;
 			}
 		}
+		if (LogicUtil.nullOrEmpty(ret))
+			return ChatColor.WHITE.toString();
 		
 		return ret;
 	}
