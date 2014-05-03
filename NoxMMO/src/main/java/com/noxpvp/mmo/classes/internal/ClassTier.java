@@ -8,6 +8,7 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
+import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.mmo.abilities.Ability;
 
 public abstract class ClassTier implements IClassTier {
@@ -28,6 +29,14 @@ public abstract class ClassTier implements IClassTier {
 	
 	public boolean canUseLevel(int level) {
 		return level <= getMaxLevel();
+	}
+	
+	public boolean canUse() {
+		return retainer.getPlayer().hasPermission(getPermission());
+	}
+	
+	public String getPermission() {
+		return StringUtil.join(".", "nox", "class" , retainer.getName(), "tier", getName());
 	}
 	
 	public final PlayerClass getAssociatedClass() { return retainer; }

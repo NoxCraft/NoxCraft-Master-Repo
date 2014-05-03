@@ -50,4 +50,6 @@
 	- Added /Nox command
 		Has a upgrade sub command but not implemented.
 	- Fixed command NPE's
-	
+0.2.4:
+	- Fixed empty colors on last color util.
+		This will prevent color leakage on certain stuff in our plugins.

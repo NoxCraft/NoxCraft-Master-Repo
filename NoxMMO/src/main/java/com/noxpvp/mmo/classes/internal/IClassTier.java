@@ -14,6 +14,8 @@ public interface IClassTier {
 	
 	public String getName();
 	
+	public boolean canUse();
+	
 	public void setDisplayName(String displayName);
 	public String getDisplayName();
 	public List<String> getLore();
@@ -58,4 +60,6 @@ public interface IClassTier {
 	 * This will allow auto fixing values when manually setting total exp. Thus cleanup can include that set.
 	 */
 	public void update();
+
+	String getPermission();
 }
