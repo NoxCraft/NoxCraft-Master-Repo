@@ -19,6 +19,7 @@ import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.utils.ParseUtil;
+import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.Ability;
@@ -128,6 +129,16 @@ public abstract class PlayerClass implements IPlayerClass {
 
 	public void addExp(int tier, int amount) {
 		getTier(tier).addExp(amount);
+	}
+	
+	public boolean canUseClass() {
+		if (getPlayer() != null)
+			return getPlayer().hasPermission(getPermission());
+		return false;
+	}
+	
+	public String getPermission() {
+		return StringUtil.join(".", "nox", "class", getName());
 	}
 	
 	private void checkTierCount() {

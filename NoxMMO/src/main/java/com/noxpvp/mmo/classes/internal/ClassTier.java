@@ -32,7 +32,9 @@ public abstract class ClassTier implements IClassTier {
 	}
 	
 	public boolean canUse() {
-		return retainer.getPlayer().hasPermission(getPermission());
+		if (retainer.getPlayer() != null)
+			return retainer.getPlayer().hasPermission(getPermission());
+		return false;
 	}
 	
 	public String getPermission() {
