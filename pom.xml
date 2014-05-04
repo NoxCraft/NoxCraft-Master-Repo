@@ -130,12 +130,6 @@
 				<groupId>com.sk89q</groupId>
 				<artifactId>worldguard</artifactId>
 				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>*</groupId>
-						<artifactId>*</artifactId>
-					</exclusion>
-				</exclusions>
 				<version>5.9</version>
 			</dependency>
 			<dependency>
