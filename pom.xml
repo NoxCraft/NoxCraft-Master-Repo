@@ -4,6 +4,15 @@
 	<groupId>com.noxpvp</groupId>
 	<artifactId>NoxCraft</artifactId>
 	<packaging>pom</packaging>
+	<organization>
+		<name>NoxCraft</name>
+		<url>noxpvp.com</url>
+	</organization>
+	<name>NoxPVP Plugins</name>
+	<description>This is noxpvp.com's custom plugin set.
+		We add all sorts of features. Specifically coded for our server in mind.
+	</description>
+	<version>1.0</version>
 	<modules>
 		<module>NoxCore</module>
 		<module>NoxHomes</module>
@@ -99,12 +108,6 @@
 				<artifactId>Vault</artifactId>
 				<version>1.2.30</version>
 				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>*</groupId>
-						<artifactId>*</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>com.vexsoftware.votifier</groupId>
@@ -188,14 +191,5 @@
 		<defaultGoal>install</defaultGoal>
 
 	</build>
-	<organization>
-		<name>NoxCraft</name>
-		<url>noxpvp.com</url>
-	</organization>
-	<name>NoxPVP Plugins</name>
-	<description>This is noxpvp.com's custom plugin set.
 
-We add all sorts of features. Specifically coded for our server in mind.
-</description>
-	<version>1.0</version>
 </project>
