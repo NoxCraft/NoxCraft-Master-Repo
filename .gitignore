@@ -8,3 +8,7 @@ NoxCore/.classpath
 .gitignore
 *.classpath
 */dependency-reduced-pom.xml
+UUIDFetcher/
+PacketWrapper/
+NameFetcher/
+JSON-java/
