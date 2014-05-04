@@ -14,6 +14,14 @@
 		<main>com.noxpvp.noxchat.NoxChat</main>
 	</properties>
 
+	<dependencies>
+		<dependency>
+			<groupId>com.noxpvp</groupId>
+			<artifactId>NoxCore</artifactId>
+			<version>0.2.4-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<resources>
@@ -62,13 +70,5 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<dependencies>
-			<dependency>
-				<groupId>com.noxpvp</groupId>
-				<artifactId>NoxCore</artifactId>
-				<version>0.2.4-SNAPSHOT</version>
-				<scope>provided</scope>
-			</dependency>
-		</dependencies>
 	</build>
 </project>
