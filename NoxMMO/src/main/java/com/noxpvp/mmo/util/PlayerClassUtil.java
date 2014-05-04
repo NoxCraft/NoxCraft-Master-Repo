@@ -80,15 +80,11 @@ public class PlayerClassUtil { //TODO: UUID's
 
 		NoxMMO mmo = NoxMMO.getInstance();
 		
-		ConfigurationNode n = mmo.getLocalizationNode("display").getParent();
-		
-		FileConfiguration f = (FileConfiguration) n;
-		
+		log.fine("Registered the class \"" + cName + "\" with id \"" + cId + "\".");
 		mmo.loadLocale(MMOLocale.CLASS_DISPLAY_NAME.getName() + "." + cName, cName);
 		
-		f.save();
-		
-		log.fine("Registered the class \"" + cName + "\" with id \"" + cId + "\".");
+		mmo.saveLocalization();
+			
 	}
 	
 	public static List<PlayerClass> getAvailableClasses(Player player)
