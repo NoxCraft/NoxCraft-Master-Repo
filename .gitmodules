@@ -1,6 +1,6 @@
 [submodule "JSON-java"]
 	path = JSON-java
-	url = git@github.com:douglascrockford/JSON-java.git
+	url = https://github.com/douglascrockford/JSON-java.git
 [submodule "UUIDFetcher"]
 	path = UUIDFetcher
 	url = https://gist.github.com/df8dcd7855937e9d1e1f.git
@@ -9,4 +9,4 @@
 	url = https://gist.github.com/a5c971d2f2b2c3b3fb37.git
 [submodule "PacketWrapper"]
 	path = PacketWrapper
-	url = git@github.com:aadnk/PacketWrapper.git
+	url = https://github.com/aadnk/PacketWrapper.git
