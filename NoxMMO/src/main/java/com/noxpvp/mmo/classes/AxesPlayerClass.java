@@ -20,21 +20,21 @@ import com.noxpvp.mmo.classes.tiers.*;
 
 public class AxesPlayerClass extends PlayerClass {
 	
-	public static final String CLASS_NAME = "Axes";
+	public static final String className = "Axes";
 	
-	public static final String uid = "f8c26f34-fc36-427a-b92e-94090b146db1";	//RANDOMLY GENERATED DO NOT CHANGE!
+	public static final String uniqueID = "f8c26f34-fc36-427a-b92e-94090b146db1";	//RANDOMLY GENERATED DO NOT CHANGE!
 
 	public AxesPlayerClass(Player player) {
-		super(uid, CLASS_NAME, player);
+		super(uniqueID, className, player);
 	}
 
 	public AxesPlayerClass(String playerName,
 			Player player) {
-		super(uid, CLASS_NAME, playerName, player);
+		super(uniqueID, className, playerName, player);
 	}
 
 	public AxesPlayerClass(String playerName) {
-		super(uid, CLASS_NAME, playerName);
+		super(uniqueID, className, playerName);
 	}
 
 	private ItemStack identiferItem;
