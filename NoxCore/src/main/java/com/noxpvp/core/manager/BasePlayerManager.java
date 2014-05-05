@@ -60,7 +60,7 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	
 	public T getPlayer(NoxPlayer noxPlayer) {
 		T player = null;
-		String name = noxPlayer.getName();
+		String name = noxPlayer.getPlayerName();
 		if (isLoaded(name))
 			player = players.get(name);
 		else {
@@ -88,6 +88,7 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 		else {
 			player = craftNew(name);
 			players.put(name, player);
+			loadPlayer(player);
 		}
 		return player;
 	}

@@ -83,7 +83,7 @@ public abstract class PlayerClass implements IPlayerClass {
 	private String playerName;
 	
 	//Tiers
-	private Map<Integer, IClassTier> tiers;
+	protected Map<Integer, IClassTier> tiers;
 	
 	//Identification
 	private final String uid;

@@ -95,7 +95,6 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	@Override
 	protected NoxPlayer craftNew(String name) {
 		NoxPlayer player = new NoxPlayer(this, name);
-		loadPlayer(player);
 		return player;
 	}
 	
