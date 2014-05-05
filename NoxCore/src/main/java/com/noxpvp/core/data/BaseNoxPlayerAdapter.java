@@ -46,10 +46,6 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		getProxyBase().setName(name);
 	}
 	
-	public final void updateUID() {
-		getProxyBase().updateUID();
-	}
-	
 	public NoxPlayer getProxyBase() {
 		return getNoxPlayer(this.getName());
 	}
@@ -283,46 +279,6 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		getProxyBase().setVotes(amount);
 	}
 
-	public Location getBedSpawnLocation() {
-		return getProxyBase().getBedSpawnLocation();
-	}
-
-	public long getFirstPlayed() {
-		return getProxyBase().getFirstPlayed();
-	}
-
-	public long getLastPlayed() {
-		return getProxyBase().getLastPlayed();
-	}
-
-	public boolean hasPlayedBefore() {
-		return getProxyBase().hasPlayedBefore();
-	}
-
-	public boolean isBanned() {
-		return getProxyBase().isBanned();
-	}
-
-	public boolean isOp() {
-		return getProxyBase().isOp();
-	}
-
-	public boolean isWhitelisted() {
-		return getProxyBase().isWhitelisted();
-	}
-
-	public void setBanned(boolean arg0) {
-		getProxyBase().setBanned(arg0);
-	}
-
-	public void setOp(boolean arg0) {
-		getProxyBase().setOp(arg0);
-	}
-
-	public void setWhitelisted(boolean arg0) {
-		getProxyBase().setWhitelisted(arg0);
-	}
-	
 	public void saveToManager() {
 		PlayerManager.getInstance().savePlayer(getNoxPlayer());
 	}

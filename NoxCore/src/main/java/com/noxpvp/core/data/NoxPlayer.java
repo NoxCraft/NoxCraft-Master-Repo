@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
-import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -28,7 +27,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.projectiles.BlockProjectileSource;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
-import com.bergerkiller.bukkit.common.proxies.ProxyBase;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
@@ -42,11 +40,7 @@ import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.UUIDUtil;
 
-public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, NoxPlayerAdapter {
-	
-	static {
-		ProxyBase.validate(NoxPlayer.class);
-	}
+public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	private WeakHashMap<String, CoolDown> cd_cache;
 	private List<CoolDown> cds;
@@ -91,7 +85,6 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	
 	public NoxPlayer(NoxPlayer player)
 	{
-		super(player.getProxyBase());
 		permHandler = player.permHandler;
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
@@ -110,7 +103,6 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	}
 	
 	public NoxPlayer(PlayerManager mn, String name) {
-		super(Bukkit.getOfflinePlayer(name));
 		NoxCore core = mn.getPlugin();
 		permHandler = core.getPermissionHandler();
 		cds = new ArrayList<CoolDown>();
@@ -132,7 +124,6 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	}
 	
 	public NoxPlayer(PlayerManager mn, UUID uid) {
-		super(null);
 		NoxCore core = mn.getPlugin();
 		permHandler = core.getPermissionHandler();
 		cds = new ArrayList<CoolDown>();
@@ -159,14 +150,22 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		return false;
 	}
 	
-	public UUID getUUID() {
-		if (isBadUID())
-			this.uid = UUIDUtil.getInstance().tryGetID(getName());
-		
-		if (isBadUID())
-			this.uid = null;
-		
+	public UUID getUUID(boolean autoUpdate) {
+		if (autoUpdate) {
+			if (isBadUID())
+				this.uid = UUIDUtil.getInstance().tryGetID(getName());
+			
+			if (isBadUID())
+				this.uid = null;
+			
+			if (isBadUID() && isOnline())
+				this.uid = getPlayer().getUniqueId();
+		}
 		return uid;
+	}
+	
+	public UUID getUUID() {
+		return getUUID(true);
 	}
 	
 	public String getUID() {
@@ -384,9 +383,11 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	
 	public Double getMoney(String worldName) { return VaultAdapter.economy.getBalance(getPlayerName(), worldName); }
 	
+	@Deprecated
 	public String getName(){
 		return getPlayerName();
 	}
+	
 	public NoxPlayer getNoxPlayer() { return this; }
 	
 	public OfflinePlayer getOfflinePlayer() {
@@ -394,23 +395,22 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 			return Bukkit.getOfflinePlayer(getUUID());
 		else if (getPlayerName() != null)
 			return Bukkit.getOfflinePlayer(getPlayerName());
-		return getProxyBase();
+		else
+			return null;
 	}
 	
 	public final ConfigurationNode getPersistantData() { return persistant_data;}
 	
 	public Player getPlayer() {
-		if (getUUID() != null)
+		if (getUUID(false) != null)
 			return Bukkit.getPlayer(getUUID());
-		else if (getPlayerName() != null)
+		else if (!LogicUtil.nullOrEmpty(getPlayerName()))
 			return Bukkit.getPlayerExact(getPlayerName());
 		else
-			return Bukkit.getPlayerExact(getProxyBase().getName());
+			throw new IllegalStateException("Player Object is completely playerless! No name info nor UUID info present!");
 	}
 	
 	public final String getPlayerName(){
-		if (name == null && getProxyBase() != null)
-			setName(getProxyBase().getName());
 		return name;
 	}
 	
@@ -504,13 +504,7 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		getUUID();
 		saveLastLocation();
 		persistant_data.set("cooldowns", getCoolDowns());
-		persistant_data.set("last.ign", getName());
-	}
-	
-	public final void updateUID() {
-		if (getName() != null)
-			if (isOnline())
-				this.uid = getPlayer().getUniqueId();
+		persistant_data.set("last.ign", getPlayerName());
 	}
 	
 	public void saveLastLocation(){
@@ -519,7 +513,7 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 	}
 	
 	public void saveLastLocation(Player player){
-		if (!player.getName().equals(name))
+		if (!player.getUniqueId().equals(getUUID()))
 			throw new IllegalArgumentException("Must be the same player as object holder");
 		
 		persistant_data.set("last.location", new SafeLocation(player.getLocation()));
@@ -621,102 +615,7 @@ public class NoxPlayer extends ProxyBase<OfflinePlayer> implements Persistant, N
 		persistant_data.set("vote-count", amount);
 	}
 
-	/**
-	 * @return
-	 * @see org.bukkit.OfflinePlayer#getBedSpawnLocation()
-	 */
-	public Location getBedSpawnLocation() {
-		return getProxyBase().getBedSpawnLocation();
-	}
-
-
-
-	/**
-	 * @return
-	 * @see org.bukkit.OfflinePlayer#getFirstPlayed()
-	 */
-	public long getFirstPlayed() {
-		return getProxyBase().getFirstPlayed();
-	}
-
-
-
-	/**
-	 * @return
-	 * @see org.bukkit.OfflinePlayer#getLastPlayed()
-	 */
-	public long getLastPlayed() {
-		return getProxyBase().getLastPlayed();
-	}
-
-
-
-	/**
-	 * @return
-	 * @see org.bukkit.OfflinePlayer#hasPlayedBefore()
-	 */
-	public boolean hasPlayedBefore() {
-		return getProxyBase().hasPlayedBefore();
-	}
-
-
-
-	/**
-	 * @return
-	 * @see org.bukkit.OfflinePlayer#isBanned()
-	 */
-	public boolean isBanned() {
-		return getProxyBase().isBanned();
-	}
-
-
-
-	/**
-	 * @return
-	 * @see org.bukkit.permissions.ServerOperator#isOp()
-	 */
-	public boolean isOp() {
-		return getProxyBase().isOp();
-	}
-
-
-
-	/**
-	 * @return
-	 * @see org.bukkit.OfflinePlayer#isWhitelisted()
-	 */
-	public boolean isWhitelisted() {
-		return getProxyBase().isWhitelisted();
-	}
-
-	/**
-	 * @param arg0
-	 * @see org.bukkit.OfflinePlayer#setBanned(boolean)
-	 */
-	public void setBanned(boolean arg0) {
-		getProxyBase().setBanned(arg0);
-	}
-
-
-
-	/**
-	 * @param arg0
-	 * @see org.bukkit.permissions.ServerOperator#setOp(boolean)
-	 */
-	public void setOp(boolean arg0) {
-		getProxyBase().setOp(arg0);
-	}
-
-	/**
-	 * @param arg0
-	 * @see org.bukkit.OfflinePlayer#setWhitelisted(boolean)
-	 */
-	public void setWhitelisted(boolean arg0) {
-		getProxyBase().setWhitelisted(arg0);
-	}
-
 	public void saveToManager() {
 		PlayerManager.getInstance().savePlayer(this);
 	}
-
 }
