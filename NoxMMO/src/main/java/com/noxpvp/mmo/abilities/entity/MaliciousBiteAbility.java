@@ -11,6 +11,7 @@ import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
+import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 
 public class MaliciousBiteAbility extends BaseEntityAbility implements PassiveAbility<EntityDamageByEntityEvent>,  PVPAbility{
@@ -34,7 +35,7 @@ public class MaliciousBiteAbility extends BaseEntityAbility implements PassiveAb
 		
 		Player o = (Player) a;
 		
-		PlayerClass pClass = PlayerManager.getInstance().getPlayer(o).getPrimaryClass();
+		IPlayerClass pClass = PlayerManager.getInstance().getPlayer(o).getPrimaryClass();
 		
 		return RandomUtils.nextFloat() < (pClass.getCurrentTierLevel() * pClass.getLevel()) / 1000;
 	}

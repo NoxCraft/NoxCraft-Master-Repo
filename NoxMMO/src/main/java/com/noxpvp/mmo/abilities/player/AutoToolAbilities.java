@@ -13,7 +13,7 @@ import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
-import com.noxpvp.mmo.classes.internal.PlayerClass;
+import com.noxpvp.mmo.classes.internal.IPlayerClass;
 
 public class AutoToolAbilities {
 
@@ -37,7 +37,7 @@ public class AutoToolAbilities {
 			
 			int fireTicks = 50;
 			
-			PlayerClass clazz = mmoPlayer.getPrimaryClass();
+			IPlayerClass clazz = mmoPlayer.getPrimaryClass();
 			
 			fireTicks = (int) (((mmoPlayer != null) && clazz != null)? clazz.getTotalLevel() / 2.5 : fireTicks);
 			

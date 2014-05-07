@@ -11,8 +11,8 @@ import com.noxpvp.core.utils.StaticEffects;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
 
@@ -95,7 +95,7 @@ public class SkullSmasherAbility extends BasePlayerAbility implements PVPAbility
 		if (!mayExecute())
 			return false;
 		
-		PlayerClass pClass = PlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
+		IPlayerClass pClass = PlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
 		
 		int length = (20 * (pClass.getTotalLevel())) / 16;
 		

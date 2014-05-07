@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.bergerkiller.bukkit.common.filtering.Filter;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
-import com.noxpvp.mmo.classes.internal.PlayerClass;
+import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class PlayerClassFilter implements Filter<Player> {
@@ -32,8 +32,8 @@ public class PlayerClassFilter implements Filter<Player> {
 	public boolean isFiltered(Player player) {
 		MMOPlayer mPlayer = getMMOPlayer(player);
 		
-		PlayerClass mainClass = mPlayer.getPrimaryClass();
-		PlayerClass subClass = mPlayer.getSecondaryClass();
+		IPlayerClass mainClass = mPlayer.getPrimaryClass();
+		IPlayerClass subClass = mPlayer.getSecondaryClass();
 		
 		if (classIds.contains(mainClass.getUniqueID()))
 			return inverse? false : true;

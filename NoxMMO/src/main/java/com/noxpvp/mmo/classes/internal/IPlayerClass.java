@@ -1,6 +1,8 @@
 package com.noxpvp.mmo.classes.internal;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -9,6 +11,7 @@ import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
+import com.noxpvp.mmo.abilities.Ability;
 
 public interface IPlayerClass {
 	
@@ -252,6 +255,10 @@ public interface IPlayerClass {
 	public void onLoad(ConfigurationNode node);
 	
 	public void onSave(ConfigurationNode node);
+
+	public Map<String, ? extends Ability> getAbilityMap();
+
+	public Collection<? extends Ability> getAbilities();
 	
 	//TODO: Plan out more.
 //	public void onConfigLoad();

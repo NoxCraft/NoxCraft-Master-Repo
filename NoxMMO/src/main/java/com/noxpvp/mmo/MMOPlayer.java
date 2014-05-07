@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import net.minecraft.util.org.apache.commons.lang3.Validate;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -23,7 +25,9 @@ import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.abilities.PlayerAbility;
+import com.noxpvp.mmo.classes.internal.DummyClass;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
+import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
@@ -32,7 +36,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	private static final String PRIMARY_CLASS_NODE = "current.class.primary";
 	private static final String SECONDARY_CLASS_NODE = "current.class.secondary";
 	private static final String TARGET_NODE = "current.target";
-	private PlayerClass primaryClass, secondaryClass;
+	private IPlayerClass primaryClass, secondaryClass;
 	private LivingEntity target;
 	
 	public MMOPlayer(OfflinePlayer player)
@@ -73,11 +77,11 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		return Collections.unmodifiableMap(ret);
 	}
 	
-	public PlayerClass getPrimaryClass() {
+	public IPlayerClass getPrimaryClass() {
 		return primaryClass;
 	}
 	
-	public PlayerClass getSecondaryClass() {
+	public IPlayerClass getSecondaryClass() {
 		return secondaryClass;
 	}
 	
@@ -88,32 +92,36 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));
 	}
 	
-	public void setClass(PlayerClass c) {
-		if (c.isPrimaryClass())//null pointer coaster
+	public void setClass(IPlayerClass c) {
+		if (c.isPrimaryClass())
 			setPrimaryClass(c);
 		else
 			setSecondaryClass(c);
 	}
 	
 	public void setPrimaryClass(String c) {
+		if (LogicUtil.nullOrEmpty(c))
+			setClass(DummyClass.PRIMARY);
 		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
 			c = PlayerClassUtil.getIdByClassName(c);
 		
 		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));//null pointer coaster
 	}
 	
-	public void setPrimaryClass(PlayerClass c) {
+	public void setPrimaryClass(IPlayerClass c) {
 		this.primaryClass = c;
 	}
 	
 	public void setSecondaryClass(String c) {
+		if (LogicUtil.nullOrEmpty(c))
+			setClass(DummyClass.SECONDARY);
 		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
 			c = PlayerClassUtil.getIdByClassName(c);
 		
 		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));
 	}
 	
-	public void setSecondaryClass(PlayerClass c) {
+	public void setSecondaryClass(IPlayerClass c) {
 		this.secondaryClass = c;
 	}
 	

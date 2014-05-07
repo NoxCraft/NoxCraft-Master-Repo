@@ -10,7 +10,7 @@ import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
-import com.noxpvp.mmo.classes.internal.PlayerClass;
+import com.noxpvp.mmo.classes.internal.IPlayerClass;
 
 /**
  * @author NoxPVP
@@ -101,7 +101,7 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 		if (player == null)
 			return false;
 		
-		PlayerClass clazz = player.getPrimaryClass();
+		IPlayerClass clazz = player.getPrimaryClass();
 		
 		float chance = (clazz.getLevel() + clazz.getTotalLevel()) / 10;//up to 40% at max 400 total levels
 		if ((Math.random() * 100) > chance)

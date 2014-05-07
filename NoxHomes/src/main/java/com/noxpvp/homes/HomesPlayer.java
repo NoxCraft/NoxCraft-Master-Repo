@@ -125,6 +125,8 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	 * @param list the replacement list of homes.
 	 */
 	protected final void setHomes(List<BaseHome> list) {
+		if (list == null)
+			list = new ArrayList<BaseHome>();
 		ConfigurationNode node = getPersistantData().getNode("homes");
 		
 		node.clear();

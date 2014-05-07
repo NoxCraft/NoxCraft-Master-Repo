@@ -9,7 +9,7 @@ import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
-import com.noxpvp.mmo.classes.internal.PlayerClass;
+import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.runnables.DamageRunnable;
 
 public class RazerClawsAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>, PVPAbility{
@@ -34,7 +34,7 @@ public class RazerClawsAbility extends BasePlayerAbility implements PassiveAbili
 		if (event.getEntity() != getPlayer() || !mayExecute())
 			return false;
 		
-		PlayerClass clazz = PlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
+		IPlayerClass clazz = PlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
 		
 		int levels = clazz.getTotalLevel();
 		

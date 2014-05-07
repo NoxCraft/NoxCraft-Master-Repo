@@ -16,7 +16,7 @@ import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
-import com.noxpvp.mmo.classes.internal.PlayerClass;
+import com.noxpvp.mmo.classes.internal.IPlayerClass;
 
 public class TargetAbility extends BasePlayerAbility implements PassiveAbility<PlayerInteractEvent>{
 	
@@ -92,7 +92,7 @@ public class TargetAbility extends BasePlayerAbility implements PassiveAbility<P
 				CoreBar bar =  cpm.getPlayer(p.getName()).getCoreBar();
 				
 				if (mmoIt != null){
-					PlayerClass c = mmoPlayer.getPrimaryClass();
+					IPlayerClass c = mmoPlayer.getPrimaryClass();
 					
 					if (c != null) { 
 						name = mmoIt.getFullName() + bar.color + bar.separater + ChatColor.RESET + c.getDisplayName();
