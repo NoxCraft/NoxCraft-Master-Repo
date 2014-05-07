@@ -87,11 +87,6 @@
 				<version>1.0.7-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.bukkit</groupId>
-				<artifactId>bukkit</artifactId>
-				<version>1.7.9-R0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
 				<groupId>com.bergerkiller.bukkit</groupId>
 				<artifactId>BKCommonLib</artifactId>
 				<version>1.58-SNAPSHOT</version>
@@ -134,7 +129,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.spigotmc</groupId>
-				<artifactId>spigot</artifactId>
+				<artifactId>spigot-api</artifactId>
 				<version>1.7.9-R0.1-SNAPSHOT</version>
 				<scope>provided</scope>
 			</dependency>
@@ -170,8 +165,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<scope>provided</scope>
+			<artifactId>spigot-api</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
