@@ -19,7 +19,6 @@ import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.classes.internal.IClassTier;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
-import com.noxpvp.mmo.util.InventoryActionCombo;
 
 public class ClassMenu extends CoreBox{
 
@@ -51,29 +50,23 @@ public class ClassMenu extends CoreBox{
 			item = new ItemStack(locked? Material.IRON_DOOR : Material.WOODEN_DOOR);
 			meta = item.getItemMeta();
 			
-			String name = t.getDisplayName() + (locked? ChatColor.RED + "LOCKED" : (canuse? ChatColor.GREEN + "OPEN" : ChatColor.RED + "NOT AVAILIBLE"));
+			String name = clazz.getColor() + t.getDisplayName() + " | " + (locked? ChatColor.DARK_RED + "LOCKED" : (canuse? ChatColor.GREEN + "OPEN" : ChatColor.RED + "NOT AVAILIBLE"));
 			
 			meta.setDisplayName(name);
 			meta.setLore(t.getLore());
 			item.setItemMeta(meta);
 			
+			box.setItem(i, item);
 			menuItems.put(i++, new ClassMenuItem(this, item, clazz, i) {
 				
 				public void onClick(InventoryClickEvent click) {
-					if (!InventoryActionCombo.ANY_PICKUP.contains(click.getAction()) && !InventoryActionCombo.ANY_PLACE.contains(click.getAction()))
-						return;
-					
-					ClassMenuItem item;
-					if ((item = menuItems.get(click.getSlot())) != null && item.getItem() == click.getCurrentItem()){
-						MMOPlayer mmoPlayer = PlayerManager.getInstance().getPlayer(getPlayer());
+					MMOPlayer mmoPlayer = PlayerManager.getInstance().getPlayer(getPlayer());
 						
-						PlayerClass clazz = ClassMenu.this.getPlayerClass();
+					PlayerClass clazz = ClassMenu.this.getPlayerClass();
 						
-						if (clazz.isPrimaryClass()){
-							mmoPlayer.setPrimaryClass(clazz);
-							mmoPlayer.getPrimaryClass().setCurrentTier(getTier());
-						}							
-						
+					if (clazz.isPrimaryClass()){
+						mmoPlayer.setPrimaryClass(clazz);
+						mmoPlayer.getPrimaryClass().setCurrentTier(getTier());
 					}
 					
 				}

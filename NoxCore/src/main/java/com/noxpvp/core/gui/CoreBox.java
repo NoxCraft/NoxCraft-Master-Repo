@@ -25,7 +25,7 @@ import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.StaticEffects;
 
-public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
+public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, Cloneable {
 	
 	public Runnable closeRunnable;
 	private PlayerManager pm;
@@ -124,6 +124,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 			
 			return;
 		}
+		
 		Player player = p.get();
 		if (player == null)
 			return;
@@ -144,9 +145,11 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 			}
 		}
 			
-		if (backButton != null && event.getRawSlot() ==  (box.getSize() - 1)){
+		if (backButton != null && event.getRawSlot() == (box.getSize() - 1)){
 			player.closeInventory();
-			backButton.show();
+			try {
+				((CoreBox) backButton.clone()).show();
+			} catch (CloneNotSupportedException e) {}
 			
 			return;
 		}
@@ -158,6 +161,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox {
 	public void onClose(InventoryCloseEvent event) {
 		if (!isValid()) {
 			CommonUtil.nextTick(closeRunnable);
+			
 			return;
 		}
 		

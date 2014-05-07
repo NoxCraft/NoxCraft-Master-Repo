@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ import com.noxpvp.mmo.locale.MMOLocale;
 import com.noxpvp.mmo.util.InventoryActionCombo;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
-public class ClassChooseMenu extends CoreBox{
+public class ClassChooseMenu extends CoreBox {
 
 	public final static String MENU_NAME = "Class Selection";
 	public final static String MENU_MAIN_COLOR = MMOLocale.GUI_MENU_NAME_COLOR.get();
@@ -34,6 +35,12 @@ public class ClassChooseMenu extends CoreBox{
 	private final static int size = 18;
 
 	private Map<Integer, ClassChooseMenuItem> menuItems;
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return new ClassChooseMenu(getPlayer(), null);
+		
+	}
 	
 	public ClassChooseMenu(Player p, @Nullable CoreBox backButton) {
 		super(p, MMOLocale.GUI_MENU_NAME_COLOR.get() + MENU_NAME, size, backButton);
@@ -48,13 +55,13 @@ public class ClassChooseMenu extends CoreBox{
 		ItemMeta pMeta = primarySign.getItemMeta();
 		ItemMeta sMeta = secondarySign.getItemMeta();
 		
-		String lorePrefix = ChatColor.GREEN + "" + ChatColor.ITALIC;
+		String lorePrefix = ChatColor.GREEN.toString() + ChatColor.ITALIC;
 		
 		pMeta.setDisplayName(MENU_MAIN_COLOR + "Pick a primary class");
 		sMeta.setDisplayName(MENU_MAIN_COLOR + "Pick a Secondary class");
 		
-		pMeta.setLore(Arrays.asList(lorePrefix + "Click a item on this row", lorePrefix + "to select the teir you want to use"));
-		sMeta.setLore(Arrays.asList(lorePrefix + "Click a item on this row", lorePrefix + "to select a secondary class"));
+		pMeta.setLore(Arrays.asList(lorePrefix + "Click an item on this row", lorePrefix + "to select a primary class"));
+		sMeta.setLore(Arrays.asList(lorePrefix + "Click an item on this row", lorePrefix + "to select a secondary class"));
 		
 		primarySign.setItemMeta(pMeta);
 		secondarySign.setItemMeta(sMeta);
@@ -65,34 +72,35 @@ public class ClassChooseMenu extends CoreBox{
 		menuItems.put(9, null);
 		box.setItem(9, secondarySign);
 		
+		Bukkit.broadcastMessage(availableClasses.toString());
 		for (PlayerClass clazz : availableClasses) {
 			
 			ItemStack item = clazz.getIdentifingItem();
 			ItemMeta meta = item.getItemMeta();
 			
-			meta.setLore(null);//Remove any vanilla item lore
+			meta.setLore(Arrays.asList(""));//Remove any vanilla item lore
 			meta.setLore(clazz.getLore());
 			
 			item.setItemMeta(meta);
 			
 			ClassChooseMenuItem boxItem = new ClassChooseMenuItem(this, item, clazz) {
 				public void onClick(InventoryClickEvent click) {
-					if (!InventoryActionCombo.ANY_PICKUP.contains(click.getAction()) && !InventoryActionCombo.ANY_PLACE.contains(click.getAction()))
-						return;
 					
-					ClassChooseMenuItem item;
-					if ((item = menuItems.get(click.getSlot())) != null && item.getItem() == click.getCurrentItem()){
+					if (getPlayerClass().isPrimaryClass()) {
+						new ClassMenu(getPlayer(), getPlayerClass(), ClassChooseMenu.this).show();
 						
-						if (getPlayerClass().isPrimaryClass())
-							new ClassMenu(getPlayer(), getPlayerClass(), ClassChooseMenu.this).show();
-						else {
-							MMOPlayer mmoPlayer;
-							if ((mmoPlayer = PlayerManager.getInstance().getPlayer(getPlayer())) != null){
-								mmoPlayer.setSecondaryClass(getPlayerClass());
-								hide();
-							}
+						return;
+					} else {
+						MMOPlayer mmoPlayer;
+						if ((mmoPlayer = PlayerManager.getInstance().getPlayer(getPlayer())) != null){
+							mmoPlayer.setSecondaryClass(getPlayerClass());
+							hide();
+							
+							return;	
 						}
-					}
+					}					
+					
+					Bukkit.broadcastMessage("uh oh");
 				}
 			};
 			
@@ -104,6 +112,8 @@ public class ClassChooseMenu extends CoreBox{
 					 if (!menuItems.containsKey(i)){
 						 menuItems.put(i, boxItem);
 						 box.setItem(i, item);
+						 
+						 break;
 					 }
 				}
 				
@@ -124,18 +134,19 @@ public class ClassChooseMenu extends CoreBox{
 	public void clickHandler(InventoryClickEvent event) {
 		InventoryAction action = event.getAction();
 		
-		if (action != InventoryAction.PICKUP_ALL &&
-			action != InventoryAction.SWAP_WITH_CURSOR)
+		if (!InventoryActionCombo.ANY_PICKUP.contains(action) &&
+				!InventoryActionCombo.ANY_PLACE.contains(action))
 			return;
 		
-		ItemStack clickItem = event.getCursor() == null? event.getCurrentItem() : event.getCursor();
+		ItemStack clickItem = event.getCurrentItem();
 		if (clickItem == null)
 			return;
 		
 		ClassChooseMenuItem finalItem = null;
 		for (ClassChooseMenuItem item : menuItems.values()) {
-			if (item != null && item.getItem().equals(clickItem)) finalItem = item;
+			if (item != null && item.getItem().getItemMeta().equals(clickItem.getItemMeta())) finalItem = item;
 			else continue;
+			
 			break;
 		}
 		

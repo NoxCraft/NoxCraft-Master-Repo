@@ -510,7 +510,7 @@ public class NoxCore extends NoxPlugin {
 		
 		for (String group : VaultAdapter.GroupUtils.getGroupList())
 		{
-			loadLocale(CoreLocale.GROUP_TAG_PREFIX.getName() + "." + group, group);
+			loadLocale(CoreLocale.GROUP_TAG_PREFIX.getName() + "." + group, "");
 			loadLocale(CoreLocale.GROUP_TAG_SUFFIX.getName() + "." +  group, "");
 		}
 	}

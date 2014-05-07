@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.ModuleLogger;
@@ -94,7 +95,8 @@ public class PlayerClassUtil { //TODO: UUID's
 			if (c.canUseClass())
 				ret.add(c);
 		
-		return ret;
+//		return ret;
+		return getAllClasses(player);
 	}
 	
 	private static List<PlayerClass> getAllClasses(Player player) {

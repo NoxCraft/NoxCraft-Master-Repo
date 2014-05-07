@@ -74,7 +74,7 @@ public interface IPlayerClass {
 	 * Retrieves the color used for coloring armour.
 	 * @return Color armour color  object.
 	 */
-	public Color getArmourColor();
+	public Color getRBGColor();
 	
 	/**
 	 * Retrieves the unmodified unmerged coloring of the armour.

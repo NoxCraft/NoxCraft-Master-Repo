@@ -69,7 +69,7 @@ public class AxesPlayerClass extends PlayerClass {
 		return identiferItem;
 	}
 
-	public Color getArmourColor() {
+	public Color getRBGColor() {
 		return Color.fromRGB(215, 0, 0);
 	}
 
@@ -83,8 +83,7 @@ public class AxesPlayerClass extends PlayerClass {
 	}
 
 	public ChatColor getColor() {
-		// TODO Auto-generated method stub
-		return null;
+		return ChatColor.RED;
 	}
 
 	public ExperienceType[] getExpTypes() {

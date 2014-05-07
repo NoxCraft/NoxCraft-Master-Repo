@@ -106,11 +106,13 @@ public class VaultAdapter {
 			if (team != null) {
 				for (CommonTeam t2 :CommonScoreboard.getTeams()) {
 					if (team.getName() == t2.getName())
-						if (t2.getPlayers().contains(p.getName())) {
-							
-							t2.removePlayer(p);
-							CommonScoreboard.saveTeam(team);
-						}
+						continue;
+					
+					if (t2.getPlayers().contains(p.getName())) {
+						
+						t2.removePlayer(p);
+						CommonScoreboard.saveTeam(team);
+					}
 				}
 
 				pBoard.setTeam(team);
