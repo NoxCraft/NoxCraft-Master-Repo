@@ -36,7 +36,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	private static final String PRIMARY_CLASS_NODE = "current.class.primary";
 	private static final String SECONDARY_CLASS_NODE = "current.class.secondary";
 	private static final String TARGET_NODE = "current.target";
-	private IPlayerClass primaryClass, secondaryClass;
+	private IPlayerClass primaryClass = DummyClass.PRIMARY, secondaryClass = DummyClass.SECONDARY;
 	private LivingEntity target;
 	
 	public MMOPlayer(OfflinePlayer player)
@@ -105,7 +105,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
 			c = PlayerClassUtil.getIdByClassName(c);
 		
-		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));//null pointer coaster
+		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));
 	}
 	
 	public void setPrimaryClass(IPlayerClass c) {
@@ -153,8 +153,8 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	
 	public void load() {
 		ConfigurationNode node = getPersistantData();
-		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));//null pointer coaster
-		setSecondaryClass(node.get(SECONDARY_CLASS_NODE, ""));//null pointer coaster
+		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));
+		setSecondaryClass(node.get(SECONDARY_CLASS_NODE, ""));
 		
 		/*
 		 * Seperate the scope Just in case we want to use the variables again.
