@@ -89,7 +89,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 	
 	public void setClass(PlayerClass c) {
-		if (c.isPrimaryClass())
+		if (c.isPrimaryClass())//null pointer coaster
 			setPrimaryClass(c);
 		else
 			setSecondaryClass(c);
@@ -99,7 +99,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
 			c = PlayerClassUtil.getIdByClassName(c);
 		
-		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));
+		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));//null pointer coaster
 	}
 	
 	public void setPrimaryClass(PlayerClass c) {
@@ -145,8 +145,8 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	
 	public void load() {
 		ConfigurationNode node = getPersistantData();
-		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));
-		setSecondaryClass(node.get(SECONDARY_CLASS_NODE, ""));
+		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));//null pointer coaster
+		setSecondaryClass(node.get(SECONDARY_CLASS_NODE, ""));//null pointer coaster
 		
 		/*
 		 * Seperate the scope Just in case we want to use the variables again.

@@ -1,5 +1,8 @@
 package com.noxpvp.mmo.abilities;
 
+import java.util.List;
+
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.locale.MMOLocale;
 
 public abstract class BaseAbility implements Ability {
@@ -24,5 +27,9 @@ public abstract class BaseAbility implements Ability {
 	
 	public String getDescription() {
 		return "";
+	}
+	
+	public List<String> getLore() {
+		return MessageUtil.convertStringForLore(getDescription());
 	}
 }

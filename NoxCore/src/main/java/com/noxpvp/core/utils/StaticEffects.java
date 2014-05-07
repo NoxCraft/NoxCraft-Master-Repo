@@ -84,7 +84,7 @@ public class StaticEffects {
 		CommonPacket packet = new CommonPacket(PacketType.OUT_NAMED_SOUND_EFFECT);
 		
 		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.soundName, sound);
-		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.volume, 100.0F);
+		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.volume, 10.0F);
 		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.pitch, 2);
 		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.x, (int) loc.getX());
 		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.y, (int) loc.getY());

@@ -1,5 +1,7 @@
 package com.noxpvp.mmo.abilities;
 
+import java.util.List;
+
 /**
  * <b>IF this is not a dynamic ability. <br/> With changing names. Please specify a static getName() method. </b>
  * @author Chris
@@ -20,6 +22,14 @@ public interface Ability {
 	 * @return description of the ability.
 	 */
 	public String getDescription();
+	
+	/**
+	 * Retrieves the description of the ability for use as itemmeta.
+	 * <p> Mainly used for itemmeta and other uses of List<String>.
+	 * 
+	 * @return Description of the ability;
+	 */
+	public List<String> getLore();
 	
 	/**
 	 * Executes an ability

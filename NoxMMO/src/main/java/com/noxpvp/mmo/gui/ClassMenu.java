@@ -16,27 +16,33 @@ import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.gui.CoreBoxItem;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.classes.internal.IClassTier;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
 
-public class ClassMenu extends CoreBox{
+public class ClassMenu extends CoreBox {
 
 	public final static String MENU_NAME = "Class Info";
 	private final static int size = 36;
 	
 	private Map<Integer, ClassMenuItem> menuItems;
+	private CoreBox previousBox;
 	private PlayerClass clazz;
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return new ClassMenu(getPlayer(), getPlayerClass(), this.previousBox);
+	}
 	
 	public ClassMenu(final Player p, PlayerClass clazz, CoreBox backButton){
 		super(p, MMOLocale.GUI_MENU_NAME_COLOR.get() + MENU_NAME, size, backButton);
 		
 		this.menuItems = new HashMap<Integer, ClassMenuItem>();
+		this.previousBox = backButton;
 		this.clazz = clazz;
 		
 		Inventory box = getBox();
-		ItemStack item;
-		ItemMeta meta;
 		
 		box.setItem(0, clazz.getIdentifingItem());
 		
@@ -47,8 +53,8 @@ public class ClassMenu extends CoreBox{
 			boolean canuse = clazz.canUseTier(tier.getKey());
 			boolean locked = t.getLevel() >= t.getMaxLevel()? true : false;
 			
-			item = new ItemStack(locked? Material.IRON_DOOR : Material.WOODEN_DOOR);
-			meta = item.getItemMeta();
+			ItemStack item = new ItemStack(locked? Material.IRON_DOOR : Material.WOODEN_DOOR);
+			ItemMeta meta = item.getItemMeta();
 			
 			String name = clazz.getColor() + t.getDisplayName() + " | " + (locked? ChatColor.DARK_RED + "LOCKED" : (canuse? ChatColor.GREEN + "OPEN" : ChatColor.RED + "NOT AVAILIBLE"));
 			
@@ -71,6 +77,21 @@ public class ClassMenu extends CoreBox{
 					
 				}
 			});
+			
+		}
+		
+		i = 20;
+		for (Ability ab : clazz.getAbilities()) {
+			
+			ItemStack item = new ItemStack(Material.PAPER);
+			ItemMeta meta = item.getItemMeta();
+			
+			meta.setDisplayName(ab.getDisplayName());
+			meta.setLore(ab.getLore());
+			
+			item.setItemMeta(meta);
+			
+			box.setItem(i, item);
 			
 		}
 		

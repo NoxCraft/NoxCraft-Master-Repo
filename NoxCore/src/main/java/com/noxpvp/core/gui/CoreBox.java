@@ -136,12 +136,10 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		
 		event.setCancelled(true);
 		
-		if (event.getRawSlot() < box.getSize()){
-			ItemStack clickedItem = event.getCurrentItem();
-		
-			if (clickedItem != null){
-				if (clickedItem.getType() != Material.AIR)
-					StaticEffects.playSound((Player) clicked, "random.click");
+		if (event.getRawSlot() < box.getSize()) {
+			if (event.getCurrentItem().getType() != Material.AIR) {
+				
+				StaticEffects.playSound((Player) clicked, "random.click");
 			}
 		}
 			

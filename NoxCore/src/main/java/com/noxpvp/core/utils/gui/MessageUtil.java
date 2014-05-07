@@ -1,5 +1,8 @@
 package com.noxpvp.core.utils.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -274,6 +277,36 @@ public class MessageUtil {
 			return ChatColor.WHITE.toString();
 		
 		return ret;
+	}
+	
+	/**
+	 * Converts a string message into 28~ish length strings for use as item lore, or anything else
+	 * 
+	 * @param lore
+	 * @return	List<String> converted string
+	 */
+	public static List<String> convertStringForLore(String lore) {
+		List<String> ret = new ArrayList<String>();
+		
+		int one = 0, two = 0;
+		boolean ending = false;
+		
+		for(char cur : lore.toCharArray()) {
+			if (((two - one) >= 28) && !ending)
+				ending = true;
+			
+			if (ending && cur == ' ') {
+				ret.add(lore.substring(one, two));
+				
+				ending = false;
+				one = two;
+			}
+			
+			two++;	
+		}
+		
+		return ret;
+		
 	}
 }
 	
