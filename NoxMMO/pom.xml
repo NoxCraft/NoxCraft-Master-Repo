@@ -9,7 +9,7 @@
 	<artifactId>NoxMMO</artifactId>
 	<name>NoxMMO</name>
 	<description>Class and leveling based RPG skill system</description>
-	<version>0.0.1 - Test Build {SNAPSHOT}</version>
+	<version>0.0.1 - Test Build-SNAPSHOT</version>
 	<build>
 
 		<finalName>${project.artifactId}</finalName>
