@@ -264,7 +264,7 @@ public abstract class PlayerClass implements IPlayerClass {
 	}
 	
 	public final String getName() {
-		return name;
+		return getColor() + name;
 	}
 	
 	public final Player getPlayer() {

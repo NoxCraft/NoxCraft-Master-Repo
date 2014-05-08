@@ -5,7 +5,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
@@ -16,6 +20,7 @@ public abstract class ClassTier implements IClassTier {
 	private final String name;
 	private final int tierLevel;
 	private PlayerClass retainer;
+	private ItemStack identifingItem;
 	
 	public ClassTier(PlayerClass retainer, String name, int tierLevel) {
 		this.name = name;
@@ -49,6 +54,21 @@ public abstract class ClassTier implements IClassTier {
 	
 	public final String getName() {
 		return name;
+	}
+	
+	public ItemStack getIdentifingItem() {
+		if (identifingItem == null) {
+			identifingItem = new ItemStack(Material.PAPER);
+			
+			ItemMeta meta = identifingItem.getItemMeta();
+			meta.setDisplayName(getAssociatedClass().getColor() + getDisplayName());
+			meta.setLore(getLore());
+			meta.addEnchant(Enchantment.DURABILITY, 1, true);
+			
+			identifingItem.setItemMeta(meta);
+		}
+		
+		return identifingItem.clone();
 	}
 	
 	public final Player getPlayer() { return getAssociatedClass().getPlayer(); }

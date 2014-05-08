@@ -32,7 +32,7 @@ public class AxesBasherClassTier extends ClassTier {
 	}
 
 	public String getDisplayName() {
-		return getAssociatedClass().getColor() + AxesBasherClassTier.dName;
+		return AxesBasherClassTier.dName;
 	}
 
 	public List<String> getLore() {

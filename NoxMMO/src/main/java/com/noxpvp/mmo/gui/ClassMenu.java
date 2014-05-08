@@ -51,13 +51,13 @@ public class ClassMenu extends CoreBox {
 			boolean canuse = clazz.canUseTier(tier.getKey());
 			boolean locked = t.getLevel() >= t.getMaxLevel()? true : false;
 			
-			ItemStack item = new ItemStack(locked? Material.IRON_DOOR : Material.WOODEN_DOOR);
+			ItemStack item = t.getIdentifingItem();
+			item.setType(locked? Material.IRON_DOOR : Material.WOODEN_DOOR);
+			
 			ItemMeta meta = item.getItemMeta();
-			
-			String name = clazz.getColor() + t.getDisplayName() + " | " + (locked? ChatColor.DARK_RED + "LOCKED" : (canuse? ChatColor.GREEN + "OPEN" : ChatColor.RED + "NOT AVAILIBLE"));
-			
+			String name = meta.getDisplayName() + " | " + (locked? ChatColor.DARK_RED + "LOCKED" : (canuse? ChatColor.GREEN + "OPEN" : ChatColor.RED + "NOT AVAILIBLE"));
 			meta.setDisplayName(name);
-			meta.setLore(t.getLore());
+			
 			item.setItemMeta(meta);
 			
 			box.setItem(i, item);

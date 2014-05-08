@@ -71,7 +71,7 @@ public class AxesPlayerClass extends PlayerClass {
 			identiferItem.setItemMeta(meta);
 		}
 		
-		return identiferItem;
+		return identiferItem.clone();
 	}
 
 	public Color getRBGColor() {
