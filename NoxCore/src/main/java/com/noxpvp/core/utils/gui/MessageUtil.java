@@ -41,7 +41,6 @@ public class MessageUtil {
 	
 	public static void broadcast(World world, String message)
 	{
-		Bukkit.broadcastMessage("TEST");
 		for (Player player : world.getPlayers())
 			sendMessage(player, message);
 	}
@@ -304,6 +303,10 @@ public class MessageUtil {
 			
 			two++;	
 		}
+		
+		String leftOver = lore.substring(one, two);
+		if (leftOver != "" && !ret.contains(leftOver))
+			ret.add(leftOver);
 		
 		return ret;
 		

@@ -280,7 +280,7 @@
     </dependency>
     <dependency>
       <groupId>org.spigotmc</groupId>
-      <artifactId>spigot</artifactId>
+      <artifactId>spigot-api</artifactId>
       <version>1.7.9-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>

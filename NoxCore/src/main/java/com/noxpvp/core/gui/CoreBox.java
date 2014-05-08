@@ -2,7 +2,9 @@ package com.noxpvp.core.gui;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -23,9 +25,12 @@ import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.packet.PacketSoundEffects;
 import com.noxpvp.core.utils.StaticEffects;
 
 public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, Cloneable {
+	
+	private List<CoreBoxItem> menuItems;
 	
 	public Runnable closeRunnable;
 	private PlayerManager pm;
@@ -49,6 +54,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		this.p = new WeakReference<Player>(p);
 		
 		this.box = Bukkit.getServer().createInventory(null, size, name);
+		this.menuItems = new ArrayList<CoreBoxItem>();
 		pName = p.getName();
 		
 		if (backButton != null) {
@@ -66,8 +72,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		}
 		
 		this.closeRunnable = new Runnable() {
-			final CoreBox thisBox = CoreBox.this;
-			final Reference<Player> player = this.thisBox.p;	
+			final CoreBox thisBox = CoreBox.this;	
 			
 			public void run() { 
 				Player p;
@@ -75,6 +80,8 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 					p.closeInventory();
 				
 				thisBox.unregister();
+				box.clear();
+				menuItems = null;
 			}
 		};
 		
@@ -112,15 +119,32 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 	
 	public void hide() {
 		if (isValid())
-			if (box.getViewers().contains(getPlayer()))
-				CommonUtil.nextTick(closeRunnable);
+			CommonUtil.nextTick(closeRunnable);
 		
+	}
+	
+	public void addMenuItem(CoreBoxItem item) {
+		this.menuItems.add(item);
+	}
+	
+	public boolean removeMenuItem(CoreBoxItem item) {
+		return this.menuItems.remove(item);
+	}
+	
+	public CoreBoxItem getMenuItem(ItemStack item) {
+		for(CoreBoxItem menuItem : menuItems) {
+			if(menuItem.getItem().equals(item)) {
+				return menuItem;
+			} else continue;
+		}
+		
+		return null;
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onClick(InventoryClickEvent event) {
 		if (!isValid()) {
-			CommonUtil.nextTick(closeRunnable);
+			hide();
 			
 			return;
 		}
@@ -130,27 +154,35 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 			return;
 		
 		HumanEntity clicked = event.getWhoClicked();
-		if (!box.getViewers().contains(clicked)){
+		if (!event.getInventory().equals(box) || !box.getViewers().contains(clicked)){
 			return;
 		}
 		
 		event.setCancelled(true);
 		
+		ItemStack clickedItem = event.getCurrentItem();
 		if (event.getRawSlot() < box.getSize()) {
-			if (event.getCurrentItem().getType() != Material.AIR) {
+			if (clickedItem != null && clickedItem.getType() != Material.AIR) {
 				
-				StaticEffects.playSound((Player) clicked, "random.click");
+				StaticEffects.playSound(p.get(), PacketSoundEffects.RandomClick);
+				
+				CoreBoxItem item;
+				if((item = getMenuItem(clickedItem)) != null)
+					item.onClick(event);
 			}
 		}
 			
 		if (backButton != null && event.getRawSlot() == (box.getSize() - 1)){
-			player.closeInventory();
+			hide();
+			
 			try {
 				((CoreBox) backButton.clone()).show();
 			} catch (CloneNotSupportedException e) {}
 			
 			return;
 		}
+		
+
 		
 		this.clickHandler(event);
 	}
@@ -165,6 +197,14 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		
 		if (event.getInventory().equals(box))
 			this.closeHandler(event);
+	}
+	
+	public void clickHandler(InventoryClickEvent event) {
+		
+	}
+	
+	public void closeHandler(InventoryCloseEvent event) {
+		
 	}
 
 }

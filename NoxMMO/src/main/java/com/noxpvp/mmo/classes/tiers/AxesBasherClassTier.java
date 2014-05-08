@@ -32,11 +32,11 @@ public class AxesBasherClassTier extends ClassTier {
 	}
 
 	public String getDisplayName() {
-		return AxesBasherClassTier.dName;
+		return getAssociatedClass().getColor() + AxesBasherClassTier.dName;
 	}
 
 	public List<String> getLore() {
-		return Collections.emptyList();
+		return Collections.emptyList();//XXX implement soon
 	}
 
 	public int getMaxExp(int level) {

@@ -26,7 +26,6 @@ import com.noxpvp.mmo.abilities.PlayerAbility;
 import com.noxpvp.mmo.classes.internal.DummyClass;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
-import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
@@ -151,7 +150,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	
 	public void load() {
 		ConfigurationNode node = getPersistantData();
-		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));
+		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));//XXX You didn't change anything about the actualy null pointer...
 		setSecondaryClass(node.get(SECONDARY_CLASS_NODE, ""));
 		
 		/*

@@ -8,6 +8,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
@@ -62,8 +63,12 @@ public class AxesPlayerClass extends PlayerClass {
 	public ItemStack getIdentifingItem() {
 		if (identiferItem == null) {
 			identiferItem = new ItemStack(Material.DIAMOND_AXE);
-			identiferItem.getItemMeta().setDisplayName(getDisplayName());
-			identiferItem.getItemMeta().setLore(getLore());
+			
+			ItemMeta meta = identiferItem.getItemMeta();
+			meta.setDisplayName(getDisplayName());
+			meta.setLore(getLore());
+			
+			identiferItem.setItemMeta(meta);
 		}
 		
 		return identiferItem;

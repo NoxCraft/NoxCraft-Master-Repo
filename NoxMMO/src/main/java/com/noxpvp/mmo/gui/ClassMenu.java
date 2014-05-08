@@ -1,19 +1,19 @@
 package com.noxpvp.mmo.gui;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.gui.CoreBoxItem;
+import com.noxpvp.core.packet.PacketSoundEffects;
+import com.noxpvp.core.utils.StaticEffects;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.Ability;
@@ -24,9 +24,8 @@ import com.noxpvp.mmo.locale.MMOLocale;
 public class ClassMenu extends CoreBox {
 
 	public final static String MENU_NAME = "Class Info";
-	private final static int size = 36;
+	private final static int size = 45;
 	
-	private Map<Integer, ClassMenuItem> menuItems;
 	private CoreBox previousBox;
 	private PlayerClass clazz;
 	
@@ -38,7 +37,6 @@ public class ClassMenu extends CoreBox {
 	public ClassMenu(final Player p, PlayerClass clazz, CoreBox backButton){
 		super(p, MMOLocale.GUI_MENU_NAME_COLOR.get() + MENU_NAME, size, backButton);
 		
-		this.menuItems = new HashMap<Integer, ClassMenuItem>();
 		this.previousBox = backButton;
 		this.clazz = clazz;
 		
@@ -63,35 +61,45 @@ public class ClassMenu extends CoreBox {
 			item.setItemMeta(meta);
 			
 			box.setItem(i, item);
-			menuItems.put(i++, new ClassMenuItem(this, item, clazz, i) {
+			addMenuItem(new ClassMenuItem(this, item, clazz, i) {
 				
 				public void onClick(InventoryClickEvent click) {
 					MMOPlayer mmoPlayer = PlayerManager.getInstance().getPlayer(getPlayer());
 						
 					PlayerClass clazz = ClassMenu.this.getPlayerClass();
 						
-					if (clazz.isPrimaryClass()){
+					if (clazz.isPrimaryClass() && clazz.canUseClass()){//TODO finish secondarys and only play blaze if can't switch
 						mmoPlayer.setPrimaryClass(clazz);
 						mmoPlayer.getPrimaryClass().setCurrentTier(getTier());
+						
+						StaticEffects.PlaySound(p, p.getLocation(), PacketSoundEffects.MobBlazeDeath, (float) 100, 100);
 					}
 					
 				}
 			});
 			
+			i++;
+			
 		}
 		
 		i = 20;
 		for (Ability ab : clazz.getAbilities()) {
+			if (i > 26)
+				i = 29;
+			else if (i > 35)
+				i = 38;
+			else if (i > 44)
+				throw new UnsupportedOperationException("Too many abilities for the " + getBox().getTitle() + " menu");
 			
 			ItemStack item = new ItemStack(Material.PAPER);
 			ItemMeta meta = item.getItemMeta();
 			
 			meta.setDisplayName(ab.getDisplayName());
-			meta.setLore(ab.getLore());
+			meta.setLore(ab.getLore(ChatColor.GOLD));
 			
 			item.setItemMeta(meta);
 			
-			box.setItem(i, item);
+			box.setItem(i++, item);
 			
 		}
 		
@@ -100,10 +108,6 @@ public class ClassMenu extends CoreBox {
 	public PlayerClass getPlayerClass(){
 		return clazz;
 	}
-
-	public void clickHandler(InventoryClickEvent event) {}
-
-	public void closeHandler(InventoryCloseEvent event) {}
 	
 	public abstract class ClassMenuItem extends CoreBoxItem{
 

@@ -2,6 +2,8 @@ package com.noxpvp.mmo.abilities;
 
 import java.util.List;
 
+import org.bukkit.ChatColor;
+
 /**
  * <b>IF this is not a dynamic ability. <br/> With changing names. Please specify a static getName() method. </b>
  * @author Chris
@@ -30,6 +32,14 @@ public interface Ability {
 	 * @return Description of the ability;
 	 */
 	public List<String> getLore();
+	
+	/**
+	 * Retrieves the description of the ability for use as itemmeta in the specified color.
+	 * <p> Mainly used for itemmeta and other uses of List<String>.
+	 * 
+	 * @return Description of the ability;
+	 */
+	public List<String> getLore(ChatColor color);
 	
 	/**
 	 * Executes an ability

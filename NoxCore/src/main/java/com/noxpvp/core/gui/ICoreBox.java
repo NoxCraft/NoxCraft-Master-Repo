@@ -15,6 +15,11 @@ public interface ICoreBox {
 	 */
 	public Inventory getBox();
 	
+	/**
+	 * Gets the player this box was created for
+	 * 
+	 * @return Player the player
+	 */
 	public Player getPlayer();
 	
 	/**
@@ -28,6 +33,10 @@ public interface ICoreBox {
 	 * 
 	 */
 	public void hide();
+	
+	public void addMenuItem(CoreBoxItem item);
+	public boolean removeMenuItem(CoreBoxItem item);
+	public CoreBoxItem getMenuItem(ItemStack item);
 	
 	/**
 	 * Handles the code of what should go on if a player clicks on an item in the box

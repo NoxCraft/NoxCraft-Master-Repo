@@ -15,12 +15,12 @@ import com.noxpvp.mmo.classes.internal.IPlayerClass;
 
 public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>, PVPAbility {
 
-	public static final String PERM_NODE = "Critical Hit";
-	public static final String ABILITY_NAME = "critical-hit";
+	public static final String PERM_NODE = "critical-hit";
+	public static final String ABILITY_NAME = "Critical Hit";
 	
 	@Override
 	public String getDescription() {
-		return "A random change to land a critical hit, causing nausia and increased damage on the target";
+		return "A random chance to land a critical hit, causing nausia and increased damage on the target";
 	}
 	
 	private PlayerManager pm;
