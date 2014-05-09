@@ -84,7 +84,7 @@
 			<dependency>
 				<groupId>com.dsh105</groupId>
 				<artifactId>HoloAPI</artifactId>
-				<version>1.0.7-SNAPSHOT</version>
+				<version>1.2.3</version>
 			</dependency>
 			<dependency>
 				<groupId>com.bergerkiller.bukkit</groupId>

@@ -28,7 +28,7 @@ import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
-import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.noxpvp.core.commands.Command;
 import com.noxpvp.core.commands.NoxCommand;
 import com.noxpvp.core.commands.ReloadCommand;
@@ -51,7 +51,6 @@ import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
 import com.noxpvp.core.reloader.Reloader;
 import com.noxpvp.core.utils.StaticCleaner;
-import com.noxpvp.core.utils.UUIDUtil;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.command.TownyAdminCommand;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -77,9 +76,7 @@ public class NoxCore extends NoxPlugin {
 	
 	private Towny towny = null;
 	private WorldGuardPlugin worldGuard = null;
-	private HoloAPI holoAPI = null;
-	
-	private UUIDUtil uuidUtil;
+	private HoloAPICore holoAPI = null;
 	
 	private CooldownHandler cds;
 
@@ -93,7 +90,7 @@ public class NoxCore extends NoxPlugin {
 		return worldGuard;
 	}
 	
-	public final HoloAPI getHoloAPI() {
+	public final HoloAPICore getHoloAPI() {
 		return holoAPI;
 	}
 	
@@ -207,8 +204,6 @@ public class NoxCore extends NoxPlugin {
 		} else if (instance == null)
 			setInstance(this);
 		
-		uuidUtil = UUIDUtil.getInstance();
-		
 		registerSerials(this);
 		for (Plugin p : CommonUtil.getPlugins())
 			if (p instanceof NoxPlugin && CommonUtil.isDepending(p, this))
@@ -264,8 +259,8 @@ public class NoxCore extends NoxPlugin {
 		
 		{
 			Plugin plugin = pm.getPlugin("HoloAPI");
-			if (plugin != null && plugin instanceof HoloAPI)
-				holoAPI = (HoloAPI) plugin;
+			if (plugin != null && plugin instanceof HoloAPICore)
+				holoAPI = (HoloAPICore) plugin;
 		}
 		
 		Reloader r = new BaseReloader(getMasterReloader(), "NoxCore") {
