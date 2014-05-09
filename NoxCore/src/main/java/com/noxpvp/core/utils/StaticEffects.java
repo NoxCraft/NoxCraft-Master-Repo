@@ -69,28 +69,34 @@ public class StaticEffects {
 	}
 	
 	public static void BroadcastSound(Location loc, Sound sound){
-		loc.getWorld().playSound(loc, sound, 10, 0);
+		loc.getWorld().playSound(loc, sound, 1, 0);
 	}
 	
 	public static void PlaySound(Player p, Sound sound){
-		PlaySound(p, p.getLocation(), sound.name());
+		p.playSound(p.getLocation(), sound, 1, 0);
 	}
 	
 	public static void playSound(Player p, String sound){
-		PlaySound(p, p.getLocation(), sound);
+		p.playSound(p.getLocation(), sound, 1, 1);
 	}
 	
-	public static void PlaySound(Player p, Location loc, String sound){
-		CommonPacket packet = new CommonPacket(PacketType.OUT_NAMED_SOUND_EFFECT);
+	public static void PlaySound(Player p, Location loc, String sound) {
+		PlaySound(p, loc, sound, 1, 1);
+	}
+	
+	public static void PlaySound(Player p, Location loc, String sound, float volume, float pitch){
+		p.playSound(loc, sound, volume, pitch);
+		
+		/*CommonPacket packet = new CommonPacket(PacketType.OUT_NAMED_SOUND_EFFECT);
 		
 		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.soundName, sound);
-		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.volume, 10.0F);
-		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.pitch, 2);
-		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.x, (int) loc.getX());
-		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.y, (int) loc.getY());
-		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.z, (int) loc.getZ());
+		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.volume, volume);
+		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.pitch, 0);
+		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.x, (int) (loc.getX() + 0.5D) * 8);
+		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.y, (int) (loc.getY() + 0.5D) * 8);
+		packet.write(PacketType.OUT_NAMED_SOUND_EFFECT.z, (int) (loc.getZ() + 0.5D) * 8);
 		
-		PacketUtil.sendPacket(p, packet, false);
+		PacketUtil.sendPacket(p, packet, false);*/
 	}
 
 	/**

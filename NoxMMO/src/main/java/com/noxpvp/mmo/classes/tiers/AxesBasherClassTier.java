@@ -36,7 +36,7 @@ public class AxesBasherClassTier extends ClassTier {
 	}
 
 	public List<String> getLore() {
-		return Collections.emptyList();
+		return Collections.emptyList();//XXX implement soon
 	}
 
 	public int getMaxExp(int level) {

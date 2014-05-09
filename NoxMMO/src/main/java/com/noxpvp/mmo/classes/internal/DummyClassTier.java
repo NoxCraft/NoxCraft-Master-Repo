@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.mmo.abilities.Ability;
 
@@ -71,5 +74,9 @@ public class DummyClassTier extends ClassTier {
 
 	public Map<String, Ability> getAbilityMap() {
 		return Collections.emptyMap();
+	}
+
+	public ItemStack getIdentifibleItem() {
+		return new ItemStack(Material.STONE);
 	}
 }

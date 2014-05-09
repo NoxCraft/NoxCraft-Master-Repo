@@ -15,6 +15,11 @@ public interface ICoreBox {
 	 */
 	public Inventory getBox();
 	
+	/**
+	 * Gets the player this box was created for
+	 * 
+	 * @return Player the player
+	 */
 	public Player getPlayer();
 	
 	/**
@@ -28,6 +33,38 @@ public interface ICoreBox {
 	 * 
 	 */
 	public void hide();
+	
+	/**
+	 * Adds a given item to the menu and the given slot
+	 * 
+	 * @param slot
+	 * @param item
+	 * @return True if the item was successfully added, false otherwise
+	 */
+	public boolean addMenuItem(int slot, CoreBoxItem item);
+	
+	/**
+	 * Removes a given item from the menu
+	 * 
+	 * @param item
+	 * @return True if successful, false otherwise
+	 */
+	public boolean removeMenuItem(CoreBoxItem item);
+	
+	/**
+	 * Removes any {@link CoreBoxItem} in this menu at the given slot
+	 * 
+	 * @param slot
+	 */
+	public void removeMenuItem(int slot);
+	
+	/**
+	 * Gets the menu item (if any) from this slot in the menu
+	 * 
+	 * @param slot
+	 * @return {@link CoreBoxItem} that was found, null if the slot had no item
+	 */
+	public CoreBoxItem getMenuItem(int slot);
 	
 	/**
 	 * Handles the code of what should go on if a player clicks on an item in the box
@@ -64,7 +101,7 @@ public interface ICoreBox {
 		 * 
 		 * @param event
 		 */
-		public void onClick(InventoryClickEvent click);
+		public boolean onClick(InventoryClickEvent click);
 		
 	}
 	

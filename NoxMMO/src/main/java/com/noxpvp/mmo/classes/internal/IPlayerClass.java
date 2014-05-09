@@ -61,12 +61,6 @@ public interface IPlayerClass {
 	public ClassType[] getSubClassTypes();
 	
 	/**
-	 * Gets the item stack for menu information.
-	 * @return ItemStack
-	 */
-	public ItemStack getIdentifingItem();
-	
-	/**
 	 * Returns all tiers that are possible to get even if locked from user.
 	 * 
 	 * @return tiers A set of Entries of <Integer, IClassTier>

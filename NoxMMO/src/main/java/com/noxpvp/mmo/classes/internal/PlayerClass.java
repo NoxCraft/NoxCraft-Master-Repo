@@ -21,6 +21,7 @@ import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.utils.ParseUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.annotation.Temporary;
+import com.noxpvp.core.gui.MenuItemRepresentable;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.classes.DynamicClassTier;
@@ -41,7 +42,7 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
  * </ul>
  *
  */
-public abstract class PlayerClass implements IPlayerClass {
+public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable {
 	private static final String DYNAMIC_TIER_PATH = "dynamic.tiers";
 	public static final String LOG_MODULE_NAME = "PlayerClass";
 	//Debug and errors
@@ -399,6 +400,6 @@ public abstract class PlayerClass implements IPlayerClass {
 		if (getTier().getDisplayName() != null)
 			return getTier().getDisplayName();
 		else
-			return getName();
+			return getColor() + getName();
 	}
 }
