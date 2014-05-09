@@ -13,9 +13,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
+import com.noxpvp.core.gui.MenuItemRepresentable;
 import com.noxpvp.mmo.abilities.Ability;
 
-public abstract class ClassTier implements IClassTier {
+public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 
 	private final String name;
 	private final int tierLevel;
@@ -56,7 +57,7 @@ public abstract class ClassTier implements IClassTier {
 		return name;
 	}
 	
-	public ItemStack getIdentifingItem() {
+	public ItemStack getIdentifibleItem() {
 		if (identifingItem == null) {
 			identifingItem = new ItemStack(Material.PAPER);
 			

@@ -2,9 +2,9 @@ package com.noxpvp.core.gui;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -30,7 +30,7 @@ import com.noxpvp.core.utils.StaticEffects;
 
 public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, Cloneable {
 	
-	private List<CoreBoxItem> menuItems;
+	private Map<Integer, CoreBoxItem> menuItems;
 	
 	public Runnable closeRunnable;
 	private PlayerManager pm;
@@ -54,14 +54,14 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		this.p = new WeakReference<Player>(p);
 		
 		this.box = Bukkit.getServer().createInventory(null, size, name);
-		this.menuItems = new ArrayList<CoreBoxItem>();
+		this.menuItems = new HashMap<Integer, CoreBoxItem>();
 		pName = p.getName();
 		
 		if (backButton != null) {
 			this.backButton = backButton;
 			
 			ItemStack button = new ItemStack(Material.ARROW);
-			ItemMeta meta = button.getItemMeta().clone();
+			ItemMeta meta = button.getItemMeta();
 			
 			meta.setDisplayName(ChatColor.GOLD + name);
 			meta.setLore(Arrays.asList(ChatColor.AQUA + "<- Go Back To The \"" + ChatColor.GOLD + name + ChatColor.AQUA + "\" Menu"));
@@ -123,22 +123,37 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		
 	}
 	
-	public void addMenuItem(CoreBoxItem item) {
-		this.menuItems.add(item);
+	public boolean addMenuItem(int slot, CoreBoxItem item) {
+		box.setItem(slot, item.getItem());
+		menuItems.put(slot, item);
+		
+		return box.getItem(slot).equals(item.getItem());
 	}
 	
 	public boolean removeMenuItem(CoreBoxItem item) {
-		return this.menuItems.remove(item);
+		return box.removeItem(item.getItem()) == null && this.menuItems.values().remove(item);
 	}
 	
-	public CoreBoxItem getMenuItem(ItemStack item) {
-		for(CoreBoxItem menuItem : menuItems) {
-			if(menuItem.getItem().equals(item)) {
+	public void removeMenuItem(int slot) {
+		box.setItem(slot, null);
+	}
+	
+	public CoreBoxItem getMenuItem(CoreBoxItem item) {
+		for(CoreBoxItem menuItem : menuItems.values()) {
+			if(menuItem.equals(item)) {
 				return menuItem;
 			} else continue;
 		}
 		
 		return null;
+	}
+	
+	public CoreBoxItem getMenuItem(int slot) {
+		try {
+			return menuItems.get(slot);
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
@@ -159,6 +174,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		}
 		
 		event.setCancelled(true);
+		p.get().updateInventory();
 		
 		ItemStack clickedItem = event.getCurrentItem();
 		if (event.getRawSlot() < box.getSize()) {
@@ -167,7 +183,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 				StaticEffects.playSound(p.get(), PacketSoundEffects.RandomClick);
 				
 				CoreBoxItem item;
-				if((item = getMenuItem(clickedItem)) != null)
+				if((item = getMenuItem(event.getRawSlot())) != null)
 					item.onClick(event);
 			}
 		}

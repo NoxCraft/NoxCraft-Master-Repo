@@ -54,6 +54,14 @@ public interface Ability {
 	public String getDisplayName();
 	
 	/**
+	 * The same as {@link #getDisplayName()} but prefixed with a specific color
+	 * 
+	 * @param color
+	 * @return
+	 */
+	public String getDisplayName(ChatColor color);
+	
+	/**
 	 * Tells whether or not an ability should be allowed to be executed.
 	 * @return true if allowed and false if not.
 	 */

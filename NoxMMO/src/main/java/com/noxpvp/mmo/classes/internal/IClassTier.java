@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.inventory.ItemStack;
-
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.mmo.abilities.Ability;
@@ -21,7 +19,6 @@ public interface IClassTier {
 	public void setDisplayName(String displayName);
 	public String getDisplayName();
 	public List<String> getLore();
-	public ItemStack getIdentifingItem();
 	
 	public int getMaxExp();
 	public int getMaxExp(int level);

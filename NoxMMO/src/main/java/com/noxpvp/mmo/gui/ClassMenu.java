@@ -9,14 +9,17 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.gui.CoreBoxItem;
+import com.noxpvp.core.gui.CoreBoxRegion;
 import com.noxpvp.core.packet.PacketSoundEffects;
 import com.noxpvp.core.utils.StaticEffects;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.Ability;
+import com.noxpvp.mmo.classes.internal.ClassTier;
 import com.noxpvp.mmo.classes.internal.IClassTier;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
@@ -42,16 +45,21 @@ public class ClassMenu extends CoreBox {
 		
 		Inventory box = getBox();
 		
-		box.setItem(0, clazz.getIdentifingItem());
+		box.setItem(0, clazz.getIdentifibleItem());
 		
-		int i = 2;
+		CoreBoxRegion tiers = new CoreBoxRegion(this, new Vector(0, 0, 2), 0, 7),
+				abilities = new CoreBoxRegion(this, new Vector(2, 0, 0), 1, 9);
+		
 		for (Map.Entry<Integer, IClassTier> tier : clazz.getTiers()) {
-			IClassTier t = tier.getValue();
+			if (!(tier.getValue() instanceof ClassTier))
+				continue;
+			
+			ClassTier t = (ClassTier) tier.getValue();
 			
 			boolean canuse = clazz.canUseTier(tier.getKey());
 			boolean locked = t.getLevel() >= t.getMaxLevel()? true : false;
 			
-			ItemStack item = t.getIdentifingItem();
+			ItemStack item = t.getIdentifibleItem();
 			item.setType(locked? Material.IRON_DOOR : Material.WOODEN_DOOR);
 			
 			ItemMeta meta = item.getItemMeta();
@@ -60,8 +68,7 @@ public class ClassMenu extends CoreBox {
 			
 			item.setItemMeta(meta);
 			
-			box.setItem(i, item);
-			addMenuItem(new ClassMenuItem(this, item, clazz, i) {
+			tiers.add(new ClassMenuItem(this, item, clazz, t.getTierLevel()) {
 				
 				public void onClick(InventoryClickEvent click) {
 					MMOPlayer mmoPlayer = PlayerManager.getInstance().getPlayer(getPlayer());
@@ -78,28 +85,21 @@ public class ClassMenu extends CoreBox {
 				}
 			});
 			
-			i++;
-			
 		}
 		
-		i = 20;
 		for (Ability ab : clazz.getAbilities()) {
-			if (i > 26)
-				i = 29;
-			else if (i > 35)
-				i = 38;
-			else if (i > 44)
-				throw new UnsupportedOperationException("Too many abilities for the " + getBox().getTitle() + " menu");
 			
 			ItemStack item = new ItemStack(Material.PAPER);
 			ItemMeta meta = item.getItemMeta();
 			
-			meta.setDisplayName(ab.getDisplayName());
+			meta.setDisplayName(ab.getDisplayName(clazz.getColor()));
 			meta.setLore(ab.getLore(ChatColor.GOLD));
 			
 			item.setItemMeta(meta);
 			
-			box.setItem(i++, item);
+			abilities.add(new CoreBoxItem(this, item) {
+				public void onClick(InventoryClickEvent click) { return; }
+			});
 			
 		}
 		

@@ -60,7 +60,7 @@ public class AxesPlayerClass extends PlayerClass {
 		return 4;
 	}
 
-	public ItemStack getIdentifingItem() {
+	public ItemStack getIdentifibleItem() {
 		if (identiferItem == null) {
 			identiferItem = new ItemStack(Material.DIAMOND_AXE);
 			

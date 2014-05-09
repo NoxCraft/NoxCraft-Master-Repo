@@ -24,6 +24,10 @@ public abstract class BaseAbility implements Ability {
 		return MMOLocale.ABIL_DISPLAY_NAME.get(getName(), "");
 	}
 	
+	public String getDisplayName(ChatColor color) {
+		return color + getDisplayName();
+	}
+	
 	public String getName() {
 		return name;
 	}

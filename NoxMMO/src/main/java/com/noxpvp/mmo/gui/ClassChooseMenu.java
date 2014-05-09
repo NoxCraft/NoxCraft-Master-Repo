@@ -12,9 +12,11 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.gui.CoreBoxItem;
+import com.noxpvp.core.gui.CoreBoxRegion;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
@@ -60,9 +62,12 @@ public class ClassChooseMenu extends CoreBox {
 		box.setItem(0, primarySign);
 		box.setItem(9, secondarySign);
 		
+		CoreBoxRegion primarys = new CoreBoxRegion(this, new Vector(0, 0, 2), 0, 7),
+				secondarys = new CoreBoxRegion(this, new Vector(1, 0, 2), 0, 7);
+		
 		for (PlayerClass clazz : availableClasses) {
 			
-			ClassChooseMenuItem boxItem = new ClassChooseMenuItem(this, clazz.getIdentifingItem(), clazz) {
+			ClassChooseMenuItem boxItem = new ClassChooseMenuItem(this, clazz.getIdentifibleItem(), clazz) {
 				public void onClick(InventoryClickEvent click) {
 					
 					if (getPlayerClass().isPrimaryClass()) {
@@ -84,28 +89,10 @@ public class ClassChooseMenu extends CoreBox {
 			};
 			
 			if (clazz.isPrimaryClass()){
-				 for (int i = 2; i < -1 + (9 * 2); i++) {
-					 if (i > 8 && i < 11)
-						 i = 11;
-					
-					 if (getBox().getItem(i) == null){
-						 addMenuItem(boxItem);
-						 box.setItem(i, clazz.getIdentifingItem());
-						 
-						 break;
-					 }
-				}
+				primarys.add(boxItem);
 				
 			} else {
-				for (int i = 20; i < 17 + (9 * 2); i++) {
-					if (i > 26 && i < 29)
-						i = 29;
-					
-					if (getBox().getItem(i) == null){
-						addMenuItem(boxItem);
-						box.setItem(i, clazz.getIdentifingItem());
-					}
-				}
+				secondarys.add(boxItem);
 			}
 		}
 	}
