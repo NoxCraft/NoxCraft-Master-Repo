@@ -17,40 +17,14 @@
 		<module>NoxCore</module>
 		<module>NoxHomes</module>
 		<module>NoxMMO</module>
-
 		<module>NoxChat</module>
 	</modules>
-	<profiles>
-		<profile>
-			<id>RF</id>
-			<activation>
-				<file><exists>${basedir}/ROOT</exists></file>
-				
-			</activation>
-			<repositories>
-				<!-- INTERNAL PROJECT -->
-				<repository>
-					<id>Local-Repo</id>
-					<url>file://${basedir}/../repo</url>
-				</repository>
-			</repositories>
-		</profile>
-		<profile>
-			<id>Default</id>
-			<activation>
-				<file><exists>${basedir}/ROOT</exists></file>
-			</activation>
-			<repositories>
-				<!-- INTERNAL PROJECT -->
-				<repository>
-					<id>Local-Repo</id>
-					<url>file://${basedir}/repo</url>
-				</repository>
-			</repositories>
-		</profile>
-	</profiles>
 	<repositories>
-		
+		<!-- INTERNAL PROJECT -->
+		<repository>
+			<id>Local-Repo</id>
+			<url>file://${basedir}/../repo</url>
+		</repository>
 		<!--  
 		<repository>
 			<id>maven-central</id>
