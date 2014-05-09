@@ -26,6 +26,7 @@ import com.noxpvp.mmo.abilities.PlayerAbility;
 import com.noxpvp.mmo.classes.internal.DummyClass;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
@@ -86,7 +87,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
 			c = PlayerClassUtil.getIdByClassName(c);
 		
-		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));
+		setClass(PlayerClassUtil.safeConstructClass(c, getName()));
 	}
 	
 	public void setClass(IPlayerClass c) {
@@ -102,7 +103,11 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
 			c = PlayerClassUtil.getIdByClassName(c);
 		
-		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));
+		PlayerClass clazz;
+		if ((clazz = PlayerClassUtil.safeConstructClass(c, getName())) != null)
+			setClass(clazz);
+		
+		return;
 	}
 	
 	public void setPrimaryClass(IPlayerClass c) {
@@ -115,7 +120,11 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
 			c = PlayerClassUtil.getIdByClassName(c);
 		
-		setClass(PlayerClassUtil.safeConstructClass(c, getPlayerName()));
+		PlayerClass clazz;
+		if ((clazz = PlayerClassUtil.safeConstructClass(c, getName())) != null)
+			setClass(clazz);
+		
+		return;
 	}
 	
 	public void setSecondaryClass(IPlayerClass c) {
@@ -150,7 +159,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	
 	public void load() {
 		ConfigurationNode node = getPersistantData();
-		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));//XXX You didn't change anything about the actualy null pointer...
+		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));
 		setSecondaryClass(node.get(SECONDARY_CLASS_NODE, ""));
 		
 		/*
@@ -158,7 +167,11 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		 */
 		{
 			String uid = node.get(TARGET_NODE + ".uuid", String.class);
-			World world = Bukkit.getWorld(node.get(TARGET_NODE + ".world", String.class));
+			String worldName = node.get(TARGET_NODE + ".world", String.class);
+			
+			// check for possible null world name before getting world, as bukkit will freak out
+			World world = worldName == null? null : Bukkit.getWorld(worldName);
+			
 			if (!LogicUtil.nullOrEmpty(uid) && world != null)
 				setTarget(EntityUtil.getEntity(world, UUID.fromString(uid), LivingEntity.class));
 		}

@@ -68,22 +68,23 @@ public class ClassChooseMenu extends CoreBox {
 		for (PlayerClass clazz : availableClasses) {
 			
 			ClassChooseMenuItem boxItem = new ClassChooseMenuItem(this, clazz.getIdentifibleItem(), clazz) {
-				public void onClick(InventoryClickEvent click) {
+				public boolean onClick(InventoryClickEvent click) {
 					
 					if (getPlayerClass().isPrimaryClass()) {
-						hide();
 						new ClassMenu(getPlayer(), getPlayerClass(), ClassChooseMenu.this).show();
 						
-						return;
+						return true;
 					} else {
 						MMOPlayer mmoPlayer;
 						if ((mmoPlayer = PlayerManager.getInstance().getPlayer(getPlayer())) != null){
 							mmoPlayer.setSecondaryClass(getPlayerClass());
 							hide();
 							
-							return;	
+							return true;	
 						}
-					}					
+						
+						return false;
+					}
 					
 				}
 			};

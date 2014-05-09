@@ -14,19 +14,16 @@ import org.bukkit.util.Vector;
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.gui.CoreBoxItem;
 import com.noxpvp.core.gui.CoreBoxRegion;
-import com.noxpvp.core.packet.PacketSoundEffects;
-import com.noxpvp.core.utils.StaticEffects;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.classes.internal.ClassTier;
 import com.noxpvp.mmo.classes.internal.IClassTier;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
-import com.noxpvp.mmo.locale.MMOLocale;
 
 public class ClassMenu extends CoreBox {
 
-	public final static String MENU_NAME = "Class Info";
+	public final static String MENU_NAME = "Class";
 	private final static int size = 45;
 	
 	private CoreBox previousBox;
@@ -38,7 +35,7 @@ public class ClassMenu extends CoreBox {
 	}
 	
 	public ClassMenu(final Player p, PlayerClass clazz, CoreBox backButton){
-		super(p, MMOLocale.GUI_MENU_NAME_COLOR.get() + MENU_NAME, size, backButton);
+		super(p, clazz.getName() + " " + MENU_NAME, size, backButton);
 		
 		this.previousBox = backButton;
 		this.clazz = clazz;
@@ -70,18 +67,25 @@ public class ClassMenu extends CoreBox {
 			
 			tiers.add(new ClassMenuItem(this, item, clazz, t.getTierLevel()) {
 				
-				public void onClick(InventoryClickEvent click) {
+				public boolean onClick(InventoryClickEvent click) {
 					MMOPlayer mmoPlayer = PlayerManager.getInstance().getPlayer(getPlayer());
 						
 					PlayerClass clazz = ClassMenu.this.getPlayerClass();
-						
-					if (clazz.isPrimaryClass() && clazz.canUseClass()){//TODO finish secondarys and only play blaze if can't switch
+					
+					if (!clazz.canUseClass())
+						return false;
+					
+					if (clazz.isPrimaryClass()){//TODO finish secondarys and only play blaze if can't switch
 						mmoPlayer.setPrimaryClass(clazz);
 						mmoPlayer.getPrimaryClass().setCurrentTier(getTier());
 						
-						StaticEffects.PlaySound(p, p.getLocation(), PacketSoundEffects.MobBlazeDeath, (float) 100, 100);
+						return true;
+					} else {
+						mmoPlayer.setSecondaryClass(clazz);
+						mmoPlayer.getSecondaryClass().setCurrentTier(getTier());
+						
+						return true;
 					}
-					
 				}
 			});
 			
@@ -98,7 +102,7 @@ public class ClassMenu extends CoreBox {
 			item.setItemMeta(meta);
 			
 			abilities.add(new CoreBoxItem(this, item) {
-				public void onClick(InventoryClickEvent click) { return; }
+				public boolean onClick(InventoryClickEvent click) { return true; }
 			});
 			
 		}

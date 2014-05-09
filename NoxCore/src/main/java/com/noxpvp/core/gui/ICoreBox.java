@@ -101,7 +101,7 @@ public interface ICoreBox {
 		 * 
 		 * @param event
 		 */
-		public void onClick(InventoryClickEvent click);
+		public boolean onClick(InventoryClickEvent click);
 		
 	}
 	
