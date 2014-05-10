@@ -3,7 +3,6 @@ package com.noxpvp.mmo.abilities.targeted;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -11,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.noxpvp.core.data.Vector3D;
-import com.noxpvp.core.gui.CoreBar;
+import com.noxpvp.core.gui.corebar.LivingEntityTracker;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
@@ -82,27 +81,27 @@ public class TargetAbility extends BasePlayerAbility implements PassiveAbility<P
 				
 				PlayerManager pm = PlayerManager.getInstance();
 				MMOPlayer mmoPlayer = pm.getPlayer(p), mmoIt = it instanceof Player? pm.getPlayer((Player) it) : null;
-				com.noxpvp.core.manager.PlayerManager cpm = com.noxpvp.core.manager.PlayerManager.getInstance();
 				
-				if (mmoPlayer == null) continue;
+				if (mmoPlayer == null)
+					return false;
 				
 				mmoPlayer.setTarget(target_ref.get());
 				
 				String name;
-				CoreBar bar =  cpm.getPlayer(p.getName()).getCoreBar();
 				
 				if (mmoIt != null){
 					IPlayerClass c = mmoPlayer.getPrimaryClass();
 					
 					if (c != null) { 
-						name = mmoIt.getFullName() + bar.color + bar.separater + ChatColor.RESET + c.getDisplayName();
+						name = mmoIt.getFullName() + LivingEntityTracker.color + LivingEntityTracker.separater + c.getDisplayName();
 					} else name = mmoIt.getFullName();
 				} else {
 					if (it instanceof Player) name = ((Player)it).getName();
-					else name = it.getType().name();
+					else name = LivingEntityTracker.color + it.getType().name();
 				} 
 				
-				bar.newLivingTracker(target_ref.get(), name, false);
+				new LivingEntityTracker(p, target_ref.get(), name);
+
 				return true;
 			} else {
 				continue;

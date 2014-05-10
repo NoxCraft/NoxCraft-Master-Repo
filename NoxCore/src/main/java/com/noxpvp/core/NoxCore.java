@@ -28,7 +28,7 @@ import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
-import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.HoloAPICore;
 import com.noxpvp.core.commands.Command;
 import com.noxpvp.core.commands.NoxCommand;
 import com.noxpvp.core.commands.ReloadCommand;
@@ -77,7 +77,7 @@ public class NoxCore extends NoxPlugin {
 	
 	private Towny towny = null;
 	private WorldGuardPlugin worldGuard = null;
-	private HoloAPI holoAPI = null;
+	private HoloAPICore holoAPI = null;
 	
 	private UUIDUtil uuidUtil;
 	
@@ -93,7 +93,7 @@ public class NoxCore extends NoxPlugin {
 		return worldGuard;
 	}
 	
-	public final HoloAPI getHoloAPI() {
+	public final HoloAPICore getHoloAPI() {
 		return holoAPI;
 	}
 	
@@ -264,8 +264,8 @@ public class NoxCore extends NoxPlugin {
 		
 		{
 			Plugin plugin = pm.getPlugin("HoloAPI");
-			if (plugin != null && plugin instanceof HoloAPI)
-				holoAPI = (HoloAPI) plugin;
+			if (plugin != null && plugin instanceof HoloAPICore)
+				holoAPI = (HoloAPICore) plugin;
 		}
 		
 		Reloader r = new BaseReloader(getMasterReloader(), "NoxCore") {

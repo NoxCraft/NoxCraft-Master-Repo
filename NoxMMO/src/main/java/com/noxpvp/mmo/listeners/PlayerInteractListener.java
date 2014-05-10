@@ -10,7 +10,6 @@ import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
-import com.noxpvp.mmo.abilities.entity.DreamCoatAbililty;
 import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 
 public class PlayerInteractListener extends NoxListener<NoxMMO>{
@@ -40,8 +39,8 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 		//debug===========================================
 		if (p.getItemInHand().getType() != Material.STICK)
 			return;
-		
-		new DreamCoatAbililty(p).execute();
+
+		//debug here
 		
 	}
 	

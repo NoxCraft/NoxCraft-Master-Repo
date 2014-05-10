@@ -9,6 +9,13 @@ import org.bukkit.inventory.ItemStack;
 public interface ICoreBox {
 	
 	/**
+	 * Gets the name of this corebox
+	 * 
+	 * @return String name
+	 */
+	public String getName();
+	
+	/**
 	 * Gets the inventory of this box
 	 * 
 	 * @return Inventory

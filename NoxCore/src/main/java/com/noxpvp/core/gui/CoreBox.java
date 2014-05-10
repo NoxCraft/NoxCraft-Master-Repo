@@ -34,6 +34,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 	
 	public Runnable closeRunnable;
 	private PlayerManager pm;
+	private String name;
 	private Inventory box;
 	private CoreBox backButton;
 	private Reference<Player> p;
@@ -53,7 +54,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		this.pm = PlayerManager.getInstance();
 		this.p = new WeakReference<Player>(p);
 		
-		this.box = Bukkit.getServer().createInventory(null, size, name);
+		this.box = Bukkit.getServer().createInventory(null, size, (this.name = name));
 		this.menuItems = new HashMap<Integer, CoreBoxItem>();
 		pName = p.getName();
 		
@@ -64,7 +65,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 			ItemMeta meta = button.getItemMeta();
 			
 			meta.setDisplayName(ChatColor.GOLD + name);
-			meta.setLore(Arrays.asList(ChatColor.AQUA + "<- Go Back To The \"" + ChatColor.GOLD + name + ChatColor.AQUA + "\" Menu"));
+			meta.setLore(Arrays.asList(ChatColor.AQUA + "<- Go Back To The \"" + ChatColor.GOLD + backButton.getName() + ChatColor.AQUA + "\" Menu"));
 			
 			button.setItemMeta(meta);
 			
@@ -89,6 +90,10 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 			}
 		};
 		
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public Inventory getBox() {

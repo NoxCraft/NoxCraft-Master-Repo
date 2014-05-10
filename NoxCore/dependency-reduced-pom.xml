@@ -229,7 +229,7 @@
     <dependency>
       <groupId>com.dsh105</groupId>
       <artifactId>HoloAPI</artifactId>
-      <version>1.0.7-SNAPSHOT</version>
+      <version>1.2.3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -263,7 +263,7 @@
     <dependency>
       <groupId>me.confuser</groupId>
       <artifactId>BarAPI</artifactId>
-      <version>3.0</version>
+      <version>3.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

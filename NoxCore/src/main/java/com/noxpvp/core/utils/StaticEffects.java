@@ -26,9 +26,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import com.bergerkiller.bukkit.common.protocol.CommonPacket;
-import com.bergerkiller.bukkit.common.protocol.PacketType;
-import com.bergerkiller.bukkit.common.utils.PacketUtil;
 import com.dsh105.holoapi.HoloAPI;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
@@ -45,7 +42,8 @@ public class StaticEffects {
 	}
 	
 	public static void DamageAmountParticle(Location loc, double damage){
-		HoloAPI.getManager().createSimpleHologram(loc, 5, true, ChatColor.RED + String.format("%.1f", damage));
+		if (NoxCore.getInstance().isHoloAPIActive())
+			HoloAPI.getManager().createSimpleHologram(loc, 5, true, ChatColor.RED + String.format("%.1f", damage));
 	}
 	
 	public static void SkullBreak(LivingEntity e){
