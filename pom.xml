@@ -17,15 +17,20 @@
 		<module>NoxCore</module>
 		<module>NoxHomes</module>
 		<module>NoxMMO</module>
-
 		<module>NoxChat</module>
 	</modules>
 	<repositories>
+		<!-- INTERNAL PROJECT -->
+		<repository>
+			<id>Local-Repo</id>
+			<url>file://${basedir}/../repo</url>
+		</repository>
+		<!--  
 		<repository>
 			<id>maven-central</id>
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
-
+		-->
 		<repository>
 			<id>Spigot</id>
 			<url>http://repo.md-5.net/content/repositories/snapshots</url>
@@ -71,12 +76,6 @@
 		<repository>
 			<id>hawk-repo</id>
 			<url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
-		</repository>
-
-		<!-- INTERNAL PROJECT -->
-		<repository>
-			<id>Local-Repo</id>
-			<url>file://${basedir}/repo</url>
 		</repository>
 	</repositories>
 	<dependencyManagement>

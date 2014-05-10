@@ -265,7 +265,7 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	}
 	
 	public final String getName() {
-		return getColor() + name;
+		return name;
 	}
 	
 	public final Player getPlayer() {
@@ -400,6 +400,6 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 		if (getTier().getDisplayName() != null)
 			return getTier().getDisplayName();
 		else
-			return getName();
+			return getColor() + getName();
 	}
 }

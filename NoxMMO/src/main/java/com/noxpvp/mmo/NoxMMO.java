@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.permissions.PermissionDefault;
 
+import com.bergerkiller.bukkit.common.Common;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
@@ -97,6 +98,7 @@ public class NoxMMO extends NoxPlugin {
 			return;
 		}
 		setInstance(this);
+		Common.loadClasses("com.noxpvp.mmo.classes.internal.DummyClass");
 		MasterListener.init();
 		masterListener = new MasterListener();
 		
@@ -157,7 +159,6 @@ public class NoxMMO extends NoxPlugin {
 				return true;
 			}
 		});
-		
 		registerAllCommands();
 	}
 	
