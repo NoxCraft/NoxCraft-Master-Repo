@@ -7,10 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.bergerkiller.bukkit.common.utils.BlockUtil;
 import com.bergerkiller.bukkit.common.utils.MaterialUtil;
 import com.google.common.collect.Sets;
 import com.noxpvp.core.NoxCore;
@@ -34,7 +32,7 @@ public class LivingEntityTracker extends BukkitRunnable {
 	private boolean ignoreLOS;
 	private Set<Material> transparents;
 	
-	private StringBuilder text;		
+	private String text;		
 	private String stringDist;
 
 	private int displayTicks;
@@ -94,7 +92,7 @@ public class LivingEntityTracker extends BukkitRunnable {
 			transparents.add(cur);
 		}
 		
-		this.text = new StringBuilder().append(text).append(separater).append((stringDist = String.format("%0$.1f", distance)));
+		this.text = text;
 		
 		this.displayTicks = canBeOverridden? displayTicks : (displayTicks <= 0? 500 : displayTicks);
 		this.runs = 0;
@@ -127,11 +125,9 @@ public class LivingEntityTracker extends BukkitRunnable {
 			return;
 		}
 		
-		int tLength = text.length();
+		stringDist = color + separater + String.format("%.1f", distance);
 		
-		text.replace((tLength - (color.length() + separater.length() + stringDist.length())), tLength, (color + separater + (stringDist = String.format("%.1f", distance))));
-		
-		bar.getCurrentEntry().update(e, text.toString());
+		bar.getCurrentEntry().update(e, text.toString() + stringDist);
 		
 	}
 	
