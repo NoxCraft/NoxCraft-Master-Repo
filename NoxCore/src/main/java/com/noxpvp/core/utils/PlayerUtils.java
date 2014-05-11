@@ -87,7 +87,7 @@ public class PlayerUtils extends PlayerUtil{
 		}
 		
 		public static Location getTargetBlockLocation(LivingEntity from, int distance, Material... transparentTypes) {
-			Block b =  getTargetBlock(from.getEyeLocation(), distance, transparentTypes);
+			Block b = getTargetBlock(from.getEyeLocation(), distance, transparentTypes);
 			if (b == null)
 				return from.getLocation();
 			

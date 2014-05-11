@@ -1,8 +1,8 @@
 name: NoxCore
 version: ${project.version}
 main: ${main}
-depend: [BKCommonLib, BarAPI]
-softdepend: [Vault, Votifier, ProtocolLib, Towny, WorldGuard, HoloAPI]
+depend: [BKCommonLib, ProtocolLib, BarAPI]
+softdepend: [Vault, Votifier, Towny, WorldGuard, HoloAPI]
 commands:
   reloader:
     description: Reload any plugin. 

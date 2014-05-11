@@ -121,7 +121,8 @@ public class LivingEntityTracker extends BukkitRunnable {
 		
 		distance = p.getLocation().distance(e.getLocation());
 		
-		if (distance > maxDistance || (!ignoreLOS && !LineOfSightUtil.hasLineOfSight(p, e.getEyeLocation(), transparents))){
+		Block saw = LineOfSightUtil.getTargetBlock(p, 50, (Material) null);
+		if (distance > maxDistance || (!ignoreLOS && (saw != null && !saw.getType().isTransparent()))) {
 			safeCancel();
 			return;
 		}
