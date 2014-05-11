@@ -75,7 +75,7 @@ public class LeapAbility extends BaseEntityAbility {
 		
 		newVelocity.setY(0).multiply(forwardMultiplier).setY(heightVelo);
 		
-		new ParticleRunner("blockcrack_"+ e.getLocation().getBlock().getRelative(BlockFace.DOWN).getTypeId() +"_0", e, false, 0, 50, 1).start(0);
+		new ParticleRunner("blockcrack_"+ e.getLocation().getBlock().getRelative(BlockFace.DOWN).getTypeId() +"_0", e.getLocation(), false, 0, 50, 1).start(0);
 		
 		e.setVelocity(newVelocity);		
 		return true;

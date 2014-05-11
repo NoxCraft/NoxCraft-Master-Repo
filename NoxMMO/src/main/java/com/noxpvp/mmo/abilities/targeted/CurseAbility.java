@@ -6,6 +6,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
@@ -85,7 +86,7 @@ public class CurseAbility extends BaseTargetedPlayerAbility implements PVPAbilit
 		t.addPotionEffect(new PotionEffect(PotionEffectType.POISON, duration, lethality));
 		t.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, lethality));
 		
-		new ParticleRunner("angryVillager", t, false, 0, 1, 1).start(0);
+		new ParticleRunner(ParticleType.angryVillager, t, false, 0, 1, 1).start(0);
 		
 		return true;
 	}

@@ -41,7 +41,11 @@ public abstract class BaseVortexEntity implements IVortexEntity {
 		double radius = BaseVortex.lookup.get(verticalTicker())[0] * width;
 		int	horisontal = horizontalTicker();
 		
-		Vector v = new Vector(radius * BaseVortex.lookup.get(horisontal)[1], height, radius * BaseVortex.lookup.get(horisontal)[0]);
+		double verticalDif = 0;
+		if (height == 0D)
+			verticalDif = getParent().getUser().getLocation().getY() - getEntity().getLocation().getY();
+		
+		Vector v = new Vector(radius * BaseVortex.lookup.get(horisontal)[1], (verticalDif == 0? height : verticalDif), radius * BaseVortex.lookup.get(horisontal)[0]);
 		
 		setVelo(v);
 		
@@ -61,9 +65,10 @@ public abstract class BaseVortexEntity implements IVortexEntity {
 	}
 	
 	public void remove() {
-		if (onRemove())
+		if (onRemove()) {
+			this.base.removeMetadata(uniqueMetaKey, NoxMMO.getInstance());
 			this.base.remove();
-		
+		}
 	}
 	
 	public int verticalTicker() {

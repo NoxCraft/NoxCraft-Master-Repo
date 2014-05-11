@@ -1,5 +1,7 @@
 package com.noxpvp.mmo.vortex;
 
+import java.util.ArrayDeque;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -17,6 +19,10 @@ public interface IVortex {
 	
 	public Location getLocation();
 	
+	public void setSpeed(int speedInTicks);
+	
+	public int getSpeed();
+	
 	public void setMaxSize(int size);
 	
 	public int getMaxSize();
@@ -30,6 +36,8 @@ public interface IVortex {
 	public double getHeightGain();
 	
 	public void addEntity(BaseVortexEntity entity);
+	
+	public ArrayDeque<? extends BaseVortexEntity> getEntities();
 	
 	public void clearEntities();
 

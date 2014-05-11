@@ -2,7 +2,6 @@ package com.noxpvp.mmo.vortex;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,7 +14,7 @@ import com.noxpvp.mmo.NoxMMO;
 public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 
 	protected final static HashMap<Integer, Double[]> lookup = new HashMap<Integer, Double[]>();
-	private ArrayDeque<BaseVortexEntity> entities = new ArrayDeque<BaseVortexEntity>();
+	private ArrayDeque<BaseVortexEntity> entities;
 	
 	private Player user;
 	private Location currentLocation;
@@ -25,6 +24,7 @@ public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 	private double width, height;
 	
 	private int taskId;
+	private int speed;
 	
 	private static void generateLookup() {
 		if(lookup.size() != 0) {
@@ -59,6 +59,10 @@ public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 		
 	}
 	
+	public ArrayDeque<BaseVortexEntity> getEntities() {
+		return this.entities;
+	}
+	
 	public void clearEntities() {
 		for (BaseVortexEntity e : entities) {
 			e.remove();
@@ -72,6 +76,14 @@ public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 	
 	public Location getLocation() {
 		return this.currentLocation.clone();
+	}
+	
+	public void setSpeed(int speedInTicks) {
+		this.speed = speedInTicks;
+	}
+	
+	public int getSpeed() {
+		return speed;
 	}
 	
 	public void setMaxSize(int size) {
@@ -99,16 +111,19 @@ public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 	}
 	
 	public BaseVortex(Player user, Location loc, int time) {
+		entities = new ArrayDeque<BaseVortexEntity>();
+		
 		this.user = user;
 		this.currentLocation = loc;
 		this.maxEntityAmount = 50;
 		this.time = time;
+		this.speed = 5;
 		
 		generateLookup();
 	}
 	
 	public void start() {
-		this.taskId = runTaskTimer(NoxMMO.getInstance(), 0, 5).getTaskId();
+		this.taskId = runTaskTimer(NoxMMO.getInstance(), 0, speed).getTaskId();
 		
 		Bukkit.getScheduler().runTaskLater(NoxCore.getInstance(), new Runnable() {
 			
@@ -129,22 +144,6 @@ public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 			stop();
 		
 		onRun();
-		
-		// Make all entities in the list spin
-		ArrayDeque<BaseVortexEntity> que = new ArrayDeque<BaseVortexEntity>();
-
-		for (BaseVortexEntity ve : entities) {
-			HashSet<? extends BaseVortexEntity> new_entities = ve.tick();
-			for(BaseVortexEntity temp : new_entities) {
-				que.add(temp);
-			}
-		}
-		
-		// Add the new entities
-		for(BaseVortexEntity vb : que) {
-			checkListSize();
-			entities.add(vb);
-		}
 	}
 	
 	// Removes the oldest block if the list goes over the limit.

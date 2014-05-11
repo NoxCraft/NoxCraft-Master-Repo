@@ -141,7 +141,7 @@ public class MedPackAbility extends BasePlayerAbility{
 				
 				double health = getPack(eventItem).health;
 				
-				new ParticleRunner(ParticleType.heart, pickupPlayer, false, 0, 1, (int) health).runTaskTimer(NoxMMO.getInstance(), 5, 5);
+				new ParticleRunner(ParticleType.heart, pickupPlayer, false, 0, 1, (int) health).start(5, 5);
 				new HealRunnable(pickupPlayer, 1, (int) health).runTaskTimer(NoxMMO.getInstance(), 5, 5);
 				
 				MessageUtil.sendLocale(NoxMMO.getInstance(), pickupPlayer, "ability.medpack.pick-up", pickupPlayer.getName(), (abilPlayer != null? abilPlayer.getName() :  MedPackAbility.this.getNoxPlayer().getName()));

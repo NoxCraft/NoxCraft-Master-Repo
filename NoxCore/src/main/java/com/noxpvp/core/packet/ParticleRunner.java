@@ -28,11 +28,11 @@ public class ParticleRunner extends BukkitRunnable{
 	int i;
 	
 	public ParticleRunner(ParticleType type, Entity tracker, boolean offSet, float data, int amount, int runs) {
-		this(type.name(), tracker.getLocation(), offSet, data, amount, runs);
+		this(type.name(), tracker, offSet, data, amount, runs);
 	}
 	
 	public ParticleRunner(ParticleType type, LivingEntity tracker, boolean offSet, float data, int amount, int runs) {
-		this(type.name(), tracker.getEyeLocation(), offSet, data, amount, runs);
+		this(type.name(), tracker, offSet, data, amount, runs);
 	}
 	
 	public ParticleRunner(ParticleType type, Location loc, boolean offSet, float data, int amount, int runs) {
@@ -65,15 +65,17 @@ public class ParticleRunner extends BukkitRunnable{
 	}
 	
 	public void run(){
+		Location loc = null;
 		
-		if (loc instanceof LivingEntity)
-			loc = ((LivingEntity) loc).getEyeLocation().add(0, 1, 0);
-		else if (loc instanceof Entity)
-			loc = ((Entity) loc).getLocation();
-		else if (!(loc instanceof Location))
-			throw new IllegalArgumentException("Location must a type of location or entity");
+		if (this.loc instanceof LivingEntity)
+			loc = ((LivingEntity) this.loc).getEyeLocation();
+		else if (this.loc instanceof Entity)
+			loc = ((Entity) this.loc).getLocation();
+		else if (this.loc instanceof Location)
+			loc = (Location) this.loc;
+		else throw new IllegalArgumentException("Location must a type of location or entity");
 		
-		if ((runs != 0 && i >= runs) || (runs == 0 && i > 0)) {
+		if ((runs > 0 && i >= runs) || ((this.loc instanceof Entity) && !((Entity) this.loc).isValid())) {
 			safeCancel();
 			return;
 		}

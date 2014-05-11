@@ -59,7 +59,7 @@ public class StaticEffects {
 	}
 	
 	public static void BloodEffect(Entity e, NoxPlugin plugin){
-		new ParticleRunner("blockdust_35_14", e, false, .12F, 15, 1).runTaskTimer(plugin, 0, 0);
+		new ParticleRunner("blockdust_35_14", e.getLocation(), false, .12F, 15, 1).runTaskTimer(plugin, 0, 0);
 	}
 	
 	public static void BroadcastSound(Entity e, Sound sound){
