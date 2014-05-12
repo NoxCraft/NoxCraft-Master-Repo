@@ -10,19 +10,14 @@ import org.bukkit.plugin.Plugin;
 import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.bases.mutable.LocationAbstract;
 import com.noxpvp.core.NoxCore;
+import com.noxpvp.core.external.towny.*;
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.db.TownyDataSource;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 
 public class TownyUtil {
 	private static ModuleLogger log;
 	
 	private static Towny towny;
+	private static ITownyHook hook = new NullTownyHook();
 	
 	public static void setup() {
 		if (log == null)
@@ -35,6 +30,9 @@ public class TownyUtil {
 			log.severe("NoxCore is outdated. Towny no longer of the class type Towny?");
 		else
 			log.info("Towny was not found.");
+		
+		if (towny != null)
+			hook = new TownyHook(towny);
 	}
 
 	/**
@@ -43,213 +41,103 @@ public class TownyUtil {
 	public TownyUtil() {
 		super();
 	}
-	
+
 	public static boolean isTownyEnabled() {
-		if (towny == null) {
-			setup();
-			if (towny == null)
-				return false;
-		}
-		return towny.isEnabled();
+		return hook.isTownyEnabled();
 	}
-	
+
 	public static boolean isUsingTowny(World world) {
-		return isUsingTowny(world.getName());
+		return hook.isUsingTowny(world);
 	}
 
 	public static boolean isUsingTowny(String worldNamed) {
-		if (!isTownyEnabled())
-			return false;
-		
-		try {
-			return TownyUniverse.getDataSource().getWorld(worldNamed).isUsingTowny();
-		} catch (NotRegisteredException e) {
-			return false;
-		}
+		return hook.isUsingTowny(worldNamed);
 	}
-	
+
 	public static boolean isClaimedLand(LocationAbstract location) {
-		return isClaimedLand(location.toLocation());
+		return hook.isClaimedLand(location);
 	}
-	
+
 	public static boolean isClaimedLand(Location location) {
-		if (location == null)
-			return false; // To location may be null?
-		
-		if (!isTownyEnabled())
-			return false;
-		if (!isUsingTowny(location.getWorld()))
-			return false;
-		
-		TownyWorld world = null;
-		try {
-			world = TownyUniverse.getDataSource().getWorld(location.getWorld().getName());
-		} catch (NotRegisteredException e) {}
+		return hook.isClaimedLand(location);
+	}
 
-		if (world == null)
-			return false;
-		return world.hasTownBlock(Coord.parseCoord(location));
+	public static boolean isWild(LocationAbstract location) {
+		return hook.isWild(location);
 	}
-	
-	public static boolean isWild(LocationAbstract location){
-		return isWild(location.toLocation());
+
+	public static boolean isWild(Location location) {
+		return hook.isWild(location);
 	}
-	
-	public static boolean isWild(Location location){
-		if (!isTownyEnabled()) //Towny not loaded.
-			return false; //Always return false
-		
-		if (!isUsingTowny(location.getWorld())) //Overrides the using towny since the thing returns negated stuff.
-			return false; //Towny not used. Always return false.
-		
-		return !isClaimedLand(location); //Negated due to wild. 
-	}
-	
+
 	public static boolean isOwnLand(Player p) {
-		return isOwnLand(p, p.getLocation());
+		return hook.isOwnLand(p);
 	}
-	
-	public static boolean isOwnLand(Player p, LocationAbstract location){
-		return isOwnLand(p, location.toLocation());
+
+	public static boolean isOwnLand(Player p, LocationAbstract location) {
+		return hook.isOwnLand(p, location);
 	}
-	
+
 	public static boolean isOwnLand(Player p, Location location) {
-		
-		if (!isTownyEnabled()) //Towny not loaded.
-			return false; //Always return false
-		
-		if (!isUsingTowny(location.getWorld())) //Overrides the using towny since the thing returns negated stuff.
-			return false; //Towny not used. Always return false.
-
-		Resident res = null;
-		TownyWorld world = null;
-		try {
-			TownyDataSource source = TownyUniverse.getDataSource();
-			
-			res = source.getResident(p.getName());
-			world = source.getWorld(location.getWorld().getName());
-		} catch (NotRegisteredException e) {}
-		
-		if (res == null || world == null)
-			return false;
-		
-		try {
-			if (world.getTownBlock(Coord.parseCoord(location)).getTown().hasResident(res))
-				return true;
-		} catch (NotRegisteredException e) {}
-		
-		return false;
+		return hook.isOwnLand(p, location);
 	}
-	
+
 	public static boolean isTownMember(Player player, Location location) {
-		Town town = getTown(location);
-		if (town == null)
-			return false;
-		
-		return town.hasResident(player.getName());
+		return hook.isTownMember(player, location);
 	}
-	
+
 	public static boolean isTownMember(Player player, String townName) {
-		return isTownMember(player.getName(), townName);
+		return hook.isTownMember(player, townName);
 	}
-	
+
 	public static boolean isTownMember(String playerName, String townName) {
-		Town town = getTown(townName);
-		if (town == null)
-			return false;
-		
-		return town.hasResident(playerName);
+		return hook.isTownMember(playerName, townName);
 	}
-	
+
 	public static boolean isPVP(Entity entity) {
-		return isPVP(entity.getLocation());
+		return hook.isPVP(entity);
 	}
 
-	public static boolean isPVP(LocationAbstract loc){
-		return isPVP(loc.toLocation());
+	public static boolean isPVP(LocationAbstract loc) {
+		return hook.isPVP(loc);
 	}
-	
-	public static boolean isPVP(Location loc){
-		if (!isTownyEnabled()) //Towny not loaded.
-			return false; //Always return false
-		
-		if (!isUsingTowny(loc.getWorld())) //Overrides the using towny since the thing returns negated stuff.
-			return false; //Towny not used. Always return false.
-		
-		TownyWorld world = null;
-		try {
-			world = TownyUniverse.getDataSource().getWorld(loc.getWorld().getName());
-			
-			if (world != null){
-				return world.getTownBlock(Coord.parseCoord(loc)).getTown().isPVP();
-			}
-			
-		} catch (NotRegisteredException e) {
-			if (world != null)
-				return world.isPVP();
-		}
-		
-		return false;
+
+	public static boolean isPVP(Location loc) {
+		return hook.isPVP(loc);
 	}
-	
-	private static Town getTown(String townName) {
-		try {
-			return TownyUniverse.getDataSource().getTown(townName);
-		} catch (NotRegisteredException e) {
-			return null;
-		}
-	}
-	
-	private static Town getTown(Location location) {
-		Town town = null;
-		try {
-			Coord coord = Coord.parseCoord(location);
-			TownyWorld world = TownyUniverse.getDataSource().getWorld(location.getWorld().getName());
-			
-			if (world != null)
-				town = world.getTownBlock(coord).getTown();
-		} catch (NotRegisteredException e) { }
-		return town;
-	}
-	
+
 	public static boolean isAlly(Player player, Entity entity) {
-		return isAlly(player, entity.getLocation());
+		return hook.isAlly(player, entity);
 	}
-	
-	public static boolean isAlly(Player player, LocationAbstract location) {
-		return isAlly(player, location.toLocation());
-	}
-	
-	public static boolean isAlly(Player player, Location Location) {
-		//TODO: Implement.
-		return false;
-	}
-	
-	public static boolean isAlly(Player player, Player otherPlayer) {
-		//TODO: Implement
-		return false;
-	}
-	
-	public static boolean isNationMember(Player player, Entity entity) {
-		return isNationMember(player, entity.getLocation());
-	}
-	
-	public static boolean isNationMember(Player player, LocationAbstract location) {
-		return isNationMember(player, location.toLocation());
-	}
-	
-	public static boolean isNationMember(Player player, Location location) {
-		//TODO: Implement.
-		return false;
-	}
-	
-	public static boolean isNationMember(Player player, Player otherPlayer) {
-		//TODO: Implement.
-		return false;
-	}
-	
-	
 
+	public static boolean isAlly(Player player, LocationAbstract location) {
+		return hook.isAlly(player, location);
+	}
+
+	public static boolean isAlly(Player player, Location Location) {
+		return hook.isAlly(player, Location);
+	}
+
+	public static boolean isAlly(Player player, Player otherPlayer) {
+		return hook.isAlly(player, otherPlayer);
+	}
+
+	public static boolean isNationMember(Player player, Entity entity) {
+		return hook.isNationMember(player, entity);
+	}
+
+	public static boolean isNationMember(Player player, LocationAbstract location) {
+		return hook.isNationMember(player, location);
+	}
+
+	public static boolean isNationMember(Player player, Location location) {
+		return hook.isNationMember(player, location);
+	}
+
+	public static boolean isNationMember(Player player, Player otherPlayer) {
+		return hook.isNationMember(player, otherPlayer);
+	}
+	
 	/*
 	 * is ally land(block / loc)
 	 */
