@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -103,6 +104,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	public NoxPlayer(PlayerManager mn, String name) {
+		Validate.notNull(mn);
 		NoxCore core = mn.getPlugin();
 		permHandler = core.getPermissionHandler();
 		cds = new ArrayList<CoolDown>();
@@ -124,6 +126,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	public NoxPlayer(PlayerManager mn, UUID uid) {
+		Validate.notNull(mn);
 		NoxCore core = mn.getPlugin();
 		permHandler = core.getPermissionHandler();
 		cds = new ArrayList<CoolDown>();
