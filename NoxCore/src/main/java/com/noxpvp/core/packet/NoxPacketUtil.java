@@ -29,7 +29,7 @@ import com.noxpvp.core.NoxCore;
 public class NoxPacketUtil extends PacketUtil {
 	
 	private static List<Integer> MagicEntityId = new ArrayList<Integer>();
-	private static int SHARED_IDS = Short.MAX_VALUE;
+	private static int SHARED_IDS = 567891234;
 	
 	public static int getNewEntityId(int amount) {
 		if (NoxCore.getInstance().isHoloAPIActive())

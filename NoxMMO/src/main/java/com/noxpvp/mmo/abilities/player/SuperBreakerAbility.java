@@ -48,7 +48,7 @@ public class SuperBreakerAbility extends BasePlayerAbility {
 					return;
 				
 				if (!mayExecute() || !player.isValid()){
-					unRegisterHandler(this);
+					unregisterHandler(this);
 					return;
 				}
 				

@@ -25,7 +25,6 @@ public class HammerOfThorAbility extends BasePlayerAbility  implements PVPAbilit
 	public static final String ABILITY_NAME = "Hammer of Thor";
 	public static final String PERM_NODE = "hammer-of-thor";
 	
-//	private NoxPLPacketListener fakeHammerHandler;
 	private BaseMMOEventHandler<ProjectileHitEvent> hitListener;
 	private BaseMMOEventHandler<EntityDamageByEntityEvent> hitEntityListener;
 	
@@ -42,8 +41,8 @@ public class HammerOfThorAbility extends BasePlayerAbility  implements PVPAbilit
 				registerHandler(hitEntityListener);
 				registerHandler(hitListener);
 			} else {
-				unRegisterHandler(hitEntityListener);
-				unRegisterHandler(hitListener);
+				unregisterHandler(hitEntityListener);
+				unregisterHandler(hitListener);
 			}
 	}
 	
@@ -104,11 +103,17 @@ public class HammerOfThorAbility extends BasePlayerAbility  implements PVPAbilit
 				}
 				
 				public void execute(EntityDamageByEntityEvent event) {
+					if (!active) {
+						unregisterHandler(this);
+						return;
+					}
+					
 					Projectile damager = DamageUtil.getAttackingProjectile(event);
 					
 					if (damager != null && damager.hasMetadata("HammerSecurity")) {
 						event.setDamage(event.getDamage() * getDamageMultiplier());
 						damager.remove();
+						setActive(false);
 					}
 					
 					return;
@@ -132,26 +137,20 @@ public class HammerOfThorAbility extends BasePlayerAbility  implements PVPAbilit
 				}
 				
 				public void execute(ProjectileHitEvent event) {
+					if (!active) {
+						unregisterHandler(this);
+						return;
+					}
+					
 					Projectile a = event.getEntity();
 					if (a != null && a.hasMetadata("HammerSecurity")) {
 							a.remove();
+							setActive(false);
 					}
 					
 					return;
 				}
 			};
-	}
-	
-	/**
-	 * 
-	 * @param player The user of this ability instance
-	 * @param distanceVelo double multiplier of the users direction used as a velocity
-	 */
-	public HammerOfThorAbility(Player player, double distanceVelo, double damageMultiplier){
-		super(ABILITY_NAME, player);
-		
-		this.distanceVelo = distanceVelo;
-		this.damageMultiplier = damageMultiplier;
 	}
 	
 	public boolean execute() {

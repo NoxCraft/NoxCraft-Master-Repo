@@ -1,9 +1,6 @@
 package com.noxpvp.core.utils;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -11,8 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -20,61 +15,98 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.Hologram;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 
 
 public class StaticEffects {
-
+	
+	private static final NoxCore plugin = NoxCore.getInstance();
 	private static List<LivingEntity> frozenEntitys = new ArrayList<LivingEntity>();
 	
 	public static void DamageAmountParticle(LivingEntity e, double damage){
 		DamageAmountParticle(e.getEyeLocation(), damage);
 	}
 	
-	public static void DamageAmountParticle(Location loc, double damage){
-		if (NoxCore.getInstance().isHoloAPIActive())
-			HoloAPI.getManager().createSimpleHologram(loc, 5, true, ChatColor.RED + String.format("%.1f", damage));
+	public static void DamageAmountParticle(Location loc, double damage) {
+		if (plugin.isHoloAPIActive()) {
+			final Hologram damageParticle = HoloAPI.getManager()
+					.createSimpleHologram(loc, 3, true, ChatColor.RED + "-" + String.format("%.1f", damage));
+			
+			Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+				
+				public void run() {
+					HoloAPI.getManager().stopTracking(damageParticle);
+				}
+			}, 20 * 3);
+		}
+		
 	}
 	
-	public static void SkullBreak(LivingEntity e){
-		SkullBreak(e.getEyeLocation(), NoxCore.getInstance());
+	public static void HealAmountParticle(LivingEntity e, double heal){
+		HealAmountParticle(e.getEyeLocation(), heal);
 	}
 	
-	public static void SkullBreak(Location loc, NoxPlugin plugin){
+	public static void HealAmountParticle(Location loc, double heal) {
+		if (plugin.isHoloAPIActive()) {
+			final Hologram healParticle = HoloAPI.getManager()
+					.createSimpleHologram(loc, 3, true, ChatColor.GREEN + "+" + String.format("%.1f", heal));
+			
+			Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+				
+				public void run() {
+					HoloAPI.getManager().stopTracking(healParticle);
+				}
+			}, 20 * 3);
+		}
+		
+	}
+	
+	public static void SkullBreak(LivingEntity e) {
+		SkullBreak(e.getEyeLocation(), plugin);
+	}
+	
+	public static void SkullBreak(Location loc, NoxPlugin plugin) {
 		new ParticleRunner("blockcrack_155_0", loc, false, .1F, 20, 2).start(0);
 	}
 	
 	public static void BloodEffect(Entity e){
-		BloodEffect(e, NoxCore.getInstance());
+		BloodEffect(e, plugin);
 	}
 	
-	public static void BloodEffect(Entity e, NoxPlugin plugin){
+	public static void BloodEffect(Entity e, NoxPlugin plugin) {
 		new ParticleRunner("blockdust_35_14", e.getLocation(), false, .12F, 15, 1).runTaskTimer(plugin, 0, 0);
 	}
 	
-	public static void BroadcastSound(Entity e, Sound sound){
+	public static void HeartEffect(Entity e, double healAmount) {
+		HeartEffect(e, healAmount, plugin);
+	}
+	
+	public static void HeartEffect(Entity e, double healAmount, NoxPlugin plugin) {
+		new ParticleRunner(ParticleType.heart, e, false, 0, 1, (int) Math.floor(healAmount)).start(0, 5);
+	}
+	
+	public static void BroadcastSound(Entity e, Sound sound) {
 		BroadcastSound(e.getLocation(), sound);
 	}
 	
-	public static void BroadcastSound(Location loc, Sound sound){
+	public static void BroadcastSound(Location loc, Sound sound) {
 		loc.getWorld().playSound(loc, sound, 1, 0);
 	}
 	
-	public static void PlaySound(Player p, Sound sound){
+	public static void PlaySound(Player p, Sound sound) {
 		p.playSound(p.getLocation(), sound, 1, 0);
 	}
 	
-	public static void playSound(Player p, String sound){
+	public static void playSound(Player p, String sound) {
 		p.playSound(p.getLocation(), sound, 1, 1);
 	}
 	
@@ -82,7 +114,7 @@ public class StaticEffects {
 		PlaySound(p, loc, sound, 1, 1);
 	}
 	
-	public static void PlaySound(Player p, Location loc, String sound, float volume, float pitch){
+	public static void PlaySound(Player p, Location loc, String sound, float volume, float pitch) {
 		p.playSound(loc, sound, volume, pitch);
 		
 		/*CommonPacket packet = new CommonPacket(PacketType.OUT_NAMED_SOUND_EFFECT);
@@ -106,7 +138,7 @@ public class StaticEffects {
 	 * 
 	 * @return Boolean if freezing was successful
 	 */
-	public static boolean Freeze(final LivingEntity e, int ticks){
+	public static boolean Freeze(final LivingEntity e, int ticks) {
 		if (frozenEntitys.contains(e))
 			return false;
 		
@@ -126,7 +158,7 @@ public class StaticEffects {
 		e.addPotionEffect(jumping, true);
 		
 		
-		final NoxListener<NoxPlugin> freezeRemovalPrevention = new NoxListener<NoxPlugin>(NoxCore.getInstance()) {
+		final NoxListener<NoxPlugin> freezeRemovalPrevention = new NoxListener<NoxPlugin>(plugin) {
 			
 			@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 			public void onPotionDrink(PlayerItemConsumeEvent event){
@@ -158,7 +190,7 @@ public class StaticEffects {
 			}
 		};
 		
-		Bukkit.getScheduler().runTaskLater(NoxCore.getInstance(), new Runnable() {
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			
 			public void run() {
 				if (e == null || !e.isValid()){

@@ -55,5 +55,5 @@ public interface PlayerAbility extends EntityAbility {
 	 * 
 	 * @param handler
 	 */
-	public void unRegisterHandler(BaseMMOEventHandler<? extends Event> handler);
+	public void unregisterHandler(BaseMMOEventHandler<? extends Event> handler);
 }

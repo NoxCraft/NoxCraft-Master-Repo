@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import com.comphenix.packetwrapper.WrapperPlayServerAttachEntity;
 import com.comphenix.packetwrapper.WrapperPlayServerSpawnEntityLiving;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import com.noxpvp.core.packet.NoxPacketUtil;
 import com.noxpvp.core.utils.PlayerUtils;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
@@ -34,8 +35,7 @@ public class HookShotAbility extends BasePlayerAbility{
 	public static final String ABILITY_NAME = "Hook Shot";
 	public static final String PERM_NODE = "hook-shot";
 	
-	public static int batId = Short.MAX_VALUE + 1000;
-	
+	private int batId = NoxPacketUtil.getNewEntityId(1);
 	private ItemStack pullRegent = new ItemStack(Material.STRING, 1);
 	private ItemStack shootRegent = new ItemStack(Material.ARROW, 1);
 	
@@ -46,6 +46,21 @@ public class HookShotAbility extends BasePlayerAbility{
 	private int blockTime;
 	private Material holdingBlockType;
 	private Arrow arrow;
+	private boolean active = false;
+	
+	private void setActive(boolean active) {
+		boolean changed = this.active != active;
+		this.active = active;
+		
+		if (changed)
+			if (active) {
+				registerHandler(hitHandler);
+				registerHandler(pullHandler);
+			} else {
+				unregisterHandler(hitHandler);
+				unregisterHandler(pullHandler);
+			}
+	}
 
 	/**
 	 * 
@@ -120,20 +135,18 @@ public class HookShotAbility extends BasePlayerAbility{
 			}
 			
 			public void execute(ProjectileHitEvent event) {
-				if (!isActive()){
-					NoxMMO.getInstance().getMasterListener().unregisterHandler(this);
+				if (!active) {
+					unregisterHandler(this);
 				}
 				
-				if (arrow != event.getEntity())
+				if (arrow.equals(event.getEntity()))
 					return;
 				
 				Player p;
-				Arrow arrow;
 				
-				if ((p = HookShotAbility.this.getPlayer()) == null || !p.isValid())
+				if ((p = HookShotAbility.this.getPlayer()) == null)
 					return;
 				
-				arrow = (Arrow) event.getEntity();
 				WrapperPlayServerAttachEntity rope = new WrapperPlayServerAttachEntity();
 				WrapperPlayServerSpawnEntityLiving holder = new WrapperPlayServerSpawnEntityLiving();
 				
@@ -142,12 +155,7 @@ public class HookShotAbility extends BasePlayerAbility{
 				dw.setObject(6, (float) 1);
 				dw.setObject(12, 0);
 				
-				if (batId > (Short.MAX_VALUE + 10000))
-					batId = Short.MAX_VALUE + 1000;
-				
-				int id = batId++;
-				
-				holder.setEntityID(id);
+				holder.setEntityID(batId);
 				holder.setType(EntityType.BAT);
 				holder.setMetadata(dw);
 				
@@ -157,7 +165,7 @@ public class HookShotAbility extends BasePlayerAbility{
 				holder.setZ(loc.getZ());
 				
 				rope.setLeached(true);
-				rope.setEntityId(id);
+				rope.setEntityId(batId);
 				rope.setVehicleId(p.getEntityId());
 				
 				holder.sendPacket(p);
@@ -172,12 +180,12 @@ public class HookShotAbility extends BasePlayerAbility{
 				1) {
 
 					public boolean ignoreCancelled() {
-						return false;
+						return true;
 					}
 
 					public void execute(PlayerInteractEvent event) {
-						if (!isActive()){
-							NoxMMO.getInstance().getMasterListener().unregisterHandler(this);
+						if (!active){
+							unregisterHandler(this);
 						}
 						
 						Block hBlock = arrow.getLocation().getBlock();
@@ -187,10 +195,10 @@ public class HookShotAbility extends BasePlayerAbility{
 						
 						if (!PlayerUtils.hasAtleast(inv, pullRegent, pullRegent.getAmount()))
 							return;
-						if (LineOfSightUtil.hasLineOfSight(p, arrow.getLocation(), Material.AIR))
+						if (!LineOfSightUtil.hasLineOfSight(p, arrow.getLocation(), Material.AIR))
 							return;
 						if (hBlock.getType() != Material.AIR || hBlock.getRelative(0, 1, 0).getType() != Material.AIR || hBlock.getRelative(0, 2, 0).getType() != Material.AIR){
-							NoxMMO.getInstance().getMasterListener().unregisterHandler(this);
+							unregisterHandler(this);
 							arrow.remove();
 							return;
 						}
@@ -203,6 +211,7 @@ public class HookShotAbility extends BasePlayerAbility{
 						
 						p.teleport(hBlock.getRelative(0, 1, 0).getLocation(), TeleportCause.PLUGIN);
 						arrow.remove();
+						setActive(false);
 						
 					}
 
@@ -229,18 +238,9 @@ public class HookShotAbility extends BasePlayerAbility{
 		inv.removeItem(shootRegent);
 		
 		this.arrow = p.launchProjectile(Arrow.class);
-		arrow.setBounce(true);
-		arrow.setVelocity(p.getLocation().getDirection());
+		arrow.setVelocity(p.getLocation().getDirection().multiply(2));
 		
-		NoxMMO.getInstance().getMasterListener().registerHandler(hitHandler);
-		
-		return true;
-	}
-	
-	private boolean isActive(){
-		if (!mayExecute() || !getPlayer().isValid())
-			return false;
-		
+		setActive(true);
 		return true;
 	}
 

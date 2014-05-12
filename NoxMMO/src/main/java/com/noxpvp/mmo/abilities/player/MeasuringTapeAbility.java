@@ -39,7 +39,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 
 					public void execute(PlayerInteractEvent event) {
 						if (!mayExecute()){
-							unRegisterHandler(this);
+							unregisterHandler(this);
 							return;
 						}
 						if (!event.getPlayer().equals(player))
@@ -64,7 +64,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 							blocks[1] = b;
 							NoxPacketUtil.FakeBlock(10, Material.WOOL, b.getLocation());
 							
-							unRegisterHandler(this);
+							unregisterHandler(this);
 							
 							return;
 						}

@@ -44,7 +44,7 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements Pla
 		masterListener.registerHandler(handler);
 	}
 	
-	public void unRegisterHandler(BaseMMOEventHandler<? extends Event> handler) {
+	public void unregisterHandler(BaseMMOEventHandler<? extends Event> handler) {
 		masterListener.unregisterHandler(handler);
 		
 	}

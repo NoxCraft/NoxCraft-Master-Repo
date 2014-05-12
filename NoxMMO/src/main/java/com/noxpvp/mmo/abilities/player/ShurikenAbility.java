@@ -41,8 +41,8 @@ public class ShurikenAbility extends BasePlayerAbility implements PVPAbility {
 					registerHandler(hitEntityHandler);
 					registerHandler(hitHandler);
 				} else {
-					unRegisterHandler(hitEntityHandler);
-					unRegisterHandler(hitHandler);
+					unregisterHandler(hitEntityHandler);
+					unregisterHandler(hitHandler);
 				}
 			
 			return;

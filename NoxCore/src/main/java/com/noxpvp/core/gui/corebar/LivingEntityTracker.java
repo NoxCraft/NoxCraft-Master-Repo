@@ -19,7 +19,7 @@ import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 public class LivingEntityTracker extends BukkitRunnable {
 	private final static int runPeriod = 10;
 	
-	public final static String separater = " || ";
+	public final static String separater = "    ";
 	public final static String color = ChatColor.GREEN.toString();
 	
 	private LivingEntity e;
@@ -92,7 +92,7 @@ public class LivingEntityTracker extends BukkitRunnable {
 			transparents.add(cur);
 		}
 		
-		this.text = text;
+		this.text = color + text;
 		
 		this.displayTicks = canBeOverridden? displayTicks : (displayTicks <= 0? 500 : displayTicks);
 		this.runs = 0;

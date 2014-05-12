@@ -97,7 +97,7 @@ public class TargetAbility extends BasePlayerAbility implements PassiveAbility<P
 					} else name = mmoIt.getFullName();
 				} else {
 					if (it instanceof Player) name = ((Player)it).getName();
-					else name = LivingEntityTracker.color + it.getType().name();
+					else name = it.getType().name();
 				} 
 				
 				new LivingEntityTracker(p, target_ref.get(), name);

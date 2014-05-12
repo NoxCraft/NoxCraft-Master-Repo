@@ -56,7 +56,7 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 			if (active)
 				registerHandler(noTradeHandler);
 			else
-				unRegisterHandler(noTradeHandler);
+				unregisterHandler(noTradeHandler);
 	}
 	
 	/**

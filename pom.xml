@@ -31,24 +31,27 @@
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
 		-->
+		
+		<!--  Spigot -->
 		<repository>
 			<id>Spigot</id>
 			<url>http://repo.md-5.net/content/repositories/snapshots</url>
 		</repository>
 
+		<!-- Bukkit -->
 		<repository>
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public/</url>
 		</repository>
 
-		<!-- PROTOCOLLIB -->
+		<!-- ProtocolLib -->
 		<repository>
 			<id>comphenix-rep</id>
 			<name>Comphenix Repository</name>
 			<url>http://repo.comphenix.net/content/groups/public</url>
 		</repository>
 
-		<!-- BKCOMMONLIB -->
+		<!-- BKCommonLib -->
 		<repository>
 			<id>dj-tcraft repository</id>
 			<url>http://ci.dj-tcraft.nl/plugin/repository/everything/</url>
@@ -60,19 +63,19 @@
 			<url>http://maven.sk89q.com/repo/</url>
 		</repository>
 
-		<!-- VAULT -->
+		<!-- Vault -->
 		<repository>
 			<id>TheYetiCave-nexus</id>
 			<url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
 		</repository>
 
-		<!-- BARAPI -->
+		<!-- BarAPI -->
 		<repository>
 			<id>confuser-repo</id>
 			<url>http://ci.frostcast.net/plugin/repository/everything</url>
 		</repository>
 
-		<!-- HOLO API -->
+		<!-- HoloAPI -->
 		<repository>
 			<id>hawk-repo</id>
 			<url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
@@ -80,52 +83,70 @@
 	</repositories>
 	<dependencyManagement>
 		<dependencies>
+		    
+		    <!-- HoloAPI -->
 			<dependency>
 				<groupId>com.dsh105</groupId>
 				<artifactId>HoloAPI</artifactId>
 				<version>1.2.3</version>
 			</dependency>
+			
+			<!-- BKCommonLib -->
 			<dependency>
 				<groupId>com.bergerkiller.bukkit</groupId>
 				<artifactId>BKCommonLib</artifactId>
 				<version>1.58-SNAPSHOT</version>
 				<scope>provided</scope>
 			</dependency>
+			
+			<!-- ProtocolLib -->
 			<dependency>
 				<groupId>com.comphenix.protocol</groupId>
 				<artifactId>ProtocolLib</artifactId>
 				<version>3.2.0</version>
 				<scope>provided</scope>
 			</dependency>
+			
+			<!-- Vault -->
 			<dependency>
 				<groupId>net.milkbowl.vault</groupId>
 				<artifactId>Vault</artifactId>
 				<version>1.2.30</version>
 				<scope>provided</scope>
 			</dependency>
+			
+			<!-- Votifier -->
 			<dependency>
 				<groupId>com.vexsoftware.votifier</groupId>
 				<artifactId>Votifier</artifactId>
 				<version>1.9</version>
 				<scope>provided</scope>
 			</dependency>
+			
+			<!-- BarAPI -->
 			<dependency>
 				<groupId>me.confuser</groupId>
 				<artifactId>BarAPI</artifactId>
 				<version>3.1</version>
 			</dependency>
+			
+			<!-- Towny -->
 			<dependency>
 				<groupId>com.palmergames.towny</groupId>
 				<artifactId>Towny</artifactId>
 				<version>0.85.0.8</version>
 				<scope>provided</scope>
 			</dependency>
+			
+			<!-- WorldGuard -->
 			<dependency>
 				<groupId>com.sk89q</groupId>
 				<artifactId>worldguard</artifactId>
 				<scope>provided</scope>
 				<version>5.9</version>
 			</dependency>
+			
+			<!-- Spigot -->
 			<dependency>
 				<groupId>org.spigotmc</groupId>
 				<artifactId>spigot-api</artifactId>

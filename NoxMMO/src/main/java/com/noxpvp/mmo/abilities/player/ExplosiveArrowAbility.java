@@ -37,7 +37,7 @@ public class ExplosiveArrowAbility extends BasePlayerAbility implements PVPAbili
 			if (firing)
 				registerHandler(launchHandler);
 			else
-				unRegisterHandler(hitHandler);
+				unregisterHandler(hitHandler);
 		
 		return this; 
 	}
@@ -50,7 +50,7 @@ public class ExplosiveArrowAbility extends BasePlayerAbility implements PVPAbili
 			if (active)
 				registerHandler(hitHandler);
 			else
-				unRegisterHandler(hitHandler);
+				unregisterHandler(hitHandler);
 		
 		return this; 
 	}

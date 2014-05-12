@@ -59,7 +59,7 @@ public class PoisonArrowAbility extends BasePlayerAbility implements PVPAbility 
 			if (active)
 				registerHandler(hitHandler);
 			else
-				unRegisterHandler(hitHandler);
+				unregisterHandler(hitHandler);
 		
 		return this; 
 	}

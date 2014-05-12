@@ -91,8 +91,8 @@ public class MedPackAbility extends BasePlayerAbility{
 			registerHandler(inventoryPickupHandler);
 			camoflouge.register();
 			} else {
-			unRegisterHandler(handler);
-			unRegisterHandler(inventoryPickupHandler);
+			unregisterHandler(handler);
+			unregisterHandler(inventoryPickupHandler);
 			camoflouge.unRegister();
 			}
 		
