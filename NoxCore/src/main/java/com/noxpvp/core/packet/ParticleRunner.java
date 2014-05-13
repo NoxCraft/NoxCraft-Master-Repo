@@ -8,14 +8,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
-import com.bergerkiller.bukkit.common.utils.PacketUtil;
 import com.noxpvp.core.NoxCore;
 
 /**
  * @author NoxPVP
  *
  */
-public class ParticleRunner extends BukkitRunnable{
+public class ParticleRunner extends BukkitRunnable {
+	
 	private String name;
 	
 	private Object loc;
@@ -98,7 +98,7 @@ public class ParticleRunner extends BukkitRunnable{
 				commonEffect.write(PacketType.OUT_WORLD_PARTICLES.randomZ, RandomUtils.nextFloat());
 			}
 			
-			PacketUtil.broadcastPacketNearby((Location) loc, 125, commonEffect);
+			NoxPacketUtil.broadcastPacketSpigotVisibility(commonEffect, loc);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

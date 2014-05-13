@@ -5,12 +5,11 @@ import java.util.logging.Level;
 
 import org.bukkit.command.CommandSender;
 
-import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.collections.StringMap;
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.utils.gui.MessageUtil;
+import com.noxpvp.core.utils.NoxMessageBuilder;
 
 public abstract class BaseCommand implements Command {
 	private final boolean isPlayerOnly;
@@ -52,21 +51,22 @@ public abstract class BaseCommand implements Command {
 		return containsSubCommand(command.getName());
 	}
 	
-	public final void displayHelp(CommandSender sender) {
-		MessageBuilder mb = new MessageBuilder();
+	public void displayHelp(CommandSender sender) {
+		StringMap<BaseCommand> cmds = getSubCommandMap();
 		
-		mb.setSeparator("\n");
+		NoxMessageBuilder mb = new NoxMessageBuilder(getPlugin(), true);
 		
-		if (!getName().equals(""))
-			mb.newLine().append(GlobalLocale.COMMAND_HELP_HEADER.get(getPlugin().getName(), getName()));
-		else
-			mb.newLine().append(GlobalLocale.HELP_HEADER.get(getPlugin().getName()));
-
-		if (getHelp() != null)
-			for (String line : getHelp())
-				mb.append(line);
+		for (BaseCommand cmd : cmds.values())
+			mb.withCommand(cmd, true);
 		
-		MessageUtil.sendMessage(sender, mb.lines());
+		mb = onDisplayHelp(mb);
+		
+		mb.headerClose(false).send(sender);
+		
+	}
+	
+	public NoxMessageBuilder onDisplayHelp(NoxMessageBuilder message) {
+		return message;
 	}
 
 	public abstract CommandResult execute(CommandContext context) throws NoPermissionException;

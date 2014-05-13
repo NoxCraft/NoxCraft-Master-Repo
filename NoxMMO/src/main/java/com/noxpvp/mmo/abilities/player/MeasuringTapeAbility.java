@@ -52,7 +52,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 								return;
 							
 							blocks[0] = b;
-							NoxPacketUtil.FakeBlock(10, Material.WOOL, b.getLocation());
+							NoxPacketUtil.fakeBlock(10, Material.WOOL, b.getLocation());
 							
 							firstDone = true;
 							return;
@@ -62,7 +62,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 								return;
 							
 							blocks[1] = b;
-							NoxPacketUtil.FakeBlock(10, Material.WOOL, b.getLocation());
+							NoxPacketUtil.fakeBlock(10, Material.WOOL, b.getLocation());
 							
 							unregisterHandler(this);
 							

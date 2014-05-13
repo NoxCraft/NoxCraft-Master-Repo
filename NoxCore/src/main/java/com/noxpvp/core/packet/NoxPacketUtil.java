@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import com.bergerkiller.bukkit.common.bases.IntVector2;
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
+import com.bergerkiller.bukkit.common.server.SpigotServer;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
 import com.bergerkiller.bukkit.common.wrappers.DataWatcher;
 import com.comphenix.packetwrapper.BlockChangeArray;
@@ -28,6 +29,7 @@ import com.noxpvp.core.NoxCore;
 
 public class NoxPacketUtil extends PacketUtil {
 	
+	private static int spigotPlayerViewRange = 75;
 	private static List<Integer> MagicEntityId = new ArrayList<Integer>();
 	private static int SHARED_IDS = 567891234;
 	
@@ -46,14 +48,18 @@ public class NoxPacketUtil extends PacketUtil {
 			MagicEntityId.remove(id);
 	}
 	
-	public static void FakeBlock(int seconds, Material type, Location loc) {
+	public static void broadcastPacketSpigotVisibility(CommonPacket packet, Location loc) {
+		broadcastPacketNearby(loc, spigotPlayerViewRange, packet);
+	}
+	
+	public static void fakeBlock(int seconds, Material type, Location loc) {
 		Map<Material, Location> single = new HashMap<Material, Location>();
 		single.put(type, loc);
 		
-		FakeBlocks(seconds, single);	
+		fakeBlocks(seconds, single);	
 	}
 	
-	public static void FakeBlocks(int seconds, Map<Material, Location> changes) {
+	public static void fakeBlocks(int seconds, Map<Material, Location> changes) {
 		try {
 			
 			CommonPacket block = new CommonPacket(PacketType.OUT_MULTI_BLOCK_CHANGE);

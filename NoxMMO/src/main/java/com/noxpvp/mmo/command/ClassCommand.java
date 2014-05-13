@@ -1,7 +1,5 @@
 package com.noxpvp.mmo.command;
 
-import com.bergerkiller.bukkit.common.MessageBuilder;
-import com.bergerkiller.bukkit.common.collections.StringMap;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
@@ -16,9 +14,9 @@ public class ClassCommand extends BaseCommand {
 		super(COMMAND_NAME, false);
 		
 		registerSubCommands(
-				new ClassSwitchCommand(),
-				new ClassInfoCommand()
-				);
+			new ClassSwitchCommand(),
+			new ClassInfoCommand()
+			);
 	}
 
 	public String[] getFlags() {
@@ -26,14 +24,7 @@ public class ClassCommand extends BaseCommand {
 	}
 
 	public String[] getHelp() {
-		StringMap<BaseCommand> cmds = getSubCommandMap();
-		
-		MessageBuilder mb = new MessageBuilder();
-		
-		for (String cmd : cmds.keySet())
-			mb.newLine().aqua("/").yellow("class" + " " + cmd);
-		
-		return mb.lines();
+		return new String[0];
 	}
 
 	public int getMaxArguments() {

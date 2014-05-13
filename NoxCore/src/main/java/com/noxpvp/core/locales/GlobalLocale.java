@@ -20,6 +20,7 @@ public class GlobalLocale extends NoxLocale {
 	 * Argument 2: Command Name (Context label preferred)
 	 */
 	public static GlobalLocale COMMAND_HELP_HEADER;
+	public static GlobalLocale HEADER_CLOSE;
 	
 	public static GlobalLocale FAILED_PERMISSION;
 	public static GlobalLocale FAILED_PERMISSION_VERBOSE;
@@ -36,8 +37,9 @@ public class GlobalLocale extends NoxLocale {
 	
 	static {
 		//Help Dialogs
-		HELP_HEADER = new GlobalLocale("help.header", "&6[======~*~======{[&4%0%&6]}======~*~======]");
-		COMMAND_HELP_HEADER = new GlobalLocale("help.command-header", "&6[======~*~======{[&4%0% - %1%&6]}======~*~======]");
+		HELP_HEADER = new GlobalLocale("help.header", "&6[======~*~======([&c%0%&6])======~*~======]");
+		COMMAND_HELP_HEADER = new GlobalLocale("help.command-header", "&6[======~*~======([&c%0% - %1%&6])======~*~======]");
+		HEADER_CLOSE = new GlobalLocale("heap.header.close", "&6[======~*~========~.*.~========~*~======]");
 		
 		//Permissions
 		FAILED_PERMISSION = new GlobalLocale("permission.denied.default", "&cPermission Denied&r:&e %0%");

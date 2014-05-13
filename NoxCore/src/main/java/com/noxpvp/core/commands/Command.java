@@ -2,8 +2,13 @@ package com.noxpvp.core.commands;
 
 import org.bukkit.command.CommandSender;
 
+import com.noxpvp.core.utils.NoxMessageBuilder;
+
 public interface Command {
+	
 	public void displayHelp(CommandSender sender);
+	
+	public NoxMessageBuilder onDisplayHelp(NoxMessageBuilder message);
 	
 	public CommandResult executeCommand(CommandContext context) throws NoPermissionException;
 	
