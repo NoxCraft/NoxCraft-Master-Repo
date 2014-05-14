@@ -4,10 +4,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.abilities.PVPAbility;
 
 //FIXME not made yet

@@ -2,8 +2,6 @@ package com.noxpvp.mmo.abilities.player;
 
 import org.bukkit.entity.Player;
 
-import com.noxpvp.core.packet.ParticleRunner;
-import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
@@ -77,7 +75,7 @@ public class RejuvenationAbility extends BasePlayerAbility implements PVPAbility
 	public RejuvenationAbility(Player player){
 		super(ABILITY_NAME, player);
 		
-		this.healthPerHeal = 1;
+		this.healthPerHeal = 2;
 		this.heals = 6;
 		this.delayBetweenHeals = 15;
 	}
@@ -89,7 +87,6 @@ public class RejuvenationAbility extends BasePlayerAbility implements PVPAbility
 		Player p = getPlayer();
 		
 		new HealRunnable(p, healthPerHeal, heals).runTaskTimer(NoxMMO.getInstance(), 0, delayBetweenHeals);
-		new ParticleRunner(ParticleType.heart, p, true, 0F, 3, 5).start(0, delayBetweenHeals);
 		
 		return true;
 	}

@@ -14,7 +14,6 @@ import com.noxpvp.core.gui.corebar.ScrollingText;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.UUIDUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
-import com.noxpvp.core.utils.gui.ShiningStringScroller;
 
 public class LoginListener extends NoxListener<NoxCore> {
 		

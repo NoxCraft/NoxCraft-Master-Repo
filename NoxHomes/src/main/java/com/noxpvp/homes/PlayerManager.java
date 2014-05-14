@@ -97,7 +97,7 @@ public class PlayerManager extends BasePlayerManager<HomesPlayer> { //FIXME: Jav
 	 * Retrieves the named home of the named owner
 	 * 
 	 * @param owner
-	 *            name
+	 *			name
 	 * 
 	 * @param name
 	 * 			  The name of the home or null for default home

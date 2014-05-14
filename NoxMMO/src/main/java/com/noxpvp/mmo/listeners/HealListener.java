@@ -5,8 +5,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 
+import com.noxpvp.core.effect.StaticEffects;
 import com.noxpvp.core.listeners.NoxListener;
-import com.noxpvp.core.utils.StaticEffects;
 import com.noxpvp.mmo.NoxMMO;
 
 public class HealListener extends NoxListener<NoxMMO> {

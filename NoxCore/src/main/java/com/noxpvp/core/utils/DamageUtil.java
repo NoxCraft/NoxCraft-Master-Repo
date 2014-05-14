@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.omg.CosNaming.IstringHelper;
 
 public class DamageUtil {
 	

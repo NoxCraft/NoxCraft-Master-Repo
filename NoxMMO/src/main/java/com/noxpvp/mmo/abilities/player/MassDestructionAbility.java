@@ -16,9 +16,7 @@ import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.SetVelocityRunnable;
-import com.noxpvp.mmo.runnables.ShockWaveAnimation;
-import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
-
+import com.noxpvp.mmo.runnables.ShockGroundAnimation;
 /**
  * @author NoxPVP
  *
@@ -35,8 +33,23 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 	
 	private BaseMMOEventHandler<EntityDamageEvent> handler;
 	private double damage = 6;
-	private double hVelo = 4;
+	private double hVelo = 1.5;
 	private int range = 6;
+	private boolean isActive;
+	
+	private MassDestructionAbility setActive(boolean active) {
+		boolean changed = this.isActive != active;
+		this.isActive = active;
+		
+		if (changed)
+			if (active)
+				registerHandler(handler);
+			else
+				unregisterHandler(handler);
+		
+		return this; 
+	}
+	
 	
 	/**
 	 * 
@@ -108,7 +121,7 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 				
 				if (p.equals(MassDestructionAbility.this.getPlayer())) {
 					event.setCancelled(true);
-					MassDestructionAbility.this.eventExecute(MassDestructionAbility.this);
+					MassDestructionAbility.this.setActive(false).eventExecute();
 				}
 			}
 		};
@@ -125,29 +138,31 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 		Vector up = p.getLocation().getDirection();
 		up.setY(gethVelo());
 		Vector down = p.getLocation().getDirection();
-		down.setY(-gethVelo());
+		down.setY(-gethVelo() * 2);
 		
 		SetVelocityRunnable shootUp = new SetVelocityRunnable(getEntity(), up);
 		SetVelocityRunnable shootDown = new SetVelocityRunnable(getEntity(), down);
 		
 		shootUp.runTask(instance);
-		shootDown.runTaskLater(instance, 30);
-		new UnregisterMMOHandlerRunnable(handler).runTaskLater(instance, 300);//Unregister the handler in 15 seconds
+		shootDown.runTaskLater(instance, 20);
+		
+		setActive(true);
 	
 		return true;
 	}
 	
-	public void eventExecute(MassDestructionAbility ab) {
+	public void eventExecute() {
 		
-		Player p = ab.getPlayer();
+		Player p = getPlayer();
 		Location pLoc = p.getLocation();
 		
-		int range = ab.getRange();
+		int range = getRange();
 		NoxMMO mmo = NoxMMO.getInstance();
 		
-		new ParticleRunner(ParticleType.explode, pLoc, false, 0, 2, 1).runTask(mmo);
-		new ShockWaveAnimation(p, pLoc, 2, range, 0.3).runTask(mmo);
-		new ExpandingDamageRunnable(p, p.getLocation(), ab.getDamage(), range, 2).runTask(mmo);
+		new ParticleRunner(ParticleType.largeexplode, pLoc.add(0, 1, 0), false, 0, 2, 1).runTask(mmo);
+//		new ShockWaveAnimation(p, pLoc, 1, range, 0.35, true).start(0);
+		new ShockGroundAnimation(pLoc, range, hVelo, 20, 0).start(0);
+		new ExpandingDamageRunnable(p, p.getLocation(), getDamage(), range, 2).runTask(mmo);
 		
 	}
 

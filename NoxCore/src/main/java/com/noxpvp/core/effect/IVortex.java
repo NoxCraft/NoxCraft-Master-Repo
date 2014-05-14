@@ -1,9 +1,11 @@
-package com.noxpvp.mmo.vortex;
+package com.noxpvp.core.effect;
 
 import java.util.ArrayDeque;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import com.noxpvp.core.NoxPlugin;
 
 public interface IVortex {
 	
@@ -40,5 +42,7 @@ public interface IVortex {
 	public ArrayDeque<? extends BaseVortexEntity> getEntities();
 	
 	public void clearEntities();
+	
+	public NoxPlugin getPlugin();
 
 }

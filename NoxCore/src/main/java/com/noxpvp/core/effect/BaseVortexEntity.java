@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.vortex;
+package com.noxpvp.core.effect;
 
 import java.util.HashSet;
 
@@ -6,8 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
-
-import com.noxpvp.mmo.NoxMMO;
 
 public abstract class BaseVortexEntity implements IVortexEntity {
 	
@@ -23,7 +21,7 @@ public abstract class BaseVortexEntity implements IVortexEntity {
 	private int ticker_horisontal;
 	
 	public BaseVortexEntity(BaseVortex parent, Location loc, Entity base) {
-		this.uniqueMeta = new FixedMetadataValue(NoxMMO.getInstance(), parent.hashCode());
+		this.uniqueMeta = new FixedMetadataValue(parent.getPlugin(), parent.hashCode());
 		this.parent = parent;
 		this.base = base;
 		
@@ -33,7 +31,6 @@ public abstract class BaseVortexEntity implements IVortexEntity {
 		ticker_vertical = 0;
 		ticker_horisontal = (int) Math.round((Math.random() * 360));
 		
-		base.teleport(loc);
 		base.setMetadata(uniqueMetaKey, uniqueMeta);
 	}
 	
@@ -65,10 +62,10 @@ public abstract class BaseVortexEntity implements IVortexEntity {
 	}
 	
 	public void remove() {
-		if (onRemove()) {
-			this.base.removeMetadata(uniqueMetaKey, NoxMMO.getInstance());
+		if (onRemove() && isVortexEntity(getEntity())) {
 			this.base.remove();
 		}
+		this.base.removeMetadata(uniqueMetaKey, parent.getPlugin());
 	}
 	
 	public int verticalTicker() {

@@ -1,22 +1,35 @@
-package com.noxpvp.mmo.vortex;
+package com.noxpvp.core.effect;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import com.noxpvp.core.NoxCore;
-import com.noxpvp.mmo.NoxMMO;
 
 public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 
+	public final static ItemStack dummySpinItem = new ItemStack(Material.WOOD_SPADE);
+	public final static String dummyItemMeta = "DummySpinItem";
+	
+	static {
+		ItemMeta meta = dummySpinItem.getItemMeta();
+		meta.setLore(Arrays.asList(dummyItemMeta));
+		
+		dummySpinItem.setItemMeta(meta);
+		dummySpinItem.setDurability((short) 0);
+	}
+	
 	protected final static HashMap<Integer, Double[]> lookup = new HashMap<Integer, Double[]>();
 	private ArrayDeque<BaseVortexEntity> entities;
 	
 	private Player user;
+	
 	private Location currentLocation;
 	private int maxEntityAmount;
 	private int time;
@@ -123,9 +136,9 @@ public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 	}
 	
 	public void start() {
-		this.taskId = runTaskTimer(NoxMMO.getInstance(), 0, speed).getTaskId();
+		this.taskId = runTaskTimer(getPlugin(), 0, speed).getTaskId();
 		
-		Bukkit.getScheduler().runTaskLater(NoxCore.getInstance(), new Runnable() {
+		Bukkit.getScheduler().runTaskLater(getPlugin(), new Runnable() {
 			
 			public void run() {
 				BaseVortex.this.stop();
@@ -151,7 +164,6 @@ public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 		while(entities.size() >= maxEntityAmount) {
 			BaseVortexEntity ve = entities.getFirst();
 			entities.remove(ve);
-			ve.getEntity().removeMetadata(BaseVortexEntity.uniqueMetaKey, NoxMMO.getInstance());
 			ve.remove();
 		}
 	}

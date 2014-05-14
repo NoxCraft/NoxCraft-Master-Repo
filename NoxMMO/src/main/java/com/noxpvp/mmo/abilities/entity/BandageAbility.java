@@ -32,8 +32,8 @@ public class BandageAbility extends BaseEntityAbility{
 		
 		e.setHealth(e.getMaxHealth());
 		
-		DamageRunnable wereOff = new DamageRunnable(e, e, (e.getMaxHealth() / 10), 10);
-		wereOff.runTaskTimer(NoxMMO.getInstance(), delay, 15);
+		DamageRunnable wearOff = new DamageRunnable(e, e, (e.getMaxHealth() / 10), 10);
+		wearOff.runTaskTimer(NoxMMO.getInstance(), delay, 15);
 		
 		return false;
 	}

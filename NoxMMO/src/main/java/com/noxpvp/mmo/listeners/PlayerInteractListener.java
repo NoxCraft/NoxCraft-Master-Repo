@@ -10,6 +10,7 @@ import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.abilities.player.MassDestructionAbility;
 import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 
 public class PlayerInteractListener extends NoxListener<NoxMMO>{
@@ -41,6 +42,9 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 			return;
 
 		//debug here
+		new MassDestructionAbility(p).execute();
+//		new FireSpinAbility(p).execute();
+//		new TornadoAbility(p, 25, 5 * 20).execute();
 	}
 	
 }

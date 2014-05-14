@@ -6,12 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.ModuleLogger;
-import com.bergerkiller.bukkit.common.config.ConfigurationNode;
-import com.bergerkiller.bukkit.common.config.FileConfiguration;
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.reflection.SafeField;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
@@ -19,7 +16,6 @@ import com.google.common.collect.MapMaker;
 import com.noxpvp.core.collection.DualAccessMap;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.classes.AxesPlayerClass;
-import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
 

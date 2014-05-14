@@ -158,7 +158,7 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 			LivingEntity e = (LivingEntity) it;
 			
 			new HealRunnable(e, 1, (int) healAmount).runTaskTimer(instance, 40, 5);
-			new ParticleRunner(ParticleType.heart, e, false, 0, 1, (int) healAmount).runTaskTimer(instance, 40, 5);
+			
 		}
 		
 		guardians.add(guardian);

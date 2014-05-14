@@ -7,11 +7,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.effect.StaticEffects;
 import com.noxpvp.core.gui.corebar.LivingEntityTracker;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.PlayerManager;
 import com.noxpvp.core.utils.DamageUtil;
-import com.noxpvp.core.utils.StaticEffects;
 import com.noxpvp.mmo.NoxMMO;
 
 public class DamageListener extends NoxListener<NoxMMO>{

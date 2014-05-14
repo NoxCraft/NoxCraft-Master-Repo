@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.vortex;
+package com.noxpvp.core.effect;
 
 import java.util.HashSet;
 

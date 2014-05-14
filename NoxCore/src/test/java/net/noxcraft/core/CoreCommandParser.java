@@ -174,14 +174,14 @@ public class CoreCommandParser {
 	
 	
 	public static <V> Matcher<Map<String, V>> hasSize(final int size) {
-	    return new TypeSafeMatcher<Map<String, V>>() {
-	        public boolean matchesSafely(Map<String, V> kvMap) {
-	            return kvMap.size() == size;
-	        }
+		return new TypeSafeMatcher<Map<String, V>>() {
+			public boolean matchesSafely(Map<String, V> kvMap) {
+				return kvMap.size() == size;
+			}
 
-	        public void describeTo(Description description) {
-	            description.appendText(" has ").appendValue(size).appendText(" key/value pairs");
-	        }
-	    };
+			public void describeTo(Description description) {
+				description.appendText(" has ").appendValue(size).appendText(" key/value pairs");
+			}
+		};
 	}
 }

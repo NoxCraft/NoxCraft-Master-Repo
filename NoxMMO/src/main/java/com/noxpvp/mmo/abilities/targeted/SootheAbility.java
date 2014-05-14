@@ -1,11 +1,8 @@
 package com.noxpvp.mmo.abilities.targeted;
 
-import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import com.noxpvp.core.packet.ParticleRunner;
-import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
@@ -47,10 +44,9 @@ public class SootheAbility extends BaseTargetedPlayerAbility{
 			return false;
 		
 		LivingEntity t = getTarget();
-		Location tLoc = t.getLocation(), loc = new Location(tLoc.getWorld(), tLoc.getX(), tLoc.getY()+1.75, tLoc.getZ());
+		double ha = t.getHealth() + getHealAmount();
 		
-		t.setHealth(t.getHealth() + getHealAmount());
-		new ParticleRunner(ParticleType.heart, loc, false, 0, 1, (int) getHealAmount() / 2).start(0, 6);
+		t.setHealth(ha > t.getMaxHealth()? t.getMaxHealth() : ha);
 		
 		return false;
 	}

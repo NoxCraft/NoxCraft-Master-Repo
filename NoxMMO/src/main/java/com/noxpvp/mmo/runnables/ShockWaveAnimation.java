@@ -59,6 +59,9 @@ public class ShockWaveAnimation extends BukkitRunnable{
 		}
 	};
 	
+	static {
+		NoxMMO.getInstance().getMasterListener().registerHandler(landHandler);
+	}
 	
 	private Player p;
 	private Block center;
@@ -152,7 +155,6 @@ public class ShockWaveAnimation extends BukkitRunnable{
 	public void safeCancel() {try { cancel(); } catch (IllegalStateException e) {}	}
 
 	public void start(int delay) {
-		NoxMMO.getInstance().getMasterListener().registerHandler(landHandler);
 		runTaskTimer(NoxMMO.getInstance(), delay, shockSpeed);
 	}
 	
@@ -192,7 +194,7 @@ public class ShockWaveAnimation extends BukkitRunnable{
 					}
 					if (b.getType() == Material.GRASS) {b.setType(Material.DIRT);}
 					
-					final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getRelative(BlockFace.UP).getLocation(), b.getType(), b.getData());
+					final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
 					
 					nb.setVelocity(shockVelo);
 					nb.setMetadata("ShockWave", shockMeta);
@@ -201,7 +203,7 @@ public class ShockWaveAnimation extends BukkitRunnable{
 				}
 			}
 			
-		} else if (i > shockRange) {
+		} else {
 			safeCancel();
 			return;
 		}

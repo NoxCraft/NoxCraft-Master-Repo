@@ -6,17 +6,17 @@ import com.noxpvp.homes.NoxHomes;
 public class HomeLocale extends NoxLocale {
 	public final static HomeLocale LIST_OWN;
 	public final static HomeLocale LIST_OTHERS;
-	                               
+								   
 	public final static HomeLocale HOME_OWN;
 	public final static HomeLocale HOME_OTHERS;
-	                               
+								   
 	public final static HomeLocale DELHOME_OWN;
 	public final static HomeLocale DELHOME_INVALID;
 	public final static HomeLocale DELHOME_OTHERS;
-	                               
+								   
 	public final static HomeLocale SETHOME_OWN;
 	public final static HomeLocale SETHOME_OTHERS;
-	                               
+								   
 	public final static HomeLocale WARMUP;
 	public final static HomeLocale COOLDOWN;
 	

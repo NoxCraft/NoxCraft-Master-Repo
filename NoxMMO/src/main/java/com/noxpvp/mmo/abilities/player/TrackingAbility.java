@@ -19,8 +19,8 @@ import com.noxpvp.mmo.runnables.DespawnRunnable;
  */
 public class TrackingAbility extends BasePlayerAbility{
 	
-	public static final String PERM_NODE = "track";
 	public static final String ABILITY_NAME = "Tracking";
+	public static final String PERM_NODE = "tracking";
 	
 	private boolean isInvis;
 	private boolean hasSpeed;

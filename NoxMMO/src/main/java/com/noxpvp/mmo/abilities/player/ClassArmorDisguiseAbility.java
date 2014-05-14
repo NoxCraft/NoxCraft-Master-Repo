@@ -60,10 +60,10 @@ public class ClassArmorDisguiseAbility extends BasePlayerAbility{
 					meta.setColor(clazz.getRBGColor());
 				
 				if (clazz.getLevel() == clazz.getMaxLevel())
-                	meta.addEnchant(Enchantment.OXYGEN, 1, true);//fake enchant for maxed tiers
-                
-                stack.setItemMeta(meta);packet.write(nms.item, stack);
-                
+					meta.addEnchant(Enchantment.OXYGEN, 1, true);//fake enchant for maxed tiers
+				
+				stack.setItemMeta(meta);packet.write(nms.item, stack);
+				
 			} else return false;
 		} else return false;
 		

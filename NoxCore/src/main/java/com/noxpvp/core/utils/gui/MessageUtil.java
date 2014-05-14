@@ -88,7 +88,7 @@ public class MessageUtil {
 		StringBuilder msg = new StringBuilder(message);
 		if (args.length > 0)
 			 for (int i = 0; i < args.length; i++) {
-                StringUtil.replaceAll(msg, "%" + i + "%", LogicUtil.fixNull(args[i], "null"));
+				StringUtil.replaceAll(msg, "%" + i + "%", LogicUtil.fixNull(args[i], "null"));
 			 }
 		return msg.toString();
 	}

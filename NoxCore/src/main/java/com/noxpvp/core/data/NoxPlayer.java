@@ -363,23 +363,23 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	private String getMainGroup() {
-	    
-	    String[] groups = VaultAdapter.permission.getPlayerGroups(getPlayer());
-	    LinkedList<String> groupList = new LinkedList<String>();//: put local group list here
-	    
-	    if (groups.length < 0) return null;
-	    
-	    int ind = 100;
-	    String finalGroup = null;
-	    
-	    for (String group : groups) {
-	            if (groupList.indexOf(group) < ind) {
-	                    ind = groupList.indexOf(group);
-	                    finalGroup = group;
-	            }
-	    }
-	    
-	    return finalGroup;
+		
+		String[] groups = VaultAdapter.permission.getPlayerGroups(getPlayer());
+		LinkedList<String> groupList = new LinkedList<String>();//: put local group list here
+		
+		if (groups.length < 0) return null;
+		
+		int ind = 100;
+		String finalGroup = null;
+		
+		for (String group : groups) {
+				if (groupList.indexOf(group) < ind) {
+						ind = groupList.indexOf(group);
+						finalGroup = group;
+				}
+		}
+		
+		return finalGroup;
 	}
 	
 	public Double getMoney() { return VaultAdapter.economy.getBalance(getPlayerName(), getLastWorldName()); }

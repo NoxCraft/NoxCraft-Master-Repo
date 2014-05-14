@@ -1,6 +1,6 @@
 package com.noxpvp.core.packet;
 
-public class PacketSoundEffects {
+public class PacketSounds {
 	
 		// Partially generated from http://s3.amazonaws.com/MinecraftResources
 		// TODO: Clear out some sounds that don't do anything on the client

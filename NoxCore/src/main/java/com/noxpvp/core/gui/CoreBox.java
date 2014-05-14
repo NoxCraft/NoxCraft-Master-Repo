@@ -23,10 +23,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.effect.StaticEffects;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.PlayerManager;
-import com.noxpvp.core.packet.PacketSoundEffects;
-import com.noxpvp.core.utils.StaticEffects;
+import com.noxpvp.core.packet.PacketSounds;
 
 public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, Cloneable {
 	
@@ -198,14 +198,14 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 				CoreBoxItem item;
 				if((item = getMenuItem(event.getRawSlot())) != null)
 					if (item.onClick(event))
-						StaticEffects.playSound(player, PacketSoundEffects.RandomClick);
+						StaticEffects.playSound(player, PacketSounds.RandomClick);
 					else
-						StaticEffects.PlaySound(player, player.getLocation(), PacketSoundEffects.MobBlazeDeath, 1, 2);
+						StaticEffects.PlaySound(player, player.getLocation(), PacketSounds.MobBlazeDeath, 1, 2);
 			}
 		} else if (backButton != null && event.getRawSlot() == (box.getSize() - 1)){
 			try {
 				((CoreBox) backButton.clone()).show();
-				StaticEffects.playSound(player, PacketSoundEffects.RandomClick);
+				StaticEffects.playSound(player, PacketSounds.RandomClick);
 			} catch (CloneNotSupportedException e) {}
 			
 			return;

@@ -3,26 +3,36 @@ package com.noxpvp.mmo.abilities.player;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.effect.BaseVortex;
+import com.noxpvp.core.effect.BaseVortexEntity;
+import com.noxpvp.core.listeners.NoxPLPacketListener;
+import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
-import com.noxpvp.mmo.vortex.BaseVortex;
-import com.noxpvp.mmo.vortex.BaseVortexEntity;
 
 public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 
@@ -60,19 +70,24 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 	
 	private class TornadoVortex extends BaseVortex {
 
-		BaseMMOEventHandler<EntityChangeBlockEvent> handler;
-		Block currentBlock;
-		Vector direction;
+		private BaseMMOEventHandler<EntityChangeBlockEvent> handler;
+		private NoxPLPacketListener itemSpawnHandler;
+		private Block currentBlock;
+		private Vector direction;
+		
+		public NoxPlugin getPlugin() {
+			return NoxMMO.getInstance();
+		}
 		
 		public TornadoVortex(Player user, Location loc, int time) {
 			super(user, loc, time);
 			
-			setWidth(2);
-			setHeightGain(0.8);
+			setWidth(1.5);
+			setHeightGain(0.6);
 			setMaxSize(100);
-			setSpeed(5);
+			setSpeed(3);
 			
-			this.direction = user.getLocation().getDirection().normalize().multiply(1.5).setY(0);
+			this.direction = user.getLocation().getDirection().normalize().multiply(1).setY(0);
 			this.currentBlock = getNewCurrentBlock(loc);
 			
 			handler = new BaseMMOEventHandler<EntityChangeBlockEvent>(
@@ -105,6 +120,37 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 			};
 			
 			registerHandler(handler);
+			
+			this.itemSpawnHandler = new NoxPLPacketListener(getPlugin(), PacketType.Play.Server.ENTITY_METADATA) {
+				
+				@Override
+				public void onPacketSending(PacketEvent event) {
+					PacketContainer packet = event.getPacket();
+					
+					if (packet.getEntityModifier(event).read(0) instanceof Item) {
+						WrappedDataWatcher watcher = new WrappedDataWatcher(packet.getWatchableCollectionModifier().read(0));
+						ItemStack stack = watcher.getItemStack(10);
+						
+						if (stack != null && stack.getItemMeta().hasLore() && stack.getItemMeta().getLore().contains(BaseVortex.dummyItemMeta)) {
+							watcher = watcher.deepClone();
+							watcher.setObject(10, new ItemStack(Material.FIREWORK_CHARGE));
+							
+							packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
+						}
+					}
+				}
+
+			};
+			
+			itemSpawnHandler.register();
+			Bukkit.getScheduler().runTaskLater(getPlugin(), new Runnable() {
+				
+				public void run() {
+					itemSpawnHandler.unRegister();
+					
+				}
+			}, time);
+
 		}
 		
 		public Block getNewCurrentBlock(Location loc) {
@@ -116,14 +162,14 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 		}
 
 		public void onRun() {
-			Location loc;
+			Location loc = getLocation();
 			setLocation((loc = getLocation().add(direction)));
 			
 			currentBlock = getNewCurrentBlock(loc);
 			
 			// Spawns 10 blocks at a time.
 			for (int i = 0; i < 10; i++) {
-				addEntity(new TornadoVortexEntity(this, loc, currentBlock.getType()));
+				addEntity(new TornadoVortexEntity(this, loc, currentBlock));
 				
 			}
 			
@@ -147,13 +193,14 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 	}
 	
 	private class TornadoVortexEntity extends BaseVortexEntity {
-
-		public TornadoVortexEntity(BaseVortex parent, Location loc, Material type) {
-			super(parent, loc, loc.add(0, 1, 0).getWorld().spawnFallingBlock(loc, type, (byte) 0));
-		}
 		
-		public TornadoVortexEntity(BaseVortex parent, Location loc, Block block) {
-			super(parent, loc, loc.clone().add(0, 1, 0).getWorld().spawnFallingBlock(loc, block.getType(), block.getData()));
+		public TornadoVortexEntity(BaseVortex parent, Location loc, Block block)  {
+			super(parent, loc, loc.getWorld().dropItem(loc.clone().add(0, 1, 0), BaseVortex.dummySpinItem));
+			
+			((Item) getEntity()).setPickupDelay(Short.MAX_VALUE);
+			
+			new ParticleRunner(ParticleType.largesmoke, getEntity(), false, 0, 1, 0).start(0, getParent().getSpeed());
+			new ParticleRunner(ParticleType.dripWater, getEntity(), false, 0, 1, 0).start(0, getParent().getSpeed());
 		}
 		
 		public TornadoVortexEntity(BaseVortex parent, Location loc, Entity base) {
@@ -161,10 +208,9 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 		}
 
 		public boolean onRemove() {
-			if (getEntity() instanceof FallingBlock)
+			if (getEntity() instanceof Item)
 				return true;
 			
-			getEntity().removeMetadata(uniqueMetaKey, NoxMMO.getInstance());
 			return false;
 		}
 
@@ -187,7 +233,7 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 					continue;
 				
 				nearby_pickups.add(new TornadoVortexEntity(parent, parent.getLocation(), it));
-				((LivingEntity) it).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 8, 2));
+				((LivingEntity) it).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 8 * 20, 2));
 			}
 			
 			return nearby_pickups;

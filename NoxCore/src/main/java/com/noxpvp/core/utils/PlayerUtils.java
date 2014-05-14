@@ -94,11 +94,11 @@ public class PlayerUtils extends PlayerUtil{
 			return b.getLocation();
 		}
 		
-	    public static boolean hasLineOfSight(LivingEntity from, Location to, Set<Material> transparentTypes) {
-	        return getTargetBlock(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypes) == null;
-	    }
-	    
-	    public static boolean hasLineOfSight(LivingEntity from, Location to, Material... transparentTypes) {
+		public static boolean hasLineOfSight(LivingEntity from, Location to, Set<Material> transparentTypes) {
+			return getTargetBlock(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypes) == null;
+		}
+		
+		public static boolean hasLineOfSight(LivingEntity from, Location to, Material... transparentTypes) {
 			return getTargetBlock(from, (int) Math.ceil(from.getLocation().distance(to)), transparentTypes) == null;
 		}
 		

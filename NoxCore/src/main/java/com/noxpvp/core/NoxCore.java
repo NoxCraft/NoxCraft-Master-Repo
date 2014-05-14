@@ -325,15 +325,15 @@ public class NoxCore extends NoxPlugin {
 		}
 		
 		// ==== Localization ====
-        if (!this.globalLocales.isEmpty()) {
-                this.saveGlobalLocalization();
-        }
-        
-        cds = new CooldownHandler();
-        
-        cds.start();
-        
-        reloadConfig();
+		if (!this.globalLocales.isEmpty()) {
+				this.saveGlobalLocalization();
+		}
+		
+		cds = new CooldownHandler();
+		
+		cds.start();
+		
+		reloadConfig();
 	}
 
 	/**
@@ -367,44 +367,44 @@ public class NoxCore extends NoxPlugin {
 
 	@Override
 	public String getGlobalLocale(String path, String... arguments) {
-        path = path.toLowerCase(Locale.ENGLISH);
-        // First check if the path leads to a node
-        if (this.globalLocales.isNode(path)) {
-                // Redirect to the proper sub-node
-                // Check recursively if the arguments are contained
-                String newPath = path + ".default";
-                if (arguments.length > 0) {
-                        StringBuilder tmpPathBuilder = new StringBuilder(path);
-                        String tmpPath = path;
-                        for (int i = 0; i < arguments.length; i++) {
-                                tmpPathBuilder.append('.');
-                                if (arguments[i] == null) {
-                                        tmpPathBuilder.append("null");
-                                } else {
-                                        tmpPathBuilder.append(arguments[i].toLowerCase(Locale.ENGLISH));
-                                }
-                                tmpPath = tmpPathBuilder.toString();
-                                // New argument appended path exists, update the path
-                                if (this.globalLocales.contains(tmpPath)) {
-                                        newPath = tmpPath;
-                                } else {
-                                        break;
-                                }
-                        }
-                }
-                // Update path to lead to the new path
-                path = newPath;
-        }
-        // Regular loading going on
-        if (arguments.length > 0) {
-                StringBuilder locale = new StringBuilder(this.globalLocales.get(path, ""));
-                for (int i = 0; i < arguments.length; i++) {
-                        StringUtil.replaceAll(locale, "%" + i + "%", LogicUtil.fixNull(arguments[i], "null"));
-                }
-                return locale.toString();
-        } else {
-                return this.globalLocales.get(path, String.class, "");
-        }
+		path = path.toLowerCase(Locale.ENGLISH);
+		// First check if the path leads to a node
+		if (this.globalLocales.isNode(path)) {
+				// Redirect to the proper sub-node
+				// Check recursively if the arguments are contained
+				String newPath = path + ".default";
+				if (arguments.length > 0) {
+						StringBuilder tmpPathBuilder = new StringBuilder(path);
+						String tmpPath = path;
+						for (int i = 0; i < arguments.length; i++) {
+								tmpPathBuilder.append('.');
+								if (arguments[i] == null) {
+										tmpPathBuilder.append("null");
+								} else {
+										tmpPathBuilder.append(arguments[i].toLowerCase(Locale.ENGLISH));
+								}
+								tmpPath = tmpPathBuilder.toString();
+								// New argument appended path exists, update the path
+								if (this.globalLocales.contains(tmpPath)) {
+										newPath = tmpPath;
+								} else {
+										break;
+								}
+						}
+				}
+				// Update path to lead to the new path
+				path = newPath;
+		}
+		// Regular loading going on
+		if (arguments.length > 0) {
+				StringBuilder locale = new StringBuilder(this.globalLocales.get(path, ""));
+				for (int i = 0; i < arguments.length; i++) {
+						StringUtil.replaceAll(locale, "%" + i + "%", LogicUtil.fixNull(arguments[i], "null"));
+				}
+				return locale.toString();
+		} else {
+				return this.globalLocales.get(path, String.class, "");
+		}
 	}
 
 	@Override
@@ -465,9 +465,9 @@ public class NoxCore extends NoxPlugin {
 	
 	public void loadGlobalLocale(String path, String defaultValue) {
 		path = path.toLowerCase(Locale.ENGLISH);
-        if (!this.globalLocales.contains(path)) {
-                this.globalLocales.set(path, defaultValue);
-        }
+		if (!this.globalLocales.contains(path)) {
+				this.globalLocales.set(path, defaultValue);
+		}
 	}
 	
 	public void loadGlobalLocales(Class<? extends ILocalizationDefault> localizationDefaults) {
@@ -490,15 +490,15 @@ public class NoxCore extends NoxPlugin {
 		globalLocales = new FileConfiguration(this, "Global-Localization.yml");
 		
 		// load
-        if (this.globalLocales.exists()) {
-            this.loadGlobalLocalization();
-        }
+		if (this.globalLocales.exists()) {
+			this.loadGlobalLocalization();
+		}
 
-        // header
-        this.globalLocales.setHeader("Below are the global localization nodes set for Nox Plugins '" + this.getName() + "'.");
-        this.globalLocales.addHeader("For colors, use the & character followed up by 0 - F");
-        this.globalLocales.addHeader("Need help with this file? Please visit:");
-        this.globalLocales.addHeader("http://dev.bukkit.org/server-mods/bkcommonlib/pages/general/localization/");
+		// header
+		this.globalLocales.setHeader("Below are the global localization nodes set for Nox Plugins '" + this.getName() + "'.");
+		this.globalLocales.addHeader("For colors, use the & character followed up by 0 - F");
+		this.globalLocales.addHeader("Need help with this file? Please visit:");
+		this.globalLocales.addHeader("http://dev.bukkit.org/server-mods/bkcommonlib/pages/general/localization/");
 		
 		loadGlobalLocales(GlobalLocale.class);
 		loadLocales(CoreLocale.class);

@@ -1,27 +1,66 @@
 package com.noxpvp.mmo.runnables;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang.math.RandomUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
-public class ShockGroundAnimation extends BukkitRunnable{
+public class ShockGroundAnimation extends BukkitRunnable {
+	private static MetadataValue shockMeta = new FixedMetadataValue(NoxMMO.getInstance(), "noland");
+	private static BaseMMOEventHandler<EntityChangeBlockEvent> landHandler  = new BaseMMOEventHandler<EntityChangeBlockEvent>(
+			new StringBuilder("ShockGroundAnimation").toString(),
+			EventPriority.HIGHEST, 1) {
+		
+		public boolean ignoreCancelled() {
+			return true;
+		}
+		
+		public Class<EntityChangeBlockEvent> getEventType() {
+			return EntityChangeBlockEvent.class;
+		}
+		
+		public String getEventName() {
+			return "EntityChangeBlockEvent";
+		}
+		
+		public void execute(EntityChangeBlockEvent event) {
+			
+			Entity e = event.getEntity();
+			if (!(e instanceof FallingBlock))
+				return;
+			
+			if (!e.hasMetadata("ShockGround"))
+				return;
+			
+			e.remove();
+			event.setCancelled(true);
+			
+		}
+	};
+	
+	static {
+		NoxMMO.getInstance().getMasterListener().registerHandler(landHandler);
+	}
+	
 	private int shockRange;
 	private Vector shockVelo;
 	private float percentThrown;
 	private Block center;
-	private HashSet<FallingBlock> shockBlocks;
 	private List<Material> flowers;
 	
 	/**
@@ -37,10 +76,8 @@ public class ShockGroundAnimation extends BukkitRunnable{
 		this.shockRange = shockRange;
 		this.shockVelo = new Vector().zero();
 		this.percentThrown = percentThrown;
-		this.shockBlocks = new HashSet<FallingBlock>();
 		this.flowers = Arrays.asList(Material.LONG_GRASS, Material.RED_ROSE, Material.YELLOW_FLOWER, Material.CROPS, Material.DEAD_BUSH, Material.VINE, Material.SAPLING);
 		
-		Bukkit.getServer().getScheduler().runTaskLater(NoxMMO.getInstance(), this, delay);
 	}
 	
 	private boolean isThrowable(Material type){
@@ -87,8 +124,11 @@ public class ShockGroundAnimation extends BukkitRunnable{
 				return true;
 		}
 	}
-
-	@SuppressWarnings("deprecation")
+	
+	public void start(int delay) {
+		runTaskLater(NoxMMO.getInstance(), delay);
+	}
+	
 	public void run() {
 		
 		int bx = center.getX();
@@ -109,14 +149,11 @@ public class ShockGroundAnimation extends BukkitRunnable{
 				if (b.getType() == Material.GRASS) {b.setType(Material.DIRT);}
 				
 				final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
+				
 				nb.setVelocity(shockVelo.setY(RandomUtils.nextDouble() + 0.45));
+				nb.setMetadata("ShockWave", shockMeta);
 				nb.setDropItem(false);
-				shockBlocks.add(nb);
 			}
-		}
-
-		for (FallingBlock block : shockBlocks) {
-			block.setDropItem(false);
 		}
 	}
 }

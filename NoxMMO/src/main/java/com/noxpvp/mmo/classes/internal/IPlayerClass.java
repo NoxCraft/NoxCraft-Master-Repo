@@ -8,8 +8,6 @@ import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.inventory.ItemStack;
-
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.mmo.abilities.Ability;
 

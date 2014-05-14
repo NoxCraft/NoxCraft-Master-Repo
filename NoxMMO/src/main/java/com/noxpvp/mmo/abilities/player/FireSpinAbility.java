@@ -3,21 +3,27 @@ package com.noxpvp.mmo.abilities.player;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Chicken;
+import org.bukkit.Material;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.inventory.ItemStack;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.effect.BaseVortex;
+import com.noxpvp.core.effect.BaseVortexEntity;
+import com.noxpvp.core.listeners.NoxPLPacketListener;
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.vortex.BaseVortex;
-import com.noxpvp.mmo.vortex.BaseVortexEntity;
 
 public class FireSpinAbility extends BasePlayerAbility {
 	
@@ -49,18 +55,59 @@ public class FireSpinAbility extends BasePlayerAbility {
 	
 	private class FireSpinVortex extends BaseVortex {
 		
+		private NoxPLPacketListener handler;
+		
+		public NoxPlugin getPlugin() {
+			return NoxMMO.getInstance();
+		}
+		
 		public FireSpinVortex(Player user, int time) {
 			super(user, user.getLocation(), time);
 			
-			setWidth(3.0);
-			setHeightGain(0.1);
-			setMaxSize(30);
+			setWidth(1.5);
+			setHeightGain(0.2);
+			setMaxSize(50);
 			setSpeed(2);
+			
+			this.handler = new NoxPLPacketListener(NoxMMO.getInstance(), PacketType.Play.Server.ENTITY_METADATA) {
+				
+				@Override
+				public void onPacketSending(PacketEvent event) {
+					PacketContainer packet = event.getPacket();
+					
+					if (packet.getEntityModifier(event).read(0) instanceof Item) {
+						WrappedDataWatcher watcher = new WrappedDataWatcher(packet.getWatchableCollectionModifier().read(0));
+						ItemStack stack = watcher.getItemStack(10);
+						
+						if (stack == null || !stack.hasItemMeta())
+							return;
+						
+						if (!stack.getItemMeta().hasLore() || !stack.getItemMeta().getLore().contains(dummyItemMeta))
+							return;
+						
+						watcher = watcher.deepClone();
+						watcher.setObject(10, new ItemStack(Material.FIRE));
+						
+						packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
+					}
+				}
+
+			};
+			
+			handler.register();
+			Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
+				
+				public void run() {
+					handler.unRegister();
+					
+				}
+			}, time);
 
 			for (int i = 0; i < 50; i++) {
 				addEntity(new FireSpinVortexEntity(this));
 				
 			}
+			
 			
 		}
 
@@ -99,13 +146,14 @@ public class FireSpinAbility extends BasePlayerAbility {
 	
 	private class FireSpinVortexEntity extends BaseVortexEntity {
 		
-		public FireSpinVortexEntity(BaseVortex parent) {
-			super(parent, parent.getLocation(), parent.getLocation().getWorld().spawnEntity(parent.getLocation(), EntityType.CHICKEN));
+		public FireSpinVortexEntity(FireSpinVortex parent) {
+			super(parent, parent.getLocation(), 
+					parent.getLocation().getWorld().dropItem(parent.getLocation(), BaseVortex.dummySpinItem));
 			
+			Item e = (Item) getEntity();
+			e.setPickupDelay(Short.MAX_VALUE);
 			
-			((Chicken) getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Short.MAX_VALUE, 10, true));
-			
-			new ParticleRunner(ParticleType.flame, getEntity(), false, 0, 5, 0).start(0, getParent().getSpeed());
+			new ParticleRunner(ParticleType.dripLava, e, false, 0, 1, 0).start(0, parent.getSpeed());
 		}
 		
 		public FireSpinVortexEntity(BaseVortex parent, Location loc, Entity base) {
@@ -114,10 +162,10 @@ public class FireSpinAbility extends BasePlayerAbility {
 		}
 
 		public boolean onRemove() {
-			if (getEntity() instanceof Chicken)
+			if (getEntity() instanceof Item) {
 				return true;
+			}
 			
-			getEntity().removeMetadata(uniqueMetaKey, NoxMMO.getInstance());
 			return false;
 		}
 
@@ -126,11 +174,9 @@ public class FireSpinAbility extends BasePlayerAbility {
 		}
 
 		public HashSet<? extends BaseVortexEntity> onTick() {
-			Entity e = getEntity();
-			BaseVortex parent = getParent();
-			Player user = parent.getUser();
+			Player user = getParent().getUser();
 			
-			for (Entity it : user.getNearbyEntities(1, 1, 1)) {
+			for (Entity it : getEntity().getNearbyEntities(1, 1, 1)) {
 				if (!(it instanceof Damageable))
 					continue;
 				

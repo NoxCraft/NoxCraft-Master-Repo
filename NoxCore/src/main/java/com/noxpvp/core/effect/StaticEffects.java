@@ -1,4 +1,4 @@
-package com.noxpvp.core.utils;
+package com.noxpvp.core.effect;
 
 import java.util.ArrayList;
 import java.util.List;
