@@ -1,4 +1,4 @@
-package com.noxpvp.core.effect;
+package com.noxpvp.core.effect.vortex;
 
 import java.util.ArrayDeque;
 

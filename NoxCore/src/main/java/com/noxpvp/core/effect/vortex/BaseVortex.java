@@ -1,4 +1,4 @@
-package com.noxpvp.core.effect;
+package com.noxpvp.core.effect.vortex;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -40,11 +40,11 @@ public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 	private int speed;
 	
 	private static void generateLookup() {
-		if(lookup.size() != 0) {
-			return;
-		}
+//		if(lookup.size() != 0) {
+//			return;
+//		}
 		
-		for(int i = 0 ; i < 360 ; i++) {
+		for (int i = 0 ; i < 360 ; i++) {
 			Double[] data = new Double[2];
 			data[0] = Math.sin(Math.toRadians(i));
 			data[1] = Math.cos(Math.toRadians(i));

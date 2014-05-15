@@ -1,6 +1,7 @@
 package com.noxpvp.mmo.abilities.player;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.HashSet;
 
 import org.bukkit.Bukkit;
@@ -11,9 +12,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -23,8 +24,8 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.noxpvp.core.NoxPlugin;
-import com.noxpvp.core.effect.BaseVortex;
-import com.noxpvp.core.effect.BaseVortexEntity;
+import com.noxpvp.core.effect.vortex.BaseVortex;
+import com.noxpvp.core.effect.vortex.BaseVortexEntity;
 import com.noxpvp.core.listeners.NoxPLPacketListener;
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
@@ -41,7 +42,7 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 	
 	@Override
 	public String getDescription() {
-		return "The tornado lord is capable of summoning a vast amount of high power wind abilities";
+		return "The Tornado Lord is capable of summoning a vast amount of high power wind abilities";
 	}
 	
 	private int range;
@@ -59,7 +60,7 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 			return false;
 		
 		Location loc;
-		if ((loc = LineOfSightUtil.getTargetBlockLocation(getPlayer(), range, (Material) null)) != null) {
+		if ((loc = LineOfSightUtil.getTargetBlockLocation(getPlayer(), range, Material.AIR)) != null) {
 			new TornadoVortex(getPlayer(), loc, time).start();
 			
 			return true;
@@ -69,8 +70,7 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 	}
 	
 	private class TornadoVortex extends BaseVortex {
-
-		private BaseMMOEventHandler<EntityChangeBlockEvent> handler;
+		
 		private NoxPLPacketListener itemSpawnHandler;
 		private Block currentBlock;
 		private Vector direction;
@@ -83,43 +83,12 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 			super(user, loc, time);
 			
 			setWidth(1.5);
-			setHeightGain(0.6);
+			setHeightGain(0.4);
 			setMaxSize(100);
 			setSpeed(3);
 			
 			this.direction = user.getLocation().getDirection().normalize().multiply(1).setY(0);
 			this.currentBlock = getNewCurrentBlock(loc);
-			
-			handler = new BaseMMOEventHandler<EntityChangeBlockEvent>(
-					new StringBuilder().append(user.getName()).append(ABILITY_NAME).append("EntityChangeBlockEvent").toString(),
-					EventPriority.NORMAL, 1) {
-				
-				public boolean ignoreCancelled() {
-					return true;
-				}
-				
-				public Class<EntityChangeBlockEvent> getEventType() {
-					return EntityChangeBlockEvent.class;
-				}
-				
-				public String getEventName() {
-					return "EntityChangeBlockEvent";
-				}
-				
-				public void execute(EntityChangeBlockEvent event) {
-					Entity e;
-					if ((e = event.getEntity()) == null)
-						return;
-					
-					if (e.getMetadata(BaseVortexEntity.uniqueMetaKey).contains(this.hashCode())) {
-						event.setCancelled(true);
-						e.remove();
-					}
-					
-				}
-			};
-			
-			registerHandler(handler);
 			
 			this.itemSpawnHandler = new NoxPLPacketListener(getPlugin(), PacketType.Play.Server.ENTITY_METADATA) {
 				
@@ -131,9 +100,9 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 						WrappedDataWatcher watcher = new WrappedDataWatcher(packet.getWatchableCollectionModifier().read(0));
 						ItemStack stack = watcher.getItemStack(10);
 						
-						if (stack != null && stack.getItemMeta().hasLore() && stack.getItemMeta().getLore().contains(BaseVortex.dummyItemMeta)) {
+						if (stack != null && stack.getItemMeta().hasLore()) {
 							watcher = watcher.deepClone();
-							watcher.setObject(10, new ItemStack(Material.FIREWORK_CHARGE));
+							watcher.setObject(10, new ItemStack(Material.FEATHER));
 							
 							packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
 						}
@@ -155,7 +124,9 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 		
 		public Block getNewCurrentBlock(Location loc) {
 			loc.add(0, 2, 0);
-			while (!loc.getBlock().getType().isSolid())
+			
+			int i = 0;
+			while (!loc.getBlock().getType().isSolid() && i++ < 10)
 				loc.add(0, -1, 0);
 			
 			return loc.getBlock();
@@ -163,7 +134,7 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 
 		public void onRun() {
 			Location loc = getLocation();
-			setLocation((loc = getLocation().add(direction)));
+			setLocation((loc = loc.add(direction)));
 			
 			currentBlock = getNewCurrentBlock(loc);
 			
@@ -197,10 +168,15 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 		public TornadoVortexEntity(BaseVortex parent, Location loc, Block block)  {
 			super(parent, loc, loc.getWorld().dropItem(loc.clone().add(0, 1, 0), BaseVortex.dummySpinItem));
 			
-			((Item) getEntity()).setPickupDelay(Short.MAX_VALUE);
+			Item e = (Item) getEntity();
+			
+			e.setPickupDelay(Short.MAX_VALUE);
+			ItemMeta meta = e.getItemStack().getItemMeta();
+			meta.setLore(Arrays.asList((Integer.toString(hashCode()))));
+			e.getItemStack().setItemMeta(meta);
 			
 			new ParticleRunner(ParticleType.largesmoke, getEntity(), false, 0, 1, 0).start(0, getParent().getSpeed());
-			new ParticleRunner(ParticleType.dripWater, getEntity(), false, 0, 1, 0).start(0, getParent().getSpeed());
+			new ParticleRunner(ParticleType.splash, getEntity(), true, 0, 1, 0).start(0, getParent().getSpeed());
 		}
 		
 		public TornadoVortexEntity(BaseVortex parent, Location loc, Entity base) {

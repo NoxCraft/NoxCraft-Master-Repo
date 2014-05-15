@@ -3,23 +3,16 @@ package com.noxpvp.mmo.abilities.player;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.noxpvp.core.NoxPlugin;
-import com.noxpvp.core.effect.BaseVortex;
-import com.noxpvp.core.effect.BaseVortexEntity;
-import com.noxpvp.core.listeners.NoxPLPacketListener;
+import com.noxpvp.core.effect.vortex.BaseVortex;
+import com.noxpvp.core.effect.vortex.BaseVortexEntity;
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
@@ -27,12 +20,12 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class FireSpinAbility extends BasePlayerAbility {
 	
-	public final static String ABILITY_NAME = "FireSpin";
+	public final static String ABILITY_NAME = "Fire Spin";
 	public final static String PERM_NODE = "fire-spin";
 	
 	@Override
 	public String getDescription() {
-		return "Surrounds the user with a power ring of spinning fire, Scorching anyone in your path";
+		return "Surrounds the user with a powerful ring of spinning fire, Scorching anyone in your path";
 	}
 	
 	private int time;
@@ -55,8 +48,6 @@ public class FireSpinAbility extends BasePlayerAbility {
 	
 	private class FireSpinVortex extends BaseVortex {
 		
-		private NoxPLPacketListener handler;
-		
 		public NoxPlugin getPlugin() {
 			return NoxMMO.getInstance();
 		}
@@ -65,43 +56,9 @@ public class FireSpinAbility extends BasePlayerAbility {
 			super(user, user.getLocation(), time);
 			
 			setWidth(1.5);
-			setHeightGain(0.2);
+			setHeightGain(0.1);
 			setMaxSize(50);
-			setSpeed(2);
-			
-			this.handler = new NoxPLPacketListener(NoxMMO.getInstance(), PacketType.Play.Server.ENTITY_METADATA) {
-				
-				@Override
-				public void onPacketSending(PacketEvent event) {
-					PacketContainer packet = event.getPacket();
-					
-					if (packet.getEntityModifier(event).read(0) instanceof Item) {
-						WrappedDataWatcher watcher = new WrappedDataWatcher(packet.getWatchableCollectionModifier().read(0));
-						ItemStack stack = watcher.getItemStack(10);
-						
-						if (stack == null || !stack.hasItemMeta())
-							return;
-						
-						if (!stack.getItemMeta().hasLore() || !stack.getItemMeta().getLore().contains(dummyItemMeta))
-							return;
-						
-						watcher = watcher.deepClone();
-						watcher.setObject(10, new ItemStack(Material.FIRE));
-						
-						packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
-					}
-				}
-
-			};
-			
-			handler.register();
-			Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
-				
-				public void run() {
-					handler.unRegister();
-					
-				}
-			}, time);
+			setSpeed(3);
 
 			for (int i = 0; i < 50; i++) {
 				addEntity(new FireSpinVortexEntity(this));
@@ -114,7 +71,7 @@ public class FireSpinAbility extends BasePlayerAbility {
 		public void onRun() {
 			setLocation((getUser().getLocation()));
 			
-			// Spawns 1 bats at a time.
+			// Spawns 10 fire per run
 			for (int i = 0; i < 5; i++) {
 				addEntity(new FireSpinVortexEntity(this));
 				
@@ -148,12 +105,9 @@ public class FireSpinAbility extends BasePlayerAbility {
 		
 		public FireSpinVortexEntity(FireSpinVortex parent) {
 			super(parent, parent.getLocation(), 
-					parent.getLocation().getWorld().dropItem(parent.getLocation(), BaseVortex.dummySpinItem));
+					parent.getLocation().getWorld().spawnFallingBlock(parent.getLocation(), Material.FIRE, (byte) 0));
 			
-			Item e = (Item) getEntity();
-			e.setPickupDelay(Short.MAX_VALUE);
-			
-			new ParticleRunner(ParticleType.dripLava, e, false, 0, 1, 0).start(0, parent.getSpeed());
+			new ParticleRunner(ParticleType.dripLava, getEntity(), false, 0, 1, 0).start(0, parent.getSpeed());
 		}
 		
 		public FireSpinVortexEntity(BaseVortex parent, Location loc, Entity base) {
@@ -162,7 +116,7 @@ public class FireSpinAbility extends BasePlayerAbility {
 		}
 
 		public boolean onRemove() {
-			if (getEntity() instanceof Item) {
+			if (getEntity() instanceof FallingBlock) {
 				return true;
 			}
 			

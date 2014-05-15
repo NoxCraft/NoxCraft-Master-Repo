@@ -16,7 +16,7 @@ import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.SetVelocityRunnable;
-import com.noxpvp.mmo.runnables.ShockGroundAnimation;
+import com.noxpvp.mmo.runnables.ShockWaveAnimation;
 /**
  * @author NoxPVP
  *
@@ -160,9 +160,8 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 		NoxMMO mmo = NoxMMO.getInstance();
 		
 		new ParticleRunner(ParticleType.largeexplode, pLoc.add(0, 1, 0), false, 0, 2, 1).runTask(mmo);
-//		new ShockWaveAnimation(p, pLoc, 1, range, 0.35, true).start(0);
-		new ShockGroundAnimation(pLoc, range, hVelo, 20, 0).start(0);
-		new ExpandingDamageRunnable(p, p.getLocation(), getDamage(), range, 2).runTask(mmo);
+		new ShockWaveAnimation(p, pLoc, 1, range, 0.35, true).start(0);
+		new ExpandingDamageRunnable(p, p.getLocation(), getDamage(), range, 1).start(0);
 		
 	}
 

@@ -83,7 +83,7 @@ public class CurseAbility extends BaseTargetedPlayerAbility implements PVPAbilit
 		if (t.getLocation().distance(getPlayer().getLocation()) > range)
 			return false;
 		
-		t.addPotionEffect(new PotionEffect(PotionEffectType.POISON, duration, lethality));
+		t.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration, lethality));
 		t.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, lethality));
 		
 		new ParticleRunner(ParticleType.angryVillager, t, false, 0, 1, 1).start(0);

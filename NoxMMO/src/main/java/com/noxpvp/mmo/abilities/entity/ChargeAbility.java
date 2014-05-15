@@ -40,7 +40,7 @@ public class ChargeAbility extends BaseEntityAbility {
 	}
 	
 	public ChargeAbility(Entity ent) {
-		this(ent, 2);
+		this(ent, 10);
 	}
 	
 	public boolean execute() {

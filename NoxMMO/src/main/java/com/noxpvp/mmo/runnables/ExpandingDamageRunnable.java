@@ -39,7 +39,7 @@ public class ExpandingDamageRunnable extends BukkitRunnable{
 	}
 	
 	public void run(){
-		if (runs++ >= range){
+		if (runs++ > range){
 			safeCancel();
 			return;
 		}

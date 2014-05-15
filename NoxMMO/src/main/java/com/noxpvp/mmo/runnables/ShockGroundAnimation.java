@@ -151,7 +151,7 @@ public class ShockGroundAnimation extends BukkitRunnable {
 				final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
 				
 				nb.setVelocity(shockVelo.setY(RandomUtils.nextDouble() + 0.45));
-				nb.setMetadata("ShockWave", shockMeta);
+				nb.setMetadata("ShockGround", shockMeta);
 				nb.setDropItem(false);
 			}
 		}

@@ -91,7 +91,7 @@ public class StaticEffects {
 	}
 	
 	public static void HeartEffect(Entity e, double healAmount, NoxPlugin plugin) {
-		new ParticleRunner(ParticleType.heart, e, false, 0, 1, (int) Math.floor(healAmount)).start(0, 5);
+		new ParticleRunner(ParticleType.heart, e, false, 0, 1, (int) Math.ceil(healAmount)).start(0, 5);
 	}
 	
 	public static void BroadcastSound(Entity e, Sound sound) {

@@ -1,12 +1,14 @@
 package com.noxpvp.mmo.abilities.targeted;
 
 import org.apache.commons.lang.math.RandomUtils;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
@@ -20,7 +22,7 @@ public class PickPocketAbility extends BaseTargetedPlayerAbility{
 	public static final String ABILITY_NAME = "Pick Pocket";
 	
 	private float chance = 15;
-	private float calChance;
+	private float calChance = 5;
 	private int pocketamount = 1;
 	private boolean takeFullStack = false;
 	
@@ -97,7 +99,7 @@ public class PickPocketAbility extends BaseTargetedPlayerAbility{
 		
 		if (!(target instanceof InventoryHolder)) return false;
 		
-		Player p = getPlayer();
+		final Player p = getPlayer();
 		
 		double tYaw = target.getLocation().getYaw();
 		double pYaw = p.getLocation().getYaw();
@@ -108,33 +110,33 @@ public class PickPocketAbility extends BaseTargetedPlayerAbility{
 		if (!(p.isSneaking()))//and sneaking
 			return false;
 		
-		if (Math.random() > getCalChance())//chance to pick
-			return false;
+//		if (Math.random() > getCalChance())//chance to pick
+//			return false;
 		
 		Inventory inv = ((InventoryHolder) target).getInventory();//get target inventory
-		int placeHolder = 0;
 		int runs = 0;//limit for trying to find an itemstack below
 		
-		while (placeHolder == 0 && (runs < 200)){
-			int i = RandomUtils.nextInt(inv.getSize());
+		ItemStack item = null;
+		while (runs < 200) {
+			int i = RandomUtils.nextInt(((35 - 9) + 1)) + 9;
 			
-			if (inv.getItem(i) == null){
+			if ((item = inv.getItem(i)) == null || item.getType() == Material.AIR){
 				runs++;
 				continue;
-			}
-			
-			placeHolder = i;
-			break;
+			} else break;
 		}
-
-		if (placeHolder == 0)//be sure it found an item
+		
+		if (item == null || item.getType() == Material.AIR)
 			return false;
 		
-		ItemStack item = inv.getItem(placeHolder); //store item stack
 		item.setAmount(getPocketamount());//set itemstack amount
 		
-		p.getInventory().addItem(item);//give it to player
 		inv.removeItem(item);//take it from target
+		p.getInventory().addItem(item);//give it to player
+		
+		CommonUtil.nextTick(new Runnable() {
+			public void run() { p.updateInventory(); }
+		});
 		
 		return true;
 	}

@@ -252,7 +252,7 @@ public class MedPackAbility extends BasePlayerAbility{
 		
 		Item pack = p.getWorld().dropItem(p.getLocation() , medPack);
 		pack.setVelocity(p.getLocation().getDirection());
-		new ParticleRunner(ParticleType.happyVillager, pack, false, 1F, 6, 0).start(0, 10);
+		new ParticleRunner(ParticleType.happyVillager, pack, true, 1F, 6, 0).start(0, 10);
 		
 		if (!packs.add(new MedPackDataWrapper(pack, p, health))) {
 			pack.remove();

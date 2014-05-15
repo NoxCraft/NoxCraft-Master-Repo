@@ -10,9 +10,17 @@ import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.abilities.entity.ChargeAbility;
+import com.noxpvp.mmo.abilities.entity.LeapAbility;
+import com.noxpvp.mmo.abilities.player.FireSpinAbility;
 import com.noxpvp.mmo.abilities.player.MassDestructionAbility;
+import com.noxpvp.mmo.abilities.player.MedPackAbility;
+import com.noxpvp.mmo.abilities.player.TornadoAbility;
+import com.noxpvp.mmo.abilities.targeted.CurseAbility;
+import com.noxpvp.mmo.abilities.targeted.PickPocketAbility;
 import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 
+@SuppressWarnings("unused")
 public class PlayerInteractListener extends NoxListener<NoxMMO>{
 
 	PlayerManager pm;
@@ -42,9 +50,14 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 			return;
 
 		//debug here
-		new MassDestructionAbility(p).execute();
+//		new TornadoAbility(p, 25, 20 * 10).execute();
 //		new FireSpinAbility(p).execute();
-//		new TornadoAbility(p, 25, 5 * 20).execute();
+//		new MassDestructionAbility(p).execute();
+//		new LeapAbility(p).execute();
+//		new CurseAbility(p).execute();
+//		new ChargeAbility(p).execute();
+//		new MedPackAbility(p).execute();
+		new PickPocketAbility(p).execute();
 	}
 	
 }

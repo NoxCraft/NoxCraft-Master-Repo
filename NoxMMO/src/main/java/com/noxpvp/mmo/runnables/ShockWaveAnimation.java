@@ -11,14 +11,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.util.Vector;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
@@ -26,7 +24,8 @@ import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
  * @author NoxPVP
  *
  */
-public class ShockWaveAnimation extends BukkitRunnable{
+public class ShockWaveAnimation extends BukkitRunnable {
+	
 	private static MetadataValue shockMeta = new FixedMetadataValue(NoxMMO.getInstance(), "noland");
 	private static BaseMMOEventHandler<EntityChangeBlockEvent> landHandler  = new BaseMMOEventHandler<EntityChangeBlockEvent>(
 			new StringBuilder("ShockWaveAnimation").toString(),
@@ -182,19 +181,12 @@ public class ShockWaveAnimation extends BukkitRunnable{
 					
 					if (b == null) continue;
 					
-					while(!isThrowable(b.getType()) && b.getLocation().getY() > (center.getY()-4)){
+					Material type = b.getType();
+					while(!isThrowable(type) && b.getLocation().getY() > (center.getY()-4)){
 						b = b.getRelative(BlockFace.DOWN);
 					}
 					
-					if (flowers.contains(b.getType())) {
-						if (CommonUtil.callEvent(new BlockBreakEvent(b, p)).isCancelled())
-							continue;
-						
-						b.breakNaturally();
-					}
-					if (b.getType() == Material.GRASS) {b.setType(Material.DIRT);}
-					
-					final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
+					final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getLocation(), type == Material.GRASS? Material.DIRT : type, b.getData());
 					
 					nb.setVelocity(shockVelo);
 					nb.setMetadata("ShockWave", shockMeta);

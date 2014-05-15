@@ -1,4 +1,4 @@
-package com.noxpvp.core.effect;
+package com.noxpvp.core.effect.vortex;
 
 import java.util.HashSet;
 
@@ -36,13 +36,16 @@ public abstract class BaseVortexEntity implements IVortexEntity {
 	
 	public HashSet<? extends BaseVortexEntity> tick() {
 		double radius = BaseVortex.lookup.get(verticalTicker())[0] * width;
-		int	horisontal = horizontalTicker();
+		int	horizontal = horizontalTicker();
 		
 		double verticalDif = 0;
 		if (height == 0D)
 			verticalDif = getParent().getUser().getLocation().getY() - getEntity().getLocation().getY();
 		
-		Vector v = new Vector(radius * BaseVortex.lookup.get(horisontal)[1], (verticalDif == 0? height : verticalDif), radius * BaseVortex.lookup.get(horisontal)[0]);
+		Vector v = new Vector(
+				radius * BaseVortex.lookup.get(horizontal)[1],
+				(verticalDif == 0? height : verticalDif),
+				radius * BaseVortex.lookup.get(horizontal)[0]);
 		
 		setVelo(v);
 		
