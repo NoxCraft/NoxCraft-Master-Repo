@@ -21,6 +21,7 @@ import com.noxpvp.mmo.abilities.entity.*;
 import com.noxpvp.mmo.abilities.player.*;
 import com.noxpvp.mmo.abilities.player.AutoToolAbilities.*;
 import com.noxpvp.mmo.abilities.targeted.*;
+import com.noxpvp.mmo.classes.AxesPlayerClass;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.command.AbilityCommand;
 import com.noxpvp.mmo.command.ClassCommand;
@@ -199,6 +200,8 @@ public class NoxMMO extends NoxPlugin {
 	
 	@Override
 	public void permissions() {
+		
+		//Ability permissions
 		addPermission(new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability"), "Base MMO Node", PermissionDefault.FALSE,
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", AutoArmor.PERM_NODE), "Allows usage of the Auto Armor Abilities.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", AutoSword.PERM_NODE), "Allows usage of the Auto Sword Abilities.", PermissionDefault.OP),
@@ -249,12 +252,11 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", WhistleAbility.PERM_NODE), "Allows usage of the Whistle Ability.", PermissionDefault.OP)
 		));
 		
-//		addPermission(new NoxPermission(this, StringUtil.join(".", PERM_NODE, "class", "*"), "ALlow access to all classes.", PermissionDefault.OP,
-//				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "class", BasherClass.className), "Allows access to the class named " + BasherClass.className , PermissionDefault.OP),
-//				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "class", BerserkerClass.className), "Allows access to the class named " + BerserkerClass.className, PermissionDefault.OP),
-//				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "class", ChampionClass.className), "Allows access to the class named " + ChampionClass.className, PermissionDefault.OP),
-//				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "class", WarlordClass.className), "Allows access to the class named " + WarlordClass.className, PermissionDefault.OP)
-//		));
+		//Class permissions
+		addPermission(new NoxPermission(this, StringUtil.join(".", PERM_NODE, "class", "*"), "Allow access to all classes.", PermissionDefault.OP,
+				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "class", AxesPlayerClass.className), "Allows access to the class named " + AxesPlayerClass.className , PermissionDefault.OP)
+		));
+		
 	}
 
 	@Override

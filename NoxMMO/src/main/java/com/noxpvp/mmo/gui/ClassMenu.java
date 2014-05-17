@@ -14,12 +14,14 @@ import org.bukkit.util.Vector;
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.gui.CoreBoxItem;
 import com.noxpvp.core.gui.CoreBoxRegion;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.PlayerManager;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.classes.internal.ClassTier;
 import com.noxpvp.mmo.classes.internal.IClassTier;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
+import com.noxpvp.mmo.locale.MMOLocale;
 
 public class ClassMenu extends CoreBox {
 
@@ -47,6 +49,8 @@ public class ClassMenu extends CoreBox {
 		CoreBoxRegion tiers = new CoreBoxRegion(this, new Vector(0, 0, 2), 0, 7),
 				abilities = new CoreBoxRegion(this, new Vector(2, 0, 0), 1, 9);
 		
+		final MMOPlayer mmoPlayer = PlayerManager.getInstance().getPlayer(p);
+		
 		for (Map.Entry<Integer, IClassTier> tier : clazz.getTiers()) {
 			if (!(tier.getValue() instanceof ClassTier))
 				continue;
@@ -54,13 +58,16 @@ public class ClassMenu extends CoreBox {
 			ClassTier t = (ClassTier) tier.getValue();
 			
 			boolean canuse = clazz.canUseTier(tier.getKey());
-			boolean locked = t.getLevel() >= t.getMaxLevel()? true : false;
+//			boolean locked = t.getLevel() >= t.getMaxLevel()? true : false;//TODO When adding exp
+			boolean hasTier = mmoPlayer.getPrimaryClass().getTier() == t ||
+					mmoPlayer.getSecondaryClass().getTier() == t? true : false;
 			
 			ItemStack item = t.getIdentifibleItem();
-			item.setType(locked? Material.IRON_DOOR : Material.WOODEN_DOOR);
+			item.setType(/*locked? Material.IRON_DOOR : */hasTier? Material.SKULL_ITEM : Material.WOOD_DOOR);//TODO when adding exp
 			
 			ItemMeta meta = item.getItemMeta();
-			String name = meta.getDisplayName() + " | " + (locked? ChatColor.DARK_RED + "LOCKED" : (canuse? ChatColor.GREEN + "OPEN" : ChatColor.RED + "NOT AVAILIBLE"));
+//			String name = meta.getDisplayName() + " | " + (locked? ChatColor.DARK_RED + "LOCKED" : (canuse? ChatColor.GREEN + "OPEN" : ChatColor.RED + "NOT AVAILIBLE"));//TODO When adding exp
+			String name = meta.getDisplayName() + " " + (canuse? ChatColor.GREEN + "[OPEN" : ChatColor.RED + "[NOT AVAILIBLE") + "]";
 			meta.setDisplayName(name);
 			
 			item.setItemMeta(meta);
@@ -68,14 +75,14 @@ public class ClassMenu extends CoreBox {
 			tiers.add(new ClassMenuItem(this, item, clazz, t.getTierLevel()) {
 				
 				public boolean onClick(InventoryClickEvent click) {
-					MMOPlayer mmoPlayer = PlayerManager.getInstance().getPlayer(getPlayer());
-						
 					PlayerClass clazz = ClassMenu.this.getPlayerClass();
 					
-					if (!clazz.canUseClass())
+					if (!clazz.canUseClass()) {
+						MessageUtil.sendLocale(p, MMOLocale.CLASS_LOCKED, clazz.getDisplayName(), "Insufficient Permissions");
 						return false;
+					}
 					
-					if (clazz.isPrimaryClass()){//TODO finish secondarys and only play blaze if can't switch
+					if (clazz.isPrimaryClass()){
 						mmoPlayer.setPrimaryClass(clazz);
 						mmoPlayer.getPrimaryClass().setCurrentTier(getTier());
 						
@@ -113,7 +120,7 @@ public class ClassMenu extends CoreBox {
 		return clazz;
 	}
 	
-	public abstract class ClassMenuItem extends CoreBoxItem{
+	public abstract class ClassMenuItem extends CoreBoxItem {
 
 		private int tier;
 		private PlayerClass clazz;

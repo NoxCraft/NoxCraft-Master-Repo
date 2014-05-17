@@ -20,6 +20,7 @@ public class AxesWarlordClassTier extends ClassTier {
 	private volatile static String dName = "Warlord";
 	
 	private Map<String, Ability> abilities = new HashMap<String, Ability>();
+	private final double maxHealth;
 	
 	public AxesWarlordClassTier(PlayerClass retainer) {
 		super(retainer, TIER_NAME, 4);
@@ -27,8 +28,10 @@ public class AxesWarlordClassTier extends ClassTier {
 		abilities.putAll(retainer.getTier(getTierLevel()-1).getAbilityMap());
 		abilities.put("Hammer Of Thor", new HammerOfThorAbility(getPlayer()));
 		abilities.put("Mass Destruction", new MassDestructionAbility(getPlayer()));
+		
+		this.maxHealth = 28;
 	}
-	
+
 	public void setDisplayName(String displayName) {
 		AxesWarlordClassTier.dName = displayName;
 	}
@@ -39,6 +42,10 @@ public class AxesWarlordClassTier extends ClassTier {
 
 	public List<String> getLore() {
 		return Collections.emptyList();
+	}
+	
+	public double getMaxHealth() {
+		return maxHealth;
 	}
 
 	public int getMaxExp(int level) {

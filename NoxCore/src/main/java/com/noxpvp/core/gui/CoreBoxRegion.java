@@ -46,8 +46,8 @@ public class CoreBoxRegion {
 						tempItem.getType() != Material.AIR)
 					continue;
 				
-				parent.addMenuItem(tempSlot, item);
-				return true;
+				
+				return parent.addMenuItem(tempSlot, item);
 			}
 		
 		return false;

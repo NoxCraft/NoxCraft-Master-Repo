@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -26,7 +27,7 @@ public class HammerOfThorAbility extends BasePlayerAbility  implements PVPAbilit
 	public static final String PERM_NODE = "hammer-of-thor";
 	
 	private BaseMMOEventHandler<ProjectileHitEvent> hitListener;
-	private BaseMMOEventHandler<EntityDamageByEntityEvent> hitEntityListener;
+	private BaseMMOEventHandler<EntityDamageEvent> hitEntityListener;
 	
 	private double distanceVelo;
 	private double damageMultiplier;
@@ -83,26 +84,26 @@ public class HammerOfThorAbility extends BasePlayerAbility  implements PVPAbilit
 	public HammerOfThorAbility(Player player){
 			super(ABILITY_NAME, player);
 			
-			this.distanceVelo = 2;
-			this.damageMultiplier = 2;
+			this.distanceVelo = 1.5;
+			this.damageMultiplier = 4;
 			
-			this.hitEntityListener = new BaseMMOEventHandler<EntityDamageByEntityEvent>(
-					new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("EntityDamageByEntityEvent").toString(),
+			this.hitEntityListener = new BaseMMOEventHandler<EntityDamageEvent>(
+					new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("EntityDamageEvent").toString(),
 					EventPriority.LOW, 1) {
 				
 				public boolean ignoreCancelled() {
 					return true;
 				}
 				
-				public Class<EntityDamageByEntityEvent> getEventType() {
-					return EntityDamageByEntityEvent.class;
+				public Class<EntityDamageEvent> getEventType() {
+					return EntityDamageEvent.class;
 				}
 				
 				public String getEventName() {
-					return "EntityDamageByEntityEvent";
+					return "EntityDamageEvent";
 				}
 				
-				public void execute(EntityDamageByEntityEvent event) {
+				public void execute(EntityDamageEvent event) {
 					if (!active) {
 						unregisterHandler(this);
 						return;

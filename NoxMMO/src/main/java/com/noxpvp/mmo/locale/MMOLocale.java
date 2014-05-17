@@ -48,10 +48,10 @@ public class MMOLocale extends NoxLocale {
 		GUI_MENU_NAME_COLOR = new MMOLocale("gui.inventory.name_color", "&6");
 		GUI_BAR_COLOR = new MMOLocale("gui.target_bar.color", "&a");
 		
-		CLASS_NONE_BY_NAME = new MMOLocale("error.class.none-by-name", "&4There is no class by the name of %0%");
-		CLASS_LOCKED = new MMOLocale("error.class.locked", "&4The class %0% is locked. &4Reason:&e %1%");
-		CLASS_TIER_LOCKED = new MMOLocale("error.class.tier.locked", "&4The class %0% tier %1% is locked. &4Reason:&e %2%");
-		CLASS_NO_TIER = new MMOLocale("error.class.tier.missing", "&4The class %0% does not have a tier %1%");
+		CLASS_NONE_BY_NAME = new MMOLocale("error.class.none-by-name", "&cThere is no class by the name of %0%");
+		CLASS_LOCKED = new MMOLocale("error.class.locked", "&cThe class %0% is locked. &cReason:&e %1%");
+		CLASS_TIER_LOCKED = new MMOLocale("error.class.tier.locked", "&cThe %0% class tier %1% is locked. &cReason:&e %2%");
+		CLASS_NO_TIER = new MMOLocale("error.class.tier.missing", "&cThe class %0% does not have a tier %1%");
 	}
 	
 	public MMOLocale(String name, String defValue) {

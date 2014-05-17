@@ -53,7 +53,7 @@ public class ChargeAbility extends BaseEntityAbility {
 		
 		newVelocity.setY(0).multiply(forwardMultiplier);
 		
-		new ParticleRunner(ParticleType.smoke, e, false, 0, 6, 12).start(0, 2);
+		new ParticleRunner(ParticleType.largesmoke, e, true, 0, 6, 10).start(0, 1);
 		
 		e.setVelocity(newVelocity);		
 		return true;

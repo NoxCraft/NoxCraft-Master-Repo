@@ -1,10 +1,17 @@
 package com.noxpvp.mmo.abilities.player;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
+import org.bukkit.projectiles.ProjectileSource;
 
+import com.noxpvp.core.NoxPlugin;
+import com.noxpvp.core.effect.shaped.BaseHelix;
+import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
+import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 
@@ -14,8 +21,8 @@ import com.noxpvp.mmo.abilities.PVPAbility;
  */
 public class FireBallAbility extends BaseEntityAbility implements PVPAbility {
 	
-	public static final String ABILITY_NAME = "FireBall";
-	public static final String PERM_NODE = "fireball";
+	public static final String ABILITY_NAME = "Fire Ball";
+	public static final String PERM_NODE = "fire-ball";
 	
 	private double power;
 	
@@ -33,7 +40,7 @@ public class FireBallAbility extends BaseEntityAbility implements PVPAbility {
 	 * 
 	 * @return double current power set for fireball launch
 	 */
-	public double getPower() {return this.power;}
+	public double getPower() { return this.power; }
 	
 	/**
 	 * 
@@ -53,12 +60,38 @@ public class FireBallAbility extends BaseEntityAbility implements PVPAbility {
 			return false;
 		
 		Entity e = getEntity();
-		Projectile fireBall = (Projectile) e.getWorld().spawnEntity(e.getLocation().add(0, 1, 0), EntityType.SMALL_FIREBALL);
+		Location loc = (e instanceof LivingEntity)? ((LivingEntity) e).getEyeLocation() : e.getLocation();
+		Projectile fireBall = (Projectile) loc.getWorld().spawnEntity(loc, EntityType.FIREBALL);
 		
-		fireBall.setVelocity(e.getVelocity().multiply(power));
-		fireBall.setShooter((LivingEntity) e);
+		fireBall.setVelocity(loc.getDirection().normalize().multiply(getPower()));
+		fireBall.setShooter((ProjectileSource) e);
+		
+		new FireBallHelix(e, 60).render(250);
 		
 		return true;
+	}
+	
+	private class FireBallHelix extends BaseHelix {
+		
+		public NoxPlugin getPlugin() {
+			return NoxMMO.getInstance();
+		}
+		
+		public FireBallHelix(Entity user, int time) {
+			super((user instanceof LivingEntity)?
+					((LivingEntity) user).getEyeLocation() :
+						user.getLocation(), time);
+			
+			setForwardGain(0.05);
+			setRadiusGain(0.5);
+			setSpeed(1);
+			
+		}
+		
+		public void onRun() {
+			new ParticleRunner(ParticleType.flame, getLociaton(), false, 0, 1, 1).start(0);
+			
+		}
 	}
 
 }

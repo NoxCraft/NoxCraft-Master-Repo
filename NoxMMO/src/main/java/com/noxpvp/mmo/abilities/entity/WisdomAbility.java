@@ -61,7 +61,7 @@ public class WisdomAbility extends BaseEntityAbility implements PVPAbility {
 		super(ABILITY_NAME, e);
 		
 		this.mmo = NoxMMO.getInstance();
-		this.duration = 15;
+		this.duration = 10;
 		this.amplifier = 3;
 	}
 

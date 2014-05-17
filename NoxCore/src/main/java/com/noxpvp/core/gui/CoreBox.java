@@ -141,7 +141,8 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		box.setItem(slot, item.getItem());
 		menuItems.put(slot, item);
 		
-		return box.getItem(slot).equals(item.getItem());
+		ItemStack checkNull;
+		return (checkNull = box.getItem(slot)) != null && checkNull.equals(item.getItem());
 	}
 	
 	public boolean removeMenuItem(CoreBoxItem item) {

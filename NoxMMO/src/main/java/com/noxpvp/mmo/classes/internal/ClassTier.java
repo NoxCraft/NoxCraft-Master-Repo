@@ -1,12 +1,14 @@
 package com.noxpvp.mmo.classes.internal;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -44,10 +46,10 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 	}
 	
 	public String getPermission() {
-		return StringUtil.join(".", "nox", "class" , retainer.getName(), "tier", getName());
+		return StringUtil.join(".", "nox", "class", retainer.getName(), "tier", Integer.toString(getTierLevel()));
 	}
 	
-	public final PlayerClass getAssociatedClass() { return retainer; }
+	public final PlayerClass getRetainingClass() { return retainer; }
 	
 	public final int getMaxExp() {
 		return getMaxExp(getLevel());
@@ -59,12 +61,25 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 	
 	public ItemStack getIdentifibleItem() {
 		if (identifingItem == null) {
-			identifingItem = new ItemStack(Material.PAPER);
 			
-			ItemMeta meta = identifingItem.getItemMeta();
-			meta.setDisplayName(getAssociatedClass().getColor() + getDisplayName());
-			meta.setLore(getLore());
-			meta.addEnchant(Enchantment.DURABILITY, 1, true);
+			boolean classCanUse = getRetainingClass().canUseTier(getTierLevel());
+			ItemMeta meta = (identifingItem = new ItemStack(Material.STONE)).getItemMeta();
+
+			if (classCanUse) {
+				identifingItem.setType(Material.ENCHANTED_BOOK);
+				
+				meta.setDisplayName(getRetainingClass().getColor() + getDisplayName());
+				meta.setLore(getLore());
+			} else {
+				identifingItem.setType(Material.BOOK_AND_QUILL);
+				
+				meta.setDisplayName(ChatColor.MAGIC.toString() + getRetainingClass().getColor() + getDisplayName());
+				
+				List<String> lore = new ArrayList<String>();
+				for (String cur : getLore()) lore.add(ChatColor.MAGIC + cur);
+				
+				meta.setLore(lore);
+			}
 			
 			identifingItem.setItemMeta(meta);
 		}
@@ -72,7 +87,7 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 		return identifingItem.clone();
 	}
 	
-	public final Player getPlayer() { return getAssociatedClass().getPlayer(); }
+	public final Player getPlayer() { return getRetainingClass().getPlayer(); }
 	
 	public final void setTotalExp(int amount) {
 		Map<Integer, Integer> expCaps = new HashMap<Integer, Integer>();

@@ -31,6 +31,8 @@ public abstract class BaseVortexEntity implements IVortexEntity {
 		ticker_vertical = 0;
 		ticker_horisontal = (int) Math.round((Math.random() * 360));
 		
+		onCreation();
+		
 		base.setMetadata(uniqueMetaKey, uniqueMeta);
 	}
 	

@@ -29,6 +29,10 @@ public class DummyClassTier extends ClassTier {
 	public int getLevel() {
 		return 0;
 	}
+	
+	public double getMaxHealth() {
+		return 20;
+	}
 
 	public int getMaxExp(int level) {
 		return 0;

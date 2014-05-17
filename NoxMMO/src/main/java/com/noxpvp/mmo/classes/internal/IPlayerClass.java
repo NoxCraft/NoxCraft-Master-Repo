@@ -95,7 +95,6 @@ public interface IPlayerClass {
 	 * @return list<String> lore
 	 */
 	public List<String> getLore();
-//	public void setLore(String[] lore);
 	
 	/**
 	 * Returns the current tier selected.

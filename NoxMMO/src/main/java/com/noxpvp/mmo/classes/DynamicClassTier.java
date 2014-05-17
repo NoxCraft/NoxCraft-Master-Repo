@@ -84,6 +84,10 @@ public class DynamicClassTier extends ClassTier {
 		return lore;
 	}
 	
+	public double getMaxHealth() {
+		return 20;
+	}
+	
 	public int getMaxExp(int level) {
 		return round(levelToExpMap.get(level));
 	}

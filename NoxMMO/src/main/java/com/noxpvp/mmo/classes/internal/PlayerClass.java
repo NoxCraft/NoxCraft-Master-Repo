@@ -14,6 +14,8 @@ import javax.annotation.meta.When;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.PluginManager;
 
 import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
@@ -22,6 +24,7 @@ import com.bergerkiller.bukkit.common.utils.ParseUtil;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.core.gui.MenuItemRepresentable;
+import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.classes.DynamicClassTier;
@@ -43,6 +46,7 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
  *
  */
 public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable {
+	
 	private static final String DYNAMIC_TIER_PATH = "dynamic.tiers";
 	public static final String LOG_MODULE_NAME = "PlayerClass";
 	//Debug and errors
@@ -55,8 +59,6 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 			return;
 		
 		PlayerClassUtil.registerPlayerClass(playerClass.getClass());
-		
-		//TODO: do registers.
 	}
 
 	////	Helper Methods
@@ -74,11 +76,6 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	protected ModuleLogger log;
 	
 	private String name;
-	
-	//Colors
-	// IMPLEMENT THIS STATICALLY IN CLASS FILE. //THIS IS NOT GOING TO BE IN HERE BBC....
-//	private static Color armourColor;
-//	private static ChatColor colorChar;
 	
 	//Player Data
 	private String playerName;
@@ -116,8 +113,16 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 		log = pcLog.getModule(this.playerName);
 		
 		this.tiers = craftClassTiers();
-		
 		this.tiers.putAll(craftDynamicTiers());
+		
+		PluginManager pm = Bukkit.getPluginManager();
+		NoxMMO mmo = NoxMMO.getInstance();
+		for (IClassTier tier : tiers.values()) {
+			mmo.addPermission(new NoxPermission(NoxMMO.getInstance(), 
+					StringUtil.join(".", NoxMMO.PERM_NODE, "class", tier.getRetainingClass().getName(), "tier", Integer.toString(tier.getTierLevel())), 
+					"Allows the usage of the " + tier.getName() + " tier in the " + tier.getRetainingClass().getName() + " class",
+					PermissionDefault.OP));
+		}
 		
 		checkAndRegisterClass(this);
 	}
@@ -268,6 +273,13 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 		return name;
 	}
 	
+	public String getDisplayName() {
+		if (getTier().getDisplayName() != null)
+			return getTier().getDisplayName();
+		else
+			return getColor() + getName();
+	}
+	
 	public final Player getPlayer() {
 		return Bukkit.getPlayer(getPlayerName());
 	}
@@ -394,12 +406,5 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	
 	public void setExp(int tier, int amount) {
 		getTier(tier).setExp(amount);
-	}
-
-	public String getDisplayName() {
-		if (getTier().getDisplayName() != null)
-			return getTier().getDisplayName();
-		else
-			return getColor() + getName();
 	}
 }

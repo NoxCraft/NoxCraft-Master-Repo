@@ -19,14 +19,16 @@ public class AxesBerserkerClassTier extends ClassTier {
 	private volatile static String dName = "Berserker";
 	
 	private Map<String, Ability> abilities = new HashMap<String, Ability>();
+	private final double maxHealth;
 	
 	public AxesBerserkerClassTier(PlayerClass retainer) {
 		super(retainer, TIER_NAME, 3);
 		
 		abilities.putAll(retainer.getTier(getTierLevel()-1).getAbilityMap());
 		abilities.put("Charge", new ChargeAbility(getPlayer(), 3));
+		
+		this.maxHealth = 26;
 	}
-
 	
 	public void setDisplayName(String displayName) {
 		AxesBerserkerClassTier.dName = displayName;
@@ -38,6 +40,10 @@ public class AxesBerserkerClassTier extends ClassTier {
 
 	public List<String> getLore() {
 		return Collections.emptyList();
+	}
+	
+	public double getMaxHealth() {
+		return maxHealth;
 	}
 
 	public int getMaxExp(int level) {

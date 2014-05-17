@@ -33,8 +33,7 @@ public class AxesPlayerClass extends PlayerClass {
 		tiers.put(4, new AxesWarlordClassTier(this));
 	}
 
-	public AxesPlayerClass(String playerName,
-			Player player) {
+	public AxesPlayerClass(String playerName, Player player) {
 		super(uniqueID, className, playerName, player);
 	}
 
@@ -82,11 +81,6 @@ public class AxesPlayerClass extends PlayerClass {
 		return ((LeatherArmorMeta) new ItemStack(Material.LEATHER_HELMET).getItemMeta()).getColor();
 	}
 
-	public boolean canUseClass() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public ChatColor getColor() {
 		return ChatColor.RED;
 	}
@@ -96,8 +90,7 @@ public class AxesPlayerClass extends PlayerClass {
 	}
 
 	public boolean canUseTier(int tier) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;//TODO this
 	}
 
 	@Override

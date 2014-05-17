@@ -14,10 +14,10 @@ import com.noxpvp.mmo.classes.internal.*;
 public class AxesBasherClassTier extends ClassTier {
 
 	public static final String TIER_NAME = "Basher";
+	private volatile static String dName = "Basher";
 	
 	private Map<String, Ability> abilities = new HashMap<String, Ability>();
-	
-	private volatile static String dName = "Basher";
+	private final double maxHealth;
 	
 	public AxesBasherClassTier(PlayerClass retainer) {
 		super(retainer, TIER_NAME, 1);
@@ -25,6 +25,8 @@ public class AxesBasherClassTier extends ClassTier {
 		//abilities.put("Iron Grip", /* HERP */)
 		abilities.put("Leap", new LeapAbility(retainer.getPlayer()));
 		abilities.put("CriticalHit", new CriticalHitAbility(retainer.getPlayer()));
+		
+		this.maxHealth = 22;
 	}
 
 	public void setDisplayName(String displayName) {
@@ -37,6 +39,10 @@ public class AxesBasherClassTier extends ClassTier {
 
 	public List<String> getLore() {
 		return Collections.emptyList();//XXX implement soon
+	}
+	
+	public double getMaxHealth() {
+		return this.maxHealth;
 	}
 
 	public int getMaxExp(int level) {

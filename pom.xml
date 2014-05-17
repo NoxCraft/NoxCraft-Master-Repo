@@ -48,7 +48,7 @@
 		<repository>
 			<id>comphenix-rep</id>
 			<name>Comphenix Repository</name>
-			<url>http://repo.comphenix.net/content/groups/public</url>
+			<url>http://assets.comphenix.net/jenkins/plugin/repository/everything/</url>
 		</repository>
 
 		<!-- BKCommonLib -->
@@ -60,7 +60,7 @@
 		<!-- WorldGuard , WorldEdit -->
 		<repository>
 			<id>sk89q</id>
-			<url>http://maven.sk89q.com/repo/</url>
+			<url>http://maven.sk89q.com/artifactory/repo/</url>
 		</repository>
 
 		<!-- Vault -->
@@ -111,7 +111,7 @@
 			<dependency>
 				<groupId>net.milkbowl.vault</groupId>
 				<artifactId>Vault</artifactId>
-				<version>1.2.30</version>
+				<version>1.2.32</version>
 				<scope>provided</scope>
 			</dependency>
 			
@@ -150,7 +150,7 @@
 			<dependency>
 				<groupId>org.spigotmc</groupId>
 				<artifactId>spigot-api</artifactId>
-				<version>1.7.9-R0.1-SNAPSHOT</version>
+				<version>1.7.9-R0.2-SNAPSHOT</version>
 				<scope>provided</scope>
 			</dependency>
 		</dependencies>

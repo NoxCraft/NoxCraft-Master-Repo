@@ -19,12 +19,15 @@ public class AxesChampionClassTier extends ClassTier {
 	private volatile static String dName = "Champion";
 	
 	private Map<String, Ability> abilities = new HashMap<String, Ability>();
+	private final double maxHealth;
 	
 	public AxesChampionClassTier(PlayerClass retainer) {
 		super(retainer, TIER_NAME, 2);
 		
-		abilities.putAll(getAssociatedClass().getTier(getTierLevel()-1).getAbilityMap());
+		abilities.putAll(getRetainingClass().getTier(getTierLevel()-1).getAbilityMap());
 		abilities.put("Skull Smasher", new SkullSmasherAbility(getPlayer()));
+		
+		this.maxHealth = 28;
 	}
 
 	public void setDisplayName(String displayName) {
@@ -37,6 +40,10 @@ public class AxesChampionClassTier extends ClassTier {
 
 	public List<String> getLore() {
 		return Collections.emptyList();
+	}
+	
+	public double getMaxHealth() {
+		return this.maxHealth;
 	}
 
 	public int getMaxExp(int level) {

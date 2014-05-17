@@ -47,6 +47,13 @@ public class DamageUtil {
 		return e instanceof LivingEntity? (LivingEntity) e : null;
 	}
 	
+	public static Projectile getAttackingProjectile(EntityDamageEvent event) {
+		if (event instanceof EntityDamageByEntityEvent)
+			return getAttackingProjectile((EntityDamageByEntityEvent) event);
+		
+		return null;
+	}
+	
 	public static Projectile getAttackingProjectile(EntityDamageByEntityEvent event) {
 		Entity e = event.getDamager();
 		

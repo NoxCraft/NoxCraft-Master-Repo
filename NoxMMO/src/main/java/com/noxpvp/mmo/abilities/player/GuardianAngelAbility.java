@@ -138,7 +138,7 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 		v.setProfession(Profession.PRIEST);
 		v.setCustomNameVisible(true);
 		v.setCustomName(ChatColor.GREEN + "Guardian Angel");
-		v.setNoDamageTicks(200);
+		v.setNoDamageTicks(Short.MAX_VALUE);
 		
 		return v;
 	}

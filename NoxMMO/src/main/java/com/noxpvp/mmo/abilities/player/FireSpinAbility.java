@@ -7,8 +7,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SmallFireball;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.effect.vortex.BaseVortex;
@@ -41,6 +45,7 @@ public class FireSpinAbility extends BasePlayerAbility {
 			return false;
 		
 		new FireSpinVortex(getPlayer(), time).start();
+		getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, time, 1, true));
 		
 		return true;
 		
@@ -56,7 +61,7 @@ public class FireSpinAbility extends BasePlayerAbility {
 			super(user, user.getLocation(), time);
 			
 			setWidth(1.5);
-			setHeightGain(0.1);
+			setHeightGain(0.17);
 			setMaxSize(50);
 			setSpeed(3);
 
@@ -107,7 +112,7 @@ public class FireSpinAbility extends BasePlayerAbility {
 			super(parent, parent.getLocation(), 
 					parent.getLocation().getWorld().spawnFallingBlock(parent.getLocation(), Material.FIRE, (byte) 0));
 			
-			new ParticleRunner(ParticleType.dripLava, getEntity(), false, 0, 1, 0).start(0, parent.getSpeed());
+			new ParticleRunner(ParticleType.dripLava, getEntity(), false, 0, 1, 0).start(0, parent.getSpeed() + 2);
 		}
 		
 		public FireSpinVortexEntity(BaseVortex parent, Location loc, Entity base) {

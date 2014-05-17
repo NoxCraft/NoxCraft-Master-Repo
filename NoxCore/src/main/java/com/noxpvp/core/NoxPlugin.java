@@ -32,11 +32,11 @@ public abstract class NoxPlugin extends PluginBase {
 
 	protected Map<String, Command> commandExecs = new HashMap<String, Command>();
 	
-	protected void addPermission(NoxPermission perm) {
+	public void addPermission(NoxPermission perm) {
 		NoxCore.getInstance().addPermission(perm);
 	}
 	
-	protected void addPermissions(NoxPermission... perms)
+	public void addPermissions(NoxPermission... perms)
 	{
 		NoxCore.getInstance().addPermissions(perms);
 	}

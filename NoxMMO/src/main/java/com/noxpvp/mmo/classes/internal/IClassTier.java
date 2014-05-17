@@ -16,9 +16,12 @@ public interface IClassTier {
 	
 	public boolean canUse();
 	
+	public PlayerClass getRetainingClass();
 	public void setDisplayName(String displayName);
 	public String getDisplayName();
 	public List<String> getLore();
+	
+	public double getMaxHealth();
 	
 	public int getMaxExp();
 	public int getMaxExp(int level);
