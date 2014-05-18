@@ -24,19 +24,19 @@ import com.noxpvp.core.internal.LockerCaller;
 import com.noxpvp.core.internal.SafeLocker;
 import com.noxpvp.core.utils.UUIDUtil;
 
-public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persistant, LockerCaller, SafeLocker {
+public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements Persistant, LockerCaller, SafeLocker {
 	
-	private volatile static PlayerManager instance;
+	private volatile static CorePlayerManager instance;
 	private static List<IPlayerManager<?>> managers = new ArrayList<IPlayerManager<?>>();
 	
 	private AtomicBoolean isLocked = new AtomicBoolean();
 	private LockerCaller lockCaller = null;
 	
 	public static void addManager(IPlayerManager<?> manager) {
-		if (PlayerManager.managers.contains(manager))
+		if (CorePlayerManager.managers.contains(manager))
 			return;
 		
-		PlayerManager.managers.add(manager);
+		CorePlayerManager.managers.add(manager);
 	}
 	
 	@Override
@@ -56,17 +56,17 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	}
 	
 	
-	public static PlayerManager getInstance() {
+	public static CorePlayerManager getInstance() {
 		if (instance == null)
-			instance = new PlayerManager();
+			instance = new CorePlayerManager();
 		
 		return instance;
 	}
 	
-	public static PlayerManager getInstance(FileConfiguration conf, NoxCore plugin)
+	public static CorePlayerManager getInstance(FileConfiguration conf, NoxCore plugin)
 	{
 		if (instance == null)
-			instance = new PlayerManager(conf, plugin);
+			instance = new CorePlayerManager(conf, plugin);
 		
 		return instance;
 	}
@@ -75,12 +75,12 @@ public class PlayerManager extends BasePlayerManager<NoxPlayer> implements Persi
 	
 	private NoxCore plugin;
 	
-	protected PlayerManager() {
+	protected CorePlayerManager() {
 		this(new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml")), NoxCore.getInstance());
 		config = new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml"));
 	}
 
-	protected PlayerManager(FileConfiguration conf, NoxCore plugin)
+	protected CorePlayerManager(FileConfiguration conf, NoxCore plugin)
 	{
 		super(NoxPlayer.class);
 		this.plugin = plugin;

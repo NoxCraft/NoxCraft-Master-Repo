@@ -55,7 +55,7 @@ public class NoxMMO extends NoxPlugin {
 	
 	private MasterListener masterListener;
 	
-	private PlayerManager playerManager = null;
+	private MMOPlayerManager playerManager = null;
 
 	private Class<Command>[] commands =  (Class<Command>[]) new Class[]{ ClassCommand.class, AbilityCommand.class };
 	
@@ -291,11 +291,11 @@ public class NoxMMO extends NoxPlugin {
 	/**
 	 * Gets the player manager.
 	 *
-	 * @Deprecated Use {@link PlayerManager#getInstance()} instead
+	 * @Deprecated Use {@link MMOPlayerManager#getInstance()} instead
 	 * @return the player manager
 	 */
-	public PlayerManager getPlayerManager() {
-		PlayerManager c = PlayerManager.getInstance();
+	public MMOPlayerManager getPlayerManager() {
+		MMOPlayerManager c = MMOPlayerManager.getInstance();
 		if (playerManager == null)
 			playerManager = c;
 		else if (playerManager != c)

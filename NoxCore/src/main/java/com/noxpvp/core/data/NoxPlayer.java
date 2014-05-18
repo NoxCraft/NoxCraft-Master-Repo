@@ -38,14 +38,14 @@ import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.core.gui.CoreBoard;
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.internal.PermissionHandler;
-import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.utils.UUIDUtil;
 
 public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	private WeakHashMap<String, CoolDown> cd_cache;
 	private List<CoolDown> cds;
-	private PlayerManager manager;
+	private CorePlayerManager manager;
 	private String name;
 	
 	private final PermissionHandler permHandler;
@@ -103,8 +103,10 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			load();
 	}
 	
-	public NoxPlayer(PlayerManager mn, String name) {
+	public NoxPlayer(CorePlayerManager mn, String name) {
 		Validate.notNull(mn);
+		Validate.notNull(name);
+		
 		NoxCore core = mn.getPlugin();
 		permHandler = core.getPermissionHandler();
 		cds = new ArrayList<CoolDown>();
@@ -125,7 +127,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		manager.loadPlayer(this);
 	}
 	
-	public NoxPlayer(PlayerManager mn, UUID uid) {
+	public NoxPlayer(CorePlayerManager mn, UUID uid) {
 		Validate.notNull(mn);
 		NoxCore core = mn.getPlugin();
 		permHandler = core.getPermissionHandler();
@@ -142,7 +144,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this.persistant_data = mn.getPlayerNode(this);
 	}
 	
-	public NoxPlayer(PlayerManager mn, String name, String uid) {
+	public NoxPlayer(CorePlayerManager mn, String name, String uid) {
 		this(mn, name);
 		this.uid = UUID.fromString(uid);
 	}
@@ -386,7 +388,6 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	public Double getMoney(String worldName) { return VaultAdapter.economy.getBalance(getPlayerName(), worldName); }
 	
-	@Deprecated
 	public String getName(){
 		return getPlayerName();
 	}
@@ -479,7 +480,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		if (getFirstJoin() == 0)
 			setFirstJoin();
 		
-		setName(persistant_data.get("last.ign", String.class));
+		setName(persistant_data.get("last.ign", String.class, name));
 		
 		rebuild_cache();
 	}
@@ -535,6 +536,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	{
 		this.persistant_data.remove("last.death");
 		setLastDeathTS();
+		setLastDeathLocation(event.getEntity().getLocation());
 		EntityDamageEvent ede = event.getEntity().getLastDamageCause();
 		
 		if (ede == null)
@@ -619,6 +621,6 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 
 	public void saveToManager() {
-		PlayerManager.getInstance().savePlayer(this);
+		CorePlayerManager.getInstance().savePlayer(this);
 	}
 }
