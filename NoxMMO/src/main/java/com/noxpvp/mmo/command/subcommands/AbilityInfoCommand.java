@@ -10,7 +10,7 @@ import com.noxpvp.core.commands.SafeNullPointerException;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.locale.MMOLocale;
 
@@ -42,7 +42,7 @@ public class AbilityInfoCommand extends BaseCommand {
 		
 		String abilityName = context.getArgument(0);
 		
-		MMOPlayer mPlayer = PlayerManager.getInstance().getPlayer(context.getPlayer());
+		MMOPlayer mPlayer = MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
 		
 		if (mPlayer == null)
 			return new CommandResult(this, true, new MessageBuilder().red("mPlayer object is null!").lines());

@@ -8,7 +8,7 @@ import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.gui.ClassChooseMenu;
 import com.noxpvp.mmo.locale.MMOLocale;
@@ -80,7 +80,7 @@ public class ClassSwitchCommand extends BaseCommand {
 		
 		PlayerClass c = PlayerClassUtil.safeConstructClass(cName, context.getPlayer());
 		
-		MMOPlayer p =  PlayerManager.getInstance().getPlayer(context.getPlayer());
+		MMOPlayer p =  MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
 		
 		if (tier == -1)
 			c.setCurrentTier(c.getLatestTier());

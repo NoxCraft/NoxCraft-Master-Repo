@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.core.effect.StaticEffects;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
@@ -95,7 +95,7 @@ public class SkullSmasherAbility extends BasePlayerAbility implements PVPAbility
 		if (!mayExecute())
 			return false;
 		
-		IPlayerClass pClass = PlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
+		IPlayerClass pClass = MMOPlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
 		
 		int length = (20 * (pClass.getTotalLevel())) / 16;
 		

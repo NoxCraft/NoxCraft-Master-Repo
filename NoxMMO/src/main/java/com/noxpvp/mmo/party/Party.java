@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 
 public class Party implements IParty{
 	
@@ -29,7 +29,7 @@ public class Party implements IParty{
 	public Party(Player owner, @Nullable String name, @Nullable String pass){
 		this.owner = owner.getName();
 		
-		MMOPlayer player = PlayerManager.getInstance().getPlayer(owner);
+		MMOPlayer player = MMOPlayerManager.getInstance().getPlayer(owner);
 		
 		partyData = player.getPersistantData().getNode("party");
 		

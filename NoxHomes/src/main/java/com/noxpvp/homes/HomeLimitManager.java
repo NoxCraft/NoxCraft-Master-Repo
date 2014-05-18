@@ -168,11 +168,11 @@ public class HomeLimitManager implements Persistant {
 		if (adapt instanceof HomesPlayer)
 			return (HomesPlayer) adapt;
 		else
-			return PlayerManager.getInstance().getPlayer(adapt);
+			return HomesPlayerManager.getInstance().getPlayer(adapt);
 	}
 	
 	private static HomesPlayer getNoxPlayer(String name)
 	{
-		return PlayerManager.getInstance().getPlayer(name);
+		return HomesPlayerManager.getInstance().getPlayer(name);
 	}
 }

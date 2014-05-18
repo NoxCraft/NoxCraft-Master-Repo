@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import com.noxpvp.core.data.Vector3D;
 import com.noxpvp.core.gui.corebar.LivingEntityTracker;
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
@@ -79,7 +79,7 @@ public class TargetAbility extends BasePlayerAbility implements PassiveAbility<P
 			if (hasIntersection(observerStart, observerEnd, minimum, maximum)) {
 				this.target_ref = new SoftReference<LivingEntity>((LivingEntity) it);
 				
-				PlayerManager pm = PlayerManager.getInstance();
+				MMOPlayerManager pm = MMOPlayerManager.getInstance();
 				MMOPlayer mmoPlayer = pm.getPlayer(p), mmoIt = it instanceof Player? pm.getPlayer((Player) it) : null;
 				
 				if (mmoPlayer == null)

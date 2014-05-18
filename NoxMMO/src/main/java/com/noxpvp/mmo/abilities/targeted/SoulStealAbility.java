@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 
@@ -39,7 +39,7 @@ public class SoulStealAbility extends BaseTargetedPlayerAbility implements PVPAb
 	 * @param player The Player type user for this ability instance
 	 */
 	public SoulStealAbility(Player player){
-		super(ABILITY_NAME, player, PlayerManager.getInstance().getPlayer(player).getTarget());
+		super(ABILITY_NAME, player, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 	}
 	
 	/**

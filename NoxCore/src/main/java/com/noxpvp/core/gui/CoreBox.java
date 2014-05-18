@@ -25,7 +25,7 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.effect.StaticEffects;
 import com.noxpvp.core.listeners.NoxListener;
-import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.packet.PacketSounds;
 
 public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, Cloneable {
@@ -33,7 +33,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 	private Map<Integer, CoreBoxItem> menuItems;
 	
 	public Runnable closeRunnable;
-	private PlayerManager pm;
+	private CorePlayerManager pm;
 	private String name;
 	private Inventory box;
 	private CoreBox backButton;
@@ -51,7 +51,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 	public CoreBox(final Player p, String name, int size, @Nullable CoreBox backButton, NoxCore core) {
 		super(core);
 		
-		this.pm = PlayerManager.getInstance();
+		this.pm = CorePlayerManager.getInstance();
 		this.p = new WeakReference<Player>(p);
 		
 		this.box = Bukkit.getServer().createInventory(null, size, (this.name = name));

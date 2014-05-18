@@ -64,7 +64,7 @@ public class NoxHomes extends NoxPlugin {
 		
 		String[] internals = { };
 		Class<?>[] classes = {
-				PlayerManager.class,
+				HomesPlayerManager.class,
 				HomeLimitManager.class,
 		};
 		
@@ -128,9 +128,9 @@ public class NoxHomes extends NoxPlugin {
 		return core;
 	}
 	
-	public PlayerManager getHomeManager()
+	public HomesPlayerManager getHomeManager()
 	{
-		return PlayerManager.getInstance();
+		return HomesPlayerManager.getInstance();
 		
 	}
 

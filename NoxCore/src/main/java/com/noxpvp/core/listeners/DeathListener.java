@@ -11,10 +11,10 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.NoxPlayer;
-import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.manager.CorePlayerManager;
 
 public class DeathListener extends NoxListener<NoxCore> {
-	private PlayerManager pm;
+	private CorePlayerManager pm;
 	
 	public DeathListener()
 	{
@@ -24,7 +24,7 @@ public class DeathListener extends NoxListener<NoxCore> {
 	public DeathListener(NoxCore core)
 	{
 		super(core);
-		this.pm = PlayerManager.getInstance();
+		this.pm = CorePlayerManager.getInstance();
 	}
 	
 	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)

@@ -6,7 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 
@@ -41,7 +41,7 @@ public class ShadowStepAbility extends BaseTargetedPlayerAbility implements PVPA
 	 * @param player the Player type user for this ability instance
 	 */
 	public ShadowStepAbility(Player player){
-		super(ABILITY_NAME, player, PlayerManager.getInstance().getPlayer(player).getTarget());
+		super(ABILITY_NAME, player, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 		
 		this.range = 10;
 	}

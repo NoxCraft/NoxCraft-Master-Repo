@@ -15,7 +15,7 @@ import com.bergerkiller.bukkit.common.scoreboards.CommonObjective;
 import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard;
 import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard.Display;
 import com.noxpvp.core.NoxCore;
-import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.utils.TimeUtils;
 import com.noxpvp.core.utils.gui.MessageUtil;
 
@@ -24,7 +24,7 @@ public class CoreBoard{
 	private final static int BOARD_OBJ_NAME_LENGTH_MAX = 28;
 	private final static int BOARD_SCORE_NAME_MAX_LENGTH = 16;
 	
-	PlayerManager pm;
+	CorePlayerManager pm;
 	private Map<String, BoardEntry> entries;
 	private List<Integer> takenSlots;
 	private Map<String, BoardScroller> scrollers;
@@ -65,7 +65,7 @@ public class CoreBoard{
 		this.scrollers = new HashMap<String, BoardScroller>();
 		this.timers = new HashMap<String, BoardTimer>();
 		this.entries = new HashMap<String, BoardEntry>();
-		this.pm = PlayerManager.getInstance();
+		this.pm = CorePlayerManager.getInstance();
 		
 		this.takenSlots = new ArrayList<Integer>();
 		

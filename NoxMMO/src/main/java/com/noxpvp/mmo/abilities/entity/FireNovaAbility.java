@@ -31,7 +31,7 @@ public class FireNovaAbility extends BaseEntityAbility  implements PVPAbility {
 	
 	private int range;
 	private int tickSpeed;
-	private Material blockType = Material.FIRE;
+	private Material blockType;
 	private boolean burnTallGrass;
 	private FirenovaAnimation animation;
 	
@@ -100,7 +100,14 @@ public class FireNovaAbility extends BaseEntityAbility  implements PVPAbility {
 	 * 
 	 * @param entity The Entity type user for this ability instance (Also to fire ring center location)
 	 */
-	public FireNovaAbility(Entity entity){super(ABILITY_NAME, entity);}
+	public FireNovaAbility(Entity entity) {
+		super(ABILITY_NAME, entity);
+		
+		this.blockType = Material.FIRE;
+		this.burnTallGrass = false;
+		this.tickSpeed = 2;
+		this.range = 5;
+	}
 	
 	public boolean execute() {
 		if (!mayExecute())
@@ -157,28 +164,27 @@ public class FireNovaAbility extends BaseEntityAbility  implements PVPAbility {
 				for (int x = bx - i; x <= bx + i; x++) {
 					for (int z = bz - i; z <= bz + i; z++) {
 						if (Math.abs(x-bx) == i || Math.abs(z-bz) == i) {
-							Block b = center.getWorld().getBlockAt(x, y, z);
-							if (b.getType() == Material.AIR || (burnTallGrass && b.getType() == Material.LONG_GRASS)) {
-								Block under = b.getRelative(BlockFace.DOWN);
-								if (under.getType() == Material.AIR || (burnTallGrass && under.getType() == Material.LONG_GRASS)) {
-									b = under;
-								}
+							Block b = center.getWorld().getBlockAt(x, y + 3, z);
+							
+							Material type = b.getType();
+							while((type != Material.AIR || !b.getRelative(BlockFace.DOWN).getType().isSolid()) && b.getLocation().getY() > (center.getY()-4)){
+								b = b.getRelative(BlockFace.DOWN);
+								type = b.getType();
+							}
+							
+							if (b.getType() == Material.AIR) {
 								b.setType(blockType);
 								fireBlocks.add(b);
-							} else if (b.getRelative(BlockFace.UP).getType() == Material.AIR || (burnTallGrass && b.getRelative(BlockFace.UP).getType() == Material.LONG_GRASS)) {
-								b = b.getRelative(BlockFace.UP);
-								b.setType(blockType);
-								fireBlocks.add(b);
+								
 							}
 						}
 					}
 				}
-			} else if (i > range+1) {
+			} else {
 				safeCancel();
 				return;
 			}
 		}
 	}
-	
 
 }

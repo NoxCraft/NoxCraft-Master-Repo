@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
@@ -42,7 +42,7 @@ public class SeveringStrikesAbility extends BasePlayerAbility implements Passive
 		if (!(damaged instanceof Damageable))
 			return false;
 		
-		int levels = PlayerManager.getInstance().getPlayer(p).getPrimaryClass().getTotalLevel();
+		int levels = MMOPlayerManager.getInstance().getPlayer(p).getPrimaryClass().getTotalLevel();
 		this.bleed = (20 * levels) / 16;
 		
 		new DamageRunnable((Damageable) damaged, p, 1*(1+((bleed / 20) / 6)), (bleed / 20) / 3).runTaskTimer(NoxMMO.getInstance(), 30, 30);

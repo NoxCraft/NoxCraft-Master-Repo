@@ -18,7 +18,7 @@ import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.gui.CoreBoxItem;
 import com.noxpvp.core.gui.CoreBoxRegion;
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
 import com.noxpvp.mmo.util.PlayerClassUtil;
@@ -76,7 +76,7 @@ public class ClassChooseMenu extends CoreBox {
 						return true;
 					} else {
 						MMOPlayer mmoPlayer;
-						if ((mmoPlayer = PlayerManager.getInstance().getPlayer(getPlayer())) != null){
+						if ((mmoPlayer = MMOPlayerManager.getInstance().getPlayer(getPlayer())) != null){
 							mmoPlayer.setSecondaryClass(getPlayerClass());
 							hide();
 							

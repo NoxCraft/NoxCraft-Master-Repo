@@ -16,7 +16,7 @@ import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.core.events.CooldownExpireEvent;
 import com.noxpvp.core.gui.CoolDown;
-import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.manager.CorePlayerManager;
 
 public class CooldownHandler extends BukkitRunnable {
 	private Map<String, List<CoolDown>> cds;
@@ -37,12 +37,12 @@ public class CooldownHandler extends BukkitRunnable {
 
 	public void loadPlayer(OfflinePlayer player)
 	{
-		loadPlayer(PlayerManager.getInstance().getPlayer(player));
+		loadPlayer(CorePlayerManager.getInstance().getPlayer(player));
 	}
 	
 	public void loadPlayer(String name)
 	{
-		loadPlayer(PlayerManager.getInstance().getPlayer(name));
+		loadPlayer(CorePlayerManager.getInstance().getPlayer(name));
 	}
 	
 	public void run() {

@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.bergerkiller.bukkit.common.AsyncTask;
 import com.google.common.collect.MapMaker;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.Cycler;
 import com.noxpvp.core.data.NoxPlayerAdapter;
@@ -34,7 +34,7 @@ import com.noxpvp.mmo.util.InventoryActionCombo;
 
 
 //FIXME: Add visuals (Text item display / ability display.
-public class AbilityCycler extends Cycler<Ability> implements ConfigurationSerializable {
+public class AbilityCycler extends Cycler<Ability> implements IAbilityCycler, ConfigurationSerializable {
 	private static AsyncTask cleaner;
 	private static long cleaner_delay = 5000;
 	private static ConcurrentMap<MMOPlayer, List<Reference<AbilityCycler>>> d;
@@ -137,7 +137,7 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 	}
 	
 	private MMOPlayer fetchMMOPlayer(NoxPlayerAdapter adapter) {
-		return PlayerManager.getInstance().getPlayer(adapter);
+		return MMOPlayerManager.getInstance().getPlayer(adapter);
 	}
 
 	public static void register(AbilityCycler cycler) {
@@ -261,7 +261,7 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 			@EventHandler(ignoreCancelled = true, priority=EventPriority.HIGHEST)
 			public void onItemheld(PlayerItemHeldEvent event) {
 				Player p = event.getPlayer();
-				MMOPlayer player = PlayerManager.getInstance().getPlayer(p);
+				MMOPlayer player = MMOPlayerManager.getInstance().getPlayer(p);
 				
 
 				if (!d.containsKey(player))
@@ -314,7 +314,7 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 				if (!event.getInventory().getHolder().equals(p) && (event.getInventory().getHolder() instanceof Player))
 					p = (Player) event.getInventory().getHolder(); //Fixes things like openInventory plugin. If this is occuring. Not 100% sure.
 					
-				MMOPlayer player = PlayerManager.getInstance().getPlayer(p);
+				MMOPlayer player = MMOPlayerManager.getInstance().getPlayer(p);
 
 				ItemStack cursor = event.getCursor();
 				ItemStack clicked = event.getCurrentItem();
@@ -348,7 +348,7 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 			@EventHandler(ignoreCancelled = true, priority=EventPriority.MONITOR)
 			public void onLogin(PlayerJoinEvent event) {
 				Player p = event.getPlayer();
-				PlayerManager.getInstance().isLoaded(p.getName());
+				MMOPlayerManager.getInstance().isLoaded(p.getName());
 			}
 		};
 	}

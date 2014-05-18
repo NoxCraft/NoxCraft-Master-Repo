@@ -51,7 +51,7 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 	
 	public int verticalTicker() {
 		if (verticalTicker < 90)
-			verticalTicker += 5;
+			verticalTicker += 1;
 		
 		return verticalTicker;
 	}

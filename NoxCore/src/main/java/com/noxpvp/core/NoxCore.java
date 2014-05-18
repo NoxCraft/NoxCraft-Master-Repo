@@ -46,7 +46,7 @@ import com.noxpvp.core.listeners.ServerPingListener;
 import com.noxpvp.core.listeners.VoteListener;
 import com.noxpvp.core.locales.CoreLocale;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.BaseReloader;
 import com.noxpvp.core.reloader.Reloader;
@@ -166,7 +166,7 @@ public class NoxCore extends NoxPlugin {
 	@Override
 	public void disable() {
 		saveConfig();
-		PlayerManager.getInstance().save();
+		CorePlayerManager.getInstance().save();
 		
 		cds.stop();
 		cleanup();
@@ -184,7 +184,7 @@ public class NoxCore extends NoxPlugin {
 				VaultAdapter.class,
 				VaultAdapter.GroupUtils.class,
 				CoreLocale.class, GlobalLocale.class,
-				PlayerManager.class, MasterReloader.class
+				CorePlayerManager.class, MasterReloader.class
 		};
 		
 		String[] internalClasses = { };
@@ -287,7 +287,7 @@ public class NoxCore extends NoxPlugin {
 		
 		r.addModule(new BaseReloader(r, "players") {
 			public boolean reload() {
-				PlayerManager.getInstance().load();
+				CorePlayerManager.getInstance().load();
 				return true;
 			}
 		});
@@ -422,10 +422,10 @@ public class NoxCore extends NoxPlugin {
 	}
 
 	/**
-	 * @deprecated Use {@link PlayerManager#getInstance()} instead.
+	 * @deprecated Use {@link CorePlayerManager#getInstance()} instead.
 	 */
-	public PlayerManager getPlayerManager() {
-		return PlayerManager.getInstance();
+	public CorePlayerManager getPlayerManager() {
+		return CorePlayerManager.getInstance();
 	}
 	
 	/**

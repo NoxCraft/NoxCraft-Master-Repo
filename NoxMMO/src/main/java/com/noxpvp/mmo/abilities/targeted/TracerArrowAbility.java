@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 
@@ -30,7 +30,7 @@ public class TracerArrowAbility extends BaseTargetedPlayerAbility implements PVP
 	 * @return boolean If the execution ran successfully
 	 */
 	public static boolean eventExecute(Player player, final Arrow arrow){
-		MMOPlayer mmoP = PlayerManager.getInstance().getPlayer(player);
+		MMOPlayer mmoP = MMOPlayerManager.getInstance().getPlayer(player);
 		String name = player.getName();
 		
 		if (abilityCue.containsKey(name))

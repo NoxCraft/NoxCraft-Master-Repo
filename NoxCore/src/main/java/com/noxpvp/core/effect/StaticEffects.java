@@ -110,6 +110,10 @@ public class StaticEffects {
 		p.playSound(p.getLocation(), sound, 1, 1);
 	}
 	
+	public static void playSound(Player p, String sound, float volume, float pitch) {
+		p.playSound(p.getLocation(), sound, volume, pitch);
+	}
+	
 	public static void PlaySound(Player p, Location loc, String sound) {
 		PlaySound(p, loc, sound, 1, 1);
 	}

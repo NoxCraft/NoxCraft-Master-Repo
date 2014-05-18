@@ -157,10 +157,9 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 		Location pLoc = p.getLocation();
 		
 		int range = getRange();
-		NoxMMO mmo = NoxMMO.getInstance();
 		
-		new ParticleRunner(ParticleType.largeexplode, pLoc.add(0, 1, 0), false, 0, 2, 1).runTask(mmo);
-		new ShockWaveAnimation(p, pLoc, 1, range, 0.35, true).start(0);
+		new ParticleRunner(ParticleType.largeexplode, pLoc.add(0, 1, 0), true, 10, 3, 1).start(0);
+		new ShockWaveAnimation(pLoc, 1, range, 0.35, true).start(0);
 		new ExpandingDamageRunnable(p, p.getLocation(), getDamage(), range, 1).start(0);
 		
 	}

@@ -2,6 +2,7 @@ package com.noxpvp.core.manager;
 
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -13,14 +14,14 @@ import com.noxpvp.core.data.NoxPlayerAdapter;
 public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements IPlayerManager<T> {
 	private Map<String, T> players;
 	
-	private PlayerManager pm = null;
+	private CorePlayerManager pm = null;
 
 	private Class<T> typeClass;
 	
 	public BasePlayerManager(Class<T> t) {
 		this.typeClass = t;
 		this.players = craftNewStorage();
-		PlayerManager.addManager(this);
+		CorePlayerManager.addManager(this);
 	}
 	
 	protected T craftNew(NoxPlayerAdapter adapter) {
@@ -48,9 +49,9 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	 * Should never be called in the constructor of the core manager.
 	 * @return PlayerManager from NoxCore
 	 */
-	protected PlayerManager getCorePlayerManager() {
+	protected CorePlayerManager getCorePlayerManager() {
 		if (pm == null)
-			pm = PlayerManager.getInstance();
+			pm = CorePlayerManager.getInstance();
 		return pm;
 	}
 
@@ -82,6 +83,8 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	}
 	
 	public final T getPlayer(String name) { //TODO: remove duplicate code ID(gp1)
+		Validate.notNull(name);
+		
 		T player = null;
 		if (isLoaded(name))
 			player = players.get(name);

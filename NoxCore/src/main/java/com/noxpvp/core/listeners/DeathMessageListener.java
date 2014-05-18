@@ -13,16 +13,16 @@ import org.bukkit.inventory.ItemStack;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.locales.GlobalLocale;
-import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.manager.CorePlayerManager;
 
 public class DeathMessageListener extends NoxListener<NoxCore>{
 
-	private PlayerManager pm;
+	private CorePlayerManager pm;
 	
 	public DeathMessageListener(NoxCore core) {
 		super(core);
 		
-		this.pm = PlayerManager.getInstance();
+		this.pm = CorePlayerManager.getInstance();
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

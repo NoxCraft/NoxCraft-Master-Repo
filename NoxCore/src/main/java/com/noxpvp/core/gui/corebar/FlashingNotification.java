@@ -9,7 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.Cycler;
 import com.noxpvp.core.gui.CoreBar;
-import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.manager.CorePlayerManager;
 
 public class FlashingNotification extends BukkitRunnable {
 	
@@ -36,7 +36,7 @@ public class FlashingNotification extends BukkitRunnable {
 	public FlashingNotification(Player p, String text, int displayTicks, boolean canBeOverridden) {
 		
 		this.p = p;
-		this.bar = PlayerManager.getInstance().getPlayer(p).getCoreBar();
+		this.bar = CorePlayerManager.getInstance().getPlayer(p).getCoreBar();
 		if (!bar.setLock(this, canBeOverridden))
 			return;
 		

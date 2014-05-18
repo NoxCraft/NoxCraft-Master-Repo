@@ -2,11 +2,13 @@ package com.noxpvp.mmo.abilities.player;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
@@ -88,8 +90,12 @@ public class ThrowAbility extends BasePlayerAbility implements PVPAbility {
 		int i = 0;
 		for (Entity it : p.getNearbyEntities(range, range, range)){
 			if (i >= maxTargets) break;
-			if (!(it instanceof LivingEntity) || it == p) continue;
-//			if (!LineOfSightUtil.hasLineOfSight(p, ((LivingEntity) it).getEyeLocation(), (Set<Material>) null)) continue;
+			
+			if (!(it instanceof LivingEntity) || it == p)
+				continue;
+			
+			if (!LineOfSightUtil.hasLineOfSight(p, it.getLocation(), Material.AIR))
+				continue;
 			
 			i++;
 			final Damageable e = (Damageable) it;
@@ -107,7 +113,7 @@ public class ThrowAbility extends BasePlayerAbility implements PVPAbility {
 		
 		if (i > 0){
 			new ExpandingDamageRunnable(p, pLoc, 4, range, 2).start(pushDelay);
-			new ShockWaveAnimation(p, pLoc, 2, range, 0.15, true).start(pushDelay);
+			new ShockWaveAnimation(pLoc, 2, range, 0.15, true).start(pushDelay);
 			return true;
 		} else return false;
 	}

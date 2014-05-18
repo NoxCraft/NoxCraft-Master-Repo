@@ -40,6 +40,7 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 	 * @author EvilMidget
 	 */
 	static class UUIDFetcher implements Callable<Map<String, UUID>> {
+		
 		private static final String AGENT = "minecraft";
 		private static final int MAX_SEARCH = 100;
 		private static final String PROFILE_URL = "https://api.mojang.com/profiles/page/";
@@ -54,6 +55,7 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 			}
 			return JSONValue.toJSONString(lookups);
 		}
+		
 		private static HttpURLConnection createConnection(int page) throws Exception {
 			URL url = new URL(PROFILE_URL+page);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -64,6 +66,7 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 			connection.setDoOutput(true);
 			return connection;
 		}
+		
 		private static void writeBody(HttpURLConnection connection, String body) throws Exception {
 			DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
 			writer.write(body.getBytes());
@@ -114,10 +117,12 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 		return instance;
 	}
 
-	private ConcurrentHashMap<String, UUID> name2UUID = new ConcurrentHashMap<String, UUID>();
+	private ConcurrentHashMap<String, UUID> name2UUID;
 	
 	private UUIDUtil() {
 		super(NoxCore.getInstance());
+		
+		name2UUID = new ConcurrentHashMap<String, UUID>();
 		register();
 	}
 	
@@ -195,6 +200,8 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 	 */
 	@Blocking
 	public UUID getID(String name) {
+		Validate.notNull(name);
+		
 		if (name2UUID.containsKey(name)) {
 			UUID id = name2UUID.get(name);
 			

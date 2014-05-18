@@ -7,7 +7,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
@@ -23,12 +23,12 @@ public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbil
 		return "A random chance to land a critical hit, causing nausia and increased damage on the target";
 	}
 	
-	private PlayerManager pm;
+	private MMOPlayerManager pm;
 	
 	public CriticalHitAbility(Player p) {
 		super(ABILITY_NAME, p);
 		
-		this.pm = PlayerManager.getInstance();
+		this.pm = MMOPlayerManager.getInstance();
 	}
 	
 	public boolean execute(EntityDamageByEntityEvent event) {

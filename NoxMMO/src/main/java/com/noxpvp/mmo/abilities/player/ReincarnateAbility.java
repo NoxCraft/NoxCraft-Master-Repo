@@ -6,11 +6,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.mmo.MMOPlayer;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class ReincarnateAbility extends BasePlayerAbility{
 	
-	private final static String ABILITY_NAME = "Reincarnate";
+	public final static String ABILITY_NAME = "Reincarnate";
 	public final static String PERM_NODE = "reincarnate";
 	
 	private double maxRadius;
@@ -98,10 +100,14 @@ public class ReincarnateAbility extends BasePlayerAbility{
 		long ct = System.currentTimeMillis();
 		
 		for (Player pl : Bukkit.getOnlinePlayers()){
-			NoxPlayer noxP = getNoxPlayer();
+			if (pl == p)
+				continue;
 			
-			if (noxP.getLastDeathLocation().distance(pLoc) > getMaxRadius()) continue;
-			if (((ct - noxP.getLastDeathTS()) / 1000) > timeLimit) continue;
+			MMOPlayer mmop = MMOPlayerManager.getInstance().getPlayer(pl);
+			Location dLoc = mmop.getLastDeathLocation();
+			
+			if (dLoc == null || dLoc.distance(pLoc) > getMaxRadius()) continue;
+			if (((ct - mmop.getLastDeathTS()) / 1000) > timeLimit) continue;
 			
 			target = pl;
 			break;
@@ -110,7 +116,6 @@ public class ReincarnateAbility extends BasePlayerAbility{
 		if (target == null) return false;
 		
 		target.teleport(pLoc);
-		target.playEffect(EntityEffect.WOLF_HEARTS);
 		return true;
 	}
 	

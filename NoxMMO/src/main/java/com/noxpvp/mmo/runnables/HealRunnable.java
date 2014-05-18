@@ -1,7 +1,11 @@
 package com.noxpvp.mmo.runnables;
 
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
 
 /**
  * @author NoxPVP
@@ -38,7 +42,12 @@ public class HealRunnable extends BukkitRunnable{
 		}
 		
 		double ha = e.getHealth() + health;
-		e.setHealth(ha > e.getMaxHealth()? e.getMaxHealth() : ha);
+		ha = ha > e.getMaxHealth()? e.getMaxHealth() : ha;
+		
+		if (CommonUtil.callEvent(new EntityRegainHealthEvent(e, ha - e.getHealth(), RegainReason.CUSTOM)).isCancelled())
+			return;
+		
+		e.setHealth(ha);
 	}
 
 }

@@ -12,7 +12,7 @@ import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.homes.NoxHomes;
-import com.noxpvp.homes.PlayerManager;
+import com.noxpvp.homes.HomesPlayerManager;
 import com.noxpvp.homes.locale.HomeLocale;
 import com.noxpvp.homes.tp.BaseHome;
 import com.noxpvp.homes.tp.DefaultHome;
@@ -21,7 +21,7 @@ import com.noxpvp.homes.tp.NamedHome;
 public class HomeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "home";
 	public static final String PERM_NODE = "home";
-	private PlayerManager manager;
+	private HomesPlayerManager manager;
 	private final PermissionHandler permHandler;
 	
 	public HomeCommand()

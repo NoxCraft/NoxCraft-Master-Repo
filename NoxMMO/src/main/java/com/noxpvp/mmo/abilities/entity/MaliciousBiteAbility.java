@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
@@ -34,7 +34,7 @@ public class MaliciousBiteAbility extends BaseEntityAbility implements PassiveAb
 		
 		Player o = (Player) a;
 		
-		IPlayerClass pClass = PlayerManager.getInstance().getPlayer(o).getPrimaryClass();
+		IPlayerClass pClass = MMOPlayerManager.getInstance().getPlayer(o).getPrimaryClass();
 		
 		return RandomUtils.nextFloat() < (pClass.getCurrentTierLevel() * pClass.getLevel()) / 1000;
 	}

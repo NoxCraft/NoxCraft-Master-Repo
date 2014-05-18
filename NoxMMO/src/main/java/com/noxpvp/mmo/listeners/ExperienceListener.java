@@ -29,12 +29,12 @@ import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 
 public class ExperienceListener extends NoxListener<NoxMMO> {
 	
-	private final PlayerManager pm;
+	private final MMOPlayerManager pm;
 	
 	private final FileConfiguration expFile;
 	private final ConfigurationNode expNode;

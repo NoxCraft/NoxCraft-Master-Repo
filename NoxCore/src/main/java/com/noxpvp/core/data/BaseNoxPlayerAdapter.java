@@ -19,7 +19,7 @@ import com.noxpvp.core.gui.CoolDown;
 import com.noxpvp.core.gui.CoreBar;
 import com.noxpvp.core.gui.CoreBoard;
 import com.noxpvp.core.gui.CoreBox;
-import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.manager.CorePlayerManager;
 
 public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<NoxPlayer> {
 	private final String playerName;
@@ -89,7 +89,7 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 	}
 	
 	private static NoxPlayer getNoxPlayer(String name) {
-		return PlayerManager.getInstance().getPlayer(name);
+		return CorePlayerManager.getInstance().getPlayer(name);
 	}
 
 	public String toString() {
@@ -280,6 +280,6 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 	}
 
 	public void saveToManager() {
-		PlayerManager.getInstance().savePlayer(getNoxPlayer());
+		CorePlayerManager.getInstance().savePlayer(getNoxPlayer());
 	}
 }

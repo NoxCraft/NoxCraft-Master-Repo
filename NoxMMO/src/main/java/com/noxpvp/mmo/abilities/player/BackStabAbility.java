@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
@@ -97,7 +97,7 @@ public class BackStabAbility extends BasePlayerAbility implements PassiveAbility
 		if (!(pYaw <= (tYaw + accuracy)) && (pYaw >= (tYaw - accuracy)))
 			return false;
 		
-		MMOPlayer player = PlayerManager.getInstance().getPlayer(p);
+		MMOPlayer player = MMOPlayerManager.getInstance().getPlayer(p);
 		if (player == null)
 			return false;
 		

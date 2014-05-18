@@ -6,7 +6,7 @@ import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.locale.MMOLocale;
 
@@ -35,7 +35,7 @@ public class AbilityListCommand extends BaseCommand {
 			throws NoPermissionException {
 		
 		
-		MMOPlayer player = PlayerManager.getInstance().getPlayer(context.getPlayer());
+		MMOPlayer player = MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
 		MessageBuilder mb = new MessageBuilder(MMOLocale.ABIL_LIST_HEADER.get("from your classes"));
 		
 		boolean first = true;

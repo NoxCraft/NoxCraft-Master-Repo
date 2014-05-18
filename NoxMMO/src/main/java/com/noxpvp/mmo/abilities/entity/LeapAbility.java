@@ -1,14 +1,16 @@
 package com.noxpvp.mmo.abilities.entity;
 
-import org.bukkit.block.BlockFace;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
+import com.noxpvp.mmo.runnables.ShockWaveAnimation;
 
 public class LeapAbility extends BaseEntityAbility {
 
@@ -20,15 +22,16 @@ public class LeapAbility extends BaseEntityAbility {
 		return "You leap forward in your current direction";
 	}
 	
-	private double forwardMultiplier;
-	private double heightVelo;
+	private double multiplier;
 	
 	/**
 	 * Gets the current multiplier for the ability's forward velocity
 	 * 
 	 * @return double The forward multiplier
 	 */
-	public double getForwardMultiplier() {return forwardMultiplier;}
+	public double getMultiplier() {
+		return multiplier;
+	}
 
 	/**
 	 * Sets the multiplier for this ability's forward velocity
@@ -36,33 +39,18 @@ public class LeapAbility extends BaseEntityAbility {
 	 * @param forwardMultiplier The multiplier to set
 	 * @return LeapAbility This instance
 	 */
-	public LeapAbility setForwardMultiplier(double forwardMultiplier) {this.forwardMultiplier = forwardMultiplier; return this;}
+	public LeapAbility setMultiplier(double forwardMultiplier) {
+		this.multiplier = forwardMultiplier;
+		return this;
+		}
 
-	/**
-	 * Gets the current set height velocity
-	 * 
-	 * @return LeapAbility This instance
-	 */
-	public double getHeightVelo() {return heightVelo;}
-
-	/**
-	 * Sets the height velocity for this ability
-	 * 
-	 * @param heightVelo The height velocity
-	 * @return LeapAbility This instance
-	 */
-	public LeapAbility setHeightVelo(double heightVelo) {this.heightVelo = heightVelo; return this;}
-
-	public LeapAbility(Entity ent, double heightVelo, double forwardMultiplier)
-	{
+	public LeapAbility(Entity ent, double multiplier) {
 		super(ABILITY_NAME, ent);
-		this.heightVelo = heightVelo;
-		this.forwardMultiplier = forwardMultiplier;
+		this.multiplier = multiplier;
 	}
 	
-	public LeapAbility(Entity ent)
-	{
-		this(ent, 2, 2);
+	public LeapAbility(Entity ent) {
+		this(ent, 3D);
 	}
 	
 	public boolean execute() {
@@ -70,21 +58,20 @@ public class LeapAbility extends BaseEntityAbility {
 			return false;
 		
 		Entity e = getEntity();
+		Location eLoc = e.getLocation();
+		Vector newVelocity = eLoc.getDirection();
+		newVelocity.multiply(multiplier);
 		
-		Vector newVelocity = e.getLocation().getDirection();
-		
-		newVelocity.setY(0).multiply(forwardMultiplier).setY(heightVelo);
-		
-		new ParticleRunner("blockcrack_"+ e.getLocation().getBlock().getRelative(BlockFace.DOWN).getTypeId() +"_0", e.getLocation(), false, 0, 50, 1).start(0);
-		
+		// if going up a reasonable amount
+		if (newVelocity.getY() > .75) {
+			new ParticleRunner(ParticleType.cloud, eLoc.clone().add(0, 2, 0), true, 0, 50, 1).start(0);
+			new ShockWaveAnimation(eLoc, 1, 2, true).start(0);
+		}
+	
+		//reset fall distance on use
+		e.setFallDistance(0);
 		e.setVelocity(newVelocity);		
 		return true;
-	}
-
-	public boolean mayExecute() {
-		if (isValid() && getEntity() instanceof Player)
-			return VaultAdapter.permission.has((Player)getEntity(), NoxMMO.PERM_NODE + ".abilities."+PERM_NODE);
-		return isValid();
 	}
 
 }

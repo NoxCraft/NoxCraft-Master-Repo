@@ -82,14 +82,14 @@ public class FireBallAbility extends BaseEntityAbility implements PVPAbility {
 					((LivingEntity) user).getEyeLocation() :
 						user.getLocation(), time);
 			
-			setForwardGain(0.05);
+			setForwardGain(0.07);
 			setRadiusGain(0.5);
 			setSpeed(1);
 			
 		}
 		
 		public void onRun() {
-			new ParticleRunner(ParticleType.flame, getLociaton(), false, 0, 1, 1).start(0);
+			new ParticleRunner(ParticleType.dripLava, getLociaton(), false, 0, 1, 1).start(0);
 			
 		}
 	}

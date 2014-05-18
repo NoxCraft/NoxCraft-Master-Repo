@@ -16,7 +16,7 @@ import com.noxpvp.core.gui.CoreBoxItem;
 import com.noxpvp.core.gui.CoreBoxRegion;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.classes.internal.ClassTier;
 import com.noxpvp.mmo.classes.internal.IClassTier;
@@ -49,7 +49,7 @@ public class ClassMenu extends CoreBox {
 		CoreBoxRegion tiers = new CoreBoxRegion(this, new Vector(0, 0, 2), 0, 7),
 				abilities = new CoreBoxRegion(this, new Vector(2, 0, 0), 1, 9);
 		
-		final MMOPlayer mmoPlayer = PlayerManager.getInstance().getPlayer(p);
+		final MMOPlayer mmoPlayer = MMOPlayerManager.getInstance().getPlayer(p);
 		
 		for (Map.Entry<Integer, IClassTier> tier : clazz.getTiers()) {
 			if (!(tier.getValue() instanceof ClassTier))

@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
@@ -34,7 +34,7 @@ public class RazerClawsAbility extends BasePlayerAbility implements PassiveAbili
 		if (event.getEntity() != getPlayer() || !mayExecute())
 			return false;
 		
-		IPlayerClass clazz = PlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
+		IPlayerClass clazz = MMOPlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
 		
 		int levels = clazz.getTotalLevel();
 		

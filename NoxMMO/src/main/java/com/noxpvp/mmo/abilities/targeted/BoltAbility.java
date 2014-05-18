@@ -3,7 +3,7 @@ package com.noxpvp.mmo.abilities.targeted;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 
@@ -51,9 +51,10 @@ public class BoltAbility extends BaseTargetedPlayerAbility implements PVPAbility
 	 * @param player - The player to use as the abilities user
 	 */
 	public BoltAbility(Player player){
-		super(ABILITY_NAME, player, PlayerManager.getInstance().getPlayer(player).getTarget());
+		super(ABILITY_NAME, player, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 		
 		this.range = 12;
+		this.damage = 8;
 	}
 	
 	/**
@@ -63,7 +64,7 @@ public class BoltAbility extends BaseTargetedPlayerAbility implements PVPAbility
 	 * @param range - The max distance away from the user that a target can be
 	 */
 	public BoltAbility(Player player, double range){
-		super(ABILITY_NAME, player, PlayerManager.getInstance().getPlayer(player).getTarget());
+		super(ABILITY_NAME, player, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 		
 		this.range = range;
 	}

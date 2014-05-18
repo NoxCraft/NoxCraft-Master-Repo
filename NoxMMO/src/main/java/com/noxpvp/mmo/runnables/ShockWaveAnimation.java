@@ -9,7 +9,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.util.Vector;
@@ -62,7 +61,6 @@ public class ShockWaveAnimation extends BukkitRunnable {
 		NoxMMO.getInstance().getMasterListener().registerHandler(landHandler);
 	}
 	
-	private Player p;
 	private Block center;
 	private int shockSpeed;
 	private int shockRange;
@@ -79,10 +77,22 @@ public class ShockWaveAnimation extends BukkitRunnable {
 	 * @param shockCenter Location the shockwave will start from
 	 * @param shockSpeed The delay in ticks between each ring
 	 * @param shockRange the range from the location the shockwave will extend
+	 * @param circel If the wave should be a circle
+	 */
+	public ShockWaveAnimation(Location shockCenter, int shockSpeed, int shockRange, boolean circle) {
+		this(shockCenter, shockSpeed, shockRange, 0.35, circle);
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param shockCenter Location the shockwave will start from
+	 * @param shockSpeed The delay in ticks between each ring
+	 * @param shockRange the range from the location the shockwave will extend
 	 * @param shockVelo the velocity height of the shockwave blocks
 	 */
-	public ShockWaveAnimation(Player p, Location shockCenter, int shockSpeed, int shockRange, double shockVelo) {
-		this(p, shockCenter, shockSpeed, shockRange, shockVelo, false);
+	public ShockWaveAnimation(Location shockCenter, int shockSpeed, int shockRange, double shockVelo) {
+		this(shockCenter, shockSpeed, shockRange, shockVelo, false);
 	}
 	
 	/**
@@ -94,8 +104,7 @@ public class ShockWaveAnimation extends BukkitRunnable {
 	 * @param shockVelo the velocity height of the shockwave blocks
 	 * @param isCircle If the animation is circular, other wise square
 	 */
-	public ShockWaveAnimation(Player p, Location shockCenter, int shockSpeed, int shockRange, double shockVelo, boolean isCircle) {
-		this.p = p;
+	public ShockWaveAnimation(Location shockCenter, int shockSpeed, int shockRange, double shockVelo, boolean isCircle) {
 		this.center = shockCenter.getBlock().getRelative(BlockFace.DOWN);
 		this.shockSpeed = shockSpeed;
 		this.shockRange = shockRange;
@@ -171,8 +180,10 @@ public class ShockWaveAnimation extends BukkitRunnable {
 					Block b = null;
 					
 					if (isCircle) {
-						b = center.getWorld().getBlockAt(x, y+3, z);
-						if (Math.abs( (int) b.getLocation().distance(center.getLocation()) ) != i)
+						b = center.getWorld().getBlockAt(x, y + 3, z);
+						
+						double dis;
+						if ((dis = Math.abs(b.getLocation().distance(center.getLocation().clone().add(0, 3, 0)))) > (i +.50) || dis < (i -.50))
 							continue;
 						
 					} else if (Math.abs(x-bx) == i || Math.abs(z-bz) == i) {
@@ -184,6 +195,7 @@ public class ShockWaveAnimation extends BukkitRunnable {
 					Material type = b.getType();
 					while(!isThrowable(type) && b.getLocation().getY() > (center.getY()-4)){
 						b = b.getRelative(BlockFace.DOWN);
+						type = b.getType();
 					}
 					
 					final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getLocation(), type == Material.GRASS? Material.DIRT : type, b.getData());

@@ -13,7 +13,7 @@ import com.bergerkiller.bukkit.common.utils.MaterialUtil;
 import com.google.common.collect.Sets;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.gui.CoreBar;
-import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 
 public class LivingEntityTracker extends BukkitRunnable {
@@ -76,7 +76,7 @@ public class LivingEntityTracker extends BukkitRunnable {
 		
 		this.e = e;
 		this.p = p;
-		this.bar = PlayerManager.getInstance().getPlayer(p).getCoreBar();
+		this.bar = CorePlayerManager.getInstance().getPlayer(p).getCoreBar();
 		if (!bar.setLock(this, canBeOverridden))
 			return;
 		

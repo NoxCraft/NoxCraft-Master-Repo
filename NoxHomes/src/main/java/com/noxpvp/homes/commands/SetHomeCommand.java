@@ -15,7 +15,7 @@ import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.homes.HomesPlayer;
 import com.noxpvp.homes.NoxHomes;
-import com.noxpvp.homes.PlayerManager;
+import com.noxpvp.homes.HomesPlayerManager;
 import com.noxpvp.homes.locale.HomeLocale;
 import com.noxpvp.homes.tp.BaseHome;
 import com.noxpvp.homes.tp.DefaultHome;
@@ -25,7 +25,7 @@ public class SetHomeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "sethome";
 	public static final String PERM_NODE = "sethome";
 	
-	private PlayerManager manager;
+	private HomesPlayerManager manager;
 	private final PermissionHandler permHandler;
 	
 	public SetHomeCommand()
@@ -96,7 +96,7 @@ public class SetHomeCommand extends BaseCommand {
 			homeName = DefaultHome.PERM_NODE;
 		boolean good = false;
 		
-		HomesPlayer hPlayer = PlayerManager.getInstance().getPlayer(player);
+		HomesPlayer hPlayer = HomesPlayerManager.getInstance().getPlayer(player);
 		
 		if (own)
 		{

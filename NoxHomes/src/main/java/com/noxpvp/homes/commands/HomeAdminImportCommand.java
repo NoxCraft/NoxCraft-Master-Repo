@@ -11,13 +11,13 @@ import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.homes.NoxHomes;
-import com.noxpvp.homes.PlayerManager;
+import com.noxpvp.homes.HomesPlayerManager;
 import com.noxpvp.homes.homes.HomeImporter;
 
 public class HomeAdminImportCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "import";
 	public static final String PERM_NODE = "import";
-	private PlayerManager manager;
+	private HomesPlayerManager manager;
 	
 	private final PermissionHandler permHandler;
 	private String[] importerNames;

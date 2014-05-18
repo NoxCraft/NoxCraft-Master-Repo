@@ -7,7 +7,7 @@ import org.bukkit.event.block.BlockDamageEvent;
 
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
@@ -89,7 +89,7 @@ public class SuperBreakerAbility extends BasePlayerAbility {
 			return false;
 		
 		Player p = getPlayer();
-		IPlayerClass pClass = PlayerManager.getInstance().getPlayer(p).getPrimaryClass();
+		IPlayerClass pClass = MMOPlayerManager.getInstance().getPlayer(p).getPrimaryClass();
 		
 		int length = (20 * pClass.getTotalLevel()) / 16;
 		

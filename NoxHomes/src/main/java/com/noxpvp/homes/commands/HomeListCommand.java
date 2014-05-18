@@ -14,14 +14,14 @@ import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.homes.NoxHomes;
-import com.noxpvp.homes.PlayerManager;
+import com.noxpvp.homes.HomesPlayerManager;
 import com.noxpvp.homes.tp.BaseHome;
 
 public class HomeListCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "homes";
 	private final PermissionHandler permHandler;
 	public static final String LIST_PERM_NODE = "list";
-	private PlayerManager manager;
+	private HomesPlayerManager manager;
 	
 	public HomeListCommand()
 	{

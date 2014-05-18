@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.data.NoxPlayer;
-import com.noxpvp.core.manager.PlayerManager;
+import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
@@ -32,7 +32,7 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements Pla
 
 	public NoxPlayer getNoxPlayer() {
 		if (isValid())
-			return PlayerManager.getInstance().getPlayer(getPlayer());
+			return CorePlayerManager.getInstance().getPlayer(getPlayer());
 		return null;
 	}
 	

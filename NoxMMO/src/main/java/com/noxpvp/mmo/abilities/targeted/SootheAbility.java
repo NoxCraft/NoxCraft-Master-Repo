@@ -3,7 +3,7 @@ package com.noxpvp.mmo.abilities.targeted;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import com.noxpvp.mmo.PlayerManager;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
 public class SootheAbility extends BaseTargetedPlayerAbility{
@@ -34,7 +34,7 @@ public class SootheAbility extends BaseTargetedPlayerAbility{
 	 * @param player The ability's user
 	 */
 	public SootheAbility(Player player) {
-		super(ABILITY_NAME, player, PlayerManager.getInstance().getPlayer(player).getTarget());
+		super(ABILITY_NAME, player, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 		
 		this.healAmount = 8;
 	}
