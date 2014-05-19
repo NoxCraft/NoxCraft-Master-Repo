@@ -68,6 +68,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	@Temporary
 	public Map<String, Ability> getAllMappedAbilities() {
 		Map<String, Ability> ret = new HashMap<String, Ability>();
+		
 		if (getPrimaryClass() != null)
 			ret.putAll(getPrimaryClass().getAbilityMap());
 		if (getSecondaryClass() != null)
