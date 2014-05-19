@@ -9,7 +9,7 @@ import org.json.JSONWriter;
 public class TrackedJSONStringer extends JSONStringer {
 
 	private enum ACTION {
-		ARRAY, OBJECT;
+		ARRAY, OBJECT
 	}
 
 	private Stack<ACTION> actions = new Stack<TrackedJSONStringer.ACTION>();

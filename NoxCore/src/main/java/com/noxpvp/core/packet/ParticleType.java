@@ -34,6 +34,6 @@ public enum ParticleType {
 	slime,
 	heart,
 	angryVillager,
-	happyVillager;
+	happyVillager
 
 }

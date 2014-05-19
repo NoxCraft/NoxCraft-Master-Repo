@@ -182,7 +182,7 @@ public class ChestBlockedEvent extends Event implements Cancellable {
 	 * The Enum BlockCause.
 	 */
 	public static enum BlockCause {
-		BlockForm, Entity, Interact, Piston, Player, Unknown;
+		BlockForm, Entity, Interact, Piston, Player, Unknown
 	}
 	
 	/** The Constant handlers. */

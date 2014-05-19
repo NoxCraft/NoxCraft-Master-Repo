@@ -50,8 +50,8 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		return getNoxPlayer(this.getName());
 	}
 	
-	public final void setProxyBase(NoxPlayer player) { };
-	
+	public final void setProxyBase(NoxPlayer player) { }
+
 	public final NoxPlayer getNoxPlayer() {
 		return getProxyBase();
 	}

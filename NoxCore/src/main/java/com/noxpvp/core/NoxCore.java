@@ -189,9 +189,9 @@ public class NoxCore extends NoxPlugin {
 		
 		String[] internalClasses = { };
 		
-		new StaticCleaner(this, getClassLoader(), internalClasses, classes).resetAll();;
-		
-		
+		new StaticCleaner(this, getClassLoader(), internalClasses, classes).resetAll();
+
+
 	}
 	
 	@Override
