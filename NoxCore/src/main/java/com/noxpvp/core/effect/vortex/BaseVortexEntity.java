@@ -18,7 +18,7 @@ public abstract class BaseVortexEntity implements IVortexEntity {
 	private double width, height;
 	
 	private int ticker_vertical;
-	private int ticker_horisontal;
+	private int ticker_horizontal;
 	
 	public BaseVortexEntity(BaseVortex parent, Location loc, Entity base) {
 		this.uniqueMeta = new FixedMetadataValue(parent.getPlugin(), parent.hashCode());
@@ -29,7 +29,7 @@ public abstract class BaseVortexEntity implements IVortexEntity {
 		this.height = parent.getHeightGain();
 		
 		ticker_vertical = 0;
-		ticker_horisontal = (int) Math.round((Math.random() * 360));
+		ticker_horizontal = (int) Math.round((Math.random() * 360));
 		
 		onCreation();
 		
@@ -81,8 +81,8 @@ public abstract class BaseVortexEntity implements IVortexEntity {
 	}
 	
 	public int horizontalTicker() {
-		ticker_horisontal = (ticker_horisontal + 45) % 360;
-		return ticker_horisontal;
+		ticker_horizontal = (ticker_horizontal + 45) % 360;
+		return ticker_horizontal;
 	}
 
 	public void setVelo(Vector velo) {
