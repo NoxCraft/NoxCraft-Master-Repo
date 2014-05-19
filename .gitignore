@@ -12,3 +12,5 @@ UUIDFetcher/
 PacketWrapper/
 NameFetcher/
 JSON-java/
+*.iml
+.idea/
