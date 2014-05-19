@@ -22,10 +22,7 @@ public abstract class BaseCommand implements Command {
 	
 	private BaseCommand(BaseCommand parent, String name, boolean isPlayerOnly)
 	{
-		if (parent != null)
-			isRoot = false;
-		else
-			isRoot = true;
+		isRoot = parent == null;
 		
 		this.parent = parent;
 		this.name = name;

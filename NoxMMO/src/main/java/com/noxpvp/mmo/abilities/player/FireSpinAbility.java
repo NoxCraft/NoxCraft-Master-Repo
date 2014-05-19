@@ -121,11 +121,8 @@ public class FireSpinAbility extends BasePlayerAbility {
 		}
 
 		public boolean onRemove() {
-			if (getEntity() instanceof FallingBlock) {
-				return true;
-			}
-			
-			return false;
+			return getEntity() instanceof FallingBlock;
+
 		}
 
 		public boolean onCreation() {

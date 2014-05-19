@@ -60,7 +60,7 @@ public class ClassMenu extends CoreBox {
 			boolean canuse = clazz.canUseTier(tier.getKey());
 //			boolean locked = t.getLevel() >= t.getMaxLevel()? true : false;//TODO When adding exp
 			boolean hasTier = mmoPlayer.getPrimaryClass().getTier() == t ||
-					mmoPlayer.getSecondaryClass().getTier() == t? true : false;
+					mmoPlayer.getSecondaryClass().getTier() == t;
 			
 			ItemStack item = t.getIdentifibleItem();
 			item.setType(/*locked? Material.IRON_DOOR : */hasTier? Material.SKULL_ITEM : Material.WOOD_DOOR);//TODO when adding exp

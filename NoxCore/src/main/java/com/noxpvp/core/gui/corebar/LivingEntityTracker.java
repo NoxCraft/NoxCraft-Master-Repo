@@ -101,13 +101,10 @@ public class LivingEntityTracker extends BukkitRunnable {
 	}
 	
 	public boolean checkValid() {
-		if (
-			e == null  || p == null ||
-			!bar.hasLock(this) || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) ||
-			!e.isValid() || !p.isValid())
-			return false;
-		
-		return true;
+		return !(e == null || p == null ||
+				!bar.hasLock(this) || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) ||
+				!e.isValid() || !p.isValid());
+
 	}
 	
 	public void run() {

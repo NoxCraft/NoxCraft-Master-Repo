@@ -53,10 +53,7 @@ public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 	}
 	
 	public boolean checkValid() {
-		if (user == null || !user.isOnline() || !user.isValid())
-			return false;
-		
-		return true;
+		return !(user == null || !user.isOnline() || !user.isValid());
 	}
 	
 	public Player getUser() {

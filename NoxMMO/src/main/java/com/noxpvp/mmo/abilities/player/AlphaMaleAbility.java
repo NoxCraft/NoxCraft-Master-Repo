@@ -25,7 +25,7 @@ public class AlphaMaleAbility extends BasePlayerAbility implements PVPAbility {
 
 
 	private CommonLivingEntity<Wolf> wolf;
-	
+
 	public Creature getActiveTarget() {
 		return wolfController.getTarget();
 	}
@@ -105,14 +105,12 @@ public class AlphaMaleAbility extends BasePlayerAbility implements PVPAbility {
 		public Creature getTarget() { return currentTarget; }
 		
 		private static boolean isAnyNonAttackingSource(DamageSource ds) {
-			if (ds == DamageSource.ANVIL || ds == DamageSource.CACTUS
-					|| ds == DamageSource.DROWN || ds == DamageSource.FALL 
+			return ds == DamageSource.ANVIL || ds == DamageSource.CACTUS
+					|| ds == DamageSource.DROWN || ds == DamageSource.FALL
 					|| ds == DamageSource.FALLING_BLOCK || ds == DamageSource.FIRE
 					|| ds == DamageSource.LAVA || ds == DamageSource.OUT_OF_WORLD
 					|| ds == DamageSource.STARVE || ds == DamageSource.STUCK
-					|| ds == DamageSource.WITHER)
-				return true;
-			return false;
+					|| ds == DamageSource.WITHER;
 		}
 	}
 

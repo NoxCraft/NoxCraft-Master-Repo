@@ -150,9 +150,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	private boolean isBadUID() {
-		if (this.uid == null || this.uid == UUIDUtil.ZERO_UUID)
-			return true;
-		return false;
+		return this.uid == null || this.uid == UUIDUtil.ZERO_UUID;
 	}
 	
 	public UUID getUUID(boolean autoUpdate) {

@@ -94,11 +94,9 @@ public class BlockStateUtils {
 		
 		if (!skull1.getRotation().equals(skull2.getRotation()))
 			return false;
-		
-		if (!skull1.getOwner().equals(skull2.getOwner()))
-			return false;
-		
-		return true;
+
+		return skull1.getOwner().equals(skull2.getOwner());
+
 	}
 
 	private static boolean isSignMatch(Sign sign1, Sign sign2) {
@@ -110,17 +108,13 @@ public class BlockStateUtils {
 	}
 
 	private static boolean isNoteBlockMatch(NoteBlock note1, NoteBlock note2) {
-		if (!note1.getNote().equals(note2.getNote()))
-			return false;
-		
-		return true;
+		return note1.getNote().equals(note2.getNote());
+
 	}
 
 	private static boolean isJukeboxMatch(Jukebox juke1, Jukebox juke2) {
-		if (!juke1.getPlaying().equals(juke2.getPlaying()))
-			return false;
-		
-		return true;
+		return juke1.getPlaying().equals(juke2.getPlaying());
+
 	}
 
 //	private static boolean isHopperMatch(Hopper hopper1, Hopper hopper2) {
@@ -165,21 +159,17 @@ public class BlockStateUtils {
 		
 		if (!spawner1.getCreatureTypeName().equals(spawner2.getCreatureTypeName()))
 			return false;
-		
-		if (spawner1.getDelay() != spawner2.getDelay())
-			return false;
-		
-		return true;
+
+		return spawner1.getDelay() == spawner2.getDelay();
+
 	}
 
 	private static boolean isCommandBlockMatch(CommandBlock cmdBlock1, CommandBlock cmdBlock2) {
 		if (!cmdBlock1.getName().equals(cmdBlock2.getName()))
 			return false;
-		
-		if (!cmdBlock1.getCommand().equals(cmdBlock2.getCommand()))
-			return false;
-		
-		return true;
+
+		return cmdBlock1.getCommand().equals(cmdBlock2.getCommand());
+
 	}
 
 	private static boolean isBrewingStandMatch(BrewingStand stand1, BrewingStand stand2)

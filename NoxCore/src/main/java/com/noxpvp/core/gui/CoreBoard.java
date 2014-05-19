@@ -329,7 +329,7 @@ public class CoreBoard{
 			
 			this.text = new StringBuilder(scrollText + "  ||  ");
 			
-			this.useScrollColor = scrollerColor != null? true : false;
+			this.useScrollColor = scrollerColor != null;
 			this.sc = useScrollColor? scrollerColor : null;
 			
 			this.v = useScrollColor? (visibleLength <= 14 ? visibleLength : 14) : (visibleLength <= 16 ? visibleLength : 16);
@@ -369,7 +369,7 @@ public class CoreBoard{
 			this.name = name;
 			this.displayName = nameColor != null? (nameColor + displayedName) : displayedName;
 			
-			this.useScoreColor = scoreColor != null? true : false;
+			this.useScoreColor = scoreColor != null;
 			this.sc = useScoreColor? scoreColor : null;
 			
 			this.timeStamp = (System.currentTimeMillis() / 1000) + seconds;

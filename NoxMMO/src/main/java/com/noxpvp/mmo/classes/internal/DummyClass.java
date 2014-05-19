@@ -107,9 +107,7 @@ public class DummyClass implements IPlayerClass {
 	public void setCurrentTier(int tierLevel) { }
 
 	public boolean hasTier(int level) {
-		if (level == 1)
-			return true;
-		else return false;
+		return level == 1;
 	}
 
 	public int getCurrentTierLevel() {

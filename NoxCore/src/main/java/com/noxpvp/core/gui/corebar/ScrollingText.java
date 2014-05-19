@@ -53,11 +53,9 @@ public class ScrollingText extends BukkitRunnable {
 	}
 	
 	public boolean checkValid() {
-		if (!bar.hasLock(this) || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) ||
-			p == null || !p.isOnline() || !p.isValid())			
-			return false;
-		
-		return true;
+		return !(!bar.hasLock(this) || (displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) ||
+				p == null || !p.isOnline() || !p.isValid());
+
 	}
 	
 	public void run() {

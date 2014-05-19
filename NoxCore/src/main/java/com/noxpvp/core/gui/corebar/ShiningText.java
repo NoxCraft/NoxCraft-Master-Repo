@@ -40,13 +40,10 @@ public class ShiningText extends BukkitRunnable {
 	}
 	
 	public boolean checkValid() {
-		if (p == null || !bar.hasLock(this) ||
-			(displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || !p.isValid() ||
-			!p.isOnline()) {
-			return false;
-		}
-		
-		return true;
+		return !(p == null || !bar.hasLock(this) ||
+				(displayTicks > 0 && ((runs++ * runPeriod) > displayTicks)) || !p.isValid() ||
+				!p.isOnline());
+
 	}
 	
 	public void run() {

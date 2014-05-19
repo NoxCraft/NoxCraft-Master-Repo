@@ -184,10 +184,8 @@ public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
 		}
 
 		public boolean onRemove() {
-			if (getEntity() instanceof Item)
-				return true;
-			
-			return false;
+			return getEntity() instanceof Item;
+
 		}
 
 		public boolean onCreation() {

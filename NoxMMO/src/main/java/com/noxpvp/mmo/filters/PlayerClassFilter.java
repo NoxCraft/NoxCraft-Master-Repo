@@ -36,9 +36,9 @@ public class PlayerClassFilter implements Filter<Player> {
 		IPlayerClass subClass = mPlayer.getSecondaryClass();
 		
 		if (classIds.contains(mainClass.getUniqueID()))
-			return inverse? false : true;
+			return !inverse;
 		if (classIds.contains(subClass.getUniqueID()))
-			return inverse? false : true;
+			return !inverse;
 		
 		return inverse;
 	}

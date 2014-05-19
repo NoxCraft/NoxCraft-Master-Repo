@@ -97,10 +97,8 @@ public class HitVanishedPlayers extends BasePlayerAbility implements PVPAbility 
 			return false;
 		if (Math.abs(d.z * c.x - d.x * c.z) > e.z * ad.x + e.x * ad.z + epsilon)
 			return false;
-		if (Math.abs(d.x * c.y - d.y * c.x) > e.x * ad.y + e.y * ad.x + epsilon)
-			return false;
- 
-		return true;
+		return Math.abs(d.x * c.y - d.y * c.x) <= e.x * ad.y + e.y * ad.x + epsilon;
+
 	}
 
 }

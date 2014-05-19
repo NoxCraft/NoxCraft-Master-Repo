@@ -51,10 +51,7 @@ public class FlashingNotification extends BukkitRunnable {
 	}
 	
 	private boolean checkValid() {
-		if (!bar.hasLock(this) || (displayTicks != 0 && ((runs * runPeriod) > displayTicks)) || p == null || !p.isOnline())
-			return false;
-		
-		return true;
+		return !(!bar.hasLock(this) || (displayTicks != 0 && ((runs * runPeriod) > displayTicks)) || p == null || !p.isOnline());
 	}
 	
 	public void run() {

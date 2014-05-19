@@ -50,13 +50,9 @@ public class SilentWalkingAbility extends BasePlayerAbility{
 		if (closest == null || lowestDistance > 6) {
 			return false;
 		}
-		
-		if (VaultAdapter.permission.has(closest, NoxMMO.PERM_NODE + ".ability." + SilentWalkingAbility.PERM_NODE)){
-			return true;
-		}
-		
-		return false;
-		
+
+		return VaultAdapter.permission.has(closest, NoxMMO.PERM_NODE + ".ability." + SilentWalkingAbility.PERM_NODE);
+
 	}
 
 }

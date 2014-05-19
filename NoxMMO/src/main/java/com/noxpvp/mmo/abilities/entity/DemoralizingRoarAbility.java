@@ -55,10 +55,8 @@ public class DemoralizingRoarAbility extends BaseEntityAbility implements PVPAbi
 				break;
 			}
 		}
-		if (creatures.isEmpty())
-			return false;
-		
-		return true;
+		return !creatures.isEmpty();
+
 	}
 	
 	/**
