@@ -19,14 +19,14 @@ public class HomeLimitManager implements Persistant {
 	/**
 	 * @return the superPerms
 	 */
-	public static final boolean isSuperPerms() {
+	public static boolean isSuperPerms() {
 		return superPerms;
 	}
 
 	/**
 	 * @param superPerms the superPerms to set
 	 */
-	public static final void setSuperPerms(boolean superPerms) {
+	public static void setSuperPerms(boolean superPerms) {
 		HomeLimitManager.superPerms = superPerms;
 	}
 	

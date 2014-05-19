@@ -644,14 +644,14 @@ public class NoxCore extends NoxPlugin {
 	/**
 	 * @return the useUserFile
 	 */
-	public static final boolean isUseUserFile() {
+	public static boolean isUseUserFile() {
 		return useUserFile;
 	}
 	
 	/**
 	 * @return the useNanoTime
 	 */
-	public static synchronized final boolean isUsingNanoTime() {
+	public static synchronized boolean isUsingNanoTime() {
 		return useNanoTime;
 	}
 	
@@ -663,13 +663,13 @@ public class NoxCore extends NoxPlugin {
 	/**
 	 * @param useNanoTime the useNanoTime to set
 	 */
-	public static synchronized final void setUseNanoTime(boolean useNanoTime) {
+	public static synchronized void setUseNanoTime(boolean useNanoTime) {
 		NoxCore.useNanoTime = useNanoTime;
 	}
 	/**
 	 * @param useUserFile the useUserFile to set
 	 */
-	public static final void setUseUserFile(boolean useUserFile) {
+	public static void setUseUserFile(boolean useUserFile) {
 		NoxCore.useUserFile = useUserFile;
 	}
 }

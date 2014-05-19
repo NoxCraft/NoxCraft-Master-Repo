@@ -175,42 +175,42 @@ public class AbilityCycler extends Cycler<Ability> implements IAbilityCycler, Co
 	/**
 	 * @return the cleaner
 	 */
-	public static final AsyncTask getCleanerTask() {
+	public static AsyncTask getCleanerTask() {
 		return cleaner;
 	}
 
 	/**
 	 * @return the cleaner_delay
 	 */
-	public static synchronized final long getCleanerDelay() {
+	public static synchronized long getCleanerDelay() {
 		return cleaner_delay;
 	}
 
 	/**
 	 * @return the iHeld
 	 */
-	public static synchronized final NoxListener<NoxMMO> getiHeldListener() {
+	public static synchronized NoxListener<NoxMMO> getiHeldListener() {
 		return iHeld;
 	}
 
 	/**
 	 * @return the iMove
 	 */
-	public static synchronized final NoxListener<NoxMMO> getiMoveListener() {
+	public static synchronized NoxListener<NoxMMO> getiMoveListener() {
 		return iMove;
 	}
 
 	/**
 	 * @return the login
 	 */
-	public static synchronized final NoxListener<NoxMMO> getLoginListener() {
+	public static synchronized NoxListener<NoxMMO> getLoginListener() {
 		return login;
 	}
 
 	/**
 	 * @param cleaner_delay the cleaner_delay to set
 	 */
-	public static synchronized final void setCleanerDelay(long cleaner_delay) {
+	public static synchronized void setCleanerDelay(long cleaner_delay) {
 		AbilityCycler.cleaner_delay = cleaner_delay;
 	}
 
