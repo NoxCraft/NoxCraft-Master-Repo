@@ -253,7 +253,6 @@ public class MessageUtil {
 				if (chars[i] == ChatColor.COLOR_CHAR)
 					c = true;
 				i++;
-				continue;
 			} else {
 				ChatColor color = ChatColor.getByChar(chars[i]);
 				if (color != null)
@@ -269,7 +268,6 @@ public class MessageUtil {
 				}
 				c = false;
 				i++;
-				continue;
 			}
 		}
 		if (LogicUtil.nullOrEmpty(ret))

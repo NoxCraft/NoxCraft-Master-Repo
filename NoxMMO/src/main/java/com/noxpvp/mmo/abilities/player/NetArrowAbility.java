@@ -67,8 +67,7 @@ public class NetArrowAbility extends BasePlayerAbility implements PVPAbility {
 		
 		if (arrows.isEmpty())
 			setActive(false);
-		
-		return;
+
 	}
 	
 	private static boolean isNetable(Material type)

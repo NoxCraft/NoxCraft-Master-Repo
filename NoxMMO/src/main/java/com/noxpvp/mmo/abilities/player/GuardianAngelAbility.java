@@ -122,8 +122,7 @@ public class GuardianAngelAbility extends BasePlayerAbility{
 				Entity it = event.getRightClicked();
 				if (it instanceof Villager && guardians.contains(it))
 					event.setCancelled(true);
-				
-				return;				
+
 			}
 		};
 		

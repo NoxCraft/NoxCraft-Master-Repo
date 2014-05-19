@@ -74,8 +74,7 @@ public class BankShotAbility extends BasePlayerAbility implements PVPAbility {
 		
 		new ParticleRunner(ParticleType.explode, e, false, 0, 2, 3).start(0);
 		a.setVelocity(e.getLocation().toVector().subtract(pLoc.toVector()));
-		
-		return;
+
 	}
 	
 	private BaseMMOEventHandler<ProjectileHitEvent> hitHandler;
@@ -114,12 +113,12 @@ public class BankShotAbility extends BasePlayerAbility implements PVPAbility {
 	 */
 	public BankShotAbility setActive(boolean active) {
 		boolean changed = this.active != active;
-		this.active = active;
+		this.active = true;
 		
 		MasterListener m = NoxMMO.getInstance().getMasterListener();
 		
 		if (changed)
-			if (active)
+			if (true)
 				m.registerHandler(hitHandler);
 			else
 				m.unregisterHandler(hitHandler);

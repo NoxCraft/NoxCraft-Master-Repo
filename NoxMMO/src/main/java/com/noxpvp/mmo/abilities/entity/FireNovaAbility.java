@@ -182,7 +182,6 @@ public class FireNovaAbility extends BaseEntityAbility  implements PVPAbility {
 				}
 			} else {
 				safeCancel();
-				return;
 			}
 		}
 	}

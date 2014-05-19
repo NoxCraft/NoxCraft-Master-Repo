@@ -88,10 +88,8 @@ public class ChestBlockListener implements Listener {
 		ChestBlockedEvent ev = CommonUtil.callEvent(new ChestBlockedEvent(event));
 		if (ev == null)
 			return;
-		if (!ev.isCancelled())
-			return;
-		else
-			event.setCancelled(true);
+
+		event.setCancelled(ev.isCancelled());
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = true)

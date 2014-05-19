@@ -89,7 +89,6 @@ public class FireBallAbility extends BaseEntityAbility implements PVPAbility {
 		}
 		
 		public void onStart() {
-			return;
 		}
 		
 		public void onRun() {
@@ -98,7 +97,6 @@ public class FireBallAbility extends BaseEntityAbility implements PVPAbility {
 		}
 		
 		public void onStop() {
-			return;
 		}
 	}
 

@@ -34,7 +34,6 @@ public class LevelUpGlimmer extends BaseCorkScrew {
 	}
 	
 	public void onStop() {
-		return;
 	}
 
 }

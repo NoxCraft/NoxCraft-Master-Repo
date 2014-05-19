@@ -122,7 +122,6 @@ public class PickPocketAbility extends BaseTargetedPlayerAbility{
 			
 			if ((item = inv.getItem(i)) == null || item.getType() == Material.AIR){
 				runs++;
-				continue;
 			} else break;
 		}
 		

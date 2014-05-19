@@ -103,8 +103,6 @@ public class TargetAbility extends BasePlayerAbility implements PassiveAbility<P
 				new LivingEntityTracker(p, target_ref.get(), name);
 
 				return true;
-			} else {
-				continue;
 			}
 		}
 		

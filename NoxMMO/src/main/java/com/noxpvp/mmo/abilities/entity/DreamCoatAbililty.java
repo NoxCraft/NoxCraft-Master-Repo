@@ -139,7 +139,6 @@ public class DreamCoatAbililty extends BaseEntityAbility{
 		public void safeCancel(){
 			try {
 				this.cancel();
-				return;
 			} catch (IllegalStateException e) {}
 		}
 		

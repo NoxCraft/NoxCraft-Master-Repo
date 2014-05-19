@@ -105,7 +105,6 @@ public class ParticleRunner extends BukkitRunnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			safeCancel();
-			return;
 		}
 	}
 

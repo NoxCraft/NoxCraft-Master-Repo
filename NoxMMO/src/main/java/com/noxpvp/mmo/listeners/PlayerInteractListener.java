@@ -64,8 +64,8 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 		new TargetAbility(p).execute(e);//TODO make default range configized || passiveness
 		
 		//debug===========================================
-		if (p.getItemInHand().getType() != Material.STICK)
-			return;
+		if (p.getItemInHand().getType() != Material.STICK) {
+		}
 
 		//debug here
 //		new TornadoAbility(p, 25, 20 * 10).execute();

@@ -44,8 +44,7 @@ public class ShurikenAbility extends BasePlayerAbility implements PVPAbility {
 					unregisterHandler(hitEntityHandler);
 					unregisterHandler(hitHandler);
 				}
-			
-			return;
+
 		}
 		
 		/**
@@ -102,8 +101,7 @@ public class ShurikenAbility extends BasePlayerAbility implements PVPAbility {
 					
 					event.setDamage(event.getDamage() * getDamageMultiplier());
 					arrow.remove();
-					
-					return;
+
 				}
 			};
 			
@@ -130,8 +128,7 @@ public class ShurikenAbility extends BasePlayerAbility implements PVPAbility {
 						return;
 					
 					arrow.remove();
-					
-					return;
+
 				}
 			};
 		}
