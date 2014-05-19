@@ -26,8 +26,8 @@ public class AxesWarlordClassTier extends ClassTier {
 		super(retainer, TIER_NAME, 4);
 		
 		abilities.putAll(retainer.getTier(getTierLevel()-1).getAbilityMap());
-		abilities.put("Hammer Of Thor", new HammerOfThorAbility(getPlayer()));
-		abilities.put("Mass Destruction", new MassDestructionAbility(getPlayer()));
+		abilities.put(HammerOfThorAbility.ABILITY_NAME.toLowerCase(), new HammerOfThorAbility(getPlayer()));
+		abilities.put(MassDestructionAbility.ABILITY_NAME.toLowerCase(), new MassDestructionAbility(getPlayer()));
 		
 		this.maxHealth = 28;
 	}

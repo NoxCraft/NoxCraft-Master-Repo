@@ -23,8 +23,8 @@ public class AxesBasherClassTier extends ClassTier {
 		super(retainer, TIER_NAME, 1);
 		
 		//abilities.put("Iron Grip", /* HERP */)
-		abilities.put("Leap", new LeapAbility(retainer.getPlayer()));
-		abilities.put("CriticalHit", new CriticalHitAbility(retainer.getPlayer()));
+		abilities.put(LeapAbility.ABILITY_NAME.toLowerCase(), new LeapAbility(retainer.getPlayer()));
+		abilities.put(CriticalHitAbility.ABILITY_NAME.toLowerCase(), new CriticalHitAbility(retainer.getPlayer()));
 		
 		this.maxHealth = 22;
 	}

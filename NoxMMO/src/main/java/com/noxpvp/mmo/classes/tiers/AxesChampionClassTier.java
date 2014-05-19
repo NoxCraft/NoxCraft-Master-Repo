@@ -25,7 +25,7 @@ public class AxesChampionClassTier extends ClassTier {
 		super(retainer, TIER_NAME, 2);
 		
 		abilities.putAll(getRetainingClass().getTier(getTierLevel()-1).getAbilityMap());
-		abilities.put("Skull Smasher", new SkullSmasherAbility(getPlayer()));
+		abilities.put(SkullSmasherAbility.ABILITY_NAME.toLowerCase(), new SkullSmasherAbility(getPlayer()));
 		
 		this.maxHealth = 24;
 	}

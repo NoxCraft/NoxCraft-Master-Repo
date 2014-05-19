@@ -25,7 +25,7 @@ public class AxesBerserkerClassTier extends ClassTier {
 		super(retainer, TIER_NAME, 3);
 		
 		abilities.putAll(retainer.getTier(getTierLevel()-1).getAbilityMap());
-		abilities.put("Charge", new ChargeAbility(getPlayer(), 3));
+		abilities.put(ChargeAbility.ABILITY_NAME.toLowerCase(), new ChargeAbility(getPlayer(), 3));
 		
 		this.maxHealth = 26;
 	}

@@ -3,6 +3,7 @@ package com.noxpvp.mmo.command;
 import java.util.Map;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
+import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
@@ -38,10 +39,10 @@ public class AbilityCommand extends BaseCommand {
 	public CommandResult execute(CommandContext context)
 			throws NoPermissionException {
 		
-		if (!context.hasArgument(1))
+		if (!context.hasArgument(0))
 			return new CommandResult(this, false);
 		
-		String abilityName = context.getArgument(0);
+		String abilityName = StringUtil.join(" ", context.getArguments());
 		
 		MMOPlayer mPlayer = MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
 		
@@ -55,7 +56,7 @@ public class AbilityCommand extends BaseCommand {
 			ability = abilities.get(abilityName);
 		
 		if (ability == null)
-			throw new SafeNullPointerException("Ability does not exist!");
+			throw new SafeNullPointerException("Ability \"" + abilityName + "\" does not exist!");
 		
 		if (ability.mayExecute())
 			ability.execute();
