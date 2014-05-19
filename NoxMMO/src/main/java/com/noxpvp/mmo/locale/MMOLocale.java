@@ -43,7 +43,7 @@ public class MMOLocale extends NoxLocale {
 		ABIL_LIST_HEADER = new MMOLocale("display.ability.list.header", "&eList Of Abilities %0%");
 		
 		CLASS_DN = new MMOLocale("display.class.default", "%1%%0%");
-		CLASS_DISPLAY_NAME = new MMOLocale("display.class", ""); //This is blank. Will be filled in per ability name.
+		CLASS_DISPLAY_NAME = new MMOLocale("display.class", ""); //This is blank. Will be filled in per class name.
 		
 		GUI_MENU_NAME_COLOR = new MMOLocale("gui.inventory.name_color", "&6");
 		GUI_BAR_COLOR = new MMOLocale("gui.target_bar.color", "&a");

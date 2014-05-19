@@ -25,6 +25,8 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.core.gui.MenuItemRepresentable;
 import com.noxpvp.core.permissions.NoxPermission;
+import com.noxpvp.mmo.MMOPlayer;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.classes.DynamicClassTier;
@@ -114,6 +116,8 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 		
 		this.tiers = craftClassTiers();
 		this.tiers.putAll(craftDynamicTiers());
+
+		setCurrentTier(getCurrentTierLevel());
 		
 		PluginManager pm = Bukkit.getPluginManager();
 		NoxMMO mmo = NoxMMO.getInstance();
@@ -274,10 +278,7 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	}
 	
 	public String getDisplayName() {
-//		if (getTier().getDisplayName() != null)
-//			return getTier().getDisplayName();
-//		else
-			return getColor() + getName();
+		return getColor() + getName();
 	}
 	
 	public final Player getPlayer() {
@@ -398,6 +399,11 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 
 	public void setCurrentTier(int tierLevel) {
 		cTierLevel = tierLevel;
+		
+		MMOPlayer p = MMOPlayerManager.getInstance().getPlayer(getPlayer());
+		if (p.getPrimaryClass() == this)
+			p.getPlayer().setMaxHealth(getTier().getMaxHealth());
+			
 	}
 
 	public final void setExp(int amount) {

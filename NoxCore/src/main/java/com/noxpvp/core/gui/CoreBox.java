@@ -201,7 +201,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 					if (item.onClick(event))
 						StaticEffects.playSound(player, PacketSounds.RandomClick);
 					else
-						StaticEffects.PlaySound(player, player.getLocation(), PacketSounds.MobBlazeDeath, 1, 2);
+						StaticEffects.PlaySound(player, player.getLocation(), PacketSounds.RandomAnvilLand, 1, +2);
 			}
 		} else if (backButton != null && event.getRawSlot() == (box.getSize() - 1)){
 			try {

@@ -68,12 +68,12 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 			if (classCanUse) {
 				identifingItem.setType(Material.ENCHANTED_BOOK);
 				
-				meta.setDisplayName(getRetainingClass().getColor() + getDisplayName());
+				meta.setDisplayName(getDisplayName());
 				meta.setLore(getLore());
 			} else {
 				identifingItem.setType(Material.BOOK_AND_QUILL);
 				
-				meta.setDisplayName(ChatColor.MAGIC.toString() + getRetainingClass().getColor() + getDisplayName());
+				meta.setDisplayName(ChatColor.MAGIC.toString() + getDisplayName());
 				
 				List<String> lore = new ArrayList<String>();
 				for (String cur : getLore()) lore.add(ChatColor.MAGIC + cur);
