@@ -21,39 +21,39 @@ public class CurseAbility extends BaseTargetedPlayerAbility implements PVPAbilit
 	private double range;
 	
 	/**
-	 * Gets the currently set duration in ticks of the curse effect
+	 * Gets the currently set duration in ticks of the curse effect.
 	 * 
-	 * @return Integer Duration of the curse effect
+	 * @return Integer Duration of the curse effect.
 	 */
 	public int getDuration() {return duration;}
 	
 	/**
-	 * Sets the duration in ticks of the curse effect
+	 * Sets the duration in ticks of the curse effect.
 	 * 
-	 * @param lethality The duration of the curse effect
+	 * @param duration The duration of the curse effect.
 	 * @return CurseAbility This instance
 	 */
 	public CurseAbility setDuration(int duration) {this.duration = duration; return this;}
 
 	/**
-	 * Gets the currently set amplifier for the curse effect
+	 * Gets the currently set amplifier for the curse effect.
 	 * 
-	 * @return Integer Amplifier for the curse effect
+	 * @return Integer Amplifier for the curse effect.
 	 */
 	public int getLethality() {return lethality;}
 	
 	/**
-	 * Sets the amplifier of the curse effect
+	 * Sets the amplifier of the curse effect.
 	 * 
-	 * @param duration The amplifier of the curse effect
+	 * @param lethality The amplifier of the curse effect.
 	 * @return CurseAbility This instance
 	 */
 	public CurseAbility setLethality(int lethality) {this.lethality = lethality; return this;}
 	
 	/**
-	 * Gets the currently set range for this ability instance
+	 * Gets the currently set range for this ability instance.
 	 * 
-	 * @return range The max distance the target can be from the ability user
+	 * @return range The max distance the target can be from the ability user.
 	 */
 	public double getRange() {return range;}
 	

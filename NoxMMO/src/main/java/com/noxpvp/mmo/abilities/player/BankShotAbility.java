@@ -113,12 +113,12 @@ public class BankShotAbility extends BasePlayerAbility implements PVPAbility {
 	 */
 	public BankShotAbility setActive(boolean active) {
 		boolean changed = this.active != active;
-		this.active = true;
+		this.active = active;
 		
 		MasterListener m = NoxMMO.getInstance().getMasterListener();
 		
 		if (changed)
-			if (true)
+			if (active)
 				m.registerHandler(hitHandler);
 			else
 				m.unregisterHandler(hitHandler);

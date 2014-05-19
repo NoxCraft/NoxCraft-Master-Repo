@@ -152,7 +152,7 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	 * @see #unloadAndSavePlayer(String)
 	 * @see #unloadPlayer(String)
 	 * @see #savePlayer(String)
-	 * @param name the name
+	 * @param player offlinePlayer object
 	 */
 	public final void unloadAndSavePlayer(OfflinePlayer player) {
 		unloadAndSavePlayer(player.getName());

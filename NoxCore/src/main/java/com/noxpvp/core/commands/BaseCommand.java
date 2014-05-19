@@ -20,7 +20,7 @@ public abstract class BaseCommand implements Command {
 	private StringMap<BaseCommand> subCommands = new StringMap<BaseCommand>();
 	protected PermissionHandler handler;
 	
-	private BaseCommand(BaseCommand parent, String name, boolean isPlayerOnly)
+	protected BaseCommand(BaseCommand parent, String name, boolean isPlayerOnly)
 	{
 		isRoot = parent == null;
 		

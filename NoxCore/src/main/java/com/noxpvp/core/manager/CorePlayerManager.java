@@ -94,8 +94,7 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 	
 	@Override
 	protected NoxPlayer craftNew(String name) {
-		NoxPlayer player = new NoxPlayer(this, name);
-		return player;
+		return new NoxPlayer(this, name);
 	}
 	
 	@Override
@@ -167,7 +166,6 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 	 *
 	 * New files will grab UID version of file.
 	 *
-	 * @see #getPlayerFile(String)
 	 * @param noxPlayer the NoxPlayer object
 	 * @return the player file
 	 */
@@ -200,7 +198,7 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 	/**
 	 * Gets the player file.
 	 *
-	 * @param name of the player
+	 * @param path the path to the file.
 	 * @return the player file
 	 */
 	public File getPlayerFile(String... path)
@@ -219,8 +217,7 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 	/**
 	 * Gets the player node.
 	 * <b>INTERNAL METHOD</b> Best not to use this!
-	 * @param isUID 
-	 * @param name the name
+	 * @param player the the player.
 	 * @return the player node
 	 */
 	public ConfigurationNode getPlayerNode(NoxPlayer player)

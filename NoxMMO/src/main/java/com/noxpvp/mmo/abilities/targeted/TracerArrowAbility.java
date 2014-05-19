@@ -26,7 +26,7 @@ public class TracerArrowAbility extends BaseTargetedPlayerAbility implements PVP
 	/**
 	 * Runs the event-side execution of this ability
 	 * 
-	 * @param p Player, normally arrow shooter from a projectile hit event
+	 * @param player Player, normally arrow shooter from a projectile hit event
 	 * @return boolean If the execution ran successfully
 	 */
 	public static boolean eventExecute(Player player, final Arrow arrow){
@@ -36,7 +36,6 @@ public class TracerArrowAbility extends BaseTargetedPlayerAbility implements PVP
 		if (abilityCue.containsKey(name))
 			return false;
 		
-		final Arrow a = arrow;
 		final LivingEntity target = mmoP.getTarget();
 				
 		Bukkit.getScheduler().runTaskTimer(NoxMMO.getInstance(), new BukkitRunnable() {
@@ -47,7 +46,7 @@ public class TracerArrowAbility extends BaseTargetedPlayerAbility implements PVP
 			public void safeCancel() {try {cancel();} catch (IllegalStateException e) {}}
 			
 			public void run() {
-				if (a == null || !a.isValid() || target == null){
+				if (arrow == null || !arrow.isValid() || target == null){
 					safeCancel(); return;}
 				
 				los = target.getLocation().toVector().subtract(arrowLoc);

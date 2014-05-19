@@ -296,7 +296,8 @@ public class AbilityCycler extends Cycler<Ability> implements IAbilityCycler, Co
 					event.setCancelled(true); //FIXME: Add visuals (Text item display / ability display.
 			}
 		};
-		
+
+		//noinspection BooleanMethodIsAlwaysInverted
 		iMove = new NoxListener<NoxMMO>(NoxMMO.getInstance()) { //Registers the held event on item moved to hotbar. (SAVES CPU)
 			InventoryActionCombo place = InventoryActionCombo.ANY_PLACE, pickup = InventoryActionCombo.ANY_PICKUP; //Easy Access
 			

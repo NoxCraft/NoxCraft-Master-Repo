@@ -19,12 +19,12 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 	protected static void generateLookup() {
 		
 		for (int i = 0; i < 360; i++) {
-			double[] velos = new double[2];
+			double[] velocity = new double[2];
 			
-			velos[0] = Math.sin(Math.toRadians(i));
-			velos[1] = Math.cos(Math.toRadians(i));
+			velocity[0] = Math.sin(Math.toRadians(i));
+			velocity[1] = Math.cos(Math.toRadians(i));
 			
-			lookup.put(i, velos);
+			lookup.put(i, velocity);
 		}
 	}
 	

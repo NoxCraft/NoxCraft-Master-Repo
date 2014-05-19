@@ -28,7 +28,7 @@ public class HomesPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	/**
 	 * Instantiates a new homes playerRef.
 	 *
-	 * @param playerRef an OfflinePlayer
+	 * @param player an OfflinePlayer.
 	 */
 	public HomesPlayer(OfflinePlayer player)
 	{

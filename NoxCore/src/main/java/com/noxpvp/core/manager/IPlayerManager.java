@@ -21,7 +21,7 @@ public interface IPlayerManager<T extends NoxPlayerAdapter> extends Persistant {
 	/**
 	 * Gets the player with the specified name.
 	 *
-	 * @param namer of player
+	 * @param name of player
 	 * @return the player
 	 */
 	public T getPlayer(String name);

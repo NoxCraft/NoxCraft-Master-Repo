@@ -77,7 +77,7 @@ public class ShockWaveAnimation extends BukkitRunnable {
 	 * @param shockCenter Location the shockwave will start from
 	 * @param shockSpeed The delay in ticks between each ring
 	 * @param shockRange the range from the location the shockwave will extend
-	 * @param circel If the wave should be a circle
+	 * @param circle If the wave should be a circle
 	 */
 	public ShockWaveAnimation(Location shockCenter, int shockSpeed, int shockRange, boolean circle) {
 		this(shockCenter, shockSpeed, shockRange, 0.35, circle);

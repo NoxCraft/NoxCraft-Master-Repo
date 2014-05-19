@@ -106,7 +106,7 @@ public interface ICoreBox {
 		/**
 		 * Handles the code of what should go on if a player clicks this item, not necessary for most implementations
 		 * 
-		 * @param event
+		 * @param click
 		 */
 		public boolean onClick(InventoryClickEvent click);
 		

@@ -74,7 +74,7 @@ public class ReincarnateAbility extends BasePlayerAbility{
 	/**
 	 * Constructs a new ReincarnateAbility with a specified player as the user
 	 * 
-	 * @param playey The user for this ability instance
+	 * @param player The user for this ability instance
 	 * @param timeLimit The max amount of seconds that can have passed since the target player died
 	 * @param maxRadius the max amount of from the user to check for a targets players death location
 	 */

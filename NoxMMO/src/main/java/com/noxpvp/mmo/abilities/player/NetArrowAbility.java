@@ -30,8 +30,7 @@ public class NetArrowAbility extends BasePlayerAbility implements PVPAbility {
 	/**
 	 * Runs the event-side execution of this ability
 	 * 
-	 * @param p Player, normally arrow shooter from a projectile hit event
-	 * @param loc The location to make the net, normally the location of an arrow
+	 * @param a Array from projectile hit event.
 	 * @return boolean If the execution ran successfully
 	 */
 	private void eventExecute(Arrow a, int time)

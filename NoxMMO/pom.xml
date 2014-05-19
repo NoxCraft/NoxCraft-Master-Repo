@@ -45,7 +45,7 @@
 									<format property="snapshotstamp" pattern="HH - d-MM" />
 								</tstamp>
 								<replaceregexp>
-									<regexp pattern="\{Snapshot\}" />
+									<regexp pattern="-Snapshot" />
 									<substitution expression="Snapshot (${snapshotstamp})" />
 									<fileset dir="target/classes">
 										<exclude name="*.class" />
