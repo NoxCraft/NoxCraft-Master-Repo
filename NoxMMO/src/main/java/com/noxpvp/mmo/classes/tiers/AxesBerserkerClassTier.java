@@ -35,7 +35,7 @@ public class AxesBerserkerClassTier extends ClassTier {
 	}
 
 	public String getDisplayName() {
-		return AxesBerserkerClassTier.dName;
+		return getRetainingClass().getColor() + AxesBerserkerClassTier.dName;
 	}
 
 	public List<String> getLore() {

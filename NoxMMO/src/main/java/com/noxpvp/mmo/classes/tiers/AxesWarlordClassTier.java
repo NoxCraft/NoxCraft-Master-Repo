@@ -37,7 +37,7 @@ public class AxesWarlordClassTier extends ClassTier {
 	}
 
 	public String getDisplayName() {
-		return AxesWarlordClassTier.dName;
+		return getRetainingClass().getColor() + AxesWarlordClassTier.dName;
 	}
 
 	public List<String> getLore() {

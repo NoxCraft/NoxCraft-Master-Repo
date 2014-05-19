@@ -27,10 +27,6 @@ public class AxesPlayerClass extends PlayerClass {
 
 	public AxesPlayerClass(Player player) {
 		super(uniqueID, className, player);
-		tiers.put(1, new AxesBasherClassTier(this));
-		tiers.put(2, new AxesChampionClassTier(this));
-		tiers.put(3, new AxesBerserkerClassTier(this));
-		tiers.put(4, new AxesWarlordClassTier(this));
 	}
 
 	public AxesPlayerClass(String playerName, Player player) {
@@ -95,7 +91,14 @@ public class AxesPlayerClass extends PlayerClass {
 
 	@Override
 	protected Map<Integer, IClassTier> craftClassTiers() {
-		return new HashMap<Integer, IClassTier>();
+		this.tiers = new HashMap<Integer, IClassTier>();
+		
+		tiers.put(1, new AxesBasherClassTier(this));
+		tiers.put(2, new AxesChampionClassTier(this));
+		tiers.put(3, new AxesBerserkerClassTier(this));
+		tiers.put(4, new AxesWarlordClassTier(this));
+		
+		return this.tiers;
 	}
 
 	@Override

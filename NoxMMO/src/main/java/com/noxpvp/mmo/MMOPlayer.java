@@ -113,6 +113,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	
 	public void setPrimaryClass(IPlayerClass c) {
 		this.primaryClass = c;
+		getPlayer().setMaxHealth(primaryClass.getTier().getMaxHealth());
 	}
 	
 	public void setSecondaryClass(String c) {
@@ -201,7 +202,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 			node.remove(TARGET_NODE);
 		else {
 			node.set(TARGET_NODE + ".world", getTarget().getWorld().getName());
-			node.set(TARGET_NODE + "uuid", getTarget().getUniqueId().toString());
+			node.set(TARGET_NODE + ".uuid", getTarget().getUniqueId().toString());
 		}
 	}
 }

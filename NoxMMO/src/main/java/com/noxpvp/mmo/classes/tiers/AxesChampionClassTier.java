@@ -27,7 +27,7 @@ public class AxesChampionClassTier extends ClassTier {
 		abilities.putAll(getRetainingClass().getTier(getTierLevel()-1).getAbilityMap());
 		abilities.put("Skull Smasher", new SkullSmasherAbility(getPlayer()));
 		
-		this.maxHealth = 28;
+		this.maxHealth = 24;
 	}
 
 	public void setDisplayName(String displayName) {
@@ -35,7 +35,7 @@ public class AxesChampionClassTier extends ClassTier {
 	}
 
 	public String getDisplayName() {
-		return AxesChampionClassTier.dName;
+		return getRetainingClass().getColor() + AxesChampionClassTier.dName;
 	}
 
 	public List<String> getLore() {

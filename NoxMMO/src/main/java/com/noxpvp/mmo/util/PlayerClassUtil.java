@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
@@ -17,8 +16,6 @@ import com.google.common.collect.MapMaker;
 import com.noxpvp.core.collection.DualAccessMap;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.classes.AxesPlayerClass;
-import com.noxpvp.mmo.classes.internal.ClassTier;
-import com.noxpvp.mmo.classes.internal.IClassTier;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
 
@@ -180,7 +177,8 @@ public class PlayerClassUtil { //TODO: UUID's
 		
 		if (!(o instanceof PlayerClass))
 			return null;
-		PlayerClass ret = (PlayerClass)o;
+		
+		PlayerClass ret = (PlayerClass) o;
 		
 		classID = ret.getUniqueID();
 		String cs = playerName + "|" + classID;

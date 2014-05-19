@@ -85,11 +85,13 @@ public class ClassMenu extends CoreBox {
 					if (clazz.isPrimaryClass()){
 						mmoPlayer.setPrimaryClass(clazz);
 						mmoPlayer.getPrimaryClass().setCurrentTier(getTier());
+						hide();
 						
 						return true;
 					} else {
 						mmoPlayer.setSecondaryClass(clazz);
 						mmoPlayer.getSecondaryClass().setCurrentTier(getTier());
+						hide();
 						
 						return true;
 					}
