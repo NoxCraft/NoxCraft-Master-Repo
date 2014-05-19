@@ -107,13 +107,13 @@ public class ThrowAbility extends BasePlayerAbility implements PVPAbility {
 				public void run() {
 					Location pLoc = getPlayer().getLocation();
 					e.teleport(pLoc);
-					e.setVelocity(pLoc.getDirection().setY(0.45).multiply(1.6));
+					e.setVelocity(pLoc.getDirection().multiply(3).setY(1));
 			}}, pushDelay);
 		}
 		
 		if (i > 0){
 			new ExpandingDamageRunnable(p, pLoc, 4, range, 2).start(pushDelay);
-			new ShockWaveAnimation(pLoc, 2, range, 0.15, true).start(pushDelay);
+			new ShockWaveAnimation(pLoc, 2, range, true).start(pushDelay);
 			return true;
 		} else return false;
 	}

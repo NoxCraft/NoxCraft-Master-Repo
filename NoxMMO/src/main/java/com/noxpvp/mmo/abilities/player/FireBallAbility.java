@@ -88,9 +88,17 @@ public class FireBallAbility extends BaseEntityAbility implements PVPAbility {
 			
 		}
 		
+		public void onStart() {
+			return;
+		}
+		
 		public void onRun() {
-			new ParticleRunner(ParticleType.dripLava, getLociaton(), false, 0, 1, 1).start(0);
+			new ParticleRunner(ParticleType.dripLava, getLocation(), false, 0, 1, 1).start(0);
 			
+		}
+		
+		public void onStop() {
+			return;
 		}
 	}
 

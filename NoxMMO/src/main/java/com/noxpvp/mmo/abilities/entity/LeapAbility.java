@@ -50,7 +50,7 @@ public class LeapAbility extends BaseEntityAbility {
 	}
 	
 	public LeapAbility(Entity ent) {
-		this(ent, 3D);
+		this(ent, 2D);
 	}
 	
 	public boolean execute() {

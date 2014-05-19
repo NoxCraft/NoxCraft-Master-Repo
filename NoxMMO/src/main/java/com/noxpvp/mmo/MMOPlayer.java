@@ -23,6 +23,7 @@ import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.abilities.PlayerAbility;
+import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 import com.noxpvp.mmo.classes.internal.DummyClass;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
@@ -132,6 +133,9 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 	
 	public LivingEntity getTarget() {
+		if (target == null)
+			new TargetAbility(getPlayer()).execute();
+		
 		return target;
 	}
 	

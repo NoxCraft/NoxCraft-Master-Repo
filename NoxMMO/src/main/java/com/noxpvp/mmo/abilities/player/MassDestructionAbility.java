@@ -102,7 +102,7 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 				EventPriority.MONITOR, 1) {
 			
 			public boolean ignoreCancelled() {
-				return true;
+				return false;
 			}
 			
 			public Class<EntityDamageEvent> getEventType() {
@@ -125,6 +125,8 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 				}
 			}
 		};
+		
+		this.isActive = false;
 	}
 	
 	public boolean execute() {

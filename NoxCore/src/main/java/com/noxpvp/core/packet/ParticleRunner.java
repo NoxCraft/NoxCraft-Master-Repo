@@ -52,12 +52,14 @@ public class ParticleRunner extends BukkitRunnable {
 		this.i = 0;
 	}
 
-	public void start(int delay) {
+	public ParticleRunner start(int delay) {
 		start(delay, 5);
+		return this;
 	}
 	
-	public void start(int delay, int period) {
+	public ParticleRunner start(int delay, int period) {
 		runTaskTimer(NoxCore.getInstance(), delay, period);
+		return this;
 	}
 	
 	public void safeCancel() {

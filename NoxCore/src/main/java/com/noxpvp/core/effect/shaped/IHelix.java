@@ -13,13 +13,17 @@ public interface IHelix {
 	
 	public void start(int delay);
 	
+	public void onStart();
+	
+	public void onStop();
+	
 	public void run();
 	
 	public void onRun();
 	
 	public void setLocation(Location loc);
 	
-	public Location getLociaton();
+	public Location getLocation();
 	
 	public void setDirection(Vector direction);
 	

@@ -274,9 +274,9 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	}
 	
 	public String getDisplayName() {
-		if (getTier().getDisplayName() != null)
-			return getTier().getDisplayName();
-		else
+//		if (getTier().getDisplayName() != null)
+//			return getTier().getDisplayName();
+//		else
 			return getColor() + getName();
 	}
 	

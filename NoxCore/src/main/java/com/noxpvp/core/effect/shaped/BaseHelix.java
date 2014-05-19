@@ -40,7 +40,8 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 	private int horizontalTicker;
 	
 	public BaseHelix(Location loc, int time) {
-		this.loc = loc.add(this.direction = loc.getDirection());
+		this.loc = loc;
+		this.direction = loc.getDirection();
 		this.time = time;
 		
 		this.widthGain = 1;
@@ -64,6 +65,12 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 		int i = 0;
 		while (i++ < particleAmount)
 			run();
+		
+	}
+	
+	public void renderBeforeStart(int particleAmount) {
+		render(particleAmount);
+		start(0);
 	}
 	
 	public void start(int delay) {
@@ -73,15 +80,20 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 			
 			public void run() {
 				try {
+					BaseHelix.this.onStop();
 					BaseHelix.this.cancel();
 					return;
 				} catch(IllegalStateException e) {}
 				
 			}
 		}, time);
+		
+		onStart();
 	}
 
 	public void run() {
+		this.loc.add(direction);
+		
 		double radius = BaseHelix.lookup.get(verticalTicker())[0] * widthGain;
 		int	horizontal = horizontalTicker();
 		
@@ -102,7 +114,7 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 		this.loc = loc;
 	}
 	
-	public Location getLociaton() {
+	public Location getLocation() {
 		return this.loc.clone();
 	}
 	

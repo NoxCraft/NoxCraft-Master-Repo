@@ -1,11 +1,12 @@
 package com.noxpvp.mmo.abilities.player;
 
 import org.bukkit.Bukkit;
-import org.bukkit.EntityEffect;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import com.noxpvp.core.data.NoxPlayer;
+import com.noxpvp.core.packet.ParticleRunner;
+import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
@@ -97,6 +98,7 @@ public class ReincarnateAbility extends BasePlayerAbility{
 		Location pLoc = p.getLocation();
 		
 		Player target = null;
+		Location dLoc = null;
 		long ct = System.currentTimeMillis();
 		
 		for (Player pl : Bukkit.getOnlinePlayers()){
@@ -104,7 +106,7 @@ public class ReincarnateAbility extends BasePlayerAbility{
 				continue;
 			
 			MMOPlayer mmop = MMOPlayerManager.getInstance().getPlayer(pl);
-			Location dLoc = mmop.getLastDeathLocation();
+			dLoc = mmop.getLastDeathLocation();
 			
 			if (dLoc == null || dLoc.distance(pLoc) > getMaxRadius()) continue;
 			if (((ct - mmop.getLastDeathTS()) / 1000) > timeLimit) continue;
@@ -115,7 +117,10 @@ public class ReincarnateAbility extends BasePlayerAbility{
 		
 		if (target == null) return false;
 		
-		target.teleport(pLoc);
+		new ParticleRunner(ParticleType.explode, dLoc.clone().add(0, 1, 0), true, 0, 50, 1).start(0);
+		dLoc.getWorld().playSound(dLoc, Sound.ENDERMAN_TELEPORT, 3, 1);
+		
+		target.teleport(dLoc);
 		return true;
 	}
 	

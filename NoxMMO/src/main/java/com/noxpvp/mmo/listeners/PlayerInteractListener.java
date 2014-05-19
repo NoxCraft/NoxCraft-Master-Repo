@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
+import com.noxpvp.core.effect.shaped.LevelUpGlimmer;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
@@ -30,9 +31,11 @@ import com.noxpvp.mmo.abilities.player.ThrowAbility;
 import com.noxpvp.mmo.abilities.player.TornadoAbility;
 import com.noxpvp.mmo.abilities.targeted.BoltAbility;
 import com.noxpvp.mmo.abilities.targeted.CurseAbility;
+import com.noxpvp.mmo.abilities.targeted.DrainLifeAbility;
 import com.noxpvp.mmo.abilities.targeted.MortalWoundAbility;
 import com.noxpvp.mmo.abilities.targeted.PickPocketAbility;
 import com.noxpvp.mmo.abilities.targeted.SootheAbility;
+import com.noxpvp.mmo.abilities.targeted.SoulStealAbility;
 import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 
 @SuppressWarnings("unused")
@@ -85,7 +88,9 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 //		new FireNovaAbility(p).execute();
 //		new BoltAbility(p).execute();
 //		new RejuvenationAbility(p).execute();
-		new ReincarnateAbility(p).execute();
+//		new ReincarnateAbility(p).execute();
+//		new DrainLifeAbility(p).execute();
+//		new SoulStealAbility(p).execute();
 	}
 	
 }
