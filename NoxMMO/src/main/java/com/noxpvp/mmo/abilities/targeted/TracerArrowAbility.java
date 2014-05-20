@@ -56,9 +56,9 @@ public class TracerArrowAbility extends BaseTargetedPlayerAbility implements PVP
 		}, 0, 1);
 		return true;
 	}
-
+	
 	public TracerArrowAbility(Player player) {
-		super(ABILITY_NAME, player);
+		super(ABILITY_NAME, player, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 	}
 	
 	/**

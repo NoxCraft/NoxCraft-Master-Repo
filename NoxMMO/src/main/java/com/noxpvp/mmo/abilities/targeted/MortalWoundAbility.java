@@ -21,40 +21,8 @@ public class MortalWoundAbility extends BaseTargetedPlayerAbility implements PVP
 		return "Bypass all your targets powers and hit them as the mortal they are, causing slowness and posion";
 	}
 	
-	private double range;
-	private double damage;
 	private int duration;
 	private int amplifier;
-	
-	/**
-	 * Gets the range set for this ability
-	 * 
-	 * @return double Ranged
-	 */
-	public double getRange() {return range;}
-
-	/**
-	 * Sets the range for this ability
-	 * 
-	 * @param range Ranged
-	 * @return MortalWoundAbility This instance
-	 */
-	public MortalWoundAbility setRange(double range) {this.range = range; return this;}
-
-	/**
-	 * Gets the damage set for this ability
-	 * 
-	 * @return double damage
-	 */
-	public double getDamage() {return damage;}
-
-	/**
-	 * Sets the damage for this ability
-	 * 
-	 * @param damage The damage
-	 * @return MortalWoundAbility This instance
-	 */
-	public MortalWoundAbility setDamage(double damage) {this.damage = damage; return this;}
 
 	/**
 	 * Gets the duration in ticks set for this ability
@@ -86,11 +54,14 @@ public class MortalWoundAbility extends BaseTargetedPlayerAbility implements PVP
 	 */
 	public MortalWoundAbility setAmplifier(int amplifier) {this.amplifier = amplifier; return this;}
 
-	public MortalWoundAbility(Player player){
+	public MortalWoundAbility(Player player) {
+		this(player, 10);
+	}
+	
+	public MortalWoundAbility(Player player, double range){
 		super(ABILITY_NAME, player, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 		
-		this.range = 10;
-		this.damage = 6;
+		setDamage(8);
 		this.duration = (20 * 4);
 		this.amplifier = 2;
 	}
@@ -99,12 +70,11 @@ public class MortalWoundAbility extends BaseTargetedPlayerAbility implements PVP
 		if (!mayExecute())
 			return false;
 		
-		if (getDistance() > range) return false;
-		
 		LivingEntity t = getTarget();
 		Player p = getPlayer();
 		
-		t.damage(damage, p);
+		t.damage(getDamage(), p);
+		
 		return t.addPotionEffects(Arrays.asList(
 				new PotionEffect(PotionEffectType.POISON, duration, amplifier),
 				new PotionEffect(PotionEffectType.SLOW, duration, amplifier)));

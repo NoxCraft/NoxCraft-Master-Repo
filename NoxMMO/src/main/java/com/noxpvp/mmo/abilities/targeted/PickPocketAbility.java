@@ -16,7 +16,7 @@ import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
  * @author NoxPVP
  *
  */
-public class PickPocketAbility extends BaseTargetedPlayerAbility{
+public class PickPocketAbility extends BaseTargetedPlayerAbility {
 	
 	public static final String PERM_NODE = "pick-pocket";
 	public static final String ABILITY_NAME = "Pick Pocket";

@@ -68,29 +68,29 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 			return;
 
 		//debug here
-//		new TornadoAbility(p, 25, 20 * 10).execute();
+		new TornadoAbility(p, 25, 20 * 10).execute();
 		new FireSpinAbility(p).execute();
-//		new MassDestructionAbility(p).execute();
-//		new LeapAbility(p).execute();
-//		new CurseAbility(p).execute();
-//		new ChargeAbility(p).execute();
-//		new MedPackAbility(p).execute();
-//		new PickPocketAbility(p).execute();
-//		new HookShotAbility(p).execute();//XXX do this
-//		new FireBallAbility(p).execute();
-//		new HammerOfThorAbility(p).execute();
-//		new GuardianAngelAbility(p).execute();
-//		new BandageAbility(p).execute();
-//		new WisdomAbility(p).execute();
-//		new SootheAbility(p).execute();
-//		new ThrowAbility(p).execute();
-//		new MortalWoundAbility(p).execute();
-//		new FireNovaAbility(p).execute();
-//		new BoltAbility(p).execute();
-//		new RejuvenationAbility(p).execute();
-//		new ReincarnateAbility(p).execute();
-//		new DrainLifeAbility(p).execute();
-//		new SoulStealAbility(p).execute();
+		new MassDestructionAbility(p).execute();
+		new LeapAbility(p).execute();
+		new CurseAbility(p).execute();
+		new ChargeAbility(p).execute();
+		new MedPackAbility(p).execute();
+		new PickPocketAbility(p).execute();
+		new HookShotAbility(p).execute();//XXX do this
+		new FireBallAbility(p).execute();
+		new HammerOfThorAbility(p).execute();
+		new GuardianAngelAbility(p).execute();
+		new BandageAbility(p).execute();
+		new WisdomAbility(p).execute();
+		new SootheAbility(p).execute();
+		new ThrowAbility(p).execute();
+		new MortalWoundAbility(p).execute();
+		new FireNovaAbility(p).execute();
+		new BoltAbility(p).execute();
+		new RejuvenationAbility(p).execute();
+		new ReincarnateAbility(p).execute();
+		new DrainLifeAbility(p).execute();
+		new SoulStealAbility(p).execute();
 	}
 	
 }
