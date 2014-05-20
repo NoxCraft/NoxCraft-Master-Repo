@@ -1,9 +1,18 @@
 package com.noxpvp.mmo.command.subcommands;
 
+import java.util.Map.Entry;
+import java.util.Set;
+
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.utils.NoxMessageBuilder;
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.classes.internal.ClassTier;
+import com.noxpvp.mmo.classes.internal.IClassTier;
+import com.noxpvp.mmo.classes.internal.PlayerClass;
+import com.noxpvp.mmo.util.NoxMMOMessageBuilder;
+import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class ClassInfoCommand extends BaseCommand {
 
@@ -17,18 +26,38 @@ public class ClassInfoCommand extends BaseCommand {
 		return new String[] {};
 	}
 
-	public String[] getHelp() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public int getMaxArguments() {
-		return 2;
+		return 1;
 	}
 
 	@Override
 	public CommandResult execute(CommandContext context) throws NoPermissionException {
-		return new CommandResult(this, false);
+		
+		if (!context.hasArgument(0))
+			return new CommandResult(this, false);
+		
+		String className = context.getArgument(0).toLowerCase();
+		
+		if (!PlayerClassUtil.hasClassNameIgnoreCase(className))
+			return new CommandResult(this, false);
+		
+		PlayerClass clazz = null;
+		for (PlayerClass c : PlayerClassUtil.getAvailableClasses(context.getPlayer()))
+			if (c.getName().equalsIgnoreCase(className)) {
+				clazz = c;
+				break;
+			}
+		
+		if (clazz == null)
+			return new CommandResult(this, false);
+		
+		NoxMMOMessageBuilder mb = new NoxMMOMessageBuilder(getPlugin());
+		mb.commandHeader(clazz.getDisplayName() + " Class", true);
+		
+		mb.withClassInfo(clazz).headerClose(true);
+		mb.send(context.getSender());
+		
+		return new CommandResult(this, true);
 	}
 
 	@Override

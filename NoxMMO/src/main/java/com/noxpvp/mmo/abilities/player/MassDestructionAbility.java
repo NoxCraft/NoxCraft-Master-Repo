@@ -28,7 +28,8 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 	
 	@Override
 	public String getDescription() {
-		return "You leap high into the air causing the ground to shake when you land, dealing " + String.format("%.1f", getDamage()) + " to all enemys within " + String.format("%.2f", getRange()) + " blocks";
+		return "You leap high into the air causing the ground to shake when you land, dealing "
+				+ getDamage() + " to all enemys within " + getRange() + " blocks";
 	}
 	
 	private BaseMMOEventHandler<EntityDamageEvent> handler;

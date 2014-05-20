@@ -14,17 +14,13 @@ public class ClassCommand extends BaseCommand {
 		super(COMMAND_NAME, false);
 		
 		registerSubCommands(
-			new ClassSwitchCommand(),
-			new ClassInfoCommand()
-			);
+				new ClassSwitchCommand(),
+				new ClassInfoCommand()
+				);
 	}
 
 	public String[] getFlags() {
 		return new String[] {"h", "help"};
-	}
-
-	public String[] getHelp() {
-		return new String[0];
 	}
 
 	public int getMaxArguments() {

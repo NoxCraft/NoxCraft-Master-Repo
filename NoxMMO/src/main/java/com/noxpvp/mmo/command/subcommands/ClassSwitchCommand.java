@@ -69,7 +69,7 @@ public class ClassSwitchCommand extends BaseCommand {
 		
 		int tier = ParseUtil.parseInt(sTier, -1);
 
-		if (PlayerClassUtil.hasClassName(cName))
+		if (PlayerClassUtil.hasClassNameIgnoreCase(cName))
 			cName = PlayerClassUtil.getIdByClassName(cName);
 		
 		if (!PlayerClassUtil.hasClassId(cName))

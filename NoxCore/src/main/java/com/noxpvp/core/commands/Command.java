@@ -14,8 +14,6 @@ public interface Command {
 	
 	public String[] getFlags();
 	
-	public String[] getHelp();
-	
 	public int getMaxArguments();
 	
 	public String getName();

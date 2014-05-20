@@ -8,11 +8,13 @@ import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.commands.SafeNullPointerException;
+import com.noxpvp.core.utils.NoxMessageBuilder;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.command.subcommands.AbilityInfoCommand;
+import com.noxpvp.mmo.command.subcommands.AbilityListCommand;
 
 public class AbilityCommand extends BaseCommand {
 
@@ -21,16 +23,13 @@ public class AbilityCommand extends BaseCommand {
 	public AbilityCommand() {
 		super(COMMAND_NAME, true);
 		registerSubCommand(new AbilityInfoCommand());
+		registerSubCommand(new AbilityListCommand());
 	}
 
 	public String[] getFlags() {
 		return new String[] { "h", "help" };
 	}
-
-	public String[] getHelp() {
-		return new String[]{"/ability [info] <ability name>"};
-	}
-
+	
 	public int getMaxArguments() {
 		return 1;
 	}

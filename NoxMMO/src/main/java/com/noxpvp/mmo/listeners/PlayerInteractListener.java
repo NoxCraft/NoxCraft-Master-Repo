@@ -69,7 +69,7 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 
 		//debug here
 //		new TornadoAbility(p, 25, 20 * 10).execute();
-//		new FireSpinAbility(p).execute();
+		new FireSpinAbility(p).execute();
 //		new MassDestructionAbility(p).execute();
 //		new LeapAbility(p).execute();
 //		new CurseAbility(p).execute();

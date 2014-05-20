@@ -19,7 +19,20 @@ public class NoxMessageBuilder extends MessageBuilder {
 		super();
 		
 		this.plugin = plugin;
-		helpHeader(true).newLine();
+		if (withHeader)
+			helpHeader(true);
+	}
+	
+	public NoxMessageBuilder commandHeader(String command) {
+		return commandHeader(command, true);
+	}
+	
+	public NoxMessageBuilder commandHeader(String command, boolean addNewline) {
+		append(GlobalLocale.COMMAND_HELP_HEADER.get(plugin.getName(), command));
+		if (addNewline)
+			newLine();
+		
+		return this;
 	}
 	
 	public NoxMessageBuilder helpHeader() {

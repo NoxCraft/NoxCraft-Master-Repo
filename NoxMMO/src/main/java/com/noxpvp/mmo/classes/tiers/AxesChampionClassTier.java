@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.mmo.abilities.Ability;
-import com.noxpvp.mmo.abilities.player.SkullSmasherAbility;
+import com.noxpvp.mmo.abilities.player.RageAbility;
 import com.noxpvp.mmo.classes.internal.ClassTier;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
@@ -25,7 +25,7 @@ public class AxesChampionClassTier extends ClassTier {
 		super(retainer, TIER_NAME, 2);
 		
 		abilities.putAll(getRetainingClass().getTier(getTierLevel()-1).getAbilityMap());
-		abilities.put(SkullSmasherAbility.ABILITY_NAME.toLowerCase(), new SkullSmasherAbility(getPlayer()));
+		abilities.put(RageAbility.ABILITY_NAME.toLowerCase(), new RageAbility(getPlayer()));
 		
 		this.maxHealth = 24;
 	}
