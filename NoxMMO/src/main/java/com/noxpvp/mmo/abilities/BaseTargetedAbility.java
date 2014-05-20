@@ -6,16 +6,32 @@ import java.lang.ref.SoftReference;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
-public abstract class BaseTargetedAbility extends BaseAbility implements TargetedAbility{
+public abstract class BaseTargetedAbility extends BaseRangedAbility implements TargetedAbility {
+	
 	private Reference<LivingEntity> target_ref;
 	
-	public BaseTargetedAbility(String name, LivingEntity target){
-		super(name);
+	public BaseTargetedAbility(String name, double range, LivingEntity target){
+		super(name, range);
 		
 		this.target_ref = new SoftReference<LivingEntity>(target);
 	}
 	
-	public BaseTargetedAbility(String name){
+	/**
+	 * creates a new targeted ability with 0 range
+	 * 
+	 * @param name
+	 * @param target
+	 */
+	public BaseTargetedAbility(String name, LivingEntity target){
+		this(name, 0, target);
+	}
+	
+	/**
+	 * creates a new targeted ability with 0 range and a null target
+	 * 
+	 * @param name
+	 */
+	public BaseTargetedAbility(String name) {
 		this(name, null);
 	}
 	

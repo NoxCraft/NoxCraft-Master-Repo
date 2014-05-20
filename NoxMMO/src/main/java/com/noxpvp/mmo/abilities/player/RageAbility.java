@@ -16,14 +16,14 @@ import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
 
-public class SkullSmasherAbility extends BasePlayerAbility implements PVPAbility {
+public class RageAbility extends BasePlayerAbility implements PVPAbility {
 	
-	public static final String ABILITY_NAME = "Skull Smasher";
-	public static final String PERM_NODE = "skull-smasher";
+	public static final String ABILITY_NAME = "Rage";
+	public static final String PERM_NODE = "Rage";
 	
 	@Override
 	public String getDescription() {
-		return "Your axe becomes ingulfed with power! Dealing 75% damage to all enemys surrounding anything you damage";
+		return "Your axe becomes ingulfed with your own rage! Dealing 75% damage to all enemys surrounding anything you damage";
 	}
 	
 	private BaseMMOEventHandler<EntityDamageByEntityEvent> handler;
@@ -40,15 +40,15 @@ public class SkullSmasherAbility extends BasePlayerAbility implements PVPAbility
 	 * Sets the range for this ability
 	 * 
 	 * @param range The range
-	 * @return SkullSmasherAbility This instance
+	 * @return RageAbility This instance
 	 */
-	public SkullSmasherAbility setRange(double range) {this.range = range; return this;}
+	public RageAbility setRange(double range) {this.range = range; return this;}
 
 	/**
 	 * 
 	 * @param player The user of the ability instance
 	 */
-	public SkullSmasherAbility(Player player, double range){
+	public RageAbility(Player player, double range){
 		super(ABILITY_NAME, player);
 		
 		this.handler = new BaseMMOEventHandler<EntityDamageByEntityEvent>(
@@ -68,11 +68,11 @@ public class SkullSmasherAbility extends BasePlayerAbility implements PVPAbility
 			}
 			
 			public void execute(EntityDamageByEntityEvent event) {
-				if (!event.getDamager().equals(SkullSmasherAbility.this.getPlayer()))
+				if (!event.getDamager().equals(RageAbility.this.getPlayer()))
 					return;
 				
 				double damage = event.getDamage();
-				double range = SkullSmasherAbility.this.range;
+				double range = RageAbility.this.range;
 				Player attacker = (Player) event.getDamager();
 				
 				for (Entity it : getPlayer().getNearbyEntities(range, range, range)){
@@ -87,7 +87,7 @@ public class SkullSmasherAbility extends BasePlayerAbility implements PVPAbility
 		this.range = range;
 	}
 
-	public SkullSmasherAbility(Player player) {
+	public RageAbility(Player player) {
 		this(player, 5);
 	}
 

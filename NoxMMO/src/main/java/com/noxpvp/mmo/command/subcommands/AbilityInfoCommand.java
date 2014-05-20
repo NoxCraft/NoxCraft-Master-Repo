@@ -7,6 +7,7 @@ import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.commands.SafeNullPointerException;
+import com.noxpvp.core.utils.NoxMessageBuilder;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
@@ -25,11 +26,7 @@ public class AbilityInfoCommand extends BaseCommand {
 	public String[] getFlags() {
 		return new String[] { "h", "help" };
 	}
-
-	public String[] getHelp() {
-		return null;
-	}
-
+	
 	public int getMaxArguments() {
 		return 1;
 	}
@@ -37,10 +34,11 @@ public class AbilityInfoCommand extends BaseCommand {
 	@Override
 	public CommandResult execute(CommandContext context)
 			throws NoPermissionException {
-		if (!context.hasArgument(1))
+		
+		if (!context.hasArgument(0))
 			return new CommandResult(this, false);
 		
-		String abilityName = context.getArgument(0);
+		String abilityName = context.getArgument(0).toLowerCase();
 		
 		MMOPlayer mPlayer = MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
 		

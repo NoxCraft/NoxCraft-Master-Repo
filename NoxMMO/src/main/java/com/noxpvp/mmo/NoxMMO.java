@@ -241,7 +241,7 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", ShadowStepAbility.PERM_NODE), "Allows usage of the Shadow Step Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", ShurikenAbility.PERM_NODE), "Allows usage of the Shuriken Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", SilentWalkingAbility.PERM_NODE), "Allows usage of the SilentWalking Ability.", PermissionDefault.OP),
-				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", SkullSmasherAbility.PERM_NODE), "Allows usage of the Skull Smasher Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", RageAbility.PERM_NODE), "Allows usage of the Skull Smasher Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", SoulStealAbility.PERM_NODE), "Allows usage of the Soul Steal Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", SootheAbility.PERM_NODE), "Allows usage of the Soothe Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", SuperBreakerAbility.PERM_NODE), "Allows usage of the Super Breaker Ability.", PermissionDefault.OP),

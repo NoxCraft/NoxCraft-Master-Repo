@@ -7,17 +7,24 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-public abstract class BaseTargetedPlayerAbility extends BasePlayerAbility implements TargetedPlayerAbility{
+public abstract class BaseTargetedPlayerAbility extends BaseRangedPlayerAbility implements TargetedPlayerAbility {
 	private Reference<LivingEntity> target_ref;
 	
-	public BaseTargetedPlayerAbility(String name, Player player, LivingEntity target){
-		super(name, player);
+	public BaseTargetedPlayerAbility(String name, Player player, double range, LivingEntity target){
+		super(name, player, range);
 		
 		this.target_ref = new SoftReference<LivingEntity>(target);
 	}
 	
-	public BaseTargetedPlayerAbility(String name, Player player){
-		this(name, player, null);
+	/**
+	 * creates a new targeted player ability with 0 range
+	 * 
+	 * @param name
+	 * @param player
+	 * @param target
+	 */
+	public BaseTargetedPlayerAbility(String name, Player player, LivingEntity target){
+		this(name, player, 0, target);
 	}
 	
 	public LivingEntity getTarget() {
@@ -48,6 +55,6 @@ public abstract class BaseTargetedPlayerAbility extends BasePlayerAbility implem
 	 * @return boolean If the execute() method is normally able to start
 	 */
 	public boolean mayExecute() {
-		return (getPlayer() != null && getTarget() != null);
+		return super.mayExecute() && (getTarget() != null && (getDistance() <= getRange()));
 	}
 }

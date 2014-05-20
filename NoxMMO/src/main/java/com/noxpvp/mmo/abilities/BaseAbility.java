@@ -16,12 +16,12 @@ public abstract class BaseAbility implements Ability {
 	}
 	
 	/**
-	 * This implementation returns {@link MMOLocale#ABIL_DISPLAY_NAME} using method {@link MMOLocale#get(String...)} with the parameters as [getName(), ""]
+	 * This implementation returns {@link MMOLocale#ABIL_DISPLAY_NAME} using method {@link MMOLocale#get(String...)} with the parameters as [getName(), getName()]
 	 * <hr>
 	 * {@inheritDoc}
 	 */
 	public String getDisplayName() {
-		return MMOLocale.ABIL_DISPLAY_NAME.get(getName(), "");
+		return MMOLocale.ABIL_DISPLAY_NAME.get(getName(), getName());
 	}
 	
 	public String getDisplayName(ChatColor color) {

@@ -13,40 +13,24 @@ import com.noxpvp.core.data.Vector3D;
 import com.noxpvp.core.gui.corebar.LivingEntityTracker;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.MMOPlayerManager;
-import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
 import com.noxpvp.mmo.abilities.PassiveAbility;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
 
-public class TargetAbility extends BasePlayerAbility implements PassiveAbility<PlayerInteractEvent>{
+public class TargetAbility extends BaseRangedPlayerAbility implements PassiveAbility<PlayerInteractEvent>{
 	
 	public static final String PERM_NODE = "target";
 	public static final String ABILITY_NAME = "Target";
 	
-	private double range;
 	private Reference<LivingEntity> target_ref;
-	
-	/**
-	 * 
-	 * 
-	 * @return double - The currently set range for target distance
-	 */
-	public double getRange() {return range;}
-	
-	/**
-	 * 
-	 * @param range - The double range to look for targets
-	 * @return TargetAbility - This instance, used for chaining
-	 */
-	public TargetAbility setRange(double range) {this.range = range; return this;}
 	
 	/**
 	 * 
 	 * @param player - The Player type user for this ability instance
 	 */
 	public TargetAbility(Player player){
-		super(ABILITY_NAME, player);
+		super(ABILITY_NAME, player, 30);
 		
-		this.range = 25;
 	}
 	
 	/**
@@ -60,8 +44,9 @@ public class TargetAbility extends BasePlayerAbility implements PassiveAbility<P
 			return false;
 		
 		Player p = getPlayer();
+		double range = getRange();
 		
-		for (Entity it : p.getNearbyEntities(range, range, range)){
+		for (Entity it : p.getNearbyEntities(range, range, range)) {
 			
 			if (!(it instanceof LivingEntity) || it.equals(p)) continue;
 			if ((it instanceof Player) && !(p).canSee((Player) it)) continue;
@@ -106,7 +91,7 @@ public class TargetAbility extends BasePlayerAbility implements PassiveAbility<P
 			}
 		}
 		
-		return true;
+		return false;
 	}
 	
 	private boolean hasIntersection(Vector3D p1, Vector3D p2, Vector3D min, Vector3D max) {

@@ -78,7 +78,7 @@ public abstract class BaseCommand implements Command {
 		CommandContext newContext = null;
 		
 		if (context.getArgumentCount() > 1)
-			newContext = new CommandContext(context.getSender(), context.getFlags(), Arrays.copyOfRange(args, 1, args.length -1));
+			newContext = new CommandContext(context.getSender(), context.getFlags(), Arrays.copyOfRange(args, 1, args.length));
 		else
 			newContext = new CommandContext(context.getSender(), context.getFlags());
 		

@@ -2,7 +2,7 @@ package com.noxpvp.mmo.abilities;
 
 import org.bukkit.entity.LivingEntity;
 
-public interface TargetedEntityAbility extends EntityAbility, TargetedAbility{
+public interface TargetedEntityAbility extends RangedEntityAbility {
 	
 	/**
 	 * Gets the target involved in this targeted ability instance

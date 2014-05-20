@@ -70,7 +70,7 @@ public class PlayerClassUtil { //TODO: UUID's
 		if (!good)
 			return;
 		
-		String cName = className.get(null), cId = classId.get(null);
+		String cName = className.get(clazz), cId = classId.get(clazz);
 		
 		pClasses.put(cId, clazz);
 		classIdNameMap.put(cId, cName);
@@ -135,6 +135,14 @@ public class PlayerClassUtil { //TODO: UUID's
 	
 	public static boolean hasClassName(String name) {
 		return classIdNameMap.containsValue(name);
+	}
+	
+	public static boolean hasClassNameIgnoreCase(String name) {
+		for (String cn : classIdNameMap.values())
+			if (cn.equalsIgnoreCase(name))
+				return true;
+		
+		return false;
 	}
 	
 	public static String getClassIDbyClass(Class<?> clazz)

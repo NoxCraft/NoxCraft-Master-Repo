@@ -18,39 +18,19 @@ public class ShadowStepAbility extends BaseTargetedPlayerAbility implements PVPA
 	
 	public static final String PERM_NODE = "shadow-step";
 	public static final String ABILITY_NAME = "Shadow Step";
-	private int range;
-	
-	/**
-	 * 
-	 * 
-	 * @return Integer the currently set range for the ability execution
-	 */
-	public int getRange() {return range;}
-	
-	/**
-	 * 
-	 * 
-	 * @param range The range that the target can be from the ability user
-	 * @return ShadowStepAbility This instance, used for chaining
-	 */
-	public ShadowStepAbility setRange(int range) {this.range = range; return this;}
 	
 	/**
 	 * 
 	 * 
 	 * @param player the Player type user for this ability instance
 	 */
-	public ShadowStepAbility(Player player){
-		super(ABILITY_NAME, player, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
+	public ShadowStepAbility(Player player, double range){
+		super(ABILITY_NAME, player, range, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 		
-		this.range = 10;
 	}
 
 	public boolean execute() {
 		if (!mayExecute())
-			return false;
-		
-		if (getDistance() > range)
 			return false;
 		
 		Location targetLoc = getTarget().getLocation();

@@ -22,16 +22,16 @@ public class DrainLifeAbility extends BaseTargetedPlayerAbility {
 	public final static String PERM_NODE = "drain-life";
 	
 	private int time;
-	private double range;
-	private double damage;
 	private int period;
 	
 	public DrainLifeAbility(Player p) {
-		super(ABILITY_NAME, p, MMOPlayerManager.getInstance().getPlayer(p).getTarget());
+		this(p, 5);
+	}
+	
+	public DrainLifeAbility(Player p, double range) {
+		super(ABILITY_NAME, p, range, MMOPlayerManager.getInstance().getPlayer(p).getTarget());
 		
 		this.time = 20 * 10;
-		this.range = 15;
-		this.damage = 2;
 		this.period = 20;
 	}
 
@@ -90,18 +90,12 @@ public class DrainLifeAbility extends BaseTargetedPlayerAbility {
 		}
 
 		public void run() {
-			if (!player.isValid() || !target.isValid())
+			if (!mayExecute())
 				stop();
 			
-			this.pLoc = player.getLocation().add(0, 0.2, 0);
-			this.tLoc = target.getLocation();
-			
-			if (pLoc.distance(tLoc) > range)
-				stop();
-			
-			if ((counter % period) == 0  && target.getHealth() > damage && player.getHealth() < player.getMaxHealth()) {
-				target.damage(damage, player);
-				player.setHealth(Math.min(player.getHealth() + damage, player.getMaximumAir()));
+			if ((counter % period) == 0  && target.getHealth() > getDamage() && player.getHealth() < player.getMaxHealth()) {
+				target.damage(getDamage(), player);
+				player.setHealth(Math.min(player.getHealth() + getDamage(), player.getMaximumAir()));
 			}
 			
 			ents.add(new heart(tLoc));

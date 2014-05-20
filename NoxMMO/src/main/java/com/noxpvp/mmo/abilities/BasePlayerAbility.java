@@ -3,25 +3,18 @@ package com.noxpvp.mmo.abilities;
 import org.apache.commons.lang.IllegalClassException;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.utils.TownyUtil;
-import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public abstract class BasePlayerAbility extends BaseEntityAbility implements PlayerAbility {
-	
-	private MasterListener masterListener;
 	
 	public BasePlayerAbility(final String name, Player player)
 	{
 		super(name, player);
-		
-		this.masterListener = NoxMMO.getInstance().getMasterListener();
 	}
 	
 	public Player getPlayer() {
@@ -34,19 +27,6 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements Pla
 		if (isValid())
 			return CorePlayerManager.getInstance().getPlayer(getPlayer());
 		return null;
-	}
-	
-	public MasterListener getMasterListener() {
-		return masterListener;
-	}
-	
-	public void registerHandler(BaseMMOEventHandler<? extends Event> handler) {
-		masterListener.registerHandler(handler);
-	}
-	
-	public void unregisterHandler(BaseMMOEventHandler<? extends Event> handler) {
-		masterListener.unregisterHandler(handler);
-		
 	}
 	
 	/**

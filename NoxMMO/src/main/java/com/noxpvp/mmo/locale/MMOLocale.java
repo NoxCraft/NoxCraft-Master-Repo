@@ -25,6 +25,11 @@ public class MMOLocale extends NoxLocale {
 	public final static MMOLocale GUI_BAR_COLOR;
 	
 	//Ability Information
+
+	/**
+	 * @param 1 Ability name
+	 * @param 2 Description
+	 */
 	public final static MMOLocale ABIL_INFO;
 	
 	//INTERNAL
@@ -37,7 +42,7 @@ public class MMOLocale extends NoxLocale {
 		ABIL_DN = new MMOLocale("display.ability.default", "%1%%0%");
 		ABIL_DISPLAY_NAME = new MMOLocale("display.ability", ""); //This is blank. Will be filled in per ability name.
 		
-		ABIL_INFO = new MMOLocale("display.ability.info", "&7Ability: &e%0%&a %1%");
+		ABIL_INFO = new MMOLocale("display.ability.info", "&e%0%&6: &c%1%");
 		
 		ABIL_LIST_SEPERATOR = new MMOLocale("display.ability.list.color", "&7,");
 		ABIL_LIST_HEADER = new MMOLocale("display.ability.list.header", "&eList Of Abilities %0%");

@@ -1,14 +1,13 @@
 package com.noxpvp.mmo.command.subcommands;
 
-import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
+import com.noxpvp.core.utils.NoxMessageBuilder;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.Ability;
-import com.noxpvp.mmo.locale.MMOLocale;
 
 public class AbilityListCommand extends BaseCommand {
 
@@ -22,10 +21,6 @@ public class AbilityListCommand extends BaseCommand {
 		return new String[0];
 	}
 
-	public String[] getHelp() {
-		return null;
-	}
-
 	public int getMaxArguments() {
 		return 0;
 	}
@@ -34,24 +29,22 @@ public class AbilityListCommand extends BaseCommand {
 	public CommandResult execute(CommandContext context)
 			throws NoPermissionException {
 		
-		
 		MMOPlayer player = MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
-		MessageBuilder mb = new MessageBuilder(MMOLocale.ABIL_LIST_HEADER.get("from your classes"));
+		NoxMessageBuilder mb = new NoxMessageBuilder(getPlugin()).commandHeader("Ability List", true);
 		
-		boolean first = true;
 		for (Ability ability: player.getAllAbilities()) {
-			mb.append(ability.getDisplayName());
-			if (first) { mb.setSeparator(MMOLocale.ABIL_LIST_SEPERATOR.get()); first = false;}
+			mb.yellow(ability.getDisplayName()).gold(": ").red(ability.getDescription()).newLine();
 		}
-		mb.setSeparator("");
+		
+		mb.headerClose();
 		mb.send(context.getSender());
 		
 		return new CommandResult(this, true);
 	}
-
+	
 	@Override
 	public NoxMMO getPlugin() {
 		return NoxMMO.getInstance();
 	}
-
+	
 }

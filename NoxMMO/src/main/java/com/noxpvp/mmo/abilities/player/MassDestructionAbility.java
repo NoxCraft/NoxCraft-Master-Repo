@@ -11,7 +11,7 @@ import org.bukkit.util.Vector;
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
 import com.noxpvp.mmo.abilities.PVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
@@ -21,20 +21,19 @@ import com.noxpvp.mmo.runnables.ShockWaveAnimation;
  * @author NoxPVP
  *
  */
-public class MassDestructionAbility extends BasePlayerAbility implements PVPAbility {
+public class MassDestructionAbility extends BaseRangedPlayerAbility implements PVPAbility {
 	
 	public static final String PERM_NODE = "mass-destruction";
 	public static final String ABILITY_NAME = "Mass Destruction";
 	
 	@Override
 	public String getDescription() {
-		return "You leap high into the air causing the ground to shake when you land, dealing " + String.format("%.1f", getDamage()) + " to all enemys within " + String.format("%.2f", getRange()) + " blocks";
+		return "You leap high into the air causing the ground to shake when you land, dealing "
+				+ getDamage() + " to all enemys within " + getRange() + " blocks";
 	}
 	
 	private BaseMMOEventHandler<EntityDamageEvent> handler;
-	private double damage = 6;
 	private double hVelo = 1.5;
-	private int range = 6;
 	private boolean isActive;
 	
 	private MassDestructionAbility setActive(boolean active) {
@@ -49,20 +48,6 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 		
 		return this; 
 	}
-	
-	
-	/**
-	 * 
-	 * @return Double The current damage set for this ability
-	 */
-	public double getDamage() {return damage;}
-
-	/**
-	 * 
-	 * @param damage
-	 * @return MassDestructionAbility This instance
-	 */
-	public MassDestructionAbility setDamage(double damage) {this.damage = damage; return this;}
 
 	/**
 	 * 
@@ -76,25 +61,16 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 	 * @return Double The current set velocity used for the player upwards/downwards effect
 	 */
 	public double gethVelo() {return this.hVelo;}
+
+	public MassDestructionAbility(Player p) {
+		this(p, 10);
+	}
 	
-	/**
-	 * 
-	 * @return Integer The current range
-	 */
-	public int getRange() {return range;}
-
-	/**
-	 * 
-	 * @param range
-	 * @return MassDestructionAbility This instance
-	 */
-	public MassDestructionAbility setRange(int range) {this.range = range; return this;}
-
 	/**
 	 * 
 	 * @param p The Player type user for this instance
 	 */
-	public MassDestructionAbility(Player p){
+	public MassDestructionAbility(Player p, double range){
 		super(ABILITY_NAME, p);
 		
 		handler = new BaseMMOEventHandler<EntityDamageEvent>(
@@ -158,7 +134,7 @@ public class MassDestructionAbility extends BasePlayerAbility implements PVPAbil
 		Player p = getPlayer();
 		Location pLoc = p.getLocation();
 		
-		int range = getRange();
+		int range = (int) Math.ceil(getRange());
 		
 		new ParticleRunner(ParticleType.largeexplode, pLoc.add(0, 1, 0), true, 10, 3, 1).start(0);
 		new ShockWaveAnimation(pLoc, 1, range, 0.35, true).start(0);

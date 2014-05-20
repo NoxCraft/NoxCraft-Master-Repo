@@ -20,13 +20,14 @@ public class DisarmAbility extends BaseTargetedPlayerAbility implements PVPAbili
 	
 	private final static String ABILITY_NAME = "Disarm";
 	public static final String PERM_NODE = "disarm";
+
 	
-	/**
-	 * 
-	 * @param player - The Player type user for this ability instance
-	 */
-	public DisarmAbility(Player player){
-		super(ABILITY_NAME, player, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
+	public DisarmAbility(Player player) {
+		this(player, 10);
+	}
+	
+	public DisarmAbility(Player player, double range) {
+		super(ABILITY_NAME, player, range, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 	}
 
 	public boolean execute() {

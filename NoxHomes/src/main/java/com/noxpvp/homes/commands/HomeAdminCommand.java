@@ -1,10 +1,8 @@
 package com.noxpvp.homes.commands;
 
-import java.util.Map.Entry;
-
-import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
+import com.noxpvp.core.utils.NoxMessageBuilder;
 import com.noxpvp.homes.NoxHomes;
 
 public class HomeAdminCommand extends BaseCommand {
@@ -23,16 +21,12 @@ public class HomeAdminCommand extends BaseCommand {
 		return new CommandResult(this, false);
 	}
 	
-	public String[] getHelp() {
-		MessageBuilder mb = new MessageBuilder();
-		mb.setIndent(1);
-		mb.setSeparator("\n");
-		for (Entry<String, BaseCommand> entry : getSubCommandMap().entrySet())
-			for (String line : entry.getValue().getHelp())
-				mb.append(line);
-		mb.setIndent(0);
+	@Override
+	public NoxMessageBuilder onDisplayHelp(NoxMessageBuilder message) {
+		for (BaseCommand cmd : getSubCommandMap().values())
+			message.withCommand(cmd, true);
 		
-		return mb.lines();
+		return message;
 	}
 
 	public String[] getFlags() {

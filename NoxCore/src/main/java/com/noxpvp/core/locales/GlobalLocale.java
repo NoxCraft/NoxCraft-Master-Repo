@@ -15,6 +15,7 @@ public class GlobalLocale extends NoxLocale {
 	}
 	
 	public static GlobalLocale HELP_HEADER;
+	
 	/**
 	 * Argument 1: Plugin Name<br>
 	 * Argument 2: Command Name (Context label preferred)

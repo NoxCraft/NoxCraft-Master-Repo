@@ -18,8 +18,6 @@ public class CurseAbility extends BaseTargetedPlayerAbility implements PVPAbilit
 	
 	private int duration;
 	private int lethality;
-	private double range;
-	
 	/**
 	 * Gets the currently set duration in ticks of the curse effect.
 	 * 
@@ -50,28 +48,15 @@ public class CurseAbility extends BaseTargetedPlayerAbility implements PVPAbilit
 	 */
 	public CurseAbility setLethality(int lethality) {this.lethality = lethality; return this;}
 	
-	/**
-	 * Gets the currently set range for this ability instance.
-	 * 
-	 * @return range The max distance the target can be from the ability user.
-	 */
-	public double getRange() {return range;}
+	public CurseAbility(Player player) {
+		this(player, 15);
+	}
 	
-	/**
-	 * Sets the range of this ability instance
-	 * 
-	 * @param range The max distance to allow the target to be from the ability user
-	 * @return CurseAbility This instance
-	 */
-	public CurseAbility setRange(double range) {this.range = range; return this;}
-	
-	public CurseAbility(Player player){
-		
-		super(ABILITY_NAME, player, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
-		
+	public CurseAbility(Player player, double range) {
+		super(ABILITY_NAME, player, range, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
+				
 		this.duration = 100;
 		this.lethality = 1;
-		this.range = 5;
 	}
 
 	public boolean execute() {
@@ -79,9 +64,6 @@ public class CurseAbility extends BaseTargetedPlayerAbility implements PVPAbilit
 			return false;
 		
 		LivingEntity t = getTarget();
-		
-		if (t.getLocation().distance(getPlayer().getLocation()) > range)
-			return false;
 		
 		t.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration, lethality));
 		t.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, lethality));

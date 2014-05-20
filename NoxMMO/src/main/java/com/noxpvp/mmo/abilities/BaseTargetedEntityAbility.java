@@ -7,28 +7,35 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
-public abstract class BaseTargetedEntityAbility extends BaseEntityAbility implements TargetedEntityAbility{
+public abstract class BaseTargetedEntityAbility extends BaseRangedEntityAbility implements TargetedEntityAbility {
 	private Reference<LivingEntity> target_ref;
 	
-	public BaseTargetedEntityAbility(String name, Entity entity, LivingEntity target){
-		super(name, entity);
+	public BaseTargetedEntityAbility(String name, Entity entity, double range, LivingEntity target) {
+		super(name, entity, range);
 		
 		this.target_ref = new SoftReference<LivingEntity>(target);
 	}
 	
-	public BaseTargetedEntityAbility(String name, Entity entity){
-		this(name, entity, null);
+	/**
+	 * creates a new targeted entity ability with 0 range
+	 * 
+	 * @param name
+	 * @param entity
+	 * @param target
+	 */
+	public BaseTargetedEntityAbility(String name, Entity entity, LivingEntity target) {
+		this(name, entity, 0, target);
 	}
 	
 	public LivingEntity getTarget() {
 		return (target_ref == null) ? null : target_ref.get();
 	}
 	
-	public void setTarget(LivingEntity target){
+	public void setTarget(LivingEntity target) {
 		this.target_ref = new SoftReference<LivingEntity>(target);
 	}
 	
-	public double getDistance(){
+	public double getDistance() {
 		if (getEntity() != null)
 			return getDistance(getEntity().getLocation());
 		
@@ -48,6 +55,6 @@ public abstract class BaseTargetedEntityAbility extends BaseEntityAbility implem
 	 * @return boolean If the execute() method is normally able to start
 	 */
 	public boolean mayExecute() {
-		return (getEntity() != null && getTarget() != null);
+		return super.mayExecute() && (getEntity() != null && getTarget() != null && (getDistance() <= getRange()));
 	}
 }
