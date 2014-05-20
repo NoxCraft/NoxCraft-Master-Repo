@@ -34,7 +34,7 @@ import com.noxpvp.mmo.util.InventoryActionCombo;
 
 
 //FIXME: Add visuals (Text item display / ability display.
-public class AbilityCycler extends Cycler<Ability> implements IAbilityCycler, ConfigurationSerializable {
+public class AbilityCycler extends Cycler<Ability> implements ConfigurationSerializable {
 	private static AsyncTask cleaner;
 	private static long cleaner_delay = 5000;
 	private static ConcurrentMap<MMOPlayer, List<Reference<AbilityCycler>>> d;
