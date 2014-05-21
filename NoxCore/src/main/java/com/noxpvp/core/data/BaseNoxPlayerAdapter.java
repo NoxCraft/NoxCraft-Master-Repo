@@ -205,7 +205,7 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 	}
 
 	public void removeCooldDown(String name) {
-		getProxyBase().removeCooldDown(name);
+		getProxyBase().removeCoolDown(name);
 	}
 	
 	public final void superSave() {

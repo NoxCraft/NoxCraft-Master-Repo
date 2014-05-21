@@ -39,6 +39,7 @@ public class NoxMMO extends NoxPlugin {
 	
 	private PermissionHandler permHandler;
 	
+	AbilityListener abilityListener;
 	DamageListener damageListener;
 	HealListener healListener;
 	PlayerInteractListener playerTargetListener;
@@ -112,6 +113,7 @@ public class NoxMMO extends NoxPlugin {
 		PlayerClassUtil.init();
 		PlayerClass.init();
 		
+		abilityListener = new AbilityListener(instance);
 		damageListener = new DamageListener(instance);
 		healListener = new HealListener(instance);
 		playerTargetListener = new PlayerInteractListener(instance);
@@ -123,6 +125,7 @@ public class NoxMMO extends NoxPlugin {
 		equipmentPacketListener = packetListeners.new EntityEquipmentListener();
 		worldSoundListener = packetListeners.new WorldSoundListener();
 		
+		abilityListener.register();
 		damageListener.register();
 		healListener.register();
 		playerTargetListener.register();
