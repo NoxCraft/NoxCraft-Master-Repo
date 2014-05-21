@@ -66,4 +66,11 @@ public interface Ability {
 	 * @return true if allowed and false if not.
 	 */
 	public boolean mayExecute();
+	
+	/**
+	 * Returns the result of this ability when its is thrown
+	 * 
+	 * @return {@link Boolean} cancelled
+	 */
+	public boolean isCancelled();
 }

@@ -41,9 +41,12 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements IPl
 		if (player == null || !player.isValid() || !player.isOnline() || !hasPermission())
 			return false;
 		
-		boolean cancelled = CommonUtil.callEvent(new PlayerAbilityPreExecuteEvent(player, this)).isCancelled();
-		
-		return !cancelled && (((this instanceof IPVPAbility) && TownyUtil.isPVP(player)) || !(this instanceof IPVPAbility));
+		return !isCancelled() && (((this instanceof IPVPAbility) && TownyUtil.isPVP(player)) || !(this instanceof IPVPAbility));
+	}
+	
+	@Override
+	public boolean isCancelled() {
+		return CommonUtil.callEvent(new PlayerAbilityPreExecuteEvent(getPlayer(), this)).isCancelled();
 	}
 	
 	/**

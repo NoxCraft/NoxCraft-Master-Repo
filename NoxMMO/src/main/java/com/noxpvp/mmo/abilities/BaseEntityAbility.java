@@ -42,9 +42,11 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 		if (entity == null || entity.isDead() || !entity.isValid())
 			return false;
 		
-		boolean cancelled = CommonUtil.callEvent(new EntityAbilityPreExcuteEvent(entity, this)).isCancelled();
-		
-		return !cancelled && (((this instanceof IPVPAbility) && TownyUtil.isPVP(entity)) || !(this instanceof IPVPAbility));
+		return !isCancelled() && (((this instanceof IPVPAbility) && TownyUtil.isPVP(entity)) || !(this instanceof IPVPAbility));
+	}
+	
+	public boolean isCancelled() {
+		return CommonUtil.callEvent(new EntityAbilityPreExcuteEvent(getEntity(), this)).isCancelled();
 	}
 	
 	public MasterListener getMasterListener() {

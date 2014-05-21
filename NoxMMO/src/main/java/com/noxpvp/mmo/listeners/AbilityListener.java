@@ -13,8 +13,12 @@ import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 import com.noxpvp.mmo.events.EntityAbilityExecutedEvent;
 import com.noxpvp.mmo.events.EntityAbilityPreExcuteEvent;
+import com.noxpvp.mmo.events.EntityTargetedAbilityExecutedEvent;
+import com.noxpvp.mmo.events.EntityTargetedAbilityPreExecuteEvent;
 import com.noxpvp.mmo.events.PlayerAbilityExecutedEvent;
 import com.noxpvp.mmo.events.PlayerAbilityPreExecuteEvent;
+import com.noxpvp.mmo.events.PlayerTargetedAbilityExecutedEvent;
+import com.noxpvp.mmo.events.PlayerTargetedAbilityPreExecuteEvent;
 
 public class AbilityListener extends NoxListener<NoxMMO> {
 
@@ -38,12 +42,12 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerAbilityPreExecute(PlayerAbilityPreExecuteEvent event) {
+	public void onEntityAbilityExecuted(EntityAbilityExecutedEvent event) {
 		return;
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onEntityAbilityExecuted(EntityAbilityExecutedEvent event) {
+	public void onPlayerAbilityPreExecute(PlayerAbilityPreExecuteEvent event) {
 		return;
 	}
 	
@@ -58,5 +62,25 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 		
 		return;
 	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityTargetedAbilityPreExecute(EntityTargetedAbilityPreExecuteEvent event) {
+		return;
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityTargetedAbilityExecuted(EntityTargetedAbilityExecutedEvent event) {
+		return;
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerTargetedAbilityPreExecute(PlayerTargetedAbilityPreExecuteEvent event) {
+		return;
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerTargetedAbilityExecuted(PlayerTargetedAbilityExecutedEvent event) {
+		return;
+	}	
 	
 }
