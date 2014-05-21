@@ -3,15 +3,18 @@ package com.noxpvp.mmo.abilities;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.utils.TownyUtil;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.events.EntityAbilityPreExcuteEvent;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
+import com.noxpvp.mmo.locale.MMOLocale;
 
 public abstract class BaseEntityAbility extends BaseAbility implements IEntityAbility {
 	private Reference<Entity> entityRef;
@@ -42,9 +45,18 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 		if (entity == null || entity.isDead() || !entity.isValid())
 			return false;
 		
-		boolean cancelled = CommonUtil.callEvent(new EntityAbilityPreExcuteEvent(entity, this)).isCancelled();
+		if (this instanceof IPVPAbility && !TownyUtil.isPVP(entity)) {
+			if (entity instanceof CommandSender)
+				MessageUtil.sendLocale((CommandSender) entity, MMOLocale.ABIL_NO_PVP, getName());
+			
+			return false;
+		}
 		
-		return !cancelled && (((this instanceof IPVPAbility) && TownyUtil.isPVP(entity)) || !(this instanceof IPVPAbility));
+		return super.mayExecute();
+	}
+	
+	public boolean isCancelled() {
+		return CommonUtil.callEvent(new EntityAbilityPreExcuteEvent(getEntity(), this)).isCancelled();
 	}
 	
 	public MasterListener getMasterListener() {

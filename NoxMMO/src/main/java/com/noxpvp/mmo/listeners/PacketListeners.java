@@ -6,8 +6,8 @@ import com.bergerkiller.bukkit.common.events.PacketReceiveEvent;
 import com.bergerkiller.bukkit.common.events.PacketSendEvent;
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketListener;
-import com.noxpvp.mmo.abilities.player.ClassArmorDisguiseAbility;
-import com.noxpvp.mmo.abilities.player.SilentWalkingAbility;
+import com.noxpvp.mmo.abilities.player.ClassArmorDisguisePlayerAbility;
+import com.noxpvp.mmo.abilities.player.SilentWalkingPlayerAbility;
 
 public class PacketListeners {
 
@@ -40,7 +40,7 @@ public class PacketListeners {
 				/*
 				 * class armor disguises
 				 */
-				new ClassArmorDisguiseAbility(p, packet).execute();
+				new ClassArmorDisguisePlayerAbility(p, packet).execute();
 				
 			}
 		}
@@ -63,7 +63,7 @@ public class PacketListeners {
 				/*
 				 * silent walking ability
 				 */
-				arg0.setCancelled(new SilentWalkingAbility(p, packet).execute());
+				arg0.setCancelled(new SilentWalkingPlayerAbility(p, packet).execute());
 				
 			}
 			

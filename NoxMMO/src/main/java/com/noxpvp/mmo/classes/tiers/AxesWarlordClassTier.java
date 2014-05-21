@@ -7,8 +7,8 @@ import java.util.Map;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.mmo.abilities.Ability;
-import com.noxpvp.mmo.abilities.player.HammerOfThorAbility;
-import com.noxpvp.mmo.abilities.player.MassDestructionAbility;
+import com.noxpvp.mmo.abilities.player.HammerOfThorPlayerAbility;
+import com.noxpvp.mmo.abilities.player.MassDestructionPlayerAbility;
 import com.noxpvp.mmo.classes.internal.ClassTier;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
@@ -26,8 +26,8 @@ public class AxesWarlordClassTier extends ClassTier {
 		super(retainer, TIER_NAME, 4);
 		
 		abilities.putAll(retainer.getTier(getTierLevel()-1).getAbilityMap());
-		abilities.put(HammerOfThorAbility.ABILITY_NAME.toLowerCase(), new HammerOfThorAbility(getPlayer()));
-		abilities.put(MassDestructionAbility.ABILITY_NAME.toLowerCase(), new MassDestructionAbility(getPlayer()));
+		abilities.put(HammerOfThorPlayerAbility.ABILITY_NAME.toLowerCase(), new HammerOfThorPlayerAbility(getPlayer()));
+		abilities.put(MassDestructionPlayerAbility.ABILITY_NAME.toLowerCase(), new MassDestructionPlayerAbility(getPlayer()));
 		
 		this.maxHealth = 28;
 	}

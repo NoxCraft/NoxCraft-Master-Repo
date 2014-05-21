@@ -10,7 +10,7 @@ import com.noxpvp.mmo.events.internal.IAbilityEvent;
 
 public class EntityAbilityEvent extends EntityEvent implements IAbilityEvent {
 	private final static HandlerList handlers = new HandlerList();
-	private BaseEntityAbility ability;
+	protected BaseEntityAbility ability;
 	
 	public EntityAbilityEvent(Entity what, BaseEntityAbility ability) {
 		super(what);
@@ -22,8 +22,11 @@ public class EntityAbilityEvent extends EntityEvent implements IAbilityEvent {
 		return ability;
 	}
 
-	@Override
 	public HandlerList getHandlers() {
+		return handlers;
+	}
+	
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 

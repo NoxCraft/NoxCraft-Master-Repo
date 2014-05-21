@@ -9,7 +9,7 @@ import com.noxpvp.mmo.events.internal.IPlayerAbilityEvent;
 
 public class PlayerAbilityEvent extends PlayerEvent implements IPlayerAbilityEvent {
 	private final static HandlerList handlers = new HandlerList();
-	private BasePlayerAbility ability;
+	protected BasePlayerAbility ability;
 
 	public PlayerAbilityEvent(Player who, BasePlayerAbility ability) {
 		super(who);
@@ -21,8 +21,12 @@ public class PlayerAbilityEvent extends PlayerEvent implements IPlayerAbilityEve
 		return ability;
 	}
 
-	@Override
 	public HandlerList getHandlers() {
 		return handlers;
 	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
+	
 }

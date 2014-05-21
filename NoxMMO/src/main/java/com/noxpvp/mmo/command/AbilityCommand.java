@@ -57,8 +57,7 @@ public class AbilityCommand extends BaseCommand {
 		if (ability == null)
 			throw new SafeNullPointerException("Ability \"" + abilityName + "\" does not exist!");
 		
-		if (ability.mayExecute())
-			ability.execute();
+		ability.execute();
 		
 		return new CommandResult(this, true);
 	}

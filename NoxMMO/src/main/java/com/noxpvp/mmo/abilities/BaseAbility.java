@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 
+import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.locale.MMOLocale;
 
@@ -48,5 +49,12 @@ public abstract class BaseAbility implements Ability {
 		}
 			
 		return ret;
+	}
+	
+	public boolean mayExecute() {
+		if (isCancelled())
+			return false;
+		
+		return true;
 	}
 }

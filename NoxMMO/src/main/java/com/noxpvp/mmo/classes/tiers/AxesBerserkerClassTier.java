@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.mmo.abilities.Ability;
-import com.noxpvp.mmo.abilities.entity.ChargeAbility;
+import com.noxpvp.mmo.abilities.entity.ChargeEntityAbility;
 import com.noxpvp.mmo.classes.internal.ClassTier;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
@@ -25,7 +25,7 @@ public class AxesBerserkerClassTier extends ClassTier {
 		super(retainer, TIER_NAME, 3);
 		
 		abilities.putAll(retainer.getTier(getTierLevel()-1).getAbilityMap());
-		abilities.put(ChargeAbility.ABILITY_NAME.toLowerCase(), new ChargeAbility(getPlayer(), 3));
+		abilities.put(ChargeEntityAbility.ABILITY_NAME.toLowerCase(), new ChargeEntityAbility(getPlayer(), 3));
 		
 		this.maxHealth = 26;
 	}
