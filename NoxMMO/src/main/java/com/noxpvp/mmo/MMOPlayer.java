@@ -108,7 +108,8 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		PlayerClass clazz;
 		if ((clazz = PlayerClassUtil.safeConstructClass(c, getName())) != null)
 			setClass(clazz);
-
+		
+		return;
 	}
 	
 	public void setPrimaryClass(IPlayerClass c) {
@@ -125,7 +126,8 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		PlayerClass clazz;
 		if ((clazz = PlayerClassUtil.safeConstructClass(c, getName())) != null)
 			setClass(clazz);
-
+		
+		return;
 	}
 	
 	public void setSecondaryClass(IPlayerClass c) {

@@ -209,6 +209,7 @@ public class ShockWaveAnimation extends BukkitRunnable {
 			
 		} else {
 			safeCancel();
+			return;
 		}
 	}
 }

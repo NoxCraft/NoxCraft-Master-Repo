@@ -134,8 +134,7 @@ public class PoisonArrowAbility extends BasePlayerAbility implements PVPAbility 
 				if (arrows.isEmpty())
 					setActive(false);
 				
-				else {
-				}
+				else return;
 			}
 
 			public Class<EntityDamageByEntityEvent> getEventType() {

@@ -88,6 +88,8 @@ public class TargetAbility extends BaseRangedPlayerAbility implements PassiveAbi
 				new LivingEntityTracker(p, target_ref.get(), name);
 
 				return true;
+			} else {
+				continue;
 			}
 		}
 		

@@ -114,6 +114,7 @@ public class FlyAbility extends BasePlayerAbility{
 				FlyAbility.flyers.remove(p);
 				
 				safeCancel();
+				return;
 			} else {
 				i.removeItem(regent);
 				p.updateInventory();

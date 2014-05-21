@@ -74,7 +74,8 @@ public class BankShotAbility extends BasePlayerAbility implements PVPAbility {
 		
 		new ParticleRunner(ParticleType.explode, e, false, 0, 2, 3).start(0);
 		a.setVelocity(e.getLocation().toVector().subtract(pLoc.toVector()));
-
+		
+		return;
 	}
 	
 	private BaseMMOEventHandler<ProjectileHitEvent> hitHandler;

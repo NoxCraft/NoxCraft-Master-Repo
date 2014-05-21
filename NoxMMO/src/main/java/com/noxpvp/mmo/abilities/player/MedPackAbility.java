@@ -42,9 +42,12 @@ public class MedPackAbility extends BasePlayerAbility{
 	
 	private static boolean hasPack(int entityId) {
 		for (MedPackDataWrapper wrap : packs)
-			if (wrap.pack.getEntityId() == entityId)
+			if (wrap.pack.getEntityId() == entityId) {
 				return true;
-
+			} else {
+				continue;
+			}
+		
 		return false;
 	}
 	
@@ -146,7 +149,8 @@ public class MedPackAbility extends BasePlayerAbility{
 				
 				if (packs.isEmpty())
 					setActive(false);
-
+				
+				return;
 			}
 		};
 		
@@ -172,7 +176,8 @@ public class MedPackAbility extends BasePlayerAbility{
 				
 				if (packs.isEmpty())
 					setActive(false);
-
+				
+				return;
 			}
 		};
 		
@@ -212,7 +217,8 @@ public class MedPackAbility extends BasePlayerAbility{
 				
 				if (packs.isEmpty())
 					setActive(false);
-
+				
+				return;
 			}
 			
 			@Override

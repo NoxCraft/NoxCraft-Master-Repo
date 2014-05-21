@@ -55,6 +55,7 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 							NoxPacketUtil.fakeBlock(10, Material.WOOL, b.getLocation());
 							
 							firstDone = true;
+							return;
 						} else {
 							b = LineOfSightUtil.getTargetBlock(player, 10, (Set<Material>) null);
 							if (b == null)
@@ -64,7 +65,8 @@ public class MeasuringTapeAbility extends BasePlayerAbility{
 							NoxPacketUtil.fakeBlock(10, Material.WOOL, b.getLocation());
 							
 							unregisterHandler(this);
-
+							
+							return;
 						}
 						
 					}

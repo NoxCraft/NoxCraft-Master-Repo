@@ -69,9 +69,11 @@ public class CommandUtil {
 								break;
 						if (++i >= r.length)
 							break;
+						continue;
 					} else if (isFlag) {
 						fsb.append(r[i]);
 						i++;
+						continue;
 					} else if (isFlagValue) {
 						if (r[i] == ' ' && !isQuoting) {
 							isFlagValue = false;
@@ -86,6 +88,7 @@ public class CommandUtil {
 						} else
 							fvsb.append(r[i]);
 						i++;
+						continue;
 					}
 				}
 				if (!isLongFlag)
@@ -106,7 +109,8 @@ public class CommandUtil {
 				
 				fsb = new StringBuilder();
 				fvsb = new StringBuilder();
-
+				
+				continue;
 			} else {
 				if (r[i] == ' ' && !isQuoting) {
 					if (asb.length() > 0)
@@ -124,6 +128,7 @@ public class CommandUtil {
 						asb.append(r[i]);
 				}
 				i++;
+				continue;
 			}
 		}
 		if (asb.length() > 0 && !args.contains(asb.toString())) //Safety catch.

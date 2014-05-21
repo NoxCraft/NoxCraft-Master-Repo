@@ -82,6 +82,7 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 				try {
 					BaseHelix.this.onStop();
 					BaseHelix.this.cancel();
+					return;
 				} catch(IllegalStateException e) {}
 				
 			}

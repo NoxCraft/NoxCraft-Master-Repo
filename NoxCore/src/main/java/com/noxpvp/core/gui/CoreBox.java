@@ -133,7 +133,8 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 	public void hide() {
 		if (isValid())
 			CommonUtil.nextTick(closeRunnable);
-
+		
+		return;
 	}
 	
 	public boolean addMenuItem(int slot, CoreBoxItem item) {
@@ -150,14 +151,15 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 	
 	public void removeMenuItem(int slot) {
 		box.setItem(slot, null);
-
+		
+		return;
 	}
 	
 	public CoreBoxItem getMenuItem(CoreBoxItem item) {
 		for(CoreBoxItem menuItem : menuItems.values()) {
 			if(menuItem.equals(item)) {
 				return menuItem;
-			}
+			} else continue;
 		}
 		
 		return null;

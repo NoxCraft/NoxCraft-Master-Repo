@@ -86,6 +86,7 @@ public class DrainLifeAbility extends BaseTargetedPlayerAbility {
 			
 			try {
 				cancel();
+				return;
 			} catch (IllegalStateException e) {}
 		}
 

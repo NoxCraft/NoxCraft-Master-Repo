@@ -116,7 +116,8 @@ public class HammerOfThorAbility extends BasePlayerAbility  implements PVPAbilit
 						damager.remove();
 						setActive(false);
 					}
-
+					
+					return;
 				}
 			};
 			
@@ -147,7 +148,8 @@ public class HammerOfThorAbility extends BasePlayerAbility  implements PVPAbilit
 							a.remove();
 							setActive(false);
 					}
-
+					
+					return;
 				}
 			};
 	}

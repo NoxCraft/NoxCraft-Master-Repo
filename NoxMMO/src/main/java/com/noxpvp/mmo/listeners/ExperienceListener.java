@@ -81,7 +81,8 @@ public class ExperienceListener extends NoxListener<NoxMMO> {
 		 * Entity Killing / Taming
 		 */
 		for (EntityType type : EntityType.values()) {
-			if (type == null ||type.getEntityClass() == null) { }
+			if (type == null ||type.getEntityClass() == null)
+				continue;
 			else if (living.isAssignableFrom(type.getEntityClass()))
 				defs.add("multipliers.kills." + type.name());
 			else if (tamable.isAssignableFrom(type.getEntityClass()))
