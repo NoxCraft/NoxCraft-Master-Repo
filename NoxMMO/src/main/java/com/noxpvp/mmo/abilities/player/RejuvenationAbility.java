@@ -4,14 +4,14 @@ import org.bukkit.entity.Player;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.runnables.HealRunnable;
 
 /**
  * @author NoxPVP
  *
  */
-public class RejuvenationAbility extends BasePlayerAbility implements PVPAbility {
+public class RejuvenationAbility extends BasePlayerAbility implements IPVPAbility {
 	
 	public static final String ABILITY_NAME = "Rejuvenation";
 	public static final String PERM_NODE = "rejuvenation";

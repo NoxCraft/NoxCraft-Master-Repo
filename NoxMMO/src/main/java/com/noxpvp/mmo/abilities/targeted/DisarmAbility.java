@@ -8,13 +8,13 @@ import org.bukkit.entity.Player;
 
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 
 /**
  * @author NoxPVP
  *
  */
-public class DisarmAbility extends BaseTargetedPlayerAbility implements PVPAbility {
+public class DisarmAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
 	
 	public static List<LivingEntity> disarmed = new ArrayList<LivingEntity>();
 	

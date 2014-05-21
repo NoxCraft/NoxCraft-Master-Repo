@@ -2,7 +2,7 @@ package com.noxpvp.mmo.abilities;
 
 import org.bukkit.entity.Player;
 
-public abstract class BaseRangedPlayerAbility extends BasePlayerAbility implements RangedPlayerAbility {
+public abstract class BaseRangedPlayerAbility extends BasePlayerAbility implements IRangedPlayerAbility {
 	private double range;
 	
 	public BaseRangedPlayerAbility(String name, Player player) {

@@ -13,13 +13,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 
 /**
  * @author NoxPVP
  *
  */
-public class FireNovaAbility extends BaseEntityAbility  implements PVPAbility {
+public class FireNovaAbility extends BaseEntityAbility  implements IPVPAbility {
 	
 	public static final String ABILITY_NAME = "Fire Nova";
 	public static final String PERM_NODE = "fire-nova";

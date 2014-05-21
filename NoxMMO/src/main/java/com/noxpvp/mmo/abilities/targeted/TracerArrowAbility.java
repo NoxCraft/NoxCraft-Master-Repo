@@ -14,9 +14,9 @@ import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 
-public class TracerArrowAbility extends BaseTargetedPlayerAbility implements PVPAbility {
+public class TracerArrowAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
 	
 	static Map<String, TracerArrowAbility> abilityCue = new HashMap<String, TracerArrowAbility>();
 	

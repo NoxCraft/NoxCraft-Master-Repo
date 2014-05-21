@@ -19,8 +19,10 @@ public abstract class BaseCorkScrew extends BaseHelix {
 
 	@Override
 	public void run() {
-		if ((getLocation().getY() - origHeight) > heightLimit)
+		if ((getLocation().getY() - origHeight) > heightLimit) {
+			setCanRender(false);
 			return;
+		}
 		
 		double radius = BaseHelix.lookup.get(verticalTicker())[0] * getRadiusGain();
 		int	horizontal = horizontalTicker();

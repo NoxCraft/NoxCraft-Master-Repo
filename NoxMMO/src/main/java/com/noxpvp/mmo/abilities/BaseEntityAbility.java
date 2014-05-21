@@ -6,12 +6,14 @@ import java.lang.ref.SoftReference;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.events.EntityAbilityPreExcuteEvent;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
-public abstract class BaseEntityAbility extends BaseAbility implements EntityAbility {
+public abstract class BaseEntityAbility extends BaseAbility implements IEntityAbility {
 	private Reference<Entity> entityRef;
 	private MasterListener masterListener;
 	private double damage;
@@ -37,8 +39,12 @@ public abstract class BaseEntityAbility extends BaseAbility implements EntityAbi
 	 */
 	public boolean mayExecute() {
 		Entity entity = getEntity();
+		if (entity == null || entity.isDead() || !entity.isValid())
+			return false;
 		
-		return entity != null && (((this instanceof PVPAbility) && TownyUtil.isPVP(entity)) || !(this instanceof PVPAbility));
+		boolean cancelled = CommonUtil.callEvent(new EntityAbilityPreExcuteEvent(entity, this)).isCancelled();
+		
+		return !cancelled && (((this instanceof IPVPAbility) && TownyUtil.isPVP(entity)) || !(this instanceof IPVPAbility));
 	}
 	
 	public MasterListener getMasterListener() {

@@ -6,7 +6,7 @@ import java.lang.ref.SoftReference;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
-public abstract class BaseTargetedAbility extends BaseRangedAbility implements TargetedAbility {
+public abstract class BaseTargetedAbility extends BaseRangedAbility implements ITargetedAbility {
 	
 	private Reference<LivingEntity> target_ref;
 	

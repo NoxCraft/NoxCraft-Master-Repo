@@ -5,9 +5,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 
-public class ForcePullAbility extends BaseEntityAbility implements PVPAbility {
+public class ForcePullAbility extends BaseEntityAbility implements IPVPAbility {
 	
 	public static final String ABILITY_NAME = "Force Pull";
 	public static final String PERM_NODE = "force-pull";

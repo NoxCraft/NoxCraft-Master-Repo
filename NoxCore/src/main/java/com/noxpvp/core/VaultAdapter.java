@@ -1,9 +1,9 @@
 package com.noxpvp.core;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -30,7 +30,7 @@ public class VaultAdapter {
 			else if (log != null)
 					log.warning("Could not get group list... " + (!isPermissionsLoaded()?"Permissions not loaded.":permission.hasGroupSupport()?"":"No Group Support") );
 
-			return new Collections.emptyList();
+			return Collections.emptyList();
 		}
 		
 		public static String getPlayerGroup(Player p) {

@@ -9,7 +9,7 @@ public interface IHelix {
 	
 	public NoxPlugin getPlugin();
 	
-	public void render(int particleLimit);
+	public void render(int maxRuns);
 	
 	public void start(int delay);
 	
@@ -36,4 +36,8 @@ public interface IHelix {
 	public void setForwardGain(double gain);
 	
 	public double getForwardGain();
+	
+	public void setCanRender(boolean can);
+	
+	public boolean getCanRender();
 }

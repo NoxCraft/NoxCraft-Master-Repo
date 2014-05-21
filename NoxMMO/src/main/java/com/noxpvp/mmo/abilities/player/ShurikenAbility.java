@@ -16,10 +16,10 @@ import com.noxpvp.core.packet.NoxPacketUtil;
 import com.noxpvp.core.utils.DamageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
-public class ShurikenAbility extends BasePlayerAbility implements PVPAbility {
+public class ShurikenAbility extends BasePlayerAbility implements IPVPAbility {
 		private static final FixedMetadataValue trackingMeta = new FixedMetadataValue(NoxMMO.getInstance(), "Shuriken");
 	
 		public static final String ABILITY_NAME = "Shuriken";

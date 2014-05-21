@@ -4,13 +4,15 @@ import org.apache.commons.lang.IllegalClassException;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.mmo.NoxMMO;
+import com.noxpvp.mmo.events.PlayerAbilityPreExecuteEvent;
 
-public abstract class BasePlayerAbility extends BaseEntityAbility implements PlayerAbility {
+public abstract class BasePlayerAbility extends BaseEntityAbility implements IPlayerAbility {
 	
 	public BasePlayerAbility(final String name, Player player)
 	{
@@ -36,10 +38,12 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements Pla
 	 */
 	public boolean mayExecute() {
 		Player player = getPlayer();
+		if (player == null || !player.isValid() || !player.isOnline() || !hasPermission())
+			return false;
 		
-		return player != null && player.isValid() && 
-				player.isOnline() && hasPermission() &&
-				(((this instanceof PVPAbility) && TownyUtil.isPVP(player)) || !(this instanceof PVPAbility));
+		boolean cancelled = CommonUtil.callEvent(new PlayerAbilityPreExecuteEvent(player, this)).isCancelled();
+		
+		return !cancelled && (((this instanceof IPVPAbility) && TownyUtil.isPVP(player)) || !(this instanceof IPVPAbility));
 	}
 	
 	/**

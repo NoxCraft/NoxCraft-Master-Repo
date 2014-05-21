@@ -12,12 +12,12 @@ import org.bukkit.inventory.ItemStack;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.PassiveAbility;
+import com.noxpvp.mmo.abilities.IPassiveAbility;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
 
 public class AutoToolAbilities {
 
-	public static class AutoSword extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>{
+	public static class AutoSword extends BasePlayerAbility implements IPassiveAbility<EntityDamageByEntityEvent>{
 		
 		public final static String ABILITY_NAME = "Auto Sword";
 		public final static String PERM_NODE = "auto-sword";
@@ -51,7 +51,7 @@ public class AutoToolAbilities {
 		}
 	}
 	
-	public static class AutoTool extends BasePlayerAbility implements PassiveAbility<BlockBreakEvent> {
+	public static class AutoTool extends BasePlayerAbility implements IPassiveAbility<BlockBreakEvent> {
 		
 		public final static String ABILITY_NAME = "Auto Tool";
 		public final static String PERM_NODE = "auto-tool";
@@ -152,7 +152,7 @@ public class AutoToolAbilities {
 		}
 	}
 	
-	public static class AutoArmor extends BasePlayerAbility implements PassiveAbility<EntityDamageEvent> {
+	public static class AutoArmor extends BasePlayerAbility implements IPassiveAbility<EntityDamageEvent> {
 		
 		public final static String ABILITY_NAME = "Auto Armor";
 		public final static String PERM_NODE = "auto-armor";

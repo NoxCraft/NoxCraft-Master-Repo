@@ -33,7 +33,7 @@ public class AbilityListCommand extends BaseCommand {
 		NoxMessageBuilder mb = new NoxMessageBuilder(getPlugin()).commandHeader("Ability List", true);
 		
 		for (Ability ability: player.getAllAbilities()) {
-			mb.yellow(ability.getDisplayName()).gold(": ").red(ability.getDescription()).newLine();
+			mb.yellow(ability.getDisplayName()).gold(": ").red(ability.getLore()).newLine();
 		}
 		
 		mb.headerClose();

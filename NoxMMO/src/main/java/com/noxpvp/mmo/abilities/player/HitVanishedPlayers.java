@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 
 import com.noxpvp.core.data.Vector3D;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 
-public class HitVanishedPlayers extends BasePlayerAbility implements PVPAbility {
+public class HitVanishedPlayers extends BasePlayerAbility implements IPVPAbility {
 	
 	public static final String ABILITY_NAME = "Hit Vanished Players";
 	public static final String PERM_NODE = "hit-vanished-players";

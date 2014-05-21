@@ -11,12 +11,12 @@ import com.noxpvp.core.effect.StaticEffects;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
 
-public class RageAbility extends BasePlayerAbility implements PVPAbility {
+public class RageAbility extends BasePlayerAbility implements IPVPAbility {
 	
 	public static final String ABILITY_NAME = "Rage";
 	public static final String PERM_NODE = "Rage";

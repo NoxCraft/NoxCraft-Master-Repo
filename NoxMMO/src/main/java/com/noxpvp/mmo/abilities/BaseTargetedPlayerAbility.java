@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-public abstract class BaseTargetedPlayerAbility extends BaseRangedPlayerAbility implements TargetedPlayerAbility {
+public abstract class BaseTargetedPlayerAbility extends BaseRangedPlayerAbility implements ITargetedPlayerAbility {
 	private Reference<LivingEntity> target_ref;
 	
 	public BaseTargetedPlayerAbility(String name, Player player, double range, LivingEntity target){

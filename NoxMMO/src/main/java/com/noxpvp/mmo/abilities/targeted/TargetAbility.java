@@ -14,10 +14,10 @@ import com.noxpvp.core.gui.corebar.LivingEntityTracker;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
-import com.noxpvp.mmo.abilities.PassiveAbility;
+import com.noxpvp.mmo.abilities.IPassiveAbility;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
 
-public class TargetAbility extends BaseRangedPlayerAbility implements PassiveAbility<PlayerInteractEvent>{
+public class TargetAbility extends BaseRangedPlayerAbility implements IPassiveAbility<PlayerInteractEvent>{
 	
 	public static final String PERM_NODE = "target";
 	public static final String ABILITY_NAME = "Target";

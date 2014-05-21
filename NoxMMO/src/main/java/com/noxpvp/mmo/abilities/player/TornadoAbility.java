@@ -32,10 +32,10 @@ import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
-public class TornadoAbility extends BasePlayerAbility implements PVPAbility {
+public class TornadoAbility extends BasePlayerAbility implements IPVPAbility {
 
 	public final static String ABILITY_NAME = "Tornado";
 	public final static String PERM_NODE = "tornado";

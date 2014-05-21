@@ -5,11 +5,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 
 //FIXME not made yet
 
-public class JoustAbility extends BasePlayerAbility implements PVPAbility {
+public class JoustAbility extends BasePlayerAbility implements IPVPAbility {
 
 	public final static String ABILITY_NAME = "Joust";
 	public final static String PERM_NODE = "joust";
