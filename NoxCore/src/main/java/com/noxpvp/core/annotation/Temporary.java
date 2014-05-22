@@ -8,16 +8,15 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates this is temporary
- * <p>
+ * <p/>
  * Most commonly used for quick releases of partial features and workarounds. <br>
  * This is used to mark stuff that should not be heavily relied on either.
- *
  */
 @Documented
 @Retention(RetentionPolicy.SOURCE)
-@Target(value = { ElementType.ANNOTATION_TYPE, 
-		ElementType.CONSTRUCTOR, 
-		ElementType.FIELD, 
+@Target(value = {ElementType.ANNOTATION_TYPE,
+		ElementType.CONSTRUCTOR,
+		ElementType.FIELD,
 		ElementType.LOCAL_VARIABLE,
 		ElementType.METHOD,
 		ElementType.PACKAGE,

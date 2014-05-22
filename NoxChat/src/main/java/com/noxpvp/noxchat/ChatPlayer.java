@@ -10,6 +10,9 @@ import com.noxpvp.core.utils.gui.MessageUtil;
 
 public class ChatPlayer extends BaseNoxPlayerAdapter implements Targetable {
 
+	private Targetable target;
+	private List<String> mutes;
+
 	public ChatPlayer(NoxPlayerAdapter player) {
 		super(player);
 	}
@@ -17,18 +20,14 @@ public class ChatPlayer extends BaseNoxPlayerAdapter implements Targetable {
 	public ChatPlayer(OfflinePlayer player) {
 		super(player);
 	}
-
 	public ChatPlayer(String name) {
 		super(name);
 	}
 
-	private Targetable target;
-	private List<String> mutes;
-	
 	public Targetable getTarget() {
 		return this.target;
 	}
-	
+
 	public void setTarget(Targetable target) {
 		this.target = target;
 	}
@@ -42,12 +41,12 @@ public class ChatPlayer extends BaseNoxPlayerAdapter implements Targetable {
 		if (isOnline())
 			MessageUtil.sendMessage(getPlayer(), messages);
 	}
-	
+
 	public void sendTargetMessage(String message) {
 		if (getTarget() != null)
 			getTarget().sendMessage(message);
 	}
-	
+
 	public void sendTargetMessage(String... messages) {
 		if (getTarget() != null)
 			getTarget().sendMessage(messages);
@@ -101,6 +100,6 @@ public class ChatPlayer extends BaseNoxPlayerAdapter implements Targetable {
 
 	@Override
 	public void load() {
-		
+
 	}
 }

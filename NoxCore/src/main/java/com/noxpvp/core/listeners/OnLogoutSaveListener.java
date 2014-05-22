@@ -12,7 +12,7 @@ public class OnLogoutSaveListener extends NoxListener<NoxCore> {
 	public OnLogoutSaveListener(NoxCore plugin) {
 		super(plugin);
 	}
-	
+
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void onLogoutEvent(PlayerQuitEvent event) {
 		CorePlayerManager.getInstance().unloadAndSavePlayer(event.getPlayer().getName());

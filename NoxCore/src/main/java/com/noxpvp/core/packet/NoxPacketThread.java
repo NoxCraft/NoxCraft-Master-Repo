@@ -12,7 +12,7 @@ public class NoxPacketThread extends Task {
 
 	public void run() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

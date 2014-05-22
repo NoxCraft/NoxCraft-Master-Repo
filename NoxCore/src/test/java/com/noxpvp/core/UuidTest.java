@@ -31,7 +31,7 @@ public class UuidTest {
 	@Test
 	public void testUUIDCompression() throws Exception {
 		UUID id = UUID.randomUUID();
-		String expected = id.toString().replaceAll("-","");
+		String expected = id.toString().replaceAll("-", "");
 		String actual = UUIDUtil.compressUUID(id);
 		assertEquals(expected, actual);
 	}
@@ -39,7 +39,7 @@ public class UuidTest {
 	@Test
 	public void testCompressionSpeed() throws Exception {
 		UUID id = UUID.randomUUID();
-		String expected = id.toString().replaceAll("-","");
+		String expected = id.toString().replaceAll("-", "");
 		TimeUtils.StopWatch watch = new TimeUtils.StopWatch();
 		watch.setUsingNanos(true);
 

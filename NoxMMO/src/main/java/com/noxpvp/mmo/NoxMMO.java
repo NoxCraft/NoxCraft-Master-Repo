@@ -35,58 +35,62 @@ public class NoxMMO extends NoxPlugin {
 	public static final String PERM_NODE = "nox.mmo";
 
 	private static NoxMMO instance;
-	private NoxCore core;
-	
-	private PermissionHandler permHandler;
-	
 	AbilityListener abilityListener;
 	DamageListener damageListener;
 	HealListener healListener;
 	PlayerInteractListener playerTargetListener;
 	BlockListener blockListener;
-//	ExperienceListener experieneceListener;
-	
 	PacketListeners packetListeners;
-//	PlayerAnimationListener playerAnimationListener;
+	//	PlayerAnimationListener playerAnimationListener;
 	EntityEquipmentListener equipmentPacketListener;
+//	ExperienceListener experieneceListener;
 	WorldSoundListener worldSoundListener;
-	
+	private NoxCore core;
+	private PermissionHandler permHandler;
 	private FileConfiguration config;
 	private FileConfiguration experience;
-	
+
 	private MasterListener masterListener;
-	
+
 	private MMOPlayerManager playerManager = null;
 
-	private Class<Command>[] commands =  (Class<Command>[]) new Class[]{ ClassCommand.class, AbilityCommand.class };
-	
+	private Class<Command>[] commands = (Class<Command>[]) new Class[]{ClassCommand.class, AbilityCommand.class};
+
+	public static NoxMMO getInstance() {
+		return instance;
+	}
+
+	private void setInstance(NoxMMO noxMMO) {
+		instance = noxMMO;
+	}
+
 	@Override
 	public void disable() {
-		masterListener.unregisterAll(); 
+		masterListener.unregisterAll();
 		permHandler = null;
 		masterListener = null;
-		
+
 		Class<?>[] classes = {
 				ShurikenPlayerAbility.class, HammerOfThorPlayerAbility.class,
 				HookShotPlayerAbility.class, SeveringStrikesPlayerAbility.class,
 				PlayerClass.class, PlayerClassUtil.class,
 				AbilityCycler.class, MasterListener.class
 		};
-		
-		String[] internals = { };
-		
+
+		String[] internals = {};
+
 		new StaticCleaner(this, getClassLoader(), internals, classes).resetAll();
-		
+
 		setInstance(null);
 	}
-	
-	public FileConfiguration getMMOConfig(){
+
+	public FileConfiguration getMMOConfig() {
 		if (config == null)
 			config = new FileConfiguration(this, "config.yml");
 		return config;
 	}
-	
-	public FileConfiguration getExperienceConfig(){
+
+	public FileConfiguration getExperienceConfig() {
 		if (experience == null)
 			experience = new FileConfiguration(this, "experience.yml");
 		return experience;
@@ -94,8 +98,7 @@ public class NoxMMO extends NoxPlugin {
 
 	@Override
 	public void enable() {
-		if (instance != null)
-		{
+		if (instance != null) {
 			log(Level.SEVERE, "This plugin already has an instance running!! Disabling second run.");
 			setEnabled(false);
 			return;
@@ -104,27 +107,27 @@ public class NoxMMO extends NoxPlugin {
 		Common.loadClasses("com.noxpvp.mmo.classes.internal.DummyClass");
 		MasterListener.init();
 		masterListener = new MasterListener();
-		
-		
+
+
 		getPlayerManager();
-		
+
 		core = NoxCore.getInstance();
-		
+
 		PlayerClassUtil.init();
 		PlayerClass.init();
-		
+
 		abilityListener = new AbilityListener(instance);
 		damageListener = new DamageListener(instance);
 		healListener = new HealListener(instance);
 		playerTargetListener = new PlayerInteractListener(instance);
 		blockListener = new BlockListener(instance);
 //		experieneceListener = new ExperienceListener(instance);
-		
+
 		packetListeners = new PacketListeners();
 //		playerAnimationListener = packetListeners.new PlayerAnimationListener();
 		equipmentPacketListener = packetListeners.new EntityEquipmentListener();
 		worldSoundListener = packetListeners.new WorldSoundListener();
-		
+
 		abilityListener.register();
 		damageListener.register();
 		healListener.register();
@@ -132,35 +135,35 @@ public class NoxMMO extends NoxPlugin {
 		blockListener.register();
 		permHandler = new PermissionHandler(this);
 //		experieneceListener.register();
-		
+
 //		register(playerAnimationListener, PacketType.IN_ENTITY_ANIMATION);
 		register(equipmentPacketListener, PacketType.OUT_ENTITY_EQUIPMENT);
 		register(worldSoundListener, PacketType.OUT_NAMED_SOUND_EFFECT);
-		
+
 		Reloader base = new BaseReloader(getMasterReloader(), "NoxMMO") {
 			public boolean reload() {
 				return true;
 			}
 		};
-		
+
 		base.addModule(new BaseReloader(base, "config.yml") {
-			
+
 			public boolean reload() {
 				reloadConfig();
 				return true;
 			}
 		});
-		
+
 		base.addModule(new BaseReloader(base, "locale") {
-			
+
 			public boolean reload() {
 				localization();
 				return true;
 			}
 		});
-		
+
 		base.addModule(new BaseReloader(base, "experience.yml") {
-			
+
 			public boolean reload() {
 				getExperienceConfig().load();
 				return true;
@@ -168,10 +171,9 @@ public class NoxMMO extends NoxPlugin {
 		});
 		registerAllCommands();
 	}
-	
+
 	private void registerAllCommands() {
-		for (Class<Command> cls : commands)
-		{
+		for (Class<Command> cls : commands) {
 			SafeConstructor<Command> cons = new SafeConstructor<Command>(cls, new Class[0]);
 			Command rn = cons.newInstance();
 			if (rn != null)
@@ -179,10 +181,6 @@ public class NoxMMO extends NoxPlugin {
 		}
 	}
 
-	private void setInstance(NoxMMO noxMMO) {
-		instance = noxMMO;
-	}
-	
 	@Override
 	public void saveDefaultConfig() {
 		//TODO: Add Defaults.
@@ -191,19 +189,19 @@ public class NoxMMO extends NoxPlugin {
 
 	@Override
 	public void saveConfig() {
-		
+
 		config.save();
 	}
-	
+
 	@Override
 	public void reloadConfig() {
 		config.load();
-		
+
 	}
-	
+
 	@Override
 	public void permissions() {
-		
+
 		//Ability permissions
 		addPermission(new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability"), "Base MMO Node", PermissionDefault.FALSE,
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", AutoArmor.PERM_NODE), "Allows usage of the Auto Armor Abilities.", PermissionDefault.OP),
@@ -255,48 +253,48 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", VanishPlayerAbility.PERM_NODE), "Allows usage of the Vanish Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", WhistlePlayerAbility.PERM_NODE), "Allows usage of the Whistle Ability.", PermissionDefault.OP)
 		));
-		
+
 		//Class permissions
 		addPermission(new NoxPermission(this, StringUtil.join(".", PERM_NODE, "class", "*"), "Allow access to all classes.", PermissionDefault.OP,
-				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "class", AxesPlayerClass.className), "Allows access to the class named " + AxesPlayerClass.className , PermissionDefault.OP)
+				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "class", AxesPlayerClass.className), "Allows access to the class named " + AxesPlayerClass.className, PermissionDefault.OP)
 		));
-		
+
 	}
 
 	@Override
 	public void localization() {
-		
+
 		loadLocales(MMOLocale.class);
-		
-//		
+
+//
 //		loadLocale("ability.already-active", "&4You cannot use the ability \"%1%\" as it is already active!");
 //		loadLocale("ability.activated.default", "&a%1% Activated!");
-//		
+//
 //		//Ability - MedPack
 //		loadLocale("ability.medpack.use", "&eMedPack dropped!");
 //		loadLocale("ability.medpack.picked-up.other", "&c%1%&e Picked up your dropped medpack!");
 //		loadLocale("ability.medpack.picked-up", "&ePicked up %2%'s dropped medpack!");
-//		
-//		//Ability - NetArrow 
+//
+//		//Ability - NetArrow
 //		loadLocale("ability.arrow.net.use", getLocale("ability.activated", NetArrowAbility.ABILITY_NAME)); //Dynamic defaults FTW
 //		loadLocale("ability.arrow.net.trapped", "&cSomething was caught in the net!"); //%1% should be a list comma delimited of entities or players. Default does not contain it.
-//		
+//
 //		//Ability - Explosive Arrow
 //		loadLocale("ability.arrow.explosive", "&eExplosive Arrow Activated!"); //FIXME: Unused
-//		
-		//Ability - 
-		
+//
+		//Ability -
+
 	}
 
-	public MasterListener getMasterListener(){
+	public MasterListener getMasterListener() {
 		return masterListener;
 	}
-	
+
 	/**
 	 * Gets the player manager.
 	 *
-	 * @Deprecated Use {@link MMOPlayerManager#getInstance()} instead
 	 * @return the player manager
+	 * @Deprecated Use {@link MMOPlayerManager#getInstance()} instead
 	 */
 	public MMOPlayerManager getPlayerManager() {
 		MMOPlayerManager c = MMOPlayerManager.getInstance();
@@ -304,10 +302,10 @@ public class NoxMMO extends NoxPlugin {
 			playerManager = c;
 		else if (playerManager != c)
 			playerManager = c;
-		
+
 		return playerManager;
 	}
-	
+
 	@Override
 	public NoxCore getCore() {
 		return core;
@@ -317,13 +315,11 @@ public class NoxMMO extends NoxPlugin {
 	public PermissionHandler getPermissionHandler() {
 		return permHandler;
 	}
-	
-	public static NoxMMO getInstance() { return instance; }
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public Class<? extends ConfigurationSerializable>[] getSerialiables() {
 		return new Class[0];
 	}
-	
+
 }

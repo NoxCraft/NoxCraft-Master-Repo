@@ -10,9 +10,13 @@ public class AbilityEvent extends Event implements IAbilityEvent {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final BaseAbility ability;
-	
+
 	public AbilityEvent(BaseAbility ability) {
 		this.ability = ability;
+	}
+
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 
 	public BaseAbility getAbility() {
@@ -20,10 +24,6 @@ public class AbilityEvent extends Event implements IAbilityEvent {
 	}
 
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 

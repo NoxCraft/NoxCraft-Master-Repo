@@ -4,7 +4,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.noxpvp.core.gui.ICoreBox.ICoreBoxItem;
 
-public abstract class CoreBoxItem implements ICoreBoxItem{
+public abstract class CoreBoxItem implements ICoreBoxItem {
 
 	private CoreBox box;
 	private ItemStack item;
@@ -17,7 +17,7 @@ public abstract class CoreBoxItem implements ICoreBoxItem{
 	public CoreBox getParentBox() {
 		return box;
 	}
-	
+
 	public ItemStack getItem() {
 		return item;
 	}

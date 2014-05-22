@@ -33,89 +33,110 @@ import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 
 public class ExperienceListener extends NoxListener<NoxMMO> {
-	
+
 	private final MMOPlayerManager pm;
-	
+
 	private final FileConfiguration expFile;
 	private final ConfigurationNode expNode;
 	private final ConfigurationNode matNode;
-	private Map<String, Integer> cachedMultipliers;
-	private List<Material> exc = new ArrayList<Material>();
-	private List<Material> mine = new ArrayList<Material>();
-	
 	private final int killExp;
 	private final int miningExp;
 	private final int excavationExp;
 	private final int smeltingExp;
-	
+	private Map<String, Integer> cachedMultipliers;
+	private List<Material> exc = new ArrayList<Material>();
+	private List<Material> mine = new ArrayList<Material>();
+
 	public ExperienceListener() {
 		this(NoxMMO.getInstance());
 	}
-	
+
 	public ExperienceListener(NoxMMO mmo) {
 		super(mmo);
-		
+
 		this.pm = mmo.getPlayerManager();
-		
+
 		this.expFile = mmo.getExperienceConfig();
 		this.expNode = expFile.getNode("experience");
 		this.matNode = expFile.getNode("materials");
-		
+
 		this.killExp = expNode.get("amounts.base.kill", 100);
 		this.miningExp = expNode.get("amounts.base.mining", 100);
 		this.excavationExp = expNode.get("amounts.base.excavation", 100);
 		this.smeltingExp = expNode.get("amounts.base.smelting", 100);
-		
+
 		this.cachedMultipliers = this.initializePresets();
 		if (this.cachedMultipliers == null) this.cachedMultipliers = new HashMap<String, Integer>();
 	}
-	
+
+	private static List<String> readLines(String fileName) {
+		Scanner scanner = null;
+		List<String> lines = new ArrayList<String>();
+		try {
+			InputStream i = NoxMMO.getInstance().getResource(fileName);
+			if (i == null)
+				return lines;
+
+			scanner = new Scanner(i);
+
+			while (scanner.hasNextLine())
+				lines.add(scanner.nextLine());
+		} catch (Throwable t) {
+			t.printStackTrace();
+		} finally {
+			if (scanner != null)
+				scanner.close();
+		}
+
+		return lines;
+	}
+
 	private Map<String, Integer> initializePresets() {
 		Map<String, Integer> cache = new HashMap<String, Integer>();
 		List<String> defs = new ArrayList<String>();
-		
+
 		Class<LivingEntity> living = LivingEntity.class;
 		Class<Tameable> tamable = Tameable.class;
-		
+
 		/*
 		 * Entity Killing / Taming
 		 */
 		for (EntityType type : EntityType.values()) {
-			if (type == null ||type.getEntityClass() == null)
+			if (type == null || type.getEntityClass() == null)
 				continue;
 			else if (living.isAssignableFrom(type.getEntityClass()))
 				defs.add("multipliers.kills." + type.name());
 			else if (tamable.isAssignableFrom(type.getEntityClass()))
 				defs.add("multipliers.taming." + type.name());
-				
+
 		}
-		
+
 		List<String> c = matNode.get("mining", new ArrayList<String>());
 		List<String> c2 = matNode.get("excavation", new ArrayList<String>());
-		
+
 		List<String> d = readLines("defaultMining.txt");
 		List<String> d2 = readLines("defaultExcavation.txt");
-		
+
 		boolean changes = false;
 		for (String i : d)
 			if (!c.contains(i)) {
 				c.add(i);
 				changes = true;
 			}
-		
+
 		for (String i : d2)
 			if (!c2.contains(i)) {
 				c2.add(i);
 				changes = true;
 			}
-		
+
 		if (changes) {
 			matNode.set("mining", c);
 			matNode.set("excavation", c2);
 		}
-		
+
 		mine.clear();
-		for (Iterator<String> iterator = c.iterator(); iterator.hasNext();) {
+		for (Iterator<String> iterator = c.iterator(); iterator.hasNext(); ) {
 			String i = iterator.next();
 			Material m = Material.valueOf(i);
 			if (m == null)
@@ -125,12 +146,12 @@ public class ExperienceListener extends NoxListener<NoxMMO> {
 				iterator.remove();
 				continue;
 			}
-			
+
 			mine.add(m);
 		}
-		
+
 		exc.clear();
-		for (Iterator<String> iterator = c2.iterator(); iterator.hasNext();) {
+		for (Iterator<String> iterator = c2.iterator(); iterator.hasNext(); ) {
 			String i = iterator.next();
 			try {
 				Material m = Material.valueOf(i);
@@ -141,22 +162,22 @@ public class ExperienceListener extends NoxListener<NoxMMO> {
 					iterator.remove();
 					continue;
 				}
-				
+
 				exc.add(m);
 			} catch (IllegalArgumentException e) {
-				
+
 			}
 		}
-		
+
 		if (changes)
 			expFile.save();
-		
+
 		for (String value : defs)
 			cache.put(value, expNode.get("amounts." + value, 1));
-		
+
 		return cache;
 	}
-	
+
 	public int getExpBoost(Player player) {
 		if (VaultAdapter.permission.has(player, NoxMMO.PERM_NODE + ".exp.booster.5"))
 			return 4;
@@ -168,99 +189,77 @@ public class ExperienceListener extends NoxListener<NoxMMO> {
 			return 1;
 		else return 0;
 	}
-	
-	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onKill(EntityDeathEvent event) {
 		LivingEntity killed = event.getEntity();
-		
-		EntityDamageByEntityEvent last = (EntityDamageByEntityEvent) ((killed.getLastDamageCause() instanceof EntityDamageByEntityEvent)? killed.getLastDamageCause() : null);
+
+		EntityDamageByEntityEvent last = (EntityDamageByEntityEvent) ((killed.getLastDamageCause() instanceof EntityDamageByEntityEvent) ? killed.getLastDamageCause() : null);
 		if (last == null) return;
-		
-		Player attacker = (Player) (last.getDamager() instanceof Player? last.getDamager() : null);
+
+		Player attacker = (Player) (last.getDamager() instanceof Player ? last.getDamager() : null);
 		if (attacker == null) return;
-		
+
 		MMOPlayer mmoPlayer = pm.getPlayer(attacker);
 		if (mmoPlayer == null) return;
-		
+
 		double multiplier = cachedMultipliers.get(killed.getType().name());
-		
+
 		mmoPlayer.addExp(ExperienceType.PVP, MathUtil.floor(killExp * multiplier));
-		
+
 	}
 
-	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBreak(BlockBreakEvent event) {
 		Player breaker = event.getPlayer();
-		
+
 		MMOPlayer player = pm.getPlayer(breaker);
 		if (player == null) return;
-		
+
 		double xpMulti = cachedMultipliers.get(event.getBlock().getType().name());
 		if (xpMulti != 0)
-			xpMulti =+ getExpBoost(breaker);
-		
+			xpMulti = +getExpBoost(breaker);
+
 		if (mine.contains(event.getBlock().getType()))
 			player.addExp(ExperienceType.MINING, MathUtil.floor(miningExp * xpMulti));
 		else if (exc.contains(event.getBlock().getType()))
 			player.addExp(ExperienceType.EXCAVATION, MathUtil.floor(excavationExp * xpMulti));
 	}
 
-	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onSmelt(FurnaceExtractEvent event) {
 		if (event.getExpToDrop() <= 0) return;
-		
+
 		Player smelter = event.getPlayer();
-		
+
 		MMOPlayer player = pm.getPlayer(smelter);
-		
+
 		if (player == null) return;
 		double xpMulti = cachedMultipliers.get(event.getItemType().name());
 		if (xpMulti != 0)
-			xpMulti =+ getExpBoost(smelter);
-		
+			xpMulti = +getExpBoost(smelter);
+
 		if (xpMulti != 0)
-			xpMulti =+ getExpBoost(smelter);
-		
+			xpMulti = +getExpBoost(smelter);
+
 		player.addExp(ExperienceType.SMELTING, MathUtil.floor(smeltingExp * xpMulti));
 	}
-	
-	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onTame(EntityTameEvent event) {
 		AnimalTamer tamer = event.getOwner();
-		
+
 		Player player = null;
 		if (!(tamer instanceof Player) || (player = (Player) tamer) == null)
 			return;
-		
+
 		MMOPlayer mmoPlayer;
 		if ((mmoPlayer = pm.getPlayer(player)) == null) return;
-		
+
 		double xpMulti = cachedMultipliers.get(event.getEntityType().name());
 		if (xpMulti != 0)
-			xpMulti =+ getExpBoost(player);
-		
+			xpMulti = +getExpBoost(player);
+
 		mmoPlayer.addExp(ExperienceType.TAMING, MathUtil.floor(miningExp * xpMulti));
-	}
-	
-	private static List<String> readLines(String fileName) {
-		Scanner scanner = null; 
-		List<String> lines = new ArrayList<String>();
-		try {
-			InputStream i = NoxMMO.getInstance().getResource(fileName);
-			if (i == null)
-				return lines;
-			
-			scanner = new Scanner(i);
-			
-			while (scanner.hasNextLine())
-				lines.add(scanner.nextLine());
-		} catch (Throwable t) {
-			t.printStackTrace();
-		} finally {
-			if (scanner != null)
-				scanner.close();
-		}
-		
-		return lines;
 	}
 }

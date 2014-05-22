@@ -8,22 +8,27 @@ import com.noxpvp.core.data.NoxPlayerAdapter;
 
 @Deprecated
 public class NoxPlayerDataEvent extends Event {
-	private final NoxPlayerAdapter player;
-	
-	private boolean shouldHonorCore;
-	
 	@Deprecated
-	public NoxPlayerDataEvent(NoxPlayerAdapter player, boolean honorCore)
-	{
+	private static final HandlerList handlers = new HandlerList();
+	private final NoxPlayerAdapter player;
+	private boolean shouldHonorCore;
+
+	@Deprecated
+	public NoxPlayerDataEvent(NoxPlayerAdapter player, boolean honorCore) {
 		this.player = player;
 		this.shouldHonorCore = honorCore;
+	}
+
+	@Deprecated
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 
 	@Deprecated
 	public OfflinePlayer getBukkitPlayer() {
 		return player.getNoxPlayer().getOfflinePlayer();
 	}
-	
+
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;
@@ -35,13 +40,7 @@ public class NoxPlayerDataEvent extends Event {
 	}
 
 	@Deprecated
-	public boolean shouldHonorCore() { return shouldHonorCore; }
-
-	@Deprecated
-	private static final HandlerList handlers = new HandlerList();
-
-	@Deprecated
-	public static HandlerList getHandlerList() {
-		return handlers;
+	public boolean shouldHonorCore() {
+		return shouldHonorCore;
 	}
 }

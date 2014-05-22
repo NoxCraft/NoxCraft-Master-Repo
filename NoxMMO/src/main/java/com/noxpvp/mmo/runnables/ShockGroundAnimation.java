@@ -22,54 +22,53 @@ import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public class ShockGroundAnimation extends BukkitRunnable {
 	private static MetadataValue shockMeta = new FixedMetadataValue(NoxMMO.getInstance(), "noland");
-	private static BaseMMOEventHandler<EntityChangeBlockEvent> landHandler  = new BaseMMOEventHandler<EntityChangeBlockEvent>(
+	private static BaseMMOEventHandler<EntityChangeBlockEvent> landHandler = new BaseMMOEventHandler<EntityChangeBlockEvent>(
 			new StringBuilder("ShockGroundAnimation").toString(),
 			EventPriority.HIGHEST, 1) {
-		
+
 		public boolean ignoreCancelled() {
 			return true;
 		}
-		
+
 		public Class<EntityChangeBlockEvent> getEventType() {
 			return EntityChangeBlockEvent.class;
 		}
-		
+
 		public String getEventName() {
 			return "EntityChangeBlockEvent";
 		}
-		
+
 		public void execute(EntityChangeBlockEvent event) {
-			
+
 			Entity e = event.getEntity();
 			if (!(e instanceof FallingBlock))
 				return;
-			
+
 			if (!e.hasMetadata("ShockGround"))
 				return;
-			
+
 			e.remove();
 			event.setCancelled(true);
-			
+
 		}
 	};
-	
+
 	static {
 		NoxMMO.getInstance().getMasterListener().registerHandler(landHandler);
 	}
-	
+
 	private int shockRange;
 	private Vector shockVelo;
 	private float percentThrown;
 	private Block center;
 	private List<Material> flowers;
-	
+
 	/**
-	 * 
-	 * @param shockCenter Location for center of shock
-	 * @param shockRange Distance of wave from center
-	 * @param shockVelo Height velocity to throw blocks
+	 * @param shockCenter   Location for center of shock
+	 * @param shockRange    Distance of wave from center
+	 * @param shockVelo     Height velocity to throw blocks
 	 * @param percentThrown Decimal value of chance to throw blocks (1.0 = all / 0.8 = 80% of blocks)
-	 * @param delay Delay in ticks before starting
+	 * @param delay         Delay in ticks before starting
 	 */
 	public ShockGroundAnimation(Location shockCenter, int shockRange, double shockVelo, float percentThrown, int delay) {
 		this.center = shockCenter.getBlock();
@@ -77,11 +76,11 @@ public class ShockGroundAnimation extends BukkitRunnable {
 		this.shockVelo = new Vector().zero();
 		this.percentThrown = percentThrown;
 		this.flowers = Arrays.asList(Material.LONG_GRASS, Material.RED_ROSE, Material.YELLOW_FLOWER, Material.CROPS, Material.DEAD_BUSH, Material.VINE, Material.SAPLING);
-		
+
 	}
-	
-	private boolean isThrowable(Material type){
-		switch(type){
+
+	private boolean isThrowable(Material type) {
+		switch (type) {
 			case AIR:
 			case SAPLING:
 			case POWERED_RAIL:
@@ -124,32 +123,36 @@ public class ShockGroundAnimation extends BukkitRunnable {
 				return true;
 		}
 	}
-	
+
 	public void start(int delay) {
 		runTaskLater(NoxMMO.getInstance(), delay);
 	}
-	
+
 	public void run() {
-		
+
 		int bx = center.getX();
 		int y = center.getY();
 		int bz = center.getZ();
-		
+
 		for (int x = bx - shockRange; x <= bx + shockRange; x++) {
 			for (int z = bz - shockRange; z <= bz + shockRange; z++) {
-				Block b = center.getWorld().getBlockAt(x, y+3, z);
-				
-				while(!isThrowable(b.getType()) && b.getLocation().getY() >= (center.getY()-3)){
+				Block b = center.getWorld().getBlockAt(x, y + 3, z);
+
+				while (!isThrowable(b.getType()) && b.getLocation().getY() >= (center.getY() - 3)) {
 					b = b.getRelative(BlockFace.DOWN);
 				}
-				
+
 				if (Math.random() > percentThrown) continue;
-				
-				if (flowers.contains(b.getType())) {b.breakNaturally();}
-				if (b.getType() == Material.GRASS) {b.setType(Material.DIRT);}
-				
+
+				if (flowers.contains(b.getType())) {
+					b.breakNaturally();
+				}
+				if (b.getType() == Material.GRASS) {
+					b.setType(Material.DIRT);
+				}
+
 				final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
-				
+
 				nb.setVelocity(shockVelo.setY(RandomUtils.nextDouble() + 0.45));
 				nb.setMetadata("ShockGround", shockMeta);
 				nb.setDropItem(false);

@@ -27,109 +27,109 @@ import com.noxpvp.mmo.locale.MMOLocale;
 public class AbilityListener extends NoxListener<NoxMMO> {
 
 	MMOPlayerManager pm;
-	
+
 	public AbilityListener() {
 		this(NoxMMO.getInstance());
 	}
-	
+
 	public AbilityListener(NoxMMO plugin) {
 		super(plugin);
-		
+
 		this.pm = MMOPlayerManager.getInstance();
 	}
 
 	//TODO finish
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityAbilityPreExecute(EntityAbilityPreExcuteEvent event) {
 		return;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityAbilityExecuted(EntityAbilityExecutedEvent event) {
 		return;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerAbilityPreExecute(PlayerAbilityPreExecuteEvent event) {
 		return;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerAbilityExecuted(PlayerAbilityExecutedEvent event) {
 		Player p = event.getPlayer();
 		MMOPlayer mp = pm.getPlayer(p);
 		BaseEntityAbility ab = event.getAbility();
-		
+
 		if (ab instanceof IHeated)
 			mp.addCoolDown(ab.getName(), ((IHeated) ab).getCoolDownTime(), true);
-		
+
 		MessageUtil.sendLocale(p, MMOLocale.ABIL_USE, ab.getName());
-		
+
 		return;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityTargetedAbilityPreExecute(EntityTargetedAbilityPreExecuteEvent event) {
 		return;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityTargetedAbilityExecuted(EntityTargetedAbilityExecutedEvent event) {
 		return;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTargetedAbilityPreExecute(PlayerTargetedAbilityPreExecuteEvent event) {
 		return;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTargetedAbilityExecuted(PlayerTargetedAbilityExecutedEvent event) {
 		Player p = event.getPlayer();
 		MMOPlayer mp = pm.getPlayer(p);
 		BaseTargetedPlayerAbility ab = event.getAbility();
-		
-		String target = ab.getTarget() instanceof Player?
+
+		String target = ab.getTarget() instanceof Player ?
 				pm.getPlayer((Player) ab.getTarget()).getFullName() :
-					ab.getTarget().getType().name().toLowerCase();
-				
+				ab.getTarget().getType().name().toLowerCase();
+
 		if (ab instanceof IHeated)
 			mp.addCoolDown(ab.getName(), ((IHeated) ab).getCoolDownTime(), true);
-		
+
 		if (ab.getDamage() > 0) {
 			MessageUtil.sendLocale(p, MMOLocale.ABIL_USE_TARGET_DAMAGED, ab.getName(), target, String.format("%.2f", ab.getDamage()));
-			
+
 			if (ab.getTarget() instanceof CommandSender)
 				MessageUtil.sendLocale((CommandSender) ab.getTarget(), MMOLocale.ABIL_HIT_ATTACKER_DAMAGED, mp.getFullName(), ab.getName(), String.format("%.2f", ab.getDamage()));
-		} else { 
+		} else {
 			MessageUtil.sendLocale(p, MMOLocale.ABIL_USE_TARGET, ab.getName(), target);
-			
+
 			if (ab.getTarget() instanceof CommandSender)
 				MessageUtil.sendLocale((CommandSender) ab.getTarget(), MMOLocale.ABIL_HIT_ATTACKER, mp.getFullName(), ab.getName());
 		}
-				
+
 		return;
-	}	
-	
+	}
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityTargetedAbilityPreExecute(EntityTargetedAbilityPreExecuteEvent event) {
 		return;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityTargetedAbilityExecuted(EntityTargetedAbilityExecutedEvent event) {
 		return;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTargetedAbilityPreExecute(PlayerTargetedAbilityPreExecuteEvent event) {
 		return;
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTargetedAbilityExecuted(PlayerTargetedAbilityExecutedEvent event) {
 		return;
-	}	
-	
+	}
+
 }

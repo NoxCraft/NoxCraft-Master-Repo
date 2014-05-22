@@ -6,34 +6,31 @@ import com.noxpvp.core.data.NoxPlayerAdapter;
 
 @Deprecated
 public class PlayerDataLoadEvent extends NoxPlayerDataEvent {
+	private static final HandlerList handlers = new HandlerList();
 	private boolean isOverwriting;
 
 	@Deprecated
-	public PlayerDataLoadEvent(NoxPlayerAdapter player, boolean honorCore)
-	{
+	public PlayerDataLoadEvent(NoxPlayerAdapter player, boolean honorCore) {
 		this(player, honorCore, true);
 	}
 
 	@Deprecated
-	public PlayerDataLoadEvent(NoxPlayerAdapter player, boolean honorCore, boolean shouldOverwrite)
-	{
+	public PlayerDataLoadEvent(NoxPlayerAdapter player, boolean honorCore, boolean shouldOverwrite) {
 		super(player, honorCore);
 		this.isOverwriting = shouldOverwrite;
+	}
+
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 
 	@Deprecated
 	public boolean isOverwriting() {
 		return isOverwriting;
 	}
-	
+
 	@Override
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	private static final HandlerList handlers = new HandlerList();
-	
-	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 }

@@ -13,13 +13,13 @@ import com.noxpvp.core.NoxPlugin;
 public class UpgradeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "upgrade";
 	public static final String PERM_NODE = "upgrade";
-	
+
 //	private final Map<CommandSender, LockerCaller> lockers = new HashMap<CommandSender, LockerCaller>();
-	
+
 	public UpgradeCommand() {
 		super(COMMAND_NAME, false);
 	}
-	
+
 	public String[] getFlags() {
 		return new String[0];
 	}

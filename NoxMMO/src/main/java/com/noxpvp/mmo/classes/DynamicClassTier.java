@@ -26,25 +26,32 @@ public class DynamicClassTier extends ClassTier {
 	private String displayName;
 	private Map<Integer, Integer> expMap = new HashMap<Integer, Integer>();
 	private ExperienceType[] expTypes = new ExperienceType[0];
-	
+
 	private int level, maxLevel;
 	private InterpolatedMap levelToExpMap = new InterpolatedMap();
 	private List<String> lore = new ArrayList<String>();
-	
+
 	private String permNode = "";
 	private boolean useLevelPerms = false;
-	
+
 	/**
-	 * 
 	 * @param name
 	 * @param tierLevel current tier level
-	 * @param maxLevel Maximum allowed level.
+	 * @param maxLevel  Maximum allowed level.
 	 */
 	public DynamicClassTier(PlayerClass retainer, String name, int tierLevel, @Nullable Integer maxLevel) {
 		super(retainer, name, tierLevel);
 
 		if (maxLevel == null || maxLevel < 0)
 			this.maxLevel = Integer.MAX_VALUE;
+	}
+
+	private static int round(double value) {
+		int ret = 0;
+
+		ret = MathUtil.floor(value);
+
+		return ret;
 	}
 
 	@Override
@@ -68,26 +75,38 @@ public class DynamicClassTier extends ClassTier {
 		return displayName;
 	}
 
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
 	public int getExp(int level) {
 		return expMap.get(level);
 	}
-	
+
 	public ExperienceType[] getExpTypes() {
 		return expTypes;
 	}
-	
+
 	public int getLevel() {
 		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	public List<String> getLore() {
 		return lore;
 	}
-	
+
+	public void setLore(List<String> lore) {
+		this.lore = lore;
+	}
+
 	public double getMaxHealth() {
 		return 20;
 	}
-	
+
 	public int getMaxExp(int level) {
 		return round(levelToExpMap.get(level));
 	}
@@ -95,23 +114,25 @@ public class DynamicClassTier extends ClassTier {
 	public int getMaxLevel() {
 		return maxLevel;
 	}
-	
+
 	public int getNeededExp() {
 		return getNeededExp(getLevel() + 1);
 	}
-	
+
 	public int getNeededExp(int level) {
-		
+
 		return 0;
 	}
 
 	@Override
-	public void load(ConfigurationNode node) { }
+	public void load(ConfigurationNode node) {
+	}
 
 	/**
 	 * Loads the tiers configuration. <br>
-	 * 
-	 * The node you supply must already be in the tiers section. 
+	 * <p/>
+	 * The node you supply must already be in the tiers section.
+	 *
 	 * @param node the node to traverse for settings.
 	 */
 	public void loadTierConfig(ConfigurationNode node) {
@@ -120,62 +141,43 @@ public class DynamicClassTier extends ClassTier {
 			if (ParseUtil.isNumeric(lvl)) {
 				int l = ParseUtil.parseInt(lvl, -1);
 				if (l < 0)
-					 continue;
-				
+					continue;
+
 				levelToExpMap.put(l, eNode.get(lvl, levelToExpMap.get(l)));
 			}
-		
-		
-				
+
+
 	}
 
 	@Override
-	public void save(ConfigurationNode node) { }
+	public void save(ConfigurationNode node) {
+	}
 
 	/**
 	 * Saves the tiers configuration. <br>
-	 * 
-	 * The node you supply must already be in the tiers section. 
+	 * <p/>
+	 * The node you supply must already be in the tiers section.
+	 *
 	 * @param node preselected node.
 	 */
 	public void saveTierConfig(ConfigurationNode node) {
-		
+
 	}
 
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
-	
 	public void setExp(int amount) {
 		boolean maxed = amount > getMaxExp();
 		if (maxed)
 			amount -= getMaxExp();
-		
+
 		if (amount < 0)
 			amount = 0;
 		expMap.put(getLevel(), getMaxExp());
 		setLevel(getLevel() + 1);
-		
+
 		if (amount <= 0)
 			return;
-		
+
 		setExp(amount);
-	}
-	
-	public void setLevel(int level) {
-		this.level = level;
-	}
-	
-	public void setLore(List<String> lore) {
-		this.lore = lore;
-	}
-	
-	private static int round(double value) {
-		int ret = 0;
-		
-		ret = MathUtil.floor(value);
-		
-		return ret;
 	}
 
 	public Map<String, Ability> getAbilityMap() {

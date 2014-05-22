@@ -25,20 +25,47 @@ import com.noxpvp.core.internal.SafeLocker;
 import com.noxpvp.core.utils.UUIDUtil;
 
 public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements Persistant, LockerCaller, SafeLocker {
-	
+
 	private volatile static CorePlayerManager instance;
 	private static List<IPlayerManager<?>> managers = new ArrayList<IPlayerManager<?>>();
-	
+	protected FileConfiguration config;
 	private AtomicBoolean isLocked = new AtomicBoolean();
 	private LockerCaller lockCaller = null;
-	
+	private NoxCore plugin;
+
+	protected CorePlayerManager() {
+		this(new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml")), NoxCore.getInstance());
+		config = new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml"));
+	}
+
+
+	protected CorePlayerManager(FileConfiguration conf, NoxCore plugin) {
+		super(NoxPlayer.class);
+		this.plugin = plugin;
+		this.config = conf;
+	}
+
 	public static void addManager(IPlayerManager<?> manager) {
 		if (CorePlayerManager.managers.contains(manager))
 			return;
-		
+
 		CorePlayerManager.managers.add(manager);
 	}
-	
+
+	public static CorePlayerManager getInstance() {
+		if (instance == null)
+			instance = new CorePlayerManager();
+
+		return instance;
+	}
+
+	public static CorePlayerManager getInstance(FileConfiguration conf, NoxCore plugin) {
+		if (instance == null)
+			instance = new CorePlayerManager(conf, plugin);
+
+		return instance;
+	}
+
 	@Override
 	public boolean unloadIfOffline(String name) {
 		boolean unloaded = super.unloadIfOffline(name);
@@ -46,7 +73,7 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 			unloadPlayer(name);
 		return unloaded;
 	}
-	
+
 	@Override
 	public void unloadPlayer(String name) {
 		super.unloadPlayer(name);
@@ -54,49 +81,17 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 			if (manager != this)
 				manager.unloadPlayer(name);
 	}
-	
-	
-	public static CorePlayerManager getInstance() {
-		if (instance == null)
-			instance = new CorePlayerManager();
-		
-		return instance;
-	}
-	
-	public static CorePlayerManager getInstance(FileConfiguration conf, NoxCore plugin)
-	{
-		if (instance == null)
-			instance = new CorePlayerManager(conf, plugin);
-		
-		return instance;
-	}
-	
-	protected FileConfiguration config;
-	
-	private NoxCore plugin;
-	
-	protected CorePlayerManager() {
-		this(new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml")), NoxCore.getInstance());
-		config = new FileConfiguration(NoxCore.getInstance().getDataFile("players.yml"));
-	}
 
-	protected CorePlayerManager(FileConfiguration conf, NoxCore plugin)
-	{
-		super(NoxPlayer.class);
-		this.plugin = plugin;
-		this.config = conf;
-	}
-	
 	@Override
 	protected NoxPlayer craftNew(NoxPlayerAdapter adapter) {
 		return adapter.getNoxPlayer();
 	}
-	
+
 	@Override
 	protected NoxPlayer craftNew(String name) {
 		return new NoxPlayer(this, name);
 	}
-	
+
 	@Override
 	protected Map<String, NoxPlayer> craftNewStorage() {
 		return new HashMap<String, NoxPlayer>();
@@ -111,19 +106,18 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 					ret.add(f);
 			}
 		} catch (NullPointerException e) {//We don't have a nullfix yet... 
-			
+
 		}
 		return ret;
 	}
-	
+
 	/**
-	 * @deprecated Uses old file names... This will break.. Use " MISSING METHOD " instead. 
 	 * @return list of player names.
+	 * @deprecated Uses old file names... This will break.. Use " MISSING METHOD " instead.
 	 */
 	public List<String> getAllPlayerNames() {
 		List<String> ret = new ArrayList<String>();
-		if (isMultiFile())
-		{
+		if (isMultiFile()) {
 			try {
 				for (File f : NoxCore.getInstance().getDataFile("playerdata").listFiles()) {
 					String name = f.getName().replace(".yml", "");
@@ -131,39 +125,40 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 						ret.add(name);
 				}
 			} catch (NullPointerException e) {//We don't have a nullfix yet...
-				 
+
 			}
 		} else {
 			for (ConfigurationNode node : config.getNode("players").getNodes())
 				ret.add(node.getName());
 		}
-		
+
 		for (NoxPlayer p : getLoadedPlayers())
 			if (!ret.contains(p.getName()))
 				ret.add(p.getName());
-		
+
 		return ret;
 	}
-	
+
 	public NoxPlayer[] getLoadedPlayers() {
 		return getPlayerMap().values().toArray(new NoxPlayer[0]);
-	}	
-	
-/**
+	}
+
+	/**
 	 * ARE YOU CRAZY!?
-	 * @deprecated returns the param that was given. 
+	 *
 	 * @param player
 	 * @return player param
+	 * @deprecated returns the param that was given.
 	 */
 	public NoxPlayer getPlayer(NoxPlayer player) {
 		return player;
 	}
-	
+
 	/**
 	 * Gets the player file. <br><br>
-	 * 
+	 * <p/>
 	 * Will not auto move files that are not updated for 1.8 UID.
-	 *
+	 * <p/>
 	 * New files will grab UID version of file.
 	 *
 	 * @param noxPlayer the NoxPlayer object
@@ -189,50 +184,47 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 					if (!old.delete())
 						old.deleteOnExit();
 			}
-			
+
 			return uidF;
-			
+
 		}
 	}
-	
+
 	/**
 	 * Gets the player file.
 	 *
 	 * @param path the path to the file.
 	 * @return the player file
 	 */
-	public File getPlayerFile(String... path)
-	{
+	public File getPlayerFile(String... path) {
 		String[] oPath = path;
-		path = new String[oPath.length+1];
+		path = new String[oPath.length + 1];
 		path[0] = "playerdata";
-		
+
 		//Rough Copy.
 		for (int i = 0; i < oPath.length; i++)
-			path[i+1] = oPath[i];
-		
+			path[i + 1] = oPath[i];
+
 		return NoxCore.getInstance().getDataFile(path);
 	}
 
 	/**
 	 * Gets the player node.
 	 * <b>INTERNAL METHOD</b> Best not to use this!
+	 *
 	 * @param player the the player.
 	 * @return the player node
 	 */
-	public ConfigurationNode getPlayerNode(NoxPlayer player)
-	{
-		if (isMultiFile() && !(player.getPersistantData() instanceof FileConfiguration))
-		{
-			FileConfiguration c = new FileConfiguration(getPlayerFile(player)); 
+	public ConfigurationNode getPlayerNode(NoxPlayer player) {
+		if (isMultiFile() && !(player.getPersistantData() instanceof FileConfiguration)) {
+			FileConfiguration c = new FileConfiguration(getPlayerFile(player));
 			ConfigurationNode old = player.getPersistantData();
 			if (old != null)
 				for (Entry<String, Object> entry : old.getValues().entrySet()) //Copy data.
 					c.set(entry.getKey(), entry.getValue());
-			
+
 			return c;
-		}
-		else if (isMultiFile() && (player.getPersistantData() instanceof FileConfiguration))
+		} else if (isMultiFile() && (player.getPersistantData() instanceof FileConfiguration))
 			return (FileConfiguration) player.getPersistantData();
 		else if (config != null && !isMultiFile())
 			if (player.getUUID() == null && player.getName() != null)
@@ -244,17 +236,23 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 		else
 			return null;
 	}
-	
-	public NoxCore getPlugin() { return plugin; }
-	
+
+	public NoxCore getPlugin() {
+		return plugin;
+	}
+
 	//////// HELPER FUNCTIONS
+
 	/**
 	 * Checks if is multi file.
 	 * <b>INTERNALLY USED METHOD</b>
+	 *
 	 * @return true, if is using the multi file structure for player data.
 	 */
-	public boolean isMultiFile() { return NoxCore.isUseUserFile(); }
-	
+	public boolean isMultiFile() {
+		return NoxCore.isUseUserFile();
+	}
+
 	/* (non-Javadoc)
 	 * @see com.noxpvp.core.Persistant#load()
 	 */
@@ -263,48 +261,47 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 
 		getPlayerMap().clear();
 		config.load();
-		
+
 		for (Player player : Bukkit.getOnlinePlayers())
 			loadOrCreate(player.getName());
-		
+
 		for (String name : pls)
 			if (!isLoaded(name))
 				loadOrCreate(name);
-		
+
 	}
-	
+
 	private void loadOrCreate(String name) {
 		loadPlayer(name);
 	}
-	
+
 	/**
 	 * Load player.
 	 *
 	 * @param noxPlayer the NoxPlayer object to load
 	 */
 	public void loadPlayer(NoxPlayer noxPlayer) {
-		ConfigurationNode persistant_data = getPlayerNode(noxPlayer); 
+		ConfigurationNode persistant_data = getPlayerNode(noxPlayer);
 
 		if (persistant_data != noxPlayer.getPersistantData()) {//Remove desyncs...
 			noxPlayer.setPersistantData(persistant_data);
-			getPlugin().log(Level.INFO, "Player data object mismatch. Syncing objects for player\"" + noxPlayer.getName() +":"+ noxPlayer.getUID() + "\"");
+			getPlugin().log(Level.INFO, "Player data object mismatch. Syncing objects for player\"" + noxPlayer.getName() + ":" + noxPlayer.getUID() + "\"");
 		}
-		
-		if (persistant_data instanceof FileConfiguration)
-		{
+
+		if (persistant_data instanceof FileConfiguration) {
 			FileConfiguration fNode = (FileConfiguration) persistant_data;
 			fNode.load();
 		} else {
 			load();
 		}
-		
+
 		super.loadPlayer(noxPlayer);
-		
+
 		for (IPlayerManager<?> manager : managers)
 			if (manager != this)
 				manager.loadPlayer(noxPlayer);
 	}
-	
+
 	/**
 	 * Load player.
 	 *
@@ -319,7 +316,7 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 	 */
 	public void save() {
 		super.save();
-		
+
 		if (!isMultiFile())
 			config.save();
 	}
@@ -329,27 +326,25 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 	 *
 	 * @param player the player
 	 */
-	public void savePlayer(NoxPlayer player) 
-	{
+	public void savePlayer(NoxPlayer player) {
 //		if (!lockFiles.isLocked()) {
 //			getPlugin().log(Level.SEVERE, "Could not save player '" + player.getName() + ":=" + player.getUID() + "' due to file lock.");
 //			return;
 //		}
-		
+
 		ConfigurationNode persistant_data = getPlayerNode(player);
 		if (persistant_data != player.getPersistantData()) {//Remove desyncs...
-			player.setPersistantData(persistant_data); 
-			getPlugin().log(Level.INFO, "Player data object mismatch. Syncing objects for player\"" + player.getName() +":"+ player.getUID() + "\"");
+			player.setPersistantData(persistant_data);
+			getPlugin().log(Level.INFO, "Player data object mismatch. Syncing objects for player\"" + player.getName() + ":" + player.getUID() + "\"");
 		}
-		
+
 		player.save();
 		for (IPlayerManager<?> manager : managers) { //Iterate through all plugin.
 			if (manager != this)
-				manager.savePlayer(player); 
+				manager.savePlayer(player);
 		}
-		
-		if (persistant_data instanceof FileConfiguration)
-		{
+
+		if (persistant_data instanceof FileConfiguration) {
 			persistant_data.set("last.save", System.currentTimeMillis()); //Snapshot
 			FileConfiguration configNode = (FileConfiguration) persistant_data;
 			configNode.save();
@@ -360,7 +355,8 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 
 	/**
 	 * Are you crazy!
-	 * @deprecated returns the specified argument.. 
+	 *
+	 * @deprecated returns the specified argument..
 	 */
 	protected NoxPlayer craftNew(NoxPlayer adapter) {
 		return adapter;
@@ -383,12 +379,12 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 		boolean ret = false;
 		if (getCaller() == null) {
 			ret = true;
-			isLocked.set(true); 
+			isLocked.set(true);
 		} else if (getCaller() == caller) {
 			ret = true;
 			isLocked.set(true);
 		}
-		
+
 		if (ret)
 			lockCaller = caller;
 		return ret;
@@ -409,6 +405,6 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 	}
 
 	public void complain(SafeLocker lock, LockerCaller complainer) {
-		getPlugin().log(Level.SEVERE, "PlayerManager is on file lock. " + ((complainer != null) ? ("Complainer: " + complainer.getClass().getName()):""));
+		getPlugin().log(Level.SEVERE, "PlayerManager is on file lock. " + ((complainer != null) ? ("Complainer: " + complainer.getClass().getName()) : ""));
 	}
 }

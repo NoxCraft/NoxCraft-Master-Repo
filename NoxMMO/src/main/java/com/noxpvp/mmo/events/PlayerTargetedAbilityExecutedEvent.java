@@ -11,7 +11,7 @@ public class PlayerTargetedAbilityExecutedEvent extends PlayerAbilityEvent imple
 	public PlayerTargetedAbilityExecutedEvent(Player who, BaseTargetedPlayerAbility ability) {
 		super(who, ability);
 	}
-	
+
 	@Override
 	public BaseTargetedPlayerAbility getAbility() {
 		return (BaseTargetedPlayerAbility) super.getAbility();

@@ -12,20 +12,18 @@ import com.noxpvp.mmo.abilities.IPVPAbility;
 
 /**
  * @author NoxPVP
- *
  */
 public class DisarmPlayerAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
-	
-	public static List<LivingEntity> disarmed = new ArrayList<LivingEntity>();
-	
-	private static final String ABILITY_NAME = "Disarm";
-	public static final String PERM_NODE = "disarm";
 
-	
+	public static final String PERM_NODE = "disarm";
+	private static final String ABILITY_NAME = "Disarm";
+	public static List<LivingEntity> disarmed = new ArrayList<LivingEntity>();
+
+
 	public DisarmPlayerAbility(Player player) {
 		this(player, 10);
 	}
-	
+
 	public DisarmPlayerAbility(Player player, double range) {
 		super(ABILITY_NAME, player, range, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 	}
@@ -33,10 +31,10 @@ public class DisarmPlayerAbility extends BaseTargetedPlayerAbility implements IP
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
-		
+
 		DisarmPlayerAbility.disarmed.add(getTarget());
-		
+
 		return true;
 	}
-	
+
 }

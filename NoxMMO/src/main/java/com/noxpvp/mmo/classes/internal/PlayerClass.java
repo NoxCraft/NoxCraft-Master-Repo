@@ -37,102 +37,99 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
  * <br/>
  * Bold signifies that internal mechanisms depend heavily on and <b>MUST</b> be implemented.
  * <ol>
- * 	<li><b>(String playerName)</b></li>
+ * <li><b>(String playerName)</b></li>
  * </ol>
  * <br/><br/>
  * You must implement the following:<br/>
  * <ul>
- * 	<li> public static final String variable of "uniqueID";</li>
- * 	<li> public static final String variable of "className";</li>
+ * <li> public static final String variable of "uniqueID";</li>
+ * <li> public static final String variable of "className";</li>
  * </ul>
- *
  */
 public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable {
-	
-	private static final String DYNAMIC_TIER_PATH = "dynamic.tiers";
+
 	public static final String LOG_MODULE_NAME = "PlayerClass";
+	private static final String DYNAMIC_TIER_PATH = "dynamic.tiers";
 	//Debug and errors
 	protected static ModuleLogger pcLog;
-	
+
 	@SuppressWarnings("rawtypes")
 	private static List<Class> registeredClasses;
+	//Identification
+	private final String uid;
+	protected ModuleLogger log;
+	//Tiers
+	protected Map<Integer, IClassTier> tiers;
+	private int cTierLevel = 1;
+	private String name;
+	//Player Data
+	private String playerName;
+
+	public PlayerClass(String uid, @Nonnull String name, @Nonnull Player player) {
+		this(uid, name, null, player);
+	}
+
+	public PlayerClass(String uid, @Nonnull String name, @Nonnull String playerName) {
+		this(uid, name, playerName, null);
+	}
+
+	public PlayerClass(String uid,
+	                   @Nonnull String name,
+	                   @Nonnull(when = When.MAYBE) String playerName, @Nonnull(when = When.MAYBE) Player player) {
+		Validate.notNull(name, "The name of class must not be null!");
+		Validate.notNull(uid, "The UID of class must not be null!");
+		Validate.isTrue((player != null || playerName != null), "Either the player or the playerName must not be null!");
+
+		this.uid = uid;
+		this.name = name;
+
+		if (playerName == null)
+			this.playerName = player.getName();
+		else
+			this.playerName = playerName;
+
+		log = pcLog.getModule(this.playerName);
+
+		this.tiers = craftClassTiers();
+		this.tiers.putAll(craftDynamicTiers());
+
+		setCurrentTier(getCurrentTierLevel());
+
+		PluginManager pm = Bukkit.getPluginManager();
+		NoxMMO mmo = NoxMMO.getInstance();
+		for (IClassTier tier : tiers.values()) {
+			mmo.addPermission(new NoxPermission(NoxMMO.getInstance(),
+					StringUtil.join(".", NoxMMO.PERM_NODE, "class", tier.getRetainingClass().getName(), "tier", Integer.toString(tier.getTierLevel())),
+					"Allows the usage of the " + tier.getName() + " tier in the " + tier.getRetainingClass().getName() + " class",
+					PermissionDefault.OP));
+		}
+
+		checkAndRegisterClass(this);
+	}
+
 	private static void checkAndRegisterClass(PlayerClass playerClass) {
 		if (registeredClasses.contains(playerClass.getClass()))
 			return;
-		
+
 		PlayerClassUtil.registerPlayerClass(playerClass.getClass());
 	}
+
+	//// START TEMP
 
 	////	Helper Methods
 	public static int getTierLevel(IClassTier tier) {
 		return tier.getTierLevel();
 	}
+
 	//THIS MUST BE STARTED ON ENABLE!
 	@SuppressWarnings("rawtypes")
 	public static void init() {
 		pcLog = NoxMMO.getInstance().getModuleLogger(LOG_MODULE_NAME);
 		registeredClasses = new ArrayList<Class>();
 	}
-	
-	private int cTierLevel = 1;
-	protected ModuleLogger log;
-	
-	private String name;
-	
-	//Player Data
-	private String playerName;
-	
-	//Tiers
-	protected Map<Integer, IClassTier> tiers;
-	
-	//Identification
-	private final String uid;
-	
-	public PlayerClass(String uid, @Nonnull String name, @Nonnull Player player) {
-		this(uid, name, null, player);
-	}
-	
-	//// START TEMP
-	
-	public PlayerClass(String uid, @Nonnull String name, @Nonnull String playerName) {
-		this(uid, name, playerName, null);
-	}
-	
-	public PlayerClass(String uid, @Nonnull String name, @Nonnull(when = When.MAYBE) String playerName,  @Nonnull(when = When.MAYBE) Player player)
-	{
-		Validate.notNull(name, "The name of class must not be null!");
-		Validate.notNull(uid, "The UID of class must not be null!");
-		Validate.isTrue((player != null || playerName != null), "Either the player or the playerName must not be null!");
-		
-		this.uid = uid;
-		this.name = name;
-		
-		if (playerName == null)
-			this.playerName = player.getName();
-		else
-			this.playerName = playerName;
-		
-		log = pcLog.getModule(this.playerName);
-		
-		this.tiers = craftClassTiers();
-		this.tiers.putAll(craftDynamicTiers());
 
-		setCurrentTier(getCurrentTierLevel());
-		
-		PluginManager pm = Bukkit.getPluginManager();
-		NoxMMO mmo = NoxMMO.getInstance();
-		for (IClassTier tier : tiers.values()) {
-			mmo.addPermission(new NoxPermission(NoxMMO.getInstance(), 
-					StringUtil.join(".", NoxMMO.PERM_NODE, "class", tier.getRetainingClass().getName(), "tier", Integer.toString(tier.getTierLevel())), 
-					"Allows the usage of the " + tier.getName() + " tier in the " + tier.getRetainingClass().getName() + " class",
-					PermissionDefault.OP));
-		}
-		
-		checkAndRegisterClass(this);
-	}
-	
 	//// END TEMP
-	
+
 	public final void addExp(int amount) {
 		getTier().addExp(amount);
 	}
@@ -140,52 +137,49 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	public void addExp(int tier, int amount) {
 		getTier(tier).addExp(amount);
 	}
-	
+
 	public boolean canUseClass() {
 		if (getPlayer() != null)
 			return getPlayer().hasPermission(getPermission());
 		return false;
 	}
-	
+
 	public String getPermission() {
 		return StringUtil.join(".", "nox", "class", getName());
 	}
-	
+
 	private void checkTierCount() {
-		if (tiers.size() != getHighestPossibleTier())
-		{
+		if (tiers.size() != getHighestPossibleTier()) {
 			pcLog.warning("Possible missing tiers for classes found.");
 			log.severe("Tier count mismatch. Current tier count is " + tiers.size() + " when supposed to be " + getHighestPossibleTier());
-			
-			if (tiers.size() < getHighestPossibleTier())
-			{
+
+			if (tiers.size() < getHighestPossibleTier()) {
 				int h = tiers.size() - 1;
 				int i = h + 1;
-				while (i < getHighestPossibleTier())
-				{
+				while (i < getHighestPossibleTier()) {
 					ClassTier dumb = new DummyClassTier(this, i);
 					tiers.put(i, dumb);
 					i++;
 				}
 			}
-			
-			
+
+
 			//TODO: Message about missing tiers... URRRRGGGHHHh
-			
+
 			//IF DUMMIES USED
 //			log.severe("Dummy tiers were used for missing tier objects") //FIXME: Better debug message.
 		}
 	}
-	
+
 	protected abstract Map<Integer, IClassTier> craftClassTiers();
-	
+
 	protected final Map<Integer, IClassTier> craftDynamicTiers() {
 		return craftDynamicTiers(getClassConfig());
 	}
-	
+
 	private Map<Integer, IClassTier> craftDynamicTiers(ConfigurationNode node) {
 		Map<Integer, IClassTier> nTiers = new HashMap<Integer, IClassTier>();
-		
+
 		if (node != null) {
 			node = node.getNode(DYNAMIC_TIER_PATH);
 			for (ConfigurationNode t : node.getNodes()) {
@@ -194,57 +188,61 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 					pcLog.warning("Tier level must be greater than 0. One of the dynamic tiers is invalid.");
 					continue;
 				}
-				
+
 				if (!t.contains("name")) {
 					pcLog.severe("One of the nodes for dynamic tiers in a player class is missing a name value.");
 					continue;
 				}
-				
+
 				int maxLvl = t.get("max-level", -1);
 				DynamicClassTier ti = new DynamicClassTier(this, t.get("name", String.class), tl, maxLvl);
 				ti.loadTierConfig(t);
 				nTiers.put(tl, ti);
 			}
-				
+
 		}
-		
+
 		return nTiers;
 	}
-	
+
 	@Temporary
 	public Collection<Ability> getAbilities() {
 		return getAbilityMap().values();
 	}
-	
+
 	@Temporary
 	public Map<String, Ability> getAbilityMap() {
 		return getTier().getAbilityMap();
 	}
-	
+
 	protected abstract FileConfiguration getClassConfig();
-	
+
 	public final int getCurrentTierLevel() {
 		return cTierLevel;
 	}
-	
+
 	public final int getExp() {
 		return getExp(getCurrentTierLevel());
 	}
-	
+
+	public final void setExp(int amount) {
+		setExp(getCurrentTierLevel(), amount);
+	}
+
 	public int getExp(int tier) {
 		return getTier(tier).getExp();
 	}
-	
+
 	public int getHighestAllowedTier() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
 	public int getLatestTier() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
 	public final int getLevel() {
 		return getLevel(getCurrentTierLevel());
 	}
@@ -252,48 +250,47 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	public int getLevel(int tier) {
 		return getTier(tier).getLevel();
 	}
-	
+
 	public List<String> getLore() {
 		return getTier().getLore();
 	}
-	
+
 	public final int getMaxExp() {
 		return getMaxExp(getCurrentTierLevel());
 	}
-	
+
 	public int getMaxExp(int tier) {
 		return getTier(tier).getMaxExp();
 	}
-	
+
 	public final int getMaxLevel() {
 		return getMaxLevel(getCurrentTierLevel());
 	}
-	
+
 	public int getMaxLevel(int tier) {
 		return getTier().getMaxLevel();
 	}
-	
+
 	public final String getName() {
 		return name;
 	}
-	
+
 	public String getDisplayName() {
 		return getColor() + getName();
 	}
-	
+
 	public final Player getPlayer() {
 		return Bukkit.getPlayer(getPlayerName());
 	}
-	
+
 	public final String getPlayerName() {
 		return playerName;
 	}
 
-	
 	public final IClassTier getTier() {
 		return getTier(getCurrentTierLevel());
 	}
-	
+
 	public final IClassTier getTier(int level) {
 		if (hasTier(level))
 			return tiers.get(level);
@@ -307,6 +304,7 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	/**
 	 * {@inheritDoc} <br/><br/>
 	 * <b>Warning. This is calculated every run!</b>
+	 *
 	 * @see com.noxpvp.mmo.classes.internal.IPlayerClass#getTotalExp()
 	 */
 	public int getTotalExp() {
@@ -339,42 +337,43 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	 * <br/>
 	 * You do not need to load the following. Just implement the set functions and it will work fine. <br/>
 	 * <ul>
-	 * 	<li></li>
+	 * <li></li>
 	 * </ul>
-	 * @param node The PlayerClass section of player configuration. 
+	 *
+	 * @param node The PlayerClass section of player configuration.
 	 */
 	public abstract void load(ConfigurationNode node);
 
 	public void onLoad(ConfigurationNode node) {
 		if (!node.get("uid", "").equals(getUniqueID()))
 			throw new IllegalArgumentException("Configuration node was does not match UID. UID supposed to be " + getUniqueID() + " but got " + node.get("uid", "$BLANK$"));
-		
+
 		int a = node.get("current.tier", -1);
 		if (a < 0) {
 			if (a != -1) //Only throw error if tier did not exist. (-1 signifies it)
 				log.severe(new StringBuilder().append("The configuration node for currently selected tier of the playerclass is invalid. It must be higher then 0. It is currently ").append(a).append("\n").append("Resetting value to 1").toString());
 			a = 1;
 		}
-		
+
 		setCurrentTier(a);
-		
+
 		checkTierCount(); //Check and repair tiers.
-		
+
 		for (IClassTier tier : tiers.values())
 			tier.onLoad(node);
-		
+
 		load(node);
 	}
 
 	public void onSave(ConfigurationNode node) {
 		node = node.getNode(getUniqueID().toString());
 		node.set("current.tier", getCurrentTierLevel());
-		
+
 		checkTierCount(); //Check and repair tiers.
-		
+
 		for (IClassTier tier : tiers.values())
 			tier.onSave(node);
-		
+
 		save(node);
 	}
 
@@ -389,7 +388,8 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	/**
 	 * Save additional data to the node on player class saving. <br/><br/>
 	 * <b>Warning the node is already in proper position. No need to re position node.</b>
-	 * @param node The PlayerClass section of player configuration. 
+	 *
+	 * @param node The PlayerClass section of player configuration.
 	 */
 	public abstract void save(ConfigurationNode node);
 
@@ -399,17 +399,13 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 
 	public void setCurrentTier(int tierLevel) {
 		cTierLevel = tierLevel;
-		
+
 		MMOPlayer p = MMOPlayerManager.getInstance().getPlayer(getPlayer());
 		if (p.getPrimaryClass() == this)
 			p.getPlayer().setMaxHealth(getTier().getMaxHealth());
-			
+
 	}
 
-	public final void setExp(int amount) {
-		setExp(getCurrentTierLevel(), amount);
-	}
-	
 	public void setExp(int tier, int amount) {
 		getTier(tier).setExp(amount);
 	}

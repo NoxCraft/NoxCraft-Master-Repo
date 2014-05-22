@@ -8,18 +8,18 @@ import com.noxpvp.homes.NoxHomes;
 
 public class LocateHomeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "locatehome";
-	
+
 	private NoxHomes plugin;
-	
+
 	public LocateHomeCommand() {
 		super(COMMAND_NAME, false);
 		this.plugin = NoxHomes.getInstance();
 	}
-	
+
 	public String[] getHelp() {
-		return new String[] {"THIS COMMAND IS NOT IMPLEMENTED" };
+		return new String[]{"THIS COMMAND IS NOT IMPLEMENTED"};
 	}
-	
+
 	public CommandResult execute(CommandContext context) {
 		return new CommandResult(this, false);
 	}

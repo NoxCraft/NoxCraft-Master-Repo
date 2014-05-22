@@ -20,64 +20,65 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 	private Reference<Entity> entityRef;
 	private MasterListener masterListener;
 	private double damage;
-	
-	public BaseEntityAbility(final String name, Entity ref)
-	{
+
+	public BaseEntityAbility(final String name, Entity ref) {
 		super(name);
 		entityRef = new SoftReference<Entity>(ref);
-		
+
 		this.masterListener = NoxMMO.getInstance().getMasterListener();
 	}
-	
+
 	public Entity getEntity() {
 		return entityRef.get();
 	}
-	
-	public boolean isValid() { return getEntity() != null; }
-	
+
+	public boolean isValid() {
+		return getEntity() != null;
+	}
+
 	/**
 	 * Returns is the Entity of this ability is null, thus if the execute method will start
-	 * 
+	 *
 	 * @return boolean If the execute() method is normally able to start
 	 */
 	public boolean mayExecute() {
 		Entity entity = getEntity();
 		if (entity == null || entity.isDead() || !entity.isValid())
 			return false;
-		
+
 		if (this instanceof IPVPAbility && !TownyUtil.isPVP(entity)) {
 			if (entity instanceof CommandSender)
 				MessageUtil.sendLocale((CommandSender) entity, MMOLocale.ABIL_NO_PVP, getName());
-			
+
 			return false;
 		}
-		
+
 		return super.mayExecute();
 	}
-	
+
 	public boolean isCancelled() {
 		return CommonUtil.callEvent(new EntityAbilityPreExcuteEvent(getEntity(), this)).isCancelled();
 	}
-	
+
 	public MasterListener getMasterListener() {
 		return masterListener;
 	}
-	
+
 	public void registerHandler(BaseMMOEventHandler<? extends Event> handler) {
 		masterListener.registerHandler(handler);
 	}
-	
+
 	public void unregisterHandler(BaseMMOEventHandler<? extends Event> handler) {
 		masterListener.unregisterHandler(handler);
-		
+
 	}
-	
-	public void setDamage(double damage) {
-		this.damage = damage;
-	}
-	
+
 	public double getDamage() {
 		return damage;
 	}
-	
+
+	public void setDamage(double damage) {
+		this.damage = damage;
+	}
+
 }

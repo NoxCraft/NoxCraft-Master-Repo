@@ -13,8 +13,12 @@ public class PlayerAbilityEvent extends PlayerEvent implements IPlayerAbilityEve
 
 	public PlayerAbilityEvent(Player who, BasePlayerAbility ability) {
 		super(who);
-		
+
 		this.ability = ability;
+	}
+
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 
 	public BasePlayerAbility getAbility() {
@@ -24,9 +28,5 @@ public class PlayerAbilityEvent extends PlayerEvent implements IPlayerAbilityEve
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-	
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-	
+
 }

@@ -19,20 +19,20 @@ import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
 public class DrainLifePlayerAbility extends BaseTargetedPlayerAbility {
-	
+
 	public static final String ABILITY_NAME = "Drain Life";
 	public static final String PERM_NODE = "drain-life";
-	
+
 	private int time;
 	private int period;
-	
+
 	public DrainLifePlayerAbility(Player p) {
 		this(p, 10);
 	}
-	
+
 	public DrainLifePlayerAbility(Player p, double range) {
 		super(ABILITY_NAME, p, range, MMOPlayerManager.getInstance().getPlayer(p).getTarget());
-		
+
 		this.time = 20 * 10;
 		this.period = 20;
 	}
@@ -40,24 +40,24 @@ public class DrainLifePlayerAbility extends BaseTargetedPlayerAbility {
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
-		
+
 		new DrainingLifePipe(getPlayer(), getTarget(), time).start(0);
-		
+
 		return true;
-		
+
 	}
-	
+
 	private class DrainingLifePipe extends BukkitRunnable {
 		private ArrayDeque<heart> ents;
 		private Player player;
 		private LivingEntity target;
-		
+
 		private Location pLoc, tLoc;
-		
+
 		private int counter;
 		private int time;
 		private int speed;
-		
+
 		public DrainingLifePipe(Player p, LivingEntity target, int time) {
 			this.player = p;
 			this.pLoc = p.getLocation();
@@ -71,27 +71,28 @@ public class DrainLifePlayerAbility extends BaseTargetedPlayerAbility {
 
 		public void start(int delay) {
 			this.runTaskTimer(NoxMMO.getInstance(), delay, speed);
-			
+
 			Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
-				
+
 				public void run() {
 					stop();
 				}
 			}, time);
 		}
-		
+
 		public void stop() {
 			for (heart h : ents)
 				h.remove();
-			
+
 			ents.clear();
-			
+
 			try {
 				cancel();
 				return;
-			} catch (IllegalStateException e) {}
+			} catch (IllegalStateException e) {
+			}
 		}
-		
+
 		public boolean mayRun() {
 			return getTarget() != null && (getDistance() <= getRange());
 		}
@@ -99,62 +100,62 @@ public class DrainLifePlayerAbility extends BaseTargetedPlayerAbility {
 		public void run() {
 			if (!mayRun())
 				stop();
-			
+
 			pLoc = player.getLocation();
 			tLoc = target.getLocation();
-			
-			if ((counter % period) == 0  && target.getHealth() > getDamage() && player.getHealth() < player.getMaxHealth()) {
+
+			if ((counter % period) == 0 && target.getHealth() > getDamage() && player.getHealth() < player.getMaxHealth()) {
 				target.damage(getDamage(), player);
 				player.setHealth(Math.min(player.getHealth() + getDamage(), player.getMaxHealth()));
 			}
-			
+
 			ents.add(new heart(tLoc));
-			
+
 			while (ents.size() > 50) {
-					heart first = ents.getFirst();
-					ents.remove(first);
-					first.remove();
+				heart first = ents.getFirst();
+				ents.remove(first);
+				first.remove();
 			}
-			
+
 			for (heart heart : ents) {
 				if (heart.loc.distance(player.getLocation()) < 1) {
 					heart.remove();
 					continue;
 				}
-				
+
 				Vector dir = pLoc.toVector().subtract(heart.loc.toVector()).normalize().multiply(0.5);
 				heart.tick(dir);
 			}
-			
+
 			counter += speed;
-			
+
 		}
-		
+
 		public Hologram newHeart() {
 			return HoloAPI.getManager().createSimpleHologram(tLoc, 2, ChatColor.RED + "♥");
 		}
-		
+
 		private class heart {
 			Location loc;
 			Hologram h;
-			
+
 			public heart(Location loc) {
 				this.loc = loc;
 				this.h = newHeart();
 			}
-			
+
 			public void remove() {
 				this.h.clearAllPlayerViews();
 				ents.remove(this.h);
 			}
-			
+
 			public void tick(Vector direction) {
 				this.loc.add(direction);
 				new ParticleRunner(ParticleType.happyVillager, loc, false, 0, 1, 1).start(0);
 				this.h.move(loc);
 			}
 		}
-		
+
 	}
 
 }

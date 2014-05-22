@@ -17,9 +17,8 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 	private transient World world;
 	private String worldName;
 	private double x, y, z;
-	
-	public SafeLocation(Location location)
-	{
+
+	public SafeLocation(Location location) {
 		pitch = location.getPitch();
 		yaw = location.getYaw();
 		x = location.getX();
@@ -28,7 +27,7 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 		world = location.getWorld();
 		worldName = world.getName();
 	}
-	
+
 	public SafeLocation(final String worldName2, final double x2, final double y2, final double z2, final float pitch2, final float yaw2) {
 		worldName = worldName2;
 		x = x2;
@@ -38,18 +37,45 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 		yaw = yaw2;
 		world = Bukkit.getServer().getWorld(worldName2);
 	}
-	
+
+	public static SafeLocation deserialize(Map<String, Object> data) {
+		float pitch, yaw;
+		double x, y, z;
+		String world;
+		try {
+			try {
+				pitch = ((Double) data.get("pitch")).floatValue();
+				yaw = ((Double) data.get("yaw")).floatValue();
+			} catch (ClassCastException e) {
+				pitch = (Float) data.get("pitch");
+				yaw = (Float) data.get("yaw");
+			}
+			x = (Double) data.get("x");
+			y = (Double) data.get("y");
+			z = (Double) data.get("z");
+			world = (String) data.get("world");
+		} catch (Throwable e) {
+			NoxCore plugin = NoxCore.getInstance();
+			plugin.log(Level.SEVERE, "Error occured while translating location info from config.");
+			if (e instanceof ClassCastException)
+				plugin.log(Level.SEVERE, "Data was of the wrong type.");
+			plugin.handle(e);
+			return null;
+		}
+		return new SafeLocation(world, x, y, z, pitch, yaw);
+	}
+
 	@Override
 	public float getPitch() {
 		return pitch;
 	}
-	
+
 	@Override
 	public World getWorld() {
-		return (world!=null)?world:Bukkit.getServer().getWorld(worldName);
+		return (world != null) ? world : Bukkit.getServer().getWorld(worldName);
 	}
 
-	public String getWorldName(){
+	public String getWorldName() {
 		return worldName;
 	}
 
@@ -57,7 +83,7 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 	public double getX() {
 		return x;
 	}
-	
+
 	@Override
 	public double getY() {
 		return y;
@@ -75,7 +101,7 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 
 	public Map<String, Object> serialize() {
 		Map<String, Object> data = new HashMap<String, Object>();
-		
+
 		data.put("pitch", pitch);
 		data.put("yaw", yaw);
 		data.put("x", x);
@@ -126,40 +152,12 @@ public class SafeLocation extends LocationAbstract implements ConfigurationSeria
 	public String toString() {
 		final String w = getWorldName();
 		return new StringBuilder().append("{world=")
-				.append((w==null?"null":w))
+				.append((w == null ? "null" : w))
 				.append(", x=").append(getX())
 				.append(", y=").append(getY())
 				.append(", z=").append(getZ())
 				.append(", yaw=").append(getYaw())
 				.append(", pitch=").append(getPitch())
 				.append("}").toString();
-	}
-
-	public static SafeLocation deserialize(Map<String, Object> data)
-	{
-		float pitch, yaw;
-		double x, y, z;
-		String world;
-		try {
-			try {
-				pitch = ((Double) data.get("pitch")).floatValue();
-				yaw = ((Double) data.get("yaw")).floatValue();
-			} catch (ClassCastException e) {
-				pitch = (Float) data.get("pitch");
-				yaw = (Float) data.get("yaw");
-			}
-			x = (Double) data.get("x");
-			y = (Double) data.get("y");
-			z = (Double) data.get("z");
-			world = (String) data.get("world");
-		} catch (Throwable e) {
-			NoxCore plugin = NoxCore.getInstance();
-			plugin.log(Level.SEVERE, "Error occured while translating location info from config.");
-			if (e instanceof ClassCastException)
-				plugin.log(Level.SEVERE, "Data was of the wrong type.");
-			plugin.handle(e);
-			return null;
-		}
-		return new SafeLocation(world, x, y, z, pitch, yaw);
 	}
 }

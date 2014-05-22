@@ -24,9 +24,9 @@ public class AbilityInfoCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[] { "h", "help" };
+		return new String[]{"h", "help"};
 	}
-	
+
 	public int getMaxArguments() {
 		return 1;
 	}
@@ -34,26 +34,26 @@ public class AbilityInfoCommand extends BaseCommand {
 	@Override
 	public CommandResult execute(CommandContext context)
 			throws NoPermissionException {
-		
+
 		if (!context.hasArgument(0))
 			return new CommandResult(this, false);
-		
+
 		String abilityName = context.getArgument(0).toLowerCase();
-		
+
 		MMOPlayer mPlayer = MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
-		
+
 		if (mPlayer == null)
 			return new CommandResult(this, true, new MessageBuilder().red("mPlayer object is null!").lines());
-		
+
 		Map<String, Ability> abilities = mPlayer.getAllMappedAbilities();
-		
+
 		Ability ability = null;
 		if (abilities.containsKey(abilityName))
 			ability = abilities.get(abilityName);
-		
+
 		if (ability == null)
 			throw new SafeNullPointerException("Ability does not exist!");
-		
+
 		MessageUtil.sendLocale(context.getSender(), MMOLocale.ABIL_INFO, ability.getDisplayName(), ability.getDescription());
 		return new CommandResult(this, true);
 	}

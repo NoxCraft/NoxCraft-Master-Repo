@@ -13,11 +13,11 @@ public class TargetConverter extends BasicConverter<Targetable> {
 	@Override
 	protected Targetable convertSpecial(Object value, Class<?> valueType, Targetable def) {
 		if (value instanceof Player)
-			return PlayerManager.getInstance().getPlayer((Player)value);
-		
+			return PlayerManager.getInstance().getPlayer((Player) value);
+
 		return def;
 	}
-	
+
 	@Override
 	public boolean isRegisterSupported() {
 		return false;

@@ -12,17 +12,17 @@ public class InventoryPickupItemListener extends GenericMMOListener<InventoryPic
 	public InventoryPickupItemListener(NoxMMO plugin) {
 		super(plugin, InventoryPickupItemEvent.class);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onLowest(InventoryPickupItemEvent event) {
 		onEventLowest(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void onLow(InventoryPickupItemEvent event) {
 		onEventLow(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
 	public void onNormal(InventoryPickupItemEvent event) {
 		onEventNormal(event);
@@ -32,12 +32,12 @@ public class InventoryPickupItemListener extends GenericMMOListener<InventoryPic
 	public void onHigh(InventoryPickupItemEvent event) {
 		onEventHigh(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
 	public void onHighest(InventoryPickupItemEvent event) {
 		onEventHighest(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onMonitor(InventoryPickupItemEvent event) {
 		onEventMonitor(event);

@@ -9,18 +9,18 @@ import com.noxpvp.mmo.command.subcommands.ClassSwitchCommand;
 
 public class ClassCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "class";
-	
+
 	public ClassCommand() {
 		super(COMMAND_NAME, false);
-		
+
 		registerSubCommands(
 				new ClassSwitchCommand(),
 				new ClassInfoCommand()
-				);
+		);
 	}
 
 	public String[] getFlags() {
-		return new String[] {"h", "help"};
+		return new String[]{"h", "help"};
 	}
 
 	public int getMaxArguments() {

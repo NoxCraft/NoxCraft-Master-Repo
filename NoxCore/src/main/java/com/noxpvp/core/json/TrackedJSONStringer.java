@@ -17,13 +17,13 @@ public class TrackedJSONStringer extends JSONStringer {
 	public TrackedJSONStringer() {
 		super();
 	}
-	
+
 	public boolean isCurrentlyArray() {
 		if (!actions.isEmpty())
 			return actions.peek() == ACTION.ARRAY;
 		return false;
 	}
-	
+
 	public boolean isCurrentlyObject() {
 		if (!actions.isEmpty())
 			return actions.peek() == ACTION.OBJECT;
@@ -43,30 +43,29 @@ public class TrackedJSONStringer extends JSONStringer {
 		actions.add(ACTION.OBJECT);
 		return ret;
 	}
-	
+
 	@Override
 	public JSONWriter endArray() throws JSONException {
 		JSONWriter ret = super.endArray();
 		if (!actions.isEmpty())
 			if (actions.peek() == ACTION.ARRAY)
 				actions.pop();
-		
+
 		return ret;
 	}
-	
+
 	@Override
 	public JSONWriter endObject() throws JSONException {
 		JSONWriter ret = super.endObject();
 		if (!actions.isEmpty())
 			if (actions.peek() == ACTION.OBJECT)
 				actions.pop();
-		
+
 		return ret;
 	}
 
 	public JSONWriter close() throws JSONException {
-		while (!actions.isEmpty())
-		{
+		while (!actions.isEmpty()) {
 			ACTION a = actions.pop();
 			if (a.equals(ACTION.ARRAY))
 				endArray();

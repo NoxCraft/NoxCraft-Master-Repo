@@ -7,8 +7,9 @@ public interface IPlayerAbilityEvent {
 
 	/**
 	 * Gets the {@link IPlayerAbility} associated with this event
+	 *
 	 * @return {@link BasePlayerAbility} The ability
 	 */
 	public BasePlayerAbility getAbility();
-	
+
 }

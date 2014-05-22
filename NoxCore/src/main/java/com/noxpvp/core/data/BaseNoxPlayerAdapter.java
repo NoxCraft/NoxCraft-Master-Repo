@@ -28,6 +28,22 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		ProxyBase.validate(BaseNoxPlayerAdapter.class);
 	}
 
+	public BaseNoxPlayerAdapter(NoxPlayerAdapter player) {
+		this(player.getPlayerName());
+	}
+
+	public BaseNoxPlayerAdapter(OfflinePlayer player) {
+		this(player.getName());
+	}
+
+	public BaseNoxPlayerAdapter(String name) {
+		this.playerName = name;
+	}
+
+	private static NoxPlayer getNoxPlayer(String name) {
+		return CorePlayerManager.getInstance().getPlayer(name);
+	}
+
 	public void deleteCoreBox() {
 		getProxyBase().deleteCoreBox();
 	}
@@ -48,41 +64,20 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		getProxyBase().updatePersistantData();
 	}
 
-	public void setFirstLoad(boolean isFirstLoad) {
-		getProxyBase().setFirstLoad(isFirstLoad);
-	}
-
 	public boolean isFirstLoad() {
 		return getProxyBase().isFirstLoad();
 	}
 
-	public void setPersistantData(ConfigurationNode persistant_data) {
-		getProxyBase().setPersistantData(persistant_data);
-	}
-
-	public BaseNoxPlayerAdapter(NoxPlayerAdapter player)
-	{
-		this(player.getPlayerName());
-	}
-
-	public BaseNoxPlayerAdapter(OfflinePlayer player) {
-		this(player.getName());
-	}
-
-	public BaseNoxPlayerAdapter(String name)
-	{
-		this.playerName = name;
-	}
-
-	public final void setName(String name) {
-		getProxyBase().setName(name);
+	public void setFirstLoad(boolean isFirstLoad) {
+		getProxyBase().setFirstLoad(isFirstLoad);
 	}
 
 	public NoxPlayer getProxyBase() {
 		return getNoxPlayer(this.getName());
 	}
 
-	public final void setProxyBase(NoxPlayer player) { }
+	public final void setProxyBase(NoxPlayer player) {
+	}
 
 	public final NoxPlayer getNoxPlayer() {
 		return getProxyBase();
@@ -96,6 +91,10 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		return getProxyBase().getPersistantData();
 	}
 
+	public void setPersistantData(ConfigurationNode persistant_data) {
+		getProxyBase().setPersistantData(persistant_data);
+	}
+
 	public final ConfigurationNode getTempData() {
 		return getProxyBase().getTempData();
 	}
@@ -103,11 +102,17 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 	/**
 	 * @deprecated calls {@link #getName()}. Use that instead for less processing.
 	 */
-	public final String getPlayerName() { return getName(); }
+	public final String getPlayerName() {
+		return getName();
+	}
 
-	public final OfflinePlayer getOfflinePlayer() { return Bukkit.getOfflinePlayer(getName()); }
+	public final OfflinePlayer getOfflinePlayer() {
+		return Bukkit.getOfflinePlayer(getName());
+	}
 
-	public final boolean isOnline() { return getOfflinePlayer().isOnline(); }
+	public final boolean isOnline() {
+		return getOfflinePlayer().isOnline();
+	}
 
 	public final Player getPlayer() {
 		if (isOnline())
@@ -118,10 +123,6 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 
 	public final String getFullName() {
 		return getNoxPlayer().getFullName();
-	}
-
-	private static NoxPlayer getNoxPlayer(String name) {
-		return CorePlayerManager.getInstance().getPlayer(name);
 	}
 
 	public String toString() {
@@ -164,6 +165,10 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		return getProxyBase().getFirstJoin();
 	}
 
+	public void setFirstJoin(long value) {
+		getProxyBase().setFirstJoin(value);
+	}
+
 	public long getFirstJoin(boolean cached) {
 		return getProxyBase().getFirstJoin(cached);
 	}
@@ -172,8 +177,16 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		return getProxyBase().getLastDeathLocation();
 	}
 
+	public void setLastDeathLocation(Location loc) {
+		getProxyBase().setLastDeathLocation(loc);
+	}
+
 	public long getLastDeathTS() {
 		return getProxyBase().getLastDeathTS();
+	}
+
+	public void setLastDeathTS(long stamp) {
+		getProxyBase().setLastDeathTS(stamp);
 	}
 
 	public long getLastJoin() {
@@ -208,8 +221,16 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		return playerName;
 	}
 
+	public final void setName(String name) {
+		getProxyBase().setName(name);
+	}
+
 	public int getVotes() {
 		return getProxyBase().getVotes();
+	}
+
+	public void setVotes(int amount) {
+		getProxyBase().setVotes(amount);
 	}
 
 	public boolean hasPermission(String permNode) {
@@ -279,24 +300,12 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		getProxyBase().setFirstJoin();
 	}
 
-	public void setFirstJoin(long value) {
-		getProxyBase().setFirstJoin(value);
-	}
-
 	public void setLastDeath(PlayerDeathEvent event) {
 		getProxyBase().setLastDeath(event);
 	}
 
-	public void setLastDeathLocation(Location loc) {
-		getProxyBase().setLastDeathLocation(loc);
-	}
-
 	public void setLastDeathTS() {
 		getProxyBase().setLastDeathTS();
-	}
-
-	public void setLastDeathTS(long stamp) {
-		getProxyBase().setLastDeathTS(stamp);
 	}
 
 	public void setLastKill(Entity entity) {
@@ -309,10 +318,6 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 
 	public void setLastKillTS(long stamp) {
 		getProxyBase().setLastKillTS(stamp);
-	}
-
-	public void setVotes(int amount) {
-		getProxyBase().setVotes(amount);
 	}
 
 	public void saveToManager() {

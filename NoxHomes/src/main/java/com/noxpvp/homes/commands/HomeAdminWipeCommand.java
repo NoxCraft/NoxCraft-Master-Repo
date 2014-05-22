@@ -18,37 +18,34 @@ public class HomeAdminWipeCommand extends BaseCommand {
 	public static final String PERM_NODE = "wipe.homes";
 	private static final Random r = new Random();
 	private HomesPlayerManager manager;
-	
+
 	private String key;
 	private String[] helpLines;
-	
+
 	public HomeAdminWipeCommand() {
 		super(COMMAND_NAME, false);
 		key = getNextKey();
-		
+
 		updateHelp();
-		
+
 		manager = getPlugin().getHomeManager();
 	}
-	
+
 	public CommandResult execute(CommandContext context) {
 		String[] args = context.getArguments();
 		CommandSender sender = context.getSender();
-		
+
 		boolean wiped = false;
-		if (args.length < 1)
-		{
+		if (args.length < 1) {
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Must Specify Safety Key.");
 			return new CommandResult(this, false);
 		}
-		
+
 		String k = null;
-		if (args.length > 0) 
-		{
+		if (args.length > 0) {
 			k = args[0];
-		
-			if (k.equals(key))
-			{
+
+			if (k.equals(key)) {
 				manager.clear();
 				manager.save();
 				wiped = true;
@@ -57,19 +54,18 @@ public class HomeAdminWipeCommand extends BaseCommand {
 				return new CommandResult(this, false);
 			}
 		}
-		
-		if (wiped)
-		{
+
+		if (wiped) {
 			key = getNextKey();
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_SUCCESS, "Wiped home data.");
-			
+
 			updateHelp();
 		} else {
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Could not wipe data.");
 		}
 		return new CommandResult(this, true);
 	}
-	
+
 	private String getNextKey() {
 		return String.valueOf(r.nextInt(NoxCore.getInstance().getConfig().getInt("wipe-confirmation-number", 9999)));
 	}
@@ -79,10 +75,10 @@ public class HomeAdminWipeCommand extends BaseCommand {
 		mb.blue("/").append(HomeAdminCommand.COMMAND_NAME).append(' ').append(COMMAND_NAME).newLine();
 		mb.red("WILL WIPE ALL HOME LOCATIONS ON ALL PLAYERS").newLine();
 		mb.red("Current Safety Key: ").yellow(key);
-		
+
 		helpLines = mb.lines();
 	}
-	
+
 	public String[] getHelp() {
 		return helpLines;
 	}
@@ -102,5 +98,5 @@ public class HomeAdminWipeCommand extends BaseCommand {
 	public NoxHomes getPlugin() {
 		return NoxHomes.getInstance();
 	}
-	
+
 }

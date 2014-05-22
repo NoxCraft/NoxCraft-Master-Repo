@@ -13,20 +13,19 @@ public class CommandContext implements ICommandContext {
 	private String[] args;
 	private Map<String, Object> flags;
 	private CommandSender sender;
-	
-	public CommandContext(CommandSender sender, Map<String, Object> flags, String... args)
-	{
+
+	public CommandContext(CommandSender sender, Map<String, Object> flags, String... args) {
 		this.flags = new HashMap<String, Object>(flags);
 		this.sender = sender;
 		this.args = args;
 	}
-	
+
 	public String getArgument(int arg) {
 		if (arg >= getArgumentCount())
-			throw new IndexOutOfBoundsException("Argument does not exist! Maximum Index of "+ (getArgumentCount() - 1) +"!");
+			throw new IndexOutOfBoundsException("Argument does not exist! Maximum Index of " + (getArgumentCount() - 1) + "!");
 		return args[arg];
 	}
-	
+
 	public int getArgumentCount() {
 		return args.length;
 	}
@@ -61,7 +60,7 @@ public class CommandContext implements ICommandContext {
 	public Map<String, Object> getFlags() {
 		return Collections.unmodifiableMap(flags);
 	}
-	
+
 	public Player getPlayer() {
 		if (isPlayer())
 			return (Player) getSender();
@@ -83,6 +82,6 @@ public class CommandContext implements ICommandContext {
 	public boolean isPlayer() {
 		return getSender() instanceof Player;
 	}
-	
-	
+
+
 }

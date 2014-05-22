@@ -27,48 +27,50 @@ public class PacketListeners {
 		public void onPacketSend(PacketSendEvent arg0) {}
 		
 	}*/
-	
+
 	public class EntityEquipmentListener implements PacketListener {
 
 		public void onPacketReceive(PacketReceiveEvent arg0) {
-			
+
 			CommonPacket packet = arg0.getPacket();
 			Player p = arg0.getPlayer();
-			
-			if (p != null){
+
+			if (p != null) {
 				
 				/*
 				 * class armor disguises
 				 */
 				new ClassArmorDisguisePlayerAbility(p, packet).execute();
-				
+
 			}
 		}
 
-		public void onPacketSend(PacketSendEvent arg0) {}
-		
+		public void onPacketSend(PacketSendEvent arg0) {
+		}
+
 	}
 
-	public class WorldSoundListener implements PacketListener{
-		
-		public void onPacketReceive(PacketReceiveEvent arg0) {}
-		
+	public class WorldSoundListener implements PacketListener {
+
+		public void onPacketReceive(PacketReceiveEvent arg0) {
+		}
+
 		public void onPacketSend(PacketSendEvent arg0) {
-			
+
 			CommonPacket packet = arg0.getPacket();
 			Player p = arg0.getPlayer();
-			
-			if (p != null){
+
+			if (p != null) {
 				
 				/*
 				 * silent walking ability
 				 */
 				arg0.setCancelled(new SilentWalkingPlayerAbility(p, packet).execute());
-				
+
 			}
-			
+
 		}
-		
+
 	}
 
 }

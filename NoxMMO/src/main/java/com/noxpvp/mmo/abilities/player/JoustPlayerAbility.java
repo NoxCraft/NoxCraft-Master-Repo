@@ -13,19 +13,19 @@ public class JoustPlayerAbility extends BasePlayerAbility implements IPVPAbility
 
 	public static final String ABILITY_NAME = "Joust";
 	public static final String PERM_NODE = "joust";
-	
+
 	private EntityDamageByEntityEvent event;
-	
+
 	public JoustPlayerAbility(Player p, EntityDamageByEntityEvent event) {
 		super(ABILITY_NAME, p);
-		
+
 		this.event = event;
 	}
 
 	public boolean execute() {
-		
+
 		throw new NotImplementedException();
-		
+
 //		MMOPlayer mmoP;
 //		PlayerClass clazz = (mmoP = PlayerManager.getInstance().getPlayer(getPlayer())) != null? mmoP.getPrimaryClass() : null;
 //		

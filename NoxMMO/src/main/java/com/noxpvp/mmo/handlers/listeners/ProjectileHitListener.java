@@ -11,17 +11,17 @@ public class ProjectileHitListener extends GenericMMOListener<ProjectileHitEvent
 	public ProjectileHitListener(NoxMMO plugin) {
 		super(plugin, ProjectileHitEvent.class);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onLowest(ProjectileHitEvent event) {
 		onEventLowest(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void onLow(ProjectileHitEvent event) {
 		onEventLow(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
 	public void onNormal(ProjectileHitEvent event) {
 		onEventNormal(event);
@@ -31,12 +31,12 @@ public class ProjectileHitListener extends GenericMMOListener<ProjectileHitEvent
 	public void onHigh(ProjectileHitEvent event) {
 		onEventHigh(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
 	public void onHighest(ProjectileHitEvent event) {
 		onEventHighest(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onMonitor(ProjectileHitEvent event) {
 		onEventMonitor(event);

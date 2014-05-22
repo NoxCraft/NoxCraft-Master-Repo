@@ -21,26 +21,25 @@ import com.noxpvp.homes.tp.NamedHome;
 public class HomeCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "home";
 	public static final String PERM_NODE = "home";
-	private HomesPlayerManager manager;
 	private final PermissionHandler permHandler;
-	
-	public HomeCommand()
-	{
+	private HomesPlayerManager manager;
+
+	public HomeCommand() {
 		super(COMMAND_NAME, true);
 		manager = getPlugin().getHomeManager();
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
 	}
-	
+
 	public CommandResult execute(CommandContext context) {
-		
+
 		if (!context.isPlayer()) {
 			MessageUtil.sendLocale(context.getSender(), GlobalLocale.CONSOLE_ONLYPLAYER);
 			return new CommandResult(this, true);
 		}
-		
+
 		if (context.hasFlag("h") || context.hasFlag("help"))
 			return new CommandResult(this, false); //Its caught anyway why repeat display help code...
-		
+
 		Player sender = context.getPlayer();
 
 		String player = null, homeName = null;
@@ -51,32 +50,32 @@ public class HomeCommand extends BaseCommand {
 			player = context.getFlag("player", String.class);
 		else
 			player = context.getPlayer().getName(); //Impossible to NPE. If it does. We got problems..
-		
+
 		if (context.hasArgument(0))
 			homeName = context.getArgument(0);
-		
+
 		boolean own = sender.getName().equals(player);
-		
-		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, (own? "": "others.") + (homeName==null ? DefaultHome.PERM_NODE: NamedHome.PERM_NODE));
+
+		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, (own ? "" : "others.") + (homeName == null ? DefaultHome.PERM_NODE : NamedHome.PERM_NODE));
 		if (!permHandler.hasPermission(sender, perm))
-			throw new NoPermissionException(sender, perm, new StringBuilder().append("Teleport to ").append((own?"your ":"others ")).append("homes.").toString());
-		
+			throw new NoPermissionException(sender, perm, new StringBuilder().append("Teleport to ").append((own ? "your " : "others ")).append("homes.").toString());
+
 		BaseHome home = manager.getHome(player, homeName);
-		if (home == null) 
-			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "The home \"" + (homeName == null? "default": homeName) + "\" does not exist");
+		if (home == null)
+			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "The home \"" + (homeName == null ? "default" : homeName) + "\" does not exist");
 		else if (home.tryTeleport(sender, permHandler.hasPermission(sender, perm + ".multi"))) {
-			MessageUtil.sendLocale(getPlugin(), sender, "homes.home"+ (own?".own":""), player, (homeName == null? "default": homeName));
+			MessageUtil.sendLocale(getPlugin(), sender, "homes.home" + (own ? ".own" : ""), player, (homeName == null ? "default" : homeName));
 			if (home.isOwner(sender)) {
-				
+
 				String perm2 = StringUtil.join(".", NoxHomes.HOMES_NODE, PERM_NODE, "other-towns");
 				if (TownyUtil.isClaimedLand(home.getLocation()) && !TownyUtil.isOwnLand(sender, home.getLocation()) && !permHandler.hasPermission(sender, perm2)) {
-					MessageUtil.sendLocale(sender, HomeLocale.DELHOME_INVALID, (homeName == null? "default": homeName), HomeLocale.BAD_LOCATION.get("Not part of wild and not your own town."));
+					MessageUtil.sendLocale(sender, HomeLocale.DELHOME_INVALID, (homeName == null ? "default" : homeName), HomeLocale.BAD_LOCATION.get("Not part of wild and not your own town."));
 					manager.removeHome(home);
 				}
 			}
 		} else
 			MessageUtil.sendLocale(sender, GlobalLocale.COMMAND_FAILED, "Could not teleport home.");
-		
+
 		return new CommandResult(this, true);
 	}
 
@@ -87,7 +86,7 @@ public class HomeCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[]{ "h", "help", "p", "player"};
+		return new String[]{"h", "help", "p", "player"};
 	}
 
 	public int getMaxArguments() {

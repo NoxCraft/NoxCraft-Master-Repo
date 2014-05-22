@@ -8,17 +8,16 @@ import com.noxpvp.core.manager.BasePlayerManager;
 
 public class MMOPlayerManager extends BasePlayerManager<MMOPlayer> {
 	private static MMOPlayerManager instance;
-	
+
+	private MMOPlayerManager() {
+		super(MMOPlayer.class);
+	}
+
 	public static MMOPlayerManager getInstance() {
 		if (instance == null)
 			instance = new MMOPlayerManager();
-		
+
 		return instance;
-	}
-	
-	private MMOPlayerManager()
-	{
-		super(MMOPlayer.class);
 	}
 
 	public NoxMMO getPlugin() {
@@ -38,5 +37,5 @@ public class MMOPlayerManager extends BasePlayerManager<MMOPlayer> {
 	protected Map<String, MMOPlayer> craftNewStorage() {
 		return new HashMap<String, MMOPlayer>();
 	}
-	
+
 }

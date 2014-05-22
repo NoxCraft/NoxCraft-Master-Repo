@@ -16,34 +16,33 @@ import com.noxpvp.mmo.classes.internal.PlayerClass;
 public class AxesWarlordClassTier extends ClassTier {
 
 	public static final String TIER_NAME = "Warlord";
-	
+
 	private volatile static String dName = "Warlord";
-	
-	private Map<String, Ability> abilities = new HashMap<String, Ability>();
 	private final double maxHealth;
-	
+	private Map<String, Ability> abilities = new HashMap<String, Ability>();
+
 	public AxesWarlordClassTier(PlayerClass retainer) {
 		super(retainer, TIER_NAME, 4);
-		
-		abilities.putAll(retainer.getTier(getTierLevel()-1).getAbilityMap());
+
+		abilities.putAll(retainer.getTier(getTierLevel() - 1).getAbilityMap());
 		abilities.put(HammerOfThorPlayerAbility.ABILITY_NAME.toLowerCase(), new HammerOfThorPlayerAbility(getPlayer()));
 		abilities.put(MassDestructionPlayerAbility.ABILITY_NAME.toLowerCase(), new MassDestructionPlayerAbility(getPlayer()));
-		
-		this.maxHealth = 28;
-	}
 
-	public void setDisplayName(String displayName) {
-		AxesWarlordClassTier.dName = displayName;
+		this.maxHealth = 28;
 	}
 
 	public String getDisplayName() {
 		return getRetainingClass().getColor() + AxesWarlordClassTier.dName;
 	}
 
+	public void setDisplayName(String displayName) {
+		AxesWarlordClassTier.dName = displayName;
+	}
+
 	public List<String> getLore() {
 		return Collections.emptyList();
 	}
-	
+
 	public double getMaxHealth() {
 		return maxHealth;
 	}
@@ -68,14 +67,14 @@ public class AxesWarlordClassTier extends ClassTier {
 		return 0;
 	}
 
-	public void setLevel(int level) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public int getLevel() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public void setLevel(int level) {
+		// TODO Auto-generated method stub
+
 	}
 
 	public int getMaxLevel() {

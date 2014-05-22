@@ -21,37 +21,31 @@ import com.noxpvp.core.manager.CorePlayerManager;
 public class CooldownHandler extends BukkitRunnable {
 	private Map<String, List<CoolDown>> cds;
 	private NoxCore core;
-	
-	public CooldownHandler()
-	{
+
+	public CooldownHandler() {
 		cds = new MapMaker().concurrencyLevel(2).makeMap();
 		core = NoxCore.getInstance();
 	}
-	
-	public synchronized void loadPlayer(NoxPlayerAdapter adapter)
-	{
+
+	public synchronized void loadPlayer(NoxPlayerAdapter adapter) {
 		NoxPlayer player = adapter.getNoxPlayer();
-		
+
 		cds.put(player.getName(), player.getCoolDowns());
 	}
 
-	public void loadPlayer(OfflinePlayer player)
-	{
+	public void loadPlayer(OfflinePlayer player) {
 		loadPlayer(CorePlayerManager.getInstance().getPlayer(player));
 	}
-	
-	public void loadPlayer(String name)
-	{
+
+	public void loadPlayer(String name) {
 		loadPlayer(CorePlayerManager.getInstance().getPlayer(name));
 	}
-	
+
 	public void run() {
-		for (Entry<String, List<CoolDown>> entry : cds.entrySet())
-		{
+		for (Entry<String, List<CoolDown>> entry : cds.entrySet()) {
 			final String name = entry.getKey();
 			for (final CoolDown cd : entry.getValue())
-				if (cd.expired())
-				{
+				if (cd.expired()) {
 					CommonUtil.nextTick(new Runnable() {
 						public void run() {
 							Player p = Bukkit.getPlayer(name);
@@ -60,9 +54,9 @@ public class CooldownHandler extends BukkitRunnable {
 						}
 					});
 				}
-		}		
+		}
 	}
-	
+
 	public synchronized void start() {
 		try {
 			runTaskTimerAsynchronously(core, 0, 20);
@@ -71,7 +65,7 @@ public class CooldownHandler extends BukkitRunnable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public synchronized void stop() {
 		try {
 			cancel();

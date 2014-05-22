@@ -5,12 +5,12 @@ import com.noxpvp.noxchat.Targetable;
 public class RangedChannel extends BaseChannel {
 	private String name;
 	private double range;
-	
+
 	public RangedChannel(String name, double range) {
 		this.name = name;
 		this.range = range;
 	}
-	
+
 	public String getName() {
 		return this.name;
 	}

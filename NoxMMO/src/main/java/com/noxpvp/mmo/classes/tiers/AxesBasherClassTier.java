@@ -15,32 +15,31 @@ public class AxesBasherClassTier extends ClassTier {
 
 	public static final String TIER_NAME = "Basher";
 	private volatile static String dName = "Basher";
-	
-	private Map<String, Ability> abilities = new HashMap<String, Ability>();
 	private final double maxHealth;
-	
+	private Map<String, Ability> abilities = new HashMap<String, Ability>();
+
 	public AxesBasherClassTier(PlayerClass retainer) {
 		super(retainer, TIER_NAME, 1);
-		
+
 		//abilities.put("Iron Grip", /* HERP */)
 		abilities.put(LeapEntityAbility.ABILITY_NAME.toLowerCase(), new LeapEntityAbility(retainer.getPlayer()));
 		abilities.put(CriticalHitPlayerAbility.ABILITY_NAME.toLowerCase(), new CriticalHitPlayerAbility(retainer.getPlayer()));
-		
-		this.maxHealth = 22;
-	}
 
-	public void setDisplayName(String displayName) {
-		AxesBasherClassTier.dName = displayName;
+		this.maxHealth = 22;
 	}
 
 	public String getDisplayName() {
 		return getRetainingClass().getColor() + AxesBasherClassTier.dName;
 	}
 
+	public void setDisplayName(String displayName) {
+		AxesBasherClassTier.dName = displayName;
+	}
+
 	public List<String> getLore() {
 		return Collections.emptyList();//XXX implement soon
 	}
-	
+
 	public double getMaxHealth() {
 		return this.maxHealth;
 	}
@@ -64,14 +63,14 @@ public class AxesBasherClassTier extends ClassTier {
 		return 0;
 	}
 
-	public void setLevel(int level) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public int getLevel() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public void setLevel(int level) {
+		// TODO Auto-generated method stub
+
 	}
 
 	public int getMaxLevel() {

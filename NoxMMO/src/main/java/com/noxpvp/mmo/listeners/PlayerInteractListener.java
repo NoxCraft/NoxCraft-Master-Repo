@@ -45,30 +45,29 @@ import com.noxpvp.mmo.events.PlayerAbilityExecutedEvent;
 import com.noxpvp.mmo.events.PlayerTargetedAbilityExecutedEvent;
 
 @SuppressWarnings("unused")
-public class PlayerInteractListener extends NoxListener<NoxMMO>{
+public class PlayerInteractListener extends NoxListener<NoxMMO> {
 
 	MMOPlayerManager pm;
-	
-	public PlayerInteractListener(NoxMMO mmo)
-	{
+
+	public PlayerInteractListener(NoxMMO mmo) {
 		super(mmo);
-		
+
 		this.pm = MMOPlayerManager.getInstance();
 	}
-	
+
 	public PlayerInteractListener() {
 		this(NoxMMO.getInstance());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onInteract(PlayerInteractEvent e) {
-		
+
 		Player p;
 		MMOPlayer player = pm.getPlayer((p = e.getPlayer()));
 		if (player == null) return;
-		
+
 		new TargetPlayerAbility(p).execute(e);//TODO make default range configized || passiveness
-		
+
 		//debug===========================================
 		if (p.getItemInHand().getType() != Material.STICK)
 			return;
@@ -83,11 +82,11 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 //		new MedPackAbility(p).execute();
 //		new PickPocketAbility(p).execute();
 //		new HookShotAbility(p).execute();//XXX do this
-		
+
 		DrainLifePlayerAbility fs;
 		if ((fs = new DrainLifePlayerAbility(p)).execute())
 			CommonUtil.callEvent(new PlayerTargetedAbilityExecutedEvent(p, fs));
-		
+
 //		new HammerOfThorAbility(p).execute();
 //		new GuardianAngelAbility(p).execute();
 //		new BandageAbility(p).execute();
@@ -102,8 +101,8 @@ public class PlayerInteractListener extends NoxListener<NoxMMO>{
 //		new DrainLifeAbility(p).execute();
 //		new SoulStealAbility(p).execute();
 //		new LevelUpGlimmer(p.getLocation(), 20 * 10, 10).start(0);
-		
+
 //		Bukkit.broadcastMessage(p.getLocation().getDirection().getY() + "");
 	}
-	
+
 }

@@ -12,32 +12,30 @@ import com.noxpvp.core.commands.CommandContext;
 
 public class CommandUtil {
 	private static final char escapeChar = '\\';
-	
+
 	private static final char flagChar = '-';
 
 	private static List<Character> quoteChars = new ArrayList<Character>(Arrays.asList('\'', '"'));
-	
+
 	///WARNING THIS IS A COMPLEX FUNCTION DO NOT MODIFY WITHOUT PROPER TESTING!
-	public static CommandContext parseCommand(CommandSender sender, String argLine)
-	{
+	public static CommandContext parseCommand(CommandSender sender, String argLine) {
 		Map<String, Object> flags = new LinkedHashMap<String, Object>();
 
 		List<String> args = new ArrayList<String>();
-		
+
 		StringBuilder asb = new StringBuilder();
 		StringBuilder fsb = new StringBuilder();
 		StringBuilder fvsb = new StringBuilder();
 
 		char[] r = argLine.toCharArray();
-		
+
 		boolean isQuoting = false, isFlag = false, isLongFlag = false, isFlagValue = false, isEscaped = false;
 		char quoteChar = '\0';
 		int i = 0;
-		
-		while (i < r.length)
-		{
+
+		while (i < r.length) {
 //			if (((i - 1) >= 0) && r[i-1] == ' ') 
-			if (r[i] == flagChar && (((i - 1) >= 0) && r[i-1] == ' ')) {
+			if (r[i] == flagChar && (((i - 1) >= 0) && r[i - 1] == ' ')) {
 				isFlag = true;
 				if (r[i + 1] == flagChar) {
 					isLongFlag = true;
@@ -51,7 +49,7 @@ public class CommandUtil {
 							isFlagValue = true;
 						} else if (isFlagValue)
 							isFlagValue = false;
-						
+
 						i++;
 						if (r[i] == flagChar)
 							break;
@@ -60,13 +58,12 @@ public class CommandUtil {
 					} else if (r[i] == escapeChar) {
 						if (!isEscaped)
 							isEscaped = true;
+						else if (isFlag)
+							fsb.append(r[i]);
+						else if (isFlagValue)
+							fvsb.append(r[i]);
 						else
-							if (isFlag)
-								fsb.append(r[i]);
-							else if (isFlagValue)
-								fvsb.append(r[i]);
-							else
-								break;
+							break;
 						if (++i >= r.length)
 							break;
 						continue;
@@ -103,13 +100,13 @@ public class CommandUtil {
 //					else if (ParseUtil.isNumeric(fvsb.toString()))
 //						flags.put(fsb.toString(), ParseUtil.parseDouble(fvsb.toString(), 0));
 //					else
-						flags.put(fsb.toString(), fvsb.toString());
+					flags.put(fsb.toString(), fvsb.toString());
 				else
 					flags.put(fsb.toString(), true);
-				
+
 				fsb = new StringBuilder();
 				fvsb = new StringBuilder();
-				
+
 				continue;
 			} else {
 				if (r[i] == ' ' && !isQuoting) {
@@ -133,7 +130,7 @@ public class CommandUtil {
 		}
 		if (asb.length() > 0 && !args.contains(asb.toString())) //Safety catch.
 			args.add(asb.toString());
-		
+
 		return new CommandContext(sender, flags, args.toArray(new String[args.size()]));
 	}
 }

@@ -5,15 +5,15 @@ import com.noxpvp.core.NoxCore;
 
 public class WhoisCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "whois";
-	
+
 	public static final String PERM_NODE = "whois";
-	
+
 	public WhoisCommand() {
 		super(COMMAND_NAME, false);
 	}
 
 	public String[] getFlags() {
-		return new String[] {"h", "help"};
+		return new String[]{"h", "help"};
 	}
 
 	public String[] getHelp() {

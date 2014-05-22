@@ -28,23 +28,23 @@ public class AbilityListCommand extends BaseCommand {
 	@Override
 	public CommandResult execute(CommandContext context)
 			throws NoPermissionException {
-		
+
 		MMOPlayer player = MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
 		NoxMessageBuilder mb = new NoxMessageBuilder(getPlugin()).commandHeader("Ability List", true);
-		
-		for (Ability ability: player.getAllAbilities()) {
+
+		for (Ability ability : player.getAllAbilities()) {
 			mb.yellow(ability.getDisplayName()).gold(": ").red(ability.getLore()).newLine();
 		}
-		
+
 		mb.headerClose();
 		mb.send(context.getSender());
-		
+
 		return new CommandResult(this, true);
 	}
-	
+
 	@Override
 	public NoxMMO getPlugin() {
 		return NoxMMO.getInstance();
 	}
-	
+
 }

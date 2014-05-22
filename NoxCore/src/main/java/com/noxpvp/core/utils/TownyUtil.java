@@ -15,28 +15,12 @@ import com.palmergames.bukkit.towny.Towny;
 
 public class TownyUtil {
 	private static ModuleLogger log;
-	
+
 	private static Towny towny;
 	private static ITownyHook hook = new NullTownyHook();
-	
+
 	static {
 		setup();
-	}
-	
-	public static void setup() {
-		if (log == null)
-			log = NoxCore.getInstance().getModuleLogger("TownyUtil");
-		
-		Plugin plugin = Bukkit.getPluginManager().getPlugin("Towny");
-		if (plugin instanceof Towny)
-			towny = (Towny) plugin;
-		else if (plugin != null)
-			log.severe("NoxCore is outdated. Towny no longer of the class type Towny?");
-		else
-			log.info("Towny was not found.");
-		
-		if (towny != null)
-			hook = new TownyHook(towny);
 	}
 
 	/**
@@ -44,6 +28,22 @@ public class TownyUtil {
 	 */
 	public TownyUtil() {
 		super();
+	}
+
+	public static void setup() {
+		if (log == null)
+			log = NoxCore.getInstance().getModuleLogger("TownyUtil");
+
+		Plugin plugin = Bukkit.getPluginManager().getPlugin("Towny");
+		if (plugin instanceof Towny)
+			towny = (Towny) plugin;
+		else if (plugin != null)
+			log.severe("NoxCore is outdated. Towny no longer of the class type Towny?");
+		else
+			log.info("Towny was not found.");
+
+		if (towny != null)
+			hook = new TownyHook(towny);
 	}
 
 	public static boolean isTownyEnabled() {

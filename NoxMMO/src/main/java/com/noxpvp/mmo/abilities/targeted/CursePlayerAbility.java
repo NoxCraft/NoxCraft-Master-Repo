@@ -12,64 +12,74 @@ import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 import com.noxpvp.mmo.abilities.IPVPAbility;
 
 public class CursePlayerAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
-	
-	private static final String ABILITY_NAME = "Curse";
+
 	public static final String PERM_NODE = "curse";
-	
+	private static final String ABILITY_NAME = "Curse";
 	private int duration;
 	private int lethality;
-	/**
-	 * Gets the currently set duration in ticks of the curse effect.
-	 * 
-	 * @return Integer Duration of the curse effect.
-	 */
-	public int getDuration() {return duration;}
-	
-	/**
-	 * Sets the duration in ticks of the curse effect.
-	 * 
-	 * @param duration The duration of the curse effect.
-	 * @return CurseAbility This instance
-	 */
-	public CursePlayerAbility setDuration(int duration) {this.duration = duration; return this;}
 
-	/**
-	 * Gets the currently set amplifier for the curse effect.
-	 * 
-	 * @return Integer Amplifier for the curse effect.
-	 */
-	public int getLethality() {return lethality;}
-	
-	/**
-	 * Sets the amplifier of the curse effect.
-	 * 
-	 * @param lethality The amplifier of the curse effect.
-	 * @return CurseAbility This instance
-	 */
-	public CursePlayerAbility setLethality(int lethality) {this.lethality = lethality; return this;}
-	
 	public CursePlayerAbility(Player player) {
 		this(player, 15);
 	}
-	
+
 	public CursePlayerAbility(Player player, double range) {
 		super(ABILITY_NAME, player, range, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
-				
+
 		this.duration = 100;
 		this.lethality = 1;
+	}
+
+	/**
+	 * Gets the currently set duration in ticks of the curse effect.
+	 *
+	 * @return Integer Duration of the curse effect.
+	 */
+	public int getDuration() {
+		return duration;
+	}
+
+	/**
+	 * Sets the duration in ticks of the curse effect.
+	 *
+	 * @param duration The duration of the curse effect.
+	 * @return CurseAbility This instance
+	 */
+	public CursePlayerAbility setDuration(int duration) {
+		this.duration = duration;
+		return this;
+	}
+
+	/**
+	 * Gets the currently set amplifier for the curse effect.
+	 *
+	 * @return Integer Amplifier for the curse effect.
+	 */
+	public int getLethality() {
+		return lethality;
+	}
+
+	/**
+	 * Sets the amplifier of the curse effect.
+	 *
+	 * @param lethality The amplifier of the curse effect.
+	 * @return CurseAbility This instance
+	 */
+	public CursePlayerAbility setLethality(int lethality) {
+		this.lethality = lethality;
+		return this;
 	}
 
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
-		
+
 		LivingEntity t = getTarget();
-		
+
 		t.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration, lethality));
 		t.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, duration, lethality));
-		
+
 		new ParticleRunner(ParticleType.angryVillager, t, false, 0, 1, 1).start(0);
-		
+
 		return true;
 	}
 }

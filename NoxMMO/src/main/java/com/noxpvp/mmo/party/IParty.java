@@ -14,21 +14,30 @@ import org.bukkit.entity.Player;
  * PVP can be toggled on / off and will override any towny setting for ally pvp, allowing for fighting, or preventing mis-conduct during a raid.
  */
 public interface IParty {
-	
+
 	public Player getOwner();
-	
+
 	public List<String> getMembers();
+
 	public boolean hasMember(String player);
+
 	public void addMember(String player);
 
 	public String getPartyName();
-	public String getPassword();
-	public boolean getPVPState();
-	public SharingType getSharingState();
 
 	public void setPartyName(String name);
+
+	public String getPassword();
+
 	public void setPassword(String pass);
+
+	public boolean getPVPState();
+
 	public void setPVPState(boolean state);
+
+	public SharingType getSharingState();
+
 	public void setSharingState(SharingType state);
+
 	public List<Player> getExpGroup();
 }

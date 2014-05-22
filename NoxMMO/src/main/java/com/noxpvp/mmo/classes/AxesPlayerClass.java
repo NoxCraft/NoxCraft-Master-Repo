@@ -20,10 +20,11 @@ import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.classes.tiers.*;
 
 public class AxesPlayerClass extends PlayerClass {
-	
+
 	public static final String className = "Axes";
-	
-	public static final String uniqueID = "f8c26f34-fc36-427a-b92e-94090b146db1";	//RANDOMLY GENERATED DO NOT CHANGE!
+
+	public static final String uniqueID = "f8c26f34-fc36-427a-b92e-94090b146db1";    //RANDOMLY GENERATED DO NOT CHANGE!
+	private ItemStack identiferItem;
 
 	public AxesPlayerClass(Player player) {
 		super(uniqueID, className, player);
@@ -37,8 +38,6 @@ public class AxesPlayerClass extends PlayerClass {
 		super(uniqueID, className, playerName);
 	}
 
-	private ItemStack identiferItem;
-	
 	public boolean isPrimaryClass() {
 		return true;
 	}
@@ -50,7 +49,7 @@ public class AxesPlayerClass extends PlayerClass {
 	public ClassType[] getSubClassTypes() {
 		return new ClassType[0];
 	}
-	
+
 	public int getHighestPossibleTier() {
 		return 4;
 	}
@@ -58,14 +57,14 @@ public class AxesPlayerClass extends PlayerClass {
 	public ItemStack getIdentifibleItem() {
 		if (identiferItem == null) {
 			identiferItem = new ItemStack(Material.DIAMOND_AXE);
-			
+
 			ItemMeta meta = identiferItem.getItemMeta();
 			meta.setDisplayName(getDisplayName());
 			meta.setLore(getLore());
-			
+
 			identiferItem.setItemMeta(meta);
 		}
-		
+
 		return identiferItem.clone();
 	}
 
@@ -92,25 +91,25 @@ public class AxesPlayerClass extends PlayerClass {
 	@Override
 	protected Map<Integer, IClassTier> craftClassTiers() {
 		this.tiers = new HashMap<Integer, IClassTier>();
-		
+
 		tiers.put(1, new AxesBasherClassTier(this));
 		tiers.put(2, new AxesChampionClassTier(this));
 		tiers.put(3, new AxesBerserkerClassTier(this));
 		tiers.put(4, new AxesWarlordClassTier(this));
-		
+
 		return this.tiers;
 	}
 
 	@Override
 	public void load(ConfigurationNode node) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void save(ConfigurationNode node) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

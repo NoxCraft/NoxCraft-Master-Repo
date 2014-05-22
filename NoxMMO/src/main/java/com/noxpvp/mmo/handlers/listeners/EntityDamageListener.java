@@ -11,17 +11,17 @@ public class EntityDamageListener extends GenericMMOListener<EntityDamageEvent> 
 	public EntityDamageListener(NoxMMO plugin) {
 		super(plugin, EntityDamageEvent.class);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onLowest(EntityDamageEvent event) {
 		onEventLowest(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void onLow(EntityDamageEvent event) {
 		onEventLow(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
 	public void onNormal(EntityDamageEvent event) {
 		onEventNormal(event);
@@ -31,12 +31,12 @@ public class EntityDamageListener extends GenericMMOListener<EntityDamageEvent> 
 	public void onHigh(EntityDamageEvent event) {
 		onEventHigh(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
 	public void onHighest(EntityDamageEvent event) {
 		onEventHighest(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onMonitor(EntityDamageEvent event) {
 		onEventMonitor(event);

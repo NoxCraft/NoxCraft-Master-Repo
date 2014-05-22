@@ -23,19 +23,26 @@ import com.noxpvp.core.data.Cycler;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 
-public class DreamCoatEntityAbililty extends BaseEntityAbility{
-	
+public class DreamCoatEntityAbililty extends BaseEntityAbility {
+
 	public static final String ABILITY_NAME = "Dream Coat";
 	public static final String PERM_NODE = "dream-coat";
-	
+	private static WeakHashMap<LivingEntity, DreamCoatRunnable> runnables = new WeakHashMap<LivingEntity, DreamCoatEntityAbililty.DreamCoatRunnable>();
+	private static SortedMap<Long, Color> colours = new TreeMap<Long, Color>(Collections.reverseOrder());
+	private boolean anyArmor;
+
+	public DreamCoatEntityAbililty(Entity e) {
+		super(ABILITY_NAME, e);
+
+		setupColors();
+		this.setAnyArmor(false);
+	}
+
 	@Override
 	public String getDescription() {
 		return "The coat of much technicolor";
 	}
-	
-	private static WeakHashMap<LivingEntity, DreamCoatRunnable> runnables = new WeakHashMap<LivingEntity, DreamCoatEntityAbililty.DreamCoatRunnable>();
-	private static SortedMap<Long, Color> colours = new TreeMap<Long, Color>(Collections.reverseOrder());
-	
+
 	private void setupColors() {
 		int[] values = new int[]{0, 32, 64, 96, 128, 160, 192, 224, 255};
 		for (int r : values) {
@@ -47,115 +54,113 @@ public class DreamCoatEntityAbililty extends BaseEntityAbility{
 				}
 			}
 		}
-		
+
 	}
-	
-	private boolean anyArmor;
 
-	public boolean isAnyArmor() { return anyArmor; }
-	public DreamCoatEntityAbililty setAnyArmor(boolean anyArmor) { this.anyArmor = anyArmor; return this; }
+	public boolean isAnyArmor() {
+		return anyArmor;
+	}
 
-	public DreamCoatEntityAbililty(Entity e) {
-		super(ABILITY_NAME, e);
-		
-		setupColors();
-		this.setAnyArmor(false);
+	public DreamCoatEntityAbililty setAnyArmor(boolean anyArmor) {
+		this.anyArmor = anyArmor;
+		return this;
 	}
 
 	public boolean execute() {
 		if (!(getEntity() instanceof LivingEntity))
 			return false;
-		
+
 		LivingEntity a = (LivingEntity) getEntity();
-		
-		if (runnables.containsKey(a)){
+
+		if (runnables.containsKey(a)) {
 			while (runnables.containsKey(a)) {
 				runnables.get(a).safeCancel();
 				runnables.remove(a);
-			}			
+			}
 			sendFakeArmor(a, null);
-			
+
 			return false;
 		}
-		
+
 		System.out.println("starting");
 		DreamCoatRunnable b = new DreamCoatRunnable(a);
 		runnables.put(a, b);
-		
+
 		b.runTaskTimer(NoxMMO.getInstance(), 0, 1);
 		return true;
 	}
-	
-	public void sendFakeArmor(LivingEntity e, @Nullable Color color){
-		
+
+	public void sendFakeArmor(LivingEntity e, @Nullable Color color) {
+
 		CommonPacket packet;
 		NMSPacketPlayOutEntityEquipment nms = new NMSPacketPlayOutEntityEquipment();
-		
+
 		int slot;
-		for (ItemStack i : e.getEquipment().getArmorContents()){
+		for (ItemStack i : e.getEquipment().getArmorContents()) {
 			switch (i.getType()) {
-			case LEATHER_BOOTS:
-				slot = 1;
-				break;
-			case LEATHER_LEGGINGS:
-				slot = 2;
-				break;
-			case LEATHER_CHESTPLATE:
-				slot = 3;
-				break;
-			case LEATHER_HELMET:
-				slot = 4;
-				break;
-			default:
-				continue;
+				case LEATHER_BOOTS:
+					slot = 1;
+					break;
+				case LEATHER_LEGGINGS:
+					slot = 2;
+					break;
+				case LEATHER_CHESTPLATE:
+					slot = 3;
+					break;
+				case LEATHER_HELMET:
+					slot = 4;
+					break;
+				default:
+					continue;
 			}
-			
+
 			packet = new CommonPacket(PacketType.OUT_ENTITY_EQUIPMENT);
-			
+
 			ItemStack item = i.clone();
 			LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
-			
-			if (color != null){
+
+			if (color != null) {
 				meta.setColor(color);
 				item.setItemMeta(meta);
-			}					
-			
+			}
+
 			packet.write(nms.entityId, e.getEntityId());
 			packet.write(nms.item, item);
 			packet.write(nms.slot, slot);
-			
+
 			for (Entity it : e.getNearbyEntities(75, 100, 75))
 				if (it instanceof Player)
 					PacketUtil.sendPacket((Player) it, packet, false);
-			
+
 		}
 	}
-	
-	private class DreamCoatRunnable extends BukkitRunnable{
-		
+
+	private class DreamCoatRunnable extends BukkitRunnable {
+
 		private LivingEntity e;
 		private Cycler<Color> colors = new Cycler<Color>(colours.values());
-	
-		public void safeCancel(){
+
+		public DreamCoatRunnable(LivingEntity e) {
+			this.e = e;
+		}
+
+		public void safeCancel() {
 			try {
 				this.cancel();
 				return;
-			} catch (IllegalStateException e) {}
-		}
-		
-		public DreamCoatRunnable(LivingEntity e){
-			this.e = e;
+			} catch (IllegalStateException e) {
+			}
 		}
 
 		public void run() {
 
 			if (e == null || !e.isValid() || e.isDead())
 				safeCancel();
-			
+
 			sendFakeArmor(e, colors.next());
-			
+
 		}
-		
+
 	}
 
 }

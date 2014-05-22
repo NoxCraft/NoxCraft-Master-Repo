@@ -8,7 +8,7 @@ public class EntityAbilityExecutedEvent extends EntityAbilityEvent {
 
 	public EntityAbilityExecutedEvent(Entity what, BaseEntityAbility ability) {
 		super(what, ability);
-		
+
 	}
 
 }

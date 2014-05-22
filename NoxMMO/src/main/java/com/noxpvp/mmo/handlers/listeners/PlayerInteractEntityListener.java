@@ -12,17 +12,17 @@ public class PlayerInteractEntityListener extends GenericMMOListener<PlayerInter
 	public PlayerInteractEntityListener(NoxMMO plugin) {
 		super(plugin, PlayerInteractEntityEvent.class);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onLowest(PlayerInteractEntityEvent event) {
 		onEventLowest(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void onLow(PlayerInteractEntityEvent event) {
 		onEventLow(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
 	public void onNormal(PlayerInteractEntityEvent event) {
 		onEventNormal(event);
@@ -32,12 +32,12 @@ public class PlayerInteractEntityListener extends GenericMMOListener<PlayerInter
 	public void onHigh(PlayerInteractEntityEvent event) {
 		onEventHigh(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
 	public void onHighest(PlayerInteractEntityEvent event) {
 		onEventHighest(event);
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onMonitor(PlayerInteractEntityEvent event) {
 		onEventMonitor(event);

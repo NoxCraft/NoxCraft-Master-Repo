@@ -21,149 +21,18 @@ import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 
 public class NetArrowPlayerAbility extends BasePlayerAbility implements IPVPAbility {
-	
-	private List<Arrow> arrows;
-	
+
 	public static final String ABILITY_NAME = "Net Arrow";
 	public static final String PERM_NODE = "net-arrow";
-	
-	/**
-	 * Runs the event-side execution of this ability
-	 * 
-	 * @param a Array from projectile hit event.
-	 * @return boolean If the execution ran successfully
-	 */
-	private void eventExecute(Arrow a, int time)
-	{
-		
-		Location loc = a.getLocation();
-		
-		List<Block> net = new ArrayList<Block>();
-		
-		int x = (int) loc.getX();
-		int y = (int) loc.getY();
-		int z = (int) loc.getZ();
-		int size = getSize();
-		
-		for (int by = y+(size/2); by > y-(size / 2); by--)
-			for (int bx = x+(size/2); bx > x-(size/2); bx--)
-				for (int bz = z+(size/2); bz > z-(size/2); bz--) 
-				{
-					Block b = a.getWorld().getBlockAt(bx, by, bz);
-					
-					if (!isNetable(b.getType())) continue;
-					
-					b.setType(Material.WEB);
-					net.add(b);
-					
-				}
-		
-		BlockTimerRunnable netRemover = new BlockTimerRunnable(net, Material.AIR, Material.WEB);
-		netRemover.runTaskLater(NoxMMO.getInstance(), time);
-		
-		
-		arrows.remove(a);
-		
-		if (arrows.isEmpty())
-			setActive(false);
-		
-		return;
-	}
-	
-	private static boolean isNetable(Material type)
-	{
-		switch(type){
-			case AIR:
-			case LONG_GRASS:
-			case CROPS:
-			case VINE:
-			case WATER_LILY:
-				return true;
-			default:
-				return false;
-		}
-	}
-	
+	private List<Arrow> arrows;
 	private BaseMMOEventHandler<ProjectileHitEvent> hitHandler;
 	private BaseMMOEventHandler<ProjectileLaunchEvent> launchHandler;
-	
 	private int size;
 	private int time;
 	private boolean isFiring, isActive, isSingleShotMode;
-	
-	public NetArrowPlayerAbility setFiring(boolean firing){
-		boolean changed = this.isFiring != firing;
-		this.isFiring = firing;
-		
-		MasterListener m = NoxMMO.getInstance().getMasterListener();
-		
-		if (changed)
-			if (firing)
-				m.registerHandler(launchHandler);
-			else
-				m.unregisterHandler(launchHandler);
-		
-		return this;
-	}
-	
-	public NetArrowPlayerAbility setActive(boolean active){
-		boolean changed = this.isActive != active;
-		this.isActive = active;
-		
-		MasterListener m = NoxMMO.getInstance().getMasterListener();
-		
-		if (changed)
-			if (active)
-				m.registerHandler(hitHandler);
-			else
-				m.unregisterHandler(hitHandler);
-		
-		return this;
-	}
-	
-	public NetArrowPlayerAbility setSingleShotMode(boolean single) {
-		this.isSingleShotMode = single;
-		return this;
-	}
-	
-	public boolean isSingleShotMode() { return this.isSingleShotMode; }
-	public boolean isActive() { return this.isActive; }
-	public boolean isFiring() { return this.isFiring; }
-	
-	/**
-	 * Get the currently set size of the net
-	 * 
-	 * @return Integer The net size
-	 */
-	public int getSize() {return size;}
-
-	/**
-	 * Sets the size of the net
-	 * 
-	 * @param size The width of the net itself. This should be a odd number
-	 * @return NetArrowAbility This instance
-	 */
-	public NetArrowPlayerAbility setSize(int size) {this.size = size; return this;}
-
-	/**
-	 * Gets the time the net will stay until removed
-	 * 
-	 * @return Integer Time in ticks
-	 */
-	public int getTime() {return time;}
-
-	/**
-	 * Sets the time in ticks that the net will stay
-	 * 
-	 * @param time The time in ticks
-	 * @return NetArrowAbility This instance
-	 */
-	public NetArrowPlayerAbility setTime(int time) {this.time = time; return this;}
-
-	public NetArrowPlayerAbility(Player player)
-	{
+	public NetArrowPlayerAbility(Player player) {
 		super(ABILITY_NAME, player);
-		
+
 		hitHandler = new BaseMMOEventHandler<ProjectileHitEvent>(
 				new StringBuilder().append(player.getName()).append(ABILITY_NAME).append("ProjectileHitEvent").toString(),
 				EventPriority.NORMAL, 1) {
@@ -173,11 +42,11 @@ public class NetArrowPlayerAbility extends BasePlayerAbility implements IPVPAbil
 			}
 
 			public void execute(ProjectileHitEvent event) {
-				Arrow a = (event.getEntity() instanceof Arrow)? (Arrow) event.getEntity() : null ;
-				
+				Arrow a = (event.getEntity() instanceof Arrow) ? (Arrow) event.getEntity() : null;
+
 				if (a == null)
 					return;
-				
+
 				if (arrows.contains(a))
 					eventExecute(a, time);
 			}
@@ -192,25 +61,166 @@ public class NetArrowPlayerAbility extends BasePlayerAbility implements IPVPAbil
 		};
 
 		this.arrows = new ArrayList<Arrow>();
-		
+
 		this.size = 3;
 		this.time = 100;
-		
+
 		this.isActive = false;
 		this.isFiring = false;
 		this.isSingleShotMode = true;
 	}
-	
-	public boolean execute(){
+
+	private static boolean isNetable(Material type) {
+		switch (type) {
+			case AIR:
+			case LONG_GRASS:
+			case CROPS:
+			case VINE:
+			case WATER_LILY:
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	/**
+	 * Runs the event-side execution of this ability
+	 *
+	 * @param a Array from projectile hit event.
+	 * @return boolean If the execution ran successfully
+	 */
+	private void eventExecute(Arrow a, int time) {
+
+		Location loc = a.getLocation();
+
+		List<Block> net = new ArrayList<Block>();
+
+		int x = (int) loc.getX();
+		int y = (int) loc.getY();
+		int z = (int) loc.getZ();
+		int size = getSize();
+
+		for (int by = y + (size / 2); by > y - (size / 2); by--)
+			for (int bx = x + (size / 2); bx > x - (size / 2); bx--)
+				for (int bz = z + (size / 2); bz > z - (size / 2); bz--) {
+					Block b = a.getWorld().getBlockAt(bx, by, bz);
+
+					if (!isNetable(b.getType())) continue;
+
+					b.setType(Material.WEB);
+					net.add(b);
+
+				}
+
+		BlockTimerRunnable netRemover = new BlockTimerRunnable(net, Material.AIR, Material.WEB);
+		netRemover.runTaskLater(NoxMMO.getInstance(), time);
+
+
+		arrows.remove(a);
+
+		if (arrows.isEmpty())
+			setActive(false);
+
+		return;
+	}
+
+	public boolean isSingleShotMode() {
+		return this.isSingleShotMode;
+	}
+
+	public NetArrowPlayerAbility setSingleShotMode(boolean single) {
+		this.isSingleShotMode = single;
+		return this;
+	}
+
+	public boolean isActive() {
+		return this.isActive;
+	}
+
+	public NetArrowPlayerAbility setActive(boolean active) {
+		boolean changed = this.isActive != active;
+		this.isActive = active;
+
+		MasterListener m = NoxMMO.getInstance().getMasterListener();
+
+		if (changed)
+			if (active)
+				m.registerHandler(hitHandler);
+			else
+				m.unregisterHandler(hitHandler);
+
+		return this;
+	}
+
+	public boolean isFiring() {
+		return this.isFiring;
+	}
+
+	public NetArrowPlayerAbility setFiring(boolean firing) {
+		boolean changed = this.isFiring != firing;
+		this.isFiring = firing;
+
+		MasterListener m = NoxMMO.getInstance().getMasterListener();
+
+		if (changed)
+			if (firing)
+				m.registerHandler(launchHandler);
+			else
+				m.unregisterHandler(launchHandler);
+
+		return this;
+	}
+
+	/**
+	 * Get the currently set size of the net
+	 *
+	 * @return Integer The net size
+	 */
+	public int getSize() {
+		return size;
+	}
+
+	/**
+	 * Sets the size of the net
+	 *
+	 * @param size The width of the net itself. This should be a odd number
+	 * @return NetArrowAbility This instance
+	 */
+	public NetArrowPlayerAbility setSize(int size) {
+		this.size = size;
+		return this;
+	}
+
+	/**
+	 * Gets the time the net will stay until removed
+	 *
+	 * @return Integer Time in ticks
+	 */
+	public int getTime() {
+		return time;
+	}
+
+	/**
+	 * Sets the time in ticks that the net will stay
+	 *
+	 * @param time The time in ticks
+	 * @return NetArrowAbility This instance
+	 */
+	public NetArrowPlayerAbility setTime(int time) {
+		this.time = time;
+		return this;
+	}
+
+	public boolean execute() {
 		if (!mayExecute())
 			return false;
-		
+
 		if (!isActive() && !isFiring()) {
 			setFiring(true);
 			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.arrow.net.use");
 		} else
 			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.already-active", ABILITY_NAME);
-		
+
 		return true;
 	}
 

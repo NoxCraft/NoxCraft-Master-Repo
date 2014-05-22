@@ -31,33 +31,31 @@ import com.noxpvp.core.utils.gui.MessageUtil;
 public abstract class NoxPlugin extends PluginBase {
 
 	protected Map<String, Command> commandExecs = new HashMap<String, Command>();
-	
+
 	public void addPermission(NoxPermission perm) {
 		NoxCore.getInstance().addPermission(perm);
 	}
-	
-	public void addPermissions(NoxPermission... perms)
-	{
+
+	public void addPermissions(NoxPermission... perms) {
 		NoxCore.getInstance().addPermissions(perms);
 	}
-	
+
 	@Override
 	public boolean command(CommandSender sender, String command, String[] args) {
 		String argLine = StringUtil.join(" ", args);
 		CommandContext context = CommandUtil.parseCommand(sender, argLine);
-		
-		if (commandExecs.containsKey(command.toLowerCase(Locale.ENGLISH)))
-		{
+
+		if (commandExecs.containsKey(command.toLowerCase(Locale.ENGLISH))) {
 			Command cmd = commandExecs.get(command.toLowerCase(Locale.ENGLISH));
 			if (cmd == null)
 				throw new NullPointerException("Command execution class was null!");
 			try {
 				CommandResult result = cmd.executeCommand(context);
-				
-				if (!result.success) 
+
+				if (!result.success)
 					result.executer.displayHelp(context.getSender());
 				MessageUtil.sendMessage(context.getSender(), result.extraMessages);
-				
+
 				return true;
 			} catch (NoPermissionException e) {
 				MessageUtil.sendLocale(sender, GlobalLocale.FAILED_PERMISSION_VERBOSE, e.getMessage(), e.getPermission());
@@ -70,48 +68,46 @@ public abstract class NoxPlugin extends PluginBase {
 		}
 		return false;
 	}
-	
+
 	public abstract NoxCore getCore();
-	
-	public String getGlobalLocale(String path, String... args)
-	{
+
+	public String getGlobalLocale(String path, String... args) {
 		NoxCore c;
-		if ((c = getCore())==null)
+		if ((c = getCore()) == null)
 			throw new IllegalStateException("This plugin depends on NoxCore! Its not loaded!");
 		return c.getGlobalLocale(path, args);
 	}
-	
+
 	/**
-	* Gets a localization configuration node
-	* 
-	* @param path of the node to get
-	* @return Localization configuration node
-	*/
-   public ConfigurationNode getGlobalLocalizationNode(String path) {
-	   NoxCore c;
-	   if ((c = getCore())==null)
-		   throw new IllegalStateException("This plugin depends on NoxCore! Its not loaded!");
-   
-	   return c.getGlobalLocalizationNode(path);
-   }
-	
+	 * Gets a localization configuration node
+	 *
+	 * @param path of the node to get
+	 * @return Localization configuration node
+	 */
+	public ConfigurationNode getGlobalLocalizationNode(String path) {
+		NoxCore c;
+		if ((c = getCore()) == null)
+			throw new IllegalStateException("This plugin depends on NoxCore! Its not loaded!");
+
+		return c.getGlobalLocalizationNode(path);
+	}
+
 	@Override
 	public int getMinimumLibVersion() {
 		return Common.VERSION;
 	}
-	
+
 	public abstract PermissionHandler getPermissionHandler();
-	
+
 	public abstract Class<? extends ConfigurationSerializable>[] getSerialiables();
-	
-	public void registerCommand(Command runner)
-	{
+
+	public void registerCommand(Command runner) {
 		if (runner == null)
 			throw new IllegalArgumentException("Command Runner must not be null!");
-		
+
 		if (commandExecs.containsKey(runner.getName().toLowerCase(Locale.ENGLISH)))
-			log(Level.WARNING, "Command - "+runner.getName() + " failed to register");
-		
+			log(Level.WARNING, "Command - " + runner.getName() + " failed to register");
+
 		commandExecs.put(runner.getName().toLowerCase(Locale.ENGLISH), runner);
 		PluginCommand cmd = Bukkit.getPluginCommand(runner.getName().toLowerCase());
 		try {
@@ -122,28 +118,25 @@ public abstract class NoxPlugin extends PluginBase {
 						+ "\tCommand Name:" + runner.getName());
 			else if (runner == null)
 				log(Level.SEVERE, "Command runner was null!");
-			else
-			{
+			else {
 				log(Level.SEVERE, "Command Runner Failed to register. Null Pointer Exception. \n"
-						+ "\tRunnerName: " + runner.getName() +"\n"
-								+ "\tRunner Owner: "+ CommonUtil.getPluginByClass(runner.getClass()).getName());
+						+ "\tRunnerName: " + runner.getName() + "\n"
+						+ "\tRunner Owner: " + CommonUtil.getPluginByClass(runner.getClass()).getName());
 			}
 			e.printStackTrace();
 		}
 	}
-	
-	public void registerCommands(Collection<Command> runners)
-	{
-		for(Command runner : runners)
-			registerCommand(runner);
-	}
-	
-	public void registerCommands(Command... runners)
-	{
+
+	public void registerCommands(Collection<Command> runners) {
 		for (Command runner : runners)
 			registerCommand(runner);
 	}
-	
+
+	public void registerCommands(Command... runners) {
+		for (Command runner : runners)
+			registerCommand(runner);
+	}
+
 	public final void register(Reloader reloader) {
 		getMasterReloader().addModule(reloader);
 	}

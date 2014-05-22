@@ -11,7 +11,7 @@ public class EntityTargetedAbilityPreExecuteEvent extends EntityAbilityPreExcute
 	public EntityTargetedAbilityPreExecuteEvent(Entity what, BaseTargetedEntityAbility ability) {
 		super(what, ability);
 	}
-	
+
 	@Override
 	public BaseTargetedEntityAbility getAbility() {
 		return (BaseTargetedEntityAbility) super.getAbility();

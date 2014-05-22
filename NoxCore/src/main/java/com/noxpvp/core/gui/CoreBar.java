@@ -10,97 +10,94 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.ObjectLock;
 
 public class CoreBar {
-	
-	private final Entry currentEntry = new Entry();
-	
-	public final Player p;
-	private ObjectLock lock;
-	
+
 	public static String separater;
 	public static String color;
-	
+	public final Player p;
+	private final Entry currentEntry = new Entry();
+	private ObjectLock lock;
+
 	/**
-	 * 
 	 * @param p - The player to give this bar to
 	 */
-	public CoreBar(NoxCore core, Player p){
+	public CoreBar(NoxCore core, Player p) {
 		this.p = p;
-		
+
 		lock = new ObjectLock(null, true);
-		
+
 		if (color == null || separater == null) {
 			separater = core.getCoreConfig().get("gui.corebar.separater", String.class, "  ||  ");
 			color = core.getCoreConfig().get("gui.corebar.default-color", String.class, ChatColor.GREEN.toString());
 		}
-		
+
 	}
-	
-	public boolean isChangeable(){
+
+	public boolean isChangeable() {
 		return (lock == null || lock.lock == null || lock.canUnlock);
 	}
-	
+
 	public boolean hasLock(Object lock) {
 		return (this.lock != null && this.lock.lock != null && this.lock.lock.equals(lock));
 	}
-	
+
 	public boolean setLock(Object lock, boolean canUnlock) {
 		if (isChangeable()) {
 			this.lock = new ObjectLock(lock, canUnlock);
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public void removeIfLockedBy(Object lock) {
 		if (this.lock != null && lock != null && this.lock.lock != null && this.lock.lock.equals(lock)) {
 			this.lock = null;
-			
+
 			currentEntry.hide();
 		}
-		
-	}	
-	
+
+	}
+
 	public Entry getCurrentEntry() {
 		return this.currentEntry;
 	}
-	
+
 	public class Entry {
 		float percentFilled;
 		String text;
-		
-		public Entry(){
+
+		public Entry() {
 			this.percentFilled = 100F;
 		}
-		
-		public void update(float percentFilled, String text){
+
+		public void update(float percentFilled, String text) {
 			this.percentFilled = percentFilled;
 			this.text = text;
-			
+
 			BarAPI.setMessage(p, text, percentFilled);
 		}
-		
-		public void update(LivingEntity health, String text){
+
+		public void update(LivingEntity health, String text) {
 			update((float) (health.getHealth() / health.getMaxHealth()) * 100, text);
 		}
-		
-		public void update(String text){
+
+		public void update(String text) {
 			this.update(percentFilled, text);
-			
+
 		}
-		
-		public void update(float percentFilled){
+
+		public void update(float percentFilled) {
 			update(percentFilled, text);
 		}
-		
-		public void update(LivingEntity health){
+
+		public void update(LivingEntity health) {
 			update(health, text);
 		}
-		
-		public void hide(){
+
+		public void hide() {
 			BarAPI.removeBar(p);
 		}
-		
+
 	}
 
 }

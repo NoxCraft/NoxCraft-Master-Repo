@@ -9,11 +9,11 @@ import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 public class UnregisterMMOHandlerRunnable extends BukkitRunnable {
 
 	private BaseMMOEventHandler<? extends Event> handler;
-	
-	public UnregisterMMOHandlerRunnable(BaseMMOEventHandler<? extends Event> handler){
+
+	public UnregisterMMOHandlerRunnable(BaseMMOEventHandler<? extends Event> handler) {
 		this.handler = handler;
 	}
-	
+
 	public void run() {
 		NoxMMO.getInstance().getMasterListener().unregisterHandler(handler);
 	}

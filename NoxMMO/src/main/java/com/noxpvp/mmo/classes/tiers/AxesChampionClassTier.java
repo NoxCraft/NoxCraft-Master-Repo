@@ -15,33 +15,32 @@ import com.noxpvp.mmo.classes.internal.PlayerClass;
 public class AxesChampionClassTier extends ClassTier {
 
 	public static final String TIER_NAME = "Champion";
-	
+
 	private volatile static String dName = "Champion";
-	
-	private Map<String, Ability> abilities = new HashMap<String, Ability>();
 	private final double maxHealth;
-	
+	private Map<String, Ability> abilities = new HashMap<String, Ability>();
+
 	public AxesChampionClassTier(PlayerClass retainer) {
 		super(retainer, TIER_NAME, 2);
-		
-		abilities.putAll(getRetainingClass().getTier(getTierLevel()-1).getAbilityMap());
-		abilities.put(RagePlayerAbility.ABILITY_NAME.toLowerCase(), new RagePlayerAbility(getPlayer()));
-		
-		this.maxHealth = 24;
-	}
 
-	public void setDisplayName(String displayName) {
-		AxesChampionClassTier.dName = displayName;
+		abilities.putAll(getRetainingClass().getTier(getTierLevel() - 1).getAbilityMap());
+		abilities.put(RagePlayerAbility.ABILITY_NAME.toLowerCase(), new RagePlayerAbility(getPlayer()));
+
+		this.maxHealth = 24;
 	}
 
 	public String getDisplayName() {
 		return getRetainingClass().getColor() + AxesChampionClassTier.dName;
 	}
 
+	public void setDisplayName(String displayName) {
+		AxesChampionClassTier.dName = displayName;
+	}
+
 	public List<String> getLore() {
 		return Collections.emptyList();
 	}
-	
+
 	public double getMaxHealth() {
 		return this.maxHealth;
 	}
@@ -66,14 +65,14 @@ public class AxesChampionClassTier extends ClassTier {
 		return 0;
 	}
 
-	public void setLevel(int level) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public int getLevel() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public void setLevel(int level) {
+		// TODO Auto-generated method stub
+
 	}
 
 	public int getMaxLevel() {

@@ -25,9 +25,9 @@ import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.handlers.listeners.*;
 
 public class GenericMMOListener<T extends Event> extends NoxListener<NoxMMO> {
-	
+
 	protected static Map<Class<?>, SafeConstructor<GenericMMOListener<?>>> constructors = new HashMap<Class<?>, SafeConstructor<GenericMMOListener<?>>>();
-	
+
 	static {
 		constructors.put(EntityDamageEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(EntityDamageListener.class, NoxMMO.class));
 		constructors.put(EntityDamageByEntityEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(EntityDamageByEntityListener.class, NoxMMO.class));
@@ -39,115 +39,106 @@ public class GenericMMOListener<T extends Event> extends NoxListener<NoxMMO> {
 		constructors.put(PlayerInteractEntityEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(PlayerInteractEntityListener.class, NoxMMO.class));
 		constructors.put(EntityChangeBlockEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(EntityChangeBlockListener.class, NoxMMO.class));
 	}
-	
+
 	private Class<T> eventType;
 	private WeakHashMap<String, MMOEventHandler<T>> abe_name_cache;
 	private Map<EventPriority, SortedSet<MMOEventHandler<T>>> abilityHandlers;
-	
+
 	protected GenericMMOListener(NoxMMO plugin, Class<T> type) {
 		super(plugin);
 		eventType = type;
-		
+
 		abe_name_cache = new WeakHashMap<String, MMOEventHandler<T>>();
 		abilityHandlers = new HashMap<EventPriority, SortedSet<MMOEventHandler<T>>>();
-		for (EventPriority pri: EventPriority.values())
+		for (EventPriority pri : EventPriority.values())
 			abilityHandlers.put(pri, new TreeSet<MMOEventHandler<T>>());
 	}
-	
-	protected void onEventLowest(T event)
-	{
-		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.LOWEST))
-		{
+
+	public static <T extends Event> GenericMMOListener<T> newListener(NoxMMO plugin, Class<T> type) {
+		if (constructors.containsKey(type))
+			return (GenericMMOListener<T>) constructors.get(type).newInstance(plugin);
+		return null;
+	}
+
+	protected void onEventLowest(T event) {
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.LOWEST)) {
 			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
 				continue;
 			handler.execute(event);
 		}
 	}
-	
-	protected void onEventLow(T event)
-	{
-		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.LOW))
-		{
+
+	protected void onEventLow(T event) {
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.LOW)) {
 			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
 				continue;
 			handler.execute(event);
 		}
 	}
-	
-	protected void onEventNormal(T event)
-	{
-		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.NORMAL))
-		{
+
+	protected void onEventNormal(T event) {
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.NORMAL)) {
 			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
 				continue;
 			handler.execute(event);
 		}
 	}
-	
-	protected void onEventHigh(T event)
-	{
-		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.HIGH))
-		{
+
+	protected void onEventHigh(T event) {
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.HIGH)) {
 			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
 				continue;
 			handler.execute(event);
 		}
 	}
-	
-	protected void onEventHighest(T event)
-	{
-		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.HIGHEST))
-		{
-			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
-				continue;
-			handler.execute(event);
-		}	
-	}
-	
-	protected void onEventMonitor(T event)
-	{
-		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.MONITOR))
-		{
+
+	protected void onEventHighest(T event) {
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.HIGHEST)) {
 			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
 				continue;
 			handler.execute(event);
 		}
 	}
-	
-	public Class<T> getEventType()
-	{
+
+	protected void onEventMonitor(T event) {
+		for (MMOEventHandler<T> handler : abilityHandlers.get(EventPriority.MONITOR)) {
+			if (event instanceof Cancellable && ((Cancellable) event).isCancelled() && handler.ignoreCancelled())
+				continue;
+			handler.execute(event);
+		}
+	}
+
+	public Class<T> getEventType() {
 		return eventType;
 	}
-	
-	public void unregisterHandler(MMOEventHandler<T> handler)
-	{
+
+	public void unregisterHandler(MMOEventHandler<T> handler) {
 		String name;
 		if (!abe_name_cache.containsKey((name = handler.getID())))
 			throw new IllegalStateException(name + " is already not registered to this handler.");
-		
+
 		abilityHandlers.get(handler.getEventPriority()).remove(handler);
 		abe_name_cache.remove(name);
-		
+
 		boolean empty = true;
 		for (EventPriority priority : abilityHandlers.keySet()) {
 			if (!abilityHandlers.get(priority).isEmpty()) {
 				empty = false;
 			}
 		}
-		
+
 		if (empty)
 			unregister();
 	}
-	
-	public void registerHandler(MMOEventHandler<T> handler)
-	{
+
+	public void registerHandler(MMOEventHandler<T> handler) {
 		String name;
 		if (abe_name_cache.containsKey((name = handler.getID())))
 			throw new IllegalStateException(name + " is already registered!");
-		
+
 		abe_name_cache.put(name, handler);
 		abilityHandlers.get(handler.getEventPriority()).add(handler);
-		
+
 		for (EventPriority priority : abilityHandlers.keySet()) {
 			if (!abilityHandlers.get(priority).isEmpty()) {
 				if (isRegistered())
@@ -156,11 +147,5 @@ public class GenericMMOListener<T extends Event> extends NoxListener<NoxMMO> {
 					register();
 			}
 		}
-	}
-	
-	public static <T extends Event> GenericMMOListener<T> newListener(NoxMMO plugin, Class<T> type) {
-		if (constructors.containsKey(type))
-			return (GenericMMOListener<T>) constructors.get(type).newInstance(plugin);
-		return null;
 	}
 }

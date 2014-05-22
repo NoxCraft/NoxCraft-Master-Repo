@@ -11,12 +11,12 @@ public class PlayerTargetedAbilityPreExecuteEvent extends PlayerAbilityPreExecut
 	public PlayerTargetedAbilityPreExecuteEvent(Player who, BaseTargetedPlayerAbility ability) {
 		super(who, ability);
 	}
-	
+
 	@Override
 	public BaseTargetedPlayerAbility getAbility() {
 		return (BaseTargetedPlayerAbility) super.getAbility();
 	}
-	
+
 	public LivingEntity getTarget() {
 		return ((BaseTargetedPlayerAbility) ability).getTarget();
 	}

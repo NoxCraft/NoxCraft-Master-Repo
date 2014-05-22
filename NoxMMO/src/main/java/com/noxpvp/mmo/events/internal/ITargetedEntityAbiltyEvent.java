@@ -9,12 +9,14 @@ public interface ITargetedEntityAbiltyEvent extends IRangedEntityAbilityEvent {
 
 	/**
 	 * Gets the {@link ITargetedEntityAbility} associated with this event
+	 *
 	 * @return {@link BaseTargetedEntityAbility} The Ability
 	 */
 	public BaseTargetedEntityAbility getAbility();
-	
+
 	/**
 	 * Gets the target {@link LivingEntity} involved in this event
+	 *
 	 * @return {@link LivingEntity} The target
 	 */
 	public LivingEntity getTarget();

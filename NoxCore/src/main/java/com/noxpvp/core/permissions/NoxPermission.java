@@ -13,20 +13,18 @@ public class NoxPermission implements IPermissionDefault {
 	private String node;
 	private String[] parents;
 	private NoxPlugin plugin;
-	
-	public NoxPermission(NoxPlugin plugin, String node, String description, PermissionDefault defaults)
-	{
+
+	public NoxPermission(NoxPlugin plugin, String node, String description, PermissionDefault defaults) {
 		this(plugin, node, description, defaults, new NoxPermission[0]);
 	}
-	
-	public NoxPermission(NoxPlugin plugin, String node, String description, PermissionDefault defaults, NoxPermission... children)
-	{
+
+	public NoxPermission(NoxPlugin plugin, String node, String description, PermissionDefault defaults, NoxPermission... children) {
 		this.plugin = plugin;
 		if (!node.startsWith("nox."))
 			this.node = "nox." + node;
 		else
 			this.node = node;
-		
+
 		this.name = this.node;
 		this.children = children;
 		this.parents = new String[1];
@@ -34,26 +32,24 @@ public class NoxPermission implements IPermissionDefault {
 		this.defaultPermission = defaults;
 		this.parents[0] = this.node.substring(0, this.node.lastIndexOf('.')) + "*";
 	}
-	
-	public NoxPermission[] getChildren()
-	{
+
+	public NoxPermission[] getChildren() {
 		return children;
 	}
-	
+
 	public PermissionDefault getDefault() {
 		return defaultPermission;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
-	public String[] getParentNodes()
-	{
+
+	public String[] getParentNodes() {
 		return parents;
 	}
 

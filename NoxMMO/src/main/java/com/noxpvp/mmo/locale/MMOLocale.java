@@ -4,54 +4,54 @@ import com.noxpvp.core.locales.NoxLocale;
 import com.noxpvp.mmo.NoxMMO;
 
 public class MMOLocale extends NoxLocale {
-	
+
 	//Error
 	/**
 	 * @param 1 class
 	 */
 	public static final MMOLocale CLASS_NONE_BY_NAME;
-	
+
 	/**
 	 * @param 1 class
 	 * @param 2 reason
 	 */
 	public static final MMOLocale CLASS_LOCKED;
-	
+
 	/**
 	 * @param 1 class
 	 * @param 2 reason
 	 */
 	public static final MMOLocale CLASS_TIER_LOCKED;
-	
+
 	/**
 	 * @param 1 class
 	 * @param 2 tier
 	 */
 	public static final MMOLocale CLASS_NO_TIER;
-	
+
 	/**
 	 * @param 1 ability
 	 * @param 2 remaining time
 	 */
 	public static final MMOLocale ABIL_ON_COOLDOWN;
-	
+
 	/**
 	 * @param 1 ability
 	 * @param 2 target
 	 */
 	public static final MMOLocale ABIL_BAD_TARGET;
-	
+
 	/**
 	 * @param none
 	 */
 	public static final MMOLocale ABIL_NO_TARGET;
-	
+
 	/**
 	 * @param 1 ability
 	 * @param 2 town/region/other name
 	 */
 	public static final MMOLocale ABIL_NO_PVP_ZONE;
-	
+
 	/**
 	 * @param 1 ability
 	 */
@@ -61,53 +61,53 @@ public class MMOLocale extends NoxLocale {
 	public static final MMOLocale CLASS_DN;
 	public static final MMOLocale CLASS_DISPLAY_NAME;
 	public static final MMOLocale ABIL_DISPLAY_NAME;
-	
+
 	/**
 	 * @param 1 ability
 	 */
 	public static final MMOLocale ABIL_USE;
-	
+
 	/**
 	 * @param 1 ability
 	 * @param 2 target
 	 */
 	public static final MMOLocale ABIL_USE_TARGET;
-	
+
 	/**
 	 * @param 1 ability
 	 * @param 2 target
 	 * @param 3 damage amount (format %.2f please)
 	 */
 	public static final MMOLocale ABIL_USE_TARGET_DAMAGED;
-	
+
 	/**
 	 * @param 1 ability
 	 */
 	public static final MMOLocale ABIL_HIT;
-	
+
 	/**
 	 * @param 1 attacker
 	 * @param 2 ability
 	 */
 	public static final MMOLocale ABIL_HIT_ATTACKER;
-	
+
 	/**
 	 * @param 1 attacker
 	 * @param 2 ability
 	 * @param 3 damage amount (format %.2f please)
 	 */
 	public static final MMOLocale ABIL_HIT_ATTACKER_DAMAGED;
-	
+
 	/**
 	 * @param 1 Ability name
 	 * @param 2 Description
 	 */
 	public static final MMOLocale ABIL_INFO;
-	
+
 	//Guis
 	public static final MMOLocale GUI_MENU_NAME_COLOR;
 	public static final MMOLocale GUI_BAR_COLOR;
-	
+
 	//INTERNAL
 	/**
 	 * @deprecated This is used internally. Do not use!
@@ -124,8 +124,8 @@ public class MMOLocale extends NoxLocale {
 		ABIL_BAD_TARGET = new MMOLocale("error.ability.bad-target", "&cThe &e%0% &cability cannot be used on &e%1% &cright now");
 		ABIL_NO_TARGET = new MMOLocale("error.ability.no-target", "&cYou don't have a target right now!");
 		ABIL_NO_PVP_ZONE = new MMOLocale("error.ability.no-pvp-zone-named", "&cYou can't use the &e%0% &cability in &e%1%");
-		ABIL_NO_PVP = new MMOLocale("error.ability.no-pvp-zone", "&cYou can't use the &e%0% &cability here");		
-		
+		ABIL_NO_PVP = new MMOLocale("error.ability.no-pvp-zone", "&cYou can't use the &e%0% &cability here");
+
 		//Display
 		CLASS_DN = new MMOLocale("display.class.default", "%1%%0%");
 		CLASS_DISPLAY_NAME = new MMOLocale("display.class", "");
@@ -138,14 +138,14 @@ public class MMOLocale extends NoxLocale {
 		ABIL_HIT = new MMOLocale("display.ability.hit", "&6You were hit by &e%1%&6!");
 		ABIL_HIT_ATTACKER = new MMOLocale("display.ability.hit-attacker", "&c%0% &6used &e%1% &6on you!");
 		ABIL_HIT_ATTACKER_DAMAGED = new MMOLocale("display.ability.hit-attacker-damaged", "&c%0% &6used &e%1% &6on you! dealing &c%2% &cdamage");
-		
-		
+
+
 		//GUIs
 		GUI_MENU_NAME_COLOR = new MMOLocale("gui.inventory.name_color", "&6");
-		GUI_BAR_COLOR = new MMOLocale("gui.target_bar.color", "&a");		
-		
+		GUI_BAR_COLOR = new MMOLocale("gui.target_bar.color", "&a");
+
 	}
-	
+
 	public MMOLocale(String name, String defValue) {
 		super(name, defValue);
 	}

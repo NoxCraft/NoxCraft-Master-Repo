@@ -7,10 +7,15 @@ public class TargetManager {
 		} else if (type.startsWith("Channel")) {
 			//TODO: Add channel support.
 		}
-		
+
 		return null;
 	}
-	
-	public static ChannelManager getChannelManager() { return ChannelManager.getInstance(); }
-	public static PlayerManager getPlayerManager() { return PlayerManager.getInstance(); }
+
+	public static ChannelManager getChannelManager() {
+		return ChannelManager.getInstance();
+	}
+
+	public static PlayerManager getPlayerManager() {
+		return PlayerManager.getInstance();
+	}
 }

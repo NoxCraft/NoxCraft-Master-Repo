@@ -6,24 +6,22 @@ import org.bukkit.util.Vector;
 
 /**
  * @author NoxPVP
- *
  */
-public class SetVelocityRunnable extends BukkitRunnable{
-	
+public class SetVelocityRunnable extends BukkitRunnable {
+
 	private Entity e;
 	private Vector velo;
-	
+
 	/**
-	 * 
-	 * @param entity Entity to give the new velocity
+	 * @param entity  Entity to give the new velocity
 	 * @param newVelo Velocity to set
 	 */
-	public SetVelocityRunnable(Entity entity, Vector newVelo){
+	public SetVelocityRunnable(Entity entity, Vector newVelo) {
 		this.e = entity;
 		this.velo = newVelo;
 	}
 
-	public void run(){
+	public void run() {
 		e.setVelocity(velo);
 	}
 }

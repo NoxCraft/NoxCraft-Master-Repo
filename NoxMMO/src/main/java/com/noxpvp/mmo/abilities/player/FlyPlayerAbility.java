@@ -14,105 +14,114 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 /**
  * @author NoxPVP
- *
  */
-public class FlyPlayerAbility extends BasePlayerAbility{
-	
+public class FlyPlayerAbility extends BasePlayerAbility {
+
 	public static final String ABILITY_NAME = "Fly";
 	public static final String PERM_NODE = "fly";
-	
+
 	public static List<Player> flyers = new ArrayList<Player>();
-	
+
 	private ItemStack reg;
 	private int regFreq;
-	
+
 	/**
-	 * 
-	 * @return ItemStack - The currently set Regent for this ability
-	 */
-	public ItemStack getReg() {return reg;}
-	
-	/**
-	 * 
-	 * @param reg - The ItemStack for this ability, including correct amount and type
-	 * @return FlyAbility - This instance, used for chaining
-	 */
-	public FlyPlayerAbility setReg(ItemStack reg) {this.reg = reg; return this;}
-	
-	/**
-	 * 
-	 * @return Integer - The amount of seconds to wait between regent collecting checks
-	 */
-	public int getRegFreq() {return regFreq;}
-	
-	/**
-	 * 
-	 * @param regFreq - The amount of seconds the ability should wait between collecting regents
-	 * @return FlyAbility - This instance, used for chaining
-	 */
-	public FlyPlayerAbility setRegFreq(int regFreq) {this.regFreq = regFreq; return this;}
-	
-	/**
-	 * 
 	 * @param player - This user for this ability instance
 	 */
 	public FlyPlayerAbility(Player player) {
 		super(ABILITY_NAME, player);
-		
+
 		this.reg = new ItemStack(Material.FEATHER, 1);
 		this.regFreq = 15;
 	}
-	
+
+	/**
+	 * @return ItemStack - The currently set Regent for this ability
+	 */
+	public ItemStack getReg() {
+		return reg;
+	}
+
+	/**
+	 * @param reg - The ItemStack for this ability, including correct amount and type
+	 * @return FlyAbility - This instance, used for chaining
+	 */
+	public FlyPlayerAbility setReg(ItemStack reg) {
+		this.reg = reg;
+		return this;
+	}
+
+	/**
+	 * @return Integer - The amount of seconds to wait between regent collecting checks
+	 */
+	public int getRegFreq() {
+		return regFreq;
+	}
+
+	/**
+	 * @param regFreq - The amount of seconds the ability should wait between collecting regents
+	 * @return FlyAbility - This instance, used for chaining
+	 */
+	public FlyPlayerAbility setRegFreq(int regFreq) {
+		this.regFreq = regFreq;
+		return this;
+	}
+
 	public boolean execute() {
 		if (!mayExecute())
 			return false;
-		
+
 		Player p = getPlayer();
-		
-		if (FlyPlayerAbility.flyers.contains(p)){
+
+		if (FlyPlayerAbility.flyers.contains(p)) {
 			FlyPlayerAbility.flyers.remove(p);
 			p.setAllowFlight(false);
 			p.setFlying(false);
-			
+
 			return true;
 		}
 		Inventory i = p.getInventory();
 		if (!i.containsAtLeast(getReg(), getReg().getAmount())) return false;
-		
+
 		i.removeItem(getReg());
 		p.updateInventory();
 		FlyPlayerAbility.flyers.add(p);
 		p.setAllowFlight(true);
-		
+
 		new FlyRunnable(p, reg).runTaskTimer(NoxMMO.getInstance(), getRegFreq() * 20, getRegFreq() * 20);
-		
+
 		return true;
 	}
-	
-	private class FlyRunnable extends BukkitRunnable{
+
+	private class FlyRunnable extends BukkitRunnable {
 		private ItemStack regent;
 		private Player p;
 		private Inventory i;
-		
-		public FlyRunnable(Player p, ItemStack regent){
+
+		public FlyRunnable(Player p, ItemStack regent) {
 			this.p = p;
 			this.regent = regent;
 			this.i = p.getInventory();
 		}
-		
-		public void safeCancel() {try { cancel(); } catch (IllegalStateException e) {}}
-		
-		public void run(){
+
+		public void safeCancel() {
+			try {
+				cancel();
+			} catch (IllegalStateException e) {
+			}
+		}
+
+		public void run() {
 			if (p == null || !p.isOnline() || !p.getAllowFlight() || !flyers.contains(p)) {
 				safeCancel();
 				return;
 			}
-			if (!i.containsAtLeast(regent, regent.getAmount())){
+			if (!i.containsAtLeast(regent, regent.getAmount())) {
 				p.setFlying(false);
 				p.setAllowFlight(false);
-				
+
 				FlyPlayerAbility.flyers.remove(p);
-				
+
 				safeCancel();
 				return;
 			} else {

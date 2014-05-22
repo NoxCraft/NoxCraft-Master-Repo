@@ -2,14 +2,18 @@ package com.noxpvp.core.data;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
- 
+
 public class Vector3D {
 	// Use protected members, like Bukkit
-	
+
+	/**
+	 * Represents the null (0, 0, 0) origin.
+	 */
+	public static final Vector3D ORIGIN = new Vector3D(0, 0, 0);
 	public final double x;
 	public final double y;
 	public final double z;
-	
+
 	/**
 	 * Construct an immutable 3D vector.
 	 */
@@ -18,17 +22,19 @@ public class Vector3D {
 		this.y = y;
 		this.z = z;
 	}
- 
+
 	/**
 	 * Construct an immutable floating point 3D vector from a location object.
+	 *
 	 * @param location - the location to copy.
 	 */
 	public Vector3D(Location location) {
 		this(location.toVector());
 	}
- 
+
 	/**
 	 * Construct an immutable floating point 3D vector from a mutable Bukkit vector.
+	 *
 	 * @param vector - the mutable real Bukkit vector to copy.
 	 */
 	public Vector3D(Vector vector) {
@@ -38,15 +44,16 @@ public class Vector3D {
 		this.y = vector.getY();
 		this.z = vector.getZ();
 	}
- 
+
 	/**
 	 * Retrieve the absolute value of this vector.
+	 *
 	 * @return The new result.
 	 */
 	public Vector3D abs() {
 		return new Vector3D(Math.abs(x), Math.abs(y), Math.abs(z));
 	}
- 
+
 	/**
 	 * Adds the current vector and a given vector together, producing a result vector.
 	 *
@@ -58,9 +65,10 @@ public class Vector3D {
 	public Vector3D add(double x, double y, double z) {
 		return new Vector3D(this.x + x, this.y + y, this.z + z);
 	}
- 
+
 	/**
 	 * Adds the current vector and a given position vector, producing a result vector.
+	 *
 	 * @param other - the other vector.
 	 * @return The new result vector.
 	 */
@@ -69,9 +77,10 @@ public class Vector3D {
 			throw new IllegalArgumentException("other cannot be NULL");
 		return new Vector3D(x + other.x, y + other.y, z + other.z);
 	}
- 
+
 	/**
 	 * Divide each dimension in the current vector by the given divisor.
+	 *
 	 * @param divisor - the divisor.
 	 * @return The new result.
 	 */
@@ -80,9 +89,10 @@ public class Vector3D {
 			throw new IllegalArgumentException("Cannot divide by null.");
 		return new Vector3D(x / divisor, y / divisor, z / divisor);
 	}
- 
+
 	/**
 	 * Divide each dimension in the current vector by the given divisor.
+	 *
 	 * @param divisor - the divisor.
 	 * @return The new result.
 	 */
@@ -91,36 +101,40 @@ public class Vector3D {
 			throw new IllegalArgumentException("Cannot divide by null.");
 		return new Vector3D(x / divisor, y / divisor, z / divisor);
 	}
- 
+
 	/**
 	 * Multiply each dimension in the current vector by the given factor.
+	 *
 	 * @param factor - multiplier.
 	 * @return The new result.
 	 */
 	public Vector3D multiply(double factor) {
 		return new Vector3D(x * factor, y * factor, z * factor);
 	}
- 
+
 	/**
 	 * Multiply each dimension in the current vector by the given factor.
+	 *
 	 * @param factor - multiplier.
 	 * @return The new result.
 	 */
 	public Vector3D multiply(int factor) {
 		return new Vector3D(x * factor, y * factor, z * factor);
 	}
- 
+
 	/**
 	 * Substracts the current vector and a given vector together, producing a result vector.
+	 *
 	 * @param other - the other vector.
 	 * @return The new result vector.
 	 */
 	public Vector3D subtract(double x, double y, double z) {
 		return new Vector3D(this.x - x, this.y - y, this.z - z);
 	}
- 
+
 	/**
 	 * Substracts the current vector and a given vector, producing a result position.
+	 *
 	 * @param other - the other position.
 	 * @return The new result position.
 	 */
@@ -129,22 +143,18 @@ public class Vector3D {
 			throw new IllegalArgumentException("other cannot be NULL");
 		return new Vector3D(x - other.x, y - other.y, z - other.z);
 	}
- 
+
 	@Override
 	public String toString() {
 		return String.format("[x: %s, y: %s, z: %s]", x, y, z);
 	}
- 
+
 	/**
 	 * Convert this instance to an equivalent real 3D vector.
+	 *
 	 * @return Real 3D vector.
 	 */
 	public Vector toVector() {
 		return new Vector(x, y, z);
 	}
- 
-	/**
-	 * Represents the null (0, 0, 0) origin.
-	 */
-	public static final Vector3D ORIGIN = new Vector3D(0, 0, 0);
 }

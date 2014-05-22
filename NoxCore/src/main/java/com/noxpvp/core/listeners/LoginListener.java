@@ -16,36 +16,33 @@ import com.noxpvp.core.utils.UUIDUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
 
 public class LoginListener extends NoxListener<NoxCore> {
-		
+
 	private String loginMessage;
-		
-	public LoginListener()
-	{
+
+	public LoginListener() {
 		this(NoxCore.getInstance());
 	}
-	
-	public LoginListener(NoxCore core)
-	{
+
+	public LoginListener(NoxCore core) {
 		super(core);
 		updateLoginMessage();
 	}
-	
+
 	public void updateLoginMessage() {
 		loginMessage = MessageUtil.parseColor(getPlugin().getCoreConfig().get("motd.login", String.class, "&6Welcome to &cNoxImperialis!"));
 	}
-	
-	@EventHandler(priority=EventPriority.HIGH, ignoreCancelled = true)
-	public void onLogin(PlayerJoinEvent e)
-	{
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onLogin(PlayerJoinEvent e) {
 		final Player p = e.getPlayer();
-		UUIDUtil.getInstance().ensurePlayerUUIDsByName(UUIDUtil.toList(p.getName()));		
+		UUIDUtil.getInstance().ensurePlayerUUIDsByName(UUIDUtil.toList(p.getName()));
 		CorePlayerManager.getInstance().getPlayer(p);
-		
+
 		VaultAdapter.GroupUtils.reloadGroupTag(p);
 		new ScrollingText(p, loginMessage, 300);
 	}
-	
-	@EventHandler(priority=EventPriority.MONITOR)
+
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onUUIDFound(final NoxUUIDFoundEvent event) {
 		if (event.isAsynchronous()) //safety check.
 		{
@@ -62,7 +59,7 @@ public class LoginListener extends NoxListener<NoxCore> {
 				pm.loadPlayer(event.getUsername());
 		}
 	}
-	
+
 	@Override
 	public void register() {
 		super.register();

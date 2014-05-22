@@ -29,93 +29,92 @@ import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.packet.PacketSounds;
 
 public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, Cloneable {
-	
-	private Map<Integer, CoreBoxItem> menuItems;
-	
+
+	private final String pName;
 	public Runnable closeRunnable;
+	private Map<Integer, CoreBoxItem> menuItems;
 	private CorePlayerManager pm;
 	private String name;
 	private Inventory box;
 	private CoreBox backButton;
 	private Reference<Player> p;
-	private final String pName;
-	
-	public CoreBox(Player p, String name, int size, @Nullable CoreBox backButton){
+
+	public CoreBox(Player p, String name, int size, @Nullable CoreBox backButton) {
 		this(p, name, size, backButton, NoxCore.getInstance());
 	}
-	
+
 	public CoreBox(Player p, String name, int size) {
 		this(p, name, size, null, NoxCore.getInstance());
 	}
-	
+
 	public CoreBox(final Player p, String name, int size, @Nullable CoreBox backButton, NoxCore core) {
 		super(core);
-		
+
 		this.pm = CorePlayerManager.getInstance();
 		this.p = new WeakReference<Player>(p);
-		
+
 		this.box = Bukkit.getServer().createInventory(null, size, (this.name = name));
 		this.menuItems = new HashMap<Integer, CoreBoxItem>();
 		pName = p.getName();
-		
+
 		if (backButton != null) {
 			this.backButton = backButton;
-			
+
 			ItemStack button = new ItemStack(Material.ARROW);
 			ItemMeta meta = button.getItemMeta();
-			
+
 			meta.setDisplayName(ChatColor.GOLD + name);
 			meta.setLore(Arrays.asList(ChatColor.AQUA + "<- Go Back To The \"" + ChatColor.GOLD + backButton.getName() + ChatColor.AQUA + "\" Menu"));
-			
+
 			button.setItemMeta(meta);
-			
+
 			this.box.setItem(this.box.getSize() - 1, button);
 		}
-		
+
 		this.closeRunnable = new Runnable() {
-			final CoreBox thisBox = CoreBox.this;	
-			
-			public void run() { 
+			final CoreBox thisBox = CoreBox.this;
+
+			public void run() {
 				Player p;
 				if ((p = getPlayer()) != null && box.getViewers().contains(p))
 					p.closeInventory();
-				
+
 				NoxPlayer np = pm.getPlayer(p);
 				if (np.hasCoreBox(thisBox))
 					np.deleteCoreBox();
-				
+
 				thisBox.unregister();
 				box.clear();
 				menuItems = null;
 			}
 		};
-		
+
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public Inventory getBox() {
 		return box;
 	}
-	
+
 	public Player getPlayer() {
-		return p == null? null : p.get() == null? null : p.get();
+		return p == null ? null : p.get() == null ? null : p.get();
 	}
-	
+
 	public boolean isValid() {
 		Player p = getPlayer();
 		return p != null && p.isValid() && pm.getPlayer(p).hasCoreBox(this);
 	}
-	
+
 	public boolean fixReference() {
 		Player player = Bukkit.getPlayer(pName);
 		if (player == null)
 			return false;
-		
+
 		this.p = new WeakReference<Player>(player);
-		
+
 		return true;
 	}
 
@@ -123,48 +122,48 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		Player p;
 		if ((p = getPlayer()) == null)
 			return;
-		
+
 		pm.getPlayer(p).setCoreBox(this);
 		p.openInventory(box);
 
 		register();
 	}
-	
+
 	public void hide() {
 		if (isValid())
 			CommonUtil.nextTick(closeRunnable);
-		
+
 		return;
 	}
-	
+
 	public boolean addMenuItem(int slot, CoreBoxItem item) {
 		box.setItem(slot, item.getItem());
 		menuItems.put(slot, item);
-		
+
 		ItemStack checkNull;
 		return (checkNull = box.getItem(slot)) != null && checkNull.equals(item.getItem());
 	}
-	
+
 	public boolean removeMenuItem(CoreBoxItem item) {
 		return box.removeItem(item.getItem()) == null && this.menuItems.values().remove(item);
 	}
-	
+
 	public void removeMenuItem(int slot) {
 		box.setItem(slot, null);
-		
+
 		return;
 	}
-	
+
 	public CoreBoxItem getMenuItem(CoreBoxItem item) {
-		for(CoreBoxItem menuItem : menuItems.values()) {
-			if(menuItem.equals(item)) {
+		for (CoreBoxItem menuItem : menuItems.values()) {
+			if (menuItem.equals(item)) {
 				return menuItem;
 			} else continue;
 		}
-		
+
 		return null;
 	}
-	
+
 	public CoreBoxItem getMenuItem(int slot) {
 		try {
 			return menuItems.get(slot);
@@ -172,67 +171,68 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 			return null;
 		}
 	}
-	
-	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onClick(InventoryClickEvent event) {
 		if (!isValid()) {
 			hide();
-			
+
 			return;
 		}
-		
+
 		if (!event.getInventory().equals(box)) {
 			return;
 		}
-		
+
 		Player player = p.get();
 		if (player == null)
-			return;	
-		
+			return;
+
 		event.setCancelled(true);
 		player.updateInventory();
-		
+
 		ItemStack clickedItem = event.getCurrentItem();
 		if (event.getRawSlot() < (box.getSize() - 1)) {
 			if (clickedItem != null && clickedItem.getType() != Material.AIR) {
-				
+
 				CoreBoxItem item;
-				if((item = getMenuItem(event.getRawSlot())) != null)
+				if ((item = getMenuItem(event.getRawSlot())) != null)
 					if (item.onClick(event))
 						StaticEffects.playSound(player, PacketSounds.RandomClick);
 					else
 						StaticEffects.PlaySound(player, player.getLocation(), PacketSounds.RandomAnvilLand, 1, +2);
 			}
-		} else if (backButton != null && event.getRawSlot() == (box.getSize() - 1)){
+		} else if (backButton != null && event.getRawSlot() == (box.getSize() - 1)) {
 			try {
 				((CoreBox) backButton.clone()).show();
 				StaticEffects.playSound(player, PacketSounds.RandomClick);
-			} catch (CloneNotSupportedException e) {}
-			
+			} catch (CloneNotSupportedException e) {
+			}
+
 			return;
 		}
-		
+
 		this.clickHandler(event);
 	}
-	
-	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onClose(InventoryCloseEvent event) {
 		if (!isValid()) {
 			hide();
-			
+
 			return;
 		}
-		
+
 		if (event.getInventory().equals(box))
 			this.closeHandler(event);
 	}
-	
+
 	public void clickHandler(InventoryClickEvent event) {
-		
+
 	}
-	
+
 	public void closeHandler(InventoryCloseEvent event) {
-		
+
 	}
 
 }

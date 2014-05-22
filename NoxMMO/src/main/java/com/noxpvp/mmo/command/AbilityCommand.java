@@ -19,7 +19,7 @@ import com.noxpvp.mmo.command.subcommands.AbilityListCommand;
 public class AbilityCommand extends BaseCommand {
 
 	public static final String COMMAND_NAME = "ability";
-	
+
 	public AbilityCommand() {
 		super(COMMAND_NAME, true);
 		registerSubCommand(new AbilityInfoCommand());
@@ -27,9 +27,9 @@ public class AbilityCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[] { "h", "help" };
+		return new String[]{"h", "help"};
 	}
-	
+
 	public int getMaxArguments() {
 		return 1;
 	}
@@ -37,28 +37,28 @@ public class AbilityCommand extends BaseCommand {
 	@Override
 	public CommandResult execute(CommandContext context)
 			throws NoPermissionException {
-		
+
 		if (!context.hasArgument(0))
 			return new CommandResult(this, false);
-		
+
 		String abilityName = StringUtil.join(" ", context.getArguments());
-		
+
 		MMOPlayer mPlayer = MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
-		
+
 		if (mPlayer == null)
 			return new CommandResult(this, true, new MessageBuilder().red("mPlayer object is null!").lines());
-		
+
 		Map<String, Ability> abilities = mPlayer.getAllMappedAbilities();
-		
+
 		Ability ability = null;
 		if (abilities.containsKey(abilityName))
 			ability = abilities.get(abilityName);
-		
+
 		if (ability == null)
 			throw new SafeNullPointerException("Ability \"" + abilityName + "\" does not exist!");
-		
+
 		ability.execute();
-		
+
 		return new CommandResult(this, true);
 	}
 

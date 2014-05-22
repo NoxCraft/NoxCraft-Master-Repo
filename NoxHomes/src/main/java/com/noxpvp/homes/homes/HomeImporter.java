@@ -23,8 +23,8 @@ import com.noxpvp.homes.tp.BaseHome;
 import com.noxpvp.homes.tp.DefaultHome;
 import com.noxpvp.homes.tp.NamedHome;
 
-public enum HomeImporter implements Importer{
-	Essentials(new Importer(){
+public enum HomeImporter implements Importer {
+	Essentials(new Importer() {
 
 		public boolean importData(boolean erase) {
 			NoxHomes plugin = NoxHomes.getInstance();
@@ -34,8 +34,7 @@ public enum HomeImporter implements Importer{
 			File essentialsDir = new File(StringUtil.join(File.separator, "plugins", "Essentials", "userdata"));
 			if (!essentialsDir.exists())
 				return false;
-			else
-			{
+			else {
 				File[] userFiles = essentialsDir.listFiles();
 				List<?> homeLocation;
 				for (File userFile : userFiles) {
@@ -43,43 +42,39 @@ public enum HomeImporter implements Importer{
 						String user = userFile.getName().replaceAll("\\.yml", "");
 						YamlConfiguration userConfig = new YamlConfiguration();
 						userConfig.load(userFile);
-						
+
 						homeLocation = userConfig.getList("home");
-						if (!LogicUtil.nullOrEmpty(homeLocation))
-						{
+						if (!LogicUtil.nullOrEmpty(homeLocation)) {
 							try {
 								Map<String, Object> data = new HashMap<String, Object>();
 								data.put("world", ((String) homeLocation.get(5)).toLowerCase());
-								data.put("x", (Double)homeLocation.get(0));
-								data.put("y", (Double)homeLocation.get(1));
-								data.put("z", (Double)homeLocation.get(2));
-								data.put("pitch", (Float)homeLocation.get(4));
-								data.put("yaw", (Float)homeLocation.get(3));
-								
+								data.put("x", (Double) homeLocation.get(0));
+								data.put("y", (Double) homeLocation.get(1));
+								data.put("z", (Double) homeLocation.get(2));
+								data.put("pitch", (Float) homeLocation.get(4));
+								data.put("yaw", (Float) homeLocation.get(3));
+
 								SafeLocation loc = SafeLocation.deserialize(data);
 								if (loc == null)
 									throw new Exception();
-								
+
 								homes.add(new DefaultHome(user, loc.toLocation()));
-								
-							} catch (Exception e)
-							{
+
+							} catch (Exception e) {
 								//This entry failed. Ignore and continue
 							}
 						}
-						
+
 						ConfigurationSection homeWorlds = userConfig.getConfigurationSection("home.worlds");
 						if (homeWorlds != null) {
-							for (String homeWorld : homeWorlds.getKeys(false))
-							{
+							for (String homeWorld : homeWorlds.getKeys(false)) {
 								ConfigurationSection homeData = userConfig.getConfigurationSection("home.worlds." + homeWorld);
-								
-								if (homeData != null)
-								{
+
+								if (homeData != null) {
 									try {
 										Map<String, Object> data = new HashMap<String, Object>();
 										data.put("world", homeWorld);
-										
+
 										Double x, y, z;
 										Float pitch, yaw;
 
@@ -88,20 +83,20 @@ public enum HomeImporter implements Importer{
 										z = homeData.getDouble("z", Double.NaN);
 										pitch = (float) homeData.getDouble("pitch", Float.NaN);
 										yaw = (float) homeData.getDouble("yaw", Float.NaN);
-										
+
 										if (x.isNaN() || y.isNaN() || z.isNaN() || pitch.isNaN() || yaw.isNaN())
 											throw new Exception();
-										
+
 										data.put("x", x);
 										data.put("y", y);
 										data.put("z", z);
 										data.put("pitch", pitch);
 										data.put("yaw", yaw);
-										
+
 										SafeLocation loc = SafeLocation.deserialize(data);
 										if (loc == null)
 											throw new Exception();
-										
+
 										homes.add(new NamedHome(user, homeWorld, loc.toLocation()));
 									} catch (Exception e) {
 										//This entry failed. Ignore and continue;
@@ -109,13 +104,11 @@ public enum HomeImporter implements Importer{
 								}
 							}
 						}
-						
+
 						ConfigurationSection homeEntries = userConfig.getConfigurationSection("homes");
-						for (String homeName : homeEntries.getKeys(false))
-						{
-							ConfigurationSection homeData = userConfig.getConfigurationSection("homes."+homeName);
-							if (homeData != null)
-							{
+						for (String homeName : homeEntries.getKeys(false)) {
+							ConfigurationSection homeData = userConfig.getConfigurationSection("homes." + homeName);
+							if (homeData != null) {
 								try {
 									if (homeName.equals("home"))
 										homes.add(new DefaultHome(user, SafeLocation.deserialize(homeData.getValues(false)).toLocation()));
@@ -136,9 +129,9 @@ public enum HomeImporter implements Importer{
 			plugin.getHomeManager().addHomes(homes);
 			return true;
 		}
-		
+
 	}),
-	MultiHome(new Importer(){
+	MultiHome(new Importer() {
 
 		public boolean importData(boolean erase) {
 			NoxHomes plugin = NoxHomes.getInstance();
@@ -148,20 +141,18 @@ public enum HomeImporter implements Importer{
 			File multiHomeFile = new File(StringUtil.join(File.separator, "plugins", "MultiHome", "homes.txt"));
 			if (!multiHomeFile.exists())
 				return false;
-			else
-			{
+			else {
 				BufferedReader reader = null;
 				try {
 					FileReader fstream = new FileReader(multiHomeFile);
 					reader = new BufferedReader(fstream);
-					
+
 					String line = reader.readLine();
 					if (line != null)
 						line = line.trim();
-					
-					while (line != null)
-					{
-						if (!line.startsWith("#") && line.length() > 0){
+
+					while (line != null) {
+						if (!line.startsWith("#") && line.length() > 0) {
 							String[] values = line.split(";");
 							double x = 0, y = 0, z = 0;
 							float pitch = 0, yaw = 0;
@@ -222,13 +213,14 @@ public enum HomeImporter implements Importer{
 			}
 		}
 	});
-	
+
 	private Importer importer;
-	
-	HomeImporter(Importer importer)
-	{
+
+	HomeImporter(Importer importer) {
 		this.importer = importer;
 	}
-	
-	public boolean importData(boolean erase) {return this.importer.importData(erase);}
+
+	public boolean importData(boolean erase) {
+		return this.importer.importData(erase);
+	}
 }

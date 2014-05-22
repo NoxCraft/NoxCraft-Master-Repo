@@ -21,88 +21,81 @@ import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 /**
  * @author NoxPVP
- *
  */
 public class ShockWaveAnimation extends BukkitRunnable {
-	
+
 	private static MetadataValue shockMeta = new FixedMetadataValue(NoxMMO.getInstance(), "noland");
-	private static BaseMMOEventHandler<EntityChangeBlockEvent> landHandler  = new BaseMMOEventHandler<EntityChangeBlockEvent>(
+	private static BaseMMOEventHandler<EntityChangeBlockEvent> landHandler = new BaseMMOEventHandler<EntityChangeBlockEvent>(
 			new StringBuilder("ShockWaveAnimation").toString(),
 			EventPriority.HIGHEST, 1) {
-		
+
 		public boolean ignoreCancelled() {
 			return true;
 		}
-		
+
 		public Class<EntityChangeBlockEvent> getEventType() {
 			return EntityChangeBlockEvent.class;
 		}
-		
+
 		public String getEventName() {
 			return "EntityChangeBlockEvent";
 		}
-		
+
 		public void execute(EntityChangeBlockEvent event) {
-			
+
 			Entity e = event.getEntity();
 			if (!(e instanceof FallingBlock))
 				return;
-			
+
 			if (!e.hasMetadata("ShockWave"))
 				return;
-			
+
 			e.remove();
 			event.setCancelled(true);
-			
+
 		}
 	};
-	
+
 	static {
 		NoxMMO.getInstance().getMasterListener().registerHandler(landHandler);
 	}
-	
+
 	private Block center;
 	private int shockSpeed;
 	private int shockRange;
 	private Vector shockVelo;
 	private boolean isCircle;
-	
+
 	private int i;
 	private List<Material> flowers;
-	
-	
+
+
 	/**
-	 * 
-	 * 
 	 * @param shockCenter Location the shockwave will start from
-	 * @param shockSpeed The delay in ticks between each ring
-	 * @param shockRange the range from the location the shockwave will extend
-	 * @param circle If the wave should be a circle
+	 * @param shockSpeed  The delay in ticks between each ring
+	 * @param shockRange  the range from the location the shockwave will extend
+	 * @param circle      If the wave should be a circle
 	 */
 	public ShockWaveAnimation(Location shockCenter, int shockSpeed, int shockRange, boolean circle) {
 		this(shockCenter, shockSpeed, shockRange, 0.35, circle);
 	}
-	
+
 	/**
-	 * 
-	 * 
 	 * @param shockCenter Location the shockwave will start from
-	 * @param shockSpeed The delay in ticks between each ring
-	 * @param shockRange the range from the location the shockwave will extend
-	 * @param shockVelo the velocity height of the shockwave blocks
+	 * @param shockSpeed  The delay in ticks between each ring
+	 * @param shockRange  the range from the location the shockwave will extend
+	 * @param shockVelo   the velocity height of the shockwave blocks
 	 */
 	public ShockWaveAnimation(Location shockCenter, int shockSpeed, int shockRange, double shockVelo) {
 		this(shockCenter, shockSpeed, shockRange, shockVelo, false);
 	}
-	
+
 	/**
-	 * 
-	 * 
 	 * @param shockCenter Location the shockwave will start from
-	 * @param shockSpeed The delay in ticks between each ring
-	 * @param shockRange the range from the location the shockwave will extend
-	 * @param shockVelo the velocity height of the shockwave blocks
-	 * @param isCircle If the animation is circular, other wise square
+	 * @param shockSpeed  The delay in ticks between each ring
+	 * @param shockRange  the range from the location the shockwave will extend
+	 * @param shockVelo   the velocity height of the shockwave blocks
+	 * @param isCircle    If the animation is circular, other wise square
 	 */
 	public ShockWaveAnimation(Location shockCenter, int shockSpeed, int shockRange, double shockVelo, boolean isCircle) {
 		this.center = shockCenter.getBlock().getRelative(BlockFace.DOWN);
@@ -110,13 +103,13 @@ public class ShockWaveAnimation extends BukkitRunnable {
 		this.shockRange = shockRange;
 		this.shockVelo = new Vector().setY(shockVelo);
 		this.isCircle = isCircle;
-		
+
 		this.i = 0;
 		this.flowers = Arrays.asList(Material.LONG_GRASS, Material.RED_ROSE, Material.YELLOW_FLOWER, Material.CROPS, Material.DEAD_BUSH, Material.VINE, Material.SAPLING);
 	}
-	
-	private boolean isThrowable(Material type){
-		switch(type){
+
+	private boolean isThrowable(Material type) {
+		switch (type) {
 			case AIR:
 			case SAPLING:
 			case POWERED_RAIL:
@@ -159,54 +152,59 @@ public class ShockWaveAnimation extends BukkitRunnable {
 				return true;
 		}
 	}
-	
-	public void safeCancel() {try { cancel(); } catch (IllegalStateException e) {}	}
+
+	public void safeCancel() {
+		try {
+			cancel();
+		} catch (IllegalStateException e) {
+		}
+	}
 
 	public void start(int delay) {
 		runTaskTimer(NoxMMO.getInstance(), delay, shockSpeed);
 	}
-	
+
 	public void run() {
-		
+
 		i += 1;
 		if (i <= shockRange) {
 			// do next ring
 			int bx = center.getX();
 			int y = center.getY();
 			int bz = center.getZ();
-			
+
 			for (int x = bx - i; x <= bx + i; x++) {
 				for (int z = bz - i; z <= bz + i; z++) {
 					Block b = null;
-					
+
 					if (isCircle) {
 						b = center.getWorld().getBlockAt(x, y + 3, z);
-						
+
 						double dis;
-						if ((dis = Math.abs(b.getLocation().distance(center.getLocation().clone().add(0, 3, 0)))) > (i +.50) || dis < (i -.50))
+						if ((dis = Math.abs(b.getLocation().distance(center.getLocation().clone().add(0, 3, 0)))) > (i + .50) || dis < (i - .50))
 							continue;
-						
-					} else if (Math.abs(x-bx) == i || Math.abs(z-bz) == i) {
-						b = center.getWorld().getBlockAt(x, y+3, z);//+3 - max height above location
+
+					} else if (Math.abs(x - bx) == i || Math.abs(z - bz) == i) {
+						b = center.getWorld().getBlockAt(x, y + 3, z);//+3 - max height above location
 					}
-					
+
 					if (b == null) continue;
-					
+
 					Material type = b.getType();
-					while(!isThrowable(type) && b.getLocation().getY() > (center.getY()-4)){
+					while (!isThrowable(type) && b.getLocation().getY() > (center.getY() - 4)) {
 						b = b.getRelative(BlockFace.DOWN);
 						type = b.getType();
 					}
-					
-					final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getLocation(), type == Material.GRASS? Material.DIRT : type, b.getData());
-					
+
+					final FallingBlock nb = b.getWorld().spawnFallingBlock(b.getLocation(), type == Material.GRASS ? Material.DIRT : type, b.getData());
+
 					nb.setVelocity(shockVelo);
 					nb.setMetadata("ShockWave", shockMeta);
 					nb.setDropItem(false);
-					   
+
 				}
 			}
-			
+
 		} else {
 			safeCancel();
 			return;

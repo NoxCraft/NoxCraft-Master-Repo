@@ -12,39 +12,36 @@ import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class PlayerClassFilter implements Filter<Player> {
-	
+
 	private List<String> classIds;
-	
+
 	private boolean inverse = false;
-	
-	public PlayerClassFilter(String... ids)
-	{
+
+	public PlayerClassFilter(String... ids) {
 		classIds = new ArrayList<String>();
-		for (String id: ids)
-		{
+		for (String id : ids) {
 			if (PlayerClassUtil.hasClassId(id))
 				classIds.add(id);
 			else if (PlayerClassUtil.hasClassName(id))
 				classIds.add(PlayerClassUtil.getIdByClassName(id));
 		}
 	}
-	
+
 	public boolean isFiltered(Player player) {
 		MMOPlayer mPlayer = getMMOPlayer(player);
-		
+
 		IPlayerClass mainClass = mPlayer.getPrimaryClass();
 		IPlayerClass subClass = mPlayer.getSecondaryClass();
-		
+
 		if (classIds.contains(mainClass.getUniqueID()))
 			return !inverse;
 		if (classIds.contains(subClass.getUniqueID()))
 			return !inverse;
-		
+
 		return inverse;
 	}
-	
-	private static MMOPlayer getMMOPlayer(Player player)
-	{
+
+	private static MMOPlayer getMMOPlayer(Player player) {
 		return MMOPlayerManager.getInstance().getPlayer(player);
 	}
 }

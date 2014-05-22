@@ -19,17 +19,24 @@ public class DummyClassTier extends ClassTier {
 	public DummyClassTier(PlayerClass retainer, int tierLevel) {
 		super(retainer, "DummyTier", tierLevel);
 	}
-	
-	public void addExp(int amount) { }
+
+	public void addExp(int amount) {
+	}
 
 	public String getDisplayName() {
 		return "";
 	}
 
+	public void setDisplayName(String displayName) {
+	}
+
 	public int getLevel() {
 		return 0;
 	}
-	
+
+	public void setLevel(int level) {
+	}
+
 	public double getMaxHealth() {
 		return 20;
 	}
@@ -51,29 +58,29 @@ public class DummyClassTier extends ClassTier {
 	}
 
 	@Override
-	public void load(ConfigurationNode node) { }
+	public void load(ConfigurationNode node) {
+	}
 
-	public void removeExp(int amount) { }
+	public void removeExp(int amount) {
+	}
 
 	@Override
-	public void save(ConfigurationNode node) { }
+	public void save(ConfigurationNode node) {
+	}
 
-	public void setDisplayName(String displayName) { }
-
-	public void setExp(int amount) { }
+	public void setExp(int amount) {
+	}
 
 	public int getExp(int level) {
 		return 0;
 	}
-
-	public void setLevel(int level) { }
 
 	public List<String> getLore() {
 		return b2;
 	}
 
 	public ExperienceType[] getExpTypes() {
-		return b ;
+		return b;
 	}
 
 	public Map<String, Ability> getAbilityMap() {

@@ -23,7 +23,7 @@ public class ClassSwitchCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[] {"h", "help", "nogui"};
+		return new String[]{"h", "help", "nogui"};
 	}
 
 	public String[] getHelp() {
@@ -31,8 +31,7 @@ public class ClassSwitchCommand extends BaseCommand {
 		mb.newLine().green("Flags").newLine().setIndent(1);
 		boolean first = true;
 		mb.red("");
-		for (String s : getFlags())
-		{
+		for (String s : getFlags()) {
 			mb.append(s);
 			if (first) {
 				first = false;
@@ -49,51 +48,48 @@ public class ClassSwitchCommand extends BaseCommand {
 
 	@Override
 	public CommandResult execute(CommandContext context) throws NoPermissionException {
-		if (!context.hasFlag("nogui"))
-		{
+		if (!context.hasFlag("nogui")) {
 			new ClassChooseMenu(context.getPlayer(), null).show();
 			return new CommandResult(this, true);
 		}
-		
+
 		String cName = null;
 		String sTier = null;
 		if (!context.hasArgument(0))
 			return new CommandResult(this, false);
 		cName = context.getArgument(0);
-		
+
 		if (context.hasArgument(1))
 			sTier = context.getArgument(1);
-		
+
 		if (sTier == null)
 			sTier = "-1";
-		
+
 		int tier = ParseUtil.parseInt(sTier, -1);
 
 		if (PlayerClassUtil.hasClassNameIgnoreCase(cName))
 			cName = PlayerClassUtil.getIdByClassName(cName);
-		
-		if (!PlayerClassUtil.hasClassId(cName))
-		{
+
+		if (!PlayerClassUtil.hasClassId(cName)) {
 			MMOLocale.CLASS_NONE_BY_NAME.message(context.getSender(), cName);
 			return new CommandResult(this, true);
 		}
-		
+
 		PlayerClass c = PlayerClassUtil.safeConstructClass(cName, context.getPlayer());
-		
-		MMOPlayer p =  MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
-		
+
+		MMOPlayer p = MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
+
 		if (tier == -1)
 			c.setCurrentTier(c.getLatestTier());
-		
-		if (!c.canUseTier(tier))
-		{
-			MMOLocale.CLASS_TIER_LOCKED.message(context.getSender(), cName, ""+ tier, "(RAW) class.canUseTier(" + tier + ") == false");
+
+		if (!c.canUseTier(tier)) {
+			MMOLocale.CLASS_TIER_LOCKED.message(context.getSender(), cName, "" + tier, "(RAW) class.canUseTier(" + tier + ") == false");
 			return new CommandResult(this, true);
 		}
 		c.setCurrentTier(tier);
-		
+
 		p.setClass(c);
-		
+
 		return new CommandResult(this, true);
 	}
 

@@ -12,12 +12,18 @@ import com.noxpvp.core.utils.StaticCleaner;
 import com.palmergames.bukkit.towny.Towny;
 
 public class NoxChat extends NoxPlugin {
-	private PermissionHandler permHandler;
-	
 	private static NoxChat instance;
-	
 	Towny towny;
-	
+	private PermissionHandler permHandler;
+
+	public static NoxChat getInstance() {
+		return instance;
+	}
+
+	private static void setInstance(NoxChat instance) {
+		NoxChat.instance = instance;
+	}
+
 	@Override
 	public NoxCore getCore() {
 		return NoxCore.getInstance();
@@ -37,36 +43,26 @@ public class NoxChat extends NoxPlugin {
 	@Override
 	public void disable() {
 		String[] internalClasses = new String[]{};
-		Class<?>[] publicClasses = new Class[] {
+		Class<?>[] publicClasses = new Class[]{
 				PlayerManager.class
 		};
-		
+
 		new StaticCleaner(this, getClassLoader(), internalClasses, publicClasses).resetAll();
 	}
 
 	@Override
 	public void enable() {
-		if (instance != null)
-		{
+		if (instance != null) {
 			log(Level.SEVERE, "This plugin already has an instance running!! Disabling second run.");
 			setEnabled(false);
 			return;
 		}
 		setInstance(this);
-		
+
 		Conversion.register(new TargetConverter());
-		
+
 		permHandler = new PermissionHandler(this);
-		
+
 		towny = getCore().getTowny();
-	}
-	
-	public static NoxChat getInstance() {
-		return instance;
-	}
-	
-	private static void setInstance(NoxChat instance)
-	{
-		NoxChat.instance = instance;
 	}
 }

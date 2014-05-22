@@ -5,42 +5,47 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 
-public class Cycler<E> implements ListIterator<E>{
+public class Cycler<E> implements ListIterator<E> {
 	private ArrayList<E> data;
-	
+
 	private int index;
-	
-	public Cycler(Collection<E> data)
-	{
+
+	public Cycler(Collection<E> data) {
 		this.data = new ArrayList<E>(data);
 		index = 0;
 	}
-	
-	public Cycler(int size)
-	{
+
+	public Cycler(int size) {
 		data = new ArrayList<E>(size);
 		index = 0;
 	}
-	
+
 	public void add(E e) {
 		data.add(currentIndex(), e);
 	}
-	
+
 	/**
 	 * Retrieves the current object on the current index / iteration.
 	 *
 	 * @return the current object.
 	 */
-	public E current() { return data.get(currentIndex()); }
-	
+	public E current() {
+		return data.get(currentIndex());
+	}
+
 	/**
 	 * Retrieves the current index.
-	 * 
+	 *
 	 * @return 0 - (Cycler Size)
 	 */
-	public int currentIndex() { return index;}
-	public List<E> getList() { return data; }
-	
+	public int currentIndex() {
+		return index;
+	}
+
+	public List<E> getList() {
+		return data;
+	}
+
 	/*
 	 * Warning this method will cause it to loop infinite on iteration.
 	 * 
@@ -73,7 +78,7 @@ public class Cycler<E> implements ListIterator<E>{
 	public int nextIndex() {
 		return currentIndex() >= (data.size() - 1) ? 0 : (currentIndex() + 1);
 	}
-	
+
 	public E peekNext() {
 		return data.get(nextIndex());
 	}
@@ -88,7 +93,7 @@ public class Cycler<E> implements ListIterator<E>{
 	}
 
 	public int previousIndex() {
-		return currentIndex() <= 0 ? (data.size()-1) : (currentIndex() - 1);
+		return currentIndex() <= 0 ? (data.size() - 1) : (currentIndex() - 1);
 	}
 
 	public void remove() {

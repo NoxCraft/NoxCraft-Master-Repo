@@ -11,7 +11,7 @@ public class EntityTargetedAbilityExecutedEvent extends EntityAbilityEvent imple
 	public EntityTargetedAbilityExecutedEvent(Entity what, BaseTargetedEntityAbility ability) {
 		super(what, ability);
 	}
-	
+
 	@Override
 	public BaseTargetedEntityAbility getAbility() {
 		return (BaseTargetedEntityAbility) super.getAbility();

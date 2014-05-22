@@ -17,64 +17,58 @@ import com.noxpvp.homes.homes.HomeImporter;
 public class HomeAdminImportCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "import";
 	public static final String PERM_NODE = "import";
-	private HomesPlayerManager manager;
-	
 	private final PermissionHandler permHandler;
+	private HomesPlayerManager manager;
 	private String[] importerNames;
-	
-	
-	public HomeAdminImportCommand()
-	{
+
+
+	public HomeAdminImportCommand() {
 		super(COMMAND_NAME, false);
-		
+
 		if (NoxCore.getInstance() == null)
 			throw new RuntimeException("NoxCore plugin is not loaded! Do not use this class in other plugins please.");
-		
+
 		manager = getPlugin().getHomeManager();
 		permHandler = NoxHomes.getInstance().getPermissionHandler();
-		
+
 		HomeImporter[] vals = HomeImporter.values();
 		importerNames = new String[vals.length];
-		
+
 		for (int i = 0; i < importerNames.length; i++)
 			importerNames[i] = vals[i].name();
 	}
-	
+
 	public CommandResult execute(CommandContext context) {
 		CommandSender sender = context.getSender();
 		String[] args = context.getArguments();
-		if (manager == null)
-		{
+		if (manager == null) {
 			manager = getPlugin().getHomeManager();
-			if (manager == null);
+			if (manager == null) ;
 			{
 				MessageUtil.sendLocale(sender, GlobalLocale.ERROR_NULL, "PlayerManager reference in Home List Object.");
 				return new CommandResult(this, true);
 			}
 		}
-		
+
 		String perm = StringUtil.join(".", NoxHomes.HOMES_NODE, "admin", PERM_NODE);
-		if (!permHandler.hasPermission(sender, perm))
-		{
+		if (!permHandler.hasPermission(sender, perm)) {
 			MessageUtil.sendLocale(sender, GlobalLocale.FAILED_PERMISSION, "Can not import homes data.", perm);
 			return new CommandResult(this, true);
 		}
-		
-		
-		
-		if (args.length < 1 || args[0].equalsIgnoreCase("help") || context.hasFlag("h") || context.hasFlag("help") || HomeImporter.valueOf(args[0]) == null)
-		{
-			
+
+
+		if (args.length < 1 || args[0].equalsIgnoreCase("help") || context.hasFlag("h") || context.hasFlag("help") || HomeImporter.valueOf(args[0]) == null) {
+
 			MessageBuilder mb = new MessageBuilder();
-			
+
 			if (args.length < 1)
 				mb.red("You must specify one of the importers.").newLine();
 			else if (HomeImporter.valueOf(args[0]) == null)
 				mb.red(args[0]).append(" is not a valid importer.");
 			mb.blue("List of importers: ");
-			
+
 			mb.yellow("[").green(StringUtil.combineNames(importerNames)).yellow("]").newLine().aqua("/").append(COMMAND_NAME).append(" ").yellow("[").green(StringUtil.join("|", importerNames)).yellow("]");
-			
+
 			mb.send(sender);
 			return new CommandResult(this, true);
 		}
@@ -82,9 +76,8 @@ public class HomeAdminImportCommand extends BaseCommand {
 		HomeImporter porter = null;
 		if (args.length > 0)
 			porter = HomeImporter.valueOf(args[0]);
-		
-		if (porter == null)
-		{
+
+		if (porter == null) {
 			mb.red("Importer: ").append(args[0]).append(". Does not exist.");
 			mb.newLine().aqua("The following importers are available. ").yellow("[").green(StringUtil.combineNames(importerNames)).yellow("]");
 		} else {
@@ -94,7 +87,7 @@ public class HomeAdminImportCommand extends BaseCommand {
 			else
 				mb.red("Could not import data. For more information view console logs.");
 		}
-		
+
 		mb.send(sender);
 		return new CommandResult(this, true);
 	}
@@ -104,7 +97,7 @@ public class HomeAdminImportCommand extends BaseCommand {
 		mb.blue("/").append(HomeAdminCommand.COMMAND_NAME).append(" ").append(COMMAND_NAME).append(" ").yellow("[importerName]");
 		mb.newLine().blue("Importers: ").newLine();
 		mb.aqua("[").green(StringUtil.combineNames(importerNames)).aqua("]");
-		
+
 		return mb.lines();
 	}
 

@@ -15,39 +15,35 @@ import com.noxpvp.core.manager.CorePlayerManager;
 
 public class DeathListener extends NoxListener<NoxCore> {
 	private CorePlayerManager pm;
-	
-	public DeathListener()
-	{
+
+	public DeathListener() {
 		this(NoxCore.getInstance());
 	}
-	
-	public DeathListener(NoxCore core)
-	{
+
+	public DeathListener(NoxCore core) {
 		super(core);
 		this.pm = CorePlayerManager.getInstance();
 	}
-	
-	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
-	public void onDeath(PlayerDeathEvent e)
-	{
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onDeath(PlayerDeathEvent e) {
 		NoxPlayer player = pm.getPlayer(e.getEntity());
 		if (player == null)
 			return;
-		
+
 		player.setLastDeath(e);
 	}
-	
-	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
-	public void onEntityDeath(EntityDeathEvent e)
-	{
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onEntityDeath(EntityDeathEvent e) {
 		Player p = null;
 		NoxPlayer np = null;
-		EntityDamageEvent ede =  e.getEntity().getLastDamageCause();
+		EntityDamageEvent ede = e.getEntity().getLastDamageCause();
 		if (ede instanceof EntityDamageByEntityEvent) {
 			EntityDamageByEntityEvent edbe = (EntityDamageByEntityEvent) ede;
 			if (edbe.getDamager() instanceof Projectile) {
-				if (((Projectile)edbe.getDamager()).getShooter() instanceof Player) {
-					p = (Player)((Projectile)edbe.getDamager()).getShooter();
+				if (((Projectile) edbe.getDamager()).getShooter() instanceof Player) {
+					p = (Player) ((Projectile) edbe.getDamager()).getShooter();
 					if ((np = pm.getPlayer(p)) != null)
 						np.setLastKill(e.getEntity());
 				}

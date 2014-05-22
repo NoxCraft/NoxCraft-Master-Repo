@@ -7,7 +7,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class NoxUUIDEvent extends Event {
-	
+
+	private static final HandlerList handlers = new HandlerList();
 	private final String username;
 	private final UUID uuid;
 
@@ -16,24 +17,22 @@ public class NoxUUIDEvent extends Event {
 		this.username = username;
 		this.uuid = uuid;
 	}
-	
+
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
+
 	public String getUsername() {
 		return username;
 	}
-	
+
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-	
+
 	public UUID getUUID() {
 		return uuid;
-	}
-
-	private static final HandlerList handlers = new HandlerList();
-	
-	public static HandlerList getHandlerList() {
-		return handlers;
 	}
 
 }

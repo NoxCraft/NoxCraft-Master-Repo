@@ -7,9 +7,8 @@ import com.noxpvp.homes.NoxHomes;
 
 public class HomeAdminCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "noxhomes";
-	
-	public HomeAdminCommand()
-	{
+
+	public HomeAdminCommand() {
 		super(COMMAND_NAME, false);
 		registerSubCommands(
 				new HomeAdminImportCommand(),
@@ -20,12 +19,12 @@ public class HomeAdminCommand extends BaseCommand {
 	public CommandResult execute(CommandContext context) {
 		return new CommandResult(this, false);
 	}
-	
+
 	@Override
 	public NoxMessageBuilder onDisplayHelp(NoxMessageBuilder message) {
 		for (BaseCommand cmd : getSubCommandMap().values())
 			message.withCommand(cmd, true);
-		
+
 		return message;
 	}
 

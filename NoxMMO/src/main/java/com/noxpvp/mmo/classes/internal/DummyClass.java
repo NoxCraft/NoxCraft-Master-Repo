@@ -21,19 +21,19 @@ public class DummyClass implements IPlayerClass {
 
 	public static final DummyClass PRIMARY = new DummyClass(true);
 	public static final DummyClass SECONDARY = new DummyClass(false);
-	
+
 	private static final ClassType[] EMPTY_CLASSTYPE = new ClassType[0];
 
 	private static final ExperienceType[] EMPTY_EXPTYPE = new ExperienceType[0];
 	private final Map<Integer, IClassTier> tiers = new HashMap<Integer, IClassTier>();
-	
+
 	private final boolean isPrimary;
-	
+
 	private DummyClass(boolean isPrimary) {
 		this.isPrimary = isPrimary;
 	}
-	
-	
+
+
 	public boolean isPrimaryClass() {
 		return isPrimary;
 	}
@@ -50,7 +50,7 @@ public class DummyClass implements IPlayerClass {
 		ItemStack ret = new ItemStack(Material.SIGN);
 		ret.getItemMeta().setDisplayName(getDisplayName());
 		ret.getItemMeta().setLore(getLore());
-		
+
 		return ret;
 	}
 
@@ -102,9 +102,11 @@ public class DummyClass implements IPlayerClass {
 		return tiers.get(1);
 	}
 
-	public void setCurrentTier(IClassTier tier) { }
+	public void setCurrentTier(IClassTier tier) {
+	}
 
-	public void setCurrentTier(int tierLevel) { }
+	public void setCurrentTier(int tierLevel) {
+	}
 
 	public boolean hasTier(int level) {
 		return level == 1;
@@ -134,6 +136,9 @@ public class DummyClass implements IPlayerClass {
 
 	public int getExp() {
 		return 0;
+	}
+
+	public void setExp(int amount) {
 	}
 
 	public int getExp(int tier) {
@@ -172,23 +177,30 @@ public class DummyClass implements IPlayerClass {
 		return 0;
 	}
 
-	public void setExp(int amount) { }
+	public void setExp(int tier, int amount) {
+	}
 
-	public void setExp(int tier, int amount) { }
+	public void addExp(int amount) {
+	}
 
-	public void addExp(int amount) { }
+	public void addExp(int tier, int amount) {
+	}
 
-	public void addExp(int tier, int amount) { }
+	public void removeExp(int amount) {
+	}
 
-	public void removeExp(int amount) { }
+	public void removeExp(int tier, int amount) {
+	}
 
-	public void removeExp(int tier, int amount) { }
+	public void onLoad(ConfigurationNode node) {
+	}
 
-	public void onLoad(ConfigurationNode node) { }
+	public void onSave(ConfigurationNode node) {
+	}
 
-	public void onSave(ConfigurationNode node) { }
-
-	public Map<String, ? extends Ability> getAbilityMap() { return new HashMap<String, Ability>(); }
+	public Map<String, ? extends Ability> getAbilityMap() {
+		return new HashMap<String, Ability>();
+	}
 
 	public Collection<? extends Ability> getAbilities() {
 		return new ArrayList<Ability>();
