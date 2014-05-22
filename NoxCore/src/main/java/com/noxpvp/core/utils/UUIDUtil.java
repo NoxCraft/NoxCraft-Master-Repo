@@ -13,6 +13,8 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -40,7 +42,7 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 	 * @author EvilMidget
 	 */
 	static class UUIDFetcher implements Callable<Map<String, UUID>> {
-		
+
 		private static final String AGENT = "minecraft";
 		private static final int MAX_SEARCH = 100;
 		private static final String PROFILE_URL = "https://api.mojang.com/profiles/page/";
@@ -55,7 +57,7 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 			}
 			return JSONValue.toJSONString(lookups);
 		}
-		
+
 		private static HttpURLConnection createConnection(int page) throws Exception {
 			URL url = new URL(PROFILE_URL+page);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -66,22 +68,22 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 			connection.setDoOutput(true);
 			return connection;
 		}
-		
+
 		private static void writeBody(HttpURLConnection connection, String body) throws Exception {
 			DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
 			writer.write(body.getBytes());
 			writer.flush();
 			writer.close();
 		}
-	
+
 		private final JSONParser jsonParser = new JSONParser();
-	
+
 		private final List<String> names;
-	
+
 		public UUIDFetcher(List<String> names) {
 			this.names = ImmutableList.copyOf(names);
 		}
-		
+
 		public Map<String, UUID> call() throws Exception {
 			Map<String, UUID> uuidMap = new HashMap<String, UUID>();
 			String body = buildBody(names);
@@ -105,71 +107,110 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 			return uuidMap;
 		}
 	}
-	
+
 	private volatile static UUIDUtil instance;
-	
+
 	public static final UUID ZERO_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+	public static final String ZERO_UUID_COMPRESSED = UUIDUtil.compressUUID(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+
+	public static final Pattern uuidPattern = Pattern.compile("(\\w{8})-?(\\w{4})-?(\\w{4})-?(\\w{4})-?(\\w{12})");
+
+	public static String compressUUID(Object ob) {
+		return compressUUID(ob.toString());
+	}
+
+	public static String compressUUID(String id) {
+		Matcher m = uuidPattern.matcher(id);
+		Validate.isTrue(m.matches(), "Not a valid UUID string!"); //functionally equivalant to isUUID(id). Just less cpu and faster.
+
+		return m.replaceAll("$1$2$3$4$5");
+	}
+
+	public static String decompressUUID(String id) {
+		Matcher m = uuidPattern.matcher(id);
+		Validate.isTrue(m.matches(), "Not a valid UUID string!");
+
+		return m.replaceAll("$1-$2-$3-$4-$5");
+	}
+
+	public static UUID toUUID(String id) {
+		if (id == null)
+			return null;
+
+		try {
+			id = decompressUUID(id);
+			return UUID.fromString(id);
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
+	}
+
+	public static boolean isUUID(Object object) {
+		return uuidPattern.matcher(object.toString()).matches();
+	}
 
 	public static UUIDUtil getInstance() {
 		if (instance == null)
 			instance = new UUIDUtil();
-		
+
 		return instance;
 	}
 
 	private ConcurrentHashMap<String, UUID> name2UUID;
-	
+
 	private UUIDUtil() {
 		super(NoxCore.getInstance());
-		
+
 		name2UUID = new ConcurrentHashMap<String, UUID>();
 		register();
 	}
-	
+
+
+
 	public void ensurePlayerUUIDByName(String name) {
 		ensurePlayerUUIDsByName(toList(name));
 	}
-	
+
 	public void ensurePlayerUUIDsByName(final List<String> names) {
 		for (String name : names)
 			name2UUID.put(name, ZERO_UUID);
-		
+
 		if (Bukkit.isPrimaryThread())
 			fetchByOnlineNames(names);
-		
+
 		new AsyncTask() {
 			public void run() {
 				fetchByNames(names);
 			}
 		}.start();
 	}
-	
+
 	private void mapIDS(Map<String, UUID> map) {
 		for (Entry<String, UUID> entry : map.entrySet())
 			mapID(entry);
 	}
-	
+
 	private void mapID(Entry<String, UUID> entry) {
 		mapID(entry.getKey(), entry.getValue());
 	}
-	
+
 	private void mapID(String username, UUID id) {
 		if ((name2UUID.containsKey(username) || name2UUID.get(username) == ZERO_UUID)  && !name2UUID.get(username).equals(id)) {
 			CommonUtil.callEvent(new NoxUUIDLostEvent(username, name2UUID.get(username)));
 			name2UUID.remove(username);
 		}
-		
+
 		if (!name2UUID.containsKey(username) || name2UUID.get(username) == ZERO_UUID) {
 			name2UUID.put(username, id);
 			CommonUtil.callEvent(new NoxUUIDFoundEvent(username, id));
 		}
 	}
-	
+
 	private void fetchByNames(List<String> names) {
 		Map<String, UUID> call = new HashMap<String, UUID>();
 		if (Bukkit.isPrimaryThread())
 			call.putAll(fetchByOnlineNames(names));
-			
+
 		try {
 			call.putAll(new UUIDFetcher(names).call());
 		} catch (Exception e) {
@@ -180,7 +221,7 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 
 	private Map<String, UUID> fetchByOnlineNames(List<String> names) {
 		Validate.isTrue(Bukkit.isPrimaryThread(), "Must run on server thread for safety.");
-		
+
 		Map<String, UUID> call = new HashMap<String, UUID>();
 		for (Iterator<String> iterator = names.iterator(); iterator.hasNext();) {
 			String name = iterator.next();
@@ -188,12 +229,12 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 			if (p != null && p.getUniqueId() != null) {
 				call.put(name, p.getUniqueId());
 				iterator.remove();
-			} 
+			}
 		}
 		mapIDS(call);
 		return call;
 	}
-	
+
 	/**
 	 * @param name of player
 	 * @return UUID of player
@@ -201,14 +242,14 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 	@Blocking
 	public UUID getID(String name) {
 		Validate.notNull(name);
-		
+
 		if (name2UUID.containsKey(name)) {
 			UUID id = name2UUID.get(name);
-			
+
 			if (id != ZERO_UUID)
 				return id;
 		}
-		
+
 		fetchByNames(toList(name));
 		return name2UUID.get(name);
 	}
@@ -218,7 +259,7 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 		names.add(name);
 		return names;
 	}
-	
+
 	/**
 	 * Attempts to get a UUID without blocking threads.
 	 * @param name of player
@@ -236,12 +277,12 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 					return id;
 				}
 			}
-			
+
 			ensurePlayerUUIDByName(name);
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Attempts to get a UUID without blocking threads.
 	 * @param player object
@@ -260,17 +301,17 @@ public class UUIDUtil extends NoxListener<NoxCore>{
 					return id;
 				}
 			}
-			
+
 			ensurePlayerUUIDByName(name);
 			return null;
 		}
 	}
-	
+
 	@EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) {
 		ensurePlayerUUIDByName(event.getPlayer().getName());
 	}
-	
+
 	@EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent event) {
 		remove(event.getPlayer());

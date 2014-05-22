@@ -151,7 +151,7 @@ public final class TimeUtils {
 		
 		return sb.toString();
 	}
-	
+	//XXX: This is actually not millis seconds on the MS entry. It is actually Micro Seconds.
 	public static String getReadableNanosTime(long nanos) {
 		int ns = (int) (nanos % 1000);
 		nanos /= 1000;

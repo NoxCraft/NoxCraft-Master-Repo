@@ -23,71 +23,103 @@ import com.noxpvp.core.manager.CorePlayerManager;
 
 public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<NoxPlayer> {
 	private final String playerName;
-	
+
 	static {
 		ProxyBase.validate(BaseNoxPlayerAdapter.class);
 	}
-	
+
+	public void deleteCoreBox() {
+		getProxyBase().deleteCoreBox();
+	}
+
+	public void removeCoolDown(String name) {
+		getProxyBase().removeCoolDown(name);
+	}
+
+	public boolean hasCoreBox() {
+		return getProxyBase().hasCoreBox();
+	}
+
+	public UUID getUUID(boolean autoUpdate) {
+		return getProxyBase().getUUID(autoUpdate);
+	}
+
+	public void updatePersistantData() {
+		getProxyBase().updatePersistantData();
+	}
+
+	public void setFirstLoad(boolean isFirstLoad) {
+		getProxyBase().setFirstLoad(isFirstLoad);
+	}
+
+	public boolean isFirstLoad() {
+		return getProxyBase().isFirstLoad();
+	}
+
+	public void setPersistantData(ConfigurationNode persistant_data) {
+		getProxyBase().setPersistantData(persistant_data);
+	}
+
 	public BaseNoxPlayerAdapter(NoxPlayerAdapter player)
 	{
 		this(player.getPlayerName());
 	}
-	
+
 	public BaseNoxPlayerAdapter(OfflinePlayer player) {
 		this(player.getName());
 	}
-	
+
 	public BaseNoxPlayerAdapter(String name)
 	{
 		this.playerName = name;
 	}
-	
+
 	public final void setName(String name) {
 		getProxyBase().setName(name);
 	}
-	
+
 	public NoxPlayer getProxyBase() {
 		return getNoxPlayer(this.getName());
 	}
-	
+
 	public final void setProxyBase(NoxPlayer player) { }
 
 	public final NoxPlayer getNoxPlayer() {
 		return getProxyBase();
 	}
-	
+
 	public boolean hasFirstLoaded() {
 		return getProxyBase().hasFirstLoaded();
 	}
-	
+
 	public final ConfigurationNode getPersistantData() {
 		return getProxyBase().getPersistantData();
 	}
-	
+
 	public final ConfigurationNode getTempData() {
 		return getProxyBase().getTempData();
 	}
-	
+
 	/**
-	 * @deprecated calls {@link #getName()}. Use that instead for less processing. 
+	 * @deprecated calls {@link #getName()}. Use that instead for less processing.
 	 */
 	public final String getPlayerName() { return getName(); }
-	
+
 	public final OfflinePlayer getOfflinePlayer() { return Bukkit.getOfflinePlayer(getName()); }
-	
+
 	public final boolean isOnline() { return getOfflinePlayer().isOnline(); }
-	
+
 	public final Player getPlayer() {
 		if (isOnline())
 			return (Player) getOfflinePlayer();
 		else
 			return null;
 	}
-	
+
 	public final String getFullName() {
 		return getNoxPlayer().getFullName();
 	}
-	
+
 	private static NoxPlayer getNoxPlayer(String name) {
 		return CorePlayerManager.getInstance().getPlayer(name);
 	}
@@ -199,7 +231,7 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 	public boolean isCooldownExpired(String name) {
 		return getProxyBase().isCooldownExpired(name);
 	}
-	
+
 	public void superLoad(boolean overwrite) {
 		getProxyBase().load(overwrite);
 	}
@@ -207,30 +239,34 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 	public void removeCooldDown(String name) {
 		getProxyBase().removeCoolDown(name);
 	}
-	
+
 	public final void superSave() {
 		getProxyBase().save();
 	}
-	
+
 	public final void superLoad() {
 		getProxyBase().load();
 	}
-	
+
 	public final UUID getUUID() {
 		return getProxyBase().getUUID();
 	}
-	
+
 	public final String getUID() {
 		return getProxyBase().getUID();
 	}
-	
+
 	/**
 	 * All data must be set in here. Do not save to file from here though.
 	 */
 	public abstract void save();
-	
+
 	public abstract void load();
-	
+
+	public void load(boolean overwrite) {
+		getProxyBase().load(overwrite);
+	}
+
 	public void saveLastLocation() {
 		getProxyBase().saveLastLocation();
 	}

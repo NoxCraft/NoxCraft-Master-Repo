@@ -82,7 +82,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this.isFirstLoad = isFirstLoad;
 	}
 
-	private UUID uid;
+	private String uid;
 	
 	public NoxPlayer(NoxPlayer player)
 	{
@@ -135,7 +135,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		cd_cache = new WeakHashMap<String, CoolDown>();
 		manager = mn;
 		this.name = null;
-		this.uid = uid;
+		this.uid = UUIDUtil.compressUUID(uid);
 		
 		if (getPlayer() != null){
 			this.coreBar = new CoreBar(core, getPlayer());
@@ -146,25 +146,25 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	public NoxPlayer(CorePlayerManager mn, String name, String uid) {
 		this(mn, name);
-		this.uid = UUID.fromString(uid);
+		this.uid = UUIDUtil.compressUUID(uid);
 	}
 	
 	private boolean isBadUID() {
-		return this.uid == null || this.uid == UUIDUtil.ZERO_UUID;
+		return this.uid == null || this.uid.equals(UUIDUtil.ZERO_UUID_COMPRESSED);
 	}
 	
 	public UUID getUUID(boolean autoUpdate) {
 		if (autoUpdate) {
 			if (isBadUID())
-				this.uid = UUIDUtil.getInstance().tryGetID(getName());
+				this.uid = UUIDUtil.compressUUID(UUIDUtil.getInstance().tryGetID(getName()));
 			
 			if (isBadUID())
 				this.uid = null;
 			
 			if (isBadUID() && isOnline())
-				this.uid = getPlayer().getUniqueId();
+				this.uid = UUIDUtil.compressUUID(getPlayer().getUniqueId());
 		}
-		return uid;
+		return UUIDUtil.toUUID(this.uid);
 	}
 	
 	public UUID getUUID() {
