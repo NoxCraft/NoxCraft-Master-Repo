@@ -4,23 +4,23 @@ import com.noxpvp.core.locales.NoxLocale;
 import com.noxpvp.homes.NoxHomes;
 
 public class HomeLocale extends NoxLocale {
-	public final static HomeLocale LIST_OWN;
-	public final static HomeLocale LIST_OTHERS;
+	public static final HomeLocale LIST_OWN;
+	public static final HomeLocale LIST_OTHERS;
 								   
-	public final static HomeLocale HOME_OWN;
-	public final static HomeLocale HOME_OTHERS;
+	public static final HomeLocale HOME_OWN;
+	public static final HomeLocale HOME_OTHERS;
 								   
-	public final static HomeLocale DELHOME_OWN;
-	public final static HomeLocale DELHOME_INVALID;
-	public final static HomeLocale DELHOME_OTHERS;
+	public static final HomeLocale DELHOME_OWN;
+	public static final HomeLocale DELHOME_INVALID;
+	public static final HomeLocale DELHOME_OTHERS;
 								   
-	public final static HomeLocale SETHOME_OWN;
-	public final static HomeLocale SETHOME_OTHERS;
+	public static final HomeLocale SETHOME_OWN;
+	public static final HomeLocale SETHOME_OTHERS;
 								   
-	public final static HomeLocale WARMUP;
-	public final static HomeLocale COOLDOWN;
+	public static final HomeLocale WARMUP;
+	public static final HomeLocale COOLDOWN;
 	
-	public final static HomeLocale BAD_LOCATION;
+	public static final HomeLocale BAD_LOCATION;
 	
 	static {
 		LIST_OWN 		= new HomeLocale("homes.list.own", "&3Your Homes&r: &e%1%");

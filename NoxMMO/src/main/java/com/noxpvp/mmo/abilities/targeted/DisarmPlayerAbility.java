@@ -18,7 +18,7 @@ public class DisarmPlayerAbility extends BaseTargetedPlayerAbility implements IP
 	
 	public static List<LivingEntity> disarmed = new ArrayList<LivingEntity>();
 	
-	private final static String ABILITY_NAME = "Disarm";
+	private static final String ABILITY_NAME = "Disarm";
 	public static final String PERM_NODE = "disarm";
 
 	

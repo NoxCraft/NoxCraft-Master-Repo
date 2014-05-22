@@ -17,8 +17,8 @@ import com.noxpvp.mmo.abilities.BaseEntityAbility;
 
 public class MinersHelmetEntityAbility extends BaseEntityAbility {
 
-	public final static String ABILITY_NAME = "Miner's Helmet";
-	public final static String PERM_NODE = "miners-helmet";
+	public static final String ABILITY_NAME = "Miner's Helmet";
+	public static final String PERM_NODE = "miners-helmet";
 	
 	private int duration;
 	private int speed;

@@ -25,8 +25,8 @@ import com.noxpvp.mmo.abilities.BaseEntityAbility;
 
 public class DreamCoatEntityAbililty extends BaseEntityAbility{
 	
-	public final static String ABILITY_NAME = "Dream Coat";
-	public final static String PERM_NODE = "dream-coat";
+	public static final String ABILITY_NAME = "Dream Coat";
+	public static final String PERM_NODE = "dream-coat";
 	
 	@Override
 	public String getDescription() {

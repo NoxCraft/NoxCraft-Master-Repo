@@ -25,8 +25,8 @@ import com.noxpvp.mmo.locale.MMOLocale;
 
 public class ClassMenu extends CoreBox {
 
-	public final static String MENU_NAME = "Class";
-	private final static int size = 45;
+	public static final String MENU_NAME = "Class";
+	private static final int size = 45;
 	
 	private CoreBox previousBox;
 	private PlayerClass clazz;

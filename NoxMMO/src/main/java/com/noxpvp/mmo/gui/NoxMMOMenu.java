@@ -6,8 +6,8 @@ import com.noxpvp.mmo.locale.MMOLocale;
 
 public class NoxMMOMenu extends CoreBox {
 	
-	public final static String MENU_NAME = "NoxMMO Menu";
-	public final static int size = 1;
+	public static final String MENU_NAME = "NoxMMO Menu";
+	public static final int size = 1;
 	
 	public NoxMMOMenu(Player p) {
 		super(p, MMOLocale.GUI_MENU_NAME_COLOR.get() + MENU_NAME, size);

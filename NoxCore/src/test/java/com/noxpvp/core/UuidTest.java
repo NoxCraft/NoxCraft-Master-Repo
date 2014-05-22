@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class UuidTest {
 
-	private final static String newline = System.lineSeparator();
+	private static final String newline = System.lineSeparator();
 
 	private static void print(Object... objects) {
 

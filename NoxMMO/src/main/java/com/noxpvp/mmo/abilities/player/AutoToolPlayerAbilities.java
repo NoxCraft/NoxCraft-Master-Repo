@@ -19,8 +19,8 @@ public class AutoToolPlayerAbilities {
 
 	public static class AutoSword extends BasePlayerAbility implements IPassiveAbility<EntityDamageByEntityEvent>{
 		
-		public final static String ABILITY_NAME = "Auto Sword";
-		public final static String PERM_NODE = "auto-sword";
+		public static final String ABILITY_NAME = "Auto Sword";
+		public static final String PERM_NODE = "auto-sword";
 
 		public AutoSword(Player player) {
 			super(ABILITY_NAME, player);
@@ -53,8 +53,8 @@ public class AutoToolPlayerAbilities {
 	
 	public static class AutoTool extends BasePlayerAbility implements IPassiveAbility<BlockBreakEvent> {
 		
-		public final static String ABILITY_NAME = "Auto Tool";
-		public final static String PERM_NODE = "auto-tool";
+		public static final String ABILITY_NAME = "Auto Tool";
+		public static final String PERM_NODE = "auto-tool";
 		
 		public AutoTool(Player player) {
 			super(ABILITY_NAME, player);
@@ -154,8 +154,8 @@ public class AutoToolPlayerAbilities {
 	
 	public static class AutoArmor extends BasePlayerAbility implements IPassiveAbility<EntityDamageEvent> {
 		
-		public final static String ABILITY_NAME = "Auto Armor";
-		public final static String PERM_NODE = "auto-armor";
+		public static final String ABILITY_NAME = "Auto Armor";
+		public static final String PERM_NODE = "auto-armor";
 		
 		public AutoArmor(Player player) {
 			super(ABILITY_NAME, player);

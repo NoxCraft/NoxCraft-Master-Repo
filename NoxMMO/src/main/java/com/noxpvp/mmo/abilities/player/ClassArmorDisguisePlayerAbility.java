@@ -14,8 +14,8 @@ import com.noxpvp.mmo.classes.internal.IPlayerClass;
 
 public class ClassArmorDisguisePlayerAbility extends BasePlayerAbility{
 
-	public final static String ABILITY_NAME = "Armor Disguise";
-	public final static String PERM_NODE = "armor-disguise";
+	public static final String ABILITY_NAME = "Armor Disguise";
+	public static final String PERM_NODE = "armor-disguise";
 	
 	private CommonPacket packet;
 	

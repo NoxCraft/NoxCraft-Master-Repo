@@ -14,8 +14,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 
-	public final static ItemStack dummySpinItem = new ItemStack(Material.WOOD_SPADE);
-	public final static String dummyItemMeta = "DummySpinItem";
+	public static final ItemStack dummySpinItem = new ItemStack(Material.WOOD_SPADE);
+	public static final String dummyItemMeta = "DummySpinItem";
 	
 	static {
 		ItemMeta meta = dummySpinItem.getItemMeta();
@@ -25,7 +25,7 @@ public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 		dummySpinItem.setDurability((short) 0);
 	}
 	
-	protected final static HashMap<Integer, Double[]> lookup = new HashMap<Integer, Double[]>();
+	protected static final HashMap<Integer, Double[]> lookup = new HashMap<Integer, Double[]>();
 	private ArrayDeque<BaseVortexEntity> entities;
 	
 	private Player user;

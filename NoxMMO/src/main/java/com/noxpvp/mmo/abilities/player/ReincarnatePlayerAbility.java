@@ -13,8 +13,8 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class ReincarnatePlayerAbility extends BasePlayerAbility{
 	
-	public final static String ABILITY_NAME = "Reincarnate";
-	public final static String PERM_NODE = "reincarnate";
+	public static final String ABILITY_NAME = "Reincarnate";
+	public static final String PERM_NODE = "reincarnate";
 	
 	private double maxRadius;
 	private int timeLimit;

@@ -17,8 +17,8 @@ import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
 
 public class MeasuringTapePlayerAbility extends BasePlayerAbility{
 	
-	public final static String ABILITY_NAME = "Measuring Tape";
-	public final static String PERM_NODE = "measuring-tape";
+	public static final String ABILITY_NAME = "Measuring Tape";
+	public static final String PERM_NODE = "measuring-tape";
 	
 	private BaseMMOEventHandler<PlayerInteractEvent> handler;
 	

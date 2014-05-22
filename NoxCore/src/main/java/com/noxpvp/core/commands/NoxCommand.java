@@ -7,7 +7,7 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.utils.NoxMessageBuilder;
 
 public class NoxCommand extends BaseCommand {
-	public final static String COMMAND_NAME = "nox";
+	public static final String COMMAND_NAME = "nox";
 	public NoxCommand() {
 		super(COMMAND_NAME, false);
 		registerSubCommand(new UpgradeCommand());

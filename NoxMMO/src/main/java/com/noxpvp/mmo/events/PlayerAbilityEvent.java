@@ -8,7 +8,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.events.internal.IPlayerAbilityEvent;
 
 public class PlayerAbilityEvent extends PlayerEvent implements IPlayerAbilityEvent {
-	private final static HandlerList handlers = new HandlerList();
+	private static final HandlerList handlers = new HandlerList();
 	protected BasePlayerAbility ability;
 
 	public PlayerAbilityEvent(Player who, BasePlayerAbility ability) {

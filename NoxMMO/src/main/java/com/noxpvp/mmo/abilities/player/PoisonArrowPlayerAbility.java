@@ -21,8 +21,8 @@ import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public class PoisonArrowPlayerAbility extends BasePlayerAbility implements IPVPAbility {
 	
-	private final static String ABILITY_NAME = "Poison Arrow";
-	public final static String PERM_NODE = "poison-arrow";
+	private static final String ABILITY_NAME = "Poison Arrow";
+	public static final String PERM_NODE = "poison-arrow";
 	
 	private BaseMMOEventHandler<EntityDamageByEntityEvent> hitHandler;
 	private BaseMMOEventHandler<ProjectileLaunchEvent> launchHandler;

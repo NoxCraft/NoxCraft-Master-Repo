@@ -20,8 +20,8 @@ import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
 
 public class DrainLifePlayerAbility extends BaseTargetedPlayerAbility {
 	
-	public final static String ABILITY_NAME = "Drain Life";
-	public final static String PERM_NODE = "drain-life";
+	public static final String ABILITY_NAME = "Drain Life";
+	public static final String PERM_NODE = "drain-life";
 	
 	private int time;
 	private int period;

@@ -13,7 +13,7 @@ import com.noxpvp.core.manager.CorePlayerManager;
 
 public class FlashingNotification extends BukkitRunnable {
 	
-	private final static int runPeriod = 2;
+	private static final int runPeriod = 2;
 	
 	private Player p;
 	private CoreBar bar;

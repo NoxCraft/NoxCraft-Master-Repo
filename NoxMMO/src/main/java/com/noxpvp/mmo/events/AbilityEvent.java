@@ -8,7 +8,7 @@ import com.noxpvp.mmo.events.internal.IAbilityEvent;
 
 public class AbilityEvent extends Event implements IAbilityEvent {
 
-	private final static HandlerList handlers = new HandlerList();
+	private static final HandlerList handlers = new HandlerList();
 	private final BaseAbility ability;
 	
 	public AbilityEvent(BaseAbility ability) {

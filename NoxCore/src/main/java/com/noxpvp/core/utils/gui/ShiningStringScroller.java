@@ -5,9 +5,9 @@ import javax.annotation.Nullable;
 import org.bukkit.ChatColor;
 
 public class ShiningStringScroller {
-	private final static String regexCodes = "[&" + ChatColor.COLOR_CHAR + "][0-9a-frkmlno]";
-	private final static String regexColors = "[&" + ChatColor.COLOR_CHAR + "][0-9a-fr]";
-	private final static String regexFormats = "[&" + ChatColor.COLOR_CHAR + "][kmlno]";
+	private static final String regexCodes = "[&" + ChatColor.COLOR_CHAR + "][0-9a-frkmlno]";
+	private static final String regexColors = "[&" + ChatColor.COLOR_CHAR + "][0-9a-fr]";
+	private static final String regexFormats = "[&" + ChatColor.COLOR_CHAR + "][kmlno]";
 	
 	private String text;
 	private String[] colors;

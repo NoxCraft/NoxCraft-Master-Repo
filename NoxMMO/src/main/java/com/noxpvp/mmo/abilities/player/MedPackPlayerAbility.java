@@ -31,8 +31,8 @@ import com.noxpvp.mmo.runnables.HealRunnable;
 
 public class MedPackPlayerAbility extends BasePlayerAbility{
 	
-	public final static String ABILITY_NAME = "Med Pack";
-	public final static String PERM_NODE = "med-pack";
+	public static final String ABILITY_NAME = "Med Pack";
+	public static final String PERM_NODE = "med-pack";
 	
 	private static List<MedPackDataWrapper> packs = new ArrayList<MedPackPlayerAbility.MedPackDataWrapper>();
 	

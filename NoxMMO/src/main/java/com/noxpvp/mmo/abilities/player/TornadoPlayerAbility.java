@@ -38,8 +38,8 @@ import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public class TornadoPlayerAbility extends BasePlayerAbility implements IPVPAbility {
 
-	public final static String ABILITY_NAME = "Tornado";
-	public final static String PERM_NODE = "tornado";
+	public static final String ABILITY_NAME = "Tornado";
+	public static final String PERM_NODE = "tornado";
 	
 	@Override
 	public String getDescription() {

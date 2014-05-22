@@ -20,9 +20,9 @@ import com.noxpvp.core.utils.TimeUtils;
 import com.noxpvp.core.utils.gui.MessageUtil;
 
 public class CoreBoard{
-	private final static int BOARD_MAX_ENTRIES = 15;
-	private final static int BOARD_OBJ_NAME_LENGTH_MAX = 28;
-	private final static int BOARD_SCORE_NAME_MAX_LENGTH = 16;
+	private static final int BOARD_MAX_ENTRIES = 15;
+	private static final int BOARD_OBJ_NAME_LENGTH_MAX = 28;
+	private static final int BOARD_SCORE_NAME_MAX_LENGTH = 16;
 	
 	CorePlayerManager pm;
 	private Map<String, BoardEntry> entries;

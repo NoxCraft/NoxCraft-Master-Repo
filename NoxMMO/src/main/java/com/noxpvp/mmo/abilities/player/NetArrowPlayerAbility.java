@@ -24,8 +24,8 @@ public class NetArrowPlayerAbility extends BasePlayerAbility implements IPVPAbil
 	
 	private List<Arrow> arrows;
 	
-	public final static String ABILITY_NAME = "Net Arrow";
-	public final static String PERM_NODE = "net-arrow";
+	public static final String ABILITY_NAME = "Net Arrow";
+	public static final String PERM_NODE = "net-arrow";
 	
 	/**
 	 * Runs the event-side execution of this ability

@@ -10,7 +10,7 @@ import org.bukkit.util.Vector;
 
 public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 	
-	protected final static Map<Integer, double[]> lookup = new HashMap<Integer, double[]>();
+	protected static final Map<Integer, double[]> lookup = new HashMap<Integer, double[]>();
 	
 	static {
 		generateLookup();

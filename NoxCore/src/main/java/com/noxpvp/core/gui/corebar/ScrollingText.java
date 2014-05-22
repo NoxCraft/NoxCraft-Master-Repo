@@ -11,7 +11,7 @@ import com.noxpvp.core.utils.gui.ColoredStringScroller;
 
 public class ScrollingText extends BukkitRunnable {
 	
-	private final static int runPeriod = 3;
+	private static final int runPeriod = 3;
 	
 	private Player p;
 	private CoreBar bar;

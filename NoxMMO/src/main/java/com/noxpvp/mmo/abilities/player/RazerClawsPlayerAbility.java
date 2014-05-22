@@ -14,8 +14,8 @@ import com.noxpvp.mmo.runnables.DamageRunnable;
 
 public class RazerClawsPlayerAbility extends BasePlayerAbility implements IPassiveAbility<EntityDamageByEntityEvent>, IPVPAbility{
 
-	public final static String ABILITY_NAME = "Razer Claws";
-	public final static String PERM_NODE = "razer-claws";
+	public static final String ABILITY_NAME = "Razer Claws";
+	public static final String PERM_NODE = "razer-claws";
 	
 	private Damageable target;
 	private NoxMMO mmo;

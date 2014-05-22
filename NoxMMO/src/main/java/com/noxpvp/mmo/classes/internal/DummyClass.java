@@ -22,7 +22,7 @@ public class DummyClass implements IPlayerClass {
 	public static final DummyClass PRIMARY = new DummyClass(true);
 	public static final DummyClass SECONDARY = new DummyClass(false);
 	
-	private final static ClassType[] EMPTY_CLASSTYPE = new ClassType[0];
+	private static final ClassType[] EMPTY_CLASSTYPE = new ClassType[0];
 
 	private static final ExperienceType[] EMPTY_EXPTYPE = new ExperienceType[0];
 	private final Map<Integer, IClassTier> tiers = new HashMap<Integer, IClassTier>();

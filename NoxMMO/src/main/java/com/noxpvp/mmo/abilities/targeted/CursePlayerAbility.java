@@ -13,8 +13,8 @@ import com.noxpvp.mmo.abilities.IPVPAbility;
 
 public class CursePlayerAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
 	
-	private final static String ABILITY_NAME = "Curse";
-	public final static String PERM_NODE = "curse";
+	private static final String ABILITY_NAME = "Curse";
+	public static final String PERM_NODE = "curse";
 	
 	private int duration;
 	private int lethality;

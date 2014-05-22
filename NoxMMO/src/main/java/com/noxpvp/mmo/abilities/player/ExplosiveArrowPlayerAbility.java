@@ -19,8 +19,8 @@ import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public class ExplosiveArrowPlayerAbility extends BasePlayerAbility implements IPVPAbility {
 	
-	private final static String ABILITY_NAME = "Explosive Arrow";
-	public final static String PERM_NODE = "explosive-arrow";
+	private static final String ABILITY_NAME = "Explosive Arrow";
+	public static final String PERM_NODE = "explosive-arrow";
 	
 	private BaseMMOEventHandler<ProjectileHitEvent> hitHandler;
 	private BaseMMOEventHandler<ProjectileLaunchEvent> launchHandler;

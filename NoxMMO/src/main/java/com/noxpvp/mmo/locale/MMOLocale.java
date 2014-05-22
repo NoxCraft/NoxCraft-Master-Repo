@@ -9,110 +9,110 @@ public class MMOLocale extends NoxLocale {
 	/**
 	 * @param 1 class
 	 */
-	public final static MMOLocale CLASS_NONE_BY_NAME;
+	public static final MMOLocale CLASS_NONE_BY_NAME;
 	
 	/**
 	 * @param 1 class
 	 * @param 2 reason
 	 */
-	public final static MMOLocale CLASS_LOCKED;
+	public static final MMOLocale CLASS_LOCKED;
 	
 	/**
 	 * @param 1 class
 	 * @param 2 reason
 	 */
-	public final static MMOLocale CLASS_TIER_LOCKED;
+	public static final MMOLocale CLASS_TIER_LOCKED;
 	
 	/**
 	 * @param 1 class
 	 * @param 2 tier
 	 */
-	public final static MMOLocale CLASS_NO_TIER;
+	public static final MMOLocale CLASS_NO_TIER;
 	
 	/**
 	 * @param 1 ability
 	 * @param 2 remaining time
 	 */
-	public final static MMOLocale ABIL_ON_COOLDOWN;
+	public static final MMOLocale ABIL_ON_COOLDOWN;
 	
 	/**
 	 * @param 1 ability
 	 * @param 2 target
 	 */
-	public final static MMOLocale ABIL_BAD_TARGET;
+	public static final MMOLocale ABIL_BAD_TARGET;
 	
 	/**
 	 * @param none
 	 */
-	public final static MMOLocale ABIL_NO_TARGET;
+	public static final MMOLocale ABIL_NO_TARGET;
 	
 	/**
 	 * @param 1 ability
 	 * @param 2 town/region/other name
 	 */
-	public final static MMOLocale ABIL_NO_PVP_ZONE;
+	public static final MMOLocale ABIL_NO_PVP_ZONE;
 	
 	/**
 	 * @param 1 ability
 	 */
-	public final static MMOLocale ABIL_NO_PVP;
+	public static final MMOLocale ABIL_NO_PVP;
 
 	//Display
-	public final static MMOLocale CLASS_DN;
-	public final static MMOLocale CLASS_DISPLAY_NAME;
-	public final static MMOLocale ABIL_DISPLAY_NAME;
+	public static final MMOLocale CLASS_DN;
+	public static final MMOLocale CLASS_DISPLAY_NAME;
+	public static final MMOLocale ABIL_DISPLAY_NAME;
 	
 	/**
 	 * @param 1 ability
 	 */
-	public final static MMOLocale ABIL_USE;
+	public static final MMOLocale ABIL_USE;
 	
 	/**
 	 * @param 1 ability
 	 * @param 2 target
 	 */
-	public final static MMOLocale ABIL_USE_TARGET;
+	public static final MMOLocale ABIL_USE_TARGET;
 	
 	/**
 	 * @param 1 ability
 	 * @param 2 target
 	 * @param 3 damage amount (format %.2f please)
 	 */
-	public final static MMOLocale ABIL_USE_TARGET_DAMAGED;
+	public static final MMOLocale ABIL_USE_TARGET_DAMAGED;
 	
 	/**
 	 * @param 1 ability
 	 */
-	public final static MMOLocale ABIL_HIT;
+	public static final MMOLocale ABIL_HIT;
 	
 	/**
 	 * @param 1 attacker
 	 * @param 2 ability
 	 */
-	public final static MMOLocale ABIL_HIT_ATTACKER;
+	public static final MMOLocale ABIL_HIT_ATTACKER;
 	
 	/**
 	 * @param 1 attacker
 	 * @param 2 ability
 	 * @param 3 damage amount (format %.2f please)
 	 */
-	public final static MMOLocale ABIL_HIT_ATTACKER_DAMAGED;
+	public static final MMOLocale ABIL_HIT_ATTACKER_DAMAGED;
 	
 	/**
 	 * @param 1 Ability name
 	 * @param 2 Description
 	 */
-	public final static MMOLocale ABIL_INFO;
+	public static final MMOLocale ABIL_INFO;
 	
 	//Guis
-	public final static MMOLocale GUI_MENU_NAME_COLOR;
-	public final static MMOLocale GUI_BAR_COLOR;
+	public static final MMOLocale GUI_MENU_NAME_COLOR;
+	public static final MMOLocale GUI_BAR_COLOR;
 	
 	//INTERNAL
 	/**
 	 * @deprecated This is used internally. Do not use!
 	 */
-	public final static MMOLocale ABIL_DN;
+	public static final MMOLocale ABIL_DN;
 
 	static {
 		//Error

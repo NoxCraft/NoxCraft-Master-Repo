@@ -9,8 +9,8 @@ import com.noxpvp.mmo.abilities.IPVPAbility;
 
 public class BoltPlayerAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
 	
-	private final static String ABILITY_NAME = "Bolt";
-	public final static String PERM_NODE = "bolt";
+	private static final String ABILITY_NAME = "Bolt";
+	public static final String PERM_NODE = "bolt";
 	
 	/**
 	 * Constructs a new BoltAbility instance with the specified player as the ability user

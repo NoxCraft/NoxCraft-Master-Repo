@@ -20,8 +20,8 @@ public class TracerArrowPlayerAbility extends BaseTargetedPlayerAbility implemen
 	
 	static Map<String, TracerArrowPlayerAbility> abilityCue = new HashMap<String, TracerArrowPlayerAbility>();
 	
-	private final static String ABILITY_NAME = "Tracer Arrow";
-	public final static String PERM_NODE = "tracer-arrow";
+	private static final String ABILITY_NAME = "Tracer Arrow";
+	public static final String PERM_NODE = "tracer-arrow";
 	
 	/**
 	 * Runs the event-side execution of this ability

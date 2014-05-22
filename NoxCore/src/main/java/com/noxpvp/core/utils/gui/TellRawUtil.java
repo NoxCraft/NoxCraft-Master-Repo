@@ -22,11 +22,11 @@ public class TellRawUtil {
 	 */
 	public static class JSONBuilder {
 		public static class FLAGS {
-			public final static int BOLD = 1;
-			public final static int UNDERLINE = 2;
-			public final static int ITALIC = 4;
-			public final static int STRIKETHROUGH = 8;
-			public final static int OBFUSCATED = 16;
+			public static final int BOLD = 1;
+			public static final int UNDERLINE = 2;
+			public static final int ITALIC = 4;
+			public static final int STRIKETHROUGH = 8;
+			public static final int OBFUSCATED = 16;
 			
 			public static int valueOf(ChatColor color) {
 				switch (color) {

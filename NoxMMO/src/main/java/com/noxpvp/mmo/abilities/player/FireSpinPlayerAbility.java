@@ -23,8 +23,8 @@ import com.noxpvp.mmo.abilities.IPVPAbility;
 
 public class FireSpinPlayerAbility extends BasePlayerAbility implements IPVPAbility {
 	
-	public final static String ABILITY_NAME = "Fire Spin";
-	public final static String PERM_NODE = "fire-spin";
+	public static final String ABILITY_NAME = "Fire Spin";
+	public static final String PERM_NODE = "fire-spin";
 	
 	@Override
 	public String getDescription() {

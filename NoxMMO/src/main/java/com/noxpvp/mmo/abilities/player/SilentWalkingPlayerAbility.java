@@ -12,8 +12,8 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 
 public class SilentWalkingPlayerAbility extends BasePlayerAbility{
 
-	public final static String ABILITY_NAME = "Silent Walking";
-	public final static String PERM_NODE = "silent-walk";
+	public static final String ABILITY_NAME = "Silent Walking";
+	public static final String PERM_NODE = "silent-walk";
 	
 	private CommonPacket packet;
 	

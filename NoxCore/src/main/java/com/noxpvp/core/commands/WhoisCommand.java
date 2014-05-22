@@ -4,9 +4,9 @@ import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.noxpvp.core.NoxCore;
 
 public class WhoisCommand extends BaseCommand {
-	public final static String COMMAND_NAME = "whois";
+	public static final String COMMAND_NAME = "whois";
 	
-	public final static String PERM_NODE = "whois";
+	public static final String PERM_NODE = "whois";
 	
 	public WhoisCommand() {
 		super(COMMAND_NAME, false);

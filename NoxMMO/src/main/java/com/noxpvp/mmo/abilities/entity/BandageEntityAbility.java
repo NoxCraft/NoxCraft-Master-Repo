@@ -9,8 +9,8 @@ import com.noxpvp.mmo.runnables.DamageRunnable;
 
 public class BandageEntityAbility extends BaseEntityAbility{
 	
-	public final static String ABILITY_NAME = "Bandage";
-	public final static String PERM_NODE = "bandage";
+	public static final String ABILITY_NAME = "Bandage";
+	public static final String PERM_NODE = "bandage";
 	private int delay;
 
 	public int getDelay() {return delay;}

@@ -14,7 +14,7 @@ import com.noxpvp.core.utils.gui.MessageUtil;
 
 public class ServerPingListener extends NoxListener<NoxCore>{
 
-	public final static char new_line_char = '\n';
+	public static final char new_line_char = '\n';
 	
 	private String version;
 	private List<String> motds;

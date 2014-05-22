@@ -5,10 +5,10 @@ import com.noxpvp.core.NoxPlugin;
 
 public class CoreLocale extends NoxLocale {
 
-	public final static CoreLocale GROUP_TAG_PREFIX;
-	public final static CoreLocale GROUP_TAG_SUFFIX;
-	public final static CoreLocale SPECIAL_CHAT_PINGCOLOR;
-	public final static CoreLocale SPECIAL_CHAT_PINGSYMBAL;
+	public static final CoreLocale GROUP_TAG_PREFIX;
+	public static final CoreLocale GROUP_TAG_SUFFIX;
+	public static final CoreLocale SPECIAL_CHAT_PINGCOLOR;
+	public static final CoreLocale SPECIAL_CHAT_PINGSYMBAL;
 	
 	static {
 		GROUP_TAG_PREFIX = new CoreLocale("special.ptag.prefix", "");

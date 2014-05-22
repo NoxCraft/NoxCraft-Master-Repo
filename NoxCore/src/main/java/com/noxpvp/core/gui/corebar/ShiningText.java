@@ -10,7 +10,7 @@ import com.noxpvp.core.utils.gui.ShiningStringScroller;
 
 public class ShiningText extends BukkitRunnable {
 	
-	private final static int runPeriod = 1;
+	private static final int runPeriod = 1;
 	
 	private Player p;
 	private CoreBar bar;

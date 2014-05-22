@@ -15,8 +15,8 @@ import com.noxpvp.mmo.abilities.IPVPAbility;
 
 public class WisdomEntityAbility extends BaseEntityAbility implements IPVPAbility {
 
-	public final static String ABILITY_NAME = "Wisdom";
-	public final static String PERM_NODE = "wisdom";
+	public static final String ABILITY_NAME = "Wisdom";
+	public static final String PERM_NODE = "wisdom";
 
 	@Override
 	public String getDescription() {

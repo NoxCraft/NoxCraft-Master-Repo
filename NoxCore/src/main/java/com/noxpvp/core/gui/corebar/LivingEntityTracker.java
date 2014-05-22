@@ -17,10 +17,10 @@ import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 
 public class LivingEntityTracker extends BukkitRunnable {
-	private final static int runPeriod = 10;
+	private static final int runPeriod = 10;
 	
-	public final static String separater = "    ";
-	public final static String color = ChatColor.GREEN.toString();
+	public static final String separater = "    ";
+	public static final String color = ChatColor.GREEN.toString();
 	
 	private LivingEntity e;
 	private Player p;

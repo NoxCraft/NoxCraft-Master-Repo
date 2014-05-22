@@ -25,10 +25,10 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class ClassChooseMenu extends CoreBox {
 
-	public final static String MENU_NAME = "Class Selection";
-	public final static String MENU_MAIN_COLOR = MMOLocale.GUI_MENU_NAME_COLOR.get();
+	public static final String MENU_NAME = "Class Selection";
+	public static final String MENU_MAIN_COLOR = MMOLocale.GUI_MENU_NAME_COLOR.get();
 	
-	private final static int size = 18;
+	private static final int size = 18;
 	
 	@Override
 	protected Object clone() throws CloneNotSupportedException {

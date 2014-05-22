@@ -11,8 +11,8 @@ import com.noxpvp.mmo.abilities.IPVPAbility;
 
 public class JoustPlayerAbility extends BasePlayerAbility implements IPVPAbility {
 
-	public final static String ABILITY_NAME = "Joust";
-	public final static String PERM_NODE = "joust";
+	public static final String ABILITY_NAME = "Joust";
+	public static final String PERM_NODE = "joust";
 	
 	private EntityDamageByEntityEvent event;
 	
