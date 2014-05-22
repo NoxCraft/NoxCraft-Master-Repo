@@ -39,7 +39,7 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 	private static long cleaner_delay = 5000;
 	private static ConcurrentMap<MMOPlayer, List<Reference<AbilityCycler>>> d;
 	
-	public static final String TEMP_PCTK = "abiliy-cycler.active-count";
+	public static final String TEMP_PCTK = "ability-cycler.active-count";
 	
 	private static NoxListener<NoxMMO> iHeld,iMove,login;
 	

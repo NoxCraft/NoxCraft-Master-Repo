@@ -84,7 +84,7 @@ public class ChatPingListener extends NoxListener<NoxCore> {
 		List<String> list = new ArrayList<String>();
 		List<String> newNames = new ArrayList<String>();
 		StringBuilder sb = new StringBuilder(new String(msg));
-		String lastCol = MessageUtil.getLastColors(sb.toString());
+		String lastCol = MessageUtil.getLastColors(msg);
 		
 		final String reset = ChatColor.RESET + lastCol;
 		
