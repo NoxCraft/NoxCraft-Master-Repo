@@ -22,8 +22,11 @@ public class EntityAbilityEvent extends EntityEvent implements IAbilityEvent {
 		return ability;
 	}
 
-	@Override
 	public HandlerList getHandlers() {
+		return handlers;
+	}
+	
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 

@@ -51,6 +51,11 @@ public class MMOLocale extends NoxLocale {
 	 * @param 2 town/region/other name
 	 */
 	public final static MMOLocale ABIL_NO_PVP_ZONE;
+	
+	/**
+	 * @param 1 ability
+	 */
+	public final static MMOLocale ABIL_NO_PVP;
 
 	//Display
 	public final static MMOLocale CLASS_DN;
@@ -118,7 +123,8 @@ public class MMOLocale extends NoxLocale {
 		ABIL_ON_COOLDOWN = new MMOLocale("error.ability.on-cooldown", "&cThe &e%0% &cability has a cooldown of &e%1% &cremaining");
 		ABIL_BAD_TARGET = new MMOLocale("error.ability.bad-target", "&cThe &e%0% &cability cannot be used on &e%1% &cright now");
 		ABIL_NO_TARGET = new MMOLocale("error.ability.no-target", "&cYou don't have a target right now!");
-		ABIL_NO_PVP_ZONE = new MMOLocale("error.ability.pvp-zone", "&cYou can't use the &e%0% &cability in &e%1%");
+		ABIL_NO_PVP_ZONE = new MMOLocale("error.ability.no-pvp-zone-named", "&cYou can't use the &e%0% &cability in &e%1%");
+		ABIL_NO_PVP = new MMOLocale("error.ability.no-pvp-zone", "&cYou can't use the &e%0% &cability here");		
 		
 		//Display
 		CLASS_DN = new MMOLocale("display.class.default", "%1%%0%");

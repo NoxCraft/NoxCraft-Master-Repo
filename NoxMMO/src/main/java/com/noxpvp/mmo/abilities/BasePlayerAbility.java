@@ -8,7 +8,6 @@ import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.manager.CorePlayerManager;
-import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.events.PlayerAbilityPreExecuteEvent;
 
@@ -41,7 +40,7 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements IPl
 		if (player == null || !player.isValid() || !player.isOnline() || !hasPermission())
 			return false;
 		
-		return !isCancelled() && (((this instanceof IPVPAbility) && TownyUtil.isPVP(player)) || !(this instanceof IPVPAbility));
+		return super.mayExecute();
 	}
 	
 	@Override

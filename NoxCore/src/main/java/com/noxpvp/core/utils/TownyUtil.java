@@ -19,6 +19,10 @@ public class TownyUtil {
 	private static Towny towny;
 	private static ITownyHook hook = new NullTownyHook();
 	
+	static {
+		setup();
+	}
+	
 	public static void setup() {
 		if (log == null)
 			log = NoxCore.getInstance().getModuleLogger("TownyUtil");

@@ -7,9 +7,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.abilities.player.AutoToolAbilities.AutoTool;
+import com.noxpvp.mmo.abilities.player.AutoToolPlayerAbilities.AutoTool;
 
-public class BlockListener extends NoxListener<NoxMMO>{
+public class BlockListener extends NoxListener<NoxMMO> {
 
 	public BlockListener(NoxMMO mmo) {
 		super(mmo);
