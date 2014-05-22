@@ -5,9 +5,9 @@ import org.bukkit.entity.Player;
 
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 
-public class BoltAbility extends BaseTargetedPlayerAbility implements PVPAbility {
+public class BoltAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
 	
 	private final static String ABILITY_NAME = "Bolt";
 	public final static String PERM_NODE = "bolt";

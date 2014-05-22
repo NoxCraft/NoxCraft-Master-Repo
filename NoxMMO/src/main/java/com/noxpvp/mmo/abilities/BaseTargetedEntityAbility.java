@@ -7,7 +7,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
-public abstract class BaseTargetedEntityAbility extends BaseRangedEntityAbility implements TargetedEntityAbility {
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
+import com.noxpvp.mmo.events.EntityTargetedAbilityPreExecuteEvent;
+
+public abstract class BaseTargetedEntityAbility extends BaseRangedEntityAbility implements ITargetedEntityAbility {
 	private Reference<LivingEntity> target_ref;
 	
 	public BaseTargetedEntityAbility(String name, Entity entity, double range, LivingEntity target) {
@@ -55,6 +58,11 @@ public abstract class BaseTargetedEntityAbility extends BaseRangedEntityAbility 
 	 * @return boolean If the execute() method is normally able to start
 	 */
 	public boolean mayExecute() {
-		return super.mayExecute() && (getEntity() != null && getTarget() != null && (getDistance() <= getRange()));
+		return super.mayExecute() && (getTarget() != null && (getDistance() <= getRange()));
+	}
+	
+	@Override
+	public boolean isCancelled() {
+		return CommonUtil.callEvent(new EntityTargetedAbilityPreExecuteEvent(getEntity(), this)).isCancelled();
 	}
 }

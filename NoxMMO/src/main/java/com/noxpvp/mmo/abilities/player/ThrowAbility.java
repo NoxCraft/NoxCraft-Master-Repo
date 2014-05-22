@@ -11,11 +11,11 @@ import org.bukkit.entity.Player;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.ShockWaveAnimation;
 
-public class ThrowAbility extends BasePlayerAbility implements PVPAbility {
+public class ThrowAbility extends BasePlayerAbility implements IPVPAbility {
 	
 	public static final String ABILITY_NAME = "Grapple Throw";
 	public static final String PERM_NODE = "grapple-throw";

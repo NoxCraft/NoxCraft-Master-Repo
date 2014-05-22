@@ -1,6 +1,6 @@
 package com.noxpvp.mmo.abilities;
 
-public abstract class BaseRangedAbility extends BaseAbility implements RangedAbility {
+public abstract class BaseRangedAbility extends BaseAbility implements IRangedAbility {
 
 	private double range;
 	

@@ -493,7 +493,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			cd_cache.put(cd.getName(), cd);
 	}
 	
-	public void removeCooldDown(String name)
+	public void removeCoolDown(String name)
 	{
 		if (cd_cache.containsKey(name))
 		{

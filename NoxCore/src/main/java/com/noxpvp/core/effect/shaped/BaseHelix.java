@@ -39,6 +39,8 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 	private int verticalTicker;
 	private int horizontalTicker;
 	
+	private boolean render;
+	
 	public BaseHelix(Location loc, int time) {
 		this.loc = loc;
 		this.direction = loc.getDirection();
@@ -47,6 +49,8 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 		this.widthGain = 1;
 		this.forwardGain = 1;
 		this.speed = 2;
+		
+		this.render = true;
 		
 	}
 	
@@ -61,16 +65,15 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 		return horizontalTicker = (int) ((horizontalTicker + 22.5) % 360);
 	}
 
-	public void render(int particleAmount) {
+	public void render(int maxRuns) {
 		int i = 0;
-		while (i++ < particleAmount)
+		while (i++ < maxRuns && render)
 			run();
-		
 	}
 	
-	public void renderBeforeStart(int particleAmount) {
-		render(particleAmount);
-		start(0);
+	public void renderBeforeStart(int maxRuns, int delay) {
+		render(maxRuns);
+		start(delay);
 	}
 	
 	public void start(int delay) {
@@ -92,17 +95,16 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 	}
 
 	public void run() {
-		this.loc.add(direction);
 		
-		double radius = BaseHelix.lookup.get(verticalTicker())[0] * widthGain;
+		double radius = (BaseHelix.lookup.get(verticalTicker())[0] * widthGain) + Math.abs(direction.getY());
 		int	horizontal = horizontalTicker();
 		
 		double yawX = direction.getX(), yawZ = direction.getZ();
 		
 		Vector v = new Vector(
-				(radius * BaseHelix.lookup.get(horizontal)[0]) * yawZ,
+				((radius * BaseHelix.lookup.get(horizontal)[0]) * yawZ),
 				(radius * BaseHelix.lookup.get(horizontal)[1]),
-				(radius * BaseHelix.lookup.get(horizontal)[0]) * (yawX * -1));
+				((radius * BaseHelix.lookup.get(horizontal)[0]) * (yawX * -1)));
 		
 		this.loc.add(v);
 		this.loc.add(direction.clone().multiply(forwardGain));
@@ -150,6 +152,14 @@ public abstract class BaseHelix extends BukkitRunnable implements IHelix {
 
 	public double getForwardGain() {
 		return forwardGain;
+	}
+	
+	public void setCanRender(boolean can) {
+		this.render = can;
+	}
+	
+	public boolean getCanRender() {
+		return this.render;
 	}
 
 }

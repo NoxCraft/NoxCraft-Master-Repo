@@ -7,7 +7,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-public abstract class BaseTargetedPlayerAbility extends BaseRangedPlayerAbility implements TargetedPlayerAbility {
+import com.bergerkiller.bukkit.common.utils.CommonUtil;
+import com.noxpvp.mmo.events.PlayerTargetedAbilityPreExecuteEvent;
+
+public abstract class BaseTargetedPlayerAbility extends BaseRangedPlayerAbility implements ITargetedPlayerAbility {
 	private Reference<LivingEntity> target_ref;
 	
 	public BaseTargetedPlayerAbility(String name, Player player, double range, LivingEntity target){
@@ -56,5 +59,10 @@ public abstract class BaseTargetedPlayerAbility extends BaseRangedPlayerAbility 
 	 */
 	public boolean mayExecute() {
 		return super.mayExecute() && (getTarget() != null && (getDistance() <= getRange()));
+	}
+	
+	@Override
+	public boolean isCancelled() {
+		return CommonUtil.callEvent(new PlayerTargetedAbilityPreExecuteEvent(getPlayer(), this)).isCancelled();
 	}
 }

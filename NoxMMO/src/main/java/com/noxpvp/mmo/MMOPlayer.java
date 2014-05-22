@@ -21,8 +21,8 @@ import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.mmo.abilities.Ability;
-import com.noxpvp.mmo.abilities.PassiveAbility;
-import com.noxpvp.mmo.abilities.PlayerAbility;
+import com.noxpvp.mmo.abilities.IPassiveAbility;
+import com.noxpvp.mmo.abilities.IPlayerAbility;
 import com.noxpvp.mmo.abilities.targeted.TargetAbility;
 import com.noxpvp.mmo.classes.internal.DummyClass;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
@@ -145,11 +145,11 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		this.target = entity;
 	}
 	
-	public PlayerAbility[] getPlayerAbilities() {
+	public IPlayerAbility[] getPlayerAbilities() {
 		throw new NotImplementedException();
 	}
 	
-	public PassiveAbility<?>[] getPassiveAbilities() {
+	public IPassiveAbility<?>[] getPassiveAbilities() {
 		throw new NotImplementedException();
 	}
 	

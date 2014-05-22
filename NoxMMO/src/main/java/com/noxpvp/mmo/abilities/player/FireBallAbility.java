@@ -13,13 +13,13 @@ import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 
 /**
  * @author NoxPVP
  *
  */
-public class FireBallAbility extends BaseEntityAbility implements PVPAbility {
+public class FireBallAbility extends BaseEntityAbility implements IPVPAbility {
 	
 	public static final String ABILITY_NAME = "Fire Ball";
 	public static final String PERM_NODE = "fire-ball";
@@ -79,8 +79,8 @@ public class FireBallAbility extends BaseEntityAbility implements PVPAbility {
 		
 		public FireBallHelix(Entity user, int time) {
 			super((user instanceof LivingEntity)?
-					((LivingEntity) user).getEyeLocation() :
-						user.getLocation(), time);
+					((LivingEntity) user).getEyeLocation().add(user.getLocation().getDirection().normalize()) :
+						user.getLocation().add(user.getLocation().getDirection().normalize()), time);
 			
 			setForwardGain(0.07);
 			setRadiusGain(0.5);
@@ -93,7 +93,7 @@ public class FireBallAbility extends BaseEntityAbility implements PVPAbility {
 		}
 		
 		public void onRun() {
-			new ParticleRunner(ParticleType.dripLava, getLocation(), false, 0, 1, 1).start(0);
+			new ParticleRunner(ParticleType.flame, getLocation(), false, 0, 1, 1).start(0);
 			
 		}
 		

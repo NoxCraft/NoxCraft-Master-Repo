@@ -9,11 +9,11 @@ import org.bukkit.potion.PotionEffectType;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
-import com.noxpvp.mmo.abilities.PassiveAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
+import com.noxpvp.mmo.abilities.IPassiveAbility;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
 
-public class CriticalHitAbility extends BasePlayerAbility implements PassiveAbility<EntityDamageByEntityEvent>, PVPAbility {
+public class CriticalHitAbility extends BasePlayerAbility implements IPassiveAbility<EntityDamageByEntityEvent>, IPVPAbility {
 
 	public static final String PERM_NODE = "critical-hit";
 	public static final String ABILITY_NAME = "Critical Hit";

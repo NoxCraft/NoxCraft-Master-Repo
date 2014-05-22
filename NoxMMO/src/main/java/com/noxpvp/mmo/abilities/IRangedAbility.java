@@ -1,6 +1,6 @@
 package com.noxpvp.mmo.abilities;
 
-public interface RangedAbility extends Ability {
+public interface IRangedAbility extends Ability {
 	
 	/**
 	 * Gets the range for this ability

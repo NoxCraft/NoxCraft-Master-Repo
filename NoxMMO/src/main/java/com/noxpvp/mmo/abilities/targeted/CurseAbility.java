@@ -9,9 +9,9 @@ import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.abilities.PVPAbility;
+import com.noxpvp.mmo.abilities.IPVPAbility;
 
-public class CurseAbility extends BaseTargetedPlayerAbility implements PVPAbility {
+public class CurseAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
 	
 	private final static String ABILITY_NAME = "Curse";
 	public final static String PERM_NODE = "curse";

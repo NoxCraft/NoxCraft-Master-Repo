@@ -2,7 +2,7 @@ package com.noxpvp.mmo.abilities;
 
 import org.bukkit.entity.LivingEntity;
 
-public interface TargetedEntityAbility extends RangedEntityAbility {
+public interface ITargetedPlayerAbility extends ITargetedEntityAbility, IRangedPlayerAbility {
 	
 	/**
 	 * Gets the target involved in this targeted ability instance
@@ -19,7 +19,7 @@ public interface TargetedEntityAbility extends RangedEntityAbility {
 	public void setTarget(LivingEntity target);
 	
 	/**
-	 * Gets the distance from target to the entity involved in this instance
+	 * Gets the distance from target to the player involved in this instance
 	 * 
 	 * @return double The distance. Will return -1 if the target is null
 	 */
