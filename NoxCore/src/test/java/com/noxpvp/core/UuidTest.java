@@ -2,6 +2,7 @@ package com.noxpvp.core;
 
 import com.noxpvp.core.utils.TimeUtils;
 import com.noxpvp.core.utils.UUIDUtil;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -26,6 +27,12 @@ public class UuidTest {
 				builder.append(", ").append(ob);
 
 		System.out.println(builder.toString());
+	}
+
+	@Before
+	public void setup() {
+		if (UUIDUtil.uuidPattern == null)
+			return;
 	}
 
 	@Test

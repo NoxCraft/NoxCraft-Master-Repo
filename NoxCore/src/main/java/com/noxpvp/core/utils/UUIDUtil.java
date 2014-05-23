@@ -39,8 +39,8 @@ import com.noxpvp.core.listeners.NoxListener;
 
 public class UUIDUtil extends NoxListener<NoxCore> {
 	public static final UUID ZERO_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
-	public static final String ZERO_UUID_COMPRESSED = UUIDUtil.compressUUID(UUID.fromString("00000000-0000-0000-0000-000000000000"));
 	public static final Pattern uuidPattern = Pattern.compile("(\\w{8})-?(\\w{4})-?(\\w{4})-?(\\w{4})-?(\\w{12})");
+	public static final String ZERO_UUID_COMPRESSED = UUIDUtil.compressUUID(UUID.fromString("00000000-0000-0000-0000-000000000000"));
 	private volatile static UUIDUtil instance;
 	private ConcurrentHashMap<String, UUID> name2UUID;
 
@@ -56,6 +56,7 @@ public class UUIDUtil extends NoxListener<NoxCore> {
 	}
 
 	public static String compressUUID(String id) {
+		Validate.notNull(id);
 		Matcher m = uuidPattern.matcher(id);
 		Validate.isTrue(m.matches(), "Not a valid UUID string!"); //functionally equivalant to isUUID(id). Just less cpu and faster.
 
@@ -63,6 +64,7 @@ public class UUIDUtil extends NoxListener<NoxCore> {
 	}
 
 	public static String decompressUUID(String id) {
+		Validate.notNull(id);
 		Matcher m = uuidPattern.matcher(id);
 		Validate.isTrue(m.matches(), "Not a valid UUID string!");
 
