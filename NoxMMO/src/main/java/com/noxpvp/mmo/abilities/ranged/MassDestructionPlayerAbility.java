@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.abilities.player;
+package com.noxpvp.mmo.abilities.ranged;
 
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -28,6 +28,7 @@ public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implem
 	private BaseMMOEventHandler<EntityDamageEvent> handler;
 	private double hVelo = 1.5;
 	private boolean isActive;
+
 	public MassDestructionPlayerAbility(Player p) {
 		this(p, 10);
 	}
@@ -36,7 +37,7 @@ public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implem
 	 * @param p The Player type user for this instance
 	 */
 	public MassDestructionPlayerAbility(Player p, double range) {
-		super(ABILITY_NAME, p);
+		super(ABILITY_NAME, p, range);
 
 		handler = new BaseMMOEventHandler<EntityDamageEvent>(
 				new StringBuilder().append(p.getName()).append(ABILITY_NAME).append("EntityDamageEvent").toString(),
@@ -68,6 +69,7 @@ public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implem
 		};
 
 		this.isActive = false;
+		setDamage(5);
 	}
 
 	@Override
@@ -136,9 +138,9 @@ public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implem
 
 		int range = (int) Math.ceil(getRange());
 
-		new ParticleRunner(ParticleType.largeexplode, pLoc.add(0, 1, 0), true, 10, 3, 1).start(0);
+		new ParticleRunner(ParticleType.largeexplode, pLoc.clone().add(0, 1, 0), true, 10, 3, 1).start(0);
 		new ShockWaveAnimation(pLoc, 1, range, 0.35, true).start(0);
-		new ExpandingDamageRunnable(p, p.getLocation(), getDamage(), range, 1).start(0);
+		new ExpandingDamageRunnable(p, pLoc, getDamage(), range, 1).start(0);
 
 	}
 

@@ -23,7 +23,6 @@ import com.noxpvp.mmo.classes.internal.ClassTier;
 import com.noxpvp.mmo.classes.internal.IClassTier;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
-import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class ClassMenu extends CoreBox {
 

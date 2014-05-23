@@ -16,7 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.PluginManager;
 
 import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
@@ -97,7 +96,6 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 
 		setCurrentTier(getCurrentTierLevel());
 
-		PluginManager pm = Bukkit.getPluginManager();
 		NoxMMO mmo = NoxMMO.getInstance();
 		for (IClassTier tier : tiers.values()) {
 			mmo.addPermission(new NoxPermission(NoxMMO.getInstance(),

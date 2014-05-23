@@ -35,7 +35,7 @@ public class DrainLifePlayerAbility extends BaseTargetedPlayerAbility {
 
 		this.time = 20 * 10;
 		this.period = 20;
-		setDamage(2.0);
+		setDamage(1);
 	}
 
 	public boolean execute() {

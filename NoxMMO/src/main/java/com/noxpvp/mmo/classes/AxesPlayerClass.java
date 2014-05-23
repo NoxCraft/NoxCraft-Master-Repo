@@ -40,7 +40,7 @@ public class AxesPlayerClass extends PlayerClass {
 
 	@Override
 	public String getDescription() {
-		return "test";
+		return "Needs description";
 	}
 	
 	public boolean isPrimaryClass() {

@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.abilities.player;
+package com.noxpvp.mmo.abilities.ranged;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

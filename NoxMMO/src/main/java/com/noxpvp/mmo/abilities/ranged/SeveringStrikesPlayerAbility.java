@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.abilities.player;
+package com.noxpvp.mmo.abilities.ranged;
 
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;

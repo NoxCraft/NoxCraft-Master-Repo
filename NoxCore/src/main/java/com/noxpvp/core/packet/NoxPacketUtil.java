@@ -1,6 +1,7 @@
 package com.noxpvp.core.packet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import com.bergerkiller.bukkit.common.bases.IntVector2;
@@ -20,7 +22,11 @@ import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
 import com.bergerkiller.bukkit.common.wrappers.DataWatcher;
 import com.comphenix.packetwrapper.BlockChangeArray;
+import com.comphenix.packetwrapper.WrapperPlayServerAttachEntity;
+import com.comphenix.packetwrapper.WrapperPlayServerEntityDestroy;
+import com.comphenix.packetwrapper.WrapperPlayServerSpawnEntityLiving;
 import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.dsh105.holoapi.util.TagIdGenerator;
@@ -31,6 +37,7 @@ public class NoxPacketUtil extends PacketUtil {
 	private static int spigotPlayerViewRange = 75;
 	private static List<Integer> MagicEntityId = new ArrayList<Integer>();
 	private static int SHARED_IDS = 567891234;
+	private static ProtocolManager pm = ProtocolLibrary.getProtocolManager();
 
 	public static int getNewEntityId(int amount) {
 		if (NoxCore.getInstance().isHoloAPIActive())
@@ -174,11 +181,54 @@ public class NoxPacketUtil extends PacketUtil {
 			packetMeta.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
 
 			PacketUtil.broadcastPacket(packet, false);
-			ProtocolLibrary.getProtocolManager().broadcastServerPacket(packetMeta);
+			pm.broadcastServerPacket(packetMeta);
 
 		} catch (Exception ex) {
 		}
 
 	}
+	
+	public static void spawnRope(int holderId, int leashedId) {
+		WrapperPlayServerAttachEntity rope = new WrapperPlayServerAttachEntity();
+		
+		rope.setLeached(true);
+		rope.setEntityId(leashedId);
+		rope.setVehicleId(holderId);
 
+		pm.broadcastServerPacket(rope.getHandle());		
+	}
+	
+	public static void removeEntity(int entityId) {
+		WrapperPlayServerEntityDestroy destroy = new WrapperPlayServerEntityDestroy();
+		
+		destroy.setEntities(Arrays.asList(entityId));
+		
+		pm.broadcastServerPacket(destroy.getHandle());
+	}
+	
+	public static void spawnFakeEntity(EntityType type, Location loc) {
+		spawnFakeEnity(type, loc, false);
+	}
+	
+	public static void spawnFakeEnity(EntityType type, Location loc, boolean invisible) {
+		spawnFakeEntity(type, getNewEntityId(1), loc, invisible);
+	}
+	
+	public static void spawnFakeEntity(EntityType type, int id, Location loc, boolean invisible) {
+		WrapperPlayServerSpawnEntityLiving holder = new WrapperPlayServerSpawnEntityLiving();
+		
+		WrappedDataWatcher dw = new WrappedDataWatcher();
+		dw.setObject(0, (byte) (invisible? 0x20 : 0));
+		dw.setObject(6, (float) 1);
+		dw.setObject(12, 1);
+		
+		holder.setEntityID(id);
+		holder.setMetadata(dw);
+		holder.setType(type);
+		holder.setX(loc.getX());
+		holder.setY(loc.getY());
+		holder.setZ(loc.getZ());
+		
+		pm.broadcastServerPacket(holder.getHandle(), loc, 75);
+	}
 }

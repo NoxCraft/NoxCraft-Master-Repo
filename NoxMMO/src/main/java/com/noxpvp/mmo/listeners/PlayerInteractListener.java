@@ -14,6 +14,7 @@ import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.MMOPlayerManager;
+import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.entity.BandageEntityAbility;
@@ -25,13 +26,13 @@ import com.noxpvp.mmo.abilities.player.FireBallPlayerAbility;
 import com.noxpvp.mmo.abilities.player.FireSpinPlayerAbility;
 import com.noxpvp.mmo.abilities.player.GuardianAngelPlayerAbility;
 import com.noxpvp.mmo.abilities.player.HammerOfThorPlayerAbility;
-import com.noxpvp.mmo.abilities.player.HookShotPlayerAbility;
-import com.noxpvp.mmo.abilities.player.MassDestructionPlayerAbility;
 import com.noxpvp.mmo.abilities.player.MedPackPlayerAbility;
 import com.noxpvp.mmo.abilities.player.ReincarnatePlayerAbility;
 import com.noxpvp.mmo.abilities.player.RejuvenationPlayerAbility;
-import com.noxpvp.mmo.abilities.player.ThrowPlayerAbility;
 import com.noxpvp.mmo.abilities.player.TornadoPlayerAbility;
+import com.noxpvp.mmo.abilities.ranged.HookShotPlayerAbility;
+import com.noxpvp.mmo.abilities.ranged.MassDestructionPlayerAbility;
+import com.noxpvp.mmo.abilities.ranged.ThrowPlayerAbility;
 import com.noxpvp.mmo.abilities.targeted.BoltPlayerAbility;
 import com.noxpvp.mmo.abilities.targeted.CursePlayerAbility;
 import com.noxpvp.mmo.abilities.targeted.DrainLifePlayerAbility;
@@ -59,6 +60,7 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 		this(NoxMMO.getInstance());
 	}
 
+	private static BasePlayerAbility ab;
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onInteract(PlayerInteractEvent e) {
 
@@ -82,11 +84,14 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 //		new MedPackAbility(p).execute();
 //		new PickPocketAbility(p).execute();
 //		new HookShotAbility(p).execute();//XXX do this
-
-		DrainLifePlayerAbility fs;
-		if ((fs = new DrainLifePlayerAbility(p)).execute())
-			CommonUtil.callEvent(new PlayerTargetedAbilityExecutedEvent(p, fs));
-
+		
+		MMOPlayer mp = MMOPlayerManager.getInstance().getPlayer(p);
+		if (ab == null)
+			ab = new HookShotPlayerAbility(p);
+		
+		if (ab != null && ab.execute())
+			CommonUtil.callEvent(new PlayerAbilityExecutedEvent(p, ab));
+		
 //		new HammerOfThorAbility(p).execute();
 //		new GuardianAngelAbility(p).execute();
 //		new BandageAbility(p).execute();

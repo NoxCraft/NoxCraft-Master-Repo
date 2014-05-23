@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.locale;
 
+import com.bergerkiller.bukkit.common.localization.LocalizationEnum;
 import com.noxpvp.core.locales.NoxLocale;
 import com.noxpvp.mmo.NoxMMO;
 
@@ -56,6 +57,22 @@ public class MMOLocale extends NoxLocale {
 	 * @param 1 ability
 	 */
 	public static final MMOLocale ABIL_NO_PVP;
+	
+	/**
+	 * @param 1 amount
+	 * @param 2 Material
+	 */
+	public static final MMOLocale ABIL_NOT_ENOUGH_REGENT;
+	
+	/**
+	 * @param 1 max distance
+	 */
+	public static final MMOLocale ABIL_RANGED_TOO_FAR;
+	
+	/**
+	 * @param 1 ability
+	 */
+	public static final LocalizationEnum ABIL_NO_LOS;
 
 	//Display
 	public static final MMOLocale CLASS_DN;
@@ -114,6 +131,9 @@ public class MMOLocale extends NoxLocale {
 	 */
 	public static final MMOLocale ABIL_DN;
 
+
+
+
 	static {
 		//Error
 		CLASS_NONE_BY_NAME = new MMOLocale("error.class.none-by-name", "&cThere is no class by the name of &e%0%");
@@ -125,6 +145,9 @@ public class MMOLocale extends NoxLocale {
 		ABIL_NO_TARGET = new MMOLocale("error.ability.no-target", "&cYou don't have a target right now!");
 		ABIL_NO_PVP_ZONE = new MMOLocale("error.ability.no-pvp-zone-named", "&cYou can't use the &e%0% &cability in &e%1%");
 		ABIL_NO_PVP = new MMOLocale("error.ability.no-pvp-zone", "&cYou can't use the &e%0% &cability here");
+		ABIL_NOT_ENOUGH_REGENT = new MMOLocale("error.ability.not-enough-regent", "&cYou need atleast &e%0% &6%1% &cto use that!");
+		ABIL_RANGED_TOO_FAR = new MMOLocale("error.ability.ranged-too-far", "&cYou have to be within &e%0% &cblocks");
+		ABIL_NO_LOS = new MMOLocale("error.ability.no-los", "&cYou need line of sight to use the &e%0% &cability!");
 
 		//Display
 		CLASS_DN = new MMOLocale("display.class.default", "%1%%0%");

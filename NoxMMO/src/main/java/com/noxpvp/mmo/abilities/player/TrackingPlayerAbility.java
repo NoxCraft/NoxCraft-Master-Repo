@@ -10,13 +10,13 @@ import org.bukkit.potion.PotionEffectType;
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
 import com.noxpvp.mmo.runnables.DespawnRunnable;
 
 /**
  * @author NoxPVP
  */
-public class TrackingPlayerAbility extends BasePlayerAbility {
+public class TrackingPlayerAbility extends BaseRangedPlayerAbility {
 
 	public static final String ABILITY_NAME = "Tracking";
 	public static final String PERM_NODE = "tracking";
@@ -25,7 +25,6 @@ public class TrackingPlayerAbility extends BasePlayerAbility {
 	private boolean hasSpeed;
 	private int speedAmp;
 	private Player it;
-	private int radius;
 	private int duration;
 
 	/**
@@ -37,7 +36,7 @@ public class TrackingPlayerAbility extends BasePlayerAbility {
 		this.duration = 100;
 		this.hasSpeed = true;
 		this.isInvis = true;
-		this.radius = 75;
+		setRange(50);
 		this.speedAmp = 1;
 	}
 
@@ -88,22 +87,6 @@ public class TrackingPlayerAbility extends BasePlayerAbility {
 	}
 
 	/**
-	 * @return Integer Radius used to search to tracking targets
-	 */
-	public int getRadius() {
-		return radius;
-	}
-
-	/**
-	 * @param radius Set the radius used when searching for tracker targets
-	 * @return TrackingAbility This instance used for chaining
-	 */
-	public TrackingPlayerAbility setRadius(int radius) {
-		this.radius = radius;
-		return this;
-	}
-
-	/**
 	 * @return Integer The current duration set for tracker (Returns null is setDuration has not been used)
 	 */
 	public int getDuration() {
@@ -127,6 +110,7 @@ public class TrackingPlayerAbility extends BasePlayerAbility {
 			return false;
 
 		Player p = getPlayer();
+		double radius = getRange();
 
 		for (Entity it : p.getNearbyEntities(radius, radius, radius)) {
 			if (!(it instanceof Player))
