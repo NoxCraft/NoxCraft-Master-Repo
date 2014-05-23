@@ -13,6 +13,7 @@ import javax.annotation.meta.When;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
@@ -25,6 +26,7 @@ import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.core.gui.MenuItemRepresentable;
 import com.noxpvp.core.permissions.NoxPermission;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.NoxMMO;
@@ -251,10 +253,6 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 		return getTier(tier).getLevel();
 	}
 
-	public List<String> getLore() {
-		return getTier().getLore();
-	}
-
 	public final int getMaxExp() {
 		return getMaxExp(getCurrentTierLevel());
 	}
@@ -277,6 +275,30 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 
 	public String getDisplayName() {
 		return getColor() + getName();
+	}
+	
+	public String getDescription() {
+		return "\"Something descriptive here\"";
+	}
+	
+	public String getDescription(ChatColor color) {
+		return color + getDescription();
+	}
+	
+	public List<String> getLore() {
+		return getLore(30);
+	}
+	
+	public List<String> getLore(int lineLength) {
+		return MessageUtil.convertStringForLore(getDescription(), lineLength);
+	}
+	
+	public List<String> getLore(ChatColor color, int lineLength) {
+		List<String> ret = new ArrayList<String>();
+		for (String lore : getLore(lineLength))
+			ret.add(color + lore);
+		
+		return ret;
 	}
 
 	public final Player getPlayer() {

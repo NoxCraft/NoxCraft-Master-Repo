@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 
-import com.noxpvp.core.utils.TownyUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.locale.MMOLocale;
 
@@ -22,7 +21,7 @@ public abstract class BaseAbility implements Ability {
 	 * {@inheritDoc}
 	 */
 	public String getDisplayName() {
-		return MMOLocale.ABIL_DISPLAY_NAME.get(getName(), getName());
+		return MMOLocale.ABIL_DISPLAY_NAME.get(getName(), "");
 	}
 
 	public String getDisplayName(ChatColor color) {
@@ -37,14 +36,14 @@ public abstract class BaseAbility implements Ability {
 		return "\"Cryptic message here\"";
 	}
 
-	public List<String> getLore() {
-		return getLore(ChatColor.WHITE);
+	public List<String> getLore(int linesLength) {
+		return getLore(ChatColor.WHITE, linesLength);
 	}
 
-	public List<String> getLore(ChatColor color) {
+	public List<String> getLore(ChatColor color, int linesLength) {
 		List<String> ret = new ArrayList<String>();
 
-		for (String cur : MessageUtil.convertStringForLore(getDescription())) {
+		for (String cur : MessageUtil.convertStringForLore(getDescription(), linesLength)) {
 			ret.add(color + cur);
 		}
 

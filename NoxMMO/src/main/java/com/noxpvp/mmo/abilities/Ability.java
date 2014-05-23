@@ -32,7 +32,7 @@ public interface Ability {
 	 *
 	 * @return Description of the ability;
 	 */
-	public List<String> getLore();
+	public List<String> getLore(int lineLength);
 
 	/**
 	 * Retrieves the description of the ability for use as itemmeta in the specified color.
@@ -40,7 +40,7 @@ public interface Ability {
 	 *
 	 * @return Description of the ability;
 	 */
-	public List<String> getLore(ChatColor color);
+	public List<String> getLore(ChatColor color, int lineLength);
 
 	/**
 	 * Executes an ability

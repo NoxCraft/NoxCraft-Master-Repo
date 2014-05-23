@@ -48,7 +48,7 @@ public class TargetPlayerAbility extends BaseRangedPlayerAbility implements IPas
 
 		for (Entity it : p.getNearbyEntities(range, range, range)) {
 
-			if (!(it instanceof LivingEntity) || it.equals(p)) continue;
+			if (!(it instanceof LivingEntity) || it.equals(p) || !it.isValid() || it.isDead()) continue;
 			if ((it instanceof Player) && !(p).canSee((Player) it)) continue;
 
 			Location observerPos = p.getEyeLocation();

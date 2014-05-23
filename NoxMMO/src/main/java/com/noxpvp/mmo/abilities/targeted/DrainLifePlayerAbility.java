@@ -35,6 +35,7 @@ public class DrainLifePlayerAbility extends BaseTargetedPlayerAbility {
 
 		this.time = 20 * 10;
 		this.period = 20;
+		setDamage(2.0);
 	}
 
 	public boolean execute() {
@@ -101,11 +102,11 @@ public class DrainLifePlayerAbility extends BaseTargetedPlayerAbility {
 			if (!mayRun())
 				stop();
 
-			pLoc = player.getLocation();
-			tLoc = target.getLocation();
+			pLoc = player.getEyeLocation().add(0, -1, 0);
+			tLoc = target.getLocation().add(0, .50, 0);
 
 			if ((counter % period) == 0 && target.getHealth() > getDamage() && player.getHealth() < player.getMaxHealth()) {
-				target.damage(getDamage(), player);
+				target.setHealth(Math.max(target.getHealth() - getDamage(), 0));
 				player.setHealth(Math.min(player.getHealth() + getDamage(), player.getMaxHealth()));
 			}
 

@@ -1,5 +1,7 @@
 package com.noxpvp.mmo.command.subcommands;
 
+import org.bukkit.ChatColor;
+
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
@@ -33,7 +35,9 @@ public class AbilityListCommand extends BaseCommand {
 		NoxMessageBuilder mb = new NoxMessageBuilder(getPlugin()).commandHeader("Ability List", true);
 
 		for (Ability ability : player.getAllAbilities()) {
-			mb.yellow(ability.getDisplayName()).gold(": ").red(ability.getLore()).newLine();
+			mb.yellow(ability.getDisplayName()).gold(": ").newLine();
+			for (String lore : ability.getLore(ChatColor.RED, 30))
+				mb.append(lore).newLine();
 		}
 
 		mb.headerClose();

@@ -1,15 +1,9 @@
 package com.noxpvp.mmo.command.subcommands;
 
-import java.util.Map.Entry;
-import java.util.Set;
-
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
-import com.noxpvp.core.utils.NoxMessageBuilder;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.classes.internal.ClassTier;
-import com.noxpvp.mmo.classes.internal.IClassTier;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.util.NoxMMOMessageBuilder;
 import com.noxpvp.mmo.util.PlayerClassUtil;

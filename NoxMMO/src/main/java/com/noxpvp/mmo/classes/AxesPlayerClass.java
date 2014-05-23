@@ -38,6 +38,11 @@ public class AxesPlayerClass extends PlayerClass {
 		super(uniqueID, className, playerName);
 	}
 
+	@Override
+	public String getDescription() {
+		return "test";
+	}
+	
 	public boolean isPrimaryClass() {
 		return true;
 	}
@@ -60,7 +65,7 @@ public class AxesPlayerClass extends PlayerClass {
 
 			ItemMeta meta = identiferItem.getItemMeta();
 			meta.setDisplayName(getDisplayName());
-			meta.setLore(getLore());
+			meta.setLore(getLore(ChatColor.GOLD, 26));
 
 			identiferItem.setItemMeta(meta);
 		}

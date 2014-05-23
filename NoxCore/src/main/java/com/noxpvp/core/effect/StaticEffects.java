@@ -32,6 +32,13 @@ public class StaticEffects {
 	private static final NoxCore plugin = NoxCore.getInstance();
 	private static List<LivingEntity> frozenEntitys = new ArrayList<LivingEntity>();
 
+	public static void SmokeScreen(Location loc, int size) {
+		for (double x = (loc.getX() - size); x < (loc.getX() + size); x++)
+			for (double z = (loc.getZ() - size); z < (loc.getZ() + size); z++)
+				for (double y = (loc.getY() - size); y < (loc.getY() + size); y++)
+					new ParticleRunner(ParticleType.cloud, new Location(loc.getWorld(), x, y, z), true, 0, 2, 1).start(0);
+	}
+	
 	public static void DamageAmountParticle(LivingEntity e, double damage) {
 		DamageAmountParticle(e.getEyeLocation(), damage);
 	}

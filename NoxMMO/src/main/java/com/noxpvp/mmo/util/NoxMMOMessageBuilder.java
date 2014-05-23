@@ -3,6 +3,8 @@ package com.noxpvp.mmo.util;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
+
 import com.noxpvp.core.NoxPlugin;
 import com.noxpvp.core.utils.NoxMessageBuilder;
 import com.noxpvp.mmo.classes.internal.IClassTier;
@@ -20,8 +22,13 @@ public class NoxMMOMessageBuilder extends NoxMessageBuilder {
 
 	public NoxMMOMessageBuilder withClassInfo(PlayerClass clazz) {
 
-		gold("Name: ").append(clazz.getDisplayName()).newLine();
-		gold("Tiers: ");
+		gold(ChatColor.BOLD + "Name: ").append(clazz.getDisplayName()).newLine();
+		gold(ChatColor.BOLD + "About: ");
+		
+		for (String lore : clazz.getLore(clazz.getColor(), 30))
+			append(lore).newLine();
+		
+		yellow(ChatColor.BOLD + "Tiers: ");
 
 		Set<Entry<Integer, IClassTier>> tiers = clazz.getTiers();
 		for (Entry<Integer, IClassTier> tier : tiers) {
