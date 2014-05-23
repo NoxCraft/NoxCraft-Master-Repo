@@ -112,24 +112,4 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 		return;
 	}	
 	
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onEntityTargetedAbilityPreExecute(EntityTargetedAbilityPreExecuteEvent event) {
-		return;
-	}
-	
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onEntityTargetedAbilityExecuted(EntityTargetedAbilityExecutedEvent event) {
-		return;
-	}
-	
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerTargetedAbilityPreExecute(PlayerTargetedAbilityPreExecuteEvent event) {
-		return;
-	}
-	
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerTargetedAbilityExecuted(PlayerTargetedAbilityExecutedEvent event) {
-		return;
-	}	
-	
 }

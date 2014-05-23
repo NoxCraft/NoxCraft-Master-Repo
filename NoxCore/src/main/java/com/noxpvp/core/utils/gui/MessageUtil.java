@@ -284,14 +284,14 @@ public class MessageUtil {
 	 * @param lore
 	 * @return	List<String> converted string
 	 */
-	public static List<String> convertStringForLore(String lore) {
+	public static List<String> convertStringForLore(String lore, int lineLength) {
 		List<String> ret = new ArrayList<String>();
 		
 		int one = 0, two = 0;
 		boolean ending = false;
 		
 		for(char cur : lore.toCharArray()) {
-			if (((two - one) >= 28) && !ending)
+			if (((two - one) >= lineLength) && !ending)
 				ending = true;
 			
 			if (ending && cur == ' ') {

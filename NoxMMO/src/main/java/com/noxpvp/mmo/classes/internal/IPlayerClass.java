@@ -36,7 +36,51 @@ public interface IPlayerClass {
 	 */
 	public String getUniqueID();
 	
+	/**
+	 * Gets the name of this class
+	 * 
+	 * @return
+	 */
 	public String getName();
+	
+	/**
+	 * Gets the name of this class, prefixed with the class color
+	 * 
+	 * @return
+	 */
+	public String getDescription();
+	
+	/**
+	 * Same as @link {@link #getDescription()} but with given color
+	 * 
+	 * @param color
+	 * @return {@link String} colored description
+	 */
+	public String getDescription(ChatColor color);
+	
+	/**
+	 * Returns a list of the {@link #getDescription()}
+	 * 
+	 * @return list<String> lore
+	 */
+	public List<String> getLore();
+	
+	/**
+	 * Return the same as @link {@link #getLore()} split to given length for chat/item lore
+	 * 
+	 * @param lineLength
+	 * @return {@link List<String>} The
+	 */
+	public List<String> getLore(int lineLength);
+	
+	/**
+	 * The same as {@link #getLore(int)}, with each string in the list prefixed with the given color
+	 * 
+	 * @param color
+	 * @param lineLength
+	 * @return
+	 */
+	public List<String> getLore(ChatColor color, int lineLength);
 	
 	/**
 	 * Tells whether or not this is a primary class. Meaning the player sets this as their main display class. <br>
@@ -88,13 +132,6 @@ public interface IPlayerClass {
 	 * @return ChatColor
 	 */ 
 	public ChatColor getColor();
-	
-	/**
-	 * Returns a list of lore about this class from the config
-	 * 
-	 * @return list<String> lore
-	 */
-	public List<String> getLore();
 	
 	/**
 	 * Returns the current tier selected.

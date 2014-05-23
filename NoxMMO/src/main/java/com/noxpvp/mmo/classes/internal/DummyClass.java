@@ -33,7 +33,6 @@ public class DummyClass implements IPlayerClass {
 		this.isPrimary = isPrimary;
 	}
 	
-	
 	public boolean isPrimaryClass() {
 		return isPrimary;
 	}
@@ -83,7 +82,27 @@ public class DummyClass implements IPlayerClass {
 	}
 
 	public String getName() {
-		return "None";
+		return "Dummy class";
+	}
+	
+	public String getDescription() {
+		return "Dummy class";
+	}
+	
+	public String getDescription(ChatColor color) {
+		return color + "Dummy class";
+	}
+	
+	public List<String> getLore(int lineLength) {
+		return new ArrayList<String>();
+	}
+	
+	public List<String> getLore(ChatColor color, int lineLength) {
+		return new ArrayList<String>();
+	}
+
+	public List<String> getLore() {
+		return new ArrayList<String>();
 	}
 
 	public Set<Entry<Integer, IClassTier>> getTiers() {
@@ -92,10 +111,6 @@ public class DummyClass implements IPlayerClass {
 
 	public boolean canUseClass() {
 		return true;
-	}
-
-	public List<String> getLore() {
-		return new ArrayList<String>();
 	}
 
 	public IClassTier getTier() {

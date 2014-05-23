@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
+import com.noxpvp.core.effect.StaticEffects;
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.gui.CoreBoxItem;
 import com.noxpvp.core.gui.CoreBoxRegion;
@@ -22,6 +23,7 @@ import com.noxpvp.mmo.classes.internal.ClassTier;
 import com.noxpvp.mmo.classes.internal.IClassTier;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
+import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class ClassMenu extends CoreBox {
 
@@ -87,12 +89,14 @@ public class ClassMenu extends CoreBox {
 						mmoPlayer.getPrimaryClass().setCurrentTier(getTier());
 						hide();
 						
+						StaticEffects.SmokeScreen(p.getEyeLocation(), 2);
 						return true;
 					} else {
 						mmoPlayer.setSecondaryClass(clazz);
 						mmoPlayer.getSecondaryClass().setCurrentTier(getTier());
 						hide();
 						
+						StaticEffects.SmokeScreen(p.getEyeLocation(), 2);
 						return true;
 					}
 				}
@@ -100,13 +104,13 @@ public class ClassMenu extends CoreBox {
 			
 		}
 		
-		for (Ability ab : clazz.getAbilities()) {
+		for (Ability ab : clazz.getTier(clazz.getHighestPossibleTier()).getAbilities()) {
 			
 			ItemStack item = new ItemStack(Material.PAPER);
 			ItemMeta meta = item.getItemMeta();
 			
 			meta.setDisplayName(ab.getDisplayName(clazz.getColor()));
-			meta.setLore(ab.getLore(ChatColor.GOLD));
+			meta.setLore(ab.getLore(ChatColor.GOLD, 28));
 			
 			item.setItemMeta(meta);
 			
