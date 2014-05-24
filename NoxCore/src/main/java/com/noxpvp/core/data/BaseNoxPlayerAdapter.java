@@ -149,8 +149,8 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		getProxyBase().setCoreBox(box);
 	}
 
-	public boolean addCoolDown(String name, long length, boolean coreBoardTimer) {
-		return getProxyBase().addCoolDown(name, length, coreBoardTimer);
+	public boolean addCoolDown(String name, int seconds, boolean coreBoardTimer) {
+		return getProxyBase().addCoolDown(name, seconds, coreBoardTimer);
 	}
 
 	public void decrementVote() {
@@ -159,6 +159,14 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 
 	public List<CoolDown> getCoolDowns() {
 		return getProxyBase().getCoolDowns();
+	}
+	
+	public long getCooldownTimeRemaining(String name) {
+		return getProxyBase().getCooldownTimeRemaining(name);
+	}
+	
+	public String getReadableRemainingCDTime(String name) {
+		return getProxyBase().getReadableRemainingCDTime(name);
 	}
 
 	public long getFirstJoin() {

@@ -49,9 +49,9 @@ public class LeapPlayerAbility extends BasePlayerAbility {
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 		Location pLoc = p.getLocation();
@@ -67,7 +67,7 @@ public class LeapPlayerAbility extends BasePlayerAbility {
 		//reset fall distance on use
 		p.setFallDistance(0);
 		p.setVelocity(newVelocity);
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

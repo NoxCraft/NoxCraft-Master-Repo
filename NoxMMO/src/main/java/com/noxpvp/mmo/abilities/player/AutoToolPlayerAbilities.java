@@ -26,9 +26,9 @@ public class AutoToolPlayerAbilities {
 			super(ABILITY_NAME, player);
 		}
 
-		public boolean execute(EntityDamageByEntityEvent event) {
+		public AbilityResult execute(EntityDamageByEntityEvent event) {
 			if (!mayExecute())
-				return false;
+				return new AbilityResult(this, false);
 
 			Player p = getPlayer();
 			Entity e = event.getEntity();
@@ -43,11 +43,11 @@ public class AutoToolPlayerAbilities {
 
 			e.setFireTicks(fireTicks);
 
-			return true;
+			return new AbilityResult(this, true);
 		}
 
-		public boolean execute() {
-			return true;
+		public AbilityResult execute() {
+			return new AbilityResult(this, true);
 		}
 	}
 
@@ -65,13 +65,13 @@ public class AutoToolPlayerAbilities {
 			block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(type, amount, data));
 		}
 
-		public boolean execute() {
-			return true;
+		public AbilityResult execute() {
+			return new AbilityResult(this, true);
 		}
 
-		public boolean execute(BlockBreakEvent event) {
+		public AbilityResult execute(BlockBreakEvent event) {
 			if (!mayExecute())
-				return false;
+				return new AbilityResult(this, false);
 
 			Block block = event.getBlock();
 			Material tool = getPlayer().getItemInHand().getType();
@@ -101,7 +101,7 @@ public class AutoToolPlayerAbilities {
 
 							break;
 						default:
-							return false;
+							return new AbilityResult(this, false);
 
 					}
 
@@ -120,7 +120,7 @@ public class AutoToolPlayerAbilities {
 
 							break;
 						default:
-							return false;
+							return new AbilityResult(this, false);
 
 					}
 
@@ -139,16 +139,16 @@ public class AutoToolPlayerAbilities {
 
 							break;
 						default:
-							return false;
+							return new AbilityResult(this, false);
 
 					}
 
 					break;
 				default:
-					return false;
+					return new AbilityResult(this, false);
 			}
 
-			return true;
+			return new AbilityResult(this, true);
 		}
 	}
 
@@ -161,19 +161,19 @@ public class AutoToolPlayerAbilities {
 			super(ABILITY_NAME, player);
 		}
 
-		public boolean execute(EntityDamageEvent event) {
+		public AbilityResult execute(EntityDamageEvent event) {
 			return execute();
 		}
 
-		public boolean execute() {
+		public AbilityResult execute() {
 			Player p = getPlayer();
 
 			if (p.getEquipment().getHelmet().getType() != Material.GOLD_HELMET)
-				return false;
+				return new AbilityResult(this, false);
 
 			p.setRemainingAir(p.getMaximumAir());
 
-			return true;
+			return new AbilityResult(this, true);
 		}
 	}
 

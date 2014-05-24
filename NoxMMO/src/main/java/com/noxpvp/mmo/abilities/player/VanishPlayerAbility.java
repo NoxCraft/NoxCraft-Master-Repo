@@ -76,14 +76,14 @@ public class VanishPlayerAbility extends BasePlayerAbility {
 	/**
 	 * @return boolean If this ability executed successfully
 	 */
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		new VanishPlayerRunnable(getPlayer(), range, (time * (20 / hideFreq))).
 				runTaskTimer(NoxMMO.getInstance(), 0, hideFreq);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

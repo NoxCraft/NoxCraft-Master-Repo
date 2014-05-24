@@ -80,15 +80,15 @@ public class RejuvenationPlayerAbility extends BasePlayerAbility implements IPVP
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 
 		new HealRunnable(p, healthPerHeal, heals).runTaskTimer(NoxMMO.getInstance(), 0, delayBetweenHeals);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

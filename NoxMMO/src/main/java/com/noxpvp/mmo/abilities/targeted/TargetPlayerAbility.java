@@ -15,12 +15,13 @@ import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
 import com.noxpvp.mmo.abilities.IPassiveAbility;
+import com.noxpvp.mmo.abilities.SilentAbility;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
 
-public class TargetPlayerAbility extends BaseRangedPlayerAbility implements IPassiveAbility<PlayerInteractEvent> {
+public class TargetPlayerAbility extends BaseRangedPlayerAbility implements IPassiveAbility<PlayerInteractEvent>, SilentAbility {
 
-	public static final String PERM_NODE = "target";
 	public static final String ABILITY_NAME = "Target";
+	public static final String PERM_NODE = "target";
 
 	private Reference<LivingEntity> target_ref;
 
@@ -35,13 +36,13 @@ public class TargetPlayerAbility extends BaseRangedPlayerAbility implements IPas
 	/**
 	 * @return Boolean - PassiveAbililty, return true
 	 */
-	public boolean execute() {
-		return true;
+	public AbilityResult execute() {
+		return new AbilityResult(this, true);
 	}
 
-	public boolean execute(PlayerInteractEvent event) {
+	public AbilityResult execute(PlayerInteractEvent event) {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 		double range = getRange();
@@ -68,17 +69,17 @@ public class TargetPlayerAbility extends BaseRangedPlayerAbility implements IPas
 				MMOPlayer mmoPlayer = pm.getPlayer(p), mmoIt = it instanceof Player ? pm.getPlayer((Player) it) : null;
 
 				if (mmoPlayer == null)
-					return false;
+					return new AbilityResult(this, false);
 
 				mmoPlayer.setTarget(target_ref.get());
 
 				String name;
 
 				if (mmoIt != null) {
-					IPlayerClass c = mmoPlayer.getPrimaryClass();
+					IPlayerClass c = mmoIt.getPrimaryClass();
 
-					if (c != null) {
-						name = mmoIt.getFullName() + LivingEntityTracker.color + LivingEntityTracker.separater + c.getDisplayName();
+					if (c != null && c.getTier() != null) {
+						name = mmoIt.getFullName() + LivingEntityTracker.color + LivingEntityTracker.separater + c.getTier().getDisplayName();
 					} else name = mmoIt.getFullName();
 				} else {
 					if (it instanceof Player) name = ((Player) it).getName();
@@ -87,13 +88,13 @@ public class TargetPlayerAbility extends BaseRangedPlayerAbility implements IPas
 
 				new LivingEntityTracker(p, target_ref.get(), name);
 
-				return true;
+				return new AbilityResult(this, true);
 			} else {
 				continue;
 			}
 		}
 
-		return false;
+		return new AbilityResult(this, false);
 	}
 
 	private boolean hasIntersection(Vector3D p1, Vector3D p2, Vector3D min, Vector3D max) {

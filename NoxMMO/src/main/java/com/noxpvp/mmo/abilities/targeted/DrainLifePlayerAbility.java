@@ -38,13 +38,13 @@ public class DrainLifePlayerAbility extends BaseTargetedPlayerAbility {
 		setDamage(1);
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		new DrainingLifePipe(getPlayer(), getTarget(), time).start(0);
 
-		return true;
+		return new AbilityResult(this, true);
 
 	}
 

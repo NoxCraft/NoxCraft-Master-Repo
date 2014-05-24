@@ -22,7 +22,7 @@ public class JoustPlayerAbility extends BasePlayerAbility implements IPVPAbility
 		this.event = event;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 
 		throw new NotImplementedException();
 

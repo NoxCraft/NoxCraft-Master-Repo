@@ -42,9 +42,9 @@ public class HitVanishedPlayerAbility extends BasePlayerAbility implements IPVPA
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 
@@ -57,7 +57,7 @@ public class HitVanishedPlayerAbility extends BasePlayerAbility implements IPVPA
 			break;
 		}
 		if (this.e == null)
-			return false;
+			return new AbilityResult(this, false);
 
 		Location observerPos = p.getEyeLocation();
 		Vector3D observerDir = new Vector3D(observerPos.getDirection());
@@ -74,7 +74,7 @@ public class HitVanishedPlayerAbility extends BasePlayerAbility implements IPVPA
 			e.damage(1, p);
 		}
 
-		return true;
+		return new AbilityResult(this, false, "");
 	}
 
 	private boolean hasIntersection(Vector3D p1, Vector3D p2, Vector3D min, Vector3D max) {

@@ -22,25 +22,25 @@ public class MaliciousBiteEntityAbility extends BaseEntityAbility implements IPa
 		super(ABILITY_NAME, entity);
 	}
 
-	public boolean execute(EntityDamageByEntityEvent event) {
+	public AbilityResult execute(EntityDamageByEntityEvent event) {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
-		if (!(getEntity() instanceof Tameable)) return false;
+		if (!(getEntity() instanceof Tameable)) return new AbilityResult(this, false);
 
 		AnimalTamer a = ((Tameable) getEntity()).getOwner();
 
-		if (a == null || !(a instanceof Player)) return false;
+		if (a == null || !(a instanceof Player)) return new AbilityResult(this, false);
 
 		Player o = (Player) a;
 
 		IPlayerClass pClass = MMOPlayerManager.getInstance().getPlayer(o).getPrimaryClass();
 
-		return RandomUtils.nextFloat() < (pClass.getCurrentTierLevel() * pClass.getLevel()) / 1000;
+		return new AbilityResult(this, RandomUtils.nextFloat() < (pClass.getCurrentTierLevel() * pClass.getLevel()) / 1000);
 	}
 
-	public boolean execute() {
-		return true;
+	public AbilityResult execute() {
+		return new AbilityResult(this, true);
 	}
 
 }

@@ -11,6 +11,7 @@ import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
+import com.noxpvp.mmo.locale.MMOLocale;
 import com.noxpvp.mmo.runnables.DespawnRunnable;
 
 /**
@@ -105,9 +106,9 @@ public class TrackingPlayerAbility extends BaseRangedPlayerAbility {
 	/**
 	 * @return Boolean If execution has ended successfully
 	 */
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 		double radius = getRange();
@@ -120,7 +121,7 @@ public class TrackingPlayerAbility extends BaseRangedPlayerAbility {
 		}
 
 		if (it == null)
-			return false;
+			return new AbilityResult(this, false, MMOLocale.ABIL_NO_TARGET.get());
 
 		Monster tracker = (Monster) p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE);
 
@@ -136,7 +137,7 @@ public class TrackingPlayerAbility extends BaseRangedPlayerAbility {
 		new ParticleRunner(ParticleType.flame, it, true, 0, 0, 4).start(0, 5);
 		new DespawnRunnable(tracker).runTaskLater(NoxMMO.getInstance(), duration);
 
-		return false;
+		return new AbilityResult(this, true);
 	}
 
 }

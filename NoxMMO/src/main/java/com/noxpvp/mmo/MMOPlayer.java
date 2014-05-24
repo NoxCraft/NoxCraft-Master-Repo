@@ -23,7 +23,6 @@ import com.noxpvp.core.data.NoxPlayerAdapter;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.abilities.IPassiveAbility;
 import com.noxpvp.mmo.abilities.IPlayerAbility;
-import com.noxpvp.mmo.abilities.targeted.TargetPlayerAbility;
 import com.noxpvp.mmo.classes.internal.DummyClass;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
@@ -80,7 +79,9 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 
 	public void setPrimaryClass(IPlayerClass c) {
 		this.primaryClass = c;
-		getPlayer().setMaxHealth(primaryClass.getTier().getMaxHealth());
+		
+		if (c.getTier() != null)
+			getPlayer().setMaxHealth(primaryClass.getTier().getMaxHealth());
 	}
 
 	public IPlayerClass getSecondaryClass() {
@@ -132,9 +133,6 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	}
 
 	public LivingEntity getTarget() {
-		if (target == null)
-			new TargetPlayerAbility(getPlayer()).execute();
-
 		return target;
 	}
 

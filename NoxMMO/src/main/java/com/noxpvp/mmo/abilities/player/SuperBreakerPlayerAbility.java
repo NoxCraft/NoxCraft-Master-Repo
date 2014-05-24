@@ -83,9 +83,9 @@ public class SuperBreakerPlayerAbility extends BasePlayerAbility {
 		}
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 		IPlayerClass pClass = MMOPlayerManager.getInstance().getPlayer(p).getPrimaryClass();
@@ -95,7 +95,7 @@ public class SuperBreakerPlayerAbility extends BasePlayerAbility {
 		registerHandler(instaBreakHandler);
 		new UnregisterMMOHandlerRunnable(instaBreakHandler).runTaskLater(NoxMMO.getInstance(), length);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

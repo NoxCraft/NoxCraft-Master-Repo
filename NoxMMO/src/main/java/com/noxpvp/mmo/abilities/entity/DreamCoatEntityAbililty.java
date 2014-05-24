@@ -66,9 +66,9 @@ public class DreamCoatEntityAbililty extends BaseEntityAbility {
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!(getEntity() instanceof LivingEntity))
-			return false;
+			return new AbilityResult(this, false);
 
 		LivingEntity a = (LivingEntity) getEntity();
 
@@ -79,7 +79,7 @@ public class DreamCoatEntityAbililty extends BaseEntityAbility {
 			}
 			sendFakeArmor(a, null);
 
-			return false;
+			return new AbilityResult(this, false, "&e" + getName() + " &6has been deactivated");
 		}
 
 		System.out.println("starting");
@@ -87,7 +87,7 @@ public class DreamCoatEntityAbililty extends BaseEntityAbility {
 		runnables.put(a, b);
 
 		b.runTaskTimer(NoxMMO.getInstance(), 0, 1);
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 	public void sendFakeArmor(LivingEntity e, @Nullable Color color) {

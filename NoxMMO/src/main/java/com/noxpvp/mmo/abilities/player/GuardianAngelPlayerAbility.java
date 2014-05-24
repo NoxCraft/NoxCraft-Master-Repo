@@ -142,9 +142,9 @@ public class GuardianAngelPlayerAbility extends BasePlayerAbility {
 		return v;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		final NoxMMO instance = NoxMMO.getInstance();
 		Player p = getPlayer();
@@ -177,7 +177,7 @@ public class GuardianAngelPlayerAbility extends BasePlayerAbility {
 		}, 95);
 
 		setActive(true);
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

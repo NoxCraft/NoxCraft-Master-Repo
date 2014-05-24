@@ -86,9 +86,9 @@ public class ThrowPlayerAbility extends BasePlayerAbility implements IPVPAbility
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 		final Location pLoc = p.getLocation();
@@ -121,8 +121,9 @@ public class ThrowPlayerAbility extends BasePlayerAbility implements IPVPAbility
 		if (i > 0) {
 			new ExpandingDamageRunnable(p, pLoc, 4, range, 2).start(pushDelay);
 			new ShockWaveAnimation(pLoc, 2, range, true).start(pushDelay);
-			return true;
-		} else return false;
+			return new AbilityResult(this, true);
+			
+		} else return new AbilityResult(this, false);
 	}
 
 }

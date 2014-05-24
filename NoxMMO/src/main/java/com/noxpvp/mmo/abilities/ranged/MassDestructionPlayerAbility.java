@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;
 
+import com.noxpvp.core.internal.IHeated;
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
@@ -38,6 +39,8 @@ public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implem
 	 */
 	public MassDestructionPlayerAbility(Player p, double range) {
 		super(ABILITY_NAME, p, range);
+		
+		setCD(10);
 
 		handler = new BaseMMOEventHandler<EntityDamageEvent>(
 				new StringBuilder().append(p.getName()).append(ABILITY_NAME).append("EntityDamageEvent").toString(),
@@ -107,9 +110,9 @@ public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implem
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		NoxMMO instance = NoxMMO.getInstance();
 
@@ -128,7 +131,7 @@ public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implem
 
 		setActive(true);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 	public void eventExecute() {

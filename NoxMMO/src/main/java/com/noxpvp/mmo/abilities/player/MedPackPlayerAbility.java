@@ -236,9 +236,9 @@ public class MedPackPlayerAbility extends BasePlayerAbility {
 		return medPack;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 		ItemStack medPack = craftNewPackStack();
@@ -249,13 +249,11 @@ public class MedPackPlayerAbility extends BasePlayerAbility {
 
 		if (!packs.add(new MedPackDataWrapper(pack, p, health))) {
 			pack.remove();
-			return false;
+			return new AbilityResult(this, false);
 		}
 
-		MessageUtil.sendLocale(NoxMMO.getInstance(), p, "ability.medpack.use");
-
 		setActive(true);
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 	private class MedPackDataWrapper {

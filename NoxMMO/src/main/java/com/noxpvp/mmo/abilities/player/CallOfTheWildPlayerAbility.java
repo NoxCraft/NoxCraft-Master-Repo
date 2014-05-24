@@ -73,8 +73,9 @@ public class CallOfTheWildPlayerAbility extends BasePlayerAbility {
 		return this;
 	}
 
-	public boolean execute() {
-		if (!mayExecute()) return false;
+	public AbilityResult execute() {
+		if (!mayExecute())
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 		boolean canSpawn = true;
@@ -87,14 +88,16 @@ public class CallOfTheWildPlayerAbility extends BasePlayerAbility {
 				break;
 			}
 		}
-		if (!canSpawn) return false;
+		
+		if (!canSpawn)
+			return new AbilityResult(this, false, "&cThere is already a wolf nearby!");
 
 		Entity e = p.getWorld().spawnEntity(p.getLocation(), spawnType);
 
 		if (e instanceof Tameable)
 			((Tameable) e).setOwner(p);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

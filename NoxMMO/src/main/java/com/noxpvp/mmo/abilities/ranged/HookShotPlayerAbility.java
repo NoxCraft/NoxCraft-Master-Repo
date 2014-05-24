@@ -2,7 +2,9 @@ package com.noxpvp.mmo.abilities.ranged;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -13,9 +15,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import com.noxpvp.core.effect.StaticEffects;
+import com.noxpvp.core.internal.IHeated;
 import com.noxpvp.core.packet.NoxPacketUtil;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
-import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
@@ -25,9 +28,7 @@ import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 /**
  * @author NoxPVP
  */
-public class HookShotPlayerAbility extends BaseRangedPlayerAbility {
-
-	//TODO make this;
+public class HookShotPlayerAbility extends BaseRangedPlayerAbility implements IHeated {
 
 	public static final String ABILITY_NAME = "Hook Shot";
 	public static final String PERM_NODE = "hook-shot";
@@ -46,11 +47,12 @@ public class HookShotPlayerAbility extends BaseRangedPlayerAbility {
 	/**
 	 * @param player Player used for the ability
 	 */
-	public HookShotPlayerAbility(Player player) {
+	public HookShotPlayerAbility(Player player, int cooldown, double range) {
 		super(ABILITY_NAME, player);
 
-		setRange(50);
-		this.blockTime = 20 * 6;
+		setCD(cooldown);
+		setRange(range);
+		this.blockTime = 20 * 10;
 		this.holdingBlockType = Material.GLASS;
 		this.batId = NoxPacketUtil.getNewEntityId(1);
 
@@ -86,9 +88,22 @@ public class HookShotPlayerAbility extends BaseRangedPlayerAbility {
 
 				NoxPacketUtil.spawnFakeEntity(EntityType.BAT, batId, arrow.getLocation().add(0, -1, 0), true);
 				NoxPacketUtil.spawnRope(p.getEntityId(), batId);
+				StaticEffects.PlaySound(p, Sound.ARROW_HIT);
 
 			}
 		};
+	}
+	
+	public HookShotPlayerAbility(Player p) {
+		this(p, 5, 50);
+	}
+	
+	public HookShotPlayerAbility(Player p, int cd) {
+		this(p, cd, 50);
+	}
+	
+	public HookShotPlayerAbility(Player p, double range) {
+		this(p, 5, range);
 	}
 
 	private void setActive(boolean active) {
@@ -135,9 +150,9 @@ public class HookShotPlayerAbility extends BaseRangedPlayerAbility {
 		return this;
 	}
 
-	public boolean execute() {
-//		if (!mayExecute())
-//			return false;
+	public AbilityResult execute() {
+		if (!mayExecute())
+			return new AbilityResult(this, false);
 
 		if (active && arrow != null && arrow.isOnGround()) {
 			return eventExecute();
@@ -146,8 +161,9 @@ public class HookShotPlayerAbility extends BaseRangedPlayerAbility {
 			PlayerInventory inv = p.getInventory();
 
 			if (!inv.containsAtLeast(shootRegent, shootRegent.getAmount())) {
-				MessageUtil.sendLocale(p, MMOLocale.ABIL_NOT_ENOUGH_REGENT, Integer.toString(shootRegent.getAmount()), shootRegent.getType().name().toLowerCase());
-				return false;
+				return new AbilityResult(this, false,
+						MMOLocale.ABIL_NOT_ENOUGH_REGENT.get(
+								Integer.toString(shootRegent.getAmount()), shootRegent.getType().name().toLowerCase()));
 			}
 
 			inv.removeItem(shootRegent);
@@ -156,59 +172,75 @@ public class HookShotPlayerAbility extends BaseRangedPlayerAbility {
 			this.arrow = p.launchProjectile(Arrow.class);
 			arrow.setVelocity(p.getLocation().getDirection().multiply(2));
 			setActive(true);
-			
-			return true;
+
+			return new AbilityResult(this, false, "&6You throw your hook!");
 		}
-		
-		return false;
+
+		arrow.remove();
+		arrow = null;
+		setActive(false);
+		return new AbilityResult(this, false);
 	}
-	
-	private boolean eventExecute() {
+
+	private AbilityResult eventExecute() {
 		Block hBlock = arrow.getLocation().getBlock();
 		Player p = getPlayer();
 		Inventory inv = p.getInventory();
 		NoxPacketUtil.removeEntity(batId);
 
+		if (arrow.isDead() || !arrow.isValid() || !arrow.isOnGround()) {
+			arrow.remove();
+			arrow = null;
+			setActive(false);
 
-		if (hBlock.getType() != Material.AIR || hBlock.getRelative(0, 1, 0).getType() != Material.AIR || hBlock.getRelative(0, 2, 0).getType() != Material.AIR) {
+			return new AbilityResult(this, false, "&cYou have no hook to pull to!");
+		}
+
+		Material typeSame = hBlock.getType(), typeAbove = hBlock.getRelative(BlockFace.UP).getType();
+		if (typeSame != Material.AIR || typeAbove != Material.AIR) {
 			arrow.remove();
 			setActive(false);
-			return false;
+			return new AbilityResult(this, false, "&cThe hook area didn't have enough space to pull!");
 		}
 
 		if (getDistance() > getRange()) {
-			MessageUtil.sendLocale(p, MMOLocale.ABIL_RANGED_TOO_FAR, Double.toString(getRange()));
 			arrow.remove();
 			setActive(false);
-			return false;
+			
+			return new AbilityResult(this, false, MMOLocale.ABIL_RANGED_TOO_FAR.get(Double.toString(getRange())));
 		}
 
-		if (!hasLOS()) {
-			MessageUtil.sendLocale(p, MMOLocale.ABIL_NO_LOS, getName());
-			arrow.remove();
-			setActive(false);
-			return false;
-		}
+//		if (!hasLOS()) {
+//			arrow.remove();
+//			setActive(false);
+//			
+//			return new AbilityResult(this, false, MMOLocale.ABIL_NO_LOS.get(getName()));
+//		}
 
 		if (!inv.containsAtLeast(pullRegent, pullRegent.getAmount())) {
-			MessageUtil.sendLocale(p, MMOLocale.ABIL_NOT_ENOUGH_REGENT,
-					Integer.toString(pullRegent.getAmount()), pullRegent.getType().name().toLowerCase());
 			arrow.remove();
 			setActive(false);
-			return false;
+			
+			return new AbilityResult(this, false,
+					MMOLocale.ABIL_NOT_ENOUGH_REGENT.get(
+							Integer.toString(pullRegent.getAmount()), pullRegent.getType().name().toLowerCase()));
 		}
 
 		inv.removeItem(pullRegent);
 		p.updateInventory();
+		
+		Block blockBelow = hBlock.getRelative(BlockFace.DOWN);
+		if (blockBelow.getType() == Material.AIR) {
+			hBlock.getRelative(BlockFace.DOWN).setType(holdingBlockType);
+			new BlockTimerRunnable(blockBelow, Material.AIR, holdingBlockType).runTaskLater(NoxMMO.getInstance(), blockTime);
+		}
 
-		hBlock.setType(holdingBlockType);
-		new BlockTimerRunnable(hBlock, Material.AIR, holdingBlockType).runTaskLater(NoxMMO.getInstance(), blockTime);
-
-		p.teleport(hBlock.getRelative(0, 1, 0).getLocation().add(.50, .05, .50), TeleportCause.PLUGIN);
+		p.setFallDistance(0);
+		p.teleport(hBlock.getLocation().add(.50, .1, .50), TeleportCause.PLUGIN);
 		arrow.remove();
 
 		setActive(false);
-		return true;
+		return new AbilityResult(this, true, "&6You pull to the hook");
 	}
 	
 	public double getDistance() {

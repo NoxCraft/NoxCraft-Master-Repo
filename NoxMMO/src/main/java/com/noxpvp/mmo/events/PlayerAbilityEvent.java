@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerEvent;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.events.internal.IPlayerAbilityEvent;
 
-public class PlayerAbilityEvent extends PlayerEvent implements IPlayerAbilityEvent {
+public abstract class PlayerAbilityEvent extends PlayerEvent implements IPlayerAbilityEvent {
 	private static final HandlerList handlers = new HandlerList();
 	protected BasePlayerAbility ability;
 

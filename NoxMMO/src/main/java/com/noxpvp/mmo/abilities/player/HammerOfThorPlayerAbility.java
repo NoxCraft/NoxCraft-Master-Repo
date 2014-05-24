@@ -6,7 +6,6 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -37,6 +36,8 @@ public class HammerOfThorPlayerAbility extends BasePlayerAbility implements IPVP
 	public HammerOfThorPlayerAbility(Player player) {
 		super(ABILITY_NAME, player);
 
+		setCD(5);
+		
 		this.distanceVelo = 1.5;
 		this.damageMultiplier = 4;
 
@@ -157,9 +158,9 @@ public class HammerOfThorPlayerAbility extends BasePlayerAbility implements IPVP
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		final Player p = getPlayer();
 
@@ -175,7 +176,7 @@ public class HammerOfThorPlayerAbility extends BasePlayerAbility implements IPVP
 		NoxPacketUtil.disguiseArrow(a, hammer);
 
 		setActive(true);
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

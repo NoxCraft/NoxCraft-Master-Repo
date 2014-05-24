@@ -12,12 +12,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import com.noxpvp.core.utils.gui.MessageUtil;
+
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
+import com.noxpvp.mmo.locale.MMOLocale;
 
 public class PoisonArrowPlayerAbility extends BasePlayerAbility implements IPVPAbility {
 
@@ -203,17 +204,15 @@ public class PoisonArrowPlayerAbility extends BasePlayerAbility implements IPVPA
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		if (!isActive() && !isFiring()) {
 			setFiring(true);
-			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.activated", ABILITY_NAME);
-			return true;
+			return new AbilityResult(this, true, MMOLocale.ABIL_ACTIVATED.get(getName()));
 		} else {
-			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.already-active", ABILITY_NAME);
-			return false;
+			return new AbilityResult(this, false, MMOLocale.ABIL_ALREADY_ACTIVE.get(getName()));
 		}
 	}
 

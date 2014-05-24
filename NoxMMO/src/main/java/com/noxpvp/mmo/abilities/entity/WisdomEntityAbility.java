@@ -73,13 +73,13 @@ public class WisdomEntityAbility extends BaseEntityAbility implements IPVPAbilit
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		final LivingEntity e = (LivingEntity) (getEntity() instanceof LivingEntity ? getEntity() : null);
 
-		if (e == null) return false;
+		if (e == null) return new AbilityResult(this, false);
 
 		final Location loc = e.getLocation().clone();
 		e.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 45, -100), true);
@@ -99,7 +99,7 @@ public class WisdomEntityAbility extends BaseEntityAbility implements IPVPAbilit
 			}
 		}, 45);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

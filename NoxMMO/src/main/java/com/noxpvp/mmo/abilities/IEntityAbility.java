@@ -2,7 +2,10 @@ package com.noxpvp.mmo.abilities;
 
 import org.bukkit.entity.Entity;
 
-public interface IEntityAbility extends Ability {
+import com.noxpvp.core.internal.IHeated;
+
+public interface IEntityAbility extends Ability, IHeated {
+	
 	/**
 	 * Retrieves the entity responsible for this ability.
 	 *
@@ -23,4 +26,19 @@ public interface IEntityAbility extends Ability {
 	 * @param damage
 	 */
 	public void setDamage(double damage);
+	
+	/**
+	 * Gets the cooldown seconds variable to be used in this ability
+	 * 
+	 * @return seconds
+	 */
+	public int getCD();
+	
+	/**
+	 * Sets the cooldown seconds variable to be used in this ability
+	 * 
+	 * @param cd
+	 */
+	public void setCD(int cd);
+	
 }

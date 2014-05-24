@@ -23,10 +23,12 @@ public class SilentWalkingPlayerAbility extends BasePlayerAbility {
 		this.packet = packet;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
+		if (!mayExecute())
+			return new AbilityResult(this, false);
 
 		if (!packet.read(PacketType.OUT_NAMED_SOUND_EFFECT.soundName).contains("step."))
-			return false;
+			return new AbilityResult(this, false);
 
 		Player hearing = getPlayer();
 		Location loc = new Location(hearing.getWorld(),
@@ -47,11 +49,11 @@ public class SilentWalkingPlayerAbility extends BasePlayerAbility {
 			}
 		}
 
-		if (closest == null || lowestDistance > 6) {
-			return false;
+		if (closest == null || lowestDistance > 1) {
+			return new AbilityResult(this, false);
 		}
 
-		return VaultAdapter.permission.has(closest, NoxMMO.PERM_NODE + ".ability." + SilentWalkingPlayerAbility.PERM_NODE);
+		return new AbilityResult(this, VaultAdapter.permission.has(closest, NoxMMO.PERM_NODE + ".ability." + SilentWalkingPlayerAbility.PERM_NODE));
 
 	}
 

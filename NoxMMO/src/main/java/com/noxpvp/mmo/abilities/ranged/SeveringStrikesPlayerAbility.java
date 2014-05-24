@@ -27,26 +27,26 @@ public class SeveringStrikesPlayerAbility extends BasePlayerAbility implements I
 
 	}
 
-	public boolean execute() {
-		return true;
+	public AbilityResult execute() {
+		return new AbilityResult(this, true);
 	}
 
-	public boolean execute(EntityDamageByEntityEvent event) {
+	public AbilityResult execute(EntityDamageByEntityEvent event) {
 		if (!mayExecute() || event.getDamager() != getPlayer())
-			return false;
+			return new AbilityResult(this, false);
 
 		Entity damaged = event.getEntity();
 		Player p = getPlayer();
 
 		if (!(damaged instanceof Damageable))
-			return false;
+			return new AbilityResult(this, false);
 
 		int levels = MMOPlayerManager.getInstance().getPlayer(p).getPrimaryClass().getTotalLevel();
 		this.bleed = (20 * levels) / 16;
 
 		new DamageRunnable((Damageable) damaged, p, 1 * (1 + ((bleed / 20) / 6)), (bleed / 20) / 3).runTaskTimer(NoxMMO.getInstance(), 30, 30);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

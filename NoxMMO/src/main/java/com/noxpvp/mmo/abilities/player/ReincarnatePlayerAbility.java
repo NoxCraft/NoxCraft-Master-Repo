@@ -9,14 +9,14 @@ import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.MMOPlayerManager;
-import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
+import com.noxpvp.mmo.locale.MMOLocale;
 
-public class ReincarnatePlayerAbility extends BasePlayerAbility {
+public class ReincarnatePlayerAbility extends BaseRangedPlayerAbility {
 
 	public static final String ABILITY_NAME = "Reincarnate";
 	public static final String PERM_NODE = "reincarnate";
 
-	private double maxRadius;
 	private int timeLimit;
 
 	/**
@@ -27,8 +27,8 @@ public class ReincarnatePlayerAbility extends BasePlayerAbility {
 	public ReincarnatePlayerAbility(Player player) {
 		super(ABILITY_NAME, player);
 
+		setRange(10);
 		this.timeLimit = 60;
-		this.maxRadius = 10;
 	}
 
 	/**
@@ -39,30 +39,9 @@ public class ReincarnatePlayerAbility extends BasePlayerAbility {
 	 * @param maxRadius the max amount of from the user to check for a targets players death location
 	 */
 	public ReincarnatePlayerAbility(Player player, int timeLimit, double maxRadius) {
-		super(ABILITY_NAME, player);
+		super(ABILITY_NAME, player, maxRadius);
 
 		this.timeLimit = timeLimit;
-		this.maxRadius = maxRadius;
-	}
-
-	/**
-	 * Gets the radius the ability will check for a players last death location - Defaults to 10
-	 *
-	 * @return double The radius this ability instance is currently set to check for a players last death location
-	 */
-	public double getMaxRadius() {
-		return maxRadius;
-	}
-
-	/**
-	 * Sets the radius to check for a players last death location
-	 *
-	 * @param maxRadius The radius this ability instance should check for a players last death location
-	 * @return ReincarnateAbility This instance
-	 */
-	public ReincarnatePlayerAbility setMaxRadius(double maxRadius) {
-		this.maxRadius = maxRadius;
-		return this;
 	}
 
 	/**
@@ -90,9 +69,9 @@ public class ReincarnatePlayerAbility extends BasePlayerAbility {
 	 *
 	 * @return boolean If this ability executed successfully
 	 */
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 		Location pLoc = p.getLocation();
@@ -108,20 +87,22 @@ public class ReincarnatePlayerAbility extends BasePlayerAbility {
 			MMOPlayer mmop = MMOPlayerManager.getInstance().getPlayer(pl);
 			dLoc = mmop.getLastDeathLocation();
 
-			if (dLoc == null || dLoc.distance(pLoc) > getMaxRadius()) continue;
+			if (dLoc == null || dLoc.distance(pLoc) > getRange()) continue;
 			if (((ct - mmop.getLastDeathTS()) / 1000) > timeLimit) continue;
 
 			target = pl;
 			break;
 		}
 
-		if (target == null) return false;
+		if (target == null)
+			new AbilityResult(this, false, MMOLocale.ABIL_NO_TARGET.get());
 
 		new ParticleRunner(ParticleType.explode, dLoc.clone().add(0, 1, 0), true, 0, 50, 1).start(0);
 		dLoc.getWorld().playSound(dLoc, Sound.ENDERMAN_TELEPORT, 3, 1);
 
 		target.teleport(dLoc);
-		return true;
+		return new AbilityResult(this, true, MMOLocale.ABIL_USE_TARGET.get(getName(), target instanceof Player?
+				MMOPlayerManager.getInstance().getPlayer((Player) target).getFullName() : target.getType().name().toLowerCase()));
 	}
 
 }

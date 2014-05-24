@@ -26,9 +26,9 @@ public class ShadowStepPlayerAbility extends BaseTargetedPlayerAbility implement
 
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Location targetLoc = getTarget().getLocation();
 		Vector facing = targetLoc.getDirection().setY(0).multiply(-1);
@@ -39,12 +39,12 @@ public class ShadowStepPlayerAbility extends BaseTargetedPlayerAbility implement
 
 		Block b = loc.getBlock();
 		if (!(!b.getType().isSolid() || b.getRelative(BlockFace.UP).getType().isSolid())) {
-			return false;
+			return new AbilityResult(this, false);
 		}
 
 		getPlayer().teleport(loc);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

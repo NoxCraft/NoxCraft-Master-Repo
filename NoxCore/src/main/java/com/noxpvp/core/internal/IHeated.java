@@ -7,5 +7,5 @@ public interface IHeated {
 	 *
 	 * @return {@link Integer} Seconds
 	 */
-	public int getCoolDownTime();
+	public int getCD();
 }

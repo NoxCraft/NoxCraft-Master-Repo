@@ -2,13 +2,10 @@ package com.noxpvp.mmo.abilities.player;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import com.noxpvp.core.VaultAdapter;
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
-import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 import com.noxpvp.mmo.runnables.ShockWaveAnimation;
 
@@ -21,6 +18,8 @@ public class LeapPlayerAbility extends BaseEntityAbility {
 	public LeapPlayerAbility(Entity ent, double multiplier) {
 		super(ABILITY_NAME, ent);
 		this.multiplier = multiplier;
+		
+		setCD(5);
 	}
 
 	public LeapPlayerAbility(Entity ent) {
@@ -52,9 +51,9 @@ public class LeapPlayerAbility extends BaseEntityAbility {
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Entity e = getEntity();
 		Location eLoc = e.getLocation();
@@ -70,7 +69,7 @@ public class LeapPlayerAbility extends BaseEntityAbility {
 		//reset fall distance on use
 		e.setFallDistance(0);
 		e.setVelocity(newVelocity);
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

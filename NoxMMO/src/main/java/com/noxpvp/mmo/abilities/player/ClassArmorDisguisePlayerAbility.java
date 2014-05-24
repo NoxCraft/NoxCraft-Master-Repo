@@ -25,7 +25,7 @@ public class ClassArmorDisguisePlayerAbility extends BasePlayerAbility {
 		this.packet = packet;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		NMSPacketPlayOutEntityEquipment nms = new NMSPacketPlayOutEntityEquipment();
 
 		ItemStack stack = packet.read(nms.item);
@@ -52,7 +52,7 @@ public class ClassArmorDisguisePlayerAbility extends BasePlayerAbility {
 
 				IPlayerClass clazz = MMOPlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
 				if (clazz == null)
-					return false;
+					return new AbilityResult(this, false);
 
 				LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
 
@@ -65,10 +65,10 @@ public class ClassArmorDisguisePlayerAbility extends BasePlayerAbility {
 				stack.setItemMeta(meta);
 				packet.write(nms.item, stack);
 
-			} else return false;
-		} else return false;
+			} else return new AbilityResult(this, false);
+		} else return new AbilityResult(this, false);
 
-		return true;
+		return new AbilityResult(this, true);
 
 	}
 

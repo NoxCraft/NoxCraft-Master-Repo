@@ -7,7 +7,6 @@ import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.Common;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
-import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.NoxCore;
@@ -30,7 +29,6 @@ import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.command.AbilityCommand;
 import com.noxpvp.mmo.command.ClassCommand;
 import com.noxpvp.mmo.listeners.*;
-import com.noxpvp.mmo.listeners.PacketListeners.*;
 import com.noxpvp.mmo.locale.MMOLocale;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
@@ -44,11 +42,7 @@ public class NoxMMO extends NoxPlugin {
 	HealListener healListener;
 	PlayerInteractListener playerTargetListener;
 	BlockListener blockListener;
-	PacketListeners packetListeners;
-	//	PlayerAnimationListener playerAnimationListener;
-	EntityEquipmentListener equipmentPacketListener;
 //	ExperienceListener experieneceListener;
-	WorldSoundListener worldSoundListener;
 	private NoxCore core;
 	private PermissionHandler permHandler;
 	private FileConfiguration config;
@@ -127,10 +121,7 @@ public class NoxMMO extends NoxPlugin {
 		blockListener = new BlockListener(instance);
 //		experieneceListener = new ExperienceListener(instance);
 
-		packetListeners = new PacketListeners();
 //		playerAnimationListener = packetListeners.new PlayerAnimationListener();
-		equipmentPacketListener = packetListeners.new EntityEquipmentListener();
-		worldSoundListener = packetListeners.new WorldSoundListener();
 
 		abilityListener.register();
 		damageListener.register();
@@ -141,8 +132,6 @@ public class NoxMMO extends NoxPlugin {
 //		experieneceListener.register();
 
 //		register(playerAnimationListener, PacketType.IN_ENTITY_ANIMATION);
-		register(equipmentPacketListener, PacketType.OUT_ENTITY_EQUIPMENT);
-		register(worldSoundListener, PacketType.OUT_NAMED_SOUND_EFFECT);
 
 		Reloader base = new BaseReloader(getMasterReloader(), "NoxMMO") {
 			public boolean reload() {
@@ -212,7 +201,7 @@ public class NoxMMO extends NoxPlugin {
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", AutoSword.PERM_NODE), "Allows usage of the Auto Sword Abilities.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", AutoTool.PERM_NODE), "Allows usage of the Auto Tool Abilities.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", BackStabPlayerAbility.PERM_NODE), "Allows usage of the Back Stab Ability.", PermissionDefault.OP),
-				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", BandageEntityAbility.PERM_NODE), "Allows usage of the Bandage Ability.", PermissionDefault.OP),
+				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", BandagePlayerAbility.PERM_NODE), "Allows usage of the Bandage Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", BankShotPlayerAbility.PERM_NODE), "Allows usage of the Bank Shot Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", BoltPlayerAbility.PERM_NODE), "Allows usage of the Bolt Ability.", PermissionDefault.OP),
 				new NoxPermission(this, StringUtil.join(".", PERM_NODE, "ability", CallOfTheWildPlayerAbility.PERM_NODE), "Allows usage of the Call Of The Wild Ability.", PermissionDefault.OP),

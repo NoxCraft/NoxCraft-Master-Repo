@@ -37,9 +37,9 @@ public class WhistlePlayerAbility extends BasePlayerAbility {
 	/**
 	 * @return boolean If the ability has executed successfully
 	 */
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 
@@ -53,7 +53,7 @@ public class WhistlePlayerAbility extends BasePlayerAbility {
 			else if (!n.isSitting()) n.setSitting(true);
 		}
 
-		return true;
+		return new AbilityResult(this, false);
 	}
 
 }

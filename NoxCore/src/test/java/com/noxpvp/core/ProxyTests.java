@@ -1,18 +1,10 @@
 package com.noxpvp.core;
 
 import com.bergerkiller.bukkit.common.proxies.Proxy;
-import com.dsh105.holoapi.util.ConsoleLogger;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.Console;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Method;
-import java.util.logging.*;
-
 import static org.junit.Assert.*;
 
 public class ProxyTests {

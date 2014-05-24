@@ -21,14 +21,14 @@ public final class TimeUtils {
 		int days = (int) (sec % Integer.MAX_VALUE);
 
 		StringBuilder sb = new StringBuilder();
-		if (days != 0)
-			sb.append("D: ").append(days);
-		if (hours != 0)
-			sb.append(" H: ").append(hours);
-		if (minutes != 0)
-			sb.append(" M: ").append(minutes);
-		if (seconds != 0)
-			sb.append(" S: ").append(seconds);
+		if (days > 0)
+			sb.append("D: ").append(days + " ");
+		if (hours > 0)
+			sb.append("H: ").append(hours + " ");
+		if (minutes > 0)
+			sb.append("M: ").append(minutes + " ");
+		if (seconds > 0)
+			sb.append("S: ").append(seconds);
 
 		return sb.toString();
 	}
@@ -49,15 +49,15 @@ public final class TimeUtils {
 		int days = (int) (millis % Integer.MAX_VALUE);
 
 		StringBuilder sb = new StringBuilder();
-		if (days != 0)
+		if (days > 0)
 			sb.append(days).append("D ");
-		if (hours != 0)
+		if (hours > 0)
 			sb.append(hours).append("H ");
-		if (minutes != 0)
+		if (minutes > 0)
 			sb.append(minutes).append("M ");
-		if (seconds != 0)
+		if (seconds > 0)
 			sb.append(seconds).append("S ");
-		if (ms != 0)
+		if (ms > 0)
 			sb.append(ms).append("MS ");
 
 		return sb.toString();
@@ -82,18 +82,18 @@ public final class TimeUtils {
 		int days = (int) (nanos % Integer.MAX_VALUE);
 
 		StringBuilder sb = new StringBuilder();
-		if (days != 0)
-			sb.append(days).append("d ");
-		if (hours != 0)
-			sb.append(hours).append("h ");
-		if (minutes != 0)
-			sb.append(minutes).append("m ");
-		if (seconds != 0)
-			sb.append(seconds).append("s ");
-		if (ms != 0)
-			sb.append(ms).append("ms ");
-		if (ns != 0)
-			sb.append(ns).append("ns");
+		if (days > 0)
+			sb.append("D: ").append(days + " ");
+		if (hours > 0)
+			sb.append("H: ").append(hours + " ");
+		if (minutes > 0)
+			sb.append("M: ").append(minutes + " ");
+		if (seconds > 0)
+			sb.append("S: ").append(seconds + " ");
+		if (ms > 0)
+			sb.append("MS: ").append(ms + " ");
+		if (ns > 0)
+			sb.append("NS: ").append(ns);
 
 		return sb.toString();
 	}

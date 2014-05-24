@@ -29,9 +29,9 @@ public class DemoralizingRoarEntityAbility extends BaseEntityAbility implements 
 		creatures = new HashSet<Creature>();
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Entity e = getEntity();
 
@@ -52,7 +52,8 @@ public class DemoralizingRoarEntityAbility extends BaseEntityAbility implements 
 				break;
 			}
 		}
-		return !creatures.isEmpty();
+		
+		return new AbilityResult(this, !creatures.isEmpty());
 
 	}
 

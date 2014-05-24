@@ -70,13 +70,13 @@ public class MinersHelmetEntityAbility extends BaseEntityAbility {
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		new MinersHelmet(getEntity(), duration * (20 / speed)).runTaskTimer(NoxMMO.getInstance(), 0, speed);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 	private class MinersHelmet extends BukkitRunnable {

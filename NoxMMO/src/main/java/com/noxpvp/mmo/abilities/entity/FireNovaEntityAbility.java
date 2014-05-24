@@ -108,14 +108,14 @@ public class FireNovaEntityAbility extends BaseEntityAbility implements IPVPAbil
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		animation = new FirenovaAnimation();
 		animation.start();
 
-		return true;
+		return new AbilityResult(this, false);
 	}
 
 	private class FirenovaAnimation extends BukkitRunnable {

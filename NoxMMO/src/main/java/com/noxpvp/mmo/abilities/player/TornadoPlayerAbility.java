@@ -12,7 +12,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -31,18 +30,18 @@ import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
 import com.noxpvp.mmo.abilities.IPVPAbility;
-import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
+import com.noxpvp.mmo.locale.MMOLocale;
 
-public class TornadoPlayerAbility extends BasePlayerAbility implements IPVPAbility {
+public class TornadoPlayerAbility extends BaseRangedPlayerAbility implements IPVPAbility {
 
 	public static final String ABILITY_NAME = "Tornado";
 	public static final String PERM_NODE = "tornado";
 	private int range;
 	private int time;
 	public TornadoPlayerAbility(Player p, int range, int time) {
-		super(ABILITY_NAME, p);
+		super(ABILITY_NAME, p, range);
 
 		this.range = range;
 		this.time = time;
@@ -53,18 +52,18 @@ public class TornadoPlayerAbility extends BasePlayerAbility implements IPVPAbili
 		return "The Tornado Lord is capable of summoning a vast amount of high power wind abilities";
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Location loc;
 		if ((loc = LineOfSightUtil.getTargetBlockLocation(getPlayer(), range, Material.AIR)) != null) {
 			new TornadoVortex(getPlayer(), loc, time).start();
 
-			return true;
+			return new AbilityResult(this, true);
 		}
 
-		return false;
+		return new AbilityResult(this, false, MMOLocale.ABIL_RANGED_TOO_FAR.get(Double.toString(getRange())));
 	}
 
 	private class TornadoVortex extends BaseVortex {

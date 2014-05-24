@@ -54,23 +54,26 @@ public class ParryPlayerAbility extends BasePlayerAbility implements IPassiveAbi
 		return this;
 	}
 
-	public boolean execute() {
-		return true;
+	public AbilityResult execute() {
+		return new AbilityResult(this, true);
 	}
 
-	public boolean execute(EntityDamageByEntityEvent event) {
-		if (event.getEntity() != getPlayer() || !mayExecute()) return false;
+
+	public AbilityResult execute(EntityDamageByEntityEvent event) {
+		if (event.getEntity() != getPlayer() || !mayExecute())
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 
 		MMOPlayer mmoPlayer;
 
 		if ((mmoPlayer = MMOPlayerManager.getInstance().getPlayer(p)) == null || (mustBlock && (!parriedWeapons.contains(p.getItemInHand().getType()))))
-			return false;
+			return new AbilityResult(this, false);
 
 		float chance = mmoPlayer.getPrimaryClass().getTotalLevel() / 6;
 		percentChance = (chance <= 75) ? chance : 75;
-		if (RandomUtils.nextFloat() > percentChance) return false;
+		if (RandomUtils.nextFloat() > percentChance)
+			return new AbilityResult(this, false);
 
 
 		Entity damager = event.getDamager();
@@ -78,7 +81,7 @@ public class ParryPlayerAbility extends BasePlayerAbility implements IPassiveAbi
 			((Damageable) damager).damage(event.getDamage() / .7, p);
 		}
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

@@ -81,9 +81,9 @@ public class BackStabPlayerAbility extends BasePlayerAbility implements IPassive
 		this.damagePercent = damagePercent;
 	}
 
-	public boolean execute(EntityDamageByEntityEvent event) {
+	public AbilityResult execute(EntityDamageByEntityEvent event) {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		LivingEntity t = getTarget();
 		Player p = getPlayer();
@@ -94,28 +94,28 @@ public class BackStabPlayerAbility extends BasePlayerAbility implements IPassive
 		double pYaw = pLoc.getYaw();
 
 		if (!(pYaw <= (tYaw + accuracy)) && (pYaw >= (tYaw - accuracy)))
-			return false;
+			return new AbilityResult(this, false);
 
 		MMOPlayer player = MMOPlayerManager.getInstance().getPlayer(p);
 		if (player == null)
-			return false;
+			return new AbilityResult(this, false);
 
 		IPlayerClass clazz = player.getPrimaryClass();
 
 		float chance = (clazz.getLevel() + clazz.getTotalLevel()) / 10;//up to 40% at max 400 total levels
 		if ((Math.random() * 100) > chance)
-			return false;
+			return new AbilityResult(this, false);
 
 		if (pLoc.distance(tLoc) < .35)//prevent if inside the target
-			return false;
+			return new AbilityResult(this, false);
 
 		event.setDamage(event.getDamage() * damagePercent);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
-	public boolean execute() {
-		return true;
+	public AbilityResult execute() {
+		return new AbilityResult(this, true);
 	}
 
 }

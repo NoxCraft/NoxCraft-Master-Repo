@@ -149,9 +149,9 @@ public class ShurikenPlayerAbility extends BasePlayerAbility implements IPVPAbil
 	/**
 	 * @return boolean If this ability executed successfully
 	 */
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 
@@ -167,7 +167,7 @@ public class ShurikenPlayerAbility extends BasePlayerAbility implements IPVPAbil
 		NoxPacketUtil.disguiseArrow(a, shuriken);
 
 		setActive(true);
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

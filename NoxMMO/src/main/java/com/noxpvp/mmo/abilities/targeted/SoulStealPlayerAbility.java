@@ -43,13 +43,13 @@ public class SoulStealPlayerAbility extends BaseTargetedPlayerAbility implements
 	/**
 	 * @return Boolean If the ability has successfully executed
 	 */
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		getTarget().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration, 1));
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

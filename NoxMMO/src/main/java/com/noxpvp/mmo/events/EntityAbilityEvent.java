@@ -8,7 +8,7 @@ import com.noxpvp.mmo.abilities.BaseAbility;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
 import com.noxpvp.mmo.events.internal.IAbilityEvent;
 
-public class EntityAbilityEvent extends EntityEvent implements IAbilityEvent {
+public abstract class EntityAbilityEvent extends EntityEvent implements IAbilityEvent {
 	private static final HandlerList handlers = new HandlerList();
 	protected BaseEntityAbility ability;
 

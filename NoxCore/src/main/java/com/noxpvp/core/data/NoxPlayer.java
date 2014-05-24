@@ -39,6 +39,7 @@ import com.noxpvp.core.gui.CoreBoard;
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.manager.CorePlayerManager;
+import com.noxpvp.core.utils.TimeUtils;
 import com.noxpvp.core.utils.UUIDUtil;
 
 public class NoxPlayer implements Persistant, NoxPlayerAdapter {
@@ -115,6 +116,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		this(mn, name);
 		this.uid = UUIDUtil.compressUUID(uid);
 	}
+	
+//	DATA ===========================================
 
 	public boolean isFirstLoad() {
 		return isFirstLoad;
@@ -159,7 +162,9 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	public boolean hasFirstLoaded() {
 		return isFirstLoad;
 	}
-
+	
+//	GUI ==================================================
+	
 	public CoreBoard getCoreBoard() {
 		if (coreBoard == null)
 			return (coreBoard = new CoreBoard(manager.getPlugin(), getPlayer()));
@@ -195,32 +200,29 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 
 		coreBox = null;
 	}
-
+	
+//	CoolDowns =====================================================================
+	
 	/**
 	 * Adds new cooldown to player.
-	 * <br>
-	 * This will use nano seconds if {@link NoxCore#isUsingNanoTime()} returns true. Else it will use millis.
-	 * // * @param name of cooldown
 	 *
-	 * @param length of cooldown specified by nanos or millis depending is {@link NoxCore#isUsingNanoTime()}
-	 *               //	 * @return
+	 *@param String name of the cooldown
+	 *@param int length of cd in seconds
+	 *@param boolean if the timer should be put on the coreboard
+	 *@return
 	 */
-	public boolean addCoolDown(String name, long length, boolean coreBoardTimer) {
+	public boolean addCoolDown(String name, int length, boolean coreBoardTimer) {
 		NoxCore core = manager.getPlugin();
-		boolean isNano = NoxCore.isUsingNanoTime();
 
-		if (cd_cache.containsKey(name) && !cd_cache.get(name).expired())
-			return false;
+		if (cd_cache.containsKey(name)) {
+			CoolDown cd;
+			if ((cd = cd_cache.get(name)) != null && cd.expired()) {
+				cd_cache.remove(name);
+				cds.remove(cd);
+			} else return false;
+		}
 
-		CoolDown cd;
-
-		long time = 0;
-		if (isNano)
-			time = System.nanoTime() + length;
-		else
-			time = length;
-
-		cd = new CoolDown(name, time, isNano);
+		CoolDown cd = new CoolDown(name, length);
 
 		cds.add(cd);
 		cd_cache.put(cd.getName(), cd);
@@ -245,20 +247,79 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			getCoreBoard().addTimer(
 					name,
 					name,
-					(int) (isNano ? ((length / 1000) / 1000) : (length / 1000)),
+					length,
 					cdNameColor,
 					cdCDColor);
 		}
 
 		return true;
 	}
+	
+	public List<CoolDown> getCoolDowns() {
+		return cds;
+	}
+	
+	private void rebuild_cache() {
+		cd_cache.clear();
+		for (CoolDown cd : cds)
+			if (!cd.expired())
+				cd_cache.put(cd.getName(), cd);
+			else {
+				cds.remove(cd);
+				continue;
+			}
+	}
+	
+	public void removeCoolDown(String name) {
+		if (cd_cache.containsKey(name)) {
+			cds.remove(cd_cache.get(name));
+			cd_cache.remove(name);
+		}
+	}
+	
+	public boolean isCooldownActive(String name) {
+		if (cd_cache.containsKey(name)) {
+			CoolDown cd = cd_cache.get(name);
+			
+			if (cd.expired()) {
+				removeCoolDown(name);
+				return isCooldownActive(name);
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean isCooldownExpired(String name) {
+		if (cd_cache.containsKey(name))
+			return cd_cache.get(name).expired();
+		else
+			return true;
+	}
+	
+	public long getCooldownTimeRemaining(String name) {
+		if (cd_cache.containsKey(name))
+			return cd_cache.get(name).getTimeLeft();
+		
+		return 0;
+	}
+	
+	public String getReadableRemainingCDTime(String name) {
+		if (!isCooldownActive(name))
+			return "0";
+		
+		long rem = getCooldownTimeRemaining(name);
+		if (NoxCore.isUsingNanoTime())
+			rem = (rem / 1000 / 1000);
+		else rem = (rem / 1000);
+		
+		return TimeUtils.getReadableSecTime(rem);
+	}
 
 	public void decrementVote() {
 		setVotes(getVotes() - 1);
-	}
-
-	public List<CoolDown> getCoolDowns() {
-		return cds;
 	}
 
 	public long getFirstJoin() {
@@ -396,24 +457,6 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			return null;
 	}
 
-	public final ConfigurationNode getPersistantData() {
-		return persistant_data;
-	}
-
-	/**
-	 * Safely changes the persistant data object.
-	 * <p>Cloning all data from original node.
-	 *
-	 * @param persistant_data to replace with.
-	 */
-	public void setPersistantData(ConfigurationNode persistant_data) {
-		if (this.persistant_data != null) {
-			Map<String, Object> values = this.persistant_data.getValues();
-			for (Entry<String, Object> entry : values.entrySet())
-				persistant_data.set(entry.getKey(), entry.getValue());
-		}
-		this.persistant_data = persistant_data;
-	}
 
 	public Player getPlayer() {
 		if (getUUID(false) != null)
@@ -426,10 +469,6 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 
 	public final String getPlayerName() {
 		return name;
-	}
-
-	public final ConfigurationNode getTempData() {
-		return temp_data;
 	}
 
 	public int getVotes() {
@@ -460,26 +499,35 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		setVotes(getVotes() + 1);
 	}
 
-	public boolean isCooldownActive(String name) {
-		if (cd_cache.containsKey(name))
-			return cd_cache.get(name).expired();
-		else
-			return false;
-	}
-
-	public boolean isCooldownExpired(String name) {
-		if (cd_cache.containsKey(name))
-			return cd_cache.get(name).expired();
-		else
-			return true;
-	}
-
 	public boolean isOnline() {
 		return getOfflinePlayer().isOnline();
 	}
 
 	public synchronized void load() {
 		load(true);
+	}
+	
+	public final ConfigurationNode getPersistantData() {
+		return persistant_data;
+	}
+	
+	/**
+	 * Safely changes the persistant data object.
+	 * <p>Cloning all data from original node.
+	 *
+	 * @param persistant_data to replace with.
+	 */
+	public void setPersistantData(ConfigurationNode persistant_data) {
+		if (this.persistant_data != null) {
+			Map<String, Object> values = this.persistant_data.getValues();
+			for (Entry<String, Object> entry : values.entrySet())
+				persistant_data.set(entry.getKey(), entry.getValue());
+		}
+		this.persistant_data = persistant_data;
+	}
+	
+	public final ConfigurationNode getTempData() {
+		return temp_data;
 	}
 
 	public synchronized void load(boolean overwrite) {
@@ -494,25 +542,21 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		setName(persistant_data.get("last.ign", String.class, name));
 
 		rebuild_cache();
-	}
-
-	private void rebuild_cache() {
-		cd_cache.clear();
-		for (CoolDown cd : cds)
-			cd_cache.put(cd.getName(), cd);
-	}
-
-	public void removeCoolDown(String name) {
-		if (cd_cache.containsKey(name)) {
-			cds.remove(cd_cache.get(name));
-			cd_cache.remove(name);
+		
+		for (CoolDown cd : cds) {
+			getCoreBoard().addTimer(cd.getName(), cd.getName(),
+					(int) cd.getTimeLeft() / (cd.isNanoTime()? 1000 : 1) / 1000,
+					ChatColor.YELLOW, ChatColor.GREEN);
 		}
+		
 	}
 
 	public void save() {
 		getUUID();
 		saveLastLocation();
+		persistant_data.remove("cooldowns");
 		persistant_data.set("cooldowns", getCoolDowns());
+		persistant_data.remove("last.ign");
 		persistant_data.set("last.ign", getPlayerName());
 	}
 
@@ -609,4 +653,5 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	public void saveToManager() {
 		CorePlayerManager.getInstance().savePlayer(this);
 	}
+
 }

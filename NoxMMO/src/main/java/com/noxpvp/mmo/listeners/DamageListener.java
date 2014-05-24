@@ -6,9 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.effect.StaticEffects;
-import com.noxpvp.core.gui.corebar.LivingEntityTracker;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.utils.DamageUtil;
@@ -53,22 +51,7 @@ public class DamageListener extends NoxListener<NoxMMO> {
 						StaticEffects.DamageAmountParticle(livingDamaged, event.getDamage());
 					}
 				}
-
-				if (playerDamaged != null) {
-
-					NoxPlayer noxPlayerDamaged = pm.getPlayer(playerDamaged.getName());
-
-					if (noxPlayerDamaged != null)
-						new LivingEntityTracker(playerAttacker, livingDamaged, noxPlayerDamaged.getFullName(), 300);
-
-
-				} else {
-					new LivingEntityTracker(playerAttacker, livingDamaged, livingDamaged.getType().name(), 300);
-				}
-
 			}
 		}
-
 	}
-
 }

@@ -17,7 +17,7 @@ import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 
 public class LivingEntityTracker extends BukkitRunnable {
-	public static final String separater = "    ";
+	public static final String separater = "  ";
 	public static final String color = ChatColor.GREEN.toString();
 	private static final int runPeriod = 10;
 	private LivingEntity e;

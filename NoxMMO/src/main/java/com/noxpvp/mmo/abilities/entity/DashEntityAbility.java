@@ -52,13 +52,13 @@ public class DashEntityAbility extends BaseEntityAbility {
 		this.d = d;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		((LivingEntity) getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, d, s, true));
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

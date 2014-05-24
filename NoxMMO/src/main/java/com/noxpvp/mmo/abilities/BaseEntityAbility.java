@@ -5,6 +5,7 @@ import java.lang.ref.SoftReference;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
@@ -19,6 +20,8 @@ import com.noxpvp.mmo.locale.MMOLocale;
 public abstract class BaseEntityAbility extends BaseAbility implements IEntityAbility {
 	private Reference<Entity> entityRef;
 	private MasterListener masterListener;
+	
+	private int cd;
 	private double damage;
 
 	public BaseEntityAbility(final String name, Entity ref) {
@@ -26,6 +29,7 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 		entityRef = new SoftReference<Entity>(ref);
 
 		this.masterListener = NoxMMO.getInstance().getMasterListener();
+		this.cd = 5;
 	}
 
 	public Entity getEntity() {
@@ -43,7 +47,7 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 	 */
 	public boolean mayExecute() {
 		Entity entity = getEntity();
-		if (entity == null || entity.isDead() || !entity.isValid())
+		if (entity == null || (!(entity instanceof Player) && (entity.isDead() || !entity.isValid())))
 			return false;
 
 		if (this instanceof IPVPAbility && !TownyUtil.isPVP(entity)) {
@@ -79,6 +83,14 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 
 	public void setDamage(double damage) {
 		this.damage = damage;
+	}
+	
+	public int getCD() {
+		return cd;
+	}
+	
+	public void setCD(int cd) {
+		this.cd = cd;
 	}
 
 }

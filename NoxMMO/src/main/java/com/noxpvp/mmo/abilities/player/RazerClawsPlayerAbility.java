@@ -18,34 +18,33 @@ public class RazerClawsPlayerAbility extends BasePlayerAbility implements IPassi
 	public static final String PERM_NODE = "razer-claws";
 
 	private Damageable target;
-	private NoxMMO mmo;
 
 	public RazerClawsPlayerAbility(Player p, Damageable target) {
 		super(ABILITY_NAME, p);
 
 		this.target = target;
-		this.mmo = NoxMMO.getInstance();
 	}
 
-	public boolean execute() {
-		return true;
+	public AbilityResult execute() {
+		return new AbilityResult(this, true);
 	}
 
-	public boolean execute(EntityDamageByEntityEvent event) {
+	public AbilityResult execute(EntityDamageByEntityEvent event) {
 
 		if (event.getEntity() != getPlayer() || !mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		IPlayerClass clazz = MMOPlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
 
 		int levels = clazz.getTotalLevel();
 
 		float chance = (levels / 20) <= 20 ? levels / 20 : 20;
-		if (Math.random() > (chance)) return false;
+		if (Math.random() > (chance))
+			return new AbilityResult(this, false);
 
-		new DamageRunnable(target, getPlayer(), ((levels / 90) <= 5 ? levels / 90 : 90), (int) levels / 70).runTaskTimer(mmo, 0, 30);
+		new DamageRunnable(target, getPlayer(), ((levels / 90) <= 5 ? levels / 90 : 90), (int) levels / 70).runTaskTimer(NoxMMO.getInstance(), 0, 30);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

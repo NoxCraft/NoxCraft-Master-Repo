@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.projectiles.ProjectileSource;
 
@@ -12,13 +13,13 @@ import com.noxpvp.core.effect.shaped.BaseHelix;
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.abilities.BaseEntityAbility;
+import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.IPVPAbility;
 
 /**
  * @author NoxPVP
  */
-public class FireBallPlayerAbility extends BaseEntityAbility implements IPVPAbility {
+public class FireBallPlayerAbility extends BasePlayerAbility implements IPVPAbility {
 
 	public static final String ABILITY_NAME = "Fire Ball";
 	public static final String PERM_NODE = "fire-ball";
@@ -28,8 +29,8 @@ public class FireBallPlayerAbility extends BaseEntityAbility implements IPVPAbil
 	/**
 	 * @param e The Entity type user of this ability instance
 	 */
-	public FireBallPlayerAbility(Entity e) {
-		super(ABILITY_NAME, e);
+	public FireBallPlayerAbility(Player p) {
+		super(ABILITY_NAME, p);
 
 		this.power = 3;
 	}
@@ -51,9 +52,9 @@ public class FireBallPlayerAbility extends BaseEntityAbility implements IPVPAbil
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Entity e = getEntity();
 		Location loc = (e instanceof LivingEntity) ? ((LivingEntity) e).getEyeLocation() : e.getLocation();
@@ -64,7 +65,7 @@ public class FireBallPlayerAbility extends BaseEntityAbility implements IPVPAbil
 
 		new FireBallHelix(e, 60).render(250);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 	private class FireBallHelix extends BaseHelix {

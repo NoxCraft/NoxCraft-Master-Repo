@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 
+import com.noxpvp.mmo.abilities.BaseAbility.AbilityResult;
+
 /**
  * <b>IF this is not a dynamic ability. <br/> With changing names. Please specify a static getName() method. </b>
  *
@@ -17,6 +19,8 @@ public interface Ability {
 	 * @return Ability Name
 	 */
 	public String getName();
+	
+	public String getUniqueId();
 
 	/**
 	 * Retrieves the description of the ability.
@@ -47,7 +51,7 @@ public interface Ability {
 	 *
 	 * @return true if successful and false if not.
 	 */
-	public boolean execute();
+	public AbilityResult execute();
 
 	/**
 	 * Retrieves the display name locale of this ability.

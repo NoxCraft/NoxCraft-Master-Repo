@@ -69,9 +69,9 @@ public class TracerArrowPlayerAbility extends BaseTargetedPlayerAbility implemen
 	/**
 	 * @return boolean - If the ability executed successfully
 	 */
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		final String pName = getPlayer().getName();
 
@@ -86,7 +86,7 @@ public class TracerArrowPlayerAbility extends BaseTargetedPlayerAbility implemen
 			}
 		}, 120);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

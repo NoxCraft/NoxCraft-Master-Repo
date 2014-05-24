@@ -18,12 +18,12 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
-import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
+import com.noxpvp.mmo.locale.MMOLocale;
 
 /**
  * @author NoxPVP
@@ -307,18 +307,16 @@ public class BankShotPlayerAbility extends BasePlayerAbility implements IPVPAbil
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		if (!isFiring() && !isActive()) {
 			setFiring(true);
 
-			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.activated", "Bank Shot Ability");
-			return true;
+			return new AbilityResult(this, true, MMOLocale.ABIL_ACTIVATED.get(getName()));
 		} else {
-			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.already-active", ABILITY_NAME);
-			return false;
+			return new AbilityResult(this, false, MMOLocale.ABIL_ALREADY_ACTIVE.get(getName()));
 		}
 	}
 

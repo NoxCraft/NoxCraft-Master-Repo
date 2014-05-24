@@ -83,13 +83,13 @@ public class MeasuringTapePlayerAbility extends BasePlayerAbility {
 		this.blocks = new Block[2];
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			new AbilityResult(this, false);
 
 		registerHandler(handler);
 		new UnregisterMMOHandlerRunnable(handler).runTaskLater(NoxMMO.getInstance(), 20 * 120);
-		return true;
+		return new AbilityResult(this, true);
 
 	}
 

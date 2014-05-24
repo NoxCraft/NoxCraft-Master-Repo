@@ -30,28 +30,30 @@ public class CriticalHitPlayerAbility extends BasePlayerAbility implements IPass
 		return "A random chance to land a critical hit, causing nausia and increased damage on the target";
 	}
 
-	public boolean execute(EntityDamageByEntityEvent event) {
+	public AbilityResult execute(EntityDamageByEntityEvent event) {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player playerAttacker = (Player) ((event.getDamager() instanceof Player) ? event.getDamager() : null);
 
 
 		if (playerAttacker == null || !playerAttacker.equals(getPlayer()))
-			return false;
+			return new AbilityResult(this, false);
+		
 		String itemName = playerAttacker.getItemInHand().getType().name().toUpperCase();
 		if (!itemName.contains("SWORD") && !itemName.contains("AXE"))
-			return false;
+			return new AbilityResult(this, false);
 
 		MMOPlayer player = pm.getPlayer(getPlayer());
 
 		if (player == null)
-			return false;
+			return new AbilityResult(this, false);
 
 		IPlayerClass clazz = player.getPrimaryClass();
 
 		double damage = (clazz.getLevel() + clazz.getTotalLevel()) / 75;
-		if ((Math.random() * 100) > (damage * 45)) return false;
+		if ((Math.random() * 100) > (damage * 45))
+			return new AbilityResult(this, false);
 
 		event.setDamage(damage);
 
@@ -59,14 +61,14 @@ public class CriticalHitPlayerAbility extends BasePlayerAbility implements IPass
 			((LivingEntity) event.getEntity()).addPotionEffect(
 					new PotionEffect(PotionEffectType.CONFUSION, 40, 2, false));
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 	/**
 	 * Always Returns True Due To Being Passive!
 	 */
-	public boolean execute() {
-		return true; //Passive
+	public AbilityResult execute() {
+		return new AbilityResult(this, true);
 	}
 
 }

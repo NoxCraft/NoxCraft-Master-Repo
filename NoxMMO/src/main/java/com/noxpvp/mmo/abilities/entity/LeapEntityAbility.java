@@ -49,9 +49,9 @@ public class LeapEntityAbility extends BaseEntityAbility {
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Entity e = getEntity();
 		Location eLoc = e.getLocation();
@@ -67,7 +67,7 @@ public class LeapEntityAbility extends BaseEntityAbility {
 		//reset fall distance on use
 		e.setFallDistance(0);
 		e.setVelocity(newVelocity);
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

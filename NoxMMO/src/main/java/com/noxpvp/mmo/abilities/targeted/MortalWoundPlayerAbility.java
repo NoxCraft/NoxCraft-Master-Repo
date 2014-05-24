@@ -74,18 +74,19 @@ public class MortalWoundPlayerAbility extends BaseTargetedPlayerAbility implemen
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		LivingEntity t = getTarget();
 		Player p = getPlayer();
 
 		t.damage(getDamage(), p);
-
-		return t.addPotionEffects(Arrays.asList(
+		t.addPotionEffects(Arrays.asList(
 				new PotionEffect(PotionEffectType.POISON, duration, amplifier),
 				new PotionEffect(PotionEffectType.SLOW, duration, amplifier)));
+
+		return new AbilityResult(this, true);
 	}
 
 }

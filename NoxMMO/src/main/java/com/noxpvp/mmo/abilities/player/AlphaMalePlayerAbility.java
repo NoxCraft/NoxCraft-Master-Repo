@@ -34,8 +34,8 @@ public class AlphaMalePlayerAbility extends BasePlayerAbility implements IPVPAbi
 		this.wolf.setController(wolfController);
 	}
 
-	public boolean execute() {
-		return false;
+	public AbilityResult execute() {
+		return new AbilityResult(this, false);
 	}
 
 	public WolfController getWolfController() {

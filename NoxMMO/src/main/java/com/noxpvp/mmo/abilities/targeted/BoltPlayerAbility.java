@@ -33,9 +33,9 @@ public class BoltPlayerAbility extends BaseTargetedPlayerAbility implements IPVP
 		setDamage(8);
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 		LivingEntity t = getTarget();
@@ -43,7 +43,7 @@ public class BoltPlayerAbility extends BaseTargetedPlayerAbility implements IPVP
 		t.getWorld().strikeLightningEffect(t.getLocation());
 		t.damage(getDamage(), p);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

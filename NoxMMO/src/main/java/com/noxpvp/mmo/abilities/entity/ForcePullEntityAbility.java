@@ -40,9 +40,9 @@ public class ForcePullEntityAbility extends BaseEntityAbility implements IPVPAbi
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Entity e = getEntity();
 
@@ -54,10 +54,11 @@ public class ForcePullEntityAbility extends BaseEntityAbility implements IPVPAbi
 
 			it.setVelocity(eLoc.subtract(it.getLocation()).toVector());
 
-			if (++i >= maxTargets)
+			if (i++ >= maxTargets)
 				break;
 		}
-		return true;
+		
+		return new AbilityResult(this, i > 0);
 	}
 
 }

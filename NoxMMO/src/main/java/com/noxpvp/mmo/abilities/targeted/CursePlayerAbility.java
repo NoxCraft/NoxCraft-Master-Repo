@@ -69,9 +69,9 @@ public class CursePlayerAbility extends BaseTargetedPlayerAbility implements IPV
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		LivingEntity t = getTarget();
 
@@ -80,6 +80,6 @@ public class CursePlayerAbility extends BaseTargetedPlayerAbility implements IPV
 
 		new ParticleRunner(ParticleType.angryVillager, t, false, 0, 1, 1).start(0);
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 }

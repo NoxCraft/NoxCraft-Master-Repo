@@ -44,16 +44,16 @@ public class SoothePlayerAbility extends BaseTargetedPlayerAbility {
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		LivingEntity t = getTarget();
 		double ha = t.getHealth() + getHealAmount();
 
 		t.setHealth(ha > t.getMaxHealth() ? t.getMaxHealth() : ha);
 
-		return false;
+		return new AbilityResult(this, true);
 	}
 
 }

@@ -47,9 +47,9 @@ public class ChargeEntityAbility extends BaseEntityAbility {
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Entity e = getEntity();
 
@@ -60,7 +60,7 @@ public class ChargeEntityAbility extends BaseEntityAbility {
 		new ParticleRunner(ParticleType.largesmoke, e, true, 0, 6, 10).start(0, 1);
 
 		e.setVelocity(newVelocity);
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

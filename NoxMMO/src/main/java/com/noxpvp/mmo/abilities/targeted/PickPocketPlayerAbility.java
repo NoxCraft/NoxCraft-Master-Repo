@@ -92,13 +92,14 @@ public class PickPocketPlayerAbility extends BaseTargetedPlayerAbility {
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		LivingEntity target = getTarget();
 
-		if (!(target instanceof InventoryHolder)) return false;
+		if (!(target instanceof InventoryHolder))
+			return new AbilityResult(this, false);
 
 		final Player p = getPlayer();
 
@@ -106,10 +107,10 @@ public class PickPocketPlayerAbility extends BaseTargetedPlayerAbility {
 		double pYaw = p.getLocation().getYaw();
 
 		if (!(pYaw <= (tYaw + 20)) && (pYaw >= (tYaw - 20)))//must be behind target
-			return false;
+			return new AbilityResult(this, false);
 
 		if (!(p.isSneaking()))//and sneaking
-			return false;
+			return new AbilityResult(this, false);
 
 //		if (Math.random() > getCalChance())//chance to pick
 //			return false;
@@ -128,7 +129,7 @@ public class PickPocketPlayerAbility extends BaseTargetedPlayerAbility {
 		}
 
 		if (item == null || item.getType() == Material.AIR)
-			return false;
+			return new AbilityResult(this, false);
 
 		item.setAmount(getPocketamount());//set itemstack amount
 
@@ -141,7 +142,7 @@ public class PickPocketPlayerAbility extends BaseTargetedPlayerAbility {
 			}
 		});
 
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

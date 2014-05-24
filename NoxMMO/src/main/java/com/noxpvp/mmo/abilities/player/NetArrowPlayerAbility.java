@@ -12,12 +12,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 
-import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
+import com.noxpvp.mmo.locale.MMOLocale;
 import com.noxpvp.mmo.runnables.BlockTimerRunnable;
 
 public class NetArrowPlayerAbility extends BasePlayerAbility implements IPVPAbility {
@@ -211,17 +211,16 @@ public class NetArrowPlayerAbility extends BasePlayerAbility implements IPVPAbil
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		if (!isActive() && !isFiring()) {
 			setFiring(true);
-			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.arrow.net.use");
-		} else
-			MessageUtil.sendLocale(NoxMMO.getInstance(), getPlayer(), "ability.already-active", ABILITY_NAME);
-
-		return true;
+			return new AbilityResult(this, true, MMOLocale.ABIL_ACTIVATED.get(getName()));
+		} else {
+			return new AbilityResult(this, false, MMOLocale.ABIL_ALREADY_ACTIVE.get(getName()));
+		}
 	}
 
 }

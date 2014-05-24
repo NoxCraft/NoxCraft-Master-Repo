@@ -8,7 +8,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.VaultAdapter;
-import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.events.uuid.NoxUUIDFoundEvent;
 import com.noxpvp.core.gui.corebar.ScrollingText;
 import com.noxpvp.core.manager.CorePlayerManager;

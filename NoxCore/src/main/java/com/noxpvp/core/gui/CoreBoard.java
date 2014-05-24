@@ -54,8 +54,6 @@ public class CoreBoard {
 
 		this.takenSlots = new ArrayList<Integer>();
 
-//		String name = p.getName();
-
 	}
 
 	private static String SpaceOut(String text, int maxLenth) {
@@ -81,6 +79,7 @@ public class CoreBoard {
 	public CoreBoard addScore(String name, String displayName, String score, ChatColor nameColor, ChatColor scoreColor) {
 		new BoardEntry(name, SpaceOut(nameColor + displayName, 16), SpaceOut(scoreColor + score, 16));
 
+		show();
 		return this;
 	}
 
@@ -98,6 +97,7 @@ public class CoreBoard {
 		scroller.runTaskTimer(NoxCore.getInstance(), 0, 4);
 		scrollers.put(scroller.name, scroller);
 
+		show();
 		return this;
 	}
 
@@ -115,6 +115,7 @@ public class CoreBoard {
 		timer.runTaskTimer(NoxCore.getInstance(), 0, 20);
 		timers.put(timer.name, timer);
 
+		show();
 		return this;
 	}
 
@@ -154,6 +155,9 @@ public class CoreBoard {
 			return this;
 
 		entry.remove();
+		
+		if (entries.size() < 1)
+			hide();
 
 		return this;
 	}
@@ -223,8 +227,8 @@ public class CoreBoard {
 			}
 
 			this.name = name;
-			this.displayedName = SpaceOut(displayedName, BOARD_SCORE_NAME_MAX_LENGTH);
-			this.scoreName = SpaceOut(scoreName, 16);
+			this.displayedName = SpaceOut(displayedName, BOARD_SCORE_NAME_MAX_LENGTH).substring(0, BOARD_SCORE_NAME_MAX_LENGTH);
+			this.scoreName = SpaceOut(scoreName, 16).substring(0, BOARD_SCORE_NAME_MAX_LENGTH);
 
 			this.slot1 = getNewSlot();
 			this.slot2 = getNewSlot();
@@ -274,6 +278,7 @@ public class CoreBoard {
 		public BoardEntry hide() {
 			if (!active || !isGood)
 				return this;
+			
 			ob.removeScore(name + slot1);
 			ob.removeScore(name + slot2);
 
@@ -383,9 +388,9 @@ public class CoreBoard {
 
 			this.timeStamp = (System.currentTimeMillis() / 1000) + seconds;
 
-			this.timerString = TimeUtils.getReadableSecTime(seconds);
+			this.timerString = TimeUtils.getReadableSecTime(timeStamp - (System.currentTimeMillis() / 1000));
 
-			entry = new BoardEntry(name, displayName, this.timerString);
+			entry = new BoardEntry(name, displayName, timerString);
 		}
 
 		public void run() {
@@ -409,7 +414,7 @@ public class CoreBoard {
 
 			sb.insert(0, sc);
 
-			entry.setValue(SpaceOut(sb.toString(), 16));
+			entry.setValue(SpaceOut(sb.toString(), 16).substring(0, 16));
 		}
 
 		public void safeCancel() {

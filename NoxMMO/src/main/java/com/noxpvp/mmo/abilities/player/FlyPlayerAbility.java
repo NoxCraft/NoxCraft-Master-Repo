@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.locale.MMOLocale;
 
 /**
  * @author NoxPVP
@@ -67,9 +68,9 @@ public class FlyPlayerAbility extends BasePlayerAbility {
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 
@@ -78,10 +79,13 @@ public class FlyPlayerAbility extends BasePlayerAbility {
 			p.setAllowFlight(false);
 			p.setFlying(false);
 
-			return true;
+			return new AbilityResult(this, true, MMOLocale.ABIL_DEACTIVATED.get(getName()));
 		}
+		
 		Inventory i = p.getInventory();
-		if (!i.containsAtLeast(getReg(), getReg().getAmount())) return false;
+		if (!i.containsAtLeast(getReg(), getReg().getAmount()))
+			return new AbilityResult(this, false,
+					MMOLocale.ABIL_NO_TARGET.get(Integer.toString(getReg().getAmount()), getReg().getType().name().toLowerCase()));
 
 		i.removeItem(getReg());
 		p.updateInventory();
@@ -90,7 +94,7 @@ public class FlyPlayerAbility extends BasePlayerAbility {
 
 		new FlyRunnable(p, reg).runTaskTimer(NoxMMO.getInstance(), getRegFreq() * 20, getRegFreq() * 20);
 
-		return true;
+		return new AbilityResult(this, true, MMOLocale.ABIL_ACTIVATED.get(getName()));
 	}
 
 	private class FlyRunnable extends BukkitRunnable {

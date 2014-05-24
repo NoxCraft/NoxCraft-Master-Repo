@@ -16,6 +16,8 @@ public class ChargePlayerAbility extends BasePlayerAbility {
 	public ChargePlayerAbility(Player p, double forwardMultiplier) {
 		super(ABILITY_NAME, p);
 		this.forwardMultiplier = forwardMultiplier;
+		
+		setCD(15);
 	}
 
 	public ChargePlayerAbility(Player p) {
@@ -47,9 +49,9 @@ public class ChargePlayerAbility extends BasePlayerAbility {
 		return this;
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		Player p = getPlayer();
 
@@ -60,7 +62,7 @@ public class ChargePlayerAbility extends BasePlayerAbility {
 		new ParticleRunner(ParticleType.largesmoke, p, true, 0, 6, 10).start(0, 1);
 
 		p.setVelocity(newVelocity);
-		return true;
+		return new AbilityResult(this, true);
 	}
 
 }

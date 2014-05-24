@@ -38,14 +38,14 @@ public class FireSpinPlayerAbility extends BasePlayerAbility implements IPVPAbil
 		return "Surrounds the user with a powerful ring of spinning fire, Scorching anyone in your path";
 	}
 
-	public boolean execute() {
+	public AbilityResult execute() {
 		if (!mayExecute())
-			return false;
+			return new AbilityResult(this, false);
 
 		new FireSpinVortex(getPlayer(), time).start();
 		getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, time, 1, true));
 
-		return true;
+		return new AbilityResult(this, true);
 
 	}
 

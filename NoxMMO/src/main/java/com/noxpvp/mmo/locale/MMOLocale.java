@@ -1,6 +1,5 @@
 package com.noxpvp.mmo.locale;
 
-import com.bergerkiller.bukkit.common.localization.LocalizationEnum;
 import com.noxpvp.core.locales.NoxLocale;
 import com.noxpvp.mmo.NoxMMO;
 
@@ -72,7 +71,12 @@ public class MMOLocale extends NoxLocale {
 	/**
 	 * @param 1 ability
 	 */
-	public static final LocalizationEnum ABIL_NO_LOS;
+	public static final MMOLocale ABIL_NO_LOS;
+	
+	/**
+	 * @param 1 ability
+	 */
+	public static final MMOLocale ABIL_ALREADY_ACTIVE;
 
 	//Display
 	public static final MMOLocale CLASS_DN;
@@ -96,6 +100,16 @@ public class MMOLocale extends NoxLocale {
 	 * @param 3 damage amount (format %.2f please)
 	 */
 	public static final MMOLocale ABIL_USE_TARGET_DAMAGED;
+	
+	/**
+	 * @param 1 ability
+	 */
+	public static final MMOLocale ABIL_ACTIVATED;
+	
+	/**
+	 * @param 1 ability
+	 */
+	public static final MMOLocale ABIL_DEACTIVATED;
 
 	/**
 	 * @param 1 ability
@@ -142,12 +156,13 @@ public class MMOLocale extends NoxLocale {
 		CLASS_NO_TIER = new MMOLocale("error.class.tier.missing", "&cThe class &e%0% &cdoes not have a &e%1% &ctier");
 		ABIL_ON_COOLDOWN = new MMOLocale("error.ability.on-cooldown", "&cThe &e%0% &cability has a cooldown of &e%1% &cremaining");
 		ABIL_BAD_TARGET = new MMOLocale("error.ability.bad-target", "&cThe &e%0% &cability cannot be used on &e%1% &cright now");
-		ABIL_NO_TARGET = new MMOLocale("error.ability.no-target", "&cYou don't have a target right now!");
+		ABIL_NO_TARGET = new MMOLocale("error.ability.no-target", "&cCould not find a target");
 		ABIL_NO_PVP_ZONE = new MMOLocale("error.ability.no-pvp-zone-named", "&cYou can't use the &e%0% &cability in &e%1%");
 		ABIL_NO_PVP = new MMOLocale("error.ability.no-pvp-zone", "&cYou can't use the &e%0% &cability here");
 		ABIL_NOT_ENOUGH_REGENT = new MMOLocale("error.ability.not-enough-regent", "&cYou need atleast &e%0% &6%1% &cto use that!");
 		ABIL_RANGED_TOO_FAR = new MMOLocale("error.ability.ranged-too-far", "&cYou have to be within &e%0% &cblocks");
 		ABIL_NO_LOS = new MMOLocale("error.ability.no-los", "&cYou need line of sight to use the &e%0% &cability!");
+		ABIL_ALREADY_ACTIVE = new MMOLocale("error.ability.already-active", "&e%0% &cis already active");
 
 		//Display
 		CLASS_DN = new MMOLocale("display.class.default", "%1%%0%");
@@ -158,6 +173,8 @@ public class MMOLocale extends NoxLocale {
 		ABIL_USE = new MMOLocale("display.ability.used", "&6You used the &e%0% &6ability!");
 		ABIL_USE_TARGET = new MMOLocale("display.ability.used-on-target", "&6You used the &e%0% &6ability on &c%1%");
 		ABIL_USE_TARGET_DAMAGED = new MMOLocale("display.ability.used-on-target-damaged", "&6You used the &e%0% &6ability on &c%1%&6, dealing &c%2% &6damage!");
+		ABIL_ACTIVATED = new MMOLocale("display.ability.activated", "&e%0% &6Activated!");
+		ABIL_DEACTIVATED = new MMOLocale("display.ability.deactivated", "&e%0% &6Deactivated");
 		ABIL_HIT = new MMOLocale("display.ability.hit", "&6You were hit by &e%1%&6!");
 		ABIL_HIT_ATTACKER = new MMOLocale("display.ability.hit-attacker", "&c%0% &6used &e%1% &6on you!");
 		ABIL_HIT_ATTACKER_DAMAGED = new MMOLocale("display.ability.hit-attacker-damaged", "&c%0% &6used &e%1% &6on you! dealing &c%2% &cdamage");
