@@ -12,6 +12,8 @@ public interface IVortex {
 	public void start();
 
 	public void stop();
+	
+	public void onStop();
 
 	public void onRun();
 

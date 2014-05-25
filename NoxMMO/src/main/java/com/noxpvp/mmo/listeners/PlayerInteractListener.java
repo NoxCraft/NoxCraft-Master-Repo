@@ -22,6 +22,7 @@ import com.noxpvp.mmo.abilities.player.FireSpinPlayerAbility;
 import com.noxpvp.mmo.abilities.player.GuardianAngelPlayerAbility;
 import com.noxpvp.mmo.abilities.player.LeapPlayerAbility;
 import com.noxpvp.mmo.abilities.player.RejuvenationPlayerAbility;
+import com.noxpvp.mmo.abilities.player.TornadoPlayerAbility;
 import com.noxpvp.mmo.abilities.ranged.HookShotPlayerAbility;
 import com.noxpvp.mmo.abilities.ranged.MassDestructionPlayerAbility;
 import com.noxpvp.mmo.abilities.ranged.ThrowPlayerAbility;
@@ -61,8 +62,8 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 			return;
 
 		//debug here
-//		new TornadoAbility(p, 25, 20 * 10).execute();
-//		new FireSpinPlayerAbility(p).execute();
+		new TornadoPlayerAbility(p, 25, 20 * 10).execute();
+		new FireSpinPlayerAbility(p).execute();
 		new MassDestructionPlayerAbility(p).execute();
 //		new LeapPlayerAbility(p).execute();
 //		new CurseAbility(p).execute();

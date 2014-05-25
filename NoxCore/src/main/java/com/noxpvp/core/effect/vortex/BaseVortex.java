@@ -147,6 +147,12 @@ public abstract class BaseVortex extends BukkitRunnable implements IVortex {
 	public void stop() {
 		Bukkit.getScheduler().cancelTask(taskId);
 		clearEntities();
+		
+		onStop();
+	}
+	
+	public void onStop() {
+		return;
 	}
 
 	public void run() {

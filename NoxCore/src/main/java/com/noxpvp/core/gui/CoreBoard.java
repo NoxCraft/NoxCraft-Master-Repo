@@ -23,8 +23,9 @@ public class CoreBoard {
 	private static final int BOARD_MAX_ENTRIES = 15;
 	private static final int BOARD_OBJ_NAME_LENGTH_MAX = 28;
 	private static final int BOARD_SCORE_NAME_MAX_LENGTH = 16;
-	public Player p;
-	CorePlayerManager pm;
+	
+	private Player p;
+	private CorePlayerManager pm;
 	private Map<String, BoardEntry> entries;
 	private List<Integer> takenSlots;
 	private Map<String, BoardScroller> scrollers;
@@ -293,10 +294,10 @@ public class CoreBoard {
 		public void remove() {
 			hide();
 
+			entries.remove(name);
 			removeSlotID(slot1).removeSlotID(slot2);
 
 			isGood = false;
-			entries.remove(name);
 		}
 
 		public BoardEntry setDisplayName(String name) {

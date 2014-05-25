@@ -9,6 +9,8 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -20,17 +22,60 @@ import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.IPVPAbility;
+import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
 public class FireSpinPlayerAbility extends BasePlayerAbility implements IPVPAbility {
 
 	public static final String ABILITY_NAME = "Fire Spin";
 	public static final String PERM_NODE = "fire-spin";
+	
+	private BaseMMOEventHandler<EntityChangeBlockEvent> handler;
 	private int time;
+	private boolean active;
+	private FireSpinPlayerAbility.FireSpinVortex vortex;
+	
+	private void setActive(boolean active) {
+		boolean changed = this.active != active;
+		this.active = active;
+		
+		if (changed) {
+			if (active)
+				registerHandler(handler);
+			else
+				unregisterHandler(handler);
+		}
+	}
 
 	public FireSpinPlayerAbility(Player p) {
 		super(ABILITY_NAME, p);
 
 		this.time = 20 * 10;
+		setCD(25);
+		
+		this.handler = new BaseMMOEventHandler<EntityChangeBlockEvent>(
+				new StringBuilder().append(getName()).append(p.getName()).append("EntityChangeBlockEvent").toString(),
+				EventPriority.NORMAL, 1) {
+			
+			public boolean ignoreCancelled() {
+				return true;
+			}
+			
+			public Class<EntityChangeBlockEvent> getEventType() {
+				return EntityChangeBlockEvent.class;
+			}
+			
+			public String getEventName() {
+				return "EntityChangeBlockEvent";
+			}
+			
+			public void execute(EntityChangeBlockEvent event) {
+				if (!(event.getEntity() instanceof FallingBlock))
+					return;
+				
+				if (vortex != null && event.getEntity().getMetadata(BaseVortexEntity.uniqueMetaKey).contains(vortex.hashCode()))
+					event.setCancelled(true);
+			}
+		};
 	}
 
 	@Override
@@ -42,9 +87,12 @@ public class FireSpinPlayerAbility extends BasePlayerAbility implements IPVPAbil
 		if (!mayExecute())
 			return new AbilityResult(this, false);
 
-		new FireSpinVortex(getPlayer(), time).start();
-		getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, time, 1, true));
-
+		setActive(true);
+		this.vortex = new FireSpinVortex(getPlayer(), time);
+		this.vortex.start();
+		
+		getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, time, 0, true));
+		
 		return new AbilityResult(this, true);
 
 	}
@@ -61,10 +109,7 @@ public class FireSpinPlayerAbility extends BasePlayerAbility implements IPVPAbil
 
 			for (int i = 0; i < 50; i++) {
 				addEntity(new FireSpinVortexEntity(this));
-
 			}
-
-
 		}
 
 		public NoxPlugin getPlugin() {
@@ -100,6 +145,11 @@ public class FireSpinPlayerAbility extends BasePlayerAbility implements IPVPAbil
 			for (BaseVortexEntity vb : que) {
 				addEntity(vb);
 			}
+		}
+		
+		@Override
+		public void onStop() {
+			setActive(false);
 		}
 
 	}

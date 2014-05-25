@@ -38,12 +38,13 @@ public class TornadoPlayerAbility extends BaseRangedPlayerAbility implements IPV
 
 	public static final String ABILITY_NAME = "Tornado";
 	public static final String PERM_NODE = "tornado";
-	private int range;
 	private int time;
+	
 	public TornadoPlayerAbility(Player p, int range, int time) {
 		super(ABILITY_NAME, p, range);
 
-		this.range = range;
+		setCD(45);
+		setRange(range);
 		this.time = time;
 	}
 
@@ -57,7 +58,7 @@ public class TornadoPlayerAbility extends BaseRangedPlayerAbility implements IPV
 			return new AbilityResult(this, false);
 
 		Location loc;
-		if ((loc = LineOfSightUtil.getTargetBlockLocation(getPlayer(), range, Material.AIR)) != null) {
+		if ((loc = LineOfSightUtil.getTargetBlockLocation(getPlayer(), (int) getRange(), Material.AIR)) != null) {
 			new TornadoVortex(getPlayer(), loc, time).start();
 
 			return new AbilityResult(this, true);
