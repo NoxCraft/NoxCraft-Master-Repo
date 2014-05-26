@@ -79,7 +79,6 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 //		}
 
 //		abs.get(p.getName()).execute();
-		new ThrowPlayerAbility(p).execute();
 		
 //		new FireSpinPlayerAbility(p).execute();
 		

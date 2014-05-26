@@ -25,12 +25,12 @@ public class WisdomEntityAbility extends BaseEntityAbility implements IPVPAbilit
 
 		this.mmo = NoxMMO.getInstance();
 		this.duration = 10;
-		this.amplifier = 3;
+		this.amplifier = 2;
 	}
 
 	@Override
 	public String getDescription() {
-		return "You gain a burst of sudden wisdom, increasing your attack strength for " + getDuration() + " seconds";
+		return "You gain a sudden burst of wisdom, increasing your attack strength by " + (((getAmplifier() + 1) * 130)  - 100) + " % for " + getDuration() + " seconds";
 	}
 
 	/**

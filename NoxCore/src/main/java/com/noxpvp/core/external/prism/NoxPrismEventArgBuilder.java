@@ -5,19 +5,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 
-public class NoxPrismEventArgBuilder {
+public class NoxPrismEventArgBuilder extends MessageBuilder {
 	private static final String listKW = "FORCELIST";
 	
-	private StringBuilder s;
-	
 	public NoxPrismEventArgBuilder() {
-		s = new StringBuilder();
+		super();
 	}
 	
 	public void withArg(String key, String arg) {
-		s.append(key + ":" + arg + ",");
+		append(key + ":" + arg + ",");
 	}
 	
 	public void withList(String key, String... args) {
@@ -31,14 +30,15 @@ public class NoxPrismEventArgBuilder {
 	}
 	
 	public void withList(String key, Collection<String> args) {
-		s.append(listKW + key + ":" + StringUtil.join("|", args) + ",");
+		append(listKW + key + ":" + StringUtil.join("|", args) + ",");
 	}
 	
 	public String build() {
-		if (s.charAt(s.length() - 1) == ',')
-			s.deleteCharAt(s.length() - 1);
+		String s = toString();
+		if (s.charAt(s.length() - 1) == ',');
+			s = (s.substring(0, s.length() - 1));
 		
-		return s.toString();
+		return s;
 	}
 	
 	public static Map<String, Object> getMapFromBuilder(String message) {

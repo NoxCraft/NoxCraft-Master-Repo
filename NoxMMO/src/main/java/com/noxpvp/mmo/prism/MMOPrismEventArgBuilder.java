@@ -37,6 +37,10 @@ public class MMOPrismEventArgBuilder extends NoxPrismEventArgBuilder {
 		withArg(DAMAGE_ARG, String.format("%.2f", damage));
 	}
 	
+	public void withHeal(double heal) {
+		withArg(HEAL_ARG, String.format("%.2f", heal));
+	}
+	
 	public void withEffectEntities(List<Entity> ents) {
 		List<String> additions = new ArrayList<String>();
 		

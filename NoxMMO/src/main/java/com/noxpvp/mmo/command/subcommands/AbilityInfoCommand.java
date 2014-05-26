@@ -23,7 +23,7 @@ public class AbilityInfoCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[]{"h", "help"};
+		return new String[] {};
 	}
 
 	public int getMaxArguments() {
