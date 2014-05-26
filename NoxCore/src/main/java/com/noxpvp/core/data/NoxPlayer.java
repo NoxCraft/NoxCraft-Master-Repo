@@ -256,6 +256,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 	
 	public List<CoolDown> getCoolDowns() {
+		rebuild_cache();
+		
 		return cds;
 	}
 	

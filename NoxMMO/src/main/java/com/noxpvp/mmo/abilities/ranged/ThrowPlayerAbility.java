@@ -11,47 +11,33 @@ import org.bukkit.entity.Player;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
+import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
 import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.ShockWaveAnimation;
 
-public class ThrowPlayerAbility extends BasePlayerAbility implements IPVPAbility {
+public class ThrowPlayerAbility extends BaseRangedPlayerAbility implements IPVPAbility {
 
 	public static final String ABILITY_NAME = "Grapple Throw";
 	public static final String PERM_NODE = "grapple-throw";
-	private int range;
+	
 	private int maxTargets;
 	private int pushDelay;
+	
 	/**
 	 * @param player The Player type user object for this ability instance
 	 */
 	public ThrowPlayerAbility(Player player) {
 		super(ABILITY_NAME, player);
 
-		this.maxTargets = 1;
+		this.maxTargets = 10;
 		this.pushDelay = 20;
-		this.range = 8;
+		setRange(8);
 	}
 
 	@Override
 	public String getDescription() {
 		return "You grab all nearby enemys within " + String.format("%.2f", getRange()) + " blocks and throw them high into the air";
-	}
-
-	/**
-	 * @return Integer The currently set range for this ability instance
-	 */
-	public int getRange() {
-		return range;
-	}
-
-	/**
-	 * @param range Integer range to look for target in this ability instance
-	 * @return GrappleThrowAbility This instance, used for chaining
-	 */
-	public ThrowPlayerAbility setRange(int range) {
-		this.range = range;
-		return this;
 	}
 
 	/**
@@ -90,10 +76,13 @@ public class ThrowPlayerAbility extends BasePlayerAbility implements IPVPAbility
 		if (!mayExecute())
 			return new AbilityResult(this, false);
 
+		clearEffected();
+		
 		Player p = getPlayer();
 		final Location pLoc = p.getLocation();
 
 		int i = 0;
+		double range = getRange();
 		for (Entity it : p.getNearbyEntities(range, range, range)) {
 			if (i >= maxTargets) break;
 
@@ -107,6 +96,7 @@ public class ThrowPlayerAbility extends BasePlayerAbility implements IPVPAbility
 			final Damageable e = (Damageable) it;
 			final Location itLoc = it.getLocation();
 
+			addEffectedEntity(e);
 			e.setVelocity((pLoc.toVector().subtract(itLoc.toVector()).multiply(0.4)));
 
 			Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
@@ -119,8 +109,8 @@ public class ThrowPlayerAbility extends BasePlayerAbility implements IPVPAbility
 		}
 
 		if (i > 0) {
-			new ExpandingDamageRunnable(p, pLoc, 4, range, 2).start(pushDelay);
-			new ShockWaveAnimation(pLoc, 2, range, true).start(pushDelay);
+			new ExpandingDamageRunnable(p, pLoc, 4, (int) range, 2).start(pushDelay);
+			new ShockWaveAnimation(pLoc, 2, (int) range, true).start(pushDelay);
 			return new AbilityResult(this, true);
 			
 		} else return new AbilityResult(this, false);

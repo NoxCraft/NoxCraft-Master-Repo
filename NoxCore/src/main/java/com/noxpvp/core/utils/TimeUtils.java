@@ -30,6 +30,9 @@ public final class TimeUtils {
 		if (seconds > 0)
 			sb.append("S: ").append(seconds);
 
+		if (sb.length() < 1)
+			sb.append('0');
+		
 		return sb.toString();
 	}
 

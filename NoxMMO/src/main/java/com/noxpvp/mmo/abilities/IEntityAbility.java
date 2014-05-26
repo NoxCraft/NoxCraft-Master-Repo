@@ -1,5 +1,7 @@
 package com.noxpvp.mmo.abilities;
 
+import java.util.List;
+
 import org.bukkit.entity.Entity;
 
 import com.noxpvp.core.internal.IHeated;
@@ -26,6 +28,12 @@ public interface IEntityAbility extends Ability, IHeated {
 	 * @param damage
 	 */
 	public void setDamage(double damage);
+	
+	public void addEffectedEntity(Entity e);
+	
+	public List<Entity> getEffectedEntities();
+	
+	public void clearEffected();
 	
 	/**
 	 * Gets the cooldown seconds variable to be used in this ability

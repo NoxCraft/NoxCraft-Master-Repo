@@ -74,6 +74,12 @@
 			<id>confuser-repo</id>
 			<url>http://ci.frostcast.net/plugin/repository/everything</url>
 		</repository>
+		
+		<!-- Prism -->
+		<repository>
+			<id>dhmc-repo</id>
+			<url>http://dhmc.us:8081/nexus/content/repositories/public/</url>
+		</repository>
 
 		<!-- HoloAPI -->
 		<repository>
@@ -84,6 +90,19 @@
 	<dependencyManagement>
 		<dependencies>
 		    
+		    <!-- Prism -->
+			<dependency>
+				<groupId>me.botsko</groupId>
+				<artifactId>prism</artifactId>
+				<version>2.0</version>
+				<exclusions>
+				   <exclusion>
+				       <groupId>*</groupId>
+				       <artifactId>*</artifactId>
+				   </exclusion>
+				</exclusions>
+			</dependency>
+			
 		    <!-- HoloAPI -->
 			<dependency>
 				<groupId>com.dsh105</groupId>
@@ -173,6 +192,11 @@
 		<dependency>
 			<groupId>me.confuser</groupId>
 			<artifactId>BarAPI</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>me.botsko</groupId>
+			<artifactId>prism</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.sk89q</groupId>

@@ -1,29 +1,29 @@
 package com.noxpvp.mmo.abilities.player;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
-import com.noxpvp.mmo.abilities.BaseEntityAbility;
+import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.runnables.ShockWaveAnimation;
 
-public class LeapPlayerAbility extends BaseEntityAbility {
+public class LeapPlayerAbility extends BasePlayerAbility {
 
 	public static final String ABILITY_NAME = "Leap";
 	public static final String PERM_NODE = "leap";
 	private double multiplier;
 
-	public LeapPlayerAbility(Entity ent, double multiplier) {
-		super(ABILITY_NAME, ent);
+	public LeapPlayerAbility(Player p, double multiplier) {
+		super(ABILITY_NAME, p);
 		this.multiplier = multiplier;
 		
 		setCD(5);
 	}
 
-	public LeapPlayerAbility(Entity ent) {
-		this(ent, 2D);
+	public LeapPlayerAbility(Player p) {
+		this(p, 2D);
 	}
 
 	@Override
@@ -55,20 +55,20 @@ public class LeapPlayerAbility extends BaseEntityAbility {
 		if (!mayExecute())
 			return new AbilityResult(this, false);
 
-		Entity e = getEntity();
-		Location eLoc = e.getLocation();
-		Vector newVelocity = eLoc.getDirection();
+		Player p = getPlayer();
+		Location pLoc = p.getLocation();
+		Vector newVelocity = pLoc.getDirection();
 		newVelocity.multiply(multiplier);
 
 		// if going up a reasonable amount
 		if (newVelocity.getY() > .75) {
-			new ParticleRunner(ParticleType.cloud, eLoc.clone().add(0, 2, 0), true, 0, 50, 1).start(0);
-			new ShockWaveAnimation(eLoc, 1, 2, true).start(0);
+			new ParticleRunner(ParticleType.cloud, pLoc.clone().add(0, 2, 0), true, 0, 50, 1).start(0);
+			new ShockWaveAnimation(pLoc, 1, 2, true).start(0);
 		}
 
 		//reset fall distance on use
-		e.setFallDistance(0);
-		e.setVelocity(newVelocity);
+		p.setFallDistance(0);
+		p.setVelocity(newVelocity);
 		return new AbilityResult(this, true);
 	}
 
