@@ -9,6 +9,7 @@ import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.abilities.entity.LeapEntityAbility;
 import com.noxpvp.mmo.abilities.player.CriticalHitPlayerAbility;
+import com.noxpvp.mmo.abilities.player.LeapPlayerAbility;
 import com.noxpvp.mmo.classes.internal.*;
 
 public class AxesBasherClassTier extends ClassTier {
@@ -22,7 +23,7 @@ public class AxesBasherClassTier extends ClassTier {
 		super(retainer, TIER_NAME, 1);
 
 		//abilities.put("Iron Grip", /* HERP */)
-		abilities.put(LeapEntityAbility.ABILITY_NAME.toLowerCase(), new LeapEntityAbility(retainer.getPlayer()));
+		abilities.put(LeapPlayerAbility.ABILITY_NAME.toLowerCase(), new LeapPlayerAbility(retainer.getPlayer()));
 		abilities.put(CriticalHitPlayerAbility.ABILITY_NAME.toLowerCase(), new CriticalHitPlayerAbility(retainer.getPlayer()));
 
 		this.maxHealth = 22;

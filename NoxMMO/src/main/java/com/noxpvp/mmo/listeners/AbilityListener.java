@@ -1,13 +1,10 @@
 package com.noxpvp.mmo.listeners;
 
-
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
 import com.bergerkiller.bukkit.common.utils.StringUtil;
-import com.noxpvp.core.internal.IHeated;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
@@ -26,6 +23,7 @@ import com.noxpvp.mmo.events.PlayerAbilityPreExecuteEvent;
 import com.noxpvp.mmo.events.PlayerTargetedAbilityExecutedEvent;
 import com.noxpvp.mmo.events.PlayerTargetedAbilityPreExecuteEvent;
 import com.noxpvp.mmo.locale.MMOLocale;
+import com.noxpvp.mmo.prism.AbilityUsePrismEvent;
 
 public class AbilityListener extends NoxListener<NoxMMO> {
 
@@ -64,19 +62,24 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 		MMOPlayer mp = pm.getPlayer(p);
 		BaseEntityAbility ab = event.getAbility();
 		AbilityResult result = event.getResult();
-
-		if (result.getResult() && ab.getCD() > 0)
-			mp.addCoolDown(ab.getName(), ab.getCD(), true);
-
-		if (result.getMessages().length == 0 && !(ab instanceof SilentAbility)) {
-			if (result.getResult()) {
-				MessageUtil.sendLocale(p, MMOLocale.ABIL_USE, ab.getName());
-			}
-		} else if (!(ab instanceof SilentAbility)) {
-			p.sendMessage(MessageUtil.parseColor(StringUtil.join(" ", result.getMessages())));
+		
+		boolean hasMessages = result.getMessages().length != 0;
+		boolean silent = (ab instanceof SilentAbility);
+		boolean hasCD = ab.getCD() > 0;
+		
+		if (result.getResult()) {
+			AbilityUsePrismEvent.trigger(p, result);
+			
+			if (hasCD)
+				mp.addCoolDown(ab.getName(), ab.getCD(), !silent);
 		}
+		
+		if (result.getResult() && !silent)
+			if (!hasMessages)
+				MessageUtil.sendLocale(p, MMOLocale.ABIL_USE, ab.getName());
+			else
+				p.sendMessage(MessageUtil.parseColor(StringUtil.join(" ", result.getMessages())));
 
-		return;
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -100,30 +103,36 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 		MMOPlayer mp = pm.getPlayer(p);
 		BaseTargetedPlayerAbility ab = event.getAbility();
 		AbilityResult result = event.getResult();
+		
+		boolean hasMessages = result.getMessages().length != 0;
+		boolean silent = (ab instanceof SilentAbility);
+		boolean hasCD = ab.getCD() > 0;
+		
+		if (result.getResult()) {
+			AbilityUsePrismEvent.trigger(p, result);
+			
+			if (hasCD)
+				mp.addCoolDown(ab.getName(), ab.getCD(), !silent);
+		}
 
 		String target = ab.getTarget() instanceof Player ?
 				pm.getPlayer((Player) ab.getTarget()).getFullName() :
 				ab.getTarget().getType().name().toLowerCase();
 
-		if (result.getResult() && ab.getCD() > 0)
-			mp.addCoolDown(ab.getName(), ab.getCD(), true);
-
-		if (result.getMessages().length == 0 && !(ab instanceof SilentAbility)) {
-			if (result.getResult()) {
-				if (ab.getDamage() > 0) {
-					MessageUtil.sendLocale(p, MMOLocale.ABIL_USE_TARGET_DAMAGED, ab.getName(), target, String.format("%.2f", ab.getDamage()));
+		if (result.getResult() && !silent) {
+			if (hasMessages) {
+				p.sendMessage(MessageUtil.parseColor(StringUtil.join(" ", result.getMessages())));
+			} else if (ab.getDamage() > 0) {
+				MessageUtil.sendLocale(p, MMOLocale.ABIL_USE_TARGET_DAMAGED, ab.getName(), target, String.format("%.2f", ab.getDamage()));
 					
-					if (ab.getTarget() instanceof CommandSender)
-						MessageUtil.sendLocale((CommandSender) ab.getTarget(), MMOLocale.ABIL_HIT_ATTACKER_DAMAGED, mp.getFullName(), ab.getName(), String.format("%.2f", ab.getDamage()));
-				} else {
-					MessageUtil.sendLocale(p, MMOLocale.ABIL_USE_TARGET, ab.getName(), target);
-					
-					if (ab.getTarget() instanceof CommandSender)
-						MessageUtil.sendLocale((CommandSender) ab.getTarget(), MMOLocale.ABIL_HIT_ATTACKER, mp.getFullName(), ab.getName());
-				}
+				if (ab.getTarget() instanceof Player)
+					MessageUtil.sendLocale((Player) ab.getTarget(), MMOLocale.ABIL_HIT_ATTACKER_DAMAGED, mp.getFullName(), ab.getName(), String.format("%.2f", ab.getDamage()));
+			} else {
+				MessageUtil.sendLocale(p, MMOLocale.ABIL_USE_TARGET, ab.getName(), target);
+				
+				if (ab.getTarget() instanceof Player)
+					MessageUtil.sendLocale((Player) ab.getTarget(), MMOLocale.ABIL_HIT_ATTACKER, mp.getFullName(), ab.getName());
 			}
-		} else if (!(ab instanceof SilentAbility)){
-			p.sendMessage(MessageUtil.parseColor(StringUtil.join(" ", result.getMessages())));
 		}
 		
 		return;

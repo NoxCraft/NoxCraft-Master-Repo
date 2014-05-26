@@ -31,6 +31,7 @@ public class TargetPlayerAbility extends BaseRangedPlayerAbility implements IPas
 	public TargetPlayerAbility(Player player) {
 		super(ABILITY_NAME, player, 30);
 
+		setCD(1);
 	}
 
 	/**

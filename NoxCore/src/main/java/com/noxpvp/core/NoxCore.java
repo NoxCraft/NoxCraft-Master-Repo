@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 
+import me.botsko.prism.Prism;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -75,6 +77,7 @@ public class NoxCore extends NoxPlugin {
 	private Towny towny = null;
 	private WorldGuardPlugin worldGuard = null;
 	private HoloAPICore holoAPI = null;
+	private Prism prism = null;
 	private CooldownHandler cds;
 	private Command noxCommand;
 
@@ -125,6 +128,10 @@ public class NoxCore extends NoxPlugin {
 	public final HoloAPICore getHoloAPI() {
 		return holoAPI;
 	}
+	
+	public final Prism getPrism() {
+		return prism;
+	}
 
 	public final boolean isTownyActive() {
 		return towny != null && Bukkit.getPluginManager().isPluginEnabled(towny);
@@ -136,6 +143,10 @@ public class NoxCore extends NoxPlugin {
 
 	public final boolean isHoloAPIActive() {
 		return holoAPI != null && Bukkit.getPluginManager().isPluginEnabled(holoAPI);
+	}
+	
+	public final boolean isPrismActive() {
+		return prism != null && Bukkit.getPluginManager().isPluginEnabled(prism);
 	}
 
 	@Override
@@ -289,6 +300,12 @@ public class NoxCore extends NoxPlugin {
 			Plugin plugin = pm.getPlugin("HoloAPI");
 			if (plugin != null && plugin instanceof HoloAPICore)
 				holoAPI = (HoloAPICore) plugin;
+		}
+		
+		{
+			Plugin plugin = pm.getPlugin("Prism");
+			if (plugin != null && plugin instanceof Prism)
+				prism = (Prism) plugin;
 		}
 
 		Reloader r = new BaseReloader(getMasterReloader(), "NoxCore") {

@@ -15,6 +15,7 @@ import com.noxpvp.core.commands.Command;
 import com.noxpvp.core.internal.PermissionHandler;
 import com.noxpvp.core.permissions.NoxPermission;
 import com.noxpvp.core.reloader.*;
+import com.noxpvp.core.utils.PrismUtil;
 import com.noxpvp.core.utils.StaticCleaner;
 import com.noxpvp.mmo.abilities.entity.*;
 import com.noxpvp.mmo.abilities.player.*;
@@ -30,6 +31,8 @@ import com.noxpvp.mmo.command.AbilityCommand;
 import com.noxpvp.mmo.command.ClassCommand;
 import com.noxpvp.mmo.listeners.*;
 import com.noxpvp.mmo.locale.MMOLocale;
+import com.noxpvp.mmo.prism.AbilityUseAction;
+import com.noxpvp.mmo.prism.UsedAbilityActionType;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
 
@@ -113,6 +116,12 @@ public class NoxMMO extends NoxPlugin {
 
 		PlayerClassUtil.init();
 		PlayerClass.init();
+		
+		//Register action of using an ability into prism for logging
+		PrismUtil.registerActionType(instance, new UsedAbilityActionType());
+		
+		//Register custom handlers
+		PrismUtil.registerCustomActionHandler(instance, AbilityUseAction.class);
 
 		abilityListener = new AbilityListener(instance);
 		damageListener = new DamageListener(instance);
@@ -121,8 +130,6 @@ public class NoxMMO extends NoxPlugin {
 		blockListener = new BlockListener(instance);
 //		experieneceListener = new ExperienceListener(instance);
 
-//		playerAnimationListener = packetListeners.new PlayerAnimationListener();
-
 		abilityListener.register();
 		damageListener.register();
 		healListener.register();
@@ -130,8 +137,6 @@ public class NoxMMO extends NoxPlugin {
 		blockListener.register();
 		permHandler = new PermissionHandler(this);
 //		experieneceListener.register();
-
-//		register(playerAnimationListener, PacketType.IN_ENTITY_ANIMATION);
 
 		Reloader base = new BaseReloader(getMasterReloader(), "NoxMMO") {
 			public boolean reload() {

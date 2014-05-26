@@ -2,6 +2,8 @@ package com.noxpvp.mmo.abilities;
 
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -23,6 +25,7 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 	
 	private int cd;
 	private double damage;
+	private List<Entity> effectedEntities;
 
 	public BaseEntityAbility(final String name, Entity ref) {
 		super(name);
@@ -30,6 +33,8 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 
 		this.masterListener = NoxMMO.getInstance().getMasterListener();
 		this.cd = 5;
+		this.damage = 0;
+		this.effectedEntities = new ArrayList<Entity>();
 	}
 
 	public Entity getEntity() {
@@ -91,6 +96,18 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 	
 	public void setCD(int cd) {
 		this.cd = cd;
+	}
+	
+	public void addEffectedEntity(Entity e) {
+		effectedEntities.add(e);
+	}
+	
+	public List<Entity> getEffectedEntities() {
+		return effectedEntities;
+	}
+	
+	public void clearEffected() {
+		effectedEntities.clear();
 	}
 
 }

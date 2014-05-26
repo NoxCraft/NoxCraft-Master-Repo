@@ -48,7 +48,9 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements IPl
 		
 		MMOPlayer p;
 		if (this instanceof IHeated && (p = pm.getPlayer(player)).isCooldownActive(getName())) {
-			MessageUtil.sendLocale(player, MMOLocale.ABIL_ON_COOLDOWN, getName(), p.getReadableRemainingCDTime(getName()));
+			if (!(this instanceof SilentAbility))
+				MessageUtil.sendLocale(player, MMOLocale.ABIL_ON_COOLDOWN, getName(), p.getReadableRemainingCDTime(getName()));
+			
 			return false;
 		}
 
