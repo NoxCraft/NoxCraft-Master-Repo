@@ -25,7 +25,7 @@ public class AbilityUseAction extends GenericAction {
 			if (args.containsKey(MMOPrismEventArgBuilder.TARGET_MULTIPLE_ARG)) {
 				String[] effected = (String[]) args.get(MMOPrismEventArgBuilder.TARGET_MULTIPLE_ARG);
 				
-				ret.append(ChatColor.WHITE + " - effect entities: " + ChatColor.GOLD).append(StringUtil.join(", ", effected));
+				ret.append(ChatColor.WHITE + ". effected ents: " + ChatColor.GOLD).append(StringUtil.join(", " + ChatColor.GOLD, effected));
 			}
 			
 			return ret.toString();

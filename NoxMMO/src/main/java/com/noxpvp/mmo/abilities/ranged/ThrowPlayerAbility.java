@@ -30,7 +30,7 @@ public class ThrowPlayerAbility extends BaseRangedPlayerAbility implements IPVPA
 	public ThrowPlayerAbility(Player player) {
 		super(ABILITY_NAME, player);
 
-		this.maxTargets = 1;
+		this.maxTargets = 10;
 		this.pushDelay = 20;
 		setRange(8);
 	}

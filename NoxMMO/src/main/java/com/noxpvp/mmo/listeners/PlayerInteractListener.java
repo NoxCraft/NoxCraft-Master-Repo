@@ -72,13 +72,14 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 //		new HookShotAbility(p).execute();//XXX do this
 		
 //		abs = new HashMap<String, BasePlayerAbility>();
-		MMOPlayer mp = MMOPlayerManager.getInstance().getPlayer(p);
-		if (!abs.containsKey(p.getName())) {
-			BasePlayerAbility ab = new ThrowPlayerAbility(p);
-			abs.put(p.getName(), ab);
-		}
-//
-		abs.get(p.getName()).execute();
+//		MMOPlayer mp = MMOPlayerManager.getInstance().getPlayer(p);
+//		if (!abs.containsKey(p.getName())) {
+//			BasePlayerAbility ab = new ThrowPlayerAbility(p);
+//			abs.put(p.getName(), ab);
+//		}
+
+//		abs.get(p.getName()).execute();
+		new ThrowPlayerAbility(p).execute();
 		
 //		new FireSpinPlayerAbility(p).execute();
 		

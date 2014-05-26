@@ -76,7 +76,6 @@ public class CoolDown implements ConfigurationSerializable {
 		if (!obs.containsKey("name") || !obs.containsKey("expires") || !obs.containsKey("ns"))
 			throw new IllegalArgumentException("(name | expires | ns) should not be null!");
 		
-		System.out.println("Deserialized cooldown object: " + obs.values().toString());
 		return new CoolDown((String) obs.get("name"), (Long) obs.get("expires"), (Boolean) obs.get("ns"));
 	}
 
@@ -87,7 +86,6 @@ public class CoolDown implements ConfigurationSerializable {
 		obs.put("expires", getExpiryStamp());
 		obs.put("ns", isNanoTime());
 		
-		System.out.println("Serialized cooldown object: " + obs.values().toString());
 		return obs;
 	}
 }

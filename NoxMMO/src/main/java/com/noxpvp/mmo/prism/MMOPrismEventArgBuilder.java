@@ -51,7 +51,8 @@ public class MMOPrismEventArgBuilder extends NoxPrismEventArgBuilder {
 				additions.add(name);
 		}
 		
-		withList(TARGET_MULTIPLE_ARG, additions);
+		if (additions.size() > 0)
+			withList(TARGET_MULTIPLE_ARG, additions);
 	}
 
 }
