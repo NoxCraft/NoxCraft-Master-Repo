@@ -1,13 +1,13 @@
 package com.noxpvp.mmo.abilities.targeted;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 
-public class BoltPlayerAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
+public class BoltPlayerAbility extends BaseTargetedPlayerAbility implements PVPAbility {
 
 	public static final String PERM_NODE = "bolt";
 	private static final String ABILITY_NAME = "Bolt";

@@ -1,16 +1,16 @@
 package com.noxpvp.mmo.abilities.player;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.entity.Player;
 
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.runnables.HealRunnable;
 
 /**
  * @author NoxPVP
  */
-public class RejuvenationPlayerAbility extends BasePlayerAbility implements IPVPAbility {
+public class RejuvenationPlayerAbility extends BasePlayerAbility implements PVPAbility {
 
 	public static final String ABILITY_NAME = "Rejuvenation";
 	public static final String PERM_NODE = "rejuvenation";

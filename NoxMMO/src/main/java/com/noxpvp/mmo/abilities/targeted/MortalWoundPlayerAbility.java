@@ -2,6 +2,7 @@ package com.noxpvp.mmo.abilities.targeted;
 
 import java.util.Arrays;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -9,9 +10,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 
-public class MortalWoundPlayerAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
+public class MortalWoundPlayerAbility extends BaseTargetedPlayerAbility implements PVPAbility {
 
 	public static final String ABILITY_NAME = "Mortal Wound";
 	public static final String PERM_NODE = "mortal-wound";

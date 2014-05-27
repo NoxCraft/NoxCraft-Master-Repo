@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,10 +32,9 @@ import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.locale.MMOLocale;
 
-public class TornadoPlayerAbility extends BaseRangedPlayerAbility implements IPVPAbility {
+public class TornadoPlayerAbility extends BaseRangedPlayerAbility implements PVPAbility {
 
 	public static final String ABILITY_NAME = "Tornado";
 	public static final String PERM_NODE = "tornado";

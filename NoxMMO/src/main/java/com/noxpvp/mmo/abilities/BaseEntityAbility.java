@@ -55,7 +55,7 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 		if (entity == null || (!(entity instanceof Player) && (entity.isDead() || !entity.isValid())))
 			return false;
 
-		if (this instanceof IPVPAbility && !TownyUtil.isPVP(entity)) {
+		if (this instanceof PVPAbility && !TownyUtil.isPVP(entity)) {
 			if (entity instanceof CommandSender)
 				MessageUtil.sendLocale((CommandSender) entity, MMOLocale.ABIL_NO_PVP, getName());
 
