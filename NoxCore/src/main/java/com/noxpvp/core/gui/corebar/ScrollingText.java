@@ -64,7 +64,7 @@ public class ScrollingText extends BukkitRunnable {
 			return;
 		}
 
-		bar.getCurrentEntry().update(100F, text.scroll().substring(0, this.text.toString().length()));
+		bar.getCurrentEntry().update(100F, text.scroll().substring(0, 64));
 
 	}
 

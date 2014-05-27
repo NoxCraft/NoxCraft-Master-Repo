@@ -53,6 +53,7 @@ public class CoreBar {
 		if (this.lock != null && lock != null && this.lock.lock != null && this.lock.lock.equals(lock)) {
 			this.lock = null;
 
+			currentEntry.update(0, "");
 			currentEntry.hide();
 		}
 
@@ -95,6 +96,7 @@ public class CoreBar {
 		}
 
 		public void hide() {
+			update("");
 			BarAPI.removeBar(p);
 		}
 
