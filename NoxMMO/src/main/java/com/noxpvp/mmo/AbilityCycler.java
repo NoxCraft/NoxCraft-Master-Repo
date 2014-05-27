@@ -111,17 +111,25 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 
 				final MMOPlayer mmoPlayer = MMOPlayerManager.getInstance().getPlayer(player);
 
-				if (mmoPlayer.getTempData().get(TEMP_PCTK, 0) <= 0 || !AbilityCycler.isRegistered(identity)) return; //Skip because we have no actual objects for this user.
-
+				if (/*mmoPlayer.getTempData().get(TEMP_PCTK, 0) <= 0 || */!AbilityCycler.isRegistered(identity)) return; //Skip because we have no actual objects for this user.
 
 				final ItemStack heldItem = player.getInventory().getItemInHand();
 
-				AbilityCycler cycler;
-				cycler = AbilityCycler.getCycler(heldItme);
+				AbilityCycler cycler = AbilityCycler.getCycler(identity, heldItem);
+				if (cycler == null) return;
 
-				final int change = getChange(event.getPreviousSlot(), event.getNewSlot());
+//				final int change = getChange(event.getPreviousSlot(), event.getNewSlot());
 
-
+				switch (/*change */getChange(event.getPreviousSlot(), event.getNewSlot())) {
+					case 1:
+						cycler.next();
+						return;
+					case -1:
+						cycler.previous();
+						return;
+					default:
+						return;
+				}
 			}
 
 		};
