@@ -31,8 +31,12 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 
-	private static final String PRIMARY_CLASS_NODE = "current.class.primary";
-	private static final String SECONDARY_CLASS_NODE = "current.class.secondary";
+	private static final String PRIMARY_CLASS_NODE = "current.primary-class";
+	private static final String PRIMARY_PLAYERCLASS_NODE = PRIMARY_CLASS_NODE + ".class";
+	private static final String PRIMARY_TIER_NODE = PRIMARY_CLASS_NODE + ".tier";
+	private static final String SECONDARY_CLASS_NODE = "current.secondary-class";
+	private static final String SECONDARY_PLAYERCLASS_NODE = PRIMARY_CLASS_NODE + ".class";
+	private static final String SECONDARY_TIER_NODE = PRIMARY_CLASS_NODE + ".tier";
 	private static final String TARGET_NODE = "current.target";
 	private IPlayerClass primaryClass = DummyClass.PRIMARY, secondaryClass = DummyClass.SECONDARY;
 	private LivingEntity target;
@@ -161,7 +165,9 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	public void load() {
 		ConfigurationNode node = getPersistantData();
 		setPrimaryClass(node.get(PRIMARY_CLASS_NODE, ""));
+		getPrimaryClass().setCurrentTier(node.get(PRIMARY_TIER_NODE, Integer.class, 1));
 		setSecondaryClass(node.get(SECONDARY_CLASS_NODE, ""));
+		getSecondaryClass().setCurrentTier(node.get(SECONDARY_TIER_NODE, Integer.class, 1));
 		
 		/*
 		 * Seperate the scope Just in case we want to use the variables again.
@@ -186,13 +192,17 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		ConfigurationNode node = getPersistantData();
 		if (getPrimaryClass() == null)
 			node.remove(PRIMARY_CLASS_NODE);
-		else
-			node.set(PRIMARY_CLASS_NODE, getPrimaryClass().getUniqueID());
+		else {
+			node.set(PRIMARY_PLAYERCLASS_NODE, getPrimaryClass().getUniqueID());
+			node.set(PRIMARY_TIER_NODE, getPrimaryClass().getCurrentTierLevel());
+		}
 
 		if (getSecondaryClass() == null)
 			node.remove(SECONDARY_CLASS_NODE);
-		else
-			node.set(SECONDARY_CLASS_NODE, getSecondaryClass().getUniqueID());
+		else {
+			node.set(SECONDARY_PLAYERCLASS_NODE, getSecondaryClass().getUniqueID());
+			node.set(SECONDARY_TIER_NODE, getSecondaryClass().getCurrentTierLevel());
+		}
 
 		if (getTarget() == null)
 			node.remove(TARGET_NODE);

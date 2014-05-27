@@ -165,7 +165,7 @@ public class VaultAdapter {
 
 		public static boolean hasPermission(World w, Player p, String perm) {
 			if (isPermissionsLoaded())
-				return permission.has(w.getName(), p.getName(), perm);
+				return permission.has(p, perm);
 
 			return p.hasPermission(perm);
 		}
