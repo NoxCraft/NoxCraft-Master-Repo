@@ -3,6 +3,7 @@ package com.noxpvp.mmo.abilities.targeted;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
@@ -14,9 +15,8 @@ import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 
-public class TracerArrowPlayerAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
+public class TracerArrowPlayerAbility extends BaseTargetedPlayerAbility implements PVPAbility {
 
 	public static final String PERM_NODE = "tracer-arrow";
 	private static final String ABILITY_NAME = "Tracer Arrow";

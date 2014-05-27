@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities.player;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -11,12 +12,11 @@ import com.noxpvp.core.effect.StaticEffects;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
 
-public class RagePlayerAbility extends BaseRangedPlayerAbility implements IPVPAbility {
+public class RagePlayerAbility extends BaseRangedPlayerAbility implements PVPAbility {
 
 	public static final String ABILITY_NAME = "Rage";
 	public static final String PERM_NODE = "Rage";

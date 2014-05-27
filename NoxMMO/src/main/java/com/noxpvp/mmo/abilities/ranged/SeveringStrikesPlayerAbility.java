@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities.ranged;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -8,11 +9,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.abilities.IPassiveAbility;
 import com.noxpvp.mmo.runnables.DamageRunnable;
 
-public class SeveringStrikesPlayerAbility extends BasePlayerAbility implements IPassiveAbility<EntityDamageByEntityEvent>, IPVPAbility {
+public class SeveringStrikesPlayerAbility extends BasePlayerAbility implements IPassiveAbility<EntityDamageByEntityEvent>, PVPAbility {
 
 	public static final String ABILITY_NAME = "Severing Strikes";
 	public static final String PERM_NODE = "severing-strikes";

@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities.targeted;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -8,12 +9,11 @@ import org.bukkit.util.Vector;
 
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 
 /**
  * @author NoxPVP
  */
-public class ShadowStepPlayerAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
+public class ShadowStepPlayerAbility extends BaseTargetedPlayerAbility implements PVPAbility {
 
 	public static final String PERM_NODE = "shadow-step";
 	public static final String ABILITY_NAME = "Shadow Step";

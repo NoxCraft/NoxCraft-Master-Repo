@@ -1,15 +1,15 @@
 package com.noxpvp.mmo.abilities.player;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 
 //FIXME not made yet
 
-public class JoustPlayerAbility extends BasePlayerAbility implements IPVPAbility {
+public class JoustPlayerAbility extends BasePlayerAbility implements PVPAbility {
 
 	public static final String ABILITY_NAME = "Joust";
 	public static final String PERM_NODE = "joust";

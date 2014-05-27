@@ -1,17 +1,17 @@
 package com.noxpvp.mmo.abilities.targeted;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 
 /**
  * @author NoxPVP
  */
-public class SoulStealPlayerAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
+public class SoulStealPlayerAbility extends BaseTargetedPlayerAbility implements PVPAbility {
 
 	public static final String PERM_NODE = "soulsteal";
 	public static final String ABILITY_NAME = "SoulSteal";

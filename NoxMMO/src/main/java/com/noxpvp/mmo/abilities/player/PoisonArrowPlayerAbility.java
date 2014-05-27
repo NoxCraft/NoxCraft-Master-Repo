@@ -3,6 +3,7 @@ package com.noxpvp.mmo.abilities.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -16,11 +17,10 @@ import org.bukkit.potion.PotionEffectType;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.locale.MMOLocale;
 
-public class PoisonArrowPlayerAbility extends BasePlayerAbility implements IPVPAbility {
+public class PoisonArrowPlayerAbility extends BasePlayerAbility implements PVPAbility {
 
 	public static final String PERM_NODE = "poison-arrow";
 	private static final String ABILITY_NAME = "Poison Arrow";

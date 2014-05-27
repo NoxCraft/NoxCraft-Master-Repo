@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities.ranged;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,13 +11,11 @@ import org.bukkit.entity.Player;
 
 import com.noxpvp.core.utils.PlayerUtils.LineOfSightUtil;
 import com.noxpvp.mmo.NoxMMO;
-import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.ShockWaveAnimation;
 
-public class ThrowPlayerAbility extends BaseRangedPlayerAbility implements IPVPAbility {
+public class ThrowPlayerAbility extends BaseRangedPlayerAbility implements PVPAbility {
 
 	public static final String ABILITY_NAME = "Grapple Throw";
 	public static final String PERM_NODE = "grapple-throw";

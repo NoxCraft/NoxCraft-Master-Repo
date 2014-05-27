@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities.entity;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -11,9 +12,8 @@ import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseEntityAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 
-public class WisdomEntityAbility extends BaseEntityAbility implements IPVPAbility {
+public class WisdomEntityAbility extends BaseEntityAbility implements PVPAbility {
 
 	public static final String ABILITY_NAME = "Wisdom";
 	public static final String PERM_NODE = "wisdom";

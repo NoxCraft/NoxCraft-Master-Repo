@@ -2,13 +2,8 @@ package com.noxpvp.core.data;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.UUID;
-import java.util.WeakHashMap;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -263,13 +258,15 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	
 	private void rebuild_cache() {
 		cd_cache.clear();
-		for (CoolDown cd : cds)
+
+		Iterator<CoolDown> cdz = cds.iterator();
+		while (cdz.hasNext()) {
+			CoolDown cd =  cdz.next();
 			if (!cd.expired())
 				cd_cache.put(cd.getName(), cd);
-			else {
-				cds.remove(cd);
-				continue;
-			}
+			else
+				cdz.remove();
+		}
 	}
 	
 	public void removeCoolDown(String name) {

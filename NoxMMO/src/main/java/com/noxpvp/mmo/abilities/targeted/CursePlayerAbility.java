@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities.targeted;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -9,9 +10,8 @@ import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 
-public class CursePlayerAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
+public class CursePlayerAbility extends BaseTargetedPlayerAbility implements PVPAbility {
 
 	public static final String PERM_NODE = "curse";
 	private static final String ABILITY_NAME = "Curse";

@@ -3,17 +3,17 @@ package com.noxpvp.mmo.abilities.targeted;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseTargetedPlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 
 /**
  * @author NoxPVP
  */
-public class DisarmPlayerAbility extends BaseTargetedPlayerAbility implements IPVPAbility {
+public class DisarmPlayerAbility extends BaseTargetedPlayerAbility implements PVPAbility {
 
 	private static final String ABILITY_NAME = "Disarm";
 	public static final String PERM_NODE = "disarm";

@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities.ranged;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -8,12 +9,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;
 
-import com.noxpvp.core.internal.IHeated;
 import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.runnables.ExpandingDamageRunnable;
 import com.noxpvp.mmo.runnables.SetVelocityRunnable;
@@ -22,7 +21,7 @@ import com.noxpvp.mmo.runnables.ShockWaveAnimation;
 /**
  * @author NoxPVP
  */
-public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implements IPVPAbility {
+public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implements PVPAbility {
 
 	public static final String PERM_NODE = "mass-destruction";
 	public static final String ABILITY_NAME = "Mass Destruction";

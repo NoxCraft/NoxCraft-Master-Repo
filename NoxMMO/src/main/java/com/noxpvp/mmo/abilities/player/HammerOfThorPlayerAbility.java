@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities.player;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
@@ -16,10 +17,9 @@ import com.noxpvp.core.packet.NoxPacketUtil;
 import com.noxpvp.core.utils.DamageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 
-public class HammerOfThorPlayerAbility extends BasePlayerAbility implements IPVPAbility {
+public class HammerOfThorPlayerAbility extends BasePlayerAbility implements PVPAbility {
 	public static final String ABILITY_NAME = "Hammer of Thor";
 	public static final String PERM_NODE = "hammer-of-thor";
 	public static FixedMetadataValue hammerSecurity = new FixedMetadataValue(NoxMMO.getInstance(), "HammerSecurity");

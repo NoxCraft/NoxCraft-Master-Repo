@@ -3,6 +3,7 @@ package com.noxpvp.mmo.abilities.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
@@ -21,14 +22,13 @@ import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.MasterListener;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 import com.noxpvp.mmo.locale.MMOLocale;
 
 /**
  * @author NoxPVP
  */
-public class BankShotPlayerAbility extends BasePlayerAbility implements IPVPAbility {
+public class BankShotPlayerAbility extends BasePlayerAbility implements PVPAbility {
 
 	public static final String PERM_NODE = "bank-shot";
 	private static final String ABILITY_NAME = "Bank Shot";

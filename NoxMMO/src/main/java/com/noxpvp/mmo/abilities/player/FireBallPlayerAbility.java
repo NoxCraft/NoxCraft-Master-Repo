@@ -1,5 +1,6 @@
 package com.noxpvp.mmo.abilities.player;
 
+import com.noxpvp.mmo.abilities.PVPAbility;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -14,12 +15,11 @@ import com.noxpvp.core.packet.ParticleRunner;
 import com.noxpvp.core.packet.ParticleType;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.BasePlayerAbility;
-import com.noxpvp.mmo.abilities.IPVPAbility;
 
 /**
  * @author NoxPVP
  */
-public class FireBallPlayerAbility extends BasePlayerAbility implements IPVPAbility {
+public class FireBallPlayerAbility extends BasePlayerAbility implements PVPAbility {
 
 	public static final String ABILITY_NAME = "Fire Ball";
 	public static final String PERM_NODE = "fire-ball";
