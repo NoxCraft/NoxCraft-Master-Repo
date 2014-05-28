@@ -17,52 +17,35 @@ import java.util.concurrent.ConcurrentMap;
 
 public class AbilityCycler extends Cycler<Ability> implements ConfigurationSerializable {
 
-	public static final String TEMP_PCTK = "ability-cycler.active-count";
+//	public static final String TEMP_PCTK = "ability-cycler.active-count";
 
 	static ConcurrentMap<String, List<AbilityCycler>> cyclers = null;
-
-	private final ItemStack identity;
+	private static NoxListener<NoxMMO> iHeld = null;
+	private final ItemStack cycleItem;
 	private Reference<MMOPlayer> player = null;
 
-	private static NoxListener<NoxMMO> iHeld = null;
-
-	public AbilityCycler(int size, OfflinePlayer player, ItemStack identity) {
-		this(size, MMOPlayerManager.getInstance().getPlayer(player), identity);
+	public AbilityCycler(int size, OfflinePlayer player, ItemStack cycleItem) {
+		this(size, MMOPlayerManager.getInstance().getPlayer(player), cycleItem);
 	}
 
-	public AbilityCycler(Collection<Ability> data, OfflinePlayer player, ItemStack identity) {
-		this(data, MMOPlayerManager.getInstance().getPlayer(player), identity);
+	public AbilityCycler(Collection<Ability> data, OfflinePlayer player, ItemStack cycleItem) {
+		this(data, MMOPlayerManager.getInstance().getPlayer(player), cycleItem);
 	}
 
-	public AbilityCycler(int size, MMOPlayer player, ItemStack identity) {
+	public AbilityCycler(int size, MMOPlayer player, ItemStack cycleItem) {
 		super(size);
 		this.player = new SoftReference<MMOPlayer>(player);
-		this.identity = identity;
+		this.cycleItem = cycleItem;
 
 		register(this);
 	}
 
-	public AbilityCycler(Collection<Ability> data, MMOPlayer player, ItemStack identity) {
+	public AbilityCycler(Collection<Ability> data, MMOPlayer player, ItemStack cycleItem) {
 		super(data);
 		this.player = new SoftReference<MMOPlayer>(player);
-		this.identity = identity;
+		this.cycleItem = cycleItem;
 		register(this);
 	}
-
-	boolean isValid() {
-		return player != null && player.get() != null;
-	}
-
-	@Override
-	public Map<String, Object> serialize() {
-		Map<String, Object> ret = new HashMap<String, Object>();
-
-		ret.put("current-index", currentIndex());
-//		ret.put("identifying-meta", null)
-
-		return ret;
-	}
-
 
 	public static void register(AbilityCycler cycler) {
 		//TODO: Register globals.
@@ -79,11 +62,15 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		return Collections.emptyList();
 	}
 
-	public static AbilityCycler getCycler(String identity, ItemStack item) {
+	public void updateRender() {
+		//TODO: Implement rendering.
+	}
+
+	public static AbilityCycler getCycler(String identity, final ItemStack item) {
 		List<AbilityCycler> cyclers = getCyclers(identity);
 		if (cyclers.isEmpty()) return null;
 
-
+		return null;//FIXME: FINISH MEEEEE
 	}
 
 	static boolean isRegistered(String identity) {
@@ -133,5 +120,61 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 			}
 
 		};
+	}
+
+	boolean isValid() {
+		return player != null && player.get() != null;
+	}
+
+	@Override
+	public Map<String, Object> serialize() {
+		Map<String, Object> ret = new HashMap<String, Object>();
+
+		//Ability Storage.
+		List<String> abilities = new LinkedList<String>();
+		for (Ability ability : getList())
+			abilities.add(ability.getName());
+
+		//Store current state.
+		ret.put("current-index", currentIndex());
+
+		ret.put("player", getMMOPlayer().getUUID(true));
+
+		//Store item that tells if its the cycler item.
+		ret.put("cycle-item", getCycleItem());
+
+		//Actually store the abilities.
+		ret.put("abilities", abilities);
+
+		return ret;
+	}
+
+	public static AbilityCycler valueOf(Map<String, Object> data) {
+		if (!data.containsKey("player"))
+
+		return null;
+	}
+
+	@Override
+	public Ability previous() {
+		Ability ret = super.previous();
+
+		return ret;
+	}
+
+	@Override
+	public Ability next() {
+		Ability ret = super.next();
+
+		return ret;
+	}
+
+	public MMOPlayer getMMOPlayer() {
+		if (player != null) return player.get();
+		return null;
+	}
+
+	public ItemStack getCycleItem() {
+		return cycleItem;
 	}
 }

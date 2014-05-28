@@ -34,13 +34,24 @@ public class CoreBoard {
 	private CommonObjective ob;
 
 	public CoreBoard(NoxCore core, Player player) {
-		this(core, MessageUtil.parseColor(core.getCoreConfig().get("gui.coreboard.default-name", String.class, "&cNox&6MMO")), player);
+		this(MessageUtil.parseColor(core.getCoreConfig().get("gui.coreboard.default-name", String.class, "&cNox&6MMO")), player); //FIXME: &cNox&6MMO should not be the default! This is the core api!!!
+	}
+
+	/**
+	 * @deprecated
+	 * @param core
+	 * @param objName
+	 * @param p
+	 */
+	@Deprecated
+	public CoreBoard(NoxCore core, String objName, Player p) {
+		this(objName, p);
 	}
 
 	/**
 	 * @param objName - Main name displayed on the score board
 	 */
-	public CoreBoard(NoxCore core, String objName, Player p) {
+	public CoreBoard(String objName, Player p) {
 		CommonScoreboard.removePlayer(p);
 		this.sb = CommonScoreboard.get(p);
 
