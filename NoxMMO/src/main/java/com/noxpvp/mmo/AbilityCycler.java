@@ -82,6 +82,22 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		getRenderer().render();
 	}
 
+	public boolean isCyclerMatch(ItemStack stack) {
+		return getCycleItem().isSimilar(stack);
+		return false;
+	}
+
+	public boolean isPlayerMatch(Object ob) {
+		if (!(ob instanceof OfflinePlayer || UUIDUtil.isUUID(ob) || ob instanceof MMOPlayer))
+			return false;
+
+		if (UUIDUtil.isUUID(ob) && getMMOPlayer() != null)
+			return getMMOPlayer().getUUID().equals(UUIDUtil.toUUID(ob));
+
+		if (getMMOPlayer() != null && ob instanceof  MMOPlayer)
+			return getMMOPlayer().equals(ob);
+	}
+
 	public static AbilityCycler getCycler(String identity, final ItemStack item) {
 		List<AbilityCycler> cyclers = getCyclers(identity);
 		if (cyclers.isEmpty()) return null;
