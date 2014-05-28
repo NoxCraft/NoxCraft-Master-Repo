@@ -7,10 +7,13 @@ import com.noxpvp.core.gui.rendering.IRenderer;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.utils.UUIDUtil;
 import com.noxpvp.mmo.abilities.Ability;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -58,12 +61,18 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 	}
 
 	public static void register(AbilityCycler cycler) {
-		//TODO: Register globals.
-	}
+		Validate.notNull(cycler.getMMOPlayer());
 
-	static boolean isActive(String identify, ItemStack stack) {
-		//FIXME: Retrieve cycler objects system.
-		return false;
+		MMOPlayer p = cycler.getMMOPlayer();
+
+		final String identity = UUIDUtil.compressUUID(p.getUUID());
+		if (cyclers.containsKey(identity))
+			cyclers.get(identity).add(cycler);
+		else {
+			List<AbilityCycler> abilities = new ArrayList<AbilityCycler>();
+			abilities.add(cycler);
+			cyclers.put(identity, abilities);
+		}
 	}
 
 	public static List<AbilityCycler> getCyclers(String identity) {
@@ -84,7 +93,6 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 
 	public boolean isCyclerMatch(ItemStack stack) {
 		return getCycleItem().isSimilar(stack);
-		return false;
 	}
 
 	public boolean isPlayerMatch(Object ob) {
@@ -96,13 +104,18 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 
 		if (getMMOPlayer() != null && ob instanceof  MMOPlayer)
 			return getMMOPlayer().equals(ob);
+
+		return false;
 	}
 
 	public static AbilityCycler getCycler(String identity, final ItemStack item) {
 		List<AbilityCycler> cyclers = getCyclers(identity);
 		if (cyclers.isEmpty()) return null;
 
-		return null;//FIXME: FINISH Cycler Retrieval.
+		for (AbilityCycler cycler : cyclers)
+			if (cycler.isCyclerMatch(item))
+				return cycler;
+		return null;
 	}
 
 	static boolean isRegistered(String identity) {
@@ -124,9 +137,10 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		cyclers = new MapMaker().concurrencyLevel(2).makeMap();
 
 		iHeld = new NoxListener<NoxMMO>(NoxMMO.getInstance()) {
+			@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 			public void onItemHeldEvent(PlayerItemHeldEvent event) {
 				final Player player = event.getPlayer();
-				final String identity = player.getUniqueId().toString();
+				final String identity = UUIDUtil.compressUUID(player.getUniqueId());
 				if (!player.isSneaking())
 					return;
 
@@ -143,9 +157,11 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 				switch (/*change */getChange(event.getPreviousSlot(), event.getNewSlot())) {
 					case 1:
 						cycler.next();
+						event.setCancelled(true);
 						return;
 					case -1:
 						cycler.previous();
+						event.setCancelled(true);
 						return;
 					default:
 						return;
@@ -153,6 +169,8 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 			}
 
 		};
+
+		iHeld.register();
 	}
 
 	boolean isValid() {
