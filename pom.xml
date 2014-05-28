@@ -108,6 +108,12 @@
 				<groupId>com.dsh105</groupId>
 				<artifactId>HoloAPI</artifactId>
 				<version>1.2.3</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>*</groupId>
+                    </exclusion>
+                </exclusions>
 			</dependency>
 			
 			<!-- BKCommonLib -->
@@ -116,6 +122,12 @@
 				<artifactId>BKCommonLib</artifactId>
 				<version>1.58-SNAPSHOT</version>
 				<scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>*</groupId>
+                    </exclusion>
+                </exclusions>
 			</dependency>
 			
 			<!-- ProtocolLib -->
@@ -124,6 +136,12 @@
 				<artifactId>ProtocolLib</artifactId>
 				<version>3.4.0-SNAPSHOT</version>
 				<scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>*</groupId>
+                    </exclusion>
+                </exclusions>
 			</dependency>
 			
 			<!-- Vault -->
@@ -147,6 +165,12 @@
 				<groupId>me.confuser</groupId>
 				<artifactId>BarAPI</artifactId>
 				<version>3.1</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>*</groupId>
+                    </exclusion>
+                </exclusions>
 			</dependency>
 			
 			<!-- Towny -->
@@ -179,6 +203,12 @@
 			<groupId>com.bergerkiller.bukkit</groupId>
 			<artifactId>BKCommonLib</artifactId>
 			<scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>*</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.comphenix.protocol</groupId>
