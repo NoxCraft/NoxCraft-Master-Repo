@@ -40,7 +40,7 @@ public class ClassMenu extends CoreBox {
 
 		Inventory box = getBox();
 
-		box.setItem(0, clazz.getIdentifibleItem());
+		box.setItem(0, clazz.getIdentifiableItem());
 
 		CoreBoxRegion tiers = new CoreBoxRegion(this, new Vector(0, 0, 2), 0, 7),
 				abilities = new CoreBoxRegion(this, new Vector(2, 0, 0), 1, 9);
@@ -58,8 +58,9 @@ public class ClassMenu extends CoreBox {
 			boolean hasTier = mmoPlayer.getPrimaryClass().getTier() == t ||
 					mmoPlayer.getSecondaryClass().getTier() == t;
 
-			ItemStack item = t.getIdentifibleItem();
-			item.setType(/*locked? Material.IRON_DOOR : */hasTier ? Material.SKULL_ITEM : Material.WOOD_DOOR);//TODO when adding exp
+			ItemStack item = t.getIdentifiableItem();
+			if (hasTier)
+				item.setType(Material.SKULL);
 
 			ItemMeta meta = item.getItemMeta();
 //			String name = meta.getDisplayName() + " | " + (locked? ChatColor.DARK_RED + "LOCKED" : (canuse? ChatColor.GREEN + "OPEN" : ChatColor.RED + "NOT AVAILIBLE"));//TODO When adding exp
@@ -81,18 +82,14 @@ public class ClassMenu extends CoreBox {
 					if (clazz.isPrimaryClass()) {
 						mmoPlayer.setPrimaryClass(clazz);
 						mmoPlayer.getPrimaryClass().setCurrentTier(getTier());
-						hide();
-
-						StaticEffects.SmokeScreen(p.getEyeLocation(), 2);
-						return true;
 					} else {
-						mmoPlayer.setSecondaryClass(clazz);
 						mmoPlayer.getSecondaryClass().setCurrentTier(getTier());
-						hide();
-
-						StaticEffects.SmokeScreen(p.getEyeLocation(), 2);
-						return true;
+						mmoPlayer.setSecondaryClass(clazz);
 					}
+
+					StaticEffects.SmokeScreen(p.getEyeLocation(), 2);
+					hide();
+					return true;
 				}
 			});
 
@@ -100,13 +97,7 @@ public class ClassMenu extends CoreBox {
 
 		for (Ability ab : clazz.getTier(clazz.getHighestPossibleTier()).getAbilities()) {
 
-			ItemStack item = new ItemStack(Material.PAPER);
-			ItemMeta meta = item.getItemMeta();
-
-			meta.setDisplayName(ab.getDisplayName(clazz.getColor()));
-			meta.setLore(ab.getLore(ChatColor.GOLD, 28));
-
-			item.setItemMeta(meta);
+			ItemStack item = ab.getIdentifiableItem(clazz.getAbilities().contains(ab));
 
 			abilities.add(new CoreBoxItem(this, item) {
 				public boolean onClick(InventoryClickEvent click) {

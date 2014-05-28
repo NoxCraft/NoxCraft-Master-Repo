@@ -59,18 +59,12 @@ public class AxesPlayerClass extends PlayerClass {
 		return 4;
 	}
 
-	public ItemStack getIdentifibleItem() {
-		if (identiferItem == null) {
-			identiferItem = new ItemStack(Material.DIAMOND_AXE);
-
-			ItemMeta meta = identiferItem.getItemMeta();
-			meta.setDisplayName(getDisplayName());
-			meta.setLore(getLore(ChatColor.GOLD, 26));
-
-			identiferItem.setItemMeta(meta);
-		}
-
-		return identiferItem.clone();
+	@Override
+	public ItemStack getIdentifiableItem() {
+		ItemStack s = super.getIdentifiableItem();
+		s.setType(Material.DIAMOND_AXE);
+		
+		return s;
 	}
 
 	public Color getRBGColor() {

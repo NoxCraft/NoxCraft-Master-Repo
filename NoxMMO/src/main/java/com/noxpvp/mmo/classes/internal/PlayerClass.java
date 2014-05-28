@@ -14,9 +14,13 @@ import javax.annotation.meta.When;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionDefault;
 
+import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.config.FileConfiguration;
@@ -63,6 +67,7 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	protected Map<Integer, IClassTier> tiers;
 	private int cTierLevel = 1;
 	private String name;
+	private ItemStack identiferItem;
 	//Player Data
 	private String playerName;
 
@@ -297,6 +302,21 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 			ret.add(color + lore);
 		
 		return ret;
+	}
+	
+	public ItemStack getIdentifiableItem() {
+		if (identiferItem == null) {
+			identiferItem = new ItemStack(Material.BOOK_AND_QUILL);
+
+			ItemMeta meta = identiferItem.getItemMeta();
+			meta.setDisplayName(new MessageBuilder().gold(ChatColor.BOLD + "Class: ")
+					.append(getColor() + getName()).toString());
+			meta.setLore(getLore(ChatColor.GOLD, 28));
+
+			identiferItem.setItemMeta(meta);
+		}
+
+		return identiferItem.clone();
 	}
 
 	public final Player getPlayer() {

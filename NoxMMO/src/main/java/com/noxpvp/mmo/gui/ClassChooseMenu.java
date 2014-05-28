@@ -61,7 +61,7 @@ public class ClassChooseMenu extends CoreBox {
 
 		for (PlayerClass clazz : availableClasses) {
 
-			ClassChooseMenuItem boxItem = new ClassChooseMenuItem(this, clazz.getIdentifibleItem(), clazz) {
+			ClassChooseMenuItem boxItem = new ClassChooseMenuItem(this, clazz.getIdentifiableItem(), clazz) {
 				public boolean onClick(InventoryClickEvent click) {
 
 					if (getPlayerClass().isPrimaryClass()) {

@@ -3,7 +3,9 @@ package com.noxpvp.mmo.abilities;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
 
+import com.noxpvp.core.gui.MenuItemRepresentable;
 import com.noxpvp.mmo.abilities.BaseAbility.AbilityResult;
 
 /**
@@ -11,7 +13,7 @@ import com.noxpvp.mmo.abilities.BaseAbility.AbilityResult;
  *
  * @author Chris
  */
-public interface Ability {
+public interface Ability extends MenuItemRepresentable {
 
 	/**
 	 * Retrieves the ability name.
@@ -46,6 +48,14 @@ public interface Ability {
 	 */
 	public List<String> getLore(ChatColor color, int lineLength);
 
+	/**
+	 * Same as {@link MenuItemRepresentable#getIdentifiableItem()} but with special additions depending on if the player can use it 
+	 * 
+	 * @param canUse
+	 * @return
+	 */
+	public ItemStack getIdentifiableItem(boolean canUse);
+	
 	/**
 	 * Executes an ability
 	 *

@@ -87,7 +87,7 @@ public class DummyClassTier extends ClassTier {
 		return Collections.emptyMap();
 	}
 
-	public ItemStack getIdentifibleItem() {
+	public ItemStack getIdentifiableItem() {
 		return new ItemStack(Material.STONE);
 	}
 }

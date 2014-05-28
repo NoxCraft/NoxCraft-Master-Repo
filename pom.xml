@@ -86,6 +86,7 @@
 			<id>hawk-repo</id>
 			<url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
 		</repository>
+		
 	</repositories>
 	<dependencyManagement>
 		<dependencies>
@@ -101,6 +102,13 @@
 				       <artifactId>*</artifactId>
 				   </exclusion>
 				</exclusions>
+			</dependency>
+			
+			<!-- AttributeStorage -->
+			<dependency>
+			    <groupId>com.comphenix.attribute</groupId>
+			    <artifactId>AttributeStorage</artifactId>
+			    <version>0.0.2-SNAPSHOT</version>
 			</dependency>
 			
 		    <!-- HoloAPI -->

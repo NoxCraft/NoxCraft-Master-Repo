@@ -31,6 +31,7 @@ import com.noxpvp.mmo.abilities.targeted.MortalWoundPlayerAbility;
 import com.noxpvp.mmo.abilities.targeted.SoothePlayerAbility;
 import com.noxpvp.mmo.abilities.targeted.TargetPlayerAbility;
 
+@SuppressWarnings("unused")
 public class PlayerInteractListener extends NoxListener<NoxMMO> {
 
 	MMOPlayerManager pm;

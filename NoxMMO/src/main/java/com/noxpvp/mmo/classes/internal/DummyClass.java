@@ -45,7 +45,7 @@ public class DummyClass implements IPlayerClass {
 		return EMPTY_CLASSTYPE;
 	}
 
-	public ItemStack getIdentifingItem() {
+	public ItemStack getIdentifiableItem() {
 		ItemStack ret = new ItemStack(Material.SIGN);
 		ret.getItemMeta().setDisplayName(getDisplayName());
 		ret.getItemMeta().setLore(getLore());

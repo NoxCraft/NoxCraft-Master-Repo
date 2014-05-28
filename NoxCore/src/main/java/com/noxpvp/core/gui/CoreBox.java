@@ -21,15 +21,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
+import com.bergerkiller.bukkit.common.utils.MaterialUtil;
+import com.comphenix.attribute.Attributes;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.effect.StaticEffects;
 import com.noxpvp.core.listeners.NoxListener;
+import com.noxpvp.core.listeners.NoxPLPacketListener;
 import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.packet.PacketSounds;
 
 public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, Cloneable {
 
+	private NoxPLPacketListener attributeHider;
+	
 	private final String pName;
 	public Runnable closeRunnable;
 	private Map<Integer, CoreBoxItem> menuItems;
@@ -39,6 +47,19 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 	private CoreBox backButton;
 	private Reference<Player> p;
 
+	
+	protected ItemStack removeAttributes(ItemStack item) {
+		if (item == null || MaterialUtil.isType(item.getType(), Material.BOOK_AND_QUILL, Material.AIR))
+			return item;
+		
+		Attributes a = new Attributes(item);
+		System.out.println(a.size());
+		a.clear();
+		System.out.println(a.size());
+		
+		return a.getStack();
+	}
+	
 	public CoreBox(Player p, String name, int size, @Nullable CoreBox backButton) {
 		this(p, name, size, backButton, NoxCore.getInstance());
 	}
@@ -64,7 +85,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 			ItemMeta meta = button.getItemMeta();
 
 			meta.setDisplayName(ChatColor.GOLD + name);
-			meta.setLore(Arrays.asList(ChatColor.AQUA + "<- Go Back To The \"" + ChatColor.GOLD + backButton.getName() + ChatColor.AQUA + "\" Menu"));
+			meta.setLore(Arrays.asList(ChatColor.AQUA + "<- Go Back To The \"" + ChatColor.GOLD + backButton.getName().replaceAll("(?i)menu", "") + ChatColor.AQUA + "\" Menu"));
 
 			button.setItemMeta(meta);
 
@@ -83,9 +104,32 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 				if (np.hasCoreBox(thisBox))
 					np.deleteCoreBox();
 
+				attributeHider.unRegister();
 				thisBox.unregister();
 				box.clear();
 				menuItems = null;
+			}
+		};
+		
+		this.attributeHider = new NoxPLPacketListener(core, PacketType.Play.Server.WINDOW_ITEMS) {
+			public void onPacketSending(PacketEvent event) {
+				if (event.getPlayer() != p)
+					return;
+				
+				PacketContainer packet = event.getPacket();
+				try {
+					ItemStack[] items = packet.getItemArrayModifier().read(0);
+					
+					for (int i = 0; i < items.length; i++) {
+						items[i] = removeAttributes(items[i]);
+					}
+					
+					packet.getItemArrayModifier().write(0, items);
+					event.setPacket(packet);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		};
 
@@ -117,6 +161,12 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 
 		return true;
 	}
+	
+	protected void updatePlayerInvetory() {
+		CommonUtil.nextTick(new Runnable() {
+			public void run() { p.get().updateInventory(); }
+		});
+	}
 
 	public void show() {
 		Player p;
@@ -126,6 +176,10 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		pm.getPlayer(p).setCoreBox(this);
 		p.openInventory(box);
 
+		for (ItemStack i : box.getContents())
+			i = removeAttributes(i);
+		
+		attributeHider.register();
 		register();
 	}
 
@@ -189,7 +243,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 			return;
 
 		event.setCancelled(true);
-		player.updateInventory();
+		updatePlayerInvetory();
 
 		ItemStack clickedItem = event.getCurrentItem();
 		if (event.getRawSlot() < (box.getSize() - 1)) {

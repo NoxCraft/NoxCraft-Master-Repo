@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.events.EntityAbilityExecutedEvent;
@@ -16,6 +20,7 @@ import com.noxpvp.mmo.locale.MMOLocale;
 
 public abstract class BaseAbility implements Ability {
 	private final String name;
+	private ItemStack identifingItem;
 
 	public BaseAbility(final String name) {
 		this.name = name;
@@ -58,6 +63,28 @@ public abstract class BaseAbility implements Ability {
 		}
 
 		return ret;
+	}
+	
+	public ItemStack getIdentifiableItem(boolean canUse) {
+		ItemStack s = getIdentifiableItem();
+		s.setType(canUse? Material.ENCHANTED_BOOK : Material.BOOK);
+		
+		return s;
+	}
+	
+	public ItemStack getIdentifiableItem() {
+		if (identifingItem == null) {
+			identifingItem = new ItemStack(Material.BLAZE_POWDER);
+
+			ItemMeta meta = identifingItem.getItemMeta();
+			
+			meta.setDisplayName(new MessageBuilder().gold(ChatColor.BOLD + "Ability: ").red(getName()).toString());
+			meta.setLore(getLore(ChatColor.GOLD, 28));
+			
+			identifingItem.setItemMeta(meta);
+		}
+		
+		return identifingItem.clone();
 	}
 
 	public boolean mayExecute() {

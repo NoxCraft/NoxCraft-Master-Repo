@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.gui.MenuItemRepresentable;
@@ -61,30 +62,38 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 		return name;
 	}
 
-	public ItemStack getIdentifibleItem() {
+	public ItemStack getIdentifiableItem() {
+		boolean classCanUse = getRetainingClass().canUseTier(getTierLevel());
+		ItemMeta meta;
+		
 		if (identifingItem == null) {
-
-			boolean classCanUse = getRetainingClass().canUseTier(getTierLevel());
-			ItemMeta meta = (identifingItem = new ItemStack(Material.STONE)).getItemMeta();
-
-			if (classCanUse) {
-				identifingItem.setType(Material.ENCHANTED_BOOK);
-
-				meta.setDisplayName(getDisplayName());
-				meta.setLore(getLore());
-			} else {
-				identifingItem.setType(Material.BOOK_AND_QUILL);
-
-				meta.setDisplayName(ChatColor.MAGIC.toString() + getDisplayName());
-
-				List<String> lore = new ArrayList<String>();
-				for (String cur : getLore()) lore.add(ChatColor.MAGIC + cur);
-
-				meta.setLore(lore);
-			}
-
+			identifingItem = new ItemStack(Material.STONE, getTierLevel());
+			
+			meta = identifingItem.getItemMeta();
+			meta.setDisplayName(new MessageBuilder().gold(ChatColor.BOLD + "Tier: ")
+					.append(getRetainingClass().getColor() + getName()).toString());
+			
+			meta.setLore(getLore());
+			
 			identifingItem.setItemMeta(meta);
 		}
+		
+		meta = identifingItem.getItemMeta();
+		if (classCanUse) {
+			identifingItem.setType(Material.ENCHANTED_BOOK);
+		} else {
+			identifingItem.setType(Material.BOOK_AND_QUILL);
+
+			meta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Tier: "
+					+ getRetainingClass().getColor() + getName());
+
+			List<String> lore = new ArrayList<String>();
+			for (String cur : getLore()) lore.add(ChatColor.MAGIC + cur);
+				
+			meta.setLore(lore);
+		}
+		identifingItem.setItemMeta(meta);
+
 
 		return identifingItem.clone();
 	}

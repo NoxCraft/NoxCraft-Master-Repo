@@ -8,10 +8,12 @@ import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
+import com.noxpvp.core.gui.MenuItemRepresentable;
 import com.noxpvp.mmo.abilities.Ability;
 
-public interface IPlayerClass {
+public interface IPlayerClass extends MenuItemRepresentable {
 
 	/**
 	 * A unique id for classes. <br/><br/>

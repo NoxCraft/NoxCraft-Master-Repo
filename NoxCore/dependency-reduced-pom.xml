@@ -106,10 +106,14 @@
           <finalName>NoxCore</finalName>
           <artifactSet>
             <includes>
+              <include>com.comphenix.attribute:AttributeStorage</include>
               <include>com.comphenix.packetwrapper:PacketWrapper</include>
             </includes>
           </artifactSet>
           <filters>
+            <filter>
+              <artifact>com.comphenix.attribute:AttributeStorage</artifact>
+            </filter>
             <filter>
               <artifact>com.comphenix.packetwrapper:PacketWrapper</artifact>
               <excludes>

@@ -9,5 +9,6 @@ public interface MenuItemRepresentable {
 	 *
 	 * @return {@link ItemStack} identifier
 	 */
-	public ItemStack getIdentifibleItem();
+	public ItemStack getIdentifiableItem();
+	
 }
