@@ -229,12 +229,24 @@
       <artifactId>HoloAPI</artifactId>
       <version>1.2.3</version>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.bergerkiller.bukkit</groupId>
       <artifactId>BKCommonLib</artifactId>
       <version>1.58-SNAPSHOT</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
@@ -243,12 +255,8 @@
       <scope>provided</scope>
       <exclusions>
         <exclusion>
-          <artifactId>cglib-nodep</artifactId>
-          <groupId>cglib</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>BukkitExecutors</artifactId>
-          <groupId>com.comphenix.executors</groupId>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -263,6 +271,24 @@
       <artifactId>BarAPI</artifactId>
       <version>3.1</version>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>me.botsko</groupId>
+      <artifactId>prism</artifactId>
+      <version>2.0</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>me.botsko</groupId>
