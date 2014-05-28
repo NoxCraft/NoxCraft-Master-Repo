@@ -2,6 +2,7 @@ package com.noxpvp.mmo;
 
 import com.google.common.collect.MapMaker;
 import com.noxpvp.core.data.Cycler;
+import com.noxpvp.core.gui.rendering.IRenderer;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.abilities.Ability;
 import org.bukkit.OfflinePlayer;
@@ -16,13 +17,19 @@ import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 
 public class AbilityCycler extends Cycler<Ability> implements ConfigurationSerializable {
-
+	private static final IRenderer dummyRender = new IRenderer() {
+		@Override
+		public void render() {
+			//NOTHING HAHA
+		}
+	};
 //	public static final String TEMP_PCTK = "ability-cycler.active-count";
 
 	static ConcurrentMap<String, List<AbilityCycler>> cyclers = null;
 	private static NoxListener<NoxMMO> iHeld = null;
 	private final ItemStack cycleItem;
 	private Reference<MMOPlayer> player = null;
+	private IRenderer renderer = null; //TODO: Create renderers
 
 	public AbilityCycler(int size, OfflinePlayer player, ItemStack cycleItem) {
 		this(size, MMOPlayerManager.getInstance().getPlayer(player), cycleItem);
@@ -52,7 +59,7 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 	}
 
 	static boolean isActive(String identify, ItemStack stack) {
-		//FIXME: Add some sort of listener key system.
+		//FIXME: Retrieve cycler objects system.
 		return false;
 	}
 
@@ -62,15 +69,21 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		return Collections.emptyList();
 	}
 
-	public void updateRender() {
-		//TODO: Implement rendering.
+	public IRenderer getRenderer() {
+		if (this.renderer != null)
+			return this.renderer;
+		return dummyRender;
+	}
+
+	public void renderDisplay() {
+		getRenderer().render();
 	}
 
 	public static AbilityCycler getCycler(String identity, final ItemStack item) {
 		List<AbilityCycler> cyclers = getCyclers(identity);
 		if (cyclers.isEmpty()) return null;
 
-		return null;//FIXME: FINISH MEEEEE
+		return null;//FIXME: FINISH Cycler Retrieval.
 	}
 
 	static boolean isRegistered(String identity) {
@@ -95,6 +108,8 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 			public void onItemHeldEvent(PlayerItemHeldEvent event) {
 				final Player player = event.getPlayer();
 				final String identity = player.getUniqueId().toString();
+				if (!player.isSneaking())
+					return;
 
 				final MMOPlayer mmoPlayer = MMOPlayerManager.getInstance().getPlayer(player);
 
@@ -106,7 +121,6 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 				if (cycler == null) return;
 
 //				final int change = getChange(event.getPreviousSlot(), event.getNewSlot());
-
 				switch (/*change */getChange(event.getPreviousSlot(), event.getNewSlot())) {
 					case 1:
 						cycler.next();
@@ -151,21 +165,22 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 
 	public static AbilityCycler valueOf(Map<String, Object> data) {
 		if (!data.containsKey("player"))
-
+			return null;
+		//FIXME: FINISH ME!
 		return null;
 	}
 
 	@Override
 	public Ability previous() {
 		Ability ret = super.previous();
-
+		renderDisplay();
 		return ret;
 	}
 
 	@Override
 	public Ability next() {
 		Ability ret = super.next();
-
+		renderDisplay();
 		return ret;
 	}
 
