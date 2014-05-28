@@ -1,10 +1,13 @@
 package com.noxpvp.mmo;
 
+import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.google.common.collect.MapMaker;
 import com.noxpvp.core.data.Cycler;
 import com.noxpvp.core.gui.rendering.IRenderer;
 import com.noxpvp.core.listeners.NoxListener;
+import com.noxpvp.core.utils.UUIDUtil;
 import com.noxpvp.mmo.abilities.Ability;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
@@ -163,11 +166,40 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		return ret;
 	}
 
+	private static boolean isDataValid(Map<String, Object> data) {
+		return data.containsKey("player") && data.containsKey("cycle-item") && data.containsKey("abilities") && UUIDUtil.isUUID(data.get("player"));
+	}
+
 	public static AbilityCycler valueOf(Map<String, Object> data) {
-		if (!data.containsKey("player"))
+		if (!isDataValid(data))
 			return null;
-		//FIXME: FINISH ME!
-		return null;
+
+		UUID id = UUIDUtil.toUUID(data.get("player"));
+		OfflinePlayer player = Bukkit.getOfflinePlayer(id);
+
+		ItemStack cycleItem = null;
+		if (data.get("cycle-item") instanceof ItemStack)
+			cycleItem = (ItemStack) data.get("cycle-item");
+
+		List<String> abilityNames = null;
+		if (data.get("abilities") instanceof List)
+			abilityNames = (List<String>) data.get("abilities");
+
+		if (id == null || cycleItem == null || LogicUtil.nullOrEmpty(abilityNames))
+			return null;
+
+		MMOPlayer mmoPlayer = MMOPlayerManager.getInstance().getPlayer(player);
+
+		List<Ability> abilities = new ArrayList<Ability>();
+
+		for (Ability a : mmoPlayer.getAllAbilities())
+			if (abilityNames.contains(a.getName()))
+				abilities.add(a);
+
+		if (LogicUtil.nullOrEmpty(abilities))
+			return null;
+
+		return new AbilityCycler(abilities, mmoPlayer, cycleItem);
 	}
 
 	@Override
