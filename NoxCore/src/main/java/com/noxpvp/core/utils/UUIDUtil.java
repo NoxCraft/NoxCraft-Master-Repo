@@ -257,6 +257,12 @@ public class UUIDUtil extends NoxListener<NoxCore> {
 		}
 	}
 
+	public static UUID toUUID(Object id) {
+		if (isUUID(id))
+			return (id instanceof UUID)? (UUID)id: toUUID(id.toString());
+		return null;
+	}
+
 	/**
 	 * @author EvilMidget
 	 */
