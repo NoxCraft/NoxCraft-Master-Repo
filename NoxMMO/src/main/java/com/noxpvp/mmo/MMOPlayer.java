@@ -158,7 +158,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 		/*
 		 * If successful, do this
 		 */
-//		Player p = getPlayer();
+//		Player p = getMMOPlayer();
 //		p.playSound(p.getLocation(), Sound.ORB_PICKUP, 10, 0);
 	}
 
