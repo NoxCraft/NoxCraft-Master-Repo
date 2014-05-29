@@ -1,6 +1,9 @@
 package com.noxpvp.mmo.gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,16 +27,17 @@ import com.noxpvp.mmo.classes.internal.IClassTier;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
 
-public class ClassMenu extends CoreBox {
+public class InnerClassMenu extends CoreBox {
 
 	public static final String MENU_NAME = "Class";
-	private static final int size = 45;
+	private ItemStack identifiableItem;
+	private static final int size = 27;
 
 	private CoreBox previousBox;
 	private PlayerClass clazz;
 
-	public ClassMenu(final Player p, PlayerClass clazz, CoreBox backButton) {
-		super(p, clazz.getName() + " " + MENU_NAME, size, backButton);
+	public InnerClassMenu(final Player p, PlayerClass clazz, CoreBox backButton) {
+		super(p, clazz.getDisplayName() + " " + MMOLocale.GUI_MENU_NAME_COLOR.get() + MENU_NAME, size, backButton);
 
 		this.previousBox = backButton;
 		this.clazz = clazz;
@@ -72,20 +76,15 @@ public class ClassMenu extends CoreBox {
 			tiers.add(new ClassMenuItem(this, item, clazz, t.getTierLevel()) {
 
 				public boolean onClick(InventoryClickEvent click) {
-					PlayerClass clazz = ClassMenu.this.getPlayerClass();
-
+					PlayerClass clazz = InnerClassMenu.this.getPlayerClass();
+					clazz.setCurrentTier(getTier());
+					
 					if (!clazz.canUseClass()) {
 						MessageUtil.sendLocale(p, MMOLocale.CLASS_LOCKED, clazz.getDisplayName(), "Insufficient Permissions");
 						return false;
 					}
 
-					if (clazz.isPrimaryClass()) {
-						mmoPlayer.setPrimaryClass(clazz);
-						mmoPlayer.getPrimaryClass().setCurrentTier(getTier());
-					} else {
-						mmoPlayer.getSecondaryClass().setCurrentTier(getTier());
-						mmoPlayer.setSecondaryClass(clazz);
-					}
+					mmoPlayer.setClass(clazz);
 
 					StaticEffects.SmokeScreen(p.getEyeLocation(), 2);
 					hide();
@@ -94,24 +93,30 @@ public class ClassMenu extends CoreBox {
 			});
 
 		}
-
-		for (Ability ab : clazz.getTier(clazz.getHighestPossibleTier()).getAbilities()) {
-
-			ItemStack item = ab.getIdentifiableItem(clazz.getAbilities().contains(ab));
-
-			abilities.add(new CoreBoxItem(this, item) {
-				public boolean onClick(InventoryClickEvent click) {
-					return true;
-				}
-			});
-
+		
+		List<Ability> used = new ArrayList<Ability>();
+		for (Entry<Integer, IClassTier> t : clazz.getTiers()) {
+			List<Ability> abs = new ArrayList<Ability>(t.getValue().getAbilities());
+			abs.removeAll(used);
+			
+			for (Ability ab : abs) {
+				used.add(ab);
+				ItemStack item = ab.getIdentifiableItem(clazz.getAbilities().contains(ab));
+				
+				abilities.add(new CoreBoxItem(this, item) {
+					public boolean onClick(InventoryClickEvent click) {
+						return false;
+					}
+				});
+				
+			}
 		}
-
+	
 	}
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		return new ClassMenu(getPlayer(), getPlayerClass(), this.previousBox);
+		return new InnerClassMenu(getPlayer(), getPlayerClass(), this.previousBox);
 	}
 
 	public PlayerClass getPlayerClass() {
@@ -123,7 +128,7 @@ public class ClassMenu extends CoreBox {
 		private int tier;
 		private PlayerClass clazz;
 
-		public ClassMenuItem(ClassMenu parent, ItemStack item, PlayerClass clazz, int tier) {
+		public ClassMenuItem(InnerClassMenu parent, ItemStack item, PlayerClass clazz, int tier) {
 			super(parent, item);
 
 			this.clazz = clazz;
@@ -137,6 +142,14 @@ public class ClassMenu extends CoreBox {
 		public int getTier() {
 			return tier;
 		}
+	}
+	
+	public ItemStack getIdentifiableItem() {
+		if (identifiableItem == null) {
+			identifiableItem = new ItemStack(clazz.getIdentifiableItem());
+		}
+		
+		return identifiableItem;
 	}
 
 }

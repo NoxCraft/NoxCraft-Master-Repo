@@ -26,8 +26,8 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
 public class ClassChooseMenu extends CoreBox {
 
 	public static final String MENU_NAME = "Class Selection";
-	public static final String MENU_MAIN_COLOR = MMOLocale.GUI_MENU_NAME_COLOR.get();
-
+	
+	private static final String MENU_MAIN_COLOR = MMOLocale.GUI_MENU_NAME_COLOR.get();
 	private static final int size = 18;
 
 	public ClassChooseMenu(Player p, @Nullable CoreBox backButton) {
@@ -65,7 +65,7 @@ public class ClassChooseMenu extends CoreBox {
 				public boolean onClick(InventoryClickEvent click) {
 
 					if (getPlayerClass().isPrimaryClass()) {
-						new ClassMenu(getPlayer(), getPlayerClass(), ClassChooseMenu.this).show();
+						new InnerClassMenu(getPlayer(), getPlayerClass(), ClassChooseMenu.this).show();
 
 						return true;
 					} else {
@@ -91,6 +91,14 @@ public class ClassChooseMenu extends CoreBox {
 			}
 		}
 	}
+	
+	@Override
+	public ItemStack getIdentifiableItem() {
+		ItemStack item = super.getIdentifiableItem();
+		item.setType(Material.DIAMOND_CHESTPLATE);
+		
+		return item;
+	}
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
@@ -113,4 +121,5 @@ public class ClassChooseMenu extends CoreBox {
 		}
 
 	}
+	
 }

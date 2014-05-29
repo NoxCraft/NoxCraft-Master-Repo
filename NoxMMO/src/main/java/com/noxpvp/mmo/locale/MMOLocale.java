@@ -181,7 +181,7 @@ public class MMOLocale extends NoxLocale {
 
 
 		//GUIs
-		GUI_MENU_NAME_COLOR = new MMOLocale("gui.inventory.name_color", "&6");
+		GUI_MENU_NAME_COLOR = new MMOLocale("gui.inventory.name_color", "&e");
 		GUI_BAR_COLOR = new MMOLocale("gui.target_bar.color", "&a");
 
 	}

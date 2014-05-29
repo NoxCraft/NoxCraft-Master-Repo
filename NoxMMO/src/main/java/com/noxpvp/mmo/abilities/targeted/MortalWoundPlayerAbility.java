@@ -25,6 +25,7 @@ public class MortalWoundPlayerAbility extends BaseTargetedPlayerAbility implemen
 		super(ABILITY_NAME, player, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 
 		setDamage(8);
+		setRange(10);
 		this.duration = (20 * 4);
 		this.amplifier = 2;
 	}

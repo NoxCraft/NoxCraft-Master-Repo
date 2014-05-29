@@ -4,11 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import com.bergerkiller.bukkit.common.controller.EntityController;
+import com.bergerkiller.bukkit.common.entity.CommonEntity;
+import com.bergerkiller.bukkit.common.wrappers.DamageSource;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
@@ -17,6 +25,7 @@ import com.noxpvp.mmo.abilities.BasePlayerAbility;
 import com.noxpvp.mmo.abilities.entity.FireNovaEntityAbility;
 import com.noxpvp.mmo.abilities.entity.WisdomEntityAbility;
 import com.noxpvp.mmo.abilities.player.ChargePlayerAbility;
+import com.noxpvp.mmo.abilities.player.FireBallPlayerAbility;
 import com.noxpvp.mmo.abilities.player.FireSpinPlayerAbility;
 import com.noxpvp.mmo.abilities.player.GuardianAngelPlayerAbility;
 import com.noxpvp.mmo.abilities.player.LeapPlayerAbility;
@@ -75,12 +84,13 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 //		abs = new HashMap<String, BasePlayerAbility>();
 //		MMOPlayer mp = MMOPlayerManager.getInstance().getMMOPlayer(p);
 //		if (!abs.containsKey(p.getName())) {
-//			BasePlayerAbility ab = new ThrowPlayerAbility(p);
+//			BasePlayerAbility ab = new HookShotPlayerAbility(p);
 //			abs.put(p.getName(), ab);
 //		}
-
+//
 //		abs.get(p.getName()).execute();
 		
+//		new FireBallPlayerAbility(p).execute();
 //		new FireSpinPlayerAbility(p).execute();
 		
 //		new HammerOfThorAbility(p).execute();
@@ -99,6 +109,7 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 //		new LevelUpGlimmer(p.getLocation(), 20 * 10, 10).start(0);
 
 //		Bukkit.broadcastMessage(p.getLocation().getDirection().getY() + "");
+		
 	}
 
 }

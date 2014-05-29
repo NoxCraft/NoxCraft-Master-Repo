@@ -11,3 +11,6 @@ commands:
   ability:
     description: Ability Commands
     usage: /<command> [Ability Name]
+  mmo:
+    description: NoxMMO menu
+    usage: /<command>

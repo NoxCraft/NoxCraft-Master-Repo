@@ -20,6 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
 import com.bergerkiller.bukkit.common.utils.MaterialUtil;
 import com.comphenix.attribute.Attributes;
@@ -34,7 +35,7 @@ import com.noxpvp.core.listeners.NoxPLPacketListener;
 import com.noxpvp.core.manager.CorePlayerManager;
 import com.noxpvp.core.packet.PacketSounds;
 
-public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, Cloneable {
+public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, MenuItemRepresentable, Cloneable {
 
 	private NoxPLPacketListener attributeHider;
 	
@@ -47,15 +48,17 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 	private CoreBox backButton;
 	private Reference<Player> p;
 
+	private ItemStack identifiableItem;
+
 	
 	protected ItemStack removeAttributes(ItemStack item) {
 		if (item == null || MaterialUtil.isType(item.getType(), Material.BOOK_AND_QUILL, Material.AIR))
 			return item;
 		
 		Attributes a = new Attributes(item);
-		System.out.println(a.size());
+//		System.out.println(a.size());
 		a.clear();
-		System.out.println(a.size());
+//		System.out.println(a.size());
 		
 		return a.getStack();
 	}
@@ -225,6 +228,19 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 			return null;
 		}
 	}
+	
+	public ItemStack getIdentifiableItem() {
+		if (identifiableItem == null) {
+			identifiableItem = new ItemStack(Material.CHEST);
+			ItemMeta meta = identifiableItem.getItemMeta();
+			
+			meta.setDisplayName(new MessageBuilder().gold("Menu: ").yellow(ChatColor.stripColor(name)).toString());
+			
+			identifiableItem.setItemMeta(meta);
+		}
+		
+		return identifiableItem.clone();
+	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onClick(InventoryClickEvent event) {
@@ -254,7 +270,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 					if (item.onClick(event))
 						StaticEffects.playSound(player, PacketSounds.RandomClick);
 					else
-						StaticEffects.PlaySound(player, player.getLocation(), PacketSounds.RandomAnvilLand, 1, +2);
+						StaticEffects.PlaySound(player, player.getLocation(), PacketSounds.NoteBass, 2, -2);
 			}
 		} else if (backButton != null && event.getRawSlot() == (box.getSize() - 1)) {
 			try {
