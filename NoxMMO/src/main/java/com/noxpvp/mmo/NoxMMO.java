@@ -29,6 +29,7 @@ import com.noxpvp.mmo.classes.AxesPlayerClass;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.command.AbilityCommand;
 import com.noxpvp.mmo.command.ClassCommand;
+import com.noxpvp.mmo.command.MMOCommand;
 import com.noxpvp.mmo.listeners.*;
 import com.noxpvp.mmo.locale.MMOLocale;
 import com.noxpvp.mmo.prism.AbilityUseAction;
@@ -55,7 +56,7 @@ public class NoxMMO extends NoxPlugin {
 
 	private MMOPlayerManager playerManager = null;
 
-	private Class<Command>[] commands = (Class<Command>[]) new Class[]{ClassCommand.class, AbilityCommand.class};
+	private Class<Command>[] commands = (Class<Command>[]) new Class[]{ClassCommand.class, AbilityCommand.class, MMOCommand.class};
 
 	public static NoxMMO getInstance() {
 		return instance;

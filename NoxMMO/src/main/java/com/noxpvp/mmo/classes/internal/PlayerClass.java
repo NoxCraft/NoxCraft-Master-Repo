@@ -311,7 +311,12 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 			ItemMeta meta = identiferItem.getItemMeta();
 			meta.setDisplayName(new MessageBuilder().gold(ChatColor.BOLD + "Class: ")
 					.append(getColor() + getName()).toString());
-			meta.setLore(getLore(ChatColor.GOLD, 28));
+			
+			List<String> lore = getLore(ChatColor.GOLD, 28);
+			
+			lore.add(new MessageBuilder().gold("Current Tier: ").yellow(getCurrentTierLevel()).toString());
+			
+			meta.setLore(lore);
 
 			identiferItem.setItemMeta(meta);
 		}

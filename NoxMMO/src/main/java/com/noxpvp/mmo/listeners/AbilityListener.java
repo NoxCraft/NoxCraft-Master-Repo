@@ -58,6 +58,9 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerAbilityExecuted(PlayerAbilityExecutedEvent event) {
+		if (event instanceof PlayerTargetedAbilityExecutedEvent)
+			return;
+		
 		Player p = event.getPlayer();
 		MMOPlayer mp = pm.getPlayer(p);
 		BaseEntityAbility ab = event.getAbility();
@@ -74,12 +77,12 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 				mp.addCoolDown(ab.getName(), ab.getCD(), !silent);
 		}
 		
-		if (result.getResult() && !silent)
-			if (!hasMessages)
-				MessageUtil.sendLocale(p, MMOLocale.ABIL_USE, ab.getName());
-			else
-				p.sendMessage(MessageUtil.parseColor(StringUtil.join(" ", result.getMessages())));
-
+		if (!silent)
+			if (!hasMessages) {
+				if (result.getResult())
+					MessageUtil.sendLocale(p, MMOLocale.ABIL_USE, ab.getName());
+			} else
+				p.sendMessage(MessageUtil.parseColor(StringUtil.join(" ", result.getMessages())));		
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -119,15 +122,15 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 				pm.getPlayer((Player) ab.getTarget()).getFullName() :
 				ab.getTarget().getType().name().toLowerCase();
 
-		if (result.getResult() && !silent) {
+		if (!silent) {
 			if (hasMessages) {
 				p.sendMessage(MessageUtil.parseColor(StringUtil.join(" ", result.getMessages())));
-			} else if (ab.getDamage() > 0) {
+			} else if (ab.getDamage() > 0 && result.getResult()) {
 				MessageUtil.sendLocale(p, MMOLocale.ABIL_USE_TARGET_DAMAGED, ab.getName(), target, String.format("%.2f", ab.getDamage()));
 					
 				if (ab.getTarget() instanceof Player)
 					MessageUtil.sendLocale((Player) ab.getTarget(), MMOLocale.ABIL_HIT_ATTACKER_DAMAGED, mp.getFullName(), ab.getName(), String.format("%.2f", ab.getDamage()));
-			} else {
+			} else if (result.getResult()) {
 				MessageUtil.sendLocale(p, MMOLocale.ABIL_USE_TARGET, ab.getName(), target);
 				
 				if (ab.getTarget() instanceof Player)

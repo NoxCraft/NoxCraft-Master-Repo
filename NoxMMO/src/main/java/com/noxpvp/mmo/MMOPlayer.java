@@ -1,6 +1,7 @@
 package com.noxpvp.mmo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -9,10 +10,14 @@ import java.util.UUID;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.EntityUtil;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
@@ -20,6 +25,7 @@ import com.noxpvp.core.Persistant;
 import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.core.data.BaseNoxPlayerAdapter;
 import com.noxpvp.core.data.NoxPlayerAdapter;
+import com.noxpvp.core.gui.MenuItemRepresentable;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.abilities.IPassiveAbility;
 import com.noxpvp.mmo.abilities.IPlayerAbility;
@@ -29,7 +35,7 @@ import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
-public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
+public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuItemRepresentable {
 
 	private static final String PRIMARY_CLASS_NODE = "current.primary-class";
 	private static final String PRIMARY_PLAYERCLASS_NODE = PRIMARY_CLASS_NODE + ".class";
@@ -40,6 +46,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 	private static final String TARGET_NODE = "current.target";
 	private IPlayerClass primaryClass = DummyClass.PRIMARY, secondaryClass = DummyClass.SECONDARY;
 	private LivingEntity target;
+	private ItemStack identifiableItem;
 
 	public MMOPlayer(OfflinePlayer player) {
 		super(player);
@@ -51,6 +58,21 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant {
 
 	public MMOPlayer(NoxPlayerAdapter player) {
 		super(player);
+	}
+	
+	public ItemStack getIdentifiableItem() {
+		if (identifiableItem == null) {
+			identifiableItem = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+			
+			ItemMeta meta = identifiableItem.getItemMeta();
+			
+			meta.setDisplayName(new MessageBuilder().gold("Player: ").yellow(getFullName()).toString());
+			meta.setLore(Arrays.asList("other info here"));
+			
+			identifiableItem.setItemMeta(meta);
+		}
+		
+		return identifiableItem.clone();
 	}
 
 	@Temporary

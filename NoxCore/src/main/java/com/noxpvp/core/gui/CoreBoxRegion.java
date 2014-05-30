@@ -23,6 +23,10 @@ public class CoreBoxRegion {
 
 		this.a = topLeft;
 		this.b = new Vector(a.getX() + height, 0, a.getZ() + width);
+		
+		if (a.getX() > rows)
+			throw new IllegalArgumentException("a - x is too large");
+		
 	}
 
 	private int getSlotFromCoord(Vector coord) {

@@ -8,7 +8,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
@@ -24,7 +23,6 @@ public class AxesPlayerClass extends PlayerClass {
 	public static final String className = "Axes";
 
 	public static final String uniqueID = "f8c26f34-fc36-427a-b92e-94090b146db1";    //RANDOMLY GENERATED DO NOT CHANGE!
-	private ItemStack identiferItem;
 
 	public AxesPlayerClass(Player player) {
 		super(uniqueID, className, player);

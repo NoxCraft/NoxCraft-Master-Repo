@@ -3,6 +3,7 @@ package com.noxpvp.mmo.abilities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
+import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.events.EntityAbilityExecutedEvent;
 import com.noxpvp.mmo.events.EntityTargetedAbilityExecutedEvent;
@@ -66,10 +68,27 @@ public abstract class BaseAbility implements Ability {
 	}
 	
 	public ItemStack getIdentifiableItem(boolean canUse) {
-		ItemStack s = getIdentifiableItem();
-		s.setType(canUse? Material.ENCHANTED_BOOK : Material.BOOK);
+		ItemStack item = getIdentifiableItem();
+		item.setType(canUse? Material.BLAZE_POWDER : Material.SULPHUR);
 		
-		return s;
+		if (!canUse) {
+			ItemMeta meta = item.getItemMeta();
+			MessageBuilder obfuscated = new MessageBuilder();
+			
+			for (String s : getDescription().split(" ")) {
+				if (RandomUtils.nextFloat() > .2)
+					obfuscated.gold("").magic(s);
+				else
+					obfuscated.gold(s);
+				
+				obfuscated.append(' ');
+			}
+			
+			meta.setLore(MessageUtil.convertStringForLore(obfuscated.toString(), 40));
+			item.setItemMeta(meta);
+		}
+		
+		return item;
 	}
 	
 	public ItemStack getIdentifiableItem() {
@@ -110,12 +129,10 @@ public abstract class BaseAbility implements Ability {
 		public void callEvent() {
 			Event event = null;
 			
-			if (executer instanceof BaseTargetedAbility) {
-				if (executer instanceof BaseTargetedPlayerAbility)
-					event = new PlayerTargetedAbilityExecutedEvent(((BaseTargetedPlayerAbility) executer).getPlayer(), this);
-				else if (executer instanceof BaseTargetedEntityAbility)
-					event = new EntityTargetedAbilityExecutedEvent(((BaseTargetedEntityAbility) executer).getEntity(), this);
-					
+			if (executer instanceof BaseTargetedPlayerAbility)
+				event = new PlayerTargetedAbilityExecutedEvent(((BaseTargetedPlayerAbility) executer).getPlayer(), this);
+			else if (executer instanceof BaseTargetedEntityAbility) {
+				event = new EntityTargetedAbilityExecutedEvent(((BaseTargetedEntityAbility) executer).getEntity(), this);	
 			} else if (executer instanceof BasePlayerAbility) {
 				event = new PlayerAbilityExecutedEvent(((BasePlayerAbility) executer).getPlayer(), this);
 			} else if (executer instanceof BaseEntityAbility) {
