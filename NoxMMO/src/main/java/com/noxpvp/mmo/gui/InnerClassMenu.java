@@ -30,16 +30,13 @@ import com.noxpvp.mmo.locale.MMOLocale;
 public class InnerClassMenu extends CoreBox {
 
 	public static final String MENU_NAME = "Class";
-	private ItemStack identifiableItem;
 	private static final int size = 27;
 
-	private CoreBox previousBox;
 	private PlayerClass clazz;
 
 	public InnerClassMenu(final Player p, PlayerClass clazz, CoreBox backButton) {
 		super(p, clazz.getDisplayName() + " " + MMOLocale.GUI_MENU_NAME_COLOR.get() + MENU_NAME, size, backButton);
 
-		this.previousBox = backButton;
 		this.clazz = clazz;
 
 		Inventory box = getBox();
@@ -116,7 +113,7 @@ public class InnerClassMenu extends CoreBox {
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		return new InnerClassMenu(getPlayer(), getPlayerClass(), this.previousBox);
+		return new InnerClassMenu(getPlayer(), getPlayerClass(), this.getBackButton());
 	}
 
 	public PlayerClass getPlayerClass() {
@@ -145,11 +142,7 @@ public class InnerClassMenu extends CoreBox {
 	}
 	
 	public ItemStack getIdentifiableItem() {
-		if (identifiableItem == null) {
-			identifiableItem = new ItemStack(clazz.getIdentifiableItem());
-		}
-		
-		return identifiableItem;
+		return clazz.getIdentifiableItem();
 	}
 
 }
