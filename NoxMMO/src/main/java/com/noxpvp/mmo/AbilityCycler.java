@@ -7,6 +7,7 @@ import com.noxpvp.core.gui.rendering.IRenderer;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.utils.UUIDUtil;
 import com.noxpvp.mmo.abilities.Ability;
+import com.noxpvp.mmo.renderers.BaseAbilityCyclerRenderer;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -23,19 +24,18 @@ import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 
 public class AbilityCycler extends Cycler<Ability> implements ConfigurationSerializable {
-	private static final IRenderer dummyRender = new IRenderer() {
-		@Override
-		public void render() {
-			//NOTHING HAHA
-		}
-	};
 //	public static final String TEMP_PCTK = "ability-cycler.active-count";
 
 	static ConcurrentMap<String, List<AbilityCycler>> cyclers = null;
 	private static NoxListener<NoxMMO> iHeld = null;
-	private final ItemStack cycleItem;
+	private ItemStack cycleItem;
 	private Reference<MMOPlayer> player = null;
-	private IRenderer renderer = null; //TODO: Create renderers
+
+	public void setRenderer(BaseAbilityCyclerRenderer renderer) {
+		this.renderer = renderer;
+	}
+
+	private BaseAbilityCyclerRenderer renderer = null; //TODO: Create renderers
 
 	public AbilityCycler(int size, OfflinePlayer player, ItemStack cycleItem) {
 		this(size, MMOPlayerManager.getInstance().getPlayer(player), cycleItem);
@@ -81,10 +81,10 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		return Collections.emptyList();
 	}
 
-	public IRenderer getRenderer() {
+	public BaseAbilityCyclerRenderer getRenderer() {
 		if (this.renderer != null)
 			return this.renderer;
-		return dummyRender;
+		return BaseAbilityCyclerRenderer.dummy;
 	}
 
 	public void renderDisplay() {
@@ -257,5 +257,16 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 
 	public ItemStack getCycleItem() {
 		return cycleItem;
+	}
+
+	public void setCycleItem(ItemStack itemStack) {
+		this.cycleItem = itemStack;
+	}
+
+	public Player getPlayer() {
+		if (isValid() && getMMOPlayer().isOnline())
+			return getMMOPlayer().getPlayer();
+
+		return null;
 	}
 }
