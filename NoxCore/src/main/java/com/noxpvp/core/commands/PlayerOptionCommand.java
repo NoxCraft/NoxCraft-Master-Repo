@@ -43,12 +43,10 @@ public class PlayerOptionCommand extends BaseCommand {
 		return NoxCore.getInstance();
 	}
 
-	@Override
 	public String[] getFlags() {
 		return new String[] {"h", "help"};
 	}
 
-	@Override
 	public int getMaxArguments() {
 		return -1;
 	}
