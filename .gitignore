@@ -7,3 +7,5 @@ target/
 NoxCore/.classpath
 .gitignore
 *.classpath
+.idea
+*.iml
