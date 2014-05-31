@@ -34,6 +34,7 @@ public class ChargePlayerAbility extends BasePlayerAbility {
 
 	public static final String ABILITY_NAME = "Charge";
 	public static final String PERM_NODE = "charge";
+	
 	private double forwardMultiplier;
 
 	public ChargePlayerAbility(Player p, double forwardMultiplier) {

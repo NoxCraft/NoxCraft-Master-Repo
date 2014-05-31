@@ -52,9 +52,10 @@ public class ThrowPlayerAbility extends BaseRangedPlayerAbility implements PVPAb
 	public ThrowPlayerAbility(Player player) {
 		super(ABILITY_NAME, player);
 
+		setRange(8);
+		setCD(15);
 		this.maxTargets = 10;
 		this.pushDelay = 20;
-		setRange(8);
 	}
 
 	@Override

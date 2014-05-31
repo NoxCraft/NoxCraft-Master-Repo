@@ -24,6 +24,8 @@
 package com.noxpvp.mmo.abilities.player;
 
 import com.noxpvp.mmo.abilities.PVPAbility;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -32,18 +34,32 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.core.effect.StaticEffects;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
-import com.noxpvp.mmo.runnables.UnregisterMMOHandlerRunnable;
+import com.noxpvp.mmo.locale.MMOLocale;
 
 public class RagePlayerAbility extends BaseRangedPlayerAbility implements PVPAbility {
 
 	public static final String ABILITY_NAME = "Rage";
-	public static final String PERM_NODE = "Rage";
+	public static final String PERM_NODE = "rage";
+	
+	private boolean isActive;
 	private BaseMMOEventHandler<EntityDamageByEntityEvent> handler;
+	
+	public void setActive(boolean isActive) {
+		boolean changed = this.isActive == isActive;
+		this.isActive = isActive;
+		
+		if (changed)
+			if (this.isActive)
+				registerHandler(handler);
+			else
+				unregisterHandler(handler);
+	}
 
 	/**
 	 * @param player The user of the ability instance
@@ -70,6 +86,11 @@ public class RagePlayerAbility extends BaseRangedPlayerAbility implements PVPAbi
 			}
 
 			public void execute(EntityDamageByEntityEvent event) {
+				if (!RagePlayerAbility.this.isActive) {
+					unregisterHandler(this);
+					return;
+				}
+				
 				if (!event.getDamager().equals(RagePlayerAbility.this.getPlayer()))
 					return;
 
@@ -95,7 +116,8 @@ public class RagePlayerAbility extends BaseRangedPlayerAbility implements PVPAbi
 
 	@Override
 	public String getDescription() {
-		return "Your axe becomes ingulfed with your own rage! Dealing 75% damage to all enemys surrounding anything you damage";
+		return "Your axe becomes ingulfed with your own rage! Dealing 75% initial "
+				+ "damage to all enemies surrounding anything you hit";
 	}
 
 	public AbilityResult execute() {
@@ -104,12 +126,18 @@ public class RagePlayerAbility extends BaseRangedPlayerAbility implements PVPAbi
 
 		IPlayerClass pClass = MMOPlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
 
-		int length = (20 * (pClass.getTotalLevel())) / 16;
+		int length = (20 * (pClass.getTotalLevel())) / 16;//TODO when adding exp
 
-		registerHandler(handler);
-		new UnregisterMMOHandlerRunnable(handler).runTaskLater(NoxMMO.getInstance(), length);
+		setActive(true);
+		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {
+			
+			public void run() {
+				RagePlayerAbility.this.setActive(false);
+				MessageUtil.sendLocale(getPlayer(), MMOLocale.ABIL_DEACTIVATED, getName());
+			}
+		}, length);
 
-		return new AbilityResult(this, true);
+		return new AbilityResult(this, true, MMOLocale.ABIL_ACTIVATED.get(getName()));
 	}
 
 }

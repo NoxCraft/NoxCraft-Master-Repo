@@ -46,8 +46,9 @@ import com.noxpvp.mmo.runnables.ShockWaveAnimation;
  */
 public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implements PVPAbility {
 
-	public static final String PERM_NODE = "mass-destruction";
 	public static final String ABILITY_NAME = "Mass Destruction";
+	public static final String PERM_NODE = "mass-destruction";
+	
 	private BaseMMOEventHandler<EntityDamageEvent> handler;
 	private double hVelo = 1.5;
 	private boolean isActive;
@@ -62,7 +63,9 @@ public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implem
 	public MassDestructionPlayerAbility(Player p, double range) {
 		super(ABILITY_NAME, p, range);
 		
-		setCD(10);
+		this.isActive = false;
+		setDamage(5);
+		setCD(45);
 
 		handler = new BaseMMOEventHandler<EntityDamageEvent>(
 				new StringBuilder().append(p.getName()).append(ABILITY_NAME).append("EntityDamageEvent").toString(),
@@ -86,21 +89,19 @@ public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implem
 
 				Player p = (Player) event.getEntity();
 
-				if (p.equals(MassDestructionPlayerAbility.this.getPlayer())) {
+				if (p.getName() == MassDestructionPlayerAbility.this.getPlayer().getName() && MassDestructionPlayerAbility.this.isActive) {
 					event.setCancelled(true);
-					MassDestructionPlayerAbility.this.setActive(false).eventExecute();
+					MassDestructionPlayerAbility.this.eventExecute(event.getDamage());
 				}
 			}
 		};
 
-		this.isActive = false;
-		setDamage(5);
 	}
 
 	@Override
 	public String getDescription() {
-		return "You leap high into the air causing the ground to shake when you land, dealing "
-				+ getDamage() + " to all enemys within " + getRange() + " blocks";
+		return "You leap high into the air causing the ground to shake when you land, dealing out your fall damage"
+				+ " to all enemys within " + getRange() + " blocks";
 	}
 
 	private MassDestructionPlayerAbility setActive(boolean active) {
@@ -156,7 +157,7 @@ public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implem
 		return new AbilityResult(this, true);
 	}
 
-	public void eventExecute() {
+	public void eventExecute(double d) {
 
 		Player p = getPlayer();
 		Location pLoc = p.getLocation();
@@ -165,7 +166,9 @@ public class MassDestructionPlayerAbility extends BaseRangedPlayerAbility implem
 
 		new ParticleRunner(ParticleType.largeexplode, pLoc.clone().add(0, 1, 0), true, 10, 3, 1).start(0);
 		new ShockWaveAnimation(pLoc, 1, range, 0.35, true).start(0);
-		new ExpandingDamageRunnable(p, pLoc, getDamage(), range, 1).start(0);
+		new ExpandingDamageRunnable(p, pLoc, d, range, 1).start(0);
+		
+		setActive(false);
 
 	}
 
