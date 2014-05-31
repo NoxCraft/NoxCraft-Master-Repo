@@ -25,6 +25,7 @@ public class CursePlayerAbility extends BaseTargetedPlayerAbility implements PVP
 	public CursePlayerAbility(Player player, double range) {
 		super(ABILITY_NAME, player, range, MMOPlayerManager.getInstance().getPlayer(player).getTarget());
 
+		setCD(35);
 		this.duration = 100;
 		this.lethality = 1;
 	}

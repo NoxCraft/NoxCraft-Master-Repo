@@ -22,13 +22,14 @@ import com.noxpvp.mmo.handlers.BaseMMOEventHandler;
 public class HammerOfThorPlayerAbility extends BasePlayerAbility implements PVPAbility {
 	public static final String ABILITY_NAME = "Hammer of Thor";
 	public static final String PERM_NODE = "hammer-of-thor";
+	
 	public static FixedMetadataValue hammerSecurity = new FixedMetadataValue(NoxMMO.getInstance(), "HammerSecurity");
+	
 	private BaseMMOEventHandler<ProjectileHitEvent> hitListener;
 	private BaseMMOEventHandler<EntityDamageEvent> hitEntityListener;
-
 	private double distanceVelo;
 	private double damageMultiplier;
-	private boolean active = false;
+	private boolean isActive = false;
 
 	/**
 	 * @param player The user of this ability instance
@@ -58,7 +59,7 @@ public class HammerOfThorPlayerAbility extends BasePlayerAbility implements PVPA
 			}
 
 			public void execute(EntityDamageEvent event) {
-				if (!active) {
+				if (!isActive) {
 					unregisterHandler(this);
 					return;
 				}
@@ -92,7 +93,7 @@ public class HammerOfThorPlayerAbility extends BasePlayerAbility implements PVPA
 			}
 
 			public void execute(ProjectileHitEvent event) {
-				if (!active) {
+				if (!isActive) {
 					unregisterHandler(this);
 					return;
 				}
@@ -109,8 +110,8 @@ public class HammerOfThorPlayerAbility extends BasePlayerAbility implements PVPA
 	}
 
 	private void setActive(boolean active) {
-		boolean changed = this.active != active;
-		this.active = active;
+		boolean changed = this.isActive != active;
+		this.isActive = active;
 
 		if (changed)
 			if (active) {

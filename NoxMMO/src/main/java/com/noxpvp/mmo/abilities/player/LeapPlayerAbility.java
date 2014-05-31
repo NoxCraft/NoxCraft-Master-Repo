@@ -61,7 +61,7 @@ public class LeapPlayerAbility extends BasePlayerAbility {
 		newVelocity.multiply(multiplier);
 
 		// if going up a reasonable amount
-		if (newVelocity.getY() > .75) {
+		if (newVelocity.getY() > .65) {
 			new ParticleRunner(ParticleType.cloud, pLoc.clone().add(0, 2, 0), true, 0, 50, 1).start(0);
 			new ShockWaveAnimation(pLoc, 1, 2, true).start(0);
 		}
