@@ -104,6 +104,10 @@
 				<version>2.0</version>
 				<exclusions>
                     <exclusion>
+                        <groupId>org.dthielke</groupId>
+                        <artifactId>Herochat</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <artifactId>craftbukkit</artifactId>
                         <groupId>org.bukkit</groupId>
                     </exclusion>

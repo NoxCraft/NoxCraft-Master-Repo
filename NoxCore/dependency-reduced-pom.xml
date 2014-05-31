@@ -231,8 +231,8 @@
       <scope>compile</scope>
       <exclusions>
         <exclusion>
-          <artifactId>*</artifactId>
-          <groupId>*</groupId>
+          <artifactId>netty-all</artifactId>
+          <groupId>io.netty</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -241,12 +241,6 @@
       <artifactId>BKCommonLib</artifactId>
       <version>1.58-SNAPSHOT</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>*</artifactId>
-          <groupId>*</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
@@ -255,8 +249,12 @@
       <scope>provided</scope>
       <exclusions>
         <exclusion>
-          <artifactId>*</artifactId>
-          <groupId>*</groupId>
+          <artifactId>cglib-nodep</artifactId>
+          <groupId>cglib</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>BukkitExecutors</artifactId>
+          <groupId>com.comphenix.executors</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -271,12 +269,6 @@
       <artifactId>BarAPI</artifactId>
       <version>3.1</version>
       <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>*</artifactId>
-          <groupId>*</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>me.botsko</groupId>
@@ -285,8 +277,20 @@
       <scope>provided</scope>
       <exclusions>
         <exclusion>
-          <artifactId>*</artifactId>
-          <groupId>*</groupId>
+          <artifactId>Herochat</artifactId>
+          <groupId>org.dthielke</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>craftbukkit</artifactId>
+          <groupId>org.bukkit</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>bukkit</artifactId>
+          <groupId>org.bukkit</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>worldedit</artifactId>
+          <groupId>com.sk89q</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -295,6 +299,12 @@
       <artifactId>worldguard</artifactId>
       <version>5.9</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>jchronic</artifactId>
+          <groupId>com.sk89q</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.palmergames.towny</groupId>
@@ -312,6 +322,7 @@
   <properties>
     <main>com.noxpvp.core.NoxCore</main>
     <powermock.version>1.5.2</powermock.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>
 
