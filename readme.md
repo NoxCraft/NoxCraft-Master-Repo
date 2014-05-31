@@ -8,7 +8,7 @@ For Change logs of each plugin visit the src/main/resources folders in any plugi
 
 Some plugins may not have one yet due to no releases
 
-Please read the [License](License.md)
+Please read the [License](LICENSE.MD)
 
 Credits
 ----
