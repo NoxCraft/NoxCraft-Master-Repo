@@ -8,6 +8,8 @@ For Changelogs of each plugin visit the src/main/resources folders in any plugin
 
 Some plugins may not have one yet due to no releases
 
+Please read the [License](License.md)
+
 Credits
 ----
 Christopher Krier ([AKA Coaster3000](https://github.com/coaster3000)) - Head Developer
