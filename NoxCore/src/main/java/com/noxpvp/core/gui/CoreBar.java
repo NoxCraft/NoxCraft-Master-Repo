@@ -21,6 +21,7 @@
  * To use this software with any different license terms you must get prior explicit written permission from the copyright holders.
  */
 
+
 package com.noxpvp.core.gui;
 
 import me.confuser.barapi.BarAPI;
