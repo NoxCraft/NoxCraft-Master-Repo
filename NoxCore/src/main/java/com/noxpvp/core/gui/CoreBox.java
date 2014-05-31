@@ -145,6 +145,10 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 	public Inventory getBox() {
 		return box;
 	}
+	
+	public CoreBox getBackButton() {
+		return backButton;
+	}
 
 	public Player getPlayer() {
 		return p == null ? null : p.get() == null ? null : p.get();

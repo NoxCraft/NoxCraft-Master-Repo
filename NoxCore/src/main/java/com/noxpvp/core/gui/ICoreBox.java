@@ -21,6 +21,13 @@ public interface ICoreBox {
 	 * @return Inventory
 	 */
 	public Inventory getBox();
+	
+	/**
+	 * Get the previous box before this one, if any
+	 * 
+	 * @return {@link ICoreBox} previous menu
+	 */
+	public ICoreBox getBackButton();
 
 	/**
 	 * Gets the player this box was created for

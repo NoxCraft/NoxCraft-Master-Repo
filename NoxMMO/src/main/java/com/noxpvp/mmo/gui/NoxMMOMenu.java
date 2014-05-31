@@ -3,6 +3,7 @@ package com.noxpvp.mmo.gui;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.noxpvp.core.gui.CoreBox;
@@ -33,12 +34,21 @@ public class NoxMMOMenu extends CoreBox {
 		box.setItem(0, mp.getIdentifiableItem());
 		box.setItem(1, mp.getPrimaryClass().getIdentifiableItem());
 		
+		//Class switch
 		final ClassChooseMenu ccm = new ClassChooseMenu(p, NoxMMOMenu.this);
 		links.add(new CoreBoxItem(this, ccm.getIdentifiableItem()) {
-			
 			public boolean onClick(InventoryClickEvent click) {
 				ccm.show();
 				return true;
+			}
+		});
+		
+		//Party manager
+		final PartyManagerMenu pmm = new PartyManagerMenu(p, this);
+		links.add(new CoreBoxItem(this, pmm.getIdentifiableItem()) {
+			
+			public boolean onClick(InventoryClickEvent click) {
+				return false;
 			}
 		});
 		
@@ -47,6 +57,11 @@ public class NoxMMOMenu extends CoreBox {
 	
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		return new NoxMMOMenu(getPlayer(), null);
+		return new NoxMMOMenu(getPlayer(), this.getBackButton());
+	}
+	
+	@Override
+	public ItemStack getIdentifiableItem() {
+		return super.getIdentifiableItem();
 	}
 }
