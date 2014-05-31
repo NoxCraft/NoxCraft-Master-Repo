@@ -105,11 +105,17 @@
 			</dependency>
 			
 			<!-- AttributeStorage -->
-			<dependency>
-			    <groupId>com.comphenix.attribute</groupId>
-			    <artifactId>AttributeStorage</artifactId>
-			    <version>0.0.2-SNAPSHOT</version>
-			</dependency>
+            <dependency>
+                <groupId>com.comphenix.attribute</groupId>
+                <artifactId>AttributeStorage</artifactId>
+                <version>0.0.2-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>*</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
 			
 		    <!-- HoloAPI -->
 			<dependency>
@@ -151,6 +157,12 @@
                     </exclusion>
                 </exclusions>
 			</dependency>
+
+            <dependency>
+                <groupId>com.comphenix.packetwrapper</groupId>
+                <artifactId>PacketWrapper</artifactId>
+                <version>1.7.2-R0.5</version>
+            </dependency>
 			
 			<!-- Vault -->
 			<dependency>
@@ -211,12 +223,6 @@
 			<groupId>com.bergerkiller.bukkit</groupId>
 			<artifactId>BKCommonLib</artifactId>
 			<scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>*</artifactId>
-                    <groupId>*</groupId>
-                </exclusion>
-            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.comphenix.protocol</groupId>

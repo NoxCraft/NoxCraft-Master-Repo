@@ -21,12 +21,37 @@
  * To use this software with any different license terms you must get prior explicit written permission from the copyright holders.
  */
 
-package com.noxpvp.core.gui.rendering;
+package com.noxpvp.mmo.renderers;
 
-public interface IRenderer {
+import com.noxpvp.mmo.AbilityCycler;
+
+public class ItemDisplayACRenderer extends BaseAbilityCyclerRenderer {
+
+	public ItemDisplayACRenderer(AbilityCycler cycler) {
+		super(cycler);
+	}
 
 	/**
-	 * Render the display.
+	 * Renders a view provided by the {@link com.noxpvp.mmo.AbilityCycler#peekNext()} method.
 	 */
-	public void render();
+	@Override
+	public void renderNext() {
+
+	}
+
+	/**
+	 * Renders a view provided by the {@link com.noxpvp.mmo.AbilityCycler#peekPrevious()} method.
+	 */
+	@Override
+	public void renderPrevious() {
+
+	}
+
+	/**
+	 * Renders a view provided by the current through {@link com.noxpvp.mmo.AbilityCycler#current()}.
+	 */
+	@Override
+	public void renderCurrent() {
+
+	}
 }

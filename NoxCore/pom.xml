@@ -31,14 +31,7 @@
 		<dependency>
 			<groupId>com.comphenix.packetwrapper</groupId>
 			<artifactId>PacketWrapper</artifactId>
-			<version>1.7.2-R0.5</version>
 			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>bukkit</artifactId>
-					<groupId>org.bukkit</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		
 		<dependency>

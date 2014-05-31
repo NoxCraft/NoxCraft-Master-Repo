@@ -21,12 +21,35 @@
  * To use this software with any different license terms you must get prior explicit written permission from the copyright holders.
  */
 
-package com.noxpvp.core.gui.rendering;
+package com.noxpvp.core.commands;
 
-public interface IRenderer {
+import com.noxpvp.core.NoxCore;
 
-	/**
-	 * Render the display.
-	 */
-	public void render();
+public class PlayerOptionCommand extends BaseCommand {
+
+	public static final String COMMAND_NAME = "options";
+
+	public PlayerOptionCommand() {
+		super(COMMAND_NAME, true);
+	}
+
+	@Override
+	public CommandResult execute(CommandContext context) throws NoPermissionException {
+		return new CommandResult(this, false);
+	}
+
+	@Override
+	public NoxCore getPlugin() {
+		return NoxCore.getInstance();
+	}
+
+	@Override
+	public String[] getFlags() {
+		return new String[] {"h", "help"};
+	}
+
+	@Override
+	public int getMaxArguments() {
+		return -1;
+	}
 }
