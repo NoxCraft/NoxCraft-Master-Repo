@@ -60,7 +60,6 @@ public abstract class BaseAbilityCyclerRenderer extends RenderRunner {
 		return cycler;
 	}
 
-	@Override
 	public final void render() {
 		renderCurrent();;
 	}

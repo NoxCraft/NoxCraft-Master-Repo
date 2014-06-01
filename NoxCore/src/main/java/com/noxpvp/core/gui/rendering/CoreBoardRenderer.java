@@ -41,12 +41,10 @@ public abstract class CoreBoardRenderer extends RenderRunner implements ICoreBoa
 
 	protected abstract void updateRender();
 
-	@Override
 	public final void startRender() {
 		board.show();
 	}
 
-	@Override
 	public final void stopRender() {
 		board.hide();
 	}

@@ -201,7 +201,6 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		return player != null && player.get() != null;
 	}
 
-	@Override
 	public Map<String, Object> serialize() {
 		Map<String, Object> ret = new HashMap<String, Object>();
 
