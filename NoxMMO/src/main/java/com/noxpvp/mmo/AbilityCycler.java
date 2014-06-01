@@ -27,10 +27,10 @@ package com.noxpvp.mmo;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.google.common.collect.MapMaker;
 import com.noxpvp.core.data.Cycler;
-import com.noxpvp.core.gui.rendering.IRenderer;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.core.utils.UUIDUtil;
 import com.noxpvp.mmo.abilities.Ability;
+import com.noxpvp.mmo.abilities.IPassiveAbility;
 import com.noxpvp.mmo.renderers.BaseAbilityCyclerRenderer;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -39,6 +39,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -51,7 +52,7 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 //	public static final String TEMP_PCTK = "ability-cycler.active-count";
 
 	static ConcurrentMap<String, List<AbilityCycler>> cyclers = null;
-	private static NoxListener<NoxMMO> iHeld = null;
+	private static NoxListener<NoxMMO> iHeld = null, iInteract;
 	private ItemStack cycleItem;
 	private Reference<MMOPlayer> player = null;
 
@@ -59,7 +60,7 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		this.renderer = renderer;
 	}
 
-	private BaseAbilityCyclerRenderer renderer = null; //TODO: Create renderers
+	private BaseAbilityCyclerRenderer renderer = null;
 
 	public AbilityCycler(int size, OfflinePlayer player, ItemStack cycleItem) {
 		this(size, MMOPlayerManager.getInstance().getPlayer(player), cycleItem);
@@ -194,7 +195,34 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 
 		};
 
+		iInteract = new NoxListener<NoxMMO>(NoxMMO.getInstance()) {
+				@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+				public void onInteract(PlayerInteractEvent event) {
+					final Player player = event.getPlayer();
+					final String identity = UUIDUtil.compressUUID(player.getUniqueId());
+					if (!player.isSneaking())
+						return;
+
+					final MMOPlayer mmoPlayer = MMOPlayerManager.getInstance().getPlayer(player);
+
+					if (/*mmoPlayer.getTempData().get(TEMP_PCTK, 0) <= 0 || */!AbilityCycler.isRegistered(identity)) return; //Skip because we have no actual objects for this user.
+
+					final ItemStack heldItem = player.getInventory().getItemInHand();
+
+					AbilityCycler cycler = AbilityCycler.getCycler(identity, heldItem);
+					if (cycler == null) return;
+
+					Ability a = cycler.current();
+					if (a instanceof IPassiveAbility) return;
+
+					//TODO: If complained about. Check if weapon to cancel event.
+
+					event.setCancelled(a.execute().getResult());
+				}
+		};
+
 		iHeld.register();
+		iInteract.register();
 	}
 
 	boolean isValid() {
