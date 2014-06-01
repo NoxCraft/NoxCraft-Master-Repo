@@ -26,6 +26,7 @@ package com.noxpvp.mmo.listeners;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -40,6 +41,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import com.bergerkiller.bukkit.common.controller.EntityController;
 import com.bergerkiller.bukkit.common.entity.CommonEntity;
 import com.bergerkiller.bukkit.common.wrappers.DamageSource;
+import com.noxpvp.core.gui.QuestionBox;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
@@ -83,7 +85,7 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onInteract(PlayerInteractEvent e) {
 
-		Player p;
+		final Player p;
 		MMOPlayer player = pm.getPlayer((p = e.getPlayer()));
 		if (player == null) return;
 
@@ -132,6 +134,22 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 //		new LevelUpGlimmer(p.getLocation(), 20 * 10, 10).start(0);
 
 //		Bukkit.broadcastMessage(p.getLocation().getDirection().getY() + "");
+		
+		new QuestionBox(p, "do you want creative?") {
+			
+			@Override
+			public void onDeny() {
+				this.hide();
+				
+			}
+			
+			@Override
+			public void onConfirm() {
+				p.setGameMode(GameMode.CREATIVE);
+				this.hide();
+				
+			}
+		}.show();
 		
 	}
 
