@@ -39,6 +39,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -79,28 +80,41 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 			return item;
 		
 		Attributes a = new Attributes(item);
-//		System.out.println(a.size());
 		a.clear();
-//		System.out.println(a.size());
 		
 		return a.getStack();
+	}
+	
+	public CoreBox(Player p, String name, InventoryType type, @Nullable CoreBox backButton) {
+		this(p, name, type, 0, backButton, NoxCore.getInstance());
 	}
 	
 	public CoreBox(Player p, String name, int size, @Nullable CoreBox backButton) {
 		this(p, name, size, backButton, NoxCore.getInstance());
 	}
+	
+	public CoreBox(Player p, String name, InventoryType type) {
+		this(p, name, type, 0, null, NoxCore.getInstance());
+	}
 
 	public CoreBox(Player p, String name, int size) {
 		this(p, name, size, null, NoxCore.getInstance());
 	}
+	
+	public CoreBox(Player p, String name, int size, @Nullable CoreBox backbutton, NoxCore core) {
+		this(p, name, InventoryType.CHEST, size, backbutton, core);
+	}
 
-	public CoreBox(final Player p, String name, int size, @Nullable CoreBox backButton, NoxCore core) {
+	public CoreBox(final Player p, String name, InventoryType type, int size, @Nullable CoreBox backButton, NoxCore core) {
 		super(core);
 
 		this.pm = CorePlayerManager.getInstance();
 		this.p = new WeakReference<Player>(p);
 
-		this.box = Bukkit.getServer().createInventory(null, size, (this.name = name));
+		this.box = size == 0?
+				Bukkit.getServer().createInventory(null, type, name) :
+					Bukkit.getServer().createInventory(null, size, name);
+				
 		this.menuItems = new HashMap<Integer, CoreBoxItem>();
 		pName = p.getName();
 

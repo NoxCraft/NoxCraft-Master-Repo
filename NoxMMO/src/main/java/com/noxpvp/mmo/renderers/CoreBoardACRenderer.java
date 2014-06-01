@@ -85,12 +85,10 @@ public class CoreBoardACRenderer extends BaseAbilityCyclerRenderer implements IC
 		update();
 	}
 
-	@Override
 	public void startRender() {
 		board.show();
 	}
 
-	@Override
 	public void stopRender() {
 		board.hide();
 	}
