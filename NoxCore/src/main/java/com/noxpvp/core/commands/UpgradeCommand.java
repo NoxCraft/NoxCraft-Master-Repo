@@ -44,7 +44,7 @@ public class UpgradeCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[0];
+		return blankStringArray;
 	}
 
 	public String[] getHelp() {

@@ -38,7 +38,7 @@ public class MMOCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[] {};
+		return blankStringArray;
 	}
 
 	public int getMaxArguments() {

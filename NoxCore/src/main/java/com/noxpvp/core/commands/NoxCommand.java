@@ -29,6 +29,7 @@ import com.noxpvp.core.utils.NoxMessageBuilder;
 
 public class NoxCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "nox";
+	private static final String[] flags = new String[]{"h", "help"};
 
 	public NoxCommand() {
 		super(COMMAND_NAME, false);
@@ -40,7 +41,7 @@ public class NoxCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[]{"h", "help"};
+		return flags;
 	}
 
 	@Override

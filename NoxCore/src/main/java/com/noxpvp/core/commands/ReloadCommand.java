@@ -37,6 +37,8 @@ public class ReloadCommand extends BaseCommand {
 	public static final String PERM_NODE = "nox.reload";
 	private static final String ENTER_TREE = ">";
 
+	private static final String[] flags = new String[]{"h", "help"};
+
 	public ReloadCommand() {
 		super(COMMAND_NAME, false);
 	}
@@ -101,7 +103,7 @@ public class ReloadCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[]{"help", "h", "?"};
+		return flags;
 	}
 
 	public String[] getHelp() {
