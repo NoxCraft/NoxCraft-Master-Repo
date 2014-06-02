@@ -35,6 +35,7 @@ import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.Ability;
+import com.noxpvp.mmo.command.subcommands.AbilityBindCommand;
 import com.noxpvp.mmo.command.subcommands.AbilityInfoCommand;
 import com.noxpvp.mmo.command.subcommands.AbilityListCommand;
 
@@ -46,6 +47,7 @@ public class AbilityCommand extends BaseCommand {
 
 	public AbilityCommand() {
 		super(COMMAND_NAME, true);
+		registerSubCommand(new AbilityBindCommand());
 		registerSubCommand(new AbilityInfoCommand());
 		registerSubCommand(new AbilityListCommand());
 	}

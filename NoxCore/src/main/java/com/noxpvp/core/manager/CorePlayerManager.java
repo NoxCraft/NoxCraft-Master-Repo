@@ -303,6 +303,7 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 	 *
 	 * @param noxPlayer the NoxPlayer object to load
 	 */
+	@Override
 	public void loadPlayer(NoxPlayer noxPlayer) {
 		ConfigurationNode persistant_data = getPlayerNode(noxPlayer);
 
@@ -318,7 +319,7 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 			load();
 		}
 
-		super.loadPlayer(noxPlayer);
+		noxPlayer.load();
 
 		for (IPlayerManager<?> manager : managers)
 			if (manager != this)

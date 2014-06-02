@@ -129,4 +129,7 @@ public class Cycler<E> implements ListIterator<E> {
 		data.set(currentIndex(), e);
 	}
 
+	public void addAll(Collection<E> items) {
+		data.addAll(items);
+	}
 }

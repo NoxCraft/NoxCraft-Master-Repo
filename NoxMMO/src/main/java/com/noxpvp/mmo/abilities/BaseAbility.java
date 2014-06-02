@@ -35,7 +35,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
 import com.bergerkiller.bukkit.common.utils.CommonUtil;
-import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.events.EntityAbilityExecutedEvent;
 import com.noxpvp.mmo.events.EntityTargetedAbilityExecutedEvent;
@@ -130,10 +129,7 @@ public abstract class BaseAbility implements Ability {
 	}
 
 	public boolean mayExecute() {
-		if (isCancelled())
-			return false;
-
-		return true;
+		return !isCancelled();
 	}
 	
 	public class AbilityResult {

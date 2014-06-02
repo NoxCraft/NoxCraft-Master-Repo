@@ -47,10 +47,6 @@ public class MMOPlayerManager extends BasePlayerManager<MMOPlayer> {
 		return NoxMMO.getInstance();
 	}
 
-	public void loadPlayer(NoxPlayer player) {
-		getPlayer(player).load();
-	}
-
 	@Override
 	protected MMOPlayer craftNew(NoxPlayer noxPlayer) {
 		return new MMOPlayer(noxPlayer);

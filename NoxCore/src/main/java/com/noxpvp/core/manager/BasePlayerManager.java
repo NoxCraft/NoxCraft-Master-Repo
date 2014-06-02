@@ -51,6 +51,10 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 		return craftNew(adapter.getNoxPlayer());
 	}
 
+	public void loadPlayer(NoxPlayer player) {
+		getPlayer(player).load();
+	}
+
 	protected abstract T craftNew(NoxPlayer adapter);
 
 	/**

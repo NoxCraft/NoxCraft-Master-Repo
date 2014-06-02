@@ -40,13 +40,25 @@ public abstract class BaseMMOEventHandler<T extends Event> implements MMOEventHa
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == this)
-			return true;
-		if (!(obj instanceof MMOEventHandler))
-			return false;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof MMOEventHandler)) return false;
 
-		return ((MMOEventHandler<?>) obj).getID().equals(this.getID());
+		MMOEventHandler that = (MMOEventHandler) o;
+
+		if (priority != that.getPriority()) return false;
+		if (eventPriority != that.getEventPriority()) return false;
+		if (!id.equals(that.getID())) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id.hashCode();
+		result = 31 * result + eventPriority.hashCode();
+		result = 31 * result + priority;
+		return result;
 	}
 
 	public final String getID() {

@@ -67,6 +67,9 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuI
 	private static final String SECONDARY_PLAYERCLASS_NODE = PRIMARY_CLASS_NODE + ".class";
 	private static final String SECONDARY_TIER_NODE = PRIMARY_CLASS_NODE + ".tier";
 	private static final String TARGET_NODE = "current.target";
+
+	private static final String ABILITY_CYCLERS_NODE = "cyclers";
+
 	private IPlayerClass primaryClass = DummyClass.PRIMARY, secondaryClass = DummyClass.SECONDARY;
 	private LivingEntity target;
 	private ItemStack identifiableItem;
@@ -120,6 +123,18 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuI
 			ret.putAll(getSecondaryClass().getAbilityMap());
 
 		return Collections.unmodifiableMap(ret);
+	}
+
+
+	/*
+	 * This will return a usable list object.
+	 * You may add and remove from it and it should store it automatically!
+	 * So long as the jvm considers it like a pointer to the real object. And not two objects.
+	 *
+	 * //TODO: Test to make sure data is storing properly..
+	 */
+	public List<AbilityCycler> getAbilityCyclers() {
+		return getPersistantData().getList(ABILITY_CYCLERS_NODE, AbilityCycler.class, new ArrayList<AbilityCycler>());
 	}
 
 	public IPlayerClass getPrimaryClass() {
