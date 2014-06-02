@@ -320,4 +320,8 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 
 		return null;
 	}
+
+	public static AbilityCycler getCycler(Player player) {
+		return getCycler(UUIDUtil.compressUUID(player.getUniqueId()), player.getItemInHand());
+	}
 }
