@@ -111,6 +111,7 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		this.pm = CorePlayerManager.getInstance();
 		this.p = new WeakReference<Player>(p);
 
+		this.name = name;
 		this.box = size == 0?
 				Bukkit.getServer().createInventory(null, type, name) :
 					Bukkit.getServer().createInventory(null, size, name);

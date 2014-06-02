@@ -81,7 +81,7 @@ public class NoxMessageBuilder extends MessageBuilder {
 		return (NoxMessageBuilder) append(GlobalLocale.HEADER_CLOSE.get());
 	}
 
-	public NoxMessageBuilder withCommand(NoxCommand command) {
+	public NoxMessageBuilder withCommand(BaseCommand command) {
 		return withCommand(command, false);
 	}
 
