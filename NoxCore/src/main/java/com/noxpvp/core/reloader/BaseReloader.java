@@ -45,7 +45,7 @@ public abstract class BaseReloader implements Reloader {
 		if (reloaders.containsKey(name))
 			return false;
 		else
-			reloaders.put(name, module);
+			reloaders.put(name.toLowerCase(), module);
 
 		return true;
 	}

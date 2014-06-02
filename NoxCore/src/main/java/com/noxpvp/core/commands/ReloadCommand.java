@@ -31,6 +31,7 @@ import com.noxpvp.core.MasterReloader;
 import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.locales.GlobalLocale;
 import com.noxpvp.core.reloader.Reloader;
+import com.noxpvp.core.utils.NoxMessageBuilder;
 
 public class ReloadCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "Reloader";
@@ -43,6 +44,24 @@ public class ReloadCommand extends BaseCommand {
 		super(COMMAND_NAME, false);
 	}
 
+	@Override
+	public NoxMessageBuilder onDisplayHelp(NoxMessageBuilder message) {
+		message.withCommand(this, true);
+		message.aqua("Put * on the end of any module to also load all sub modules").newLine().append(' ').newLine();//Have to have something there or it wont NL a null line
+
+		message.green("Current reloadable modules:");
+
+		MasterReloader mr = getPlugin().getMasterReloader();
+
+		if (mr.hasModules())
+			for (Reloader module : mr.getModules())
+				nextTree(message.yellow(" "), module, 0);
+		else
+			message.red("No Modules Loaded?!");
+
+		return (NoxMessageBuilder) message.newLine();
+	}
+
 	public CommandResult execute(CommandContext context) {
 
 		CommandSender sender = context.getSender();
@@ -52,8 +71,7 @@ public class ReloadCommand extends BaseCommand {
 			throw new NoPermissionException(sender, PERM_NODE, "You may not use this command!");
 
 		if (context.getFlag("?", false) || context.getFlag("h", false) || context.getFlag("help", false) || args.length == 0) {
-			displayHelp(sender);
-			return new CommandResult(this, true);
+			return new CommandResult(this, false);
 		}
 
 		String module = null;
@@ -76,7 +94,7 @@ public class ReloadCommand extends BaseCommand {
 		if (module.equals("") || module.length() == 0 && all)
 			r = getPlugin().getMasterReloader();
 		else
-			r = getPlugin().getMasterReloader().getModule(module);
+			r = getPlugin().getMasterReloader().getModule(module.toLowerCase());
 
 		try {
 			if (all) {
@@ -95,6 +113,7 @@ public class ReloadCommand extends BaseCommand {
 			GlobalLocale.COMMAND_FAILED.message(sender, "An error occured: " + e.getMessage());
 			e.printStackTrace();
 		}
+		
 		return new CommandResult(this, true);
 	}
 
@@ -104,24 +123,6 @@ public class ReloadCommand extends BaseCommand {
 
 	public String[] getFlags() {
 		return flags;
-	}
-
-	public String[] getHelp() {
-		MessageBuilder mb = new MessageBuilder();
-		mb.aqua("/").yellow(COMMAND_NAME).append(' ').aqua("<<").yellow("ModuleName").aqua("> [").yellow("SubModule1, SubModule2, ...").aqua("]>").newLine();
-		mb.aqua("Put * on the end of any module to also load all sub modules").newLine().append(' ').newLine();//Have to have something there or it wont NL a null line
-
-		mb.green("Current reloadable modules:");
-
-		MasterReloader mr = getPlugin().getMasterReloader();
-
-		if (mr.hasModules())
-			for (Reloader module : mr.getModules())
-				nextTree(mb.yellow(" "), module, 0);
-		else
-			mb.red("No Modules Loaded?!");
-
-		return mb.lines();
 	}
 
 	public int getMaxArguments() {

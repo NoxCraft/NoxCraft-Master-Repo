@@ -94,59 +94,18 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 		//debug===========================================
 		if (p.getItemInHand().getType() != Material.STICK)
 			return;
-
-		//debug here
-//		new TornadoPlayerAbility(p, 25, 20 * 10).execute();
-//		new FireSpinPlayerAbility(p).execute();
-//		new MassDestructionPlayerAbility(p).execute();
-//		new LeapPlayerAbility(p).execute();
-//		new CurseAbility(p).execute();
-//		new ChargePlayerAbility(p).execute();
-//		new MedPackAbility(p).execute();
-//		new PickPocketAbility(p).execute();
-//		new HookShotAbility(p).execute();//XXX do this
 		
-//		abs = new HashMap<String, BasePlayerAbility>();
-//		MMOPlayer mp = MMOPlayerManager.getInstance().getMMOPlayer(p);
-//		if (!abs.containsKey(p.getName())) {
-//			BasePlayerAbility ab = new HookShotPlayerAbility(p);
-//			abs.put(p.getName(), ab);
-//		}
-//
-//		abs.get(p.getName()).execute();
-		
-//		new FireBallPlayerAbility(p).execute();
-//		new FireSpinPlayerAbility(p).execute();
-		
-//		new HammerOfThorAbility(p).execute();
-//		new GuardianAngelPlayerAbility(p).execute();
-//		new BandageAbility(p).execute();
-//		new WisdomEntityAbility(p).execute();
-//		new SoothePlayerAbility(p).execute();
-//		new ThrowPlayerAbility(p).execute();
-//		new MortalWoundPlayerAbility(p).execute();
-//		new FireNovaEntityAbility(p).execute();
-//		new BoltPlayerAbility(p).execute();
-//		new RejuvenationPlayerAbility(p).execute();
-//		new ReincarnateAbility(p).execute();
-//		new DrainLifePlayerAbility(p).execute();
-//		new SoulStealAbility(p).execute();
-//		new LevelUpGlimmer(p.getLocation(), 20 * 10, 10).start(0);
-
-//		Bukkit.broadcastMessage(p.getLocation().getDirection().getY() + "");
-		
-		new QuestionBox(p, "do you want creative?") {
+		new QuestionBox(p, "Bind all abilities?") {
 			
 			@Override
 			public void onDeny() {
-				this.hide();
+				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void onConfirm() {
-				p.setGameMode(GameMode.CREATIVE);
-				this.hide();
+				// TODO Auto-generated method stub
 				
 			}
 		}.show();
