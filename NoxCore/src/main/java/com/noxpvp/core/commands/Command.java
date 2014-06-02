@@ -29,6 +29,8 @@ import com.noxpvp.core.utils.NoxMessageBuilder;
 
 public interface Command {
 
+	public String[] getAliases();
+
 	public void displayHelp(CommandSender sender);
 
 	public NoxMessageBuilder onDisplayHelp(NoxMessageBuilder message);

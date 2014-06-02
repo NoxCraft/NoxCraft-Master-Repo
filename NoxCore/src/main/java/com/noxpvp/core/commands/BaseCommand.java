@@ -23,9 +23,12 @@
 
 package com.noxpvp.core.commands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
+import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import org.bukkit.command.CommandSender;
 
 import com.bergerkiller.bukkit.common.collections.StringMap;
@@ -41,6 +44,8 @@ public abstract class BaseCommand implements Command {
 	private boolean isRoot;
 	private BaseCommand parent;
 	private StringMap<BaseCommand> subCommands = new StringMap<BaseCommand>();
+	private StringMap<String> subCommandAliases = new StringMap<String>();
+	private List<String> aliases = new ArrayList<String>();
 
 	protected static final String[] blankStringArray = new String[0];
 
@@ -60,6 +65,14 @@ public abstract class BaseCommand implements Command {
 	 */
 	public BaseCommand(String name, boolean isPlayerOnly) {
 		this(null, name, isPlayerOnly);
+	}
+
+	public final String[] getAliases() {
+		return aliases.toArray(new String[aliases.size()]);
+	}
+
+	public final void addAlias(String alias) {
+		aliases.add(alias);
 	}
 
 	public final boolean containsSubCommand(String name) {
@@ -82,6 +95,24 @@ public abstract class BaseCommand implements Command {
 
 		mb.headerClose(false).send(sender);
 
+	}
+
+	/**
+	 * Tells the specified text is a match to an alias of this command.
+	 * @param alias
+	 * @return true if alias exists. Else false
+	 */
+	public final boolean isAlias(String alias) {
+		return aliases.contains(alias);
+	}
+
+	/**
+	 * Tells if the specified text is a match to a sub commands alias.
+	 * @param alias
+	 * @return true if alias exists. Else false
+	 */
+	public boolean isSubCommandAlias(String alias) {
+		return subCommandAliases.containsKeyLower(alias);
 	}
 
 	public NoxMessageBuilder onDisplayHelp(NoxMessageBuilder message) {
@@ -157,6 +188,8 @@ public abstract class BaseCommand implements Command {
 	public final BaseCommand getSubCommand(String name) {
 		if (containsSubCommand(name))
 			return subCommands.getLower(name);
+		else if (isSubCommandAlias(name))
+			return subCommands.getLower(subCommandAliases.getLower(name));
 		return null;
 	}
 
@@ -188,6 +221,9 @@ public abstract class BaseCommand implements Command {
 
 		command.setParent(this);
 		subCommands.putLower(command.getName(), command);
+		if (!LogicUtil.nullOrEmpty(command.getAliases()))
+			for (String alias: command.getAliases())
+				subCommandAliases.putLower(alias, command.getName());
 	}
 
 	public final void registerSubCommands(BaseCommand... commands) {

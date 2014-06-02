@@ -29,6 +29,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 
+import com.bergerkiller.bukkit.common.collections.StringMap;
+import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -53,7 +55,8 @@ import com.noxpvp.core.utils.gui.MessageUtil;
 
 public abstract class NoxPlugin extends PluginBase {
 
-	protected Map<String, Command> commandExecs = new HashMap<String, Command>();
+	protected StringMap<Command> commandExecs = new StringMap<Command>();
+	protected StringMap<String> commandAliases = new StringMap<String>();
 
 	public void addPermission(NoxPermission perm) {
 		NoxCore.getInstance().addPermission(perm);
@@ -68,8 +71,12 @@ public abstract class NoxPlugin extends PluginBase {
 		String argLine = StringUtil.join(" ", args);
 		CommandContext context = CommandUtil.parseCommand(sender, argLine);
 
-		if (commandExecs.containsKey(command.toLowerCase(Locale.ENGLISH))) {
-			Command cmd = commandExecs.get(command.toLowerCase(Locale.ENGLISH));
+		String cmdString = command;
+		if (commandAliases.containsKeyLower(cmdString))
+			cmdString = commandAliases.getLower(cmdString);
+
+		if (commandExecs.containsKeyLower(cmdString)) {
+			Command cmd = commandExecs.getLower(cmdString);
 			if (cmd == null)
 				throw new NullPointerException("Command execution class was null!");
 			try {
@@ -147,7 +154,12 @@ public abstract class NoxPlugin extends PluginBase {
 						+ "\tRunner Owner: " + CommonUtil.getPluginByClass(runner.getClass()).getName());
 			}
 			e.printStackTrace();
+			return;
 		}
+
+		if (!LogicUtil.nullOrEmpty(cmd.getAliases()))
+			for (String alias : cmd.getAliases())
+				commandAliases.putLower(alias, cmd.getName());
 	}
 
 	public void registerCommands(Collection<Command> runners) {
