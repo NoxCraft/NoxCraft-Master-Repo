@@ -156,6 +156,10 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 		return getProxyBase().hashCode();
 	}
 
+	public boolean equals(Object o) {
+		return getProxyBase().equals(o);
+	}
+
 	public CoreBoard getCoreBoard() {
 		return getProxyBase().getCoreBoard();
 	}
