@@ -41,12 +41,14 @@ public class ClassSwitchCommand extends BaseCommand {
 
 	public static final String COMMAND_NAME = "switch";
 
+	private static final String[] flags = new String[]{"h", "help", "nogui"};
+
 	public ClassSwitchCommand() {
 		super(COMMAND_NAME, true);
 	}
 
 	public String[] getFlags() {
-		return new String[]{"h", "help", "nogui"};
+		return flags;
 	}
 
 	public String[] getHelp() {

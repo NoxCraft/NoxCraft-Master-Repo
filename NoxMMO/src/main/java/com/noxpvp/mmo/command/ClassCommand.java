@@ -34,6 +34,8 @@ import com.noxpvp.mmo.command.subcommands.ClassSwitchCommand;
 public class ClassCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "class";
 
+	private static final String[] flags = new String[]{"h", "help"};
+
 	public ClassCommand() {
 		super(COMMAND_NAME, true);
 
@@ -45,7 +47,7 @@ public class ClassCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[]{"h", "help"};
+		return flags;
 	}
 
 	public int getMaxArguments() {

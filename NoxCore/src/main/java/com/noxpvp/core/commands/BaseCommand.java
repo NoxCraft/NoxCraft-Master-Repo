@@ -42,6 +42,8 @@ public abstract class BaseCommand implements Command {
 	private BaseCommand parent;
 	private StringMap<BaseCommand> subCommands = new StringMap<BaseCommand>();
 
+	protected static final String[] blankStringArray = new String[0];
+
 	protected BaseCommand(BaseCommand parent, String name, boolean isPlayerOnly) {
 		isRoot = parent == null;
 

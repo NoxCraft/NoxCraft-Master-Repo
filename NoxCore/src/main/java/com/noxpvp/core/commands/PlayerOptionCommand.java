@@ -28,6 +28,7 @@ import com.noxpvp.core.NoxCore;
 public class PlayerOptionCommand extends BaseCommand {
 
 	public static final String COMMAND_NAME = "options";
+	private static final String[] flags = new String[]{"h", "help"};
 
 	public PlayerOptionCommand() {
 		super(COMMAND_NAME, true);
@@ -44,7 +45,7 @@ public class PlayerOptionCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[] {"h", "help"};
+		return flags;
 	}
 
 	public int getMaxArguments() {

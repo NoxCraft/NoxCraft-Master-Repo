@@ -43,7 +43,7 @@ public class AbilityListCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[0];
+		return blankStringArray;
 	}
 
 	public int getMaxArguments() {

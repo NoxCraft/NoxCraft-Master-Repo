@@ -42,6 +42,8 @@ public class AbilityCommand extends BaseCommand {
 
 	public static final String COMMAND_NAME = "ability";
 
+	private static final String[] flags = new String[]{"h", "help"};
+
 	public AbilityCommand() {
 		super(COMMAND_NAME, true);
 		registerSubCommand(new AbilityInfoCommand());
@@ -49,7 +51,7 @@ public class AbilityCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[]{"h", "help"};
+		return flags;
 	}
 
 	public int getMaxArguments() {

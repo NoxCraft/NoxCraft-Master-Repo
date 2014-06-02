@@ -23,24 +23,26 @@
 
 package com.noxpvp.mmo.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-
-import org.bukkit.entity.Player;
-
 import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.reflection.SafeField;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.google.common.collect.MapMaker;
 import com.noxpvp.core.collection.DualAccessMap;
+import com.noxpvp.core.utils.UUIDUtil;
+import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.classes.AxesPlayerClass;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 
 public class PlayerClassUtil { //TODO: UUID's
 	public static final String LOG_MODULE_NAME = "PlayerClass";
@@ -175,42 +177,38 @@ public class PlayerClassUtil { //TODO: UUID's
 	}
 
 	private static PlayerClass safeConstructClass(Class clazz, Player player) {
-
-		SafeConstructor sc = new SafeConstructor(clazz, Player.class);
-		if (!sc.isValid())
-			return null;
-
-		Object o = sc.newInstance(player);
-		if (!(o instanceof PlayerClass))
-			return null;
-
-		return (PlayerClass) o;
+		return safeConstructClass(clazz, UUIDUtil.compressUUID(player.getUniqueId()));
 	}
 
-	private static PlayerClass safeConstructClass(Class c, String playerName) {
+	private static PlayerClass safeConstructClass(Class c, String playerUID) {
 		String classID = getClassIDbyClass(c);
 
 		if (classID != null) {
-			String match = playerName + "|" + classID;
+			String match = playerUID + "|" + classID;
 			if (classCache.containsKey(match) && classCache.get(match) != null)
 				return classCache.get(match);
 		}
-
 
 		SafeConstructor sc = new SafeConstructor(c, String.class);
 
 		if (!sc.isValid())
 			return null;
 
-		Object o = sc.newInstance(playerName);
+		Object o = sc.newInstance(playerUID);
 
 		if (!(o instanceof PlayerClass))
 			return null;
 
 		PlayerClass ret = (PlayerClass) o;
+		try {
+			ret.onLoad(MMOPlayerManager.getInstance().getPlayer(Bukkit.getOfflinePlayer(UUIDUtil.toUUID(playerUID))).getPersistantData());
+		} catch (NullPointerException e) {
+			NoxMMO.getInstance().log(Level.SEVERE, "There is definitely null pointers occurring here. UPDATE CODE BITCHES!");
+			e.printStackTrace();
+		}
 
 		classID = ret.getUniqueID();
-		String cs = playerName + "|" + classID;
+		String cs = playerUID + "|" + classID;
 		if (LogicUtil.nullOrEmpty(classID))
 			log.warning("ClassID for class " + ret.getName() + " is null or empty!");
 		else

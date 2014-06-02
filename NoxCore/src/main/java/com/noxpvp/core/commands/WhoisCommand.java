@@ -29,6 +29,7 @@ import com.noxpvp.core.NoxCore;
 public class WhoisCommand extends BaseCommand {
 	public static final String COMMAND_NAME = "whois";
 
+	private static final String[] flags = new String[]{"h", "help"};
 	public static final String PERM_NODE = "whois";
 
 	public WhoisCommand() {
@@ -36,7 +37,7 @@ public class WhoisCommand extends BaseCommand {
 	}
 
 	public String[] getFlags() {
-		return new String[]{"h", "help"};
+		return flags;
 	}
 
 	public String[] getHelp() {
