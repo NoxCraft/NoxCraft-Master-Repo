@@ -34,6 +34,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.meta.When;
 
+import com.noxpvp.core.utils.UUIDUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -65,7 +66,7 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
  * <br/>
  * Bold signifies that internal mechanisms depend heavily on and <b>MUST</b> be implemented.
  * <ol>
- * <li><b>(String playerName)</b></li>
+ * <li><b>(String playerIdentifier)</b></li>
  * </ol>
  * <br/><br/>
  * You must implement the following:<br/>
@@ -92,32 +93,32 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	private String name;
 	private ItemStack identiferItem;
 	//Player Data
-	private String playerName;
+	private String playerIdentifier;
 
 	public PlayerClass(String uid, @Nonnull String name, @Nonnull Player player) {
 		this(uid, name, null, player);
 	}
 
-	public PlayerClass(String uid, @Nonnull String name, @Nonnull String playerName) {
-		this(uid, name, playerName, null);
+	public PlayerClass(String uid, @Nonnull String name, @Nonnull String playerIdentifier) {
+		this(uid, name, playerIdentifier, null);
 	}
 
 	public PlayerClass(String uid,
 	                   @Nonnull String name,
-	                   @Nonnull(when = When.MAYBE) String playerName, @Nonnull(when = When.MAYBE) Player player) {
+	                   @Nonnull(when = When.MAYBE) String playerIdentifier, @Nonnull(when = When.MAYBE) Player player) {
 		Validate.notNull(name, "The name of class must not be null!");
 		Validate.notNull(uid, "The UID of class must not be null!");
-		Validate.isTrue((player != null || playerName != null), "Either the player or the playerName must not be null!");
+		Validate.isTrue((player != null || playerIdentifier != null), "Either the player or the playerIdentifier must not be null!");
 
 		this.uid = uid;
 		this.name = name;
 
-		if (playerName == null)
-			this.playerName = player.getName();
+		if (playerIdentifier == null)
+			this.playerIdentifier = player.getName();
 		else
-			this.playerName = playerName;
+			this.playerIdentifier = playerIdentifier;
 
-		log = pcLog.getModule(this.playerName);
+		log = pcLog.getModule(this.playerIdentifier);
 
 		this.tiers = craftClassTiers();
 		this.tiers.putAll(craftDynamicTiers());
@@ -348,11 +349,16 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	}
 
 	public final Player getPlayer() {
-		return Bukkit.getPlayer(getPlayerName());
+		if (isPlayerIdentifierUUID()) return Bukkit.getPlayer(UUIDUtil.toUUID(getPlayerIdentifier()));
+		else return Bukkit.getPlayer(getPlayerIdentifier());
 	}
 
-	public final String getPlayerName() {
-		return playerName;
+	public final boolean isPlayerIdentifierUUID() {
+		return UUIDUtil.isUUID(getPlayerIdentifier());
+	}
+
+	public final String getPlayerIdentifier() {
+		return playerIdentifier;
 	}
 
 	public final IClassTier getTier() {

@@ -23,26 +23,27 @@
 
 package com.noxpvp.mmo.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+
+import com.noxpvp.core.utils.UUIDUtil;
+import com.noxpvp.mmo.MMOPlayerManager;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import com.bergerkiller.bukkit.common.ModuleLogger;
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.reflection.SafeField;
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
 import com.google.common.collect.MapMaker;
 import com.noxpvp.core.collection.DualAccessMap;
-import com.noxpvp.core.utils.UUIDUtil;
-import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.classes.AxesPlayerClass;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.locale.MMOLocale;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 
 public class PlayerClassUtil { //TODO: UUID's
 	public static final String LOG_MODULE_NAME = "PlayerClass";
@@ -53,7 +54,15 @@ public class PlayerClassUtil { //TODO: UUID's
 
 	private static ModuleLogger log;
 
-	private static Map<String, PlayerClass> classCache;
+	private static Map<String, PlayerClass> classCache; //FIXME: Double memory possible due to the below comment.
+	/*
+	 * When the player does not have uuid the cache could reference their name.
+	 * When doing so and their uuid is now available. It will now think that they don't exist in cache causing double class object storage.
+	 * During this the objects still remain near complete duplicates. There is only a very slight chance of data not being saved during such transition.
+	 *
+	 * However it will still load data no matter what. So this should be fine. Data is saved quite often anyways Especially on setting a home.
+	 * Setting homes forces a save operation anyways.
+	 */
 
 	private static DualAccessMap<String, String> classIdNameMap; //Key = classId : value = className
 	private static DualAccessMap<String, Class<? extends PlayerClass>> pClasses;    //Used to cache class instances. Used to not generate many class objects.
@@ -180,11 +189,11 @@ public class PlayerClassUtil { //TODO: UUID's
 		return safeConstructClass(clazz, UUIDUtil.compressUUID(player.getUniqueId()));
 	}
 
-	private static PlayerClass safeConstructClass(Class c, String playerUID) {
+	private static PlayerClass safeConstructClass(Class c, String playerIdentifier) {
 		String classID = getClassIDbyClass(c);
 
 		if (classID != null) {
-			String match = playerUID + "|" + classID;
+			String match = playerIdentifier + "|" + classID;
 			if (classCache.containsKey(match) && classCache.get(match) != null)
 				return classCache.get(match);
 		}
@@ -194,21 +203,21 @@ public class PlayerClassUtil { //TODO: UUID's
 		if (!sc.isValid())
 			return null;
 
-		Object o = sc.newInstance(playerUID);
+		Object o = sc.newInstance(playerIdentifier);
 
 		if (!(o instanceof PlayerClass))
 			return null;
 
 		PlayerClass ret = (PlayerClass) o;
 		try {
-			ret.onLoad(MMOPlayerManager.getInstance().getPlayer(Bukkit.getOfflinePlayer(UUIDUtil.toUUID(playerUID))).getPersistantData());
+			ret.onLoad(MMOPlayerManager.getInstance().getPlayer(Bukkit.getOfflinePlayer(UUIDUtil.toUUID(playerIdentifier))).getPersistantData());
 		} catch (NullPointerException e) {
 			NoxMMO.getInstance().log(Level.SEVERE, "There is definitely null pointers occurring here. UPDATE CODE BITCHES!");
 			e.printStackTrace();
 		}
 
 		classID = ret.getUniqueID();
-		String cs = playerUID + "|" + classID;
+		String cs = playerIdentifier + "|" + classID;
 		if (LogicUtil.nullOrEmpty(classID))
 			log.warning("ClassID for class " + ret.getName() + " is null or empty!");
 		else
