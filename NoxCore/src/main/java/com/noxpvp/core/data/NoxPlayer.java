@@ -477,8 +477,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	}
 
 	public OfflinePlayer getOfflinePlayer() {
-		if (getUUID() != null)
-			return Bukkit.getOfflinePlayer(getUUID());
+		if (getUUID(false) != null)
+			return Bukkit.getOfflinePlayer(getUUID(false));
 		else if (getPlayerName() != null)
 			return Bukkit.getOfflinePlayer(getPlayerName());
 		else
@@ -488,7 +488,7 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 
 	public Player getPlayer() {
 		if (getUUID(false) != null)
-			return Bukkit.getPlayer(getUUID());
+			return Bukkit.getPlayer(getUUID(false));
 		else if (!LogicUtil.nullOrEmpty(getPlayerName()))
 			return Bukkit.getPlayerExact(getPlayerName());
 		else
