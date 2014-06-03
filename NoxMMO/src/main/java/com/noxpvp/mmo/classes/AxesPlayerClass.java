@@ -29,6 +29,7 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.DelegateDeserialization;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -41,11 +42,12 @@ import com.noxpvp.mmo.classes.internal.IClassTier;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.classes.tiers.*;
 
+@DelegateDeserialization(PlayerClass.class)
 public class AxesPlayerClass extends PlayerClass {
 
 	public static final String className = "Axes";
 
-	public static final String uniqueID = "f8c26f34-fc36-427a-b92e-94090b146db1";    //RANDOMLY GENERATED DO NOT CHANGE!
+	public static final String uniqueID = "f8c26f34fc36427ab92e94090b146db1";    //RANDOMLY GENERATED DO NOT CHANGE!
 
 	public AxesPlayerClass(Player player) {
 		super(uniqueID, className, player);
@@ -93,7 +95,7 @@ public class AxesPlayerClass extends PlayerClass {
 	}
 
 	public Color getBaseArmourColor() {
-		return ((LeatherArmorMeta) new ItemStack(Material.LEATHER_HELMET).getItemMeta()).getColor();
+		return ((LeatherArmorMeta) new ItemStack(Material.LEATHER_HELMET).getItemMeta()).getColor(); //TODO: Move this to a variable. Also change the implementation. This was meant to have a base color for class then the getColor adds onto it!
 	}
 
 	public ChatColor getColor() {
@@ -109,6 +111,11 @@ public class AxesPlayerClass extends PlayerClass {
 	}
 
 	@Override
+	protected void load(Map<String, Object> data) {
+		//Nothing extra to store just yet...
+	}
+
+	@Override
 	protected Map<Integer, IClassTier> craftClassTiers() {
 		this.tiers = new HashMap<Integer, IClassTier>();
 
@@ -118,18 +125,6 @@ public class AxesPlayerClass extends PlayerClass {
 		tiers.put(4, new AxesWarlordClassTier(this));
 
 		return this.tiers;
-	}
-
-	@Override
-	public void load(ConfigurationNode node) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void save(ConfigurationNode node) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

@@ -153,6 +153,12 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		return this.uid == null || this.uid.equals(UUIDUtil.ZERO_UUID_COMPRESSED);
 	}
 
+	public final String getIdentity() {
+		UUID id;
+		if ((id = getUUID(true)) != null) return UUIDUtil.compressUUID(id);
+		else return getName();
+	}
+
 	public UUID getUUID(boolean autoUpdate) {
 		if (autoUpdate) {
 			if (isBadUID())
@@ -224,9 +230,9 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	/**
 	 * Adds new cooldown to player.
 	 *
-	 *@param String name of the cooldown
-	 *@param int length of cd in seconds
-	 *@param boolean if the timer should be put on the coreboard
+	 *@param name String of the cooldown
+	 *@param length int of cd in seconds
+	 *@param if boolean the timer should be put on the coreboard
 	 *@return
 	 */
 	public boolean addCoolDown(String name, int length, boolean coreBoardTimer) {

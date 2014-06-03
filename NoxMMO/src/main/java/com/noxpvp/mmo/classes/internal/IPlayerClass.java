@@ -36,8 +36,9 @@ import org.bukkit.Color;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.core.gui.MenuItemRepresentable;
 import com.noxpvp.mmo.abilities.Ability;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
-public interface IPlayerClass extends MenuItemRepresentable {
+public interface IPlayerClass extends MenuItemRepresentable, ConfigurationSerializable {
 
 	/**
 	 * A unique id for classes. <br/><br/>
@@ -321,10 +322,6 @@ public interface IPlayerClass extends MenuItemRepresentable {
 	public void removeExp(int amount);
 
 	public void removeExp(int tier, int amount);
-
-	public void onLoad(ConfigurationNode node);
-
-	public void onSave(ConfigurationNode node);
 
 	public Map<String, ? extends Ability> getAbilityMap();
 

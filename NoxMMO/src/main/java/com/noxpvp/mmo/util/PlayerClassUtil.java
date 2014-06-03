@@ -30,8 +30,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import com.noxpvp.core.utils.UUIDUtil;
-import com.noxpvp.mmo.MMOPlayerManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.ModuleLogger;
@@ -92,18 +90,18 @@ public class PlayerClassUtil { //TODO: UUID's
 		SafeField<String> className = new SafeField<String>(clazz, "className");
 		SafeField<String> classId = new SafeField<String>(clazz, "uniqueID");
 
-		boolean good = true;
+		boolean bad = false;
 		if (!classId.isValid() || !classId.isStatic()) {
 			log.severe("PlayerClass \"" + clazz.getName() + "\" is not valid. It does not have a static String of className");
-			good = false;
+			bad = true;
 		}
 
 		if (!className.isValid() || !className.isStatic()) {
 			log.severe("PlayerClass \"" + clazz.getName() + "\" is not valid. It does not have a static String of uniqueID");
-			good = false;
+			bad = true;
 		}
 
-		if (!good)
+		if (bad)
 			return;
 
 		String cName = className.get(clazz), cId = classId.get(clazz);
@@ -120,6 +118,7 @@ public class PlayerClassUtil { //TODO: UUID's
 
 	}
 
+	@Deprecated
 	public static List<PlayerClass> getAvailableClasses(Player player) {
 		List<PlayerClass> ret = new ArrayList<PlayerClass>();
 		for (PlayerClass c : getAllClasses(player))
@@ -130,6 +129,7 @@ public class PlayerClassUtil { //TODO: UUID's
 		return getAllClasses(player);
 	}
 
+	@Deprecated
 	private static List<PlayerClass> getAllClasses(Player player) {
 		List<PlayerClass> ret = new ArrayList<PlayerClass>();
 		for (Class c : getPClasses()) {
@@ -209,12 +209,6 @@ public class PlayerClassUtil { //TODO: UUID's
 			return null;
 
 		PlayerClass ret = (PlayerClass) o;
-		try {
-			ret.onLoad(MMOPlayerManager.getInstance().getPlayer(Bukkit.getOfflinePlayer(UUIDUtil.toUUID(playerIdentifier))).getPersistantData());
-		} catch (NullPointerException e) {
-			NoxMMO.getInstance().log(Level.SEVERE, "There is definitely null pointers occurring here. UPDATE CODE BITCHES!");
-			e.printStackTrace();
-		}
 
 		classID = ret.getUniqueID();
 		String cs = playerIdentifier + "|" + classID;
@@ -257,5 +251,21 @@ public class PlayerClassUtil { //TODO: UUID's
 	private static void addDefaults() {
 		for (Class<? extends PlayerClass> clazz : classes)
 			registerPlayerClass(clazz);
+	}
+
+	/**
+	 * Creates a new class based on serialized data maps.
+	 * <br/>
+	 * This will also load the data associated with the serialized method.
+	 * @param data map of serialized data.
+	 */
+	public static PlayerClass safeConstructClass(Map<String, Object> data) {
+		final String uuid = data.get("class.uuid").toString();
+		final String playerIdent = data.get("player-ident").toString();
+
+		PlayerClass ret = safeConstructClass(uuid, playerIdent);
+		if (ret != null) ret.onLoad(data);
+
+		return ret;
 	}
 }

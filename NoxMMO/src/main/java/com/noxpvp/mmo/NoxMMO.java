@@ -80,7 +80,7 @@ public class NoxMMO extends NoxPlugin {
 	private MMOPlayerManager playerManager = null;
 
 	private Class<Command>[] commands = (Class<Command>[]) new Class[]{ClassCommand.class, AbilityCommand.class, MMOCommand.class};
-	private Class<? extends ConfigurationSerializable>[] serializables = new Class[] {AbilityCycler.class};
+	private Class<? extends ConfigurationSerializable>[] serializables = new Class[] {AbilityCycler.class, PlayerClass.class};
 
 	public static NoxMMO getInstance() {
 		return instance;

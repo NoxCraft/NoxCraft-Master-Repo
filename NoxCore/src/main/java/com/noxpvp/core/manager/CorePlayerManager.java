@@ -43,17 +43,14 @@ import com.noxpvp.core.NoxCore;
 import com.noxpvp.core.Persistant;
 import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
-import com.noxpvp.core.internal.LockerCaller;
-import com.noxpvp.core.internal.SafeLocker;
 import com.noxpvp.core.utils.UUIDUtil;
 
-public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements Persistant, LockerCaller, SafeLocker {
+public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements Persistant {
+	//FIXME: need to add ways to detect if uuid was changed (From null to none null to auto change file names)
 
 	private volatile static CorePlayerManager instance;
 	private static List<IPlayerManager<?>> managers = new ArrayList<IPlayerManager<?>>();
 	protected FileConfiguration config;
-	private AtomicBoolean isLocked = new AtomicBoolean();
-	private LockerCaller lockCaller = null;
 	private NoxCore plugin;
 
 	protected CorePlayerManager() {
@@ -384,51 +381,5 @@ public class CorePlayerManager extends BasePlayerManager<NoxPlayer> implements P
 	 */
 	protected NoxPlayer craftNew(NoxPlayer adapter) {
 		return adapter;
-	}
-
-	public void complain(SafeLocker lock) {
-		complain(lock, null);
-	}
-
-	public boolean isLocked() {
-		return isLocked.get();
-	}
-
-	public LockerCaller getCaller() {
-		return lockCaller;
-	}
-
-	public boolean tryLock(LockerCaller caller) {
-
-		boolean ret = false;
-		if (getCaller() == null) {
-			ret = true;
-			isLocked.set(true);
-		} else if (getCaller() == caller) {
-			ret = true;
-			isLocked.set(true);
-		}
-
-		if (ret)
-			lockCaller = caller;
-		return ret;
-	}
-
-	public boolean tryUnlock(LockerCaller caller) {
-		boolean ret = false;
-		if (getCaller() == null) {
-			ret = isLocked.compareAndSet(true, false);
-			if (!ret)
-				getPlugin().log(Level.SEVERE, "PlayerManager has a lock from an unknown caller. When the lock was previously activated.");
-		} else if (getCaller() == caller) {
-			ret = true;
-			isLocked.set(true);
-			lockCaller = null;
-		}
-		return ret;
-	}
-
-	public void complain(SafeLocker lock, LockerCaller complainer) {
-		getPlugin().log(Level.SEVERE, "PlayerManager is on file lock. " + ((complainer != null) ? ("Complainer: " + complainer.getClass().getName()) : ""));
 	}
 }

@@ -32,6 +32,7 @@ import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -133,6 +134,7 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 		return ret;
 	}
 
+	//TODO: Test class made for this method. This is a complex method...
 	public final void setTotalExp(int amount) {
 		Map<Integer, Integer> expCaps = new HashMap<Integer, Integer>();
 
@@ -187,34 +189,32 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 	}
 
 	/**
-	 * Load custom data to configs.
-	 *
-	 * @param node Node is already at location to where data is saved. <br/>
+	 * {@inheritDoc}
+	 * <b>If overridden you must call super!</b>
+	 * @return map of serialized data.
 	 */
-	public abstract void load(ConfigurationNode node);
+	public Map<String, Object> serialize() {
+		Map<String, Object> ret = new HashMap<String, Object>();
 
-	public final void onLoad(ConfigurationNode node) {
-		node = node.getNode("tier." + getTierLevel());
-		setTotalExp(node.get("total-exp", 0));
-		load(node);
+		ret.put("exp", getTotalExp());
+
+		return ret;
 	}
 
-	public final void onSave(ConfigurationNode node) {
-		node = node.getNode("tier." + getTierLevel());
-		node.set("total-exp", getTotalExp());
-		save(node);
+	/**
+	 * Load custom data to configs.
+	 *
+	 * @param data map of serialized data.
+	 */
+	protected abstract void load(Map<String, Object> data);
+
+	public final void onLoad(Map<String, Object> data) {
+		setTotalExp((Integer) data.get("exp")); //Currently that is all there is needed! NO REALLY!
 	}
 
 	public void removeExp(int amount) {
 		setExp(getExp() - amount);
 	}
-
-	/**
-	 * Save custom data to configs.
-	 *
-	 * @param node Node is already at location to where data is saved. <br/>
-	 */
-	public abstract void save(ConfigurationNode node);
 
 	public void update() {
 		setTotalExp(getTotalExp());

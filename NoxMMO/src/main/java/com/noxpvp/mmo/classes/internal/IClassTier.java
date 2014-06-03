@@ -31,6 +31,7 @@ import java.util.Map;
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.mmo.abilities.Ability;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 public interface IClassTier {
 
@@ -39,6 +40,15 @@ public interface IClassTier {
 	public String getName();
 
 	public boolean canUse();
+
+	/**
+	 * This is not the bukkit api and is not included with configuration serialization.
+	 *
+	 * This is due to the way player class serialization works. This class has this method to manually deserialize stuff into class tiers.
+	 *
+	 * @return
+	 */
+	public Map<String, Object> serialize();
 
 	public PlayerClass getRetainingClass();
 
@@ -88,9 +98,10 @@ public interface IClassTier {
 
 	public ExperienceType[] getExpTypes();
 
-	public void onSave(ConfigurationNode node);
-
-	public void onLoad(ConfigurationNode node);
+	/**
+	 * Dematerializes data from serialized data map.
+	 */
+	public void onLoad(Map<String, Object> data);
 
 	/**
 	 * Used to cleanup data if max exp per level changes and such. <br/>
