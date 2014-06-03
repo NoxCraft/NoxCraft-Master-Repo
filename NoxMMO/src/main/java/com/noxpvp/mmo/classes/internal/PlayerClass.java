@@ -39,6 +39,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -74,7 +75,11 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
  * <li> public static final String variable of "uniqueID";</li>
  * <li> public static final String variable of "className";</li>
  * </ul>
+ *
+ * <b>YOU MUST ADD @DelegateDeserialization annotations to all implementing classes of this type.</b>
+ * @DelegateDeserialization(PlayerClass.class)
  */
+@SerializableAs("PlayerClass")
 public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable {
 
 	public static final String LOG_MODULE_NAME = "PlayerClass";
@@ -91,7 +96,7 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	protected Map<Integer, IClassTier> tiers;
 	private int cTierLevel = 1;
 	private String name;
-	private ItemStack identiferItem;
+	private ItemStack identifyingItem;
 	//Player Data
 	private String playerIdentifier;
 
@@ -122,6 +127,8 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 
 		this.tiers = craftClassTiers();
 		this.tiers.putAll(craftDynamicTiers());
+
+		checkTierCount();
 
 		setCurrentTier(getCurrentTierLevel());
 
@@ -158,6 +165,44 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	}
 
 	//// END TEMP
+
+	public static PlayerClass valueOf(Map<String, Object> data) {
+		if (!data.containsKey("class.uuid"))
+			throw new IllegalArgumentException("Data does not contain a unique class id! Cannot possibly cast the class to the appropriate handler.");
+
+		return PlayerClassUtil.safeConstructClass(data);
+	}
+
+	/**
+	 * Strictly used for deserializing data.
+	 * @param data
+	 */
+	public final void onLoad(Map<String, Object> data) {
+		setCurrentTier((Integer) data.get("current.tier"));
+		Map<Integer, Map<String, Object>> tierData = (Map<Integer, Map<String, Object>>) data.get("tiers");
+
+		for (int k : tierData.keySet())
+			if (hasTier(k)) getTier(k).onLoad(tierData.get(k));
+
+		load(data);
+	}
+
+	protected abstract void load(Map<String, Object> data);
+
+	public Map<String, Object> serialize() {
+		Map<String, Object> ret = new HashMap<String, Object>();
+
+		//Class retention...
+		ret.put("class.uuid", getUniqueID());
+		ret.put("class.name", getName());
+
+		ret.put("player-ident", getPlayerIdentifier());
+
+		ret.put("current.tier", getCurrentTierLevel());
+		ret.put("tiers", _getTierMap());
+
+		return ret;
+	}
 
 	public final void addExp(int amount) {
 		getTier().addExp(amount);
@@ -303,49 +348,55 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	public String getDisplayName() {
 		return getColor() + getName();
 	}
-	
+
 	public String getDescription() {
 		return "\"Something descriptive here\"";
 	}
-	
+
 	public String getDescription(ChatColor color) {
 		return color + getDescription();
 	}
-	
+
 	public List<String> getLore() {
 		return getLore(30);
 	}
-	
+
 	public List<String> getLore(int lineLength) {
 		return MessageUtil.convertStringForLore(getDescription(), lineLength);
 	}
-	
+
 	public List<String> getLore(ChatColor color, int lineLength) {
 		List<String> ret = new ArrayList<String>();
 		for (String lore : getLore(lineLength))
 			ret.add(color + lore);
-		
+
 		return ret;
 	}
-	
-	public ItemStack getIdentifiableItem() {
-		if (identiferItem == null) {
-			identiferItem = new ItemStack(Material.BOOK_AND_QUILL);
 
-			ItemMeta meta = identiferItem.getItemMeta();
+	public ItemStack getIdentifiableItem() {
+		if (identifyingItem == null) {
+			identifyingItem = new ItemStack(Material.BOOK_AND_QUILL);
+
+			ItemMeta meta = identifyingItem.getItemMeta();
 			meta.setDisplayName(new MessageBuilder().gold(ChatColor.BOLD + "Class: ")
 					.append(getColor() + getName()).toString());
-			
+
 			List<String> lore = getLore(ChatColor.GOLD, 28);
-			
+
 			lore.add(new MessageBuilder().gold("Current Tier: ").yellow(getCurrentTierLevel()).toString());
-			
+
 			meta.setLore(lore);
 
-			identiferItem.setItemMeta(meta);
+			identifyingItem.setItemMeta(meta);
 		}
 
-		return identiferItem.clone();
+		return identifyingItem.clone();
+	}
+
+	public final MMOPlayer getMMOPlayer() {
+		Player p = getPlayer();
+		if (p != null) return MMOPlayerManager.getInstance().getPlayer(p);
+		return MMOPlayerManager.getInstance().getPlayer(getPlayerIdentifier());
 	}
 
 	public final Player getPlayer() {
@@ -369,6 +420,10 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 		if (hasTier(level))
 			return tiers.get(level);
 		return null;
+	}
+
+	protected final Map<Integer, IClassTier> _getTierMap() {
+		return tiers;
 	}
 
 	public final Set<Entry<Integer, IClassTier>> getTiers() {
@@ -404,53 +459,6 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 		return tiers.containsKey(level);
 	}
 
-	/**
-	 * Load additional data from the node on player class loading. <br/><br/>
-	 * <b>Warning the node is already in proper position. No need to re position node.</b>
-	 * <br/>
-	 * <br/>
-	 * You do not need to load the following. Just implement the set functions and it will work fine. <br/>
-	 * <ul>
-	 * <li></li>
-	 * </ul>
-	 *
-	 * @param node The PlayerClass section of player configuration.
-	 */
-	public abstract void load(ConfigurationNode node);
-
-	public void onLoad(ConfigurationNode node) {
-		if (!node.get("uid", "").equals(getUniqueID()))
-			throw new IllegalArgumentException("Configuration node was does not match UID. UID supposed to be " + getUniqueID() + " but got " + node.get("uid", "$BLANK$"));
-
-		int a = node.get("current.tier", -1);
-		if (a < 0) {
-			if (a != -1) //Only throw error if tier did not exist. (-1 signifies it)
-				log.severe(new StringBuilder().append("The configuration node for currently selected tier of the playerclass is invalid. It must be higher then 0. It is currently ").append(a).append("\n").append("Resetting value to 1").toString());
-			a = 1;
-		}
-
-		setCurrentTier(a);
-
-		checkTierCount(); //Check and repair tiers.
-
-		for (IClassTier tier : tiers.values())
-			tier.onLoad(node);
-
-		load(node);
-	}
-
-	public void onSave(ConfigurationNode node) {
-		node = node.getNode(getUniqueID().toString());
-		node.set("current.tier", getCurrentTierLevel());
-
-		checkTierCount(); //Check and repair tiers.
-
-		for (IClassTier tier : tiers.values())
-			tier.onSave(node);
-
-		save(node);
-	}
-
 	public final void removeExp(int amount) {
 		removeExp(getCurrentTierLevel(), amount);
 	}
@@ -458,14 +466,6 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	public void removeExp(int tier, int amount) {
 		getTier(tier).removeExp(amount);
 	}
-
-	/**
-	 * Save additional data to the node on player class saving. <br/><br/>
-	 * <b>Warning the node is already in proper position. No need to re position node.</b>
-	 *
-	 * @param node The PlayerClass section of player configuration.
-	 */
-	public abstract void save(ConfigurationNode node);
 
 	public void setCurrentTier(IClassTier tier) {
 		setCurrentTier(tier.getLevel());
