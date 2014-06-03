@@ -25,6 +25,7 @@ package com.noxpvp.core.manager;
 
 import java.util.Map;
 
+import com.noxpvp.core.utils.UUIDUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -35,7 +36,8 @@ import com.noxpvp.core.data.NoxPlayer;
 import com.noxpvp.core.data.NoxPlayerAdapter;
 
 public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements IPlayerManager<T> {
-	private Map<String, T> players;
+	private Map<String, T> uid_players;
+	private Map<String, T> name_players;
 
 	private CorePlayerManager pm = null;
 
@@ -43,7 +45,8 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 
 	public BasePlayerManager(Class<T> t) {
 		this.typeClass = t;
-		this.players = craftNewStorage();
+		this.uid_players = craftNewStorage();
+		this.name_players = craftNewStorage();
 		CorePlayerManager.addManager(this);
 	}
 
@@ -86,18 +89,24 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	}
 
 	public T[] getLoadedPlayers() {
-		return LogicUtil.toArray(players.values(), typeClass);
+		return LogicUtil.toArray(uid_players.values(), typeClass);
 	}
 
 	public T getPlayer(NoxPlayer noxPlayer) {
 		T player = null;
-		String name = noxPlayer.getPlayerName();
+		String name = noxPlayer.getIdentity();
 		if (isLoaded(name))
-			player = players.get(name);
+			if (UUIDUtil.isUUID(name))
+				player = uid_players.get(name);
+			else
+				player = name_players.get(name);
 		else {
 			player = craftNew(noxPlayer);
 			player.load();
-			players.put(name, player);
+			if (UUIDUtil.isUUID(name))
+				uid_players.put(name, player);
+			else
+				name_players.put(name, player);
 		}
 		return player;
 	}
@@ -109,7 +118,9 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	public final T getPlayer(OfflinePlayer player) {
 		if (player == null)
 			return null;
-		return getPlayer(player.getName());
+
+		if (player instanceof Player) return getPlayer(player.getUniqueId().toString());
+		else return getPlayer(player.getName());
 	}
 
 	public final T getPlayer(String name) { //TODO: remove duplicate code ID(gp1)
@@ -117,17 +128,19 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 
 		T player = null;
 		if (isLoaded(name))
-			player = players.get(name);
+			if (UUIDUtil.isUUID(name)) player = uid_players.get(name);
+			else player = name_players.get(name);
 		else {
 			player = craftNew(name);
-			players.put(name, player);
+			if (UUIDUtil.isUUID(name)) uid_players.put(name, player);
+			else name_players.put(name, player);
 			loadPlayer(player);
 		}
 		return player;
 	}
 
 	protected Map<String, T> getPlayerMap() {
-		return this.players;
+		return this.uid_players;
 	}
 
 	public final boolean isLoaded(OfflinePlayer player) {
@@ -135,7 +148,8 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 	}
 
 	public final boolean isLoaded(String name) {
-		return players.containsKey(name);
+		if (UUIDUtil.isUUID(name)) return uid_players.containsKey(name);
+		else return name_players.containsKey(name);
 	}
 
 	public void load() {
@@ -224,6 +238,6 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 
 	public void unloadPlayer(String name) {
 		if (isLoaded(name))
-			players.remove(name);
+			uid_players.remove(name);
 	}
 }
