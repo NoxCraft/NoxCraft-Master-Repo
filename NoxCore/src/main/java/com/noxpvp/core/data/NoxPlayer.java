@@ -102,7 +102,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 		cds = new ArrayList<CoolDown>();
 		cd_cache = new WeakHashMap<String, CoolDown>();
 		manager = mn;
-		this.name = name;
+		if (UUIDUtil.isUUID(name)) this.uid = UUIDUtil.compressUUID(name);
+		else this.name = name;
 
 		getUID();
 
@@ -231,8 +232,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 	 * Adds new cooldown to player.
 	 *
 	 *@param name String of the cooldown
-	 *@param length int of cd in seconds
-	 *@param if boolean the timer should be put on the coreboard
+	 *@param int length of cd in seconds
+	 *@param boolean if the timer should be put on the coreboard
 	 *@return
 	 */
 	public boolean addCoolDown(String name, int length, boolean coreBoardTimer) {
