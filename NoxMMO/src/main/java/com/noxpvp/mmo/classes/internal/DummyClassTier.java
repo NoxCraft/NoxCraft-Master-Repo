@@ -80,15 +80,7 @@ public class DummyClassTier extends ClassTier {
 		return 0;
 	}
 
-	@Override
-	public void load(ConfigurationNode node) {
-	}
-
 	public void removeExp(int amount) {
-	}
-
-	@Override
-	public void save(ConfigurationNode node) {
 	}
 
 	public void setExp(int amount) {
@@ -112,5 +104,15 @@ public class DummyClassTier extends ClassTier {
 
 	public ItemStack getIdentifiableItem() {
 		return new ItemStack(Material.STONE);
+	}
+
+	/**
+	 * Load custom data to configs.
+	 *
+	 * @param data map of serialized data.
+	 */
+	@Override
+	protected void load(Map<String, Object> data) {
+
 	}
 }

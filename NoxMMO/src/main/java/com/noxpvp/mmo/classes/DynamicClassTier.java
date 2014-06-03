@@ -94,6 +94,16 @@ public class DynamicClassTier extends ClassTier {
 		}
 	}
 
+	/**
+	 * Load custom data to configs.
+	 *
+	 * @param data map of serialized data.
+	 */
+	@Override
+	protected void load(Map<String, Object> data) {
+
+	}
+
 	public String getDisplayName() {
 		return displayName;
 	}
@@ -147,10 +157,6 @@ public class DynamicClassTier extends ClassTier {
 		return 0;
 	}
 
-	@Override
-	public void load(ConfigurationNode node) {
-	}
-
 	/**
 	 * Loads the tiers configuration. <br>
 	 * <p/>
@@ -170,10 +176,6 @@ public class DynamicClassTier extends ClassTier {
 			}
 
 
-	}
-
-	@Override
-	public void save(ConfigurationNode node) {
 	}
 
 	/**

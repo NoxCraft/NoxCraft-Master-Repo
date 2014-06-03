@@ -243,4 +243,9 @@ public class DummyClass implements IPlayerClass {
 	public Collection<? extends Ability> getAbilities() {
 		return new ArrayList<Ability>();
 	}
+
+	@Override
+	public Map<String, Object> serialize() {
+		return null;
+	}
 }
