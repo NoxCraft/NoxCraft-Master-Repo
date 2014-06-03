@@ -119,15 +119,9 @@ public class AxesWarlordClassTier extends ClassTier {
 	}
 
 	@Override
-	public void load(ConfigurationNode node) {
+	protected void load(Map<String, Object> data) {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void save(ConfigurationNode node) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

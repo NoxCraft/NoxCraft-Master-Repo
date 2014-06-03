@@ -28,9 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.mmo.abilities.Ability;
-import com.noxpvp.mmo.abilities.entity.LeapEntityAbility;
 import com.noxpvp.mmo.abilities.player.CriticalHitPlayerAbility;
 import com.noxpvp.mmo.abilities.player.LeapPlayerAbility;
 import com.noxpvp.mmo.classes.internal.*;
@@ -116,15 +114,9 @@ public class AxesBasherClassTier extends ClassTier {
 	}
 
 	@Override
-	public void load(ConfigurationNode node) {
+	protected void load(Map<String, Object> data) {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void save(ConfigurationNode node) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

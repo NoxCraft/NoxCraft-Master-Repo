@@ -30,6 +30,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.permissions.PermissionDefault;
 
 import com.bergerkiller.bukkit.common.Common;
+import com.bergerkiller.bukkit.common.collections.StringMap;
 import com.bergerkiller.bukkit.common.reflection.SafeConstructor;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.MasterReloader;
@@ -112,7 +113,7 @@ public class NoxHomes extends NoxPlugin {
 		instance = this;
 		core = NoxCore.getInstance();
 
-		commandExecs = new HashMap<String, Command>();
+		commandExecs = new StringMap<Command>();
 
 		getLimitsManager().load();
 		getHomeManager().load();
