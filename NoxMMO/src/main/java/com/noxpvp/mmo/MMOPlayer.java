@@ -56,6 +56,7 @@ import com.noxpvp.mmo.classes.internal.DummyClass;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
+import com.noxpvp.mmo.gui.HealthBar;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuItemRepresentable {
@@ -242,6 +243,8 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuI
 			if (!LogicUtil.nullOrEmpty(uid) && world != null)
 				setTarget(EntityUtil.getEntity(world, UUID.fromString(uid), LivingEntity.class));
 		}
+		
+		new HealthBar(getPlayer());
 	}
 
 	/**

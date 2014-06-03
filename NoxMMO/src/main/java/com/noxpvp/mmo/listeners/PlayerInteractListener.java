@@ -64,6 +64,7 @@ import com.noxpvp.mmo.abilities.targeted.DrainLifePlayerAbility;
 import com.noxpvp.mmo.abilities.targeted.MortalWoundPlayerAbility;
 import com.noxpvp.mmo.abilities.targeted.SoothePlayerAbility;
 import com.noxpvp.mmo.abilities.targeted.TargetPlayerAbility;
+import com.noxpvp.mmo.gui.HealthBar;
 
 @SuppressWarnings("unused")
 public class PlayerInteractListener extends NoxListener<NoxMMO> {
@@ -85,30 +86,15 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onInteract(PlayerInteractEvent e) {
 
-		final Player p;
-		MMOPlayer player = pm.getPlayer((p = e.getPlayer()));
-		if (player == null) return;
+		final Player p = e.getPlayer();
+//		MMOPlayer player = pm.getPlayer((p = e.getPlayer()));
+//		if (player == null) return;
 
-		new TargetPlayerAbility(p).execute(e);//TODO make default range configized || passiveness
+//		new TargetPlayerAbility(p).execute(e);//TODO make default range configized || passiveness
 
 		//debug===========================================
 		if (p.getItemInHand().getType() != Material.STICK)
 			return;
-		
-		new QuestionBox(p, "Bind all abilities?") {
-			
-			@Override
-			public void onDeny() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onConfirm() {
-				// TODO Auto-generated method stub
-				
-			}
-		}.show();
 		
 	}
 
