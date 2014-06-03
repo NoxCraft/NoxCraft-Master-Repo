@@ -75,7 +75,7 @@ public class UUIDUtil extends NoxListener<NoxCore> {
 	}
 
 	public static String compressUUID(Object ob) {
-		return compressUUID(ob.toString());
+		return ob != null? compressUUID(ob.toString()) : null;
 	}
 
 	public static String compressUUID(String id) {
