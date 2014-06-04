@@ -1,9 +1,11 @@
 package com.noxpvp.core.gui;
 
 import com.bergerkiller.bukkit.common.utils.LogicUtil;
+
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.events.PacketReceiveEvent;
+import com.bergerkiller.bukkit.common.events.PacketSendEvent;
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
 import com.bergerkiller.bukkit.common.protocol.PacketType;
 import com.bergerkiller.bukkit.common.utils.PacketUtil;
@@ -36,6 +38,11 @@ public abstract class TextPrompt extends NoxPacketListener {
 			onReturn(null);
 		
 		onReturn(ret);
+	}
+	
+	@Override
+	public void onPacketSend(PacketSendEvent event) {
+		return;
 	}
 	
 	public abstract void onReturn(String[] lines);
