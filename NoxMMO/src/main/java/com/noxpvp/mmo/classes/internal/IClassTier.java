@@ -28,10 +28,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.core.annotation.Temporary;
 import com.noxpvp.mmo.abilities.Ability;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 public interface IClassTier {
 
