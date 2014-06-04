@@ -32,11 +32,7 @@ import java.util.WeakHashMap;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -61,6 +57,7 @@ public class GenericMMOListener<T extends Event> extends NoxListener<NoxMMO> {
 		constructors.put(InventoryPickupItemEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(InventoryPickupItemListener.class, NoxMMO.class));
 		constructors.put(PlayerInteractEntityEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(PlayerInteractEntityListener.class, NoxMMO.class));
 		constructors.put(EntityChangeBlockEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(EntityChangeBlockListener.class, NoxMMO.class));
+		constructors.put(EntityRegainHealthEvent.class, (SafeConstructor<GenericMMOListener<?>>) new SafeConstructor(EntityRegainHealthListener.class, NoxMMO.class));
 	}
 
 	private Class<T> eventType;

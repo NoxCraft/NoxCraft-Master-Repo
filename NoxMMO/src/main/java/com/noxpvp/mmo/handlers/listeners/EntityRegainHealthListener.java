@@ -1,4 +1,4 @@
-package com.noxpvp.mmo.listeners;
+package com.noxpvp.mmo.handlers.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
