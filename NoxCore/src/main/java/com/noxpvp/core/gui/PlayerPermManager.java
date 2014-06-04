@@ -57,8 +57,11 @@ public class PlayerPermManager extends CoreBox {
 	}
 	
 	public PlayerPermManager(Player p, @Nullable CoreBox backbutton) {
-		super(p, MENU_NAME, 3, backbutton);
+		super(p, MENU_NAME, 18, backbutton);
 		
+		if (!VaultAdapter.isPermissionsLoaded())
+			return;
+			
 		NoxPlayer player = CorePlayerManager.getInstance().getPlayer(p);
 		
 		ItemStack playerHead = new ItemStack(Material.SKULL_ITEM);
@@ -79,14 +82,18 @@ public class PlayerPermManager extends CoreBox {
 		
 		options.add(new CoreBoxItem(this, addGroup) {
 			public boolean onClick(InventoryClickEvent click) {
-				new GroupBox(getPlayer(), true, VaultAdapter.GroupUtils.getGroupList());
+				new GroupBox(getPlayer(), true, VaultAdapter.GroupUtils.getGroupList()).show();;
 				return true;
 			}
 		});
 		
 		options.add(new CoreBoxItem(this, removeGroup) {
 			public boolean onClick(InventoryClickEvent click) {
-				new GroupBox(getPlayer(), false, VaultAdapter.GroupUtils.getGroupList());
+				List<String> pGroups = new ArrayList<String>();
+				for (String g : VaultAdapter.permission.getPlayerGroups(getPlayer()))
+					pGroups.add(g);
+				
+				new GroupBox(getPlayer(), false, pGroups).show();;
 				return true;
 			}
 		});
@@ -104,7 +111,7 @@ public class PlayerPermManager extends CoreBox {
 				for (PermissionAttachmentInfo p : getPlayer().getEffectivePermissions())
 					perms.add(p.getPermission());
 				
-				new PermBox(getPlayer(), false, perms);
+				new PermBox(getPlayer(), false, perms).show();
 				return true;
 			}
 		});
@@ -117,7 +124,7 @@ public class PlayerPermManager extends CoreBox {
 		private final Player p;
 		
 		public GroupBox(Player p, boolean add, List<String> groups) {
-			super(p, add? "Add" : "Remove" + " Group For " + p.getName(), (int) groups.size() / 9);
+			super(p, add? "Add" : "Remove" + " Group For " + p.getName(),(int) Math.max(9, 9* Math.ceil(groups.size() / 9.0)));
 			
 			this.add = add;
 			this.p = p;
@@ -125,20 +132,22 @@ public class PlayerPermManager extends CoreBox {
 			ItemStack group = new ItemStack(Material.BOOK);
 			ItemMeta meta = group.getItemMeta();
 			
-			for (int i = 0; i < groups.size(); i++) {
+			for (int i = 0; i < groups.size() && i < getBox().getSize(); i++) {
 				final String name = groups.get(i);
 				meta.setDisplayName(ChatColor.AQUA + name);
+				group.setItemMeta(meta);
+				
 				addMenuItem(i, new CoreBoxItem(this, group.clone()) {
-					
-					@Override
 					public boolean onClick(InventoryClickEvent click) {
 						if (!VaultAdapter.isPermissionsLoaded())
 							return false;
 						
 						if (GroupBox.this.add)
 							VaultAdapter.permission.playerAddGroup(GroupBox.this.p, name);
-						else
+						else {
 							VaultAdapter.permission.playerRemoveGroup(GroupBox.this.p, name);
+							removeMenuItem(click.getSlot());
+						}
 						
 						return true;
 					}
@@ -154,12 +163,14 @@ public class PlayerPermManager extends CoreBox {
 		private final Player p;
 		
 		public PermBox(Player p, boolean add, @Nullable List<String> permissions) {
-			super(p,  add? "Add" : "Remove"  + " Permission For " + p.getName(), permissions.size() / 9);
+			super(p,  add? "Add" : "Remove"  + " Permission For " + p.getName(), permissions != null? Math.min(54, Math.max(9, (int) Math.ceil(permissions.size() / 9) * 9)) : 0);
 			
 			this.p = p;
 			
 			if (add && VaultAdapter.isPermissionsLoaded()) {
 				new TextPrompt(p) {
+					
+					@Override
 					public void onReturn(String[] lines) {
 						try {
 							VaultAdapter.permission.playerAdd(PermBox.this.p, StringUtil.join("", lines));
@@ -171,16 +182,15 @@ public class PlayerPermManager extends CoreBox {
 					}
 				}.show();
 			} else if (permissions != null && permissions.size() > 0) {
-				ItemStack group = new ItemStack(Material.PAPER);
-				ItemMeta meta = group.getItemMeta();
+				ItemStack permItem = new ItemStack(Material.PAPER);
+				ItemMeta meta = permItem.getItemMeta();
 
-				for (int i = 0; i < permissions.size(); i++) {
+				for (int i = 0; i < permissions.size() && i < getBox().getSize(); i++) {
 					final String name = permissions.get(i);
 					meta.setDisplayName(ChatColor.AQUA + name);
-				
-					addMenuItem(i, new CoreBoxItem(this, group.clone()) {
-						
-						@Override
+					permItem.setItemMeta(meta);
+					
+					addMenuItem(i, new CoreBoxItem(this, permItem.clone()) {
 						public boolean onClick(InventoryClickEvent click) {
 							if (!VaultAdapter.isPermissionsLoaded())
 								return false;

@@ -61,7 +61,6 @@ public class AxesPlayerClass extends PlayerClass {
 		super(uniqueID, className, playerName);
 	}
 
-	@Override
 	public String getDescription() {
 		return "Needs description";
 	}

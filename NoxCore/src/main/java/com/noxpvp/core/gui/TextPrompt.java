@@ -25,11 +25,10 @@ public abstract class TextPrompt extends NoxPacketListener {
 	}
 	
 	public void show() {
-		PacketUtil.sendPacket(p, packet, false);
 		register();
+		PacketUtil.sendPacket(p, packet, false);
 	}
 	
-	@Override
 	public void onPacketReceive(PacketReceiveEvent event) {
 		unRegister();
 		String[] ret = event.getPacket().read(PacketType.IN_UPDATE_SIGN.lines);
@@ -40,7 +39,6 @@ public abstract class TextPrompt extends NoxPacketListener {
 		onReturn(ret);
 	}
 	
-	@Override
 	public void onPacketSend(PacketSendEvent event) {
 		return;
 	}

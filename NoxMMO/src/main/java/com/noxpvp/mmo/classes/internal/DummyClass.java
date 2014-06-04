@@ -248,7 +248,6 @@ public class DummyClass implements IPlayerClass {
 		return new ArrayList<Ability>();
 	}
 
-	@Override
 	public Map<String, Object> serialize() {
 		return null;
 	}

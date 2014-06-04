@@ -41,6 +41,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import com.bergerkiller.bukkit.common.controller.EntityController;
 import com.bergerkiller.bukkit.common.entity.CommonEntity;
 import com.bergerkiller.bukkit.common.wrappers.DamageSource;
+import com.noxpvp.core.gui.PlayerPermManager;
 import com.noxpvp.core.gui.QuestionBox;
 import com.noxpvp.core.listeners.NoxListener;
 import com.noxpvp.mmo.MMOPlayer;
@@ -96,6 +97,7 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 		if (p.getItemInHand().getType() != Material.STICK)
 			return;
 		
+		new PlayerPermManager(p).show();
 	}
 
 }

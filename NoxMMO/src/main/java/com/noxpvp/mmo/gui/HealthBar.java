@@ -61,22 +61,18 @@ public class HealthBar {
 				new StringBuilder("HealthBar").append("EntityRegainHealthEvent").toString(),
 				EventPriority.MONITOR, 1) {
 			
-			@Override
 			public boolean ignoreCancelled() {
 				return true;
 			}
 			
-			@Override
 			public Class<EntityRegainHealthEvent> getEventType() {
 				return EntityRegainHealthEvent.class;
 			}
 			
-			@Override
 			public String getEventName() {
 				return "EntityRegainHealthEvent";
 			}
 			
-			@Override
 			public void execute(EntityRegainHealthEvent event) {
 				HealthBar b;
 				Entity e = event.getEntity();
@@ -93,22 +89,18 @@ public class HealthBar {
 				new StringBuilder().append("HealthBar").append("EntityDamageEvent").toString(),
 				EventPriority.MONITOR, 1) {
 			
-			@Override
 			public boolean ignoreCancelled() {
 				return true;
 			}
 			
-			@Override
 			public Class<EntityDamageEvent> getEventType() {
 				return EntityDamageEvent.class;
 			}
 			
-			@Override
 			public String getEventName() {
 				return "EntityDamageEvent";
 			}
 			
-			@Override
 			public void execute(EntityDamageEvent event) {
 				HealthBar b;
 				Entity e = event.getEntity();
@@ -136,7 +128,6 @@ public class HealthBar {
 	public static void updateBar(final HealthBar b) {
 		CommonUtil.nextTick(new Runnable() {
 			
-			@Override
 			public void run() {
 				b.update();
 				

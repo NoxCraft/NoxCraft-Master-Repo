@@ -68,7 +68,6 @@ public class AbilityBindCommand extends BaseCommand {
 
 		final boolean safe = context.hasFlag("o") || context.hasFlag("overwrite") || !exists;
 		final Task t = new Task(NoxMMO.getInstance()) {
-			@Override
 			public void run() {
 				AbilityCycler cycler; //TODO: Add single item object.
 				if (exists)
@@ -106,12 +105,10 @@ public class AbilityBindCommand extends BaseCommand {
 		return NoxMMO.getInstance();
 	}
 
-	@Override
 	public String[] getFlags() {
 		return flags;
 	}
-
-	@Override
+	
 	public int getMaxArguments() {
 		return 0;
 	}
