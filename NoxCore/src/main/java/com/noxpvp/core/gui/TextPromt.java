@@ -1,7 +1,6 @@
 package com.noxpvp.core.gui;
 
 import org.bukkit.entity.Player;
-import org.hamcrest.collection.IsEmptyCollection;
 
 import com.bergerkiller.bukkit.common.events.PacketReceiveEvent;
 import com.bergerkiller.bukkit.common.protocol.CommonPacket;
@@ -32,7 +31,7 @@ public abstract class TextPromt extends NoxPacketListener {
 		unRegister();
 		String[] ret = event.getPacket().read(PacketType.IN_UPDATE_SIGN.lines);
 		
-		if (new IsEmptyCollection<String>().matches(ret))
+		if (ret == null || ret.length < 1)
 			onReturn(null);
 		
 		onReturn(ret);
