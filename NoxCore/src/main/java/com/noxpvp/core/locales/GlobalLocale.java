@@ -50,7 +50,7 @@ public class GlobalLocale extends NoxLocale {
 		HEADER_CLOSE = new GlobalLocale("heap.header.close", "&6[======~*~========~.*.~========~*~======]");
 
 		//Permissions
-		FAILED_PERMISSION = new GlobalLocale("permission.denied.default", "&cPermission Denied&r:&e %0%");
+		FAILED_PERMISSION = new GlobalLocale("permission.denied.default", "&cNope&r: &e%0%");
 		FAILED_PERMISSION_VERBOSE = new GlobalLocale("permission.denied.verbose", FAILED_PERMISSION.getDefault().replace("%0", "%0% >> Node '%1%'"));
 
 		//Commands
@@ -64,8 +64,6 @@ public class GlobalLocale extends NoxLocale {
 		CONSOLE_NEEDPLAYER = new GlobalLocale("console.needplayer", "This command requires a player: %0%");
 		CONSOLE_ONLYPLAYER = new GlobalLocale("console.onlyplayer", "This command can only be run by a player.");
 
-		//CHAT
-		CHAT_COLOR_GLOBAL = new GlobalLocale("chat.color.global", "&b");
 
 	}
 
