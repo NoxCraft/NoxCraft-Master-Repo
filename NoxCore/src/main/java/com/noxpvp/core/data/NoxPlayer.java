@@ -171,7 +171,8 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 			if (isBadUID() && isOnline())
 				this.uid = UUIDUtil.compressUUID(getPlayer().getUniqueId());
 		}
-		return UUIDUtil.toUUID(this.uid);
+		if (this.uid != null) return UUIDUtil.toUUID(this.uid);
+		return null;
 	}
 
 	public UUID getUUID() {
@@ -488,12 +489,16 @@ public class NoxPlayer implements Persistant, NoxPlayerAdapter {
 
 
 	public Player getPlayer() {
+		Player ret = null;
+
 		if (getUUID(false) != null)
-			return Bukkit.getPlayer(getUUID(false));
+			ret = Bukkit.getPlayer(getUUID(false));
 		else if (!LogicUtil.nullOrEmpty(getPlayerName()))
-			return Bukkit.getPlayerExact(getPlayerName());
+			ret = Bukkit.getPlayerExact(getPlayerName());
 		else
 			throw new IllegalStateException("Player Object is completely playerless! No name info nor UUID info present!");
+		if (LogicUtil.nullOrEmpty(getName())) setName(ret.getName());
+		return ret;
 	}
 
 	public final String getPlayerName() {

@@ -107,7 +107,7 @@ public class UUIDUtil extends NoxListener<NoxCore> {
 	}
 
 	public static boolean isUUID(Object object) {
-		return uuidPattern.matcher(object.toString()).matches();
+		return (object != null)?uuidPattern.matcher(object.toString()).matches():false;
 	}
 
 	public static UUIDUtil getInstance() {

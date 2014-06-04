@@ -26,6 +26,8 @@ package com.noxpvp.core.data;
 import java.util.List;
 import java.util.UUID;
 
+import com.noxpvp.core.utils.UUIDUtil;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -44,12 +46,7 @@ import com.noxpvp.core.gui.CoreBoard;
 import com.noxpvp.core.gui.CoreBox;
 import com.noxpvp.core.manager.CorePlayerManager;
 
-public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<NoxPlayer> {
-	private final String playerName;
-
-	static {
-		ProxyBase.validate(BaseNoxPlayerAdapter.class);
-	}
+public abstract class BaseNoxPlayerAdapter extends ProxyBase<NoxPlayer> implements NoxPlayerAdapter {
 
 	public BaseNoxPlayerAdapter(NoxPlayerAdapter player) {
 		this(player.getPlayerName());
@@ -60,7 +57,7 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 	}
 
 	public BaseNoxPlayerAdapter(String name) {
-		this.playerName = name;
+		super(getNoxPlayer(name));
 	}
 
 	private static NoxPlayer getNoxPlayer(String name) {
@@ -93,13 +90,6 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 
 	public void setFirstLoad(boolean isFirstLoad) {
 		getProxyBase().setFirstLoad(isFirstLoad);
-	}
-
-	public NoxPlayer getProxyBase() {
-		return getNoxPlayer(this.getName());
-	}
-
-	public final void setProxyBase(NoxPlayer player) {
 	}
 
 	public final NoxPlayer getNoxPlayer() {
@@ -253,7 +243,7 @@ public abstract class BaseNoxPlayerAdapter implements NoxPlayerAdapter, Proxy<No
 	}
 
 	public String getName() {
-		return playerName;
+		return getProxyBase().getName();
 	}
 
 	public final void setName(String name) {

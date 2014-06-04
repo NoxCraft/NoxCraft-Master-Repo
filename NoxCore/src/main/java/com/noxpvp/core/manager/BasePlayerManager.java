@@ -120,6 +120,7 @@ public abstract class BasePlayerManager<T extends NoxPlayerAdapter> implements I
 			return null;
 
 		if (player instanceof Player) return getPlayer(player.getUniqueId().toString());
+		else if (LogicUtil.nullOrEmpty(player.getName())) return null;
 		else return getPlayer(player.getName());
 	}
 
