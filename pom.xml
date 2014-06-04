@@ -24,7 +24,8 @@
 		<module>NoxHomes</module>
 		<module>NoxMMO</module>
 		<module>NoxChat</module>
-	</modules>
+        <module>NoxGuilds</module>
+    </modules>
 	<repositories>
 		<!-- INTERNAL PROJECT -->
 		<repository>
