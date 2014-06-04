@@ -32,13 +32,11 @@ import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.bergerkiller.bukkit.common.MessageBuilder;
-import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.gui.MenuItemRepresentable;
 import com.noxpvp.mmo.abilities.Ability;
@@ -56,36 +54,14 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 		this.retainer = retainer;
 	}
 
-	public void addExp(int amount) {
-		setExp(getExp() + amount);
-	}
-
-	public boolean canUseLevel(int level) {
-		return level <= getMaxLevel();
-	}
-
-	public boolean canUse() {
-		if (retainer.getPlayer() != null)
-			return retainer.getPlayer().hasPermission(getPermission());
-		return false;
-	}
-
 	public String getPermission() {
 		return StringUtil.join(".", "nox", "class", retainer.getName(), "tier", Integer.toString(getTierLevel()));
 	}
-
-	public final PlayerClass getRetainingClass() {
-		return retainer;
-	}
-
-	public final int getMaxExp() {
-		return getMaxExp(getLevel());
-	}
-
+	
 	public final String getName() {
 		return name;
 	}
-
+	
 	public ItemStack getIdentifiableItem() {
 		boolean classCanUse = getRetainingClass().canUseTier(getTierLevel());
 		ItemMeta meta;
@@ -107,19 +83,41 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 			identifingItem.setType(Material.ENCHANTED_BOOK);
 		} else {
 			identifingItem.setType(Material.BOOK_AND_QUILL);
-
+			
 			meta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Tier: "
 					+ getRetainingClass().getColor() + getName());
-
+			
 			List<String> lore = new ArrayList<String>();
 			for (String cur : getLore()) lore.add(ChatColor.MAGIC + cur);
-				
+			
 			meta.setLore(lore);
 		}
 		identifingItem.setItemMeta(meta);
-
-
+		
+		
 		return identifingItem.clone();
+	}
+
+	public final PlayerClass getRetainingClass() {
+		return retainer;
+	}
+	
+	public boolean canUseLevel(int level) {
+		return level <= getMaxLevel();
+	}
+	
+	public boolean canUse() {
+		if (retainer.getPlayer() != null)
+			return retainer.getPlayer().hasPermission(getPermission());
+		return false;
+	}
+	
+	public void addExp(int amount) {
+		setExp(getExp() + amount);
+	}
+
+	public final int getMaxExp() {
+		return getMaxExp(getLevel());
 	}
 
 	public final Player getPlayer() {
@@ -129,7 +127,7 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 	public final int getTotalExp() {
 		int ret = 0;
 		for (int i = 1; i < getMaxLevel(); i++)
-			ret = getExp(i);
+			ret += getExp(i);
 
 		return ret;
 	}
@@ -188,30 +186,6 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 		return getTotalExp() >= amount;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * <b>If overridden you must call super!</b>
-	 * @return map of serialized data.
-	 */
-	public Map<String, Object> serialize() {
-		Map<String, Object> ret = new HashMap<String, Object>();
-
-		ret.put("exp", getTotalExp());
-
-		return ret;
-	}
-
-	/**
-	 * Load custom data to configs.
-	 *
-	 * @param data map of serialized data.
-	 */
-	protected abstract void load(Map<String, Object> data);
-
-	public final void onLoad(Map<String, Object> data) {
-		setTotalExp((Integer) data.get("exp")); //Currently that is all there is needed! NO REALLY!
-	}
-
 	public void removeExp(int amount) {
 		setExp(getExp() - amount);
 	}
@@ -222,5 +196,29 @@ public abstract class ClassTier implements IClassTier, MenuItemRepresentable {
 
 	public final Collection<Ability> getAbilities() {
 		return Collections.unmodifiableCollection(getAbilityMap().values());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <b>If overridden you must call super!</b>
+	 * @return map of serialized data.
+	 */
+	public Map<String, Object> serialize() {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		
+		ret.put("exp", getTotalExp());
+		
+		return ret;
+	}
+	
+	/**
+	 * Load custom data to configs.
+	 *
+	 * @param data map of serialized data.
+	 */
+	protected abstract void load(Map<String, Object> data);
+	
+	public final void onLoad(Map<String, Object> data) {
+		setTotalExp((Integer) data.get("exp")); //Currently that is all there is needed! NO REALLY!
 	}
 }

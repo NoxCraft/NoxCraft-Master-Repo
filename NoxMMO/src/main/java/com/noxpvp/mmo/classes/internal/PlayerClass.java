@@ -35,6 +35,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.meta.When;
 
 import com.noxpvp.core.utils.UUIDUtil;
+
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -84,19 +85,23 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 
 	public static final String LOG_MODULE_NAME = "PlayerClass";
 	private static final String DYNAMIC_TIER_PATH = "dynamic.tiers";
+	
 	//Debug and errors
 	protected static ModuleLogger pcLog;
 
 	@SuppressWarnings("rawtypes")
 	private static List<Class> registeredClasses;
+	
 	//Identification
 	private final String uid;
 	protected ModuleLogger log;
+	
 	//Tiers
 	protected Map<Integer, IClassTier> tiers;
 	private int cTierLevel = 1;
 	private String name;
 	private ItemStack identifyingItem;
+	
 	//Player Data
 	private String playerIdentifier;
 
@@ -306,6 +311,10 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 	public int getExp(int tier) {
 		return getTier(tier).getExp();
 	}
+	
+	public int getExpToLevel() {
+		return Math.max(0, getMaxExp() - getExp());
+	}
 
 	public int getHighestAllowedTier() {
 		// TODO Auto-generated method stub
@@ -349,10 +358,6 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 		return getColor() + getName();
 	}
 
-	public String getDescription() {
-		return "\"Something descriptive here\"";
-	}
-
 	public String getDescription(ChatColor color) {
 		return color + getDescription();
 	}
@@ -384,6 +389,11 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 			List<String> lore = getLore(ChatColor.GOLD, 28);
 
 			lore.add(new MessageBuilder().gold("Current Tier: ").yellow(getCurrentTierLevel()).toString());
+			
+			//TODO EXP
+//			lore.add(new MessageBuilder().gold("Current Level: ").yellow(getLevel()).white("/").yellow(getMaxLevel()).toString());
+//			lore.add(new MessageBuilder().gold("Exp: ").yellow(getExp()).white("/").yellow(getMaxExp()).toString());
+//			lore.add(new MessageBuilder().gold("Exp To Level: ").yellow(getExpToLevel()).toString());
 
 			meta.setLore(lore);
 

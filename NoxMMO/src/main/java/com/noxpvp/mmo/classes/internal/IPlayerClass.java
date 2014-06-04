@@ -246,6 +246,13 @@ public interface IPlayerClass extends MenuItemRepresentable, ConfigurationSerial
 	 * @return exp integer value of how much exp the tier has.
 	 */
 	public int getExp(int tier);
+	
+	/**
+	 * Gets the amount of exp needed to reach the next level in the current tier
+	 * 
+	 * @return exp Integer value needed to level
+	 */
+	public int getExpToLevel();
 
 	/**
 	 * Retrieves all exp from all tiers combined.

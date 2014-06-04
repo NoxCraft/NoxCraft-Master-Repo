@@ -175,6 +175,10 @@ public class DummyClass implements IPlayerClass {
 	public int getExp() {
 		return 0;
 	}
+	
+	public int getExpToLevel() {
+		return 0;
+	}
 
 	public void setExp(int amount) {
 	}
