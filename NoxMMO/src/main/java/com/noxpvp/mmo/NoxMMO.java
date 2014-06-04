@@ -43,20 +43,16 @@ import com.noxpvp.core.utils.StaticCleaner;
 import com.noxpvp.mmo.abilities.entity.*;
 import com.noxpvp.mmo.abilities.player.*;
 import com.noxpvp.mmo.abilities.player.AutoToolPlayerAbilities.*;
-import com.noxpvp.mmo.abilities.ranged.HookShotPlayerAbility;
-import com.noxpvp.mmo.abilities.ranged.MassDestructionPlayerAbility;
-import com.noxpvp.mmo.abilities.ranged.SeveringStrikesPlayerAbility;
-import com.noxpvp.mmo.abilities.ranged.ThrowPlayerAbility;
+import com.noxpvp.mmo.abilities.ranged.*;
 import com.noxpvp.mmo.abilities.targeted.*;
-import com.noxpvp.mmo.classes.AxesPlayerClass;
+import com.noxpvp.mmo.classes.*;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
 import com.noxpvp.mmo.command.AbilityCommand;
 import com.noxpvp.mmo.command.ClassCommand;
 import com.noxpvp.mmo.command.MMOCommand;
 import com.noxpvp.mmo.listeners.*;
 import com.noxpvp.mmo.locale.MMOLocale;
-import com.noxpvp.mmo.prism.AbilityUseAction;
-import com.noxpvp.mmo.prism.UsedAbilityActionType;
+import com.noxpvp.mmo.prism.MMOPrismUtil;
 import com.noxpvp.mmo.util.PlayerClassUtil;
 
 
@@ -142,13 +138,8 @@ public class NoxMMO extends NoxPlugin {
 		PlayerClassUtil.init();
 		PlayerClass.init();
 		
-		//Register action of using an ability into prism for logging
-		PrismUtil.registerActionType(instance, new UsedAbilityActionType());
-		
-		//Register custom handlers
-		PrismUtil.registerCustomActionHandler(instance, AbilityUseAction.class);
 
-		abilityListener = new AbilityListener(instance);
+		abilityListener = new AbilityListener(instance, core.isPrismActive());
 		damageListener = new DamageListener(instance);
 		healListener = new HealListener(instance);
 		playerTargetListener = new PlayerInteractListener(instance);
@@ -192,7 +183,17 @@ public class NoxMMO extends NoxPlugin {
 				return true;
 			}
 		});
+
 		registerAllCommands();
+		
+		//Setup Prism stuff
+		try {
+			if (core.isPrismActive()) {
+				MMOPrismUtil.registerActionTypes();
+				MMOPrismUtil.registerCustomHandlers();
+			}
+		} catch (Exception e) {}
+		
 	}
 
 	private void registerAllCommands() {

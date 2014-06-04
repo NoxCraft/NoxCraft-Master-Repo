@@ -36,6 +36,7 @@ import com.noxpvp.core.external.prism.BaseNoxPrismEvent;
 import com.noxpvp.core.external.prism.IPrismHook;
 import com.noxpvp.core.external.prism.NullPrismHook;
 import com.noxpvp.core.external.prism.PrismHook;
+
 public class PrismUtil {
 	private static ModuleLogger log;
 	
@@ -61,15 +62,28 @@ public class PrismUtil {
 		else log.severe("Prism is null and could not be found");
 	}
 	
+	public static boolean isPrismActive() {
+		return hook.isPrismEnabled();
+	}
+	
 	public static void registerActionType(NoxPlugin plugin, ActionType type) {
+		if (!isPrismActive())
+			return;
+		
 		hook.registerActionType(plugin, type);
 	}
 	
 	public static void registerCustomActionHandler(NoxPlugin plugin, Class<? extends GenericAction> clazz) {
+		if (!isPrismActive())
+			return;
+		
 		hook.registerCustomActionHandler(plugin, clazz);
 	}
 	
 	public static void callCustomPrismEvent(BaseNoxPrismEvent event) {
+		if (!isPrismActive())
+			return;
+		
 		hook.callCustomPrismEvent(event);
 	}
 }

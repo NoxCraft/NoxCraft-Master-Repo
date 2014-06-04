@@ -29,6 +29,7 @@ import org.bukkit.event.EventPriority;
 
 import com.bergerkiller.bukkit.common.utils.StringUtil;
 import com.noxpvp.core.listeners.NoxListener;
+import com.noxpvp.core.utils.PrismUtil;
 import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.MMOPlayerManager;
@@ -49,16 +50,17 @@ import com.noxpvp.mmo.locale.MMOLocale;
 import com.noxpvp.mmo.prism.AbilityUsePrismEvent;
 
 public class AbilityListener extends NoxListener<NoxMMO> {
+	private static boolean isPrismActive;
+	private MMOPlayerManager pm;
 
-	MMOPlayerManager pm;
-
-	public AbilityListener() {
-		this(NoxMMO.getInstance());
+	public AbilityListener(boolean isPrismActive) {
+		this(NoxMMO.getInstance(), isPrismActive);
 	}
 
-	public AbilityListener(NoxMMO plugin) {
+	public AbilityListener(NoxMMO plugin, boolean isPrismActive) {
 		super(plugin);
 
+		this.isPrismActive = isPrismActive;
 		this.pm = MMOPlayerManager.getInstance();
 	}
 
@@ -93,7 +95,7 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 		boolean silent = (ab instanceof SilentAbility);
 		boolean hasCD = ab.getCD() > 0;
 		
-		if (result.getResult()) {
+		if (result.getResult() && isPrismActive) {
 			AbilityUsePrismEvent.trigger(p, result);
 			
 			if (hasCD)
@@ -134,7 +136,7 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 		boolean silent = (ab instanceof SilentAbility);
 		boolean hasCD = ab.getCD() > 0;
 		
-		if (result.getResult()) {
+		if (result.getResult() && isPrismActive) {
 			AbilityUsePrismEvent.trigger(p, result);
 			
 			if (hasCD)
