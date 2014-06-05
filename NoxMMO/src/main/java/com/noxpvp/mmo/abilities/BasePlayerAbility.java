@@ -23,6 +23,8 @@
 
 package com.noxpvp.mmo.abilities;
 
+import com.bergerkiller.bukkit.common.utils.LogicUtil;
+import com.noxpvp.core.utils.UUIDUtil;
 import org.apache.commons.lang.IllegalClassException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -40,15 +42,24 @@ import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.events.PlayerAbilityPreExecuteEvent;
 import com.noxpvp.mmo.locale.MMOLocale;
 
+import java.util.logging.Level;
+
 public abstract class BasePlayerAbility extends BaseEntityAbility implements IPlayerAbility {
 	private static MMOPlayerManager pm = MMOPlayerManager.getInstance();
 	
 	public BasePlayerAbility(final String name, Player player) {
 		super(name, player);
 	}
-	
-	public void fixPlayer(String playerName) {
-		fixEntityRef(Bukkit.getPlayer(playerName));
+
+	public void fixPlayer(Object ob )
+	{
+		if (ob instanceof Player) fixEntityRef((Player)ob);
+		else if (UUIDUtil.isUUID(ob)) fixEntityRef(Bukkit.getPlayer(UUIDUtil.toUUID(ob)));
+		else if (LogicUtil.nullOrEmpty((String) ((ob == null)?null:ob.toString()))) {
+			NoxMMO.getInstance().log(Level.INFO, "It is not recommended to grab players by name due to uuid changes. " +
+							System.lineSeparator() + "BasePlayerAbility got a non uuid object for fixPlayer(object)");
+			fixEntityRef(Bukkit.getPlayer(ob.toString()));
+		}
 	}
 
 	public Player getPlayer() {
