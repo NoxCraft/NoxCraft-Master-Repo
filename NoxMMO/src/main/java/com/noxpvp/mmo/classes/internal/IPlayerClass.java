@@ -320,6 +320,7 @@ public interface IPlayerClass extends MenuItemRepresentable, ConfigurationSerial
 	 */
 	public int getTotalLevel();
 
+	//TODO: Javadocs.
 	public void setExp(int tier, int amount);
 
 	public void addExp(int amount);
@@ -335,7 +336,7 @@ public interface IPlayerClass extends MenuItemRepresentable, ConfigurationSerial
 	public Collection<? extends Ability> getAbilities();
 
 	public static enum BLEND_MODE {
-		ADDITIVE, SUBTRACTIVE, MULTIPLE, OVERRIDE, CANCEL;
+		AVERAGE, ADDITIVE, SUBTRACTIVE, MULTIPLE, OVERRIDE, CANCEL;
 
 		public Color blend(Color first, Color second) {
 			if (this.equals(OVERRIDE))
@@ -345,6 +346,11 @@ public interface IPlayerClass extends MenuItemRepresentable, ConfigurationSerial
 
 			int r = first.getRed(), g = first.getGreen(), b = first.getBlue();
 			int r2 = second.getRed(), g2 = second.getGreen(), b2 = second.getBlue();
+
+			if (this.equals(ADDITIVE))
+				return Color.fromRGB(Math.min((r + r2), 255), Math.min((g + g2), 255), Math.min((b + b2), 255));
+			else if (this.equals(AVERAGE))
+				return Color.fromRGB(((r+r2)/2), ((g+g2)/2), ((b+b2)/2));
 
 			return null; //FIXME: Finish
 		}

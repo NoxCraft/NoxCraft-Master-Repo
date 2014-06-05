@@ -91,6 +91,7 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		MMOPlayer p = cycler.getMMOPlayer();
 
 		final String identity = UUIDUtil.compressUUID(p.getUUID());
+		if (cyclers == null) cyclers = new MapMaker().concurrencyLevel(4).makeMap();
 		if (cyclers.containsKey(identity))
 			cyclers.get(identity).add(cycler);
 		else {

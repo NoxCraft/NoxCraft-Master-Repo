@@ -61,6 +61,7 @@ import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuItemRepresentable {
 
+	/** Not recommended for use **/
 	private static final String PRIMARY_CLASS_NODE = "current.primary-class";
 	private static final String PRIMARY_PLAYERCLASS_NODE = PRIMARY_CLASS_NODE + ".class";
 	private static final String PRIMARY_TIER_NODE = PRIMARY_CLASS_NODE + ".tier";
@@ -70,7 +71,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuI
 	private static final String TARGET_NODE = "current.target";
 
 	private static final String ABILITY_CYCLERS_NODE = "cyclers";
-
+	private List<IPlayerClass> classes;
 	private IPlayerClass primaryClass = DummyClass.PRIMARY, secondaryClass = DummyClass.SECONDARY;
 	private LivingEntity target;
 	private ItemStack identifiableItem;
@@ -231,7 +232,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuI
 		getSecondaryClass().setCurrentTier(node.get(SECONDARY_TIER_NODE, Integer.class, 1));
 		
 		/*
-		 * Seperate the scope Just in case we want to use the variables again.
+		 * Separate the scope Just in case we want to use the variables again.
 		 */
 		{
 			String uid = node.get(TARGET_NODE + ".uuid", String.class);
@@ -243,8 +244,12 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuI
 			if (!LogicUtil.nullOrEmpty(uid) && world != null)
 				setTarget(EntityUtil.getEntity(world, UUID.fromString(uid), LivingEntity.class));
 		}
-		
-		new HealthBar(getPlayer());
+
+		node.set(PRIMARY_PLAYERCLASS_NODE, getPrimaryClass().getUniqueID());
+		node.set(PRIMARY_TIER_NODE, getPrimaryClass().getCurrentTierLevel());
+
+		node.set(SECONDARY_PLAYERCLASS_NODE, getSecondaryClass().getUniqueID());
+		node.set(SECONDARY_TIER_NODE, getSecondaryClass().getCurrentTierLevel());
 	}
 
 	/**
