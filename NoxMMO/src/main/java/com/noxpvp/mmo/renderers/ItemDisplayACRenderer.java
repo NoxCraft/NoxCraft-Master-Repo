@@ -23,12 +23,28 @@
 
 package com.noxpvp.mmo.renderers;
 
+import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
+
+import com.comphenix.attribute.NbtFactory;
+import com.comphenix.attribute.NbtFactory.NbtCompound;
+import com.comphenix.packetwrapper.WrapperPlayServerSetSlot;
 import com.noxpvp.mmo.AbilityCycler;
+import com.noxpvp.mmo.abilities.Ability;
 
 public class ItemDisplayACRenderer extends BaseAbilityCyclerRenderer {
 
 	public ItemDisplayACRenderer(AbilityCycler cycler) {
 		super(cycler);
+	}
+	
+	private WrapperPlayServerSetSlot getNewUpdate(ItemStack s, short slot) {
+		WrapperPlayServerSetSlot p = new WrapperPlayServerSetSlot();
+		
+		p.setSlotData(s);
+		p.setSlot(slot);
+		
+		return p;
 	}
 
 	/**
@@ -36,7 +52,6 @@ public class ItemDisplayACRenderer extends BaseAbilityCyclerRenderer {
 	 */
 	@Override
 	public void renderNext() {
-
 	}
 
 	/**
@@ -52,6 +67,25 @@ public class ItemDisplayACRenderer extends BaseAbilityCyclerRenderer {
 	 */
 	@Override
 	public void renderCurrent() {
+		AbilityCycler cycler = getCycler();
+		Ability cur = cycler != null? cycler.current() : null;
+		if (cycler == null || cur == null)
+			return;
+		
+		//Get list of all items, and show which is used with an arrow
+		String[] others = new String[cycler.getList().size()];
+		int i = 0;
+		for (Ability a : cycler.getList())
+			others[i++] = (a.equals(cur)? ChatColor.GREEN + ">" : " ") + a.getDisplayName(ChatColor.RED);
+		
+		//Set fake NBT data on item, and send update packet for that item
+		ItemStack item = NbtFactory.getCraftItemStack(getCycler().getPlayer().getItemInHand().clone());
+		NbtCompound tag = NbtFactory.fromItemTag(item);
+		tag.putPath("display.Name", cur.getDisplayName(ChatColor.GOLD));
+		tag.putPath("display.Lore", NbtFactory.createList(others));
+		
+		//Send update packet
+		getNewUpdate(item, (short) cycler.getLastSlot()).sendPacket(getCycler().getPlayer());
 
 	}
 }

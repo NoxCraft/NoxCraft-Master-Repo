@@ -100,6 +100,11 @@ public class MMOLocale extends NoxLocale {
 	 * @param 1 ability
 	 */
 	public static final MMOLocale ABIL_ALREADY_ACTIVE;
+	
+	/**
+	 * @param 1 Ability name
+	 */
+	public static final MMOLocale ABIL_NOT_FOUND;
 
 	//Display
 	public static final MMOLocale CLASS_DN;
@@ -186,6 +191,7 @@ public class MMOLocale extends NoxLocale {
 		ABIL_RANGED_TOO_FAR = new MMOLocale("error.ability.ranged-too-far", "&cYou have to be within &e%0% &cblocks");
 		ABIL_NO_LOS = new MMOLocale("error.ability.no-los", "&cYou need line of sight to use the &e%0% &cability!");
 		ABIL_ALREADY_ACTIVE = new MMOLocale("error.ability.already-active", "&e%0% &cis already active");
+		ABIL_NOT_FOUND = new MMOLocale("error.ability.not-found", "&cThe ability &e%0% &ccould not be found");
 
 		//Display
 		CLASS_DN = new MMOLocale("display.class.default", "%1%%0%");

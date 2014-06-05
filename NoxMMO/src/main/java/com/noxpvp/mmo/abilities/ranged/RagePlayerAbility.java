@@ -21,7 +21,7 @@
  * To use this software with any different license terms you must get prior explicit written permission from the copyright holders.
  */
 
-package com.noxpvp.mmo.abilities.player;
+package com.noxpvp.mmo.abilities.ranged;
 
 import com.noxpvp.mmo.abilities.PVPAbility;
 
@@ -35,6 +35,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.noxpvp.core.effect.StaticEffects;
 import com.noxpvp.core.utils.gui.MessageUtil;
+import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.abilities.BaseRangedPlayerAbility;
@@ -47,7 +48,7 @@ public class RagePlayerAbility extends BaseRangedPlayerAbility implements PVPAbi
 	public static final String ABILITY_NAME = "Rage";
 	public static final String PERM_NODE = "rage";
 	
-	private boolean isActive;
+	private boolean isActive = false;
 	private BaseMMOEventHandler<EntityDamageByEntityEvent> handler;
 	
 	public void setActive(boolean isActive) {
@@ -102,8 +103,17 @@ public class RagePlayerAbility extends BaseRangedPlayerAbility implements PVPAbi
 				for (Entity it : getPlayer().getNearbyEntities(range, range, range)) {
 					if (!(it instanceof Damageable) || it.equals(attacker)) continue;
 
-					((Damageable) it).damage(damage - (damage / 4), attacker);
+					double newDamage = damage - (damage / 4);
+					((Damageable) it).damage(newDamage);
 					StaticEffects.SkullBreak((LivingEntity) it);
+					
+					if (it instanceof Player) {
+						MMOPlayer mp = MMOPlayerManager.getInstance().getPlayer(getPlayer());
+						MessageUtil.sendLocale((Player) it, MMOLocale.ABIL_HIT_ATTACKER_DAMAGED,
+								mp.getFullName(), getDisplayName(), String.format("%.2f", newDamage));
+						
+					}
+					
 				}
 			}
 		};
@@ -126,7 +136,7 @@ public class RagePlayerAbility extends BaseRangedPlayerAbility implements PVPAbi
 
 		IPlayerClass pClass = MMOPlayerManager.getInstance().getPlayer(getPlayer()).getPrimaryClass();
 
-		int length = (20 * (pClass.getTotalLevel())) / 16;//TODO when adding exp
+		int length = Math.max(20 * 5, (20 * (pClass.getTotalLevel())) / 16);
 
 		setActive(true);
 		Bukkit.getScheduler().runTaskLater(NoxMMO.getInstance(), new Runnable() {

@@ -32,6 +32,8 @@ import com.noxpvp.core.utils.UUIDUtil;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.abilities.IPassiveAbility;
 import com.noxpvp.mmo.renderers.BaseAbilityCyclerRenderer;
+import com.noxpvp.mmo.renderers.ItemDisplayACRenderer;
+
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -39,6 +41,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
@@ -51,16 +54,21 @@ import java.util.concurrent.ConcurrentMap;
 public class AbilityCycler extends Cycler<Ability> implements ConfigurationSerializable {
 //	public static final String TEMP_PCTK = "ability-cycler.active-count";
 
+	static {
+		init();
+	}
+	
 	static ConcurrentMap<String, List<AbilityCycler>> cyclers = null;
 	private static NoxListener<NoxMMO> iHeld = null, iInteract;
 	private ItemStack cycleItem;
 	private Reference<MMOPlayer> player = null;
+	private BaseAbilityCyclerRenderer renderer;
+	private int lastSlot = 0;
 
 	public void setRenderer(BaseAbilityCyclerRenderer renderer) {
 		this.renderer = renderer;
 	}
 
-	private BaseAbilityCyclerRenderer renderer = null;
 
 	public AbilityCycler(int size, OfflinePlayer player, ItemStack cycleItem) {
 		this(size, MMOPlayerManager.getInstance().getPlayer(player), cycleItem);
@@ -82,6 +90,7 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		super(data);
 		this.player = new SoftReference<MMOPlayer>(player);
 		this.cycleItem = cycleItem;
+		
 		register(this);
 	}
 
@@ -99,6 +108,8 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 			abilities.add(cycler);
 			cyclers.put(identity, abilities);
 		}
+		
+		cycler.setRenderer(new ItemDisplayACRenderer(cycler));
 	}
 
 	public static List<AbilityCycler> getCyclers(String identity) {
@@ -118,7 +129,8 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 	}
 
 	public boolean isCyclerMatch(ItemStack stack) {
-		return getCycleItem().isSimilar(stack);
+		return (stack.getType().equals(cycleItem.getType()) &&
+				stack.getData().equals(cycleItem.getData()));
 	}
 
 	public boolean isPlayerMatch(Object ob) {
@@ -157,6 +169,14 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		else
 			return 0;
 	}
+	
+	public void setLastSlot(int lastSlot) {
+		this.lastSlot = lastSlot;
+	}
+	
+	public int getLastSlot() {
+		return lastSlot;
+	}
 
 	//INITIALIZE
 	public static void init() {
@@ -182,10 +202,12 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 //				final int change = getChange(event.getPreviousSlot(), event.getNewSlot());
 				switch (/*change */getChange(event.getPreviousSlot(), event.getNewSlot())) {
 					case 1:
+						cycler.setLastSlot(36 + event.getPreviousSlot());
 						cycler.next();
 						event.setCancelled(true);
 						return;
 					case -1:
+						cycler.setLastSlot(36 + event.getPreviousSlot());
 						cycler.previous();
 						event.setCancelled(true);
 						return;
@@ -199,10 +221,14 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 		iInteract = new NoxListener<NoxMMO>(NoxMMO.getInstance()) {
 				@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
 				public void onInteract(PlayerInteractEvent event) {
+					if (!event.getAction().equals(Action.RIGHT_CLICK_AIR) &&
+							!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+						return;
+					
 					final Player player = event.getPlayer();
 					final String identity = UUIDUtil.compressUUID(player.getUniqueId());
-					if (!player.isSneaking())
-						return;
+//					if (!player.isSneaking())
+//						return;
 
 					final MMOPlayer mmoPlayer = MMOPlayerManager.getInstance().getPlayer(player);
 

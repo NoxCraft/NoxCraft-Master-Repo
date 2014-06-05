@@ -50,7 +50,7 @@ import com.noxpvp.mmo.locale.MMOLocale;
 import com.noxpvp.mmo.prism.AbilityUsePrismEvent;
 
 public class AbilityListener extends NoxListener<NoxMMO> {
-	private static boolean isPrismActive;
+	private boolean isPrismActive;
 	private MMOPlayerManager pm;
 
 	public AbilityListener(boolean isPrismActive) {
@@ -95,8 +95,10 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 		boolean silent = (ab instanceof SilentAbility);
 		boolean hasCD = ab.getCD() > 0;
 		
-		if (result.getResult() && isPrismActive) {
-			AbilityUsePrismEvent.trigger(p, result);
+		if (result.getResult()) {
+			
+			if (isPrismActive)
+				AbilityUsePrismEvent.trigger(p, result);
 			
 			if (hasCD)
 				mp.addCoolDown(ab.getName(), ab.getCD(), !silent);
@@ -136,8 +138,10 @@ public class AbilityListener extends NoxListener<NoxMMO> {
 		boolean silent = (ab instanceof SilentAbility);
 		boolean hasCD = ab.getCD() > 0;
 		
-		if (result.getResult() && isPrismActive) {
-			AbilityUsePrismEvent.trigger(p, result);
+		if (result.getResult()) {
+			
+			if (isPrismActive)
+				AbilityUsePrismEvent.trigger(p, result);
 			
 			if (hasCD)
 				mp.addCoolDown(ab.getName(), ab.getCD(), !silent);

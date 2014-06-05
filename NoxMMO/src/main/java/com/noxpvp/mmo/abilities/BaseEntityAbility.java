@@ -59,6 +59,10 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 		this.damage = 0;
 		this.effectedEntities = new ArrayList<Entity>();
 	}
+	
+	public void fixEntityRef(Entity e) {
+		this.entityRef = new SoftReference<Entity>(e);
+	}
 
 	public Entity getEntity() {
 		return entityRef.get();

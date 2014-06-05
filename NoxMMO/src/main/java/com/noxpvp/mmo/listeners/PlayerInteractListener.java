@@ -97,7 +97,6 @@ public class PlayerInteractListener extends NoxListener<NoxMMO> {
 		if (p.getItemInHand().getType() != Material.STICK)
 			return;
 		
-		new PlayerPermManager(p).show();
 	}
 
 }

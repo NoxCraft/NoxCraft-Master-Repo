@@ -24,6 +24,7 @@
 package com.noxpvp.mmo.abilities;
 
 import org.apache.commons.lang.IllegalClassException;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -45,10 +46,18 @@ public abstract class BasePlayerAbility extends BaseEntityAbility implements IPl
 	public BasePlayerAbility(final String name, Player player) {
 		super(name, player);
 	}
+	
+	public void fixPlayer(String playerName) {
+		fixEntityRef(Bukkit.getPlayer(playerName));
+	}
 
 	public Player getPlayer() {
 		if (!(getEntity() instanceof Player))
 			throw new IllegalStateException("Internal Data was tampered with..", new IllegalClassException(Player.class, Entity.class));
+		
+		Player p = (Player) getEntity();
+		if (p == null || !p.isValid())
+			fixPlayer(p.getName());
 		
 		return (Player) getEntity();
 	}

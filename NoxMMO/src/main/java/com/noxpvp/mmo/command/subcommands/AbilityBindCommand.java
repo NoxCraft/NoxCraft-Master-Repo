@@ -24,20 +24,28 @@
 package com.noxpvp.mmo.command.subcommands;
 
 import com.bergerkiller.bukkit.common.Task;
+import com.bergerkiller.bukkit.common.permissions.IPermissionDefault;
 import com.dsh105.holoapi.util.StringUtil;
 import com.noxpvp.core.commands.BaseCommand;
 import com.noxpvp.core.commands.CommandContext;
 import com.noxpvp.core.commands.NoPermissionException;
 import com.noxpvp.core.gui.QuestionBox;
+import com.noxpvp.core.utils.gui.MessageUtil;
 import com.noxpvp.mmo.AbilityCycler;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.Ability;
+import com.noxpvp.mmo.abilities.IPassiveAbility;
+import com.noxpvp.mmo.abilities.SilentAbility;
+import com.noxpvp.mmo.locale.MMOLocale;
+import com.noxpvp.mmo.util.PlayerClassUtil;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AbilityBindCommand extends BaseCommand {
 
@@ -69,13 +77,36 @@ public class AbilityBindCommand extends BaseCommand {
 		final boolean safe = context.hasFlag("o") || context.hasFlag("overwrite") || !exists;
 		final Task t = new Task(NoxMMO.getInstance()) {
 			public void run() {
-				AbilityCycler cycler; //TODO: Add single item object.
+				AbilityCycler cycler;
 				if (exists)
 					cycler = AbilityCycler.getCycler(player);
 				else
-					cycler = new AbilityCycler((/*all*/true?mmoPlayer.getAllAbilities():new ArrayList<Ability>()), player, currentItem);
+					cycler = new AbilityCycler((!singleItem?
+							mmoPlayer.getAllAbilities() :
+							new ArrayList<Ability>()), player, currentItem);
+				
 				cycler.getList().clear();
-				cycler.addAll(mmoPlayer.getAllAbilities());
+				List<Ability> abs = new ArrayList<Ability>();
+				if (singleItem) {
+					for (Ability a : mmoPlayer.getAllAbilities())
+						if (a.getName().equalsIgnoreCase(arg)) {
+							abs.add(a);
+							break;
+						}
+					
+					if (abs.isEmpty()) {
+						MessageUtil.sendLocale(player, MMOLocale.ABIL_NOT_FOUND, arg);
+						return;
+					}
+				} else {
+					for (Ability a : mmoPlayer.getAllAbilities())
+						if (!(a instanceof SilentAbility) && !(a instanceof IPassiveAbility<?>)) {
+							abs.add(a);
+						}
+					
+				}
+				
+				cycler.addAll(abs);
 				mmoPlayer.getAbilityCyclers().add(cycler);
 			}
 		};
@@ -85,14 +116,14 @@ public class AbilityBindCommand extends BaseCommand {
 				@Override
 				public void onConfirm() {
 					t.start();
+					hide();
 				}
-
 
 				@Override
 				public void onDeny() {
-					//DO NOTHING
+					hide();
 				}
-			};
+			}.show();
 		else if (safe)
 			t.start();
 

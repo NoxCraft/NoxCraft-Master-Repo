@@ -74,7 +74,6 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 
 	private ItemStack identifiableItem;
 
-	
 	protected ItemStack removeAttributes(ItemStack item) {
 		if (item == null || MaterialUtil.isType(item.getType(), Material.BOOK_AND_QUILL, Material.AIR))
 			return item;
@@ -218,14 +217,14 @@ public abstract class CoreBox extends NoxListener<NoxCore> implements ICoreBox, 
 		if ((p = getPlayer()) == null)
 			return;
 
+		attributeHider.register();
+		register();
+
 		pm.getPlayer(p).setCoreBox(this);
 		p.openInventory(box);
 
 		for (ItemStack i : box.getContents())
 			i = removeAttributes(i);
-		
-		attributeHider.register();
-		register();
 	}
 
 	public void hide() {

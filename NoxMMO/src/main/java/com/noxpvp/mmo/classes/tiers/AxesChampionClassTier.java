@@ -30,7 +30,7 @@ import java.util.Map;
 
 import com.bergerkiller.bukkit.common.config.ConfigurationNode;
 import com.noxpvp.mmo.abilities.Ability;
-import com.noxpvp.mmo.abilities.player.RagePlayerAbility;
+import com.noxpvp.mmo.abilities.ranged.RagePlayerAbility;
 import com.noxpvp.mmo.classes.internal.ClassTier;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
