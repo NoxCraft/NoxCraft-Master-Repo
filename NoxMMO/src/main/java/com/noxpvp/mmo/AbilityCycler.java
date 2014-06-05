@@ -54,10 +54,6 @@ import java.util.concurrent.ConcurrentMap;
 public class AbilityCycler extends Cycler<Ability> implements ConfigurationSerializable {
 //	public static final String TEMP_PCTK = "ability-cycler.active-count";
 
-	static {
-		init();
-	}
-	
 	static ConcurrentMap<String, List<AbilityCycler>> cyclers = null;
 	private static NoxListener<NoxMMO> iHeld = null, iInteract;
 	private ItemStack cycleItem;
@@ -227,8 +223,6 @@ public class AbilityCycler extends Cycler<Ability> implements ConfigurationSeria
 					
 					final Player player = event.getPlayer();
 					final String identity = UUIDUtil.compressUUID(player.getUniqueId());
-//					if (!player.isSneaking())
-//						return;
 
 					final MMOPlayer mmoPlayer = MMOPlayerManager.getInstance().getPlayer(player);
 

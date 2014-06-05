@@ -193,7 +193,7 @@ public class NoxMMO extends NoxPlugin {
 				MMOPrismUtil.registerCustomHandlers();
 			}
 		} catch (Exception e) {}
-		
+		AbilityCycler.init();
 	}
 
 	private void registerAllCommands() {
