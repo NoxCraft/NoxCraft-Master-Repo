@@ -25,6 +25,7 @@ package com.noxpvp.mmo.abilities;
 
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 
 	public BaseEntityAbility(final String name, Entity ref) {
 		super(name);
-		entityRef = new SoftReference<Entity>(ref);
+		entityRef = new WeakReference<Entity>(ref);
 
 		this.masterListener = NoxMMO.getInstance().getMasterListener();
 		this.cd = 5;
@@ -61,7 +62,7 @@ public abstract class BaseEntityAbility extends BaseAbility implements IEntityAb
 	}
 	
 	public void fixEntityRef(Entity e) {
-		this.entityRef = new SoftReference<Entity>(e);
+		this.entityRef = new WeakReference<Entity>(e);
 	}
 
 	public Entity getEntity() {
