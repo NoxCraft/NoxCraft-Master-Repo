@@ -24,6 +24,7 @@
 package com.noxpvp.mmo.renderers;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.attribute.NbtFactory;
@@ -68,8 +69,11 @@ public class ItemDisplayACRenderer extends BaseAbilityCyclerRenderer {
 	@Override
 	public void renderCurrent() {
 		AbilityCycler cycler = getCycler();
+		if (cycler == null) return;
+		final Player player = cycler.getPlayer();
+
 		Ability cur = cycler != null? cycler.current() : null;
-		if (cycler == null || cur == null)
+		if (cycler == null || cur == null || player == null)
 			return;
 		
 		//Get list of all items, and show which is used with an arrow
