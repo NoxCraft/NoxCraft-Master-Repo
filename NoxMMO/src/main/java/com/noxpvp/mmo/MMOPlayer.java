@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.noxpvp.mmo.util.PlayerClassUtil;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -56,8 +57,6 @@ import com.noxpvp.mmo.classes.internal.DummyClass;
 import com.noxpvp.mmo.classes.internal.ExperienceType;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
 import com.noxpvp.mmo.classes.internal.PlayerClass;
-import com.noxpvp.mmo.gui.HealthBar;
-import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuItemRepresentable {
 
@@ -71,7 +70,7 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuI
 	private static final String TARGET_NODE = "current.target";
 
 	private static final String ABILITY_CYCLERS_NODE = "cyclers";
-	private List<IPlayerClass> classes;
+	private static final String PLAYER_CLASSES_NODE = "class-data";
 	private IPlayerClass primaryClass = DummyClass.PRIMARY, secondaryClass = DummyClass.SECONDARY;
 	private LivingEntity target;
 	private ItemStack identifiableItem;
@@ -127,6 +126,9 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuI
 		return Collections.unmodifiableMap(ret);
 	}
 
+	public List<PlayerClass> getClasses() {
+		return getPersistantData().getList(PLAYER_CLASSES_NODE, PlayerClass.class, new ArrayList<PlayerClass>());
+	}
 
 	/*
 	 * This will return a usable list object.
@@ -159,10 +161,10 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuI
 	}
 
 	public void setClass(String c) {
-		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
-			c = PlayerClassUtil.getIdByClassName(c);
+		if (!PlayerClassUtil.PlayerClassConstructUtil.hasClassId(c) && PlayerClassUtil.PlayerClassConstructUtil.hasClassName(c))
+			c = PlayerClassUtil.PlayerClassConstructUtil.getIdByClassName(c);
 
-		setClass(PlayerClassUtil.safeConstructClass(c, getName()));
+		setClass(PlayerClassUtil.PlayerClassConstructUtil.safeConstructClass(c, getName()));
 	}
 
 	public void setClass(IPlayerClass c) {
@@ -175,11 +177,11 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuI
 	public void setPrimaryClass(String c) {
 		if (LogicUtil.nullOrEmpty(c))
 			setClass(DummyClass.PRIMARY);
-		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
-			c = PlayerClassUtil.getIdByClassName(c);
+		if (!PlayerClassUtil.PlayerClassConstructUtil.hasClassId(c) && PlayerClassUtil.PlayerClassConstructUtil.hasClassName(c))
+			c = PlayerClassUtil.PlayerClassConstructUtil.getIdByClassName(c);
 
 		PlayerClass clazz;
-		if ((clazz = PlayerClassUtil.safeConstructClass(c, getName())) != null)
+		if ((clazz = PlayerClassUtil.PlayerClassConstructUtil.safeConstructClass(c, getName())) != null)
 			setClass(clazz);
 
 		return;
@@ -188,11 +190,11 @@ public class MMOPlayer extends BaseNoxPlayerAdapter implements Persistant, MenuI
 	public void setSecondaryClass(String c) {
 		if (LogicUtil.nullOrEmpty(c))
 			setClass(DummyClass.SECONDARY);
-		if (!PlayerClassUtil.hasClassId(c) && PlayerClassUtil.hasClassName(c))
-			c = PlayerClassUtil.getIdByClassName(c);
+		if (!PlayerClassUtil.PlayerClassConstructUtil.hasClassId(c) && PlayerClassUtil.PlayerClassConstructUtil.hasClassName(c))
+			c = PlayerClassUtil.PlayerClassConstructUtil.getIdByClassName(c);
 
 		PlayerClass clazz;
-		if ((clazz = PlayerClassUtil.safeConstructClass(c, getName())) != null)
+		if ((clazz = PlayerClassUtil.PlayerClassConstructUtil.safeConstructClass(c, getName())) != null)
 			setClass(clazz);
 
 		return;

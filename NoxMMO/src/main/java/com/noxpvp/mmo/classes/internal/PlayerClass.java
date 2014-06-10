@@ -36,6 +36,7 @@ import javax.annotation.meta.When;
 
 import com.noxpvp.core.utils.UUIDUtil;
 
+import com.noxpvp.mmo.util.PlayerClassUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -61,7 +62,6 @@ import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.NoxMMO;
 import com.noxpvp.mmo.abilities.Ability;
 import com.noxpvp.mmo.classes.DynamicClassTier;
-import com.noxpvp.mmo.util.PlayerClassUtil;
 
 /**
  * When Implementing you must use all of the following constructors and params.
@@ -152,7 +152,7 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 		if (registeredClasses.contains(playerClass.getClass()))
 			return;
 
-		PlayerClassUtil.registerPlayerClass(playerClass.getClass());
+		PlayerClassUtil.PlayerClassConstructUtil.registerPlayerClass(playerClass.getClass());
 	}
 
 	//// START TEMP
@@ -175,7 +175,7 @@ public abstract class PlayerClass implements IPlayerClass, MenuItemRepresentable
 		if (!data.containsKey("class.uuid"))
 			throw new IllegalArgumentException("Data does not contain a unique class id! Cannot possibly cast the class to the appropriate handler.");
 
-		return PlayerClassUtil.safeConstructClass(data);
+		return PlayerClassUtil.PlayerClassConstructUtil.safeConstructClass(data);
 	}
 
 	/**

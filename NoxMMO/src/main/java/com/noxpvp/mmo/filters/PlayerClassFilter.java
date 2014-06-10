@@ -26,13 +26,13 @@ package com.noxpvp.mmo.filters;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.noxpvp.mmo.util.PlayerClassUtil;
 import org.bukkit.entity.Player;
 
 import com.bergerkiller.bukkit.common.filtering.Filter;
 import com.noxpvp.mmo.MMOPlayer;
 import com.noxpvp.mmo.MMOPlayerManager;
 import com.noxpvp.mmo.classes.internal.IPlayerClass;
-import com.noxpvp.mmo.util.PlayerClassUtil;
 
 public class PlayerClassFilter implements Filter<Player> {
 
@@ -43,10 +43,10 @@ public class PlayerClassFilter implements Filter<Player> {
 	public PlayerClassFilter(String... ids) {
 		classIds = new ArrayList<String>();
 		for (String id : ids) {
-			if (PlayerClassUtil.hasClassId(id))
+			if (PlayerClassUtil.PlayerClassConstructUtil.hasClassId(id))
 				classIds.add(id);
-			else if (PlayerClassUtil.hasClassName(id))
-				classIds.add(PlayerClassUtil.getIdByClassName(id));
+			else if (PlayerClassUtil.PlayerClassConstructUtil.hasClassName(id))
+				classIds.add(PlayerClassUtil.PlayerClassConstructUtil.getIdByClassName(id));
 		}
 	}
 

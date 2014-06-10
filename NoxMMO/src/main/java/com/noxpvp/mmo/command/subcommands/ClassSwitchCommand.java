@@ -92,15 +92,15 @@ public class ClassSwitchCommand extends BaseCommand {
 
 		int tier = ParseUtil.parseInt(sTier, -1);
 
-		if (PlayerClassUtil.hasClassNameIgnoreCase(cName))
-			cName = PlayerClassUtil.getIdByClassName(cName);
+		if (PlayerClassUtil.PlayerClassConstructUtil.hasClassNameIgnoreCase(cName))
+			cName = PlayerClassUtil.PlayerClassConstructUtil.getIdByClassName(cName);
 
-		if (!PlayerClassUtil.hasClassId(cName)) {
+		if (!PlayerClassUtil.PlayerClassConstructUtil.hasClassId(cName)) {
 			MMOLocale.CLASS_NONE_BY_NAME.message(context.getSender(), cName);
 			return new CommandResult(this, true);
 		}
 
-		PlayerClass c = PlayerClassUtil.safeConstructClass(cName, context.getPlayer());
+		PlayerClass c = PlayerClassUtil.PlayerClassConstructUtil.safeConstructClass(cName, context.getPlayer());
 
 		MMOPlayer p = MMOPlayerManager.getInstance().getPlayer(context.getPlayer());
 
